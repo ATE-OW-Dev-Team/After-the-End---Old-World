@@ -38,12 +38,25 @@ narrative_event = {##ensures big fancy lettering and scroll background
 	option = {#Go through with the execution, next step in the Rising
 		name = "irelandevents1OptA"
 		character_event = { id = irelandevents.2 days = 45 random = 24 tooltip = "EVTTOOLTIPirelandevents.2" }
-
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 100
+				OR = {
+					has_trait = zealous
+					has_trait = wroth
+					has_trait = cruel
+				}
+			}
+		}
 	}
 	option = {#Pardon him to stop the mob, adds unrest
 		name = "irelandevents1OptB"
 		11 = { add_province_modifier = { name = religious_tension  duration = 730 } }
-	
+		ai_chance = {
+			factor = 1
+		}
 	}
 }
 
@@ -57,12 +70,29 @@ narrative_event = {##the man's execution starts to get more people on their side
 
 	option = {#Arrest them and have them all killed!
 		name = "irelandevents2OptA"
-		11 = {province_event = { id = irelandevents.4 days = 45 random = 24 tooltip = "EVTTOOLTIPirelandevents.2" }}
+		hidden_effect = {
+		11 = {province_event = { id = irelandevents.4 days = 45 random = 24 }}
+		}
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 100
+				OR = {
+					has_trait = zealous
+					has_trait = wroth
+					has_trait = cruel
+				}
+			}
+		}
 	}
 	option = {#Let them be
 		name = "irelandevents2OptB"
 		11 = { add_province_modifier = { name = religious_tension  duration = 1825 } }
 		random_demesne_province = { limit = { NOT = { has_province_modifier = religious_tension } } add_province_modifier = { name = religious_tension duration = 1825 } }		
+		ai_chance = {
+			factor = 1
+		}	
 	}
 }
 narrative_event = {##the brutal reprisals have caused an outright rebellion. Have to fight for your life!
@@ -79,35 +109,14 @@ narrative_event = {##the brutal reprisals have caused an outright rebellion. Hav
 		trigger = {
 			religion = thelemic_reformed
 			NOT = {
-				primary_title = e_britannia
+				primary_title = {
+					title = e_britannia
+				}
 			}
 		}
 	}
-	option = {#The big revolt triggers, o shit
-		name = "irelandevents3OptB"
-		trigger = {
-			culture = irish
-			NOT = {
-				religion = thelemic_reformed
-			}
-		}
-	}
-	option = {
-		name = "irelandevents1OptC"
-		trigger = {
-			primary_title = e_britannia
-		}
-	}
-	option = {
-		name = "irelandevents1OptD"
-		trigger = {
-			NOT = {
-				religion_group = christian
-				religion = thelemic_reformed
-				culture = irish
-			}
-		}
-	}
+	
+
 }
 province_event = {##event that creates the Rebel character and declares the actual war
 	id = irelandevents.4
@@ -116,7 +125,13 @@ province_event = {##event that creates the Rebel character and declares the actu
 	picture = GFX_evt_peasants
 	
 	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_global_flag = rising_fired
+		}
+	}
 	immediate = {
+		set_global_flag = rising_fired
 		create_character = {
 			random_traits = yes
 			dynasty = random
