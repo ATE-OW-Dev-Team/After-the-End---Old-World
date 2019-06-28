@@ -1,0 +1,268 @@
+namespace=irelandevents
+
+#########################################
+#
+#	Events leading up to the Rising
+#
+#########################################
+
+
+####A major protest gathers in the central square of Dublin, demand release of rebel about to be executed####
+narrative_event = {##ensures big fancy lettering and scroll background
+	id = irelandevents.1
+	title = EVTTITLE_irelandevents_1
+	desc = EVTDESC_irelandevents_1
+	picture = GFX_evt_beheading
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	only_playable = yes
+	religion = thelemic_reformed #These are pre-triggers, constraining the scope of whom the event can fire for, which makes performance better
+	
+	immediate = {
+		set_global_flag = easter_rising_chain_started
+	}
+	
+	trigger = {
+		primary_title = {
+			title = k_ireland
+		}
+		NOT = {
+				has_global_flag = easter_rising_chain_started
+		}
+	}
+	mean_time_to_happen = {
+		months = 6
+	}
+	option = {#Go through with the execution, next step in the Rising
+		name = "irelandevents1OptA"
+		character_event = { id = irelandevents.2 days = 45 random = 24 tooltip = "EVTTOOLTIPirelandevents.2" }
+		ai_chance = {
+			factor = 10
+        	modifier = { trait = wroth factor = 100 }
+        	modifier = { trait = cruel factor = 100 }
+		}
+	}
+	option = {#Pardon him to stop the mob, adds unrest
+		name = "irelandevents1OptB"
+		11 = { add_province_modifier = { name = religious_tension  duration = 730 } }
+		ai_chance = {
+			factor = 10
+		}
+	}
+}
+
+narrative_event = {##the man's execution starts to get more people on their side
+	id = irelandevents.2
+	title = EVTTITLE_irelandevents_2
+	desc = EVTDESC_irelandevents_2
+	picture = GFX_evt_christian_exodus
+	
+	is_triggered_only = yes
+
+	option = {#Arrest them and have them all killed!
+		name = "irelandevents2OptA"
+
+		11 = {province_event = { id = irelandevents.4 days = 45 random = 24 tooltip = "EVTTOOLTIPirelandevents.2" }}
+		ai_chance = {
+			factor = 10
+        	modifier = { trait = wroth factor = 5 }
+        	modifier = { trait = cruel factor = 5 }
+		}
+	}
+	option = {#Let them be
+		name = "irelandevents2OptB"
+		11 = { add_province_modifier = { name = religious_tension  duration = 1825 } }
+		random_demesne_province = { limit = { NOT = { has_province_modifier = religious_tension } } add_province_modifier = { name = religious_tension duration = 1825 } }		
+		ai_chance = {
+			factor = 10
+		}
+	}
+}
+narrative_event = {##the brutal reprisals have caused an outright rebellion. Have to fight for your life!
+	id = irelandevents.3
+	title = EVTTITLE_irelandevents_3
+	desc = EVTDESC_irelandevents_3
+	picture = GFX_evt_peasants
+	
+	is_triggered_only = yes
+	major = yes
+	
+	option = {#The big revolt triggers, o shit
+		name = "irelandevents3OptA"
+	}
+	
+}
+province_event = {##event that creates the Rebel character and declares the actual war
+	id = irelandevents.4
+	title = EVTTITLE_irelandevents_4
+	desc = EVTDESC_irelandevents_4
+	picture = GFX_evt_peasants
+	
+	is_triggered_only = yes
+	trigger = {
+		NOT = {
+			has_global_flag = rising_fired
+		}
+	}
+	immediate = {
+		set_global_flag = rising_fired
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = catholic
+			culture = irish
+			female = no
+			age = 21
+			health = 7
+			fertility = 0.7
+			attributes = {
+				martial = 11
+				diplomacy = 6
+			}
+			trait = just
+			trait = brave
+			trait = ambitious
+			trait = brilliant_strategist
+			trait = inspiring_leader
+		}
+
+		new_character = {
+			set_character_flag = rising_leader
+			add_claim = k_ireland
+			create_title = {
+				tier = DUKE
+				landless = yes
+				temporary = yes
+				rebel = yes
+				culture = ROOT
+				name = "NATIONALIST_REVOLT"
+				holder = THIS
+			}
+
+			wealth = 200
+
+			spawn_unit = {
+				province = ROOT
+				home = ROOT
+				owner = THIS
+				#leader = THIS
+				scaled_by_biggest_garrison = 1.75
+				troops = {
+					archers = { 6 6 }
+					light_cavalry = { 4 4 }
+					heavy_infantry = { 8 8 }
+				}
+				attrition = 1.0
+			}
+
+			spawn_nationalist_army_effect = yes
+			spawn_nationalist_army_effect = yes
+			spawn_nationalist_army_effect = yes
+
+			# DoW on the province top liege
+			ROOT = {
+				owner = {
+					top_liege = {
+						reverse_unsafe_war = {
+							target = PREVPREVPREV
+							casus_belli = claim
+							thirdparty_title = ROOT # The county...
+							tier = KING # ... but really the de jure kingdom
+						}
+						reverse_opinion = {
+							who = PREVPREVPREV
+							modifier = opinion_evil_tyrant
+						}
+					}
+				}
+			}
+		}
+
+		owner = {
+			any_liege = { # Inform the lieges
+				character_event = {
+					id = irelandevents.3
+				}
+			}
+		}
+	}
+	option = {#The big revolt triggers
+		name = "irelandevents4OptA"
+		
+	}
+}
+
+narrative_event = {##Formation of the Legion of Mary
+	id = irelandevents.5
+	title = "EVTNAME_LOM_creation"
+	desc = "EVTDESC_LOM_creation"
+	picture = "GFX_evt_crusaders"
+	border = "GFX_event_narrative_frame_religion"
+	
+	major = yes
+	only_playable = yes
+	only_men = yes
+	
+	trigger = {
+		NOT = { #immersion-breaking
+			has_alternate_start_parameter = { key = religion_names value = random }
+		}
+		religion = catholic
+		culture = irish
+		is_heretic = no
+		
+		NOT = { is_title_active = d_legion_of_mary }
+		
+		##has_global_flag = christian_crusades_unlocked
+		
+		1954 = { # Knock
+			top_liege = { religion = catholic }		
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 4
+	}
+	
+	immediate = {
+		activate_title = { title = d_legion_of_mary status = yes }
+		create_random_soldier = {
+			dynasty = none
+			random_traits = yes
+			religion = ROOT
+		}
+		new_character = {
+
+			d_legion_of_mary = {
+				grant_title = PREV
+			}
+			wealth = 500
+		}
+		
+		religion_authority = {
+			modifier = religious_order_formed
+			years = 10
+		}
+	}
+	option = {
+		name = "EVTOPTA_LOM_creation"
+		trigger = {
+			religion = ROOT
+		}
+	}
+	option = {
+		name = "EVTOPTB_LOM_creation"
+		trigger = {
+			NOT = { religion_group = christian }
+		}
+	}
+	option = {
+		name = "EVTOPTC_LOM_creation"
+		trigger = {
+			religion_group = christian
+			NOT = { religion = ROOT }
+		}
+	}
+}
