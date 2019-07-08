@@ -548,3 +548,64 @@ narrative_event = {
 	}
 
 }
+
+narrative_event = {##formation of Sans-Culottes
+	id = jacobinists.2
+	title = "EVTNAME_sans_creation"
+	desc = "EVTDESC_sans_creation"
+	picture = "GFX_evt_market"
+	border = "GFX_event_narrative_frame_religion"
+	
+	major = yes
+	only_playable = yes
+	only_men = yes
+	
+	trigger = {
+		NOT = { #immersion-breaking
+			has_alternate_start_parameter = { key = religion_names value = random }
+		}
+		has_global_flag = jacobin_revolt_successful
+		NOT = { is_title_active = d_sans_culottes }
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		activate_title = { title = d_sans_culottes status = yes }
+		create_character = {
+			dynasty = none
+			random_traits = yes
+			trait = zealous
+			trait = brilliant_strategist
+			trait = peasant_leader
+			religion = jacobinist
+			culture = french
+		}
+		new_character = {
+
+			d_sans_culottes = {
+				grant_title = PREV
+			}
+			wealth = 500
+		}
+		
+		religion_authority = {
+			modifier = religious_order_formed
+			years = 10
+		}
+	}
+	option = {
+		name = "EVTOPTA_sans_creation"
+		trigger = {
+			religion = jacobinist
+		}
+	}
+	option = {
+		name = "EVTOPTB_sans_creation"
+		trigger = {
+			NOT = { religion = jacobinist }
+		}
+	}
+}
