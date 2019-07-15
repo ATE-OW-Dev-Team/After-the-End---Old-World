@@ -21593,3 +21593,144 @@ jacobin_rising = {
 		factor = 100
 	}
 }
+
+invade_numenor = {##Designed to reclaim Numenor if you're of Bonaparte blood
+	name = CB_NAME_NUMENOR
+	war_name = WAR_NAME_NUMENOR
+	sprite = 17
+	truce_days = 3650
+	is_permanent = yes
+	check_de_jure_tier = KING #
+
+	allowed_to_target_tributaries = no
+	
+	sort_priority = 1900
+
+	can_use_gui = {
+		check_if_crusader_trigger = yes
+	}
+
+	can_use = {
+		ROOT = {
+			independent = yes
+			OR = {
+				religion = novelist_reformed
+				religion = novelist
+			}
+		}
+		NOT = {
+			has_character_flag = used_up_invasion
+		}
+	}
+
+	can_use_title = {
+			de_jure_liege_or_above = e_france
+	}
+	
+	is_valid = {
+	}
+
+	on_add = {
+		attacker = {
+			set_character_flag = used_up_invasion
+		}
+		hidden_tooltip = { fire_haruspicy_event_effect = yes }
+		if = {
+			limit = { defender = { is_offmap_governor = offmap_china } }
+			attacker = {  
+				sound_effect = china_angered_emperor
+				detract_grace_super_huge_effect = yes 
+			}
+		}
+	}
+	
+	on_success = {
+		ROOT = {
+			participation_scaled_prestige = 100
+		}
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			hidden_tooltip = { 
+				participation_scaled_prestige = 100
+			}
+		}
+		
+		FROM = { prestige = -100 }
+	}
+
+	on_success_title = {
+			custom_tooltip = {
+				text = religious_cb_succ_tip
+				hidden_tooltip = {
+					ROOT = {
+						vassalize_or_take_under_title = {
+							title = PREV
+							enemy = FROM
+							same_religion = yes # Only vassalize rulers of my religion
+							is_religious = yes
+							type = holy_war
+						}
+					}
+				}
+			}
+		if = {
+			limit = {
+				holder_scope = { character = FROM }
+			}
+			usurp_title_only = { target = ROOT type = invasion }
+		}
+	}
+
+	on_fail = {
+		ROOT = { prestige = -500 }
+	}
+
+	on_reverse_demand = {
+		ROOT = {
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 10.0
+			}
+			ROOT = { prestige = -1000 }
+		}
+		FROM = {
+			participation_scaled_piety = 400
+			participation_scaled_prestige = 500
+			if = {
+				limit = {
+					uses_decadence = yes
+				}
+				participation_scaled_decadence = -10
+			}
+		}
+		any_defender = {
+			limit = { NOT = { character = FROM } }
+			hidden_tooltip = { 
+				participation_scaled_piety = 100
+				participation_scaled_prestige = 200
+				if = {
+					limit = {
+						uses_decadence = yes
+					}
+					participation_scaled_decadence = -10
+				}
+			}
+		}
+	}
+
+	attacker_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	attacker_ai_defeat_worth = {
+		factor = 100
+	}
+
+	defender_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	defender_ai_defeat_worth = {
+		factor = 100
+	}
+}
