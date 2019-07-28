@@ -1,0 +1,105 @@
+decisions = {
+	form_zapadoslavia = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 60
+
+		potential = {
+			OR = {		###Must be Slavic of Lech, Czech or Rus lineage
+				culture = pommeranian
+				culture = czech
+				culture = slovak
+				culture = polish
+			}
+			any_demesne_title = {
+				OR = {
+					tier = KING
+					tier = EMPEROR
+				}
+			}
+			e_zapadoslavia = {
+				is_titular = yes
+			}
+			e_zapadoslavia = {
+				has_holder = no
+			}
+			is_alternate_start = no
+		}
+
+		allow = {
+			is_adult = yes
+			prestige = 5000
+			war = no
+			NOT = { trait = incapable }
+			AND = {		#Control Czech, Poland & Rus
+				completely_controls = k_bohemia
+				completely_controls = k_poland
+				completely_controls = k_slovakia
+			}
+			is_vice_royalty = no
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = form_zapadoslavia_tt
+				grant_title_no_opinion = e_zapadoslavia 
+			}
+			
+			if = {
+				limit = {
+					is_female = yes
+					has_dlc = "Holy Fury"
+				}
+				create_bloodline = {
+					type = zapadoslavia_female
+				}
+				new_bloodline = {
+					set_description = "zapadoslavia_female_desc"
+				}
+			}
+			if = {
+				limit = {
+					is_female = no
+					has_dlc = "Holy Fury"
+				}
+				create_bloodline = {
+					type = zapadoslavia_male
+				}
+				new_bloodline = {
+					set_description = "zapadoslavia_male_desc"
+				}
+			}
+
+			hidden_tooltip = {
+				primary_title = {
+					e_zapadoslavia = {
+						copy_title_laws = PREV
+						copy_title_history = PREV
+					}
+				}
+
+				any_demesne_title = {
+					limit = {
+						tier = EMPEROR
+						NOT = { title = e_zapadoslavia }
+					}
+					destroy_landed_title = THIS
+				}
+
+				capital = PREV
+
+				###Poland, Bohemia and Slovaki unite!
+				k_bohemia = { de_jure_liege = e_zapadoslavia }
+				k_poland = { de_jure_liege = e_zapadoslavia }
+				k_slovakia = { de_jure_liege = e_zapadoslavia }
+
+				ROOT = {
+					narrative_event = { id = ATEOW_realm_event.99999 }
+				}
+				any_playable_ruler = {
+					narrative_event = { id = ATEOW_realm_event.99999 }
+				}
+			}
+		}
+	}
+}
