@@ -101,4 +101,104 @@ decisions = {
 			}
 		}
 	}
+	form_austria_hungary = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 60
+
+		potential = {
+			OR = {		###Must be Austrian or Hungarian
+				culture = austrian
+				culture = hungarian
+			}
+			any_demesne_title = {
+				OR = {
+					tier = KING
+					tier = EMPEROR
+				}
+			}
+			e_austria_hungary = {
+				is_titular = yes
+			}
+			e_austria_hungary = {
+				has_holder = no
+			}
+			is_alternate_start = no
+		}
+
+		allow = {
+			is_adult = yes
+			prestige = 5000
+			war = no
+			NOT = { trait = incapable }
+			AND = {		#Control Austrian & Hungary
+				completely_controls = k_austria
+				completely_controls = k_hungary
+			}
+			is_vice_royalty = no
+			has_landed_title = k_austria
+			has_landed_title = k_hungary
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = form_austria_hungary_tt
+				grant_title_no_opinion = e_austria_hungary 
+			}
+			
+			hidden_tooltip = {
+				primary_title = {
+					e_austria_hungary = {
+						copy_title_laws = PREV
+						copy_title_history = PREV
+					}
+				}
+
+				any_demesne_title = {
+					limit = {
+						tier = EMPEROR
+						NOT = { title = e_austria_hungary }
+					}
+					destroy_landed_title = THIS
+				}
+
+				capital = PREV
+
+				k_austria = { de_jure_liege = e_austria_hungary }
+				k_hungary = { de_jure_liege = e_austria_hungary }
+
+				if = {
+					limit = {
+						completely_controls = k_bohemia 
+					}
+					k_bohemia = { de_jure_liege = e_austria_hungary }
+				}
+				if = {
+					limit = {
+						completely_controls = k_slovakia 
+					}
+					k_slovakia = { de_jure_liege = e_austria_hungary }
+				}
+				if = {
+					limit = {
+						completely_controls = k_slovenia 
+					}
+					k_slovenia = { de_jure_liege = e_austria_hungary }
+				}
+				if = {
+					limit = {
+						completely_controls = k_chorwatia 
+					}
+					k_chorwatia = { de_jure_liege = e_austria_hungary }
+				}
+
+				# ROOT = {
+				# 	narrative_event = { id = ATEOW_realm_event.99998 }
+				# }
+				# any_playable_ruler = {
+				# 	narrative_event = { id = ATEOW_realm_event.99998 }
+				# }
+			}
+		}
+	}
 }
