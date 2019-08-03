@@ -5804,7 +5804,7 @@ religious = {
 	can_use_gui = {
 		ROOT = {
 			OR = {
-				NOT = { religion = buddhist }
+				NOT = { religion = neovedantic }
 				piety = 250
 			}
 		}
@@ -5815,7 +5815,7 @@ religious = {
 			show_scope_change = no
 			if = {
 				limit = {
-					religion = buddhist
+					religion = neovedantic
 				}
 				piety = -250
 			}
@@ -5847,29 +5847,15 @@ religious = {
 				has_character_flag = currently_reconquering_iberia
 				reconquista_check_trigger = yes
 			}
-			OR = {
-				NOT = { religion = hindu }
-				FROM = { NOT = { has_dharmic_religion_trigger = yes } }
-				AND = {
-					religion_group = FROM
-					FROM = {
-						has_character_modifier = known_satanist
-					}
-					NOT = {
-						has_character_modifier = known_satanist
-					}
-				}
-			}
 			NOT = { same_realm = FROM }
 			OR = {
+			  AND = {##Neovedantics have to use minor holy wars against other religions other than Bharatva 
 				NOT = { religion_group = FROM }
+				NOT = { religion = neovedantic }
+			 }
 				is_heresy_of = FROM
 				is_parent_religion = FROM
-				AND = {
-					has_dharmic_religion_trigger = yes
-					FROM = { religion = taoist }
-				}
-				AND = {
+				AND = {	
 					religion_group = muslim
 					NOT = { religion = FROM }
 					FROM = {
@@ -5877,6 +5863,27 @@ religious = {
 							any_current_enemy = {
 								NOT = {
 									religion_group = muslim
+								}
+							}
+						}
+					}
+				}
+				AND = {	#Dharmics have grown more aggressive
+					religion_group = dharmic
+					OR = {#Neovedantics can only use full Holy Wars against Bharatvans, who they regard as heretics and perverters of Dharma
+						NOT = {
+							religion = neovedantic
+						}
+						FROM = {
+							religion = bharatva
+						}
+					}
+					NOT = { religion = FROM }
+					FROM = {
+						NOT = { 
+							any_current_enemy = {
+								NOT = {
+									religion_group = dharmic
 								}
 							}
 						}
@@ -14711,13 +14718,12 @@ buddhist_holy_war = {
 	
 	can_use = {
 		ROOT = {
-			religion = buddhist
+			religion = neovedantic
 			NOT = { same_realm = FROM }
 			OR = {
-				NOT = { religion_group = FROM }
-				FROM = { religion = taoist }
+				NOT = { religion = FROM }
 				AND = {
-					religion_group = FROM
+					religion = FROM
 					FROM = {
 						has_character_modifier = known_satanist
 					}
@@ -14727,10 +14733,8 @@ buddhist_holy_war = {
 				}
 			}
 			top_liege = {
-				religion_group = ROOT
 				OR = {
-					NOT = { religion = FROM }
-					FROM = { religion = taoist }
+					NOT = { religion_group = FROM }#if the other person is non-Dharmic they get minor Holy Warred
 					AND = {
 						religion_group = FROM
 						FROM = {
@@ -14802,11 +14806,10 @@ buddhist_holy_war = {
 
 	is_valid = {
 		ROOT = {
-			religion = buddhist
+			religion = neovedantic
 			NOT = { same_realm = FROM }
 			OR = {
 				NOT = { religion_group = FROM }
-				FROM = { religion = taoist }
 				AND = {
 					religion_group = FROM
 					FROM = {
@@ -14820,7 +14823,6 @@ buddhist_holy_war = {
 			top_liege = {
 				OR = {
 					NOT = { religion = FROM }
-					FROM = { religion = taoist }
 					AND = {
 						religion_group = FROM
 						FROM = {
@@ -21755,11 +21757,8 @@ unite_russia = {##Designed to help the Zarists consolidate
 		ROOT = {
 			independent = yes
 			OR = {
-				culture_group = east_slavic
 				religion = zarist
 				religion = stalinist
-				religion = folklorist
-				religion = folkorist_reformed
 			}
 		}
 	}
