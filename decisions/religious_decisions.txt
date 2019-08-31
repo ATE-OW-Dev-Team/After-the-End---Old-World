@@ -662,4 +662,109 @@ targeted_decisions = {
 		}
 	}
 	
+	stalinist_fabricate_evidence = {
+		only_playable = yes
+		only_independent = yes
+		
+		ai_check_interval = 36
+		from_potential = {
+			is_playable = yes
+			religion = stalinist
+		}
+		potential = {
+		}
+		allow = {#This is meant to allow a stalinist independent ruler to spend a scaling amount of piety to gain a reason to imprison a vassal (FROM in this context is the player character)
+			OR = {
+				AND = {
+					FROM = {#If FROM has enough prestige and piety
+						prestige = 100
+						piety = 100
+					}
+					ROOT = {
+						primary_title = {#and the target's title is of an appropriate tier for the amount spent
+							tier = COUNT
+						}
+					}
+				}
+				AND = {
+					FROM = {
+						prestige = 250
+						piety = 250
+					}
+					ROOT = {
+					primary_title = {
+						tier = DUKE
+					}	
+					}
+				}
+				AND = {
+					FROM = {
+						prestige = 500
+						piety = 500
+					}
+					ROOT = {
+					primary_title = {
+						tier = KING
+					}
+				    }
+				}				
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					ROOT = {
+							primary_title = {
+							tier = KING
+						}						
+					}
+				}
+				prestige = -500
+				piety = -500
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+							primary_title = {
+							tier = DUKE
+						}						
+					}
+				}
+				prestige = -250
+				piety = -250
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+							primary_title = {
+							tier = COUNT
+						}						
+					}
+				}
+				prestige = -100
+				piety = -100
+			}
+			ROOT = {
+				set_character_flag = charge_traitor			
+			}
+			FROM = {#I have no idea if this will work...
+				character_event = { id = WoL.2082 }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				trait = cynical
+			}
+			modifier = {
+				factor = 1.5
+				trait = zealous
+			}
+		}
+	}
+	
 }	
