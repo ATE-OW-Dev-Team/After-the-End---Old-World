@@ -8,6 +8,42 @@
 
 decisions = {
 
+	create_high_chairman = {
+		only_playable = yes
+		
+		is_high_prio = yes
+		ai_check_interval = 36
+	
+		potential = {
+			is_playable = yes
+			religion = stalinist
+			NOT = { is_title_active = d_stalinist }
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		
+		allow = {
+			piety = 1000
+			num_of_holy_sites = 3
+		}
+		
+		effect = {
+			activate_title = { title = d_stalinist status = yes }
+			d_stalinist = {
+				grant_title = ROOT
+			}	
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
 	create_zardom = {
 		only_playable = yes
 		
@@ -672,6 +708,7 @@ targeted_decisions = {
 			religion = stalinist
 		}
 		potential = {
+			vassal_of = FROM
 		}
 		allow = {#This is meant to allow a stalinist independent ruler to spend a scaling amount of piety to gain a reason to imprison a vassal (FROM in this context is the player character)
 			OR = {
@@ -719,8 +756,13 @@ targeted_decisions = {
 						}						
 					}
 				}
-				prestige = -500
-				piety = -500
+				FROM = {
+					prestige = -500
+					piety = -500
+				}
+				ROOT = {
+					character_event = { id = stalin.1 }				
+				}
 			}
 			else_if = {
 				limit = {
@@ -730,8 +772,13 @@ targeted_decisions = {
 						}						
 					}
 				}
-				prestige = -250
-				piety = -250
+				FROM = {
+					prestige = -250
+					piety = -250
+				}
+				ROOT = {
+					character_event = { id = stalin.1 }				
+				}
 			}
 			else_if = {
 				limit = {
@@ -741,14 +788,13 @@ targeted_decisions = {
 						}						
 					}
 				}
-				prestige = -100
-				piety = -100
-			}
-			ROOT = {
-				set_character_flag = charge_traitor			
-			}
-			FROM = {#I have no idea if this will work...
-				character_event = { id = WoL.2082 }
+				FROM = {
+					prestige = -100
+					piety = -100
+				}
+				ROOT = {
+					character_event = { id = stalin.1 }				
+				}
 			}
 		}
 		revoke_allowed = {
