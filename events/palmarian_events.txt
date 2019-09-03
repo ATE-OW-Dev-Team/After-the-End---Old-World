@@ -1,0 +1,487 @@
+namespace=palmarian
+
+#########################################
+#
+#	Palmarian religious events
+#
+#########################################
+# Gain a bonus
+character_event = {#Start of the "Palmarians on a Catholic Crusade" events
+	id = palmarian.1
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	min_age = 16
+	only_playable = yes
+	only_men = yes
+	religion = palmarian
+	only_capable = yes
+	has_global_flag = palmarians_can_join
+	
+	trigger = {
+		is_feudal = yes #Priests and Patricians shouldn't be doing this
+	}
+
+	#hide_from = yes#this code makes the person's face not appear on the event
+
+	mean_time_to_happen = {
+		months = 3
+	}
+	
+	desc = {
+		text = palmarian.1.d
+
+	}
+	
+	option = {#I will go and help them myself!
+		name = EVTOPTA_palmarian.1
+		set_character_flag = palmarian_helping_catholics
+		add_trait = travelling
+	}
+	option = {#I have no interest in helping their false Church
+		name = EVTOPTB_palmarian.1
+		piety = 15
+	}
+}
+character_event = {#You meet with a bunch of Crusaders, they react with skepticism
+	id = palmarian.2
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	has_character_flag = palmarian_helping_catholics
+	trait = travelling
+	
+	trigger = {
+		NOT = {
+			has_character_flag = accepted_into_crusade
+		}
+	}
+
+	desc = {
+		text = palmarian.2.d
+	}
+
+	mean_time_to_happen = {
+		months = 3
+	}	
+	
+	option = {#Beg them to let you join
+		name = EVTOPTA_palmarian.2
+		trigger = {
+			NOT = {
+				trait = proud
+			}
+		}
+		prestige = -100
+		add_trait = humble
+		set_character_flag = accepted_into_crusade
+	}
+	
+	option = {#Show your martial skill
+		name = EVTOPTB_palmarian.2
+		trigger = {
+			martial = 12
+		}
+		set_character_flag = accepted_into_crusade
+	}
+	option = {#Impress them with your diplomacy
+		name = EVTOPTC_palmarian.2
+		trigger = {
+			learning = 12
+		}
+		prestige = 50
+	}
+	option = {#Lie
+		name = EVTOPTD_palmarian.2
+		trigger = {
+			intrigue = 12
+		}
+		prestige = 50
+	}
+	option = {#Go home in a huff
+		name = EVTOPTE_palmarian.2
+		remove_trait = travelling
+	}
+}
+character_event = {#You fight alongside a couple zealous Catholics, choose between becoming Catholic, becoming Cynical, or some other thing
+	id = palmarian.3
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	has_character_flag = palmarian_helping_catholics
+	trait = travelling
+
+	desc = {
+		text = palmarian.3.d
+	}
+
+	trigger = {
+		NOR = {
+			has_character_flag = considered_converting
+			religion = catholic
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 3
+	}
+	
+	option = {#Become Catholic
+		name = EVTOPTA_palmarian.3
+		trigger = {
+			NOT = {
+				religion = catholic
+			}
+		}
+		religion = catholic
+		add_trait = zealous
+		set_character_flag = considered_converting
+	}
+	
+	option = {#Convert in secret
+		name = EVTOPTB_palmarian.3
+		secret_religion = catholic
+		set_character_flag = considered_converting
+	}
+	option = {#Just enjoy the moment
+		name = EVTOPTC_palmarian.3
+		prestige = 15
+		set_character_flag = considered_converting
+	}
+	option = {#Gloria In Excelsis Deo
+		name = EVTOPTD_palmarian.3
+		trigger = {
+			religion = catholic
+		}
+		prestige = 50
+		piety = 50
+		set_character_flag = considered_converting
+	}
+}
+character_event = {#You get a letter from your local bishop who's rather annoyed with you
+	id = palmarian.4
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	has_character_flag = palmarian_helping_catholics
+	trait = travelling
+	
+	trigger = {
+		NOT = {
+			has_character_flag = reprimanded_by_palm_bishop
+		}
+	}
+
+	desc = {
+		text = palmarian.4.d
+	}
+
+	mean_time_to_happen = {
+		months = 3
+	}
+	
+	option = {#Tell him to shut up
+		name = EVTOPTA_palmarian.4
+		add_character_modifier = {
+			name = annoyed_religious
+			duration = 1825
+		}
+		set_character_flag = reprimanded_by_palm_bishop
+	}
+	option = {#Promise to come home
+		name = EVTOPTB_palmarian.4
+		remove_trait = travelling
+	}
+	option = {#come up with a plausible lie
+		name = EVTOPTC_palmarian.4
+		trigger = {
+			intrigue = 10
+		}
+		set_character_flag = reprimanded_by_palm_bishop
+	}
+	option = {#Provide a theological rationale
+		name = EVTOPTD_palmarian.4
+		trigger = {
+			learning = 10
+		}
+		set_character_flag = reprimanded_by_palm_bishop
+	}
+}
+character_event = {#You come across some Palmarians living in the land being targeted, but the Crusaders start to harass them and have damaged their possessions
+	id = palmarian.5
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	has_character_flag = palmarian_helping_catholics
+	trait = travelling
+
+	desc = {
+		text = palmarian.5.d
+	}
+
+	mean_time_to_happen = {
+		months = 3
+	}
+	
+	option = {#Repay them for the Crusaders' damage
+		name = EVTOPTA_palmarian.5
+		scaled_wealth = -0.2
+		add_trait = kind
+	}
+	
+	option = {#Do nothing
+		name = EVTOPTB_palmarian.5
+		random_list = {
+			70 = {}
+			20 = { add_trait = slothful }
+			10 = { add_trait = cruel }
+		}
+	}
+	option = {#join in!
+		name = EVTOPTC_palmarian.5
+		trigger = {
+			trait = cruel
+		}
+		add_prestige = 25
+		random = {
+			chance = 20
+			add_trait = impaler
+		}
+	}
+	option = {#remind them we're here to fight infidels, not each other
+		name = EVTOPTD_palmarian.5
+		trigger = {
+			OR = {
+				trait = crusader
+				trait = zealous
+			}
+		}
+		add_piety = 50
+	}
+	option = {#reprimand them for their uncharitable and wicked behavior and demand they repay
+		name = EVTOPTE_palmarian.5
+		trigger = {
+			OR = {
+				trait = poet
+				trait = kind
+			}
+		}
+		add_piety = 50
+	}
+}
+
+character_event = {#You find a brave Knight who is willing to offer his services to you, on account of his relative poverty
+	id = palmarian.6
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	has_character_flag = palmarian_helping_catholics
+	trait = travelling
+
+	desc = {
+		text = palmarian.6.d
+	}
+
+	mean_time_to_happen = {
+		months = 3
+	}
+	
+	option = {#Hire him in a second!
+		name = EVTOPTA_palmarian.6
+		immediate = {
+	    random_list = {
+		  10 = {
+			create_random_soldier = {
+				random_traits = yes
+				dynasty = random
+				female = no
+				religion = catholic
+				culture = italian
+				attributes = {
+					martial = 8
+					stewardship = 3
+					diplomacy = 3
+					learning = 3
+					intrigue = 3
+				}
+			}
+		  }
+		  10 = {
+			create_random_soldier = {
+				random_traits = yes
+				dynasty = random
+				female = no
+				religion = catholic
+				culture = irish
+				attributes = {
+					martial = 8
+					stewardship = 3
+					diplomacy = 3
+					learning = 3
+					intrigue = 3
+				}
+			}
+		  }
+		  10 = {
+			create_random_soldier = {
+				random_traits = yes
+				dynasty = random
+				female = no
+				religion = catholic
+				culture = bavarian
+				attributes = {
+					martial = 8
+					stewardship = 3
+					diplomacy = 3
+					learning = 3
+					intrigue = 3
+				}
+			}
+		  }
+		  10 = {
+			create_random_soldier = {
+				random_traits = yes
+				dynasty = random
+				female = no
+				religion = catholic
+				culture = portuguese
+				attributes = {
+					martial = 8
+					stewardship = 3
+					diplomacy = 3
+					learning = 3
+					intrigue = 3
+				}
+			}
+		  }
+		  10 = {
+			create_random_soldier = {
+				random_traits = yes
+				dynasty = random
+				female = no
+				religion = catholic
+				culture = croatian
+				attributes = {
+					martial = 8
+					stewardship = 3
+					diplomacy = 3
+					learning = 3
+					intrigue = 3
+				}
+			}
+		  }
+		  10 = {
+			create_random_soldier = {
+				random_traits = yes
+				dynasty = random
+				female = no
+				religion = catholic
+				culture = castilian
+				attributes = {
+					martial = 8
+					stewardship = 3
+					diplomacy = 3
+					learning = 3
+					intrigue = 3
+				}
+			}
+		  }
+		  10 = {
+			create_random_soldier = {
+				random_traits = yes
+				dynasty = random
+				female = no
+				religion = catholic
+				culture = polish
+				attributes = {
+					martial = 8
+					stewardship = 3
+					diplomacy = 3
+					learning = 3
+					intrigue = 3
+				}
+			}
+		  }
+		  10 = {
+			create_random_soldier = {
+				random_traits = yes
+				dynasty = random
+				female = no
+				religion = catholic
+				culture = lithuanian
+				attributes = {
+					martial = 8
+					stewardship = 3
+					diplomacy = 3
+					learning = 3
+					intrigue = 3
+				}
+			}
+		  }
+		}
+		new_character = {
+			remove_trait = craven
+			add_trait = zealous
+			save_event_target_as = soldier_target
+		}
+	  }
+	}
+	
+}
+
+character_event = {#You capture an important target
+	id = palmarian.7
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	has_character_flag = palmarian_helping_catholics
+	trait = travelling
+	
+	trigger = {
+		NOT = {
+			trait = crusader
+		}
+	}
+
+	desc = {
+		text = palmarian.7.d
+	}
+
+	mean_time_to_happen = {
+		months = 3
+	}
+	
+	option = {#Deus Vult!
+		name = EVTOPTA_palmarian.7
+		add_trait = crusader
+		prestige = 100
+	}
+}
+
+character_event = {#The Crusade is over
+	id = palmarian.8
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	has_character_flag = palmarian_helping_catholics
+	trait = travelling
+	
+	trigger = {
+		NOT = {
+			has_global_flag = palmarians_can_join
+		}
+	}
+
+	desc = {
+		text = palmarian.8.d
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	option = {#Aww
+		name = EVTOPTA_palmarian.8
+		remove_trait = travelling
+	}
+}
