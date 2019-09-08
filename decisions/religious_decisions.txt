@@ -8,6 +8,308 @@
 
 decisions = {
 
+		balkaner_secret_religion = {
+		only_playable = yes
+		
+		is_high_prio = yes
+		ai_check_interval = 36
+	
+		potential = {
+			NOR = {
+				has_global_flag = yugoslavism_triumphant
+				has_global_flag = yugoslavism_survives
+				secret_religion = catholic
+				secret_religion = orthodox
+				secret_religion = sunni
+				primary_title = {
+					title = e_yugoslavia
+				}
+			}
+			is_playable = yes
+			religion = jugoslavist
+			OR = {
+				culture = croatian
+				culture = slovenian
+				culture = bosnian
+				culture = serbian
+				culture = bulgarian
+			}
+		}
+		
+		allow = {
+			NOR = {
+				trait = content
+				trait = slothful
+				trait = cynical
+			}
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						culture = croatian
+						culture = slovenian
+					}
+				}
+			set_secret_religion = catholic
+			}
+			if = {
+				limit = {
+						culture = bosnian
+				}
+			set_secret_religion = sunni
+			}
+			if = {
+				limit = {
+					OR = {
+						culture = serbian
+						culture = bulgarian
+					}
+				}
+			set_secret_religion = orthodox
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 0.05#This becomes more and more likely the lower Yugoslavist MA is, starts at 5% chance
+			modifier = {#7.5%
+				factor = 1.5
+				NOT = {
+					religion_authority = 0.7 #If the MA is below 70, every 10 points of MA lost increases the chance of the AI doing this
+				}
+			}
+			modifier = {#11%
+				factor = 1.5
+				NOT = {
+					religion_authority = 0.6 #If the MA is below 70, every 10 points of MA lost increases the chance of the AI doing this
+				}
+			}
+			modifier = {#17%
+				factor = 1.5
+				NOT = {
+					religion_authority = 0.5 #If the MA is below 70, every 10 points of MA lost increases the chance of the AI doing this
+				}
+			}
+			modifier = {#25%
+				factor = 1.5
+				NOT = {
+					religion_authority = 0.4 #If the MA is below 70, every 10 points of MA lost increases the chance of the AI doing this
+				}
+			}
+			modifier = {#38%
+				factor = 1.5
+				NOT = {
+					religion_authority = 0.3 #If the MA is below 70, every 10 points of MA lost increases the chance of the AI doing this
+				}
+			}
+			modifier = {#56%
+				factor = 1.5
+				NOT = {
+					religion_authority = 0.2 #If the MA is below 70, every 10 points of MA lost increases the chance of the AI doing this
+				}
+			}
+			modifier = {#85%
+				factor = 1.5
+				NOT = {
+					religion_authority = 0.1 #If the MA is below 70, every 10 points of MA lost increases the chance of the AI doing this
+				}
+			}
+			modifier = {#The emperor abandoning Yugoslavist makes this far more likely
+				factor = 2
+				top_liege = {
+					NOT = {
+						religion = jugoslavist
+					}
+				}
+			}			
+		}
+	}
+	
+		balkaner_abandon_jugo = {
+		only_playable = yes
+		
+		is_high_prio = yes
+		ai_check_interval = 36
+	
+		potential = {
+			NOT = {
+				primary_title = { title = e_yugoslavia }
+			}
+			controls_religion = no # The Propiciater shouldn't be able to, obviously
+
+			NOR = {#can't do it if Jugo has won
+				has_global_flag = yugoslavism_triumphant
+				has_global_flag = yugoslavism_survives
+			}			
+			
+			is_playable = yes
+			religion = jugoslavist
+			OR = {
+				culture = croatian
+				culture = slovenian
+				culture = bosnian
+				culture = serbian
+				culture = bulgarian
+			}
+		}
+		
+		allow = {
+			OR = {#outright defiance requires either the Car having apostasised, or not being his vassal
+				top_liege = {
+					NOT = {
+						religion = jugoslavist
+					}
+				}
+				independent = yes
+			}
+			NOR = {
+				trait = content
+				trait = slothful
+				trait = cynical
+			}
+		}
+		
+		effect = {
+		
+			if = {#if you have a secret religion, out yourself
+				limit = {
+					has_secret_religion = yes
+				}
+				convert_to_secret_religion = yes
+			}
+		
+			else_if = {
+				limit = {
+					OR = {
+						has_secret_religion = no
+						culture = croatian
+						culture = slovenian
+					}
+				}
+			religion = catholic
+			}
+			else_if = {
+				limit = {
+						has_secret_religion = no
+						culture = bosnian
+					}
+					religion = sunni
+				}
+			else_if = {
+				limit = {
+					has_secret_religion = no
+					OR = {
+						culture = serbian
+						culture = bulgarian
+					}
+				}
+			religion = orthodox
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 0.05#This becomes more and more likely the lower Yugoslavist MA is, starts at 5% chance
+			modifier = {#7.5%
+				factor = 1.5
+				NOT = {
+					religion_authority = 0.7 #If the MA is below 70, every 10 points of MA lost increases the chance of the AI doing this
+				}
+			}
+			modifier = {#11%
+				factor = 1.5
+				NOT = {
+					religion_authority = 0.6 #If the MA is below 70, every 10 points of MA lost increases the chance of the AI doing this
+				}
+			}
+			modifier = {#17%
+				factor = 1.5
+				NOT = {
+					religion_authority = 0.5 #If the MA is below 70, every 10 points of MA lost increases the chance of the AI doing this
+				}
+			}
+			modifier = {#25%
+				factor = 1.5
+				NOT = {
+					religion_authority = 0.4 #If the MA is below 70, every 10 points of MA lost increases the chance of the AI doing this
+				}
+			}
+			modifier = {#38%
+				factor = 1.5
+				NOT = {
+					religion_authority = 0.3 #If the MA is below 70, every 10 points of MA lost increases the chance of the AI doing this
+				}
+			}
+			modifier = {#56%
+				factor = 1.5
+				NOT = {
+					religion_authority = 0.2 #If the MA is below 70, every 10 points of MA lost increases the chance of the AI doing this
+				}
+			}
+			modifier = {#85%
+				factor = 1.5
+				NOT = {
+					religion_authority = 0.1 #If the MA is below 70, every 10 points of MA lost increases the chance of the AI doing this
+				}
+			}
+			modifier = {#The emperor abandoning Yugoslavist makes this far more likely
+				factor = 2
+				top_liege = {
+					NOT = {
+						religion = jugoslavist
+					}
+				}
+			}			
+		}
+	}
+	
+	strengthen_jugoslavism = {
+		only_playable = yes
+		
+		is_high_prio = yes
+		ai_check_interval = 36
+	
+		potential = {
+			is_playable = yes
+			religion = jugoslavist
+			independent = yes
+			has_global_flag = yugoslavism_survives
+			religion_authority = 0.5#at least 50 MA
+			NOT = {
+				has_global_flag = yugoslavism_triumphant
+			}
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		
+		allow = {
+			realm_size = 100
+			prestige = 1000
+			piety = 500
+		}
+		
+		effect = {
+			character_event = { id = yugoslav.8}#triumph of Yugoslavist
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
 	create_high_chairman = {
 		only_playable = yes
 		

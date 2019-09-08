@@ -1,0 +1,921 @@
+namespace = yugoslav
+
+narrative_event = {
+	id = yugoslav.1
+	title = "EVTNAMEYUGO1"
+	desc = "EVTDESCYUGO1"
+	picture = GFX_evt_great_schism
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	show_ROOT = yes
+	hide_new = yes
+	
+	only_playable = yes
+	min_age = 16
+	religion = jugoslavist
+	
+	trigger = {
+		NOT = {
+			has_alternate_start_parameter = { key = religion_names value = random }
+		}
+		NOT = { has_global_flag = yugoslav_crisis_started }
+		controls_religion = yes
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	immediate = {
+		set_global_flag = yugoslav_crisis_started
+	}
+	
+	option = {
+		name = "EVTOPTA_yugoslav.1"
+		trigger = {
+			primary_title = { title = e_yugoslavia }
+		}
+		set_global_flag = YUG_supported_yugoslavism
+		religion_authority = {
+			modifier = yugo_crisis_supported
+			years = 20
+		}
+		character_event = {
+			id = yugoslav.2	
+		}
+	}
+	option = {
+		name = "EVTOPTB_yugoslav.1"
+		trigger = {
+			primary_title = { title = e_yugoslavia }
+		}
+		religion_authority = {
+			modifier = yugo_crisis_did_nothing
+			years = 20
+		}
+		set_global_flag = YUG_did_nothing
+	}
+	option = {
+		name = "EVTOPTC_yugoslav.1"
+		trigger = {
+			primary_title = { title = e_yugoslavia }
+		}
+		religion_authority = {
+			modifier = yugo_crisis_abandoned
+			years = 20
+		}
+		set_global_flag = YUG_abandoned_yugoslavism
+		character_event = {
+			id = yugoslav.6	
+		}
+	}
+	option = {#Option for Balkaners other than the Emperor
+		name = "EVTOPTD_yugoslav.1"
+		trigger = {
+			OR = {
+				culture = croatian
+				culture = slovenian
+				culture = serbian
+				culture = bosnian
+			}
+			NOT = {
+				primary_title = { title = e_yugoslavia }
+			}
+		}
+	}
+	option = {#Option for everyone else in the world
+		name = "EVTOPTE_yugoslav.1"
+		trigger = {
+			NOR = {
+				culture = croatian
+				culture = slovenian
+				culture = serbian
+				culture = bosnian
+			}
+			NOT = {
+				primary_title = { title = e_yugoslavia }
+			}
+		}
+	}
+	
+}
+ #You've chosen to support the Propiciater, but how?
+narrative_event = {
+	id = yugoslav.2
+	title = "EVTNAMEYUGO2"
+	desc = "EVTDESCYUGO2"
+	picture = GFX_evt_bishop_byzantine
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {#With violence
+		name = "EVTOPTA_yugoslav.2"
+		set_global_flag = YUG_violent_solution
+		if = {
+			limit = {#if you have 12+ in martial and intrigue
+				martial = 12
+				intrigue = 12
+			}
+		character_event = { id = yugoslav.3 days = 180 tooltip = EVTTOOLTIPVIOLENTYUGO }
+		}
+		else_if = {
+			limit = {#if you have 12+ in martial or intrigue, but not both
+				OR = {
+					AND = {
+						martial = 12
+						NOT = {
+							intrigue = 12
+						}
+					}
+					AND = {
+						intrigue = 12
+						NOT = {
+							martial = 12
+						}
+					}
+				}
+			}
+		character_event = { id = yugoslav.4 days = 180 tooltip = EVTTOOLTIPVIOLENTYUGO }
+		}
+		else_if = {
+		  limit = {#if you don't have either
+			 NOR = {
+				martial = 12
+				intrigue = 12
+			 }
+		  }
+		character_event = { id = yugoslav.5 days = 180 tooltip = EVTTOOLTIPVIOLENTYUGO }
+		}
+	}
+	option = {#With reason
+		name = "EVTOPTB_yugoslav.2"
+		set_global_flag = YUG_rational_solution
+		
+		if = {
+			limit = {#if you have 12+ in diplomacy and learning
+				diplomacy = 12
+				learning = 12
+			}
+		character_event = { id = yugoslav.3 days = 180 tooltip = EVTTOOLTIPREASONYUGO }
+		}
+		else_if = {
+			limit = {#if you have 12+ in martial or intrigue, but not both
+				OR = {
+					AND = {
+						diplomacy = 12
+						NOT = {
+							learning = 12
+						}
+					}
+					AND = {
+						learning = 12
+						NOT = {
+							diplomacy = 12
+						}
+					}
+				}
+			}
+		character_event = { id = yugoslav.4 days = 180 tooltip = EVTTOOLTIPREASONYUGO }
+		}
+		else_if = {
+		  limit = {#if you don't have either
+			 NOR = {
+				diplomacy = 12
+				learning = 12
+			 }
+		  }
+		character_event = { id = yugoslav.5 days = 180 tooltip = EVTTOOLTIPREASONYUGO }
+		}		
+		
+	}
+	option = {#With empty words
+		name = "EVTOPTC_yugoslav.2"
+		set_global_flag = YUG_did_nothing
+		religion_authority = {
+			modifier = yugo_crisis_changed_mind
+			years = 20
+		}
+	}	
+}
+
+narrative_event = {#You mostly succeeded, there'll be a mild unrest
+	id = yugoslav.3
+	title = "EVTNAMEYUGO3"
+	desc = "EVTDESCYUGO3"
+	picture = GFX_evt_bishop_byzantine
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {#Great, I suppose
+	   name = "EVTOPTA_yugoslav.3"
+		any_realm_province = {
+			add_province_modifier = {
+				name = yugo_unrest_mild
+				duration = 7300 #20 years, the duration of the crisis
+			}			
+		}
+	}
+}
+
+narrative_event = {#Moderate success, there'll be some unpleasantness but it should be survivable
+	id = yugoslav.4
+	title = "EVTNAMEYUGO4"
+	desc = "EVTDESCYUGO4"
+	picture = GFX_evt_bishop_byzantine
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {#It could be worse
+	   name = "EVTOPTA_yugoslav.4"
+		any_realm_province = {
+			add_province_modifier = {
+				name = yugo_unrest_med
+				duration = 7300 #20 years, the duration of the crisis
+			}			
+		}
+	}
+}
+
+narrative_event = {#Total failure, this is gonna suck
+	id = yugoslav.5
+	title = "EVTNAMEYUGO5"
+	desc = "EVTDESCYUGO5"
+	picture = GFX_evt_bishop_byzantine
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {#Oh Mercy
+	   name = "EVTOPTA_yugoslav.5"
+		any_realm_province = {
+			add_province_modifier = {
+				name = yugo_unrest_severe
+				duration = 7300 #20 years, the duration of the crisis
+			}			
+		}
+	}
+}
+
+narrative_event = {#So you abandoned Yugoslavist? Good, but now what?
+	id = yugoslav.6
+	title = "EVTNAMEYUGO6"
+	desc = "EVTDESCYUGO6"
+	picture = GFX_evt_bishop_byzantine
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {#Orthodox
+	   name = "EVTOPTA_yugoslav.6"
+	   ai_chance = {
+		 factor = 1
+		 
+		 modifier = {
+			factor = 5
+			culture = serbian
+		 }
+	   }
+	   religion = orthodox
+		any_realm_province = {
+			limit = {
+				NOT = {
+					religion = orthodox
+				}
+			}
+			add_province_modifier = {
+				name = yugo_unrest_severe
+				duration = 7300 #20 years, the duration of the crisis
+			}			
+		}
+	}
+	option = {#Catholic
+	   name = "EVTOPTB_yugoslav.6"
+	   ai_chance = {
+		 factor = 1
+		 
+		 modifier = {
+			factor = 5
+			OR = {
+				culture = croatian
+				culture = slovenian
+			}
+		 }
+	   }
+	   religion = catholic
+		any_realm_province = {
+			limit = {
+				NOT = {
+					religion = catholic
+				}
+			}
+			add_province_modifier = {
+				name = yugo_unrest_severe
+				duration = 7300 #20 years, the duration of the crisis
+			}			
+		}
+	}
+	option = {#Islam
+	   name = "EVTOPTC_yugoslav.6"
+	   ai_chance = {
+		 factor = 1
+		 
+		 modifier = {
+			factor = 5
+			culture = bosnian
+		 }
+		 modifier = {
+			factor = 0.1
+			OR = {
+				culture = serbian
+				culture = croatian
+				culture = slovenian
+			}
+		 }
+	   }
+	   religion = sunni
+		any_realm_province = {
+			limit = {
+				NOT = {
+					religion = sunni
+				}
+			}
+			add_province_modifier = {
+				name = yugo_unrest_severe
+				duration = 7300 #20 years, the duration of the crisis
+			}			
+		}
+	}
+}
+
+narrative_event = {#The event that marks the end of the Great Unrest
+	id = yugoslav.7
+	title = "EVTNAMEYUGO7"
+	desc = "EVTDESCYUGO7"
+	picture = GFX_evt_great_schism
+	border = GFX_event_narrative_frame_religion
+	
+	#major = yes #This one should be hidden because it should only show for the Propiciater, the event that it *fires*, though, will be seen by everyone
+	show_ROOT = yes
+	hide_new = yes
+	
+	only_playable = yes
+	min_age = 16
+	religion = jugoslavist
+	
+	trigger = {
+		NOT = {
+			has_alternate_start_parameter = { key = religion_names value = random }
+		}
+		has_global_flag = yugoslav_crisis_started
+		controls_religion = yes#make it fire since the Propiciater should always be Jugo, and should always exist (for now) no matter what happened in the intervening two decades
+	}
+	
+	mean_time_to_happen = {
+		months = 240#about twenty years
+	}
+	
+	option = {#OK, let's see what happened
+		name = "EVTOPTA_yugoslav.7"
+		
+		if = {
+			limit = {
+				e_yugoslavia = {
+					has_holder = yes#I KNOW for a fact that this one works
+					holder_scope = {#I think this should work, but I'm not sure. It should change the scope to the holder of e_yugoslavia, thus we should be able to check their religion
+						religion = jugoslavist
+						realm_size = 65#if you have 65 or more total realm holdings, including vassals - Yugo starts with 125 so this basically means "keep ahold of 51% of your starting realm"
+					}
+				}
+			}
+			character_event = { id = yugoslav.8}#triumph of Yugoslavism
+		}
+		else_if = {
+			limit = {
+				e_yugoslavia = {
+					has_holder = yes#I KNOW for a fact that this one works
+					holder_scope = {#I think this should work, but I'm not sure. It should change the scope to the holder of e_yugoslavia, thus we should be able to check their religion
+						religion = jugoslavist
+						NOT = {
+							realm_size = 65#if you have less than 65 total realm holdings, including vassals - Yugo starts with 125
+						}
+					}
+				}
+			}
+			character_event = { id = yugoslav.9}#survival of Yugoslavism
+		}
+		else_if = {
+			limit = {
+			OR = {
+				e_yugoslavia = {
+					has_holder = no
+				}
+				e_yugoslavia = {
+					holder_scope = {
+						NOT = {
+							religion = jugoslavist
+						}
+					}
+				}
+			}
+			}
+			character_event = { id = yugoslav.10}#death of Yugoslavism
+		}
+	}
+   }
+   
+ narrative_event = {#Yugoslavism triumphs
+	id = yugoslav.8
+	title = "EVTNAMEYUGO8"
+	desc = "EVTDESCYUGO8"
+	picture = GFX_evt_great_schism
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	show_ROOT = yes
+	hide_new = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = yugoslavism_triumphant
+			religion_authority = {
+				modifier = yug_triumph
+				years = 1000
+			}
+	}
+	
+	option = {#The Emperor is happy
+		name = "EVTOPTA_yugoslav.8"
+		trigger = {
+			primary_title = { title = e_yugoslavia }
+			religion = jugoslavist
+		}
+		any_realm_character = {
+			limit = {
+				NOT = {
+					religion = jugoslavist
+				}
+			}
+			character_event = { id = yugoslav.13}#event that demands conversion
+		}
+	}
+	option = {#So are other Yugos
+		name = "EVTOPTB_yugoslav.8"
+		trigger = {
+		    NOT = {
+				primary_title = { title = e_yugoslavia }
+			}
+			religion = jugoslavist
+		}
+	}
+	option = {#Other Christians are disgusted
+		name = "EVTOPTC_yugoslav.8"
+		trigger = {
+			religion_group = christian
+			NOT = {
+				religion = jugoslavist
+			}
+		}
+	}
+	option = {#As are Muslims
+		name = "EVTOPTD_yugoslav.8"
+		trigger = {
+			religion_group = muslim
+		}
+	}
+	option = {#Nobody else cares
+		name = "EVTOPTE_yugoslav.8"
+		trigger = {
+			NOR = {
+				religion_group = muslim
+				religion_group = christian
+			}
+		}
+	}
+}
+
+ narrative_event = {#Yugoslavism survives
+	id = yugoslav.9
+	title = "EVTNAMEYUGO9"
+	desc = "EVTDESCYUGO9"	
+	picture = GFX_evt_great_schism
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	show_ROOT = yes
+	hide_new = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = yugoslavism_survives
+			religion_authority = {
+				modifier = yug_endured
+				years = 1000
+			}
+	}
+	
+	option = {#The Emperor is happy
+		name = "EVTOPTA_yugoslav.9"
+		trigger = {
+			primary_title = { title = e_yugoslavia }
+			religion = jugoslavist
+		}
+		any_realm_character = {
+			limit = {
+				NOT = {
+					religion = jugoslavist
+				}
+			}
+			character_event = { id = yugoslav.13}#event that demands conversion
+		}
+	}
+	option = {#So are other Yugos
+		name = "EVTOPTB_yugoslav.9"
+		trigger = {
+		    NOT = {
+				primary_title = { title = e_yugoslavia }
+			}
+			religion = jugoslavist
+		}
+	}
+	option = {#Other Christians are disgusted
+		name = "EVTOPTC_yugoslav.9"
+		trigger = {
+			religion_group = christian
+			NOT = {
+				religion = jugoslavist
+			}
+		}
+	}
+	option = {#As are Muslims
+		name = "EVTOPTD_yugoslav.9"
+		trigger = {
+			religion_group = muslim
+		}
+	}
+	option = {#Nobody else cares
+		name = "EVTOPTE_yugoslav.9"
+		trigger = {
+			NOR = {
+				religion_group = muslim
+				religion_group = christian
+			}
+		}
+	}
+}
+
+ narrative_event = {#Yugoslavism destroyed
+	id = yugoslav.10
+	title = "EVTNAMEYUGO10"
+	desc = "EVTDESCYUGO10"
+	picture = GFX_evt_great_schism
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	show_ROOT = yes
+	hide_new = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_global_flag = yugoslavism_dead
+		activate_title = { title = k_serbia_triumvirate status = no }		
+	}
+	
+	option = {#The Emperor is obviously sad
+		name = "EVTOPTA_yugoslav.10"
+		trigger = {
+			primary_title = { title = e_yugoslavia }
+			religion = jugoslavist
+		}
+	}
+	option = {#So are other Yugos
+		name = "EVTOPTB_yugoslav.10"
+		trigger = {
+		    NOT = {
+				primary_title = { title = e_yugoslavia }
+			}
+			religion = jugoslavist
+		}
+	}
+	option = {#Other Christians are very happy
+		name = "EVTOPTC_yugoslav.10"
+		trigger = {
+			religion_group = christian
+			NOT = {
+				religion = jugoslavist
+			}
+		}
+	}
+	option = {#As are Muslims
+		name = "EVTOPTD_yugoslav.10"
+		trigger = {
+			religion_group = muslim
+		}
+	}
+	option = {#Nobody else cares
+		name = "EVTOPTE_yugoslav.10"
+		trigger = {
+			NOR = {
+				religion_group = muslim
+				religion_group = christian
+			}
+		}
+	}
+}
+
+ narrative_event = {#Yugoslavist Crusades start
+	id = yugoslav.11
+	title = "EVTNAMEYUGO11"
+	desc = "EVTDESCYUGO11"
+	picture = GFX_evt_jerusalem
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	show_ROOT = yes
+	hide_new = yes
+	
+	only_playable = yes
+	min_age = 16
+	only_men = yes
+	religion = jugoslavist
+	has_global_flag = yugoslavism_triumphant
+	
+	trigger = {
+		controls_religion = yes
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	immediate = {
+		set_global_flag = yugoslavist_crusades
+	}
+
+	option = {#The Emperor is happy
+		name = "EVTOPTA_yugoslav.11"
+		trigger = {
+			primary_title = { title = e_yugoslavia }
+			religion = jugoslavist
+		}
+	}
+	option = {#So are other Yugos
+		name = "EVTOPTB_yugoslav.11"
+		trigger = {
+		    NOT = {
+				primary_title = { title = e_yugoslavia }
+			}
+			religion = jugoslavist
+		}
+	}
+	option = {#Other Christians are disgusted
+		name = "EVTOPTC_yugoslav.11"
+		trigger = {
+			religion_group = christian
+			NOT = {
+				religion = jugoslavist
+			}
+		}
+	}
+	option = {#As are Muslims
+		name = "EVTOPTD_yugoslav.11"
+		trigger = {
+			religion_group = muslim
+		}
+	}
+	option = {#Nobody else cares
+		name = "EVTOPTE_yugoslav.11"
+		trigger = {
+			NOR = {
+				religion_group = muslim
+				religion_group = christian
+			}
+		}
+	}
+}
+
+ narrative_event = {#When you leave things entirely up to chance
+	id = yugoslav.12
+	title = "EVTNAMEYUGO12"
+	desc = "EVTDESCYUGO12"
+	picture = GFX_evt_great_schism
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	show_ROOT = yes
+	hide_new = yes
+	
+	only_playable = yes
+	min_age = 16
+	only_men = yes
+	religion = jugoslavist
+	has_global_flag = YUG_did_nothing
+	
+	trigger = {
+		controls_religion = yes
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+	}
+	
+	option = {#
+		name = "EVTOPTA_yugoslav.12"
+		random_list = {
+			60 = {#Worst outcome
+				character_event = { id = yugoslav.5 days = 180 tooltip = EVTTOOLTIPVIOLENTYUGO }
+			}
+			30 = {#Bad outcome
+				character_event = { id = yugoslav.4 days = 180 tooltip = EVTTOOLTIPVIOLENTYUGO }			
+			}
+			10 = {#Good outcome
+				character_event = { id = yugoslav.3 days = 180 tooltip = EVTTOOLTIPVIOLENTYUGO }				
+			}
+		}
+	}
+}
+
+ character_event = {#Car demands that you convert to Yugoslavism
+	id = yugoslav.13
+	title = "EVTNAMEYUGO13"
+	desc = "EVTDESCYUGO13"	
+	picture = GFX_evt_great_schism
+	border = GFX_event_narrative_frame_religion
+	
+	#major = yes
+	show_ROOT = yes
+	hide_new = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+	}
+	
+	option = {#I will
+		name = "EVTOPA_yugoslav.13"
+		religion = jugoslavist
+	}
+	option = {#I will...publically - am not sure if you can make it work this way, but we'll see
+		name = "EVTOPTB_yugoslav.13"
+		if = {
+			limit = {
+				religion = catholic
+			}
+			set_character_flag = YUG_cryptocatholic
+		}
+		else_if = {
+			limit = {
+				religion = orthodox
+			}
+			set_character_flag = YUG_cryptoorthodox
+		}
+		else_if = {
+			limit = {
+				religion = sunni
+			}
+			set_character_flag = YUG_cryptosunni
+		}
+		else_if = {
+			limit = {
+				religion = lutheran
+			}
+			set_character_flag = YUG_cryptolutheran
+		}
+		character_event = {
+			id = yugoslav.14
+		}
+		religion = jugoslavist
+	}
+	option = {#Never!
+		name = "EVTOPTC_yugoslav.13"
+			opinion = {
+				who = FROM
+				modifier = opinion_charge_traitor
+				months = 60
+			}	
+	}
+}
+ character_event = {#Set your secret faith after falsely converting
+	id = yugoslav.14
+	title = "EVTNAMEYUGO14"
+	desc = "EVTDESCYUGO14"	
+	picture = GFX_evt_great_schism
+	border = GFX_event_narrative_frame_religion
+	
+	#major = yes
+	show_ROOT = yes
+	hide_window = yes#this makes it hidden
+		
+	is_triggered_only = yes
+	
+	immediate = {
+		join_society = secret_religious_cult
+		if = {#you join the secret religious cult 
+			limit = {
+				NOT = { any_society_member = { is_society_grandmaster = yes } }
+			}
+			set_society_grandmaster = yes # Set character as Grand Master
+			add_society_currency_massive_effect = yes # Give the Grand Master a start-up capital to induct members
+		}	
+	}
+	
+	option = {#We will endure in secret
+		name = "EVTOPA_yugoslav.14"
+		if = {
+			limit = {
+				has_character_flag = YUG_cryptocatholic
+			}
+			set_secret_religion = catholic
+		}
+		else_if = {
+			limit = {
+				has_character_flag = YUG_cryptoorthodox
+			}
+			set_secret_religion = orthodox
+		}
+		else_if = {
+			limit = {
+				has_character_flag = YUG_cryptosunni
+			}
+			set_secret_religion = sunni
+		}
+		else_if = {
+			limit = {
+				has_character_flag = YUG_cryptolutheran
+			}
+			set_secret_religion = lutheran
+		}
+	}
+}
+
+narrative_event = {##Order of St.Tito formed
+	id = yugoslav.15
+	title = "EVTNAMEYUGO15"
+	desc = "EVTDESCYUGO15"
+	picture = "GFX_evt_crusaders"
+	border = "GFX_event_narrative_frame_religion"
+	
+	major = yes
+	only_playable = yes
+	only_men = yes
+	religion = jugoslavist
+	has_global_flag = yugoslavism_triumphant
+	
+	trigger = {
+		NOT = { #immersion-breaking
+			has_alternate_start_parameter = { key = religion_names value = random }
+		}
+		NOT = { is_title_active = d_jugo_order }
+	}
+	
+	mean_time_to_happen = {
+		months = 4
+	}
+	
+	immediate = {
+		activate_title = { title = d_jugo_order status = yes }
+		create_random_soldier = {
+			dynasty = none
+			random_traits = yes
+			religion = jugoslavist
+		}
+		new_character = {
+
+			d_jugo_order = {
+				grant_title = PREV
+			}
+			wealth = 500
+		}
+		
+		religion_authority = {
+			modifier = religious_order_formed
+			years = 10
+		}
+	}
+	option = {
+		name = "EVTOPTA_yugoslav.15"
+		trigger = {
+			religion = ROOT
+		}
+	}
+	option = {
+		name = "EVTOPTB_yugoslav.15"
+		trigger = {
+			NOT = { religion_group = christian }
+		}
+	}
+	option = {
+		name = "EVTOPTC_yugoslav.15"
+		trigger = {
+			religion_group = christian
+			NOT = { religion = ROOT }
+		}
+	}
+}
