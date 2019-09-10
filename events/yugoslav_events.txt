@@ -374,7 +374,7 @@ narrative_event = {#The event that marks the end of the Great Unrest
 	}
 	
 	mean_time_to_happen = {
-		months = 240#about twenty years
+		years = 20
 	}
 	
 	option = {#OK, let's see what happened
@@ -583,7 +583,10 @@ narrative_event = {#The event that marks the end of the Great Unrest
 	
 	immediate = {
 		set_global_flag = yugoslavism_dead
-		activate_title = { title = k_serbia_triumvirate status = no }		
+		k_serbia_triumvirate = {
+			activate_title = { title = THIS status = no }
+			unsafe_destroy_landed_title = THIS
+		}	
 	}
 	
 	option = {#The Emperor is obviously sad
@@ -720,14 +723,24 @@ narrative_event = {#The event that marks the end of the Great Unrest
 	
 	trigger = {
 		controls_religion = yes
+		NOT = {
+			has_global_flag = YUG_events_fired
+		}
 	}
 	
 	mean_time_to_happen = {
 		months = 24
 	}
 	
+	immediate = {
+		set_global_flag = YUG_events_fired
+	}
+	
 	option = {#
 		name = "EVTOPTA_yugoslav.12"
+		trigger = {
+			primary_title = { title e_yugoslavia }
+		}
 		random_list = {
 			60 = {#Worst outcome
 				character_event = { id = yugoslav.5 days = 180 tooltip = EVTTOOLTIPVIOLENTYUGO }
@@ -737,6 +750,14 @@ narrative_event = {#The event that marks the end of the Great Unrest
 			}
 			10 = {#Good outcome
 				character_event = { id = yugoslav.3 days = 180 tooltip = EVTTOOLTIPVIOLENTYUGO }				
+			}
+		}
+	}
+	option = {#Oof
+		name = "EVTOPTB_yugoslav.12"
+		trigger = {
+			NOT = {
+				primary_title = { title e_yugoslavia }
 			}
 		}
 	}
@@ -816,14 +837,7 @@ narrative_event = {#The event that marks the end of the Great Unrest
 	is_triggered_only = yes
 	
 	immediate = {
-		join_society = secret_religious_cult
-		if = {#you join the secret religious cult 
-			limit = {
-				NOT = { any_society_member = { is_society_grandmaster = yes } }
-			}
-			set_society_grandmaster = yes # Set character as Grand Master
-			add_society_currency_massive_effect = yes # Give the Grand Master a start-up capital to induct members
-		}	
+	
 	}
 	
 	option = {#We will endure in secret
@@ -851,6 +865,14 @@ narrative_event = {#The event that marks the end of the Great Unrest
 				has_character_flag = YUG_cryptolutheran
 			}
 			set_secret_religion = lutheran
+		}
+		join_society = secret_religious_cult
+		if = {#you join the secret religious cult 
+			limit = {
+				NOT = { any_society_member = { is_society_grandmaster = yes } }
+			}
+			set_society_grandmaster = yes # Set character as Grand Master
+			add_society_currency_massive_effect = yes # Give the Grand Master a start-up capital to induct members
 		}
 	}
 }
