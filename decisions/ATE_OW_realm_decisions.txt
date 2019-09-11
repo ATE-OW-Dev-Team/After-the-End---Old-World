@@ -1,4 +1,109 @@
 decisions = {
+	form_british_raj = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 60
+
+		potential = {
+			OR = {		###Must be British
+				culture = british
+				culture = westlander
+				culture = old_welsh
+				culture = farlander
+			}
+			OR = {
+				religion = thelemic_reformed
+				religion = thelemic
+			}
+			capital_scope = {
+				region = world_india
+			}
+			e_british_india = {
+				is_titular = yes
+			}
+			e_british_india = {
+				has_holder = no
+			}
+			is_alternate_start = no
+		}
+
+		allow = {
+			is_adult = yes
+			prestige = 5000
+			war = no
+			NOT = { trait = incapable }
+			AND = {		#Control the seven most important jewel-cities of India
+				completely_controls = c_tamralipti #Calcutta
+				completely_controls = c_lahur #Lahore
+				completely_controls = c_delhi #New Delhi
+				completely_controls = c_daman #Bombay/Mumbai
+				completely_controls = c_kanchipuram #Madras
+				completely_controls = c_debul #Karachi, as best I can tell
+				completely_controls = c_bikrampur #Dhaka, capital of Bengal/Bangladesh
+				completely_controls = c_kangra #Shimla was Summer capital of the Raj
+			}
+			is_vice_royalty = no
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = form_raj_tt
+				grant_title_no_opinion = e_british_india 
+			}
+			give_nickname = nick_the_glorious
+			if = {
+				limit = {
+					is_female = yes
+					has_dlc = "Holy Fury"
+				}
+				create_bloodline = {
+					type = raj_female
+				}
+				new_bloodline = {
+					set_description = "raj_female_desc"
+				}
+			}
+			if = {
+				limit = {
+					is_female = no
+					has_dlc = "Holy Fury"
+				}
+				create_bloodline = {
+					type = raj_male
+				}
+				new_bloodline = {
+					set_description = "raj_male_desc"
+				}
+			}
+
+			hidden_tooltip = {
+				primary_title = {
+					e_british_india = {
+						copy_title_laws = PREV
+						copy_title_history = PREV
+					}
+				}
+
+				any_demesne_title = {
+					limit = {
+						tier = EMPEROR
+						NOT = { title = e_british_india }
+					}
+					destroy_landed_title = THIS
+				}
+
+				capital = PREV
+
+				ROOT = {
+					narrative_event = { id = ATEOW_realm_event.99998 }
+				}
+				any_playable_ruler = {
+					narrative_event = { id = ATEOW_realm_event.99998 }
+				}
+			}
+		}
+	}
+
 	form_zapadoslavia = {
 		is_high_prio = yes
 		only_playable = yes
