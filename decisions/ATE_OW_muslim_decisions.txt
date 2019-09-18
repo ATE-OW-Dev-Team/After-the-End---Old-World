@@ -1,0 +1,160 @@
+decisions = {
+	assume_caliphate = {
+		religion_group = muslim
+		only_rulers = yes
+		is_high_prio = yes
+		potential = {
+			is_ruler = yes
+			independent = yes
+			rebel = no
+			rightful_religious_head_scope = { always = yes }
+			religion_group = muslim
+			NOR = {
+				controls_religion = yes
+				is_anti_caliph = yes
+				has_character_flag = failed_caliph
+			}
+			religion = sunni
+		}
+		allow = {
+			custom_tooltip = {
+				text = equal_tier_than_rel_head
+				NOT = { lower_tier_than = rightful_religious_head_scope }
+			}
+			OR = {
+				trait = mirza
+				trait = sayyid
+				piety = 1000
+			}
+			calc_true_if = {
+				amount = 3
+				trait = mirza
+				trait = sayyid
+				custom_tooltip = {
+					text = sayyid_counted_as_two
+					hidden_tooltip = {
+						trait = sayyid
+					}
+				}
+				piety = 1000
+				realm_size = 180
+				tier = EMPEROR
+				num_of_holy_sites = 1
+				num_of_holy_sites = 2
+			}
+		}
+		effect = {
+			wealth = -200
+			set_character_flag = newly_founded_caliphate
+			if = {
+				limit = { religion = sunni }
+				d_sunni = { add_claim = ROOT }
+			}
+			if = {
+				limit = { religion = ibadi }
+				d_ibadi = { add_claim = ROOT }
+			}
+			if = {
+				limit = { religion = wahhabi }
+				d_wahhabi = { add_claim = ROOT }
+			}
+			if = {
+				limit = { religion = shiite }
+				d_shiite = { add_claim = ROOT }
+			}
+			if = {
+				limit = { religion = bahai }
+				d_bahai = { add_claim = ROOT }
+			}
+			#hidden_tooltip = { narrative_event = { id = AOS.2 } }
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				AND = {
+					NOT = { relative_power_including_allies_defender = { who = rightful_religious_head_scope power = 0.6 } }
+					OR = {
+						trait = craven
+						trait = content
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOR = { 
+					relative_power_including_allies_defender = { who = rightful_religious_head_scope power = 0.3 } 
+					trait = brave
+					trait = lunatic
+					trait = possessed
+					trait = ambitious
+				}
+				
+			}
+			modifier = {
+				factor = 1000
+				always = yes
+			}
+			modifier = {
+				factor = 0.05
+				trait = craven
+			}
+			modifier = {
+				factor = 0.01
+				trait = content
+			}
+			modifier = {
+				factor = 0
+				NOT = { wealth = 200 }
+			}
+		}
+	}
+	give_up_caliphate = {
+		religion_group = muslim
+		only_rulers = yes
+		potential = {
+			is_ruler = yes
+			religion_group = muslim
+			is_anti_caliph = yes
+			OR = {
+				had_flag = { flag = newly_founded_caliphate years = 10 }
+				NOT = { has_character_flag = newly_founded_caliphate }
+			}
+		}
+		allow = { 
+			is_anti_caliph = yes	
+		}
+		effect = {
+			end_anti_caliphate = yes
+			prestige = -500
+			rightful_religious_head_scope = { opinion = { modifier = opinion_ended_caliphate who = ROOT years = 10 } }
+			set_character_flag = failed_caliph
+			#hidden_tooltip = { narrative_event = { id = AOS.3 } }
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				OR = {
+					trait = brave
+					trait = possessed
+					trait = ambitious
+					relative_power_including_allies_defender = { who = rightful_religious_head_scope power = 0.6 }
+				}
+			}
+			#TODO
+			modifier = {
+				factor = 2
+				trait = lunatic
+			}
+			modifier = {
+				factor = 2.5
+				trait = craven
+			}
+			modifier = {
+				factor = 5
+				trait = content
+			}
+		}
+	}
+}

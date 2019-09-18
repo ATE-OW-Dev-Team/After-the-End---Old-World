@@ -1,0 +1,206 @@
+namespace = AOS
+character_event = { #Clean up event
+	id = AOS.1
+	hide_window = yes
+	trigger = {
+		is_anti_caliph = yes
+		OR = {
+			AND = {
+				NOT = { religion = sunni }
+				has_claim = d_sunni
+			}
+			AND = {
+				NOT = { religion = ibadi }
+				has_claim = d_ibadi
+			}
+			AND = {
+				NOT = { religion = wahhabi }
+				has_claim = d_wahhabi
+			}
+			AND = {
+				NOT = { religion = shiite }
+				has_claim = d_shiite
+			}
+			AND = {
+				NOT = { religion = bahai }
+				has_claim = d_bahai
+			}
+			is_ruler = no
+			independent = no
+		}
+		
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	immediate = {
+		if = {
+			limit = { OR = { is_ruler = no independent = no } }
+			end_anti_caliphate = yes
+		}
+			if = {
+				limit = { NOT = { religion = sunni } }
+				remove_claim = d_sunni
+			}
+			if = {
+				limit = { NOT = { religion = wahhabi } }
+				remove_claim = d_wahhabi
+			}
+			if = {
+				limit = { NOT = { religion = ibadi } }
+				remove_claim = d_ibadi
+			}
+			if = {
+				limit = { NOT = { religion = bahai } }
+				remove_claim = d_bahai
+			}
+			if = {
+				limit = { NOT = { religion = shiite } }
+				remove_claim = d_shiite
+			}
+	}
+}
+narrative_event = { #TODO: Big, fancy notifications about the events of pretender caliphs
+	id = AOS.2
+	title = "EVTNAMEAOS2"
+	desc = "EVTDESCAOS2"
+	picture = GFX_evt_bishop
+	border = GFX_event_narrative_frame_religion
+	is_triggered_only = yes
+	only_playable = yes
+	major = yes
+	option = {
+		name = {
+			text = EVTOPTAAOS2
+			trigger = { NOT = { religion = ROOT } }
+		}
+		name = {
+			text = EVTOPTBAOS2
+			trigger = {
+				religion = ROOT
+				NOR = {
+					character = ROOT
+					controls_religion = yes
+				}
+			}
+		}
+		name = {
+			text = EVTOPTCAOS2
+			trigger = { character = ROOT }
+		}
+		name = {
+			text = EVTOPTDAOS2
+			trigger = { religion = ROOT controls_religion = yes }
+		}
+	}
+}
+narrative_event = {
+	id = AOS.3
+	title = "EVTNAMEAOS3"
+	desc = "EVTDESCAOS3"
+	picture = GFX_evt_bishop
+	border = GFX_event_narrative_frame_religion
+	is_triggered_only = yes
+	only_playable = yes
+	major = yes
+	option = {
+		name = {
+			text = EVTOPTAAOS3
+			trigger = { NOT = { religion = ROOT } }
+		}
+		name = {
+			text = EVTOPTBAOS3
+			trigger = {
+				religion = ROOT
+				NOR = {
+					character = ROOT
+					controls_religion = yes
+				}
+			}
+		}
+		name = {
+			text = EVTOPTCAOS3
+			trigger = { character = ROOT }
+		}
+		name = {
+			text = EVTOPTDAOS3
+			trigger = { religion = ROOT controls_religion = yes }
+		}
+	}
+}
+narrative_event = {
+	id = AOS.4
+	title = "EVTNAMEAOS4"
+	desc = "EVTDESCAOS4"
+	picture = GFX_evt_battle
+	border = GFX_event_narrative_frame_religion
+	is_triggered_only = yes
+	only_playable = yes
+	major = yes
+	option = {
+		name = {
+			text = EVTOPTAAOS4
+			trigger = { NOT = { religion = ROOT } }
+		}
+		name = {
+			text = EVTOPTBAOS4
+			trigger = {
+				religion = ROOT
+				NOR = {
+					character = ROOT
+					controls_religion = yes
+				}
+			}
+		}
+		name = {
+			text = EVTOPTCAOS4
+			trigger = { character = ROOT }
+		}
+		name = {
+			text = EVTOPTDAOS4
+			trigger = { religion = ROOT controls_religion = yes }
+		}
+	}
+}
+character_event = {
+	id = AOS.5
+	picture = GFX_evt_bishop
+	desc = "EVTDESCAOS5" # No real caliph, therefore no pretender caliphs
+	only_playable = yes
+	religion_group = muslim
+	trigger = {
+		is_anti_caliph = yes
+		rightful_religious_head_scope = { always = no }
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	option = {
+		text = EVTOPTAAOS5
+		end_anti_caliphate = yes
+	}
+}
+character_event = { # Maintain event for reducing religious authority lose from pretender caliphs
+	id = AOS.6
+	hide_window = yes
+	is_triggered_only = yes
+	only_playable = yes
+	religion_group = muslim
+	trigger = {
+		controls_religion = yes
+	}
+	immediate = {
+		text = EVTOPTAAOS5
+		any_demesne_title = {
+			limit = {
+				controls_religion = yes
+			}
+			any_claimant = {
+				religion_authority = {
+					modifier = anti_caliph
+					years = 1
+				}
+			}
+		}
+	}
+}
