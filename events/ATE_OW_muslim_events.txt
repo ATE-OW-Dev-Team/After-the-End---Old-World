@@ -58,10 +58,6 @@ character_event = { #Clean up event
 				limit = { NOT = { religion = shiite } }
 				remove_claim = d_shiite
 			}
-		if = {
-			limit = { is_anti_caliph = no }
-			clr_character_flag = is_pretender_caliph
-		}
 	}
 }
 narrative_event = { #TODO: Big, fancy notifications about the events of pretender caliphs
@@ -226,92 +222,68 @@ character_event = { # Maintain event for reducing religious authority lose from 
 character_event = {
 	id = AOS.7
 	hide_window = yes
-	is_triggered_only = yes
-	religion_group = muslim
 	only_playable = yes
 	trigger = {
-		has_character_flag = is_pretender_caliph
-		current_heir = {
-			religion = ROOT
+		any_demesne_title = {
+			has_title_flag = pretender_caliphate_title
 		}
 	}
+	mean_time_to_happen = {
+		days = 1
+	}
 	immediate = {
-		current_heir = {
-			if = {
-				limit = { religion = sunni }
-				d_sunni = { add_claim = PREV }
-			}
-			if = {
-				limit = { religion = ibadi }
-				d_ibadi = { add_claim = PREV }
-			}
-			if = {
-				limit = { religion = wahhabi }
-				d_wahhabi = { add_claim = PREV }
-			}
-			if = {
-				limit = { religion = shiite }
-				d_shiite = { add_claim = PREV }
-			}
-			if = {
-				limit = { religion = bahai }
-				d_bahai = { add_claim = PREV }
-			}
-			caliphate_gain_effect = yes
+		top_liege = {
+			character_event = { id = AOS.8 }
 		}
+		any_demesne_title = {
+			limit = { has_title_flag = pretender_caliphate_title }
+			clr_title_flag = pretender_caliphate_title
+		}
+		if = {
+			limit = {
+				independent = yes
+				religion = sunni
+				controls_religion = no
+			}
+			d_sunni = { add_claim = PREV }
+		}
+		caliphate_gain_effect = yes
 	}
 }
 character_event = {
 	id = AOS.8
 	hide_window = yes
-	is_triggered_only = yes
 	religion_group = muslim
+	only_playable = yes
 	trigger = {
-		FROM = {
-			OR = {
-				tier = FROMFROM
-				higher_tier_than = FROMFROM
-			}
+		is_anti_caliph = yes
+		primary_title = {
+			NOT = { has_title_flag = pretender_caliphate_title }
 		}
-		FROMFROM = {
-			anti_caliph = yes
-		}
+	}
+	mean_time_to_happen = {
+		days = 1
 	}
 	immediate = {
 		if = {
 			limit = {
-				religion = FROMFROM
+				independent = no
 			}
-			if = {
-				limit = { religion = sunni }
-				d_sunni = { add_claim = ROOT }
-			}
-			if = {
-				limit = { religion = ibadi }
-				d_ibadi = { add_claim = ROOT }
-			}
-			if = {
-				limit = { religion = wahhabi }
-				d_wahhabi = { add_claim = ROOT }
-			}
-			if = {
-				limit = { religion = shiite }
-				d_shiite = { add_claim = ROOT }
-			}
-			if = {
-				limit = { religion = bahai }
-				d_bahai = { add_claim = ROOT }
-			}
+			end_anti_caliphate = yes
 		}
-		if = {
+		else_if = {
 			limit = {
-				FROM = {
-					higher_tier_than = FROMFROM
+				any_realm_title = {
+					has_title_flag = pretender_caliphate_title
 				}
 			}
-			FROMFROM = {
-				end_anti_caliphate = yes
+			any_realm_title = {
+				clr_title_flag = pretender_caliphate_title
 			}
+			caliphate_gain_effect = yes
 		}
+		else = {
+			end_anti_caliphate = yes
+		}		
 	}
 }
