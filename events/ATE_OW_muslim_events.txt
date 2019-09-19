@@ -58,6 +58,10 @@ character_event = { #Clean up event
 				limit = { NOT = { religion = shiite } }
 				remove_claim = d_shiite
 			}
+		if = {
+			limit = { is_anti_caliph = no }
+			clr_character_flag = is_pretender_caliph
+		}
 	}
 }
 narrative_event = { #TODO: Big, fancy notifications about the events of pretender caliphs
@@ -164,21 +168,24 @@ narrative_event = {
 }
 character_event = {
 	id = AOS.5
-	picture = GFX_evt_bishop
-	desc = "EVTDESCAOS5" # No real caliph, therefore no pretender caliphs
+	#picture = GFX_evt_bishop
+	#desc = "EVTDESCAOS5" # No real caliph, therefore no pretender caliphs
 	only_playable = yes
 	religion_group = muslim
+	hide_window = yes
 	trigger = {
 		is_anti_caliph = yes
-		rightful_religious_head_scope = { always = no }
+		NOT = {
+			religion_head = { always = yes }
+		}
 	}
 	mean_time_to_happen = {
 		days = 1
 	}
-	option = {
-		text = EVTOPTAAOS5
+	immediate = {
 		end_anti_caliphate = yes
 	}
+	#option = { text = EVTOPTAAOS5 }
 }
 character_event = { # Maintain event for reducing religious authority lose from pretender caliphs
 	id = AOS.6
@@ -190,7 +197,6 @@ character_event = { # Maintain event for reducing religious authority lose from 
 		controls_religion = yes
 	}
 	immediate = {
-		text = EVTOPTAAOS5
 		any_demesne_title = {
 			limit = {
 				controls_religion = yes
@@ -200,6 +206,111 @@ character_event = { # Maintain event for reducing religious authority lose from 
 					modifier = anti_caliph
 					years = 1
 				}
+				save_event_target_as = current_bad_boy
+				PREV = {
+					any_claimant = {
+						limit = {
+							NOT = { character = event_target:current_bad_boy }
+						}
+						opinion = { modifier = opinion_rival_caliph who = event_target:current_bad_boy years = 1 }
+					}
+				}
+				ROOT = {
+					opinion = { modifier = opinion_rival_caliph who = PREV years = 1 }
+				}
+				caliphate_gain_effect = yes
+			}
+		}
+	}
+}
+character_event = {
+	id = AOS.7
+	hide_window = yes
+	is_triggered_only = yes
+	religion_group = muslim
+	only_playable = yes
+	trigger = {
+		has_character_flag = is_pretender_caliph
+		current_heir = {
+			religion = ROOT
+		}
+	}
+	immediate = {
+		current_heir = {
+			if = {
+				limit = { religion = sunni }
+				d_sunni = { add_claim = PREV }
+			}
+			if = {
+				limit = { religion = ibadi }
+				d_ibadi = { add_claim = PREV }
+			}
+			if = {
+				limit = { religion = wahhabi }
+				d_wahhabi = { add_claim = PREV }
+			}
+			if = {
+				limit = { religion = shiite }
+				d_shiite = { add_claim = PREV }
+			}
+			if = {
+				limit = { religion = bahai }
+				d_bahai = { add_claim = PREV }
+			}
+			caliphate_gain_effect = yes
+		}
+	}
+}
+character_event = {
+	id = AOS.8
+	hide_window = yes
+	is_triggered_only = yes
+	religion_group = muslim
+	trigger = {
+		FROM = {
+			OR = {
+				tier = FROMFROM
+				higher_tier_than = FROMFROM
+			}
+		}
+		FROMFROM = {
+			anti_caliph = yes
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				religion = FROMFROM
+			}
+			if = {
+				limit = { religion = sunni }
+				d_sunni = { add_claim = ROOT }
+			}
+			if = {
+				limit = { religion = ibadi }
+				d_ibadi = { add_claim = ROOT }
+			}
+			if = {
+				limit = { religion = wahhabi }
+				d_wahhabi = { add_claim = ROOT }
+			}
+			if = {
+				limit = { religion = shiite }
+				d_shiite = { add_claim = ROOT }
+			}
+			if = {
+				limit = { religion = bahai }
+				d_bahai = { add_claim = ROOT }
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					higher_tier_than = FROMFROM
+				}
+			}
+			FROMFROM = {
+				end_anti_caliphate = yes
 			}
 		}
 	}
