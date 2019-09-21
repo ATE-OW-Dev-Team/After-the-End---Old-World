@@ -1,0 +1,108 @@
+end_anti_caliphate_effect = {
+	if = {
+		limit = { religion = sunni }
+		remove_claim = d_sunni
+	}
+	if = {
+		limit = { religion = ibadi }
+		remove_claim = d_ibadi
+	}
+	if = {
+		limit = { religion = wahhabi }
+		remove_claim = d_wahhabi
+	}
+	if = {
+		limit = { religion = shiite }
+		remove_claim = d_shiite
+	}
+	if = {
+		limit = { religion = bahai }
+		remove_claim = d_bahai
+	}
+	any_demesne_title = {
+		clr_title_flag = pretender_caliphate_title
+	}
+	if = {
+		limit = {
+			NOT = {
+				any_dynasty_member = {
+					is_anti_caliph = yes
+					religion = PREV
+				}
+			}
+		}
+		any_dynasty_member = {
+			limit = {
+				religion = PREV
+			}
+			remove_character_modifier = PC_family_member
+		}
+	}
+}
+caliphate_gain_effect = {
+	hidden_tooltip = {
+		if = {
+			limit = {
+				NOT = {
+					any_dynasty_member = {
+						controls_religion = yes
+						religion = PREV
+					}
+				}
+			}
+			any_dynasty_member = {
+				limit = {
+					religion = PREV
+					is_playable = yes
+				}
+				add_character_modifier = { name = PC_family_member years = 1  }
+			}
+		}
+		primary_title = {
+			set_title_flag = pretender_caliphate_title #It's just sunni for now.
+		}
+		any_realm_title = {
+			clr_title_flag = pretender_caliphate_title
+		}
+	}
+}
+gain_title_effect = {
+	PREV = {
+		primary_title = {
+			save_event_target_as = former_primary_title
+		}
+	}
+	grant_title_no_opinion = PREV
+	copy_title_laws = event_target:former_primary_title
+	copy_title_history = event_target:former_primary_title
+	if = {
+		limit = {
+			PREV = {
+				NOT = {
+					any_demesne_title = {
+						higher_tier_than = PREV
+					}
+				}
+			}
+		}
+		make_primary_title = yes
+		PREV = {
+			if = {
+				limit = { is_anti_caliph = yes }
+				caliphate_gain_effect = yes
+			}
+		}
+	}
+}
+gain_empire_effect = {
+	gain_title_effect = yes
+	PREV = {
+		any_demesne_title = {
+			limit = {
+				tier = EMPEROR
+				NOT = { title = PREV }
+			}
+			destroy_landed_title = THIS
+		}
+	}
+}
