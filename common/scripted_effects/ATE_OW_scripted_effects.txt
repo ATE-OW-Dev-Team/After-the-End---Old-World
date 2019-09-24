@@ -1,3 +1,20 @@
+#################################################################################################
+# Name of the effect							Used scopes										#
+#################################################################################################
+# end_anti_caliphate_effect						Uses just one scope								#
+# caliphate_gain_effect							Uses just one scope								#
+# gain_title_effect								Scope should be title, PREV should be gainer	#
+# gain_empire_effect							Scope should be title, PREV should be gainer	#
+# jacobinist_sacrifice_tiered_traits_effect		Uses just one scope								#
+# calculate_madame_preference_effect			Scope should be victim, ROOT should be killer	#
+# jacobinist_gain_tiered_traits_effect			Scope should be killer							#
+#################################################################################################
+# To add a new preference option for Madame Guillotin you need to edit the followings:			#
+# calculate_madame_preference_effect			This file										#
+# ATE_OW_REL.6									ATE_OW_religious_events.txt						#
+# GetNewPreference								ATE_OW_custom_loc.txt							#
+# Add new ones									ATE_OW_CL_texts.csv								#
+#################################################################################################
 end_anti_caliphate_effect = {
 	if = {
 		limit = { religion = sunni }
@@ -103,6 +120,293 @@ gain_empire_effect = {
 				NOT = { title = PREV }
 			}
 			destroy_landed_title = THIS
+		}
+	}
+}
+jacobinist_sacrifice_tiered_traits_effect = {
+	hidden_effect = {
+		change_variable = { which = guillotine_points value = 1 }
+		if = { #Tier 1
+			limit = {
+				check_variable = { which = guillotine_points value = 10 }
+				NOR = { 
+					trait = guillotine_master_1
+					trait = guillotine_master_2
+					trait = guillotine_master_3
+				}
+			}
+			set_character_flag = becoming_guillotine_master_1
+		}
+		if = { #Tier 2
+			limit = {
+				check_variable = { which = guillotine_points value = 30 }
+				trait = guillotine_master_1
+				NOR = { 
+					trait = guillotine_master_2
+					trait = guillotine_master_3
+				}
+			}
+			set_character_flag = becoming_guillotine_master_2
+		}
+		if = { #Tier 3
+			limit = {
+				check_variable = { which = guillotine_points value = 100 }
+				trait = guillotine_master_2
+				NOT = { 
+					trait = guillotine_master_3
+				}
+			}
+			set_character_flag = becoming_guillotine_master_3
+		}
+	}
+}
+jacobinist_gain_tiered_traits_effect = {
+	if = {
+		limit = {
+			has_character_flag = becoming_guillotine_master_1
+		}
+		clr_character_flag = becoming_guillotine_master_1
+		add_trait = guillotine_master_1
+	}
+	if = {
+		limit = {
+			has_character_flag = becoming_guillotine_master_2
+		}
+		clr_character_flag = becoming_guillotine_master_2
+		add_trait = guillotine_master_2
+	}
+	if = {
+		limit = {
+			has_character_flag = becoming_guillotine_master_3
+		}
+		clr_character_flag = becoming_guillotine_master_3
+		add_trait = guillotine_master_3
+	}
+}
+jacobinist_sacrifice_after_death_effect = {
+	if = {
+		limit = {
+			death_reason = death_jacobinist_sacrifice
+			killer = { 
+				is_playable = yes
+				#is_landed = yes
+				NOT = { trait = incapable }
+				religion = jacobinist
+			}
+		}
+		killer = { 
+			#Bonus points first.
+			if = { #A religious head is also quite good.
+				limit = {
+					FROM = { controls_religion = yes }
+				}
+				change_variable = { which = guillotine_points value = 2 }
+			}
+			if = { #A emperor is also well accepted.
+				limit = {
+					FROM = { higher_tier_than = KING }
+				}
+				change_variable = { which = guillotine_points value = 1 }
+			}
+			#Finally, a third point is added regardless in the following scripted effect, which will also trigger the events below, when the proper score is reached.
+			jacobinist_sacrifice_tiered_traits_effect = yes 
+		}
+	}
+}
+calculate_madame_preference_effect = {
+	# Ugly but there is no other methode sadly
+	set_variable = { which = local_madame_preference value = 1.0 }
+	# Personality and birth trait preferences
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_strong }
+			is_strong_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_weak }
+			is_weak_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_strong }
+			is_weak_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_weak }
+			is_strong_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_smart }
+			is_smart_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_dumb }
+			is_dumb_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_smart }
+			is_dumb_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_dumb }
+			is_smart_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_virtue }
+			has_virtue_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_vice }
+			has_vice_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_virtue }
+			has_vice_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_vice }
+			has_virtue_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_attractive }
+			is_attractive_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_unattractive }
+			is_unattractive_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_attractive }
+			is_unattractive_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_unattractive }
+			is_attractive_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	# Education and lifestyle based preferences
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_diplomacy }
+			into_diplomacy_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_martial }
+			into_diplomacy_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_martial }
+			into_martial_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_learning }
+			into_martial_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_learning }
+			into_learning_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_intrigue }
+			into_learning_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_intrigue }
+			into_intrigue_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_stewardship }
+			into_intrigue_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_stewardship }
+			into_stewardship_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_diplomacy }
+			into_stewardship_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	# Should be at least 0.1
+	if = {
+		limit = {
+			NOT = {
+				check_variable = { which = local_madame_preference value = 0.1 }
+			}
+			set_variable = { which = local_madame_preference value = 0.1 }
 		}
 	}
 }
