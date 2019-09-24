@@ -1187,9 +1187,6 @@ targeted_decisions = {
 		}
 	}
 	
-
-
-	
 	stalinist_fabricate_evidence = {
 		only_playable = yes
 		only_independent = yes
@@ -1304,5 +1301,85 @@ targeted_decisions = {
 			}
 		}
 	}
+	jacobinist_sacrifice_decision = {
+		only_playable = yes
+		ai_check_interval = 6
+	    diplomacy_icon = GFX_sacrifice_decision
 	
-}	
+		ai_target_filter = home_court
+	
+		from_potential = {
+			show_only_failed_conditions = yes
+			is_playable = yes
+			religion = jacobinist
+		}
+	
+		potential = {
+			prisoner = yes
+			host = { character = FROM }
+		}
+		
+		allow = {
+			ROOT = {
+				NOT = { diplomatic_immunity = yes }
+				prisoner = yes 
+			}
+		}
+		
+		effect = {
+			death = {
+				death_reason = death_jacobinist_sacrifice
+				killer = FROM
+			}
+			hidden_tooltip = {
+				jacobinist_sacrifice_after_death_effect = yes
+				any_liege = {
+					limit = {
+						ai = no
+						NOT = { character = FROM }
+						NOT = { religion = FROM }
+					}
+					character_event = { id = ATE_OW_REL.2 }
+				}
+				if = {
+					limit = {
+						OR = {
+							ai = no
+							religion = FROM
+						}
+					}
+					character_event = { id = ATE_OW_REL.3 }
+				}
+				FROM = {
+					character_event = { id = ATE_OW_REL.4 }
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				FROM = { trait = cynical }
+			}
+			modifier = {
+				factor = 1.5
+				FROM = { trait = zealous }
+			}
+			modifier = {
+				factor = 1.5
+				FROM = { trait = guillotine_master_1 }
+			}
+			modifier = {
+				factor = 1.75
+				FROM = { trait = guillotine_master_2 }
+			}
+			modifier = {
+				factor = 2
+				FROM = { trait = guillotine_master_3 }
+			}
+		}
+	}
+}
