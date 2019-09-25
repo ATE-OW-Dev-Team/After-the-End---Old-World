@@ -2,7 +2,7 @@ namespace=nobelian
 
 #########################################
 #
-#	Novelist religious events
+#	Nobelian religious events
 #
 #########################################
 # Gain a bonus
@@ -10,9 +10,7 @@ character_event = {
 	id = nobelian.1
 	is_triggered_only = yes
 	picture = GFX_evt_book_carolingian_script
-	border = GFX_event_normal_frame_war
-
-	hide_from = yes
+	border = GFX_event_normal_frame_religion
 
 	desc = {
 		text = nobelian1Desc
@@ -22,19 +20,1702 @@ character_event = {
 		name = EVTOPTA_nobelian1
 		trigger = {
 			NOT = {
-				has_assigned_minor_title = title_nobelian_mentor				
+				any_courtier = {
+					has_character_flag = is_nobelian_mentor
+				}				
 			}
+		}			
+		hidden_tooltip = {
+		random_list = {
+				33 = {#1/3 chance he asks for a ton of money
+					character_event = { id = nobelian.2 days = 35 }#You look for a mentor
+				}
+				33 = {#1/3 chance he asks for an unspecified future payment (bad events may happen to you because of this, later)
+					character_event = { id = nobelian.3 days = 35 }#You look for a mentor
+				}
+				33 = {#1/3 chance he asks for a pound of flesh
+					character_event = { id = nobelian.4 days = 35 }#You look for a mentor
+				}
+		}
 		}
 	}
 	
 	option = {#Do it myself
 		name = EVTOPTB_nobelian1
+		character_event = { id = nobelian.5 days = 7 }
 	}
 	option = {#Third option for if you have a mentor
 		name = EVTOPTC_nobelian1
 		trigger = {
-			has_assigned_minor_title = title_nobelian_mentor		
+				any_courtier = {
+					has_character_flag = is_nobelian_mentor
+				}				
+		}
+		character_event = { id = nobelian.8 days = 7 }
+	}
+}
+character_event = {#Mentor asks for money
+	id = nobelian.2
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian2Desc
+	}
+	
+	option = {#OK
+		name = EVTOPTA_nobelian2
+
+			create_random_priest = {
+				random_traits = yes
+				dynasty = random
+				female = no
+				attributes = {
+					diplomacy = 2
+					learning = 10
+					stewardship = 2
+					intrigue = 2
+					martial = 2
+				}
+			}
+			
+			new_character = {
+				add_trait = mystic
+				remove_trait = slow
+				remove_trait = imbecile
+				remove_trait = dull
+				
+				remove_trait = socializer
+				remove_trait = gamer
+				remove_trait = hedonist
+				remove_trait = duelist
+				remove_trait = hunter
+				remove_trait = strategist
+				remove_trait = administrator
+				remove_trait = architect
+				remove_trait = gardener
+				remove_trait = schemer
+				remove_trait = impaler
+				remove_trait = seducer
+				remove_trait = seductress
+				remove_trait = theologian
+				remove_trait = scholar
+				
+				random_list = { # Flavor Randomization
+					20 = {  } # Nothing
+					20 = { change_learning = 2 }
+					15 = { change_learning = 4 }
+					10 = { change_learning = 6 }
+					20 = { add_trait = theologian }
+					15 = { add_trait = scholar }
+					15 = { add_trait = shrewd }
+				}
+
+				#If we have a wonder upgrade with "inpires_learning" flag, the priest will be better
+				if = {
+					limit = { ROOT = { realm_wonder_or_upgrade_has_flag_inspires_learning_trigger = yes } }
+					random_list = { 
+						15 = { add_trait = scholar change_learning = 1 }
+						10 = { add_trait = scholar change_learning = 2 }
+						 5 = { add_trait = scholar change_learning = 3 }
+						10 = { add_trait = erudite }
+						10 = { add_trait = physician }
+						10 = { add_trait = scholarly_theologian }
+						10 = { add_trait = mastermind_theologian }
+					}
+					random_list = {
+						50 = {  } # Nothing
+						10 = { add_trait = genius }
+						10 = { add_trait = chaste }
+						10 = { add_trait = poet }
+						10 = { add_trait = proud }
+						10 = { add_trait = humble }
+					}
+				}
+				save_event_target_as = invited_character
+				set_character_flag = is_nobelian_mentor
+				##All this creates the Mystic Mentor
+			}
+		scaled_wealth = -2	
+	}
+	option = {#I've changed my mind
+		name = EVTOPTB_NE_1
+		
+		hidden_tooltip = {
+			event_target:invited_character = { 
+				any_artifact = { destroy_artifact = yes }
+				death = {
+					death_reason = death_missing
+				}
+			}
 		}
 	}
+}
 
+character_event = {#Mentor asks for unspecified payment
+	id = nobelian.3
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian3Desc
+	}
+	
+	option = {#OK
+		name = EVTOPTA_nobelian3
+		set_character_flag = nobelian_ominous_promise
+
+			create_random_priest = {
+				random_traits = yes
+				dynasty = random
+				female = no
+				attributes = {
+					diplomacy = 2
+					learning = 10
+					stewardship = 2
+					intrigue = 2
+					martial = 2
+				}
+			}
+			
+			new_character = {
+				add_trait = mystic
+				remove_trait = slow
+				remove_trait = imbecile
+				remove_trait = dull
+				
+				remove_trait = socializer
+				remove_trait = gamer
+				remove_trait = hedonist
+				remove_trait = duelist
+				remove_trait = hunter
+				remove_trait = strategist
+				remove_trait = administrator
+				remove_trait = architect
+				remove_trait = gardener
+				remove_trait = schemer
+				remove_trait = impaler
+				remove_trait = seducer
+				remove_trait = seductress
+				remove_trait = theologian
+				remove_trait = scholar
+				
+				random_list = { # Flavor Randomization
+					20 = {  } # Nothing
+					20 = { change_learning = 2 }
+					15 = { change_learning = 4 }
+					10 = { change_learning = 6 }
+					20 = { add_trait = theologian }
+					15 = { add_trait = scholar }
+					15 = { add_trait = shrewd }
+				}
+
+				#If we have a wonder upgrade with "inpires_learning" flag, the priest will be better
+				if = {
+					limit = { ROOT = { realm_wonder_or_upgrade_has_flag_inspires_learning_trigger = yes } }
+					random_list = { 
+						15 = { add_trait = scholar change_learning = 1 }
+						10 = { add_trait = scholar change_learning = 2 }
+						 5 = { add_trait = scholar change_learning = 3 }
+						10 = { add_trait = erudite }
+						10 = { add_trait = physician }
+						10 = { add_trait = scholarly_theologian }
+						10 = { add_trait = mastermind_theologian }
+					}
+					random_list = {
+						50 = {  } # Nothing
+						10 = { add_trait = genius }
+						10 = { add_trait = chaste }
+						10 = { add_trait = poet }
+						10 = { add_trait = proud }
+						10 = { add_trait = humble }
+					}
+				}
+				save_event_target_as = invited_character
+				set_character_flag = is_nobelian_mentor
+				##All this creates the Mystic Mentor
+			}
+	}
+	option = {#I've changed my mind
+		name = EVTOPTB_NE_1
+		
+		hidden_tooltip = {
+			event_target:invited_character = { 
+				any_artifact = { destroy_artifact = yes }
+				death = {
+					death_reason = death_missing
+				}
+			}
+		}
+	}
+}
+
+character_event = {#Mentor asks for you to wound yourself
+	id = nobelian.4
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian4Desc
+	}
+	
+	option = {#OK
+		name = EVTOPTA_nobelian4
+		if = {
+			limit = {
+				has_dlc = "Reapers"
+			}
+		random_list = {
+			10 = {
+				add_trait = disfigured
+			}
+			10 = {
+				add_trait = one_eyed
+			}
+			10 = {
+				add_trait = one_handed
+			}
+			10 = {
+				add_trait = one_legged
+			}
+			30 = {
+				add_trait = severely_injured
+			}
+			30 = {#Lucky, it's a mild wound
+				add_trait = wounded
+			}
+		}
+		}
+		else_if = {
+			random_list = {
+				70 = {
+					add_trait = maimed
+				}
+				30 = {#Lucky
+					add_trait = wounded
+				}
+			}
+		}
+
+			create_random_priest = {
+				random_traits = yes
+				dynasty = random
+				female = no
+				attributes = {
+					diplomacy = 2
+					learning = 10
+					stewardship = 2
+					intrigue = 2
+					martial = 2
+				}
+			}
+			
+			new_character = {
+				add_trait = mystic
+				remove_trait = slow
+				remove_trait = imbecile
+				remove_trait = dull
+				
+				remove_trait = socializer
+				remove_trait = gamer
+				remove_trait = hedonist
+				remove_trait = duelist
+				remove_trait = hunter
+				remove_trait = strategist
+				remove_trait = administrator
+				remove_trait = architect
+				remove_trait = gardener
+				remove_trait = schemer
+				remove_trait = impaler
+				remove_trait = seducer
+				remove_trait = seductress
+				remove_trait = theologian
+				remove_trait = scholar
+				
+				random_list = { # Flavor Randomization
+					20 = {  } # Nothing
+					20 = { change_learning = 2 }
+					15 = { change_learning = 4 }
+					10 = { change_learning = 6 }
+					20 = { add_trait = theologian }
+					15 = { add_trait = scholar }
+					15 = { add_trait = shrewd }
+				}
+
+				#If we have a wonder upgrade with "inpires_learning" flag, the priest will be better
+				if = {
+					limit = { ROOT = { realm_wonder_or_upgrade_has_flag_inspires_learning_trigger = yes } }
+					random_list = { 
+						15 = { add_trait = scholar change_learning = 1 }
+						10 = { add_trait = scholar change_learning = 2 }
+						 5 = { add_trait = scholar change_learning = 3 }
+						10 = { add_trait = erudite }
+						10 = { add_trait = physician }
+						10 = { add_trait = scholarly_theologian }
+						10 = { add_trait = mastermind_theologian }
+					}
+					random_list = {
+						50 = {  } # Nothing
+						10 = { add_trait = genius }
+						10 = { add_trait = chaste }
+						10 = { add_trait = poet }
+						10 = { add_trait = proud }
+						10 = { add_trait = humble }
+					}
+				}
+				save_event_target_as = invited_character
+				set_character_flag = is_nobelian_mentor
+				##All this creates the Mystic Mentor
+			}
+	}
+	
+	option = {#I've changed my mind
+		name = EVTOPTB_NE_1
+		
+		hidden_tooltip = {
+			event_target:invited_character = { 
+				any_artifact = { destroy_artifact = yes }
+				death = {
+					death_reason = death_missing
+				}
+			}
+		}
+	}
+}
+
+character_event = {#You try it on your own
+	id = nobelian.5
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian5Desc
+	}
+	
+	option = {#Best chance of success
+		name = EVTOPTA_nobelian5
+		trigger = {
+			learning = 20
+			trait = mystic
+		}
+		hidden_tooltip = { 
+			random_list = {
+				80 = {
+					character_event = { id = nobelian.6 days = 3}#success
+				}
+				20 = {
+					character_event = { id = nobelian.7 days = 3}#failure
+				}
+			}
+		}
+	}
+	option = {#Coin Flip
+		name = EVTOPTB_nobelian5
+		trigger = {#if you have learning 20 OR Mystic trait, but not both
+			OR = {
+				AND = {
+					learning = 20
+					NOT = {
+						trait = mystic
+					}
+				}
+				AND = {
+					trait = mystic
+					NOT = {
+						learning = 20
+					}
+				}
+			}
+		}
+		hidden_tooltip = { 
+			random_list = {
+				50 = {
+					character_event = { id = nobelian.6 days = 3}#success
+				}
+				50 = {
+					character_event = { id = nobelian.7 days = 3}#failure
+				}
+			}
+		}
+	}
+	option = {#Likely to backfire
+		name = EVTOPTB_nobelian5
+		trigger = {#if you have learning 20 OR Mystic trait, but not both
+			NOR = {
+				learning = 20
+				trait = mystic
+			}
+		}
+		hidden_tooltip = { 
+			random_list = {
+				20 = {
+					character_event = { id = nobelian.6 days = 3}#success
+				}
+				80 = {
+					character_event = { id = nobelian.7 days = 3}#failure
+				}
+			}
+		}
+	}
+}
+
+character_event = {#You succeed
+	id = nobelian.6
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian6Desc
+	}
+	
+	option = {#You get a Mystical Insight
+		name = EVTOPTA_nobelian6
+				add_artifact = mystic_insight
+	}
+}
+character_event = {#You fail - there's still a chance that you'll get a Mystic Insight, but you'll suffer mental damage even if you do
+	id = nobelian.7
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian7Desc
+	}
+	
+	option = {#
+		name = EVTOPTA_nobelian7
+		random_list = {
+			50 = {
+				add_artifact = mystic_insight
+
+			}
+			50 = {
+			
+			}
+		}
+		if = {
+			limit = {
+				NOR = {
+					trait = stressed
+					trait = depressed
+					trait = lunatic
+					trait = possessed
+				}
+				trait = stressed
+			}
+		}
+		else_if = {
+			limit = {
+				trait = stressed
+				NOR = {
+					trait = depressed
+					trait = lunatic
+					trait = possessed
+				}
+			}
+			remove_trait = stressed
+			trait = depressed
+		}
+		else_if = {
+			limit = {
+				trait = depressed
+				NOR = {
+					trait = lunatic
+					trait = possessed
+				}
+			}
+			trait = lunatic
+		}
+		else_if = {
+			limit = {
+				trait = lunatic
+				NOT = {
+					trait = possessed
+				}
+			}
+			trait = possessed
+		}
+		else_if = {
+			limit = {
+				trait = stressed
+				trait = depressed
+				trait = lunatic
+				trait = possessed
+			}
+			random_list = {
+				50 = {
+					death = { death_reason = death_vanished }
+				}
+				50 = {
+					trait = severely_injured
+				}
+			}
+		}
+	}
+}
+character_event = {#You ask your Mentor to help you
+	id = nobelian.8
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian8Desc
+	}
+	
+	option = {#He asks for some more money for materials, this option you say yes
+		name = EVTOPTA_nobelian8
+		scaled_wealth = -0.5
+		add_artifact = mystic_insight	
+		random_list = {
+			50 = {
+				add_artifact = mystic_insight				
+				#add_character_modifier = {
+				#name = mystic_insight_modifier
+				#duration = -1
+				#stacking = yes
+				#}	
+			}
+			50 = {
+			
+			}			
+		}
+	}
+	option = {#He asks for some more money for materials, this option you say no
+		name = EVTOPTA_nobelian8
+		random_list = {
+			50 = {
+				add_artifact = mystic_insight
+			}
+			50 = {
+			
+			}			
+		}
+	}
+}
+character_event = {#You decide to search the continent for scrap and useful stuff
+	id = nobelian.9
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian9Desc
+	}
+	
+	option = {#Search in Scandinavia
+		name = EVTOPTA_nobelian9
+
+		set_character_flag = going_to_scandinavia
+		add_trait = travelling
+		hidden_tooltip = {
+		random_list = {
+			60 = {#no problems
+				character_event = { id = nobelian.11 days = 21}
+			}
+			10 = {#lord demands tribute
+				character_event = { id = nobelian.13 days = 14 }
+			}
+			10 = {#bandit attack
+				character_event = { id = nobelian.14 days = 13}
+			}
+			10 = {#Building collapse
+				character_event = { id = nobelian.15 days = 12}
+			}
+			10 = {#Inquisitive Local, change back to 10 chance after testing is complete
+					random_province = {
+						limit = {
+							region = world_europe_north
+						}
+						save_event_target_as = target_province
+					}
+				
+
+				character_event = { id = nobelian.17 days = 11}
+			}
+		}
+		}
+		#scrap
+		#spectacles
+		#old world glass
+		#ancient chemicals - more likely in Scandinavia
+		#manuscript fragment
+		#broken machine
+		#ATE relic (rare)
+	}
+	option = {#Search in Britain
+		name = EVTOPTB_nobelian9
+		set_character_flag = going_to_britain
+		add_trait = travelling
+		hidden_tooltip = {
+		random_list = {
+			60 = {#no problems
+				character_event = { id = nobelian.11 days = 21}
+			}
+			10 = {#lord demands tribute
+				character_event = { id = nobelian.13 days = 14 }
+			}
+			10 = {#bandit attack
+				character_event = { id = nobelian.14 days = 13}
+			}
+			10 = {#Building collapse
+				character_event = { id = nobelian.15 days = 12}
+			}		
+			10 = {
+				random_province = {
+					limit = {
+						region = world_europe_west_britannia
+					}
+					save_event_target_as = target_province
+				}
+				character_event = { id = nobelian.17 days = 11}
+			}
+			}
+			}
+	}
+	option = {#Search in Western Europe
+		name = EVTOPTC_nobelian9
+		set_character_flag = going_to_west_europe
+		add_trait = travelling
+		hidden_tooltip = {
+		random_list = {
+			60 = {#no problems
+				character_event = { id = nobelian.11 days = 21}
+			}
+			10 = {#lord demands tribute
+				character_event = { id = nobelian.13 days = 14 }
+			}
+			10 = {#bandit attack
+				character_event = { id = nobelian.14 days = 13}
+			}
+			10 = {#Building collapse
+				character_event = { id = nobelian.15 days = 12}
+			}		
+			10 = {
+				random_province = {
+					limit = {
+						OR = {
+							region = world_europe_west_francia
+							region = world_europe_west_germania
+						}
+					}
+					save_event_target_as = target_province
+				}
+				character_event = { id = nobelian.17 days = 11}
+			}
+			}
+			}	
+	}
+	option = {#Next page
+		name = EVTOPTD_nobelian9
+		character_event = { id = nobelian.10 }
+	}
+}
+
+character_event = {#You decide to search the continent for scrap and useful stuff
+	id = nobelian.10
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian10Desc
+	}
+	
+	option = {#Search in Eastern Europe
+		name = EVTOPTA_nobelian10
+		set_character_flag = going_to_east_europe
+		add_trait = travelling
+		hidden_tooltip = {
+		random_list = {
+			60 = {#no problems
+				character_event = { id = nobelian.11 days = 21}
+			}
+			10 = {#lord demands tribute
+				character_event = { id = nobelian.13 days = 14 }
+			}
+			10 = {#bandit attack
+				character_event = { id = nobelian.14 days = 13}
+			}
+			10 = {#Building collapse
+				character_event = { id = nobelian.15 days = 12}
+			}		
+			10 = {
+				random_province = {
+					limit = {
+						region = world_europe_east
+					}
+					save_event_target_as = target_province
+				}
+				character_event = { id = nobelian.17 days = 11}
+			}
+			}
+			}
+	}
+	option = {#Search in South Europe
+		name = EVTOPTB_nobelian10
+		set_character_flag = going_to_south_europe
+		add_trait = travelling
+		hidden_tooltip = {
+		random_list = {
+			60 = {#no problems
+				character_event = { id = nobelian.11 days = 21}
+			}
+			10 = {#lord demands tribute
+				character_event = { id = nobelian.13 days = 14 }
+			}
+			10 = {#bandit attack
+				character_event = { id = nobelian.14 days = 13}
+			}
+			10 = {#Building collapse
+				character_event = { id = nobelian.15 days = 12}
+			}		
+			10 = {
+				random_province = {
+					limit = {
+						region = world_europe_south
+					}
+					save_event_target_as = target_province
+				}
+				character_event = { id = nobelian.17 days = 11}
+			}
+			}
+			}
+	}
+	option = {#Back to first page
+		name = EVTOPTC_nobelian10
+		character_event = { id = nobelian.9 }
+	}
+}
+
+character_event = {#No problems
+	id = nobelian.11
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian11Desc
+	}
+	
+	option = {#Begins the search - a single event that's hidden to the player, to avoid having to repeat a lot of code
+		name = EVTOPTA_nobelian11
+		character_event = {
+			id = nobelian.12
+		}
+	}
+}
+
+character_event = {#Hidden event to do the nonsense under the hood
+	id = nobelian.12
+	hide_window = yes#the player will never see this
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian12Desc
+	}
+	
+	option = {#Begins the search - a single event that's hidden to the player, to avoid having to repeat a lot of code
+		name = EVTOPTA_nobelian12
+		if = {
+			limit = {
+				has_character_flag = going_to_scandinavia
+			}
+			
+		random_list = {
+		30 = {
+			set_character_flag = found_scrap
+		}
+		#Find Scrap
+		25 = {
+		}
+		#Find absolutely nothing
+		10 = {
+			set_character_flag = found_spectacles
+			}
+		#broken spectacles
+		10 = {
+			set_character_flag = found_glass
+			}
+		#old world glass
+		20 = {
+			set_character_flag = found_chemicals
+			}
+		#ancient chemicals - more likely in Scandinavia
+		10 = {
+			set_character_flag = found_fragment
+			}
+		#manuscript fragment
+		10 = {
+			set_character_flag = found_broken_machine
+			}
+		#broken machine
+		5 = {
+			set_character_flag = found_ate_relic
+			}
+		}
+		#ATE Relic (rare)
+		}
+		else_if = {
+			limit = {
+				has_character_flag = going_to_britain
+			}
+			
+		random_list = {
+		30 = {
+			set_character_flag = found_scrap
+		}
+		#Find Scrap
+		25 = {
+		}
+		#Find absolutely nothing
+		10 = {
+			set_character_flag = found_spectacles
+			}
+		#broken spectacles
+		10 = {
+			set_character_flag = found_glass
+			}
+		#old world glass
+		10 = {
+			set_character_flag = found_chemicals
+			}
+		#ancient chemicals
+		10 = {#unique to Britain
+			set_character_flag = found_tea_set
+		}
+		10 = {
+			set_character_flag = found_fragment
+			}
+		#manuscript fragment
+		10 = {
+			set_character_flag = found_broken_machine
+			}
+		#broken machine
+		5 = {
+			set_character_flag = found_ate_relic
+			}
+		}
+		#ATE Relic (rare)
+		}
+		else_if = {
+			limit = {
+				has_character_flag = going_to_west_europe
+			}
+			
+		random_list = {
+		30 = {
+			set_character_flag = found_scrap
+		}
+		#Find Scrap
+		25 = {
+		}
+		#Find absolutely nothing
+		10 = {
+			set_character_flag = found_spectacles
+			}
+		#broken spectacles
+		10 = {
+			set_character_flag = found_glass
+			}
+		#old world glass
+		10 = {
+			set_character_flag = found_chemicals
+			}
+		#ancient chemicals
+		10 = {#unique to Western Europe
+			set_character_flag = found_beer_recipe
+		}
+		10 = {
+			set_character_flag = found_fragment
+			}
+		#manuscript fragment
+		10 = {
+			set_character_flag = found_broken_machine
+			}
+		#broken machine
+		5 = {
+			set_character_flag = found_ate_relic
+			}
+		}
+		#ATE Relic (rare)
+		}
+		else_if = {
+			limit = {
+				has_character_flag = going_to_east_europe
+			}
+			
+		random_list = {
+		30 = {
+			set_character_flag = found_scrap
+		}
+		#Find Scrap
+		25 = {
+		}
+		#Find absolutely nothing
+		10 = {
+			set_character_flag = found_spectacles
+			}
+		#broken spectacles
+		10 = {
+			set_character_flag = found_glass
+			}
+		#old world glass
+		10 = {
+			set_character_flag = found_chemicals
+			}
+		#ancient chemicals
+		10 = {#unique to Western Europe
+			set_character_flag = found_artillery_book_piece
+		}
+		10 = {
+			set_character_flag = found_fragment
+			}
+		#manuscript fragment
+		10 = {
+			set_character_flag = found_broken_machine
+			}
+		#broken machine
+		5 = {
+			set_character_flag = found_ate_relic
+			}
+		}
+		#ATE Relic (rare)
+		}
+		else_if = {
+			limit = {
+				has_character_flag = going_to_south_europe
+			}
+			
+		random_list = {
+		30 = {
+			set_character_flag = found_scrap
+		}
+		#Find Scrap
+		25 = {
+		}
+		#Find absolutely nothing
+		10 = {
+			set_character_flag = found_spectacles
+			}
+		#broken spectacles
+		10 = {
+			set_character_flag = found_glass
+			}
+		#old world glass
+		10 = {
+			set_character_flag = found_chemicals
+			}
+		#ancient chemicals
+		10 = {#unique to South Europe
+			set_character_flag = found_tesla_coil_piece
+		}
+		10 = {
+			set_character_flag = found_fragment
+			}
+		#manuscript fragment
+		10 = {
+			set_character_flag = found_broken_machine
+			}
+		#broken machine
+		5 = {
+			set_character_flag = found_ate_relic
+			}
+		}
+		#ATE Relic (rare)
+		}		
+		character_event = { id = nobelian.16 days = 14 }
+	}
+}
+
+character_event = {#Local lord demands tribute
+	id = nobelian.13
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian13Desc
+	}
+	
+	option = {#Pay up, then begins the search - a single event that's hidden to the player, to avoid having to repeat a lot of code
+		name = EVTOPTA_nobelian13
+		scaled_wealth = -0.1
+		character_event = {
+			id = nobelian.12
+		}
+	}
+	option = {#Turn away
+		name = EVTOPTB_nobelian13
+		remove_trait = travelling
+	}
+	option = {#Negotiate the bribe down
+		name = EVTOPTC_nobelian13
+		trigger = {
+			OR = {
+				diplomacy = 10
+				stewardship = 10
+			}
+		}
+		scaled_wealth = -0.05
+		character_event = {
+			id = nobelian.12
+		}		
+	}
+	option = {#Sneak past
+		name = EVTOPTD_nobelian13
+		trigger = {
+			intrigue = 12
+		}
+		character_event = {
+			id = nobelian.12
+		}		
+	}
+}
+
+character_event = {#Bandit attack
+	id = nobelian.14
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian14Desc
+	}
+	
+	option = {#Fight them off
+		name = EVTOPTA_nobelian14
+		add_trait = brave
+		random_list = {
+			75 = {}
+			25 = {
+				add_trait = wounded
+			}
+		}
+		character_event = {
+			id = nobelian.12
+		}
+	}
+	option = {#Give up your money
+		name = EVTOPTB_nobelian14
+		scaled_wealth = -0.15
+		character_event = {
+			id = nobelian.12
+		}
+	}
+	option = {#Run away
+		name = EVTOPTC_nobelian14
+		remove_trait = travelling		
+	}
+	option = {#Terrify them
+		name = EVTOPTD_nobelian13
+		trigger = {
+			OR = {
+				trait = cannibal
+				trait = scarred_mid
+				trait = scarred_high
+				combat_rating = 40
+				martial = 15
+			}
+		}
+		character_event = {
+			id = nobelian.12
+		}		
+	}
+}
+
+character_event = {#Building you're investigating collapses
+	id = nobelian.15
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian15Desc
+	}
+	
+	option = {#Run away
+		name = EVTOPTA_nobelian15
+		prestige = -50
+		character_event = {
+			id = nobelian.12
+		}
+	}
+	option = {#Quick thinking saves the day
+		name = EVTOPTB_nobelian15
+		trigger = {
+			trait = genius
+		}
+		prestige = 50
+		character_event = {
+			id = nobelian.12
+		}
+	}
+	option = {#Make sure everyone gets out
+		name = EVTOPTC_nobelian15
+		trigger = {
+			OR = {
+			trait = brave
+			trait = just
+			}
+		}
+		random_list = {
+			50 = {}
+			50 = {
+				add_trait = wounded
+			}
+		}
+		character_event = {
+			id = nobelian.12
+		}
+	}
+}
+
+character_event = {#Find something
+	id = nobelian.16
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian16Desc
+	}
+	
+	immediate = {
+		clr_character_flag = going_to_britain
+		clr_character_flag = going_to_scandinavia
+		clr_character_flag = going_to_west_europe
+		clr_character_flag = going_to_east_europe
+		clr_character_flag = going_to_south_europe
+	}
+	
+	option = {#Gives you something based on what flag you had
+		name = EVTOPTA_nobelian16
+		if = {
+			limit = {
+				has_character_flag = found_scrap
+			}
+		add_artifact = scrap
+		clr_character_flag = found_scrap
+		}
+		else_if = {
+			limit = {
+				has_character_flag = found_spectacles
+			}
+		add_artifact = spectacles
+		clr_character_flag = found_spectacles
+		}
+		else_if = {
+			limit = {
+				has_character_flag = found_glass
+			}
+		add_artifact = glass
+		clr_character_flag = found_glass
+		}
+		else_if = {
+			limit = {
+				has_character_flag = found_chemicals
+			}
+		add_artifact = ancient_chemicals
+		clr_character_flag = found_chemicals
+		}
+		else_if = {
+			limit = {
+				has_character_flag = found_fragment
+			}
+		add_artifact = manuscript_fragment
+		clr_character_flag = found_fragment
+		}
+		else_if = {
+			limit = {
+				has_character_flag = found_broken_machine
+			}
+		add_artifact = broken_machine
+		clr_character_flag = found_broken_machine
+		}
+		else_if = {
+			limit = {
+				has_character_flag = found_artillery_book_piece
+			}
+		add_artifact = artillery_book_fragment
+		clr_character_flag = found_artillery_book_piece
+		}		
+		else_if = {
+			limit = {
+				has_character_flag = found_beer_recipe
+			}
+		add_artifact = beer_recipe_fragment
+		clr_character_flag = found_beer_recipe
+		}	
+		else_if = {
+			limit = {
+				has_character_flag = found_tesla_coil_piece
+			}
+		add_artifact = tesla_coil_piece
+		clr_character_flag = found_tesla_coil_piece
+		}
+		else_if = {
+			limit = {
+				has_character_flag = found_tea_set
+			}
+			random_list = {
+				50 = {
+					add_artifact = teapot
+				}
+				50 = {
+					add_artifact = teacup
+				}
+			}
+		clr_character_flag = found_artillery_book_piece
+		}			
+	}
+}
+
+character_event = {#You find a skilled local
+	id = nobelian.17
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian17Desc
+	}
+	
+	option = {#Bring him with you
+		name = EVTOPTA_nobelian17
+		scaled_wealth = -0.1
+		
+		event_target:target_province = {
+				create_character = {
+				culture = THIS
+				religion = nobelian
+				}
+			new_character = {
+				move_character = ROOT #/PREVPREV
+			}
+		}		
+
+		character_event = {
+			id = nobelian.12
+		}
+	}
+	option = {#Don't bother with him
+		name = EVTOPTB_nobelian17
+		character_event = {
+			id = nobelian.12
+		}
+	}
+}
+
+character_event = {#You give up your insights for a Tome
+	id = nobelian.18
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian18Desc
+	}
+	
+	option = {#
+		name = EVTOPTA_nobelian18
+		trigger = {
+			any_artifact = {
+				artifact_type = mystic_insight
+				count = 3
+			}				
+		}
+		destroy_artifact = mystic_insight
+		destroy_artifact = mystic_insight
+		destroy_artifact = mystic_insight
+		add_artifact = mystic_tome
+	}
+	option = {#Combine Partial Manuscript with Mystic Tome for Esoteric Literature
+		name = EVTOPTB_nobelian18
+		trigger = {
+			any_artifact = {
+				artifact_type = mystic_tome
+				count = 1
+			}
+			any_artifact = {
+				artifact_type = partial_manuscript
+				count = 1
+			}			
+		}
+		destroy_artifact = mystic_tome
+		destroy_artifact = partial_manuscript
+		add_artifact = esoteric_literature
+	}
+	option = {#Mystic Tome + Broken Machinery -> Mystical Gewgaw
+		name = EVTOPTC_nobelian18
+		trigger = {
+			any_artifact = {
+				artifact_type = mystic_tome
+				count = 1
+			}
+			any_artifact = {
+				artifact_type = broken_machine
+				count = 1
+			}			
+		}
+		destroy_artifact = mystic_tome
+		destroy_artifact = broken_machine
+		random_list = {
+			10 = {
+				add_artifact = totem_1
+			}
+			10 = {
+				add_artifact = totem_2
+			}
+			10 = {
+				add_artifact = totem_3
+			}
+			10 = {
+				add_artifact = totem_4
+			}
+		}
+	}
+	option = {#Combine Instructions with Mystic Tome for Theorem
+		name = EVTOPTD_nobelian18
+		trigger = {
+			any_artifact = {
+				artifact_type = mystic_tome
+				count = 1
+			}
+			any_artifact = {
+				artifact_type = instructions
+				count = 1
+			}			
+		}
+		destroy_artifact = mystic_tome
+		destroy_artifact = instructions
+		add_artifact = theorem
+	}
+}
+character_event = {#Combine Manuscript Fragments into Instructions, Partial Manuscripts, fuse Partial Manuscripts into Reconstructed Masterpieces or Esoteric Literature
+	id = nobelian.19
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian19Desc
+	}
+	
+	option = {#combine fragments into Instructions
+		name = EVTOPTA_nobelian19
+		trigger = {
+			any_artifact = {
+				artifact_type = manuscript_fragment
+				count = 2
+			}			
+		}
+		destroy_artifact = manuscript_fragment
+		destroy_artifact = manuscript_fragment
+		add_artifact = instructions
+	}
+	option = {#combine fragments into Partial Manuscript
+		name = EVTOPTB_nobelian19
+		trigger = {
+			any_artifact = {
+				artifact_type = manuscript_fragment
+				count = 2
+			}			
+		}
+		destroy_artifact = manuscript_fragment
+		destroy_artifact = manuscript_fragment
+		add_artifact = partial_manuscript
+	}
+	option = {#combine Partial Manuscript into Reconstructed Masterpiece
+		name = EVTOPTB_nobelian19
+		trigger = {
+			any_artifact = {
+				artifact_type = partial_manuscript
+				count = 2
+			}			
+		}
+		random_list = {#You're pretty unlikely to just randomly get a manuscript
+			10 = {
+				destroy_artifact = partial_manuscript
+				destroy_artifact = partial_manuscript
+				#add_artifact = reconstructed_masterpiece
+				character_event = { id = nobelian.20 }#event that gives them a random manuscript
+			}
+			20 = {#chance of accidentally destroying a partial manuscript while researching, also to discourage you from just constantly spamming the button to try and get it right
+				destroy_artifact = partial_manuscript
+			}
+			30 = {#another check to try and stop you from ramming it through
+				add_trait = stressed
+			}
+			40 = {#nothing at all happens
+				
+			}
+		}
+	}
+}
+
+character_event = {#You get a random Masterpiece
+	id = nobelian.20
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian20Desc
+	}
+	
+	option = {#
+		name = EVTOPTA_nobelian20
+		random_list = {
+			10 = {
+				add_artifact = lion_witch_wardrobe
+			}
+			10 = {
+				add_artifact = guillotines_for_a_humane_society
+			}
+			10 = {
+				add_artifact = the_jungle_book				
+			}
+			10 = {
+				add_artifact = the_divine_comedy
+			}
+			10 = {
+				add_artifact = frankenstein
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = literature_bloodline_founded
+				}
+				is_female = no
+			}
+			create_bloodline = laureate_literature_male
+			set_global_flag = literature_bloodline_founded
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					has_global_flag = literature_bloodline_founded
+				}
+				is_female = yes
+			}
+			create_bloodline = laureate_literature_female
+		}
+	}
+}
+
+character_event = {#Quest To Make A Great Discovery and become a Laureate
+	id = nobelian.21
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian21Desc
+	}
+	
+	option = {#Chemicals + Theorem = Ancient Medicine...or dynamite
+		name = EVTOPTA_nobelian21
+		trigger = {
+			any_artifact = {
+				artifact_type = theorem
+				count = 1
+			}
+			any_artifact = {
+				artifact_type = ancient_chemicals
+				count = 2
+			}					
+		}
+		destroy_artifact = theorem
+		destroy_artifact = ancient_chemicals
+		destroy_artifact = ancient_chemicals
+
+		random_list = {
+			50 = {#event for you getting Dynamite. Turns you into a heretic if you don't turn away
+					character_event = { id = nobelian.22 }
+			}
+			50 = {#event for you getting medicines
+					character_event = { id = nobelian.23 }
+			}
+		}
+	}
+	option = {#Esoteric Literature + Theorem = Scientific Theory book...but written in a way that makes it far less useful than an actual science book
+		name = EVTOPTB_nobelian21
+		trigger = {
+			any_artifact = {
+				artifact_type = theorem
+				count = 1
+			}
+			any_artifact = {
+				artifact_type = esoteric_literature
+				count = 1
+			}					
+		}
+		destroy_artifact = theorem
+		destroy_artifact = esoteric_literature
+
+		character_event = { id = nobelian.24 }
+	}
+	option = {#On second thoughts, maybe I'd better do nothing
+		name = EVTOPTC_nobelian21
+	}
+}
+
+
+character_event = {#You are horrified to realise that you have rediscovered Dynamite, tool of the Merchant of Death
+	id = nobelian.22
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian22Desc
+	}
+	
+	option = {#I must destroy this!
+		name = EVTOPTA_nobelian22
+		trigger = {
+			NOT = {
+				religion = dynamitist
+			}
+		}
+		piety = 1000
+	}
+	option = {#No...no..I must embrace it
+		trigger = {
+				NOT = {
+					religion = dynamitist
+				}
+		}
+		religion = dynamitist
+		add_artifact = nitroglycerine
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = dynamiter_bloodline_founded
+				}
+				is_female = no
+			}
+			create_bloodline = laureate_dynamite_male
+			set_global_flag = dynamiter_bloodline_founded
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					has_global_flag = dynamiter_bloodline_founded
+				}
+				is_female = yes
+			}
+			create_bloodline = laureate_dynamite_female
+		}
+	}
+	option = {#Haha! Glorious!
+		trigger = {
+			limit = {
+					religion = dynamitist
+			}
+		}
+		prestige = 500
+		add_artifact = nitroglycerine
+	}
+	
+}
+character_event = {#You create an ancient drug
+	id = nobelian.23
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian23Desc
+	}
+	
+	option = {#Excellent
+		name = EVTOPTA_nobelian22
+		piety = 1000
+		random_list = {
+			50 = {
+				add_artifact = penicillin
+			}
+			50 = {
+				add_artifact = morphine
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = chemist_bloodline_founded
+				}
+				is_female = no
+			}
+			create_bloodline = laureate_chemistry_male
+			set_global_flag = chemist_bloodline_founded
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					has_global_flag = chemist_bloodline_founded
+				}
+				is_female = no
+			}
+			create_bloodline = laureate_chemistry_female
+			set_global_flag = chemist_bloodline_founded
+		}		
+	}
+}
+
+character_event = {#You create a Theory Book
+	id = nobelian.24
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian24Desc
+	}
+	
+	option = {#Excellent
+		name = EVTOPTA_nobelian24
+		piety = 1000
+		random_list = {
+			33 = {
+				add_artifact = germ_theory
+			}
+			33 = {
+				add_artifact = atomic_theory
+			}
+			33 = {
+				add_artifact = electrical_theory
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = physics_bloodline_founded
+				}
+				is_female = no
+			}
+			create_bloodline = laureate_physics_male
+			set_global_flag = physics_bloodline_founded
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					has_global_flag = physics_bloodline_founded
+				}
+				is_female = no
+			}
+			create_bloodline = laureate_physics_female
+			set_global_flag = physics_bloodline_founded
+		}	
+	}
 }

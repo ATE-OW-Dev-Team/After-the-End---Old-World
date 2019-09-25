@@ -7,6 +7,43 @@
 ###########################################
 
 decisions = {
+	nobelian_legendary_discovery = {
+			only_playable = yes
+			is_high_prio = yes
+			ai_check_interval = 24
+			
+			potential = {
+				religion = nobelian
+			}
+			allow = {
+				
+			}
+			effect = {	
+					character_event = { id = nobelian.21 }
+			}		
+		}
+		
+		nobelian_search_the_continent = {
+			only_playable = yes
+			is_high_prio = yes
+			ai_check_interval = 24
+			
+			potential = {
+				religion = nobelian
+			}
+			allow = {
+				NOT = {
+					has_character_modifier = recently_searched_nobelian
+				}
+			}
+			effect = {
+					add_character_modifier = {
+						name = recently_searched_nobelian
+						duration = 365
+					}				
+					character_event = { id = nobelian.9 }
+			}		
+		}
 
 		nobelian_dive_occult = {
 			only_playable = yes
@@ -18,12 +55,16 @@ decisions = {
 			}
 			allow = {
 				NOT = {
-					has_character_flag = recently_searched
+					has_character_modifier = recently_dove_into_occult_nobelian
+					has_instances_of_character_modifier	= { modifier = mystic_insight_modifier amount = 3 }		
 				}
 			}
 			effect = {
-				set_character_flag = nobel_diving_occult
-				character_event = { id = nobelian.1 }
+					add_character_modifier = {
+						name = recently_dove_into_occult_nobelian
+						duration = 365
+					}				
+					character_event = { id = nobelian.1 }
 			}
 		}
 
@@ -978,6 +1019,206 @@ decisions = {
 
 }
 targeted_decisions = {
+
+	vassal_sacrifice_decision = {
+		only_playable = yes
+	    diplomacy_icon = GFX_sacrifice_decision
+	
+		ai_target_filter = home_court
+		ai_check_interval = 6
+	
+		from_potential = {
+			is_playable = yes
+			religion = jacobinist
+		}
+	
+		potential = {
+			prisoner = yes
+			is_adult = yes
+			host = { character = FROM }
+		}
+		
+		allow = {
+			NOT = { diplomatic_immunity = yes }
+			prisoner = yes
+		}
+		
+		effect = {
+			any_liege = {
+				limit = { 
+					ai = no
+					NOT = { character = FROM }
+				}
+				character_event = { id = SSI.60 }
+			}
+			hidden_tooltip = {
+				FROM = {
+					character_event = { id = SSI.72 }
+				}
+				if = {
+					limit = {
+						controls_religion = yes
+						NOR = {
+							religion = aztec
+							religion = aztec_reformed
+						}
+						FROM = { ai = no }
+					}
+					FROM = { set_character_flag = achievement_holy_smoke }
+				}
+			}
+			death = {
+				death_reason = death_execution_aztec_sacrifice
+				killer = FROM
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				trait = cynical
+			}
+			modifier = {
+				factor = 1.5
+				trait = zealous
+			}
+			modifier = {
+				factor = 1.5
+				trait = bloodthirsty_gods_1
+			}
+			modifier = {
+				factor = 1.75
+				trait = bloodthirsty_gods_2
+			}
+			modifier = {
+				factor = 2
+				trait = bloodthirsty_gods_3
+			}
+		}
+	}
+	
+	nobelian_merge_insights = {
+		filter = self
+		ai_check_interval = 12
+		#this decision doesn't need a from_potential, because it targets yourself, so there's no difference between the player character and the character being targeted
+		potential = {
+			OR = {
+				religion = nobelian
+				religion = dynamiter
+			}
+			any_artifact = {
+				artifact_type = mystic_insight
+				count = 1
+			}			
+		}
+		allow = {
+			any_artifact = {
+				artifact_type = mystic_insight
+				count = 3
+			}
+		}
+		effect = {
+			character_event = { id = nobelian.18 }
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				trait = cynical
+			}
+			modifier = {
+				factor = 1.5
+				trait = zealous
+			}
+		}
+	}
+	
+	nobelian_repair_stuff= {
+		filter = self
+		ai_check_interval = 12
+		#this decision doesn't need a from_potential, because it targets yourself, so there's no difference between the player character and the character being targeted
+		potential = {
+			OR = {
+				religion = nobelian
+				religion = dynamiter
+			}
+			any_artifact = {
+				artifact_type = broken_machine
+				count = 1
+			}			
+		}
+		allow = {
+			any_artifact = {
+				artifact_type = theorem
+				count = 1
+			}
+		}
+		effect = {
+			destroy_artifact = broken_machine
+			destroy_artifact = theorem
+			add_artifact = repaired_machine
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				trait = cynical
+			}
+			modifier = {
+				factor = 1.5
+				trait = zealous
+			}
+		}
+	}	
+	
+	nobelian_merge_manuscript_fragments = {
+		filter = self
+		ai_check_interval = 12
+		#this decision doesn't need a from_potential, because it targets yourself, so there's no difference between the player character and the character being targeted
+		potential = {
+			OR = {
+				religion = nobelian
+				religion = dynamiter
+			}
+			any_artifact = {
+				artifact_type = manuscript_fragment
+				count = 1
+			}			
+		}
+		allow = {
+			any_artifact = {
+				artifact_type = manuscript_fragment
+				count = 2
+			}
+		}
+		effect = {
+			character_event = { id = nobelian.19 }
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				trait = cynical
+			}
+			modifier = {
+				factor = 1.5
+				trait = zealous
+			}
+		}
+	}
+	
 	stalinist_fabricate_evidence = {
 		only_playable = yes
 		only_independent = yes
