@@ -984,90 +984,57 @@ decisions = {
 			factor = 1
 		}
 	}	
-	
-}
-targeted_decisions = {
-
-	vassal_sacrifice_decision = {
+	jacobinist_sacrifice_peasant = {
 		only_playable = yes
-	    diplomacy_icon = GFX_sacrifice_decision
+		
+		is_high_prio = yes
+		ai_check_interval = 3
 	
-		ai_target_filter = home_court
-		ai_check_interval = 6
-	
-		from_potential = {
+		potential = {
 			is_playable = yes
 			religion = jacobinist
 		}
-	
-		potential = {
-			prisoner = yes
-			is_adult = yes
-			host = { character = FROM }
-		}
 		
 		allow = {
-			NOT = { diplomatic_immunity = yes }
-			prisoner = yes
+			religion = jacobinist
+			custom_tooltip = {
+				text = JACOBINIST_HAVENT_SACRIFICED
+				ruled_years = 4
+				NOT = { has_character_modifier = madame_sacrifice_timer_2 }
+			}
 		}
 		
 		effect = {
-			any_liege = {
-				limit = { 
-					ai = no
-					NOT = { character = FROM }
-				}
-				character_event = { id = SSI.60 }
+			#character_event = { id = yugoslav.8 tooltip = JACOBINIST_GONNA_SACRIFICE_EM}
+			custom_tooltip = {
+				text = JACOBINIST_GONNA_SACRIFICE_EM
 			}
-			hidden_tooltip = {
-				FROM = {
-					character_event = { id = SSI.72 }
-				}
-				if = {
-					limit = {
-						controls_religion = yes
-						NOR = {
-							religion = aztec
-							religion = aztec_reformed
-						}
-						FROM = { ai = no }
-					}
-					FROM = { set_character_flag = achievement_holy_smoke }
-				}
-			}
-			death = {
-				death_reason = death_execution_aztec_sacrifice
-				killer = FROM
-			}
+			scaled_wealth = -0.25
+			jacobinist_madame_timer_effect = yes
 		}
+		
 		revoke_allowed = {
 			always = no
 		}
+		
 		ai_will_do = {
 			factor = 1
 			modifier = {
-				factor = 0
-				trait = cynical
+				factor = 0.2 #slow down a bit
 			}
 			modifier = {
-				factor = 1.5
-				trait = zealous
-			}
-			modifier = {
-				factor = 1.5
-				trait = bloodthirsty_gods_1
-			}
-			modifier = {
-				factor = 1.75
-				trait = bloodthirsty_gods_2
-			}
-			modifier = {
-				factor = 2
-				trait = bloodthirsty_gods_3
+				factor = 0.5
+				any_courtier = {
+					prisoner = yes
+					host = { character = ROOT }
+					NOT = { diplomatic_immunity = yes }
+				}
 			}
 		}
 	}
-	
+
+}
+targeted_decisions = {	
 	nobelian_merge_insights = {
 		filter = self
 		ai_check_interval = 12
@@ -1704,7 +1671,7 @@ targeted_decisions = {
 						NOT = { character = FROM }
 						NOT = { religion = FROM }
 					}
-					character_event = { id = ATE_OW_REL.2 }
+					character_event = { id = jacobinists.2 }
 				}
 				if = {
 					limit = {
@@ -1713,10 +1680,10 @@ targeted_decisions = {
 							religion = FROM
 						}
 					}
-					character_event = { id = ATE_OW_REL.3 }
+					character_event = { id = jacobinists.3 }
 				}
 				FROM = {
-					character_event = { id = ATE_OW_REL.4 }
+					character_event = { id = jacobinists.4 }
 				}
 			}
 		}
@@ -1726,8 +1693,15 @@ targeted_decisions = {
 		ai_will_do = {
 			factor = 1
 			modifier = {
+				factor = 0.2 # Slow down a bit
+			}
+			modifier = {
 				factor = 0
 				FROM = { trait = cynical }
+				NAND = {
+					ruled_years = 4
+					NOT = { has_character_modifier = sacrifice_timer_2 }
+				}
 			}
 			modifier = {
 				factor = 1.5
@@ -1745,6 +1719,40 @@ targeted_decisions = {
 				factor = 2
 				FROM = { trait = guillotine_master_3 }
 			}
+			
+			modifier = {
+				factor = 1.56
+				desired_by_madame_1 = yes
+			}
+			modifier = {
+				factor = 1.56
+				desired_by_madame_2 = yes
+			}
+			modifier = {
+				factor = 0.64
+				hated_by_madame_1 = yes
+			}
+			modifier = {
+				factor = 0.64
+				hated_by_madame_2 = yes
+			}
+			modifier = {
+				factor = 1.5
+				ruled_years = 3
+				NOT = { has_character_modifier = madame_sacrifice_timer_3 }
+			}
+			modifier = {
+				factor = 2
+				ruled_years = 4
+				NOT = { has_character_modifier = madame_sacrifice_timer_2 }
+				NOT = { FROM = { trait = cynical } }
+			}
+			modifier = {
+				factor = 5
+				ruled_years = 5
+				NOT = { has_character_modifier = madame_sacrifice_timer_1 }
+			}
+			
 		}
 	}
 }
