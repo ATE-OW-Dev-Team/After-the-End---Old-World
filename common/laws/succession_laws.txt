@@ -1460,6 +1460,10 @@ succession_laws = {
 				holder_scope = { 
 					NOT = { religion = catholic }
 					NOT = { religion = fraticelli }
+					NAND = {
+						higher_tier_than = BARON
+						religion = calvinist
+					}
 				}
 			}
 			holder_scope = { 
@@ -1594,8 +1598,13 @@ gender_laws = {
 	cognatic_succession = {
 		potential = {
 			holder_scope = {
-				NOT = { has_religion_feature = religion_matriarchal }
-				NOT = { has_religion_feature = religion_equal }
+				OR = {
+					is_feminist_religion = no
+					has_game_rule = {
+						name = gender
+						value = all
+					}
+				}
 				OR = {
 					NOT = { tier = baron }
 					is_theocracy = yes
@@ -1672,15 +1681,29 @@ gender_laws = {
 		default = yes
 		default_selection = {
 			factor = 10
+			modifier = {
+				factor = 0
+				holder_scope = {
+					OR = {
+						religion = katerinist
+						religion = bahai
+					}
+				}
+			}
 		}
 	}
 	agnatic_succession = {
 		female_dynasty_opinion = -5
 	
 		potential = {
-			holder_scope = { 
-				NOT = { has_religion_feature = religion_matriarchal } 
-				NOT = { has_religion_feature = religion_equal }
+			holder_scope = {
+				OR = {
+					is_feminist_religion = no
+					AND = {
+						religion = bahai
+						controls_religion = yes
+					}
+				}
 			}
 		}
 		effect = {
@@ -1700,7 +1723,18 @@ gender_laws = {
 					value = all
 				}
 			}
-			
+			modifier = {
+				factor = 0
+				holder_scope = {
+					OR = {
+						religion = katerinist
+						AND = {
+							religion = bahai
+							controls_religion = no
+						}
+					}
+				}
+			}
 			modifier = {
 				factor = 100
 				holder_scope = {
@@ -1752,6 +1786,11 @@ gender_laws = {
 						has_religion_feature = religion_equal
 						has_religion_feature = religion_feature_bon
 						AND = {
+							religion = katerinist
+							controls_religion = no
+						}
+						religion = bahai
+						AND = {
 							has_dlc = "Zeus"
 							ROOT = { holder_scope = { primary_title = { has_law = status_of_women_4 } } }
 							OR = {
@@ -1769,9 +1808,21 @@ gender_laws = {
 					}
 				}
 			}
-			
-			is_landless_type_title = no
-			
+			OR = {
+				AND = {
+					is_landless_type_title = no
+					is_primary_type_title = no
+				}
+				holder_scope = {
+					religion = bahai
+				}
+			}
+			NOT = {
+				holder_scope = {
+					religion = bahai
+					controls_religion = yes
+				}
+			}
 			OR = {
 				AND = {
 					tier = baron
@@ -1788,9 +1839,10 @@ gender_laws = {
 				holder_scope = {
 					has_religion_feature = religion_equal
 				}
+				holder_scope = {
+					religion = bahai
+				}
 			}
-			
-			is_primary_type_title = no
 		}
 		allow = {
 			OR = {
@@ -1803,6 +1855,12 @@ gender_laws = {
 						religion = messalian
 						religion = mazdaki
 						has_religion_feature = religion_equal
+						has_religion_feature = religion_feature_bon
+						AND = {
+							religion = katerinist
+							controls_religion = no
+						}
+						religion = bahai
 					}
 				}
 				OR = {
@@ -1828,15 +1886,30 @@ gender_laws = {
 				factor = 0.1
 				NOT = {
 					holder_scope = {
-						has_religion_feature = religion_equal
+						OR = {
+							has_religion_feature = religion_equal
+							has_religion_feature = religion_feature_bon
+							religion = bahai
+						}
 					}
+				}
+			}
+			modifier = {
+				factor = 0
+				holder_scope = {
+					religion = bahai
+					controls_religion = yes
 				}
 			}
 			
 			modifier = {
 				factor = 100
 				holder_scope = {
-					has_religion_feature = religion_equal
+					OR = {
+						has_religion_feature = religion_equal
+						has_religion_feature = religion_feature_bon
+						religion = bahai
+					}
 				}
 			}
 		}
@@ -1847,7 +1920,12 @@ gender_laws = {
 		female_dynasty_opinion = 10
 		
 		potential = {
-			holder_scope = { has_religion_feature = religion_matriarchal }
+			holder_scope = {
+				OR = {
+					has_religion_feature = religion_matriarchal
+					religion = katerinist
+				}
+			}
 		}
 		allow = {
 			
@@ -1860,7 +1938,15 @@ gender_laws = {
 		}
 		default_selection = {
 			factor = 1
-			
+			modifier = {
+				factor = 100
+				holder_scope = {
+					AND = {
+						religion = katerinist
+						controls_religion = yes
+					}
+				}
+			}
 		}
 	}
 	
@@ -1874,6 +1960,10 @@ gender_laws = {
 					has_religion_feature = religion_matriarchal
 					any_owned_bloodline = {
 						has_bloodline_flag = bloodline_enatic_cognatic 
+					}
+					AND = {
+						religion = katerinist
+						controls_religion = no
 					}
 				}
 			}
@@ -1899,6 +1989,10 @@ gender_laws = {
 							any_owned_bloodline = {
 								has_bloodline_flag = bloodline_enatic_cognatic 
 							}
+							AND = {
+								religion = katerinist
+								controls_religion = no
+							}
 						}
 					}
 				}
@@ -1911,6 +2005,10 @@ gender_laws = {
 						has_religion_feature = religion_matriarchal
 						any_owned_bloodline = {
 							has_bloodline_flag = bloodline_enatic_cognatic 
+						}
+						AND = {
+							religion = katerinist
+							controls_religion = no
 						}
 					}
 				}

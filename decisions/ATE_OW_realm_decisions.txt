@@ -19,10 +19,10 @@ decisions = {
 				region = world_india
 			}
 			e_british_india = {
-				is_titular = yes
-			}
-			e_british_india = {
-				has_holder = no
+				OR = {
+					is_titular = yes
+					has_holder = no
+				}
 			}
 		}
 
@@ -95,10 +95,10 @@ decisions = {
 				culture = polish
 			}
 			e_zapadoslavia = {
-				is_titular = yes
-			}
-			e_zapadoslavia = {
-				has_holder = no
+				OR = {
+					is_titular = yes
+					has_holder = no
+				}
 			}
 		}
 
@@ -171,10 +171,10 @@ decisions = {
 			}
 			
 			k_romaraj = {
-				is_titular = yes
-			}
-			k_romaraj = {
-				has_holder = no
+				OR = {
+					is_titular = yes
+					has_holder = no
+				}
 			}
 		}
 
@@ -245,19 +245,14 @@ decisions = {
 			}
 			
 			e_great_russia = {
-				is_titular = yes
+				OR = {
+					is_titular = yes
+					has_holder = no
+				}
 			}
-			e_great_russia = {
-				has_holder = no
-			}
-			e_cccp = {
-				is_titular = yes
-			}
-			e_cccp = {
-				has_holder = no
-			}
-			NOT = {
+			NOR = {
 				religion = stalinist
+				religion = trotskyite
 			}
 		}
 
@@ -270,6 +265,28 @@ decisions = {
 				completely_controls = k_volgaria
 				completely_controls = k_perm
 				completely_controls = k_arkhangelsk
+				conditional_tooltip = {
+					trigger = { k_belarus = { de_jure_liege = e_great_russia } }
+					completely_controls = k_belarus
+				}
+				conditional_tooltip = {
+					trigger = { k_smalensk = { de_jure_liege = e_great_russia } }
+					completely_controls = k_smalensk
+				}
+				conditional_tooltip = {
+					trigger = { k_belarus = { de_jure_liege = e_cccp } }
+					completely_controls = k_belarus
+				}
+				conditional_tooltip = {
+					trigger = { k_smalensk = { de_jure_liege = e_cccp } }
+					completely_controls = k_smalensk
+				}
+			}
+			e_cccp = {
+				OR = {
+					has_holder = no
+					is_titular = yes
+				}
 			}
 		}
 
@@ -350,18 +367,15 @@ decisions = {
 				culture = volgar
 				culture = sibiran
 			}
-			religion = stalinist
-			e_cccp = {
-				is_titular = yes
+			OR = {
+				religion = stalinist
+				religion = trotskyite
 			}
 			e_cccp = {
-				has_holder = no
-			}
-			e_great_russia = {
-				is_titular = yes
-			}
-			e_great_russia = {
-				has_holder = no
+				OR = {
+					is_titular = yes
+					has_holder = no
+				}
 			}
 		}
 
@@ -374,6 +388,28 @@ decisions = {
 				completely_controls = k_volgaria
 				completely_controls = k_perm
 				completely_controls = k_arkhangelsk
+				conditional_tooltip = {
+					trigger = { k_belarus = { de_jure_liege = e_great_russia } }
+					completely_controls = k_belarus
+				}
+				conditional_tooltip = {
+					trigger = { k_smalensk = { de_jure_liege = e_great_russia } }
+					completely_controls = k_smalensk
+				}
+				conditional_tooltip = {
+					trigger = { k_belarus = { de_jure_liege = e_cccp } }
+					completely_controls = k_belarus
+				}
+				conditional_tooltip = {
+					trigger = { k_smalensk = { de_jure_liege = e_cccp } }
+					completely_controls = k_smalensk
+				}
+			}
+			e_great_russia = {
+				OR = {
+					has_holder = no
+					is_titular = yes
+				}
 			}
 		}
 
@@ -384,29 +420,58 @@ decisions = {
 					gain_empire_effect = yes
 				}
 			}
-			
 			if = {
-				limit = {
-					is_female = yes
-					has_dlc = "Holy Fury"
+				limit = { religion = stalinist }
+				if = {
+					limit = {
+						is_female = yes
+						has_dlc = "Holy Fury"
+					}
+					create_bloodline = {
+						type = cccp_female
+					}
+					new_bloodline = {
+						set_description = "cccp_female_desc"
+					}
 				}
-				create_bloodline = {
-					type = cccp_female
-				}
-				new_bloodline = {
-					set_description = "cccp_female_desc"
+				if = {
+					limit = {
+						is_female = no
+						has_dlc = "Holy Fury"
+					}
+					create_bloodline = {
+						type = cccp_male
+					}
+					new_bloodline = {
+						set_description = "cccp_male_desc"
+					}
 				}
 			}
-			if = {
-				limit = {
-					is_female = no
-					has_dlc = "Holy Fury"
+			else_if = {
+				limit = { religion = trotskyite }
+				if = {
+					limit = {
+						is_female = yes
+						has_dlc = "Holy Fury"
+					}
+					create_bloodline = {
+						type = cccp_female_trotskyite
+					}
+					new_bloodline = {
+						set_description = "cccp_female_desc"
+					}
 				}
-				create_bloodline = {
-					type = cccp_male
-				}
-				new_bloodline = {
-					set_description = "cccp_male_desc"
+				if = {
+					limit = {
+						is_female = no
+						has_dlc = "Holy Fury"
+					}
+					create_bloodline = {
+						type = cccp_male_trotskyite
+					}
+					new_bloodline = {
+						set_description = "cccp_male_desc"
+					}
 				}
 			}
 
@@ -449,10 +514,10 @@ decisions = {
 		potential = {
 			form_empire_potential = yes
 			e_european_union = {
-				is_titular = yes
-			}
-			e_european_union = {
-				has_holder = no
+				OR = {
+					is_titular = yes
+					has_holder = no
+				}
 			}
 			
 			NOT = {
@@ -525,10 +590,10 @@ decisions = {
 				culture = hungarian
 			}
 			e_austria_hungary = {
-				is_titular = yes
-			}
-			e_austria_hungary = {
-				has_holder = no
+				OR = {
+					is_titular = yes
+					has_holder = no
+				}
 			}
 		}
 
@@ -537,6 +602,22 @@ decisions = {
 			AND = {		#Control Austrian & Hungary
 				completely_controls = k_austria
 				completely_controls = k_hungary
+				conditional_tooltip = {
+					trigger = { k_bohemia = { de_jure_liege = e_austria_hungary } }
+					completely_controls = k_bohemia
+				}
+				conditional_tooltip = {
+					trigger = { k_slovakia = { de_jure_liege = e_austria_hungary } }
+					completely_controls = k_slovakia
+				}
+				conditional_tooltip = {
+					trigger = { k_slovenia = { de_jure_liege = e_austria_hungary } }
+					completely_controls = k_slovenia
+				}
+				conditional_tooltip = {
+					trigger = { k_chorwatia = { de_jure_liege = e_austria_hungary } }
+					completely_controls = k_chorwatia
+				}
 			}
 		}
 

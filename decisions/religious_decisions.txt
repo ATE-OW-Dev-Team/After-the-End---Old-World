@@ -377,133 +377,6 @@ decisions = {
 			factor = 1
 		}
 	}
-
-	create_high_chairman = {
-		only_playable = yes
-		
-		is_high_prio = yes
-		ai_check_interval = 36
-	
-		potential = {
-			is_playable = yes
-			religion = stalinist
-			NOT = { is_title_active = d_stalinist }
-			NOT = {
-				has_alternate_start_parameter = { key = religion_names value = random }
-			}
-		}
-		
-		allow = {
-			piety = 1000
-			num_of_holy_sites = 3
-		}
-		
-		effect = {
-			activate_title = { title = d_stalinist status = yes }
-			d_stalinist = {
-				grant_title = ROOT
-			}	
-		}
-		
-		revoke_allowed = {
-			always = no
-		}
-		
-		ai_will_do = {
-			factor = 1
-		}
-	}
-
-	create_zardom = {
-		only_playable = yes
-		
-		is_high_prio = yes
-		ai_check_interval = 36
-	
-		potential = {
-			is_playable = yes
-			religion = zarist
-			NOT = { is_title_active = k_kremlin }
-			NOT = {
-				has_alternate_start_parameter = { key = religion_names value = random }
-			}
-		}
-		
-		allow = {
-			piety = 1000
-			primary_title = { title = e_great_russia }
-			OR = {
-				owns = 575 # Moscow
-				any_realm_lord = {
-					owns = 575
-				}
-			}
-		}
-		
-		effect = {
-			activate_title = { title = k_kremlin status = yes }
-			k_kremlin = {
-				grant_title = ROOT
-			}	
-			hidden_tooltip = {
-			religion_authority = {
-				modifier = papacy_instituted
-				years = 20
-			}
-
-		}
-		}
-		
-		revoke_allowed = {
-			always = no
-		}
-		
-		ai_will_do = {
-			factor = 1
-		}
-	}
-	
-	steal_zardom = {
-		only_playable = yes
-		
-		is_high_prio = yes
-		ai_check_interval = 36
-	
-		potential = {
-			is_playable = yes
-			religion = zarist
-			is_title_active = k_kremlin
-			k_kremlin = {
-				holder_scope = {
-					NOT = { character = ROOT }
-				}
-			}		
-			NOT = {
-				has_alternate_start_parameter = { key = religion_names value = random }
-			}
-		}
-		
-		allow = {
-			piety = 1000
-			primary_title = { title = e_great_russia }
-			owns = 575 # Moscow
-		}
-		
-		effect = {
-			k_kremlin = {
-				grant_title = ROOT
-			}
-			add_piety = -1000
-		}
-		
-		revoke_allowed = {
-			always = no
-		}
-		
-		ai_will_do = {
-			factor = 1
-		}
-	}
 	
 	create_fraticelli_papacy = {
 		only_playable = yes
@@ -1009,7 +882,7 @@ decisions = {
 			custom_tooltip = {
 				text = JACOBINIST_GONNA_SACRIFICE_EM
 			}
-			scaled_wealth = -0.25
+			scaled_wealth = { value = -0.25 min = 10 max = 500 }
 			jacobinist_madame_timer_effect = yes
 		}
 		
@@ -1021,6 +894,16 @@ decisions = {
 			factor = 1
 			modifier = {
 				factor = 0.2 #slow down a bit
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					scaled_wealth = { value = 0.25 min = 10 max = 500 }
+				}
+			}
+			modifier = {
+				factor = 0.5
+				war = yes
 			}
 			modifier = {
 				factor = 0.5
