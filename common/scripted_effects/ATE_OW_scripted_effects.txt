@@ -258,13 +258,13 @@ jacobinist_sacrifice_after_death_effect = {
 			#Bonus points first.
 			if = { #A religious head is also quite good.
 				limit = {
-					FROM = { controls_religion = yes }
+					PREV = { controls_religion = yes }
 				}
 				change_variable = { which = guillotine_points value = 2 }
 			}
 			if = { #A emperor is also well accepted.
 				limit = {
-					FROM = { higher_tier_than = KING }
+					PREV = { higher_tier_than = KING }
 				}
 				change_variable = { which = guillotine_points value = 1 }
 			}
@@ -467,6 +467,84 @@ calculate_madame_preference_effect = {
 			into_stewardship_trigger = yes
 		}
 		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = { ROOT = { has_character_modifier = madame_wants_young } }
+		if = { limit = { NOT = { age = 17 } } change_variable = { which = local_madame_preference value = 0.2 } }
+		if = { limit = { age = 50 } subtract_variable = { which = local_madame_preference value = 0.2 } }
+	}
+	if = {
+		limit = { ROOT = { has_character_modifier = madame_wants_old } }
+		if = { limit = { age = 50 } change_variable = { which = local_madame_preference value = 0.2 } }
+		if = { limit = { NOT = { age = 17 } } subtract_variable = { which = local_madame_preference value = 0.2 } }
+	}
+	if = {
+		limit = {
+			ROOT = {
+				OR = {
+					has_character_modifier = madame_wants_christian
+					has_character_modifier = madame_wants_esoteric
+					has_character_modifier = madame_wants_pagan_group
+					has_character_modifier = madame_wants_jewish_group
+					has_character_modifier = madame_wants_pirate
+					has_character_modifier = madame_wants_muslim
+					has_character_modifier = madame_wants_indian_group
+					has_character_modifier = madame_wants_buddhist_group
+					has_character_modifier = madame_wants_zoroastrian_group
+					has_character_modifier = madame_wants_communist
+					has_character_modifier = madame_wants_zarist
+					has_character_modifier = madame_wants_nobelian
+					has_character_modifier = madame_wants_ironist
+					has_character_modifier = madame_wants_khanist
+					has_character_modifier = madame_wants_jacobinist
+				}
+			}
+		}
+		trigger_switch = {
+			on_trigger = religion_group
+			christian				= { if = { limit = { ROOT = { has_character_modifier = madame_wants_christian } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.2 } } }
+			esoteric				= { if = { limit = { ROOT = { has_character_modifier = madame_wants_esoteric } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.2 } } }
+			pagan_group				= { if = { limit = { ROOT = { has_character_modifier = madame_wants_pagan_group } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.2 } } }
+			jewish_group			= { if = { limit = { ROOT = { has_character_modifier = madame_wants_jewish_group } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.2 } } }
+			pirate					= { if = { limit = { ROOT = { has_character_modifier = madame_wants_pirate } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.2 } } }
+			muslim					= { if = { limit = { ROOT = { has_character_modifier = madame_wants_muslim } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.2 } } }
+			indian_group			= { if = { limit = { ROOT = { has_character_modifier = madame_wants_indian_group } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.2 } } }
+			buddhist_group			= { if = { limit = { ROOT = { has_character_modifier = madame_wants_buddhist_group } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.2 } } }
+			zoroastrian_group		= { if = { limit = { ROOT = { has_character_modifier = madame_wants_zoroastrian_group } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.2 } } }
+			old_world_cultist_group	= {
+				if = {
+					limit = {
+						NOR = {
+							ROOT = { has_character_modifier = madame_wants_communist }
+							ROOT = { has_character_modifier = madame_wants_zarist }
+							ROOT = { has_character_modifier = madame_wants_nobelian }
+							ROOT = { has_character_modifier = madame_wants_ironist }
+							ROOT = { has_character_modifier = madame_wants_khanist }
+							ROOT = { has_character_modifier = madame_wants_jacobinist }
+						}
+					}
+					subtract_variable = { which = local_madame_preference value = 0.2 }
+				}
+				else = {
+					if = { limit = { is_communist_religion_trigger = yes ROOT = { has_character_modifier = madame_wants_communist } } change_variable = { which = local_madame_preference value = 0.2 } }
+					if = { limit = { is_zarist_religion_trigger = yes ROOT = { has_character_modifier = madame_wants_zarist } } change_variable = { which = local_madame_preference value = 0.2 } }
+					if = { limit = { is_nobelian_religion_trigger = yes ROOT = { has_character_modifier = madame_wants_nobelian } } change_variable = { which = local_madame_preference value = 0.2 } }
+					if = { limit = { is_ironist_religion_trigger = yes ROOT = { has_character_modifier = madame_wants_ironist } } change_variable = { which = local_madame_preference value = 0.2 } }
+					if = { limit = { is_khanist_religion_trigger = yes ROOT = { has_character_modifier = madame_wants_khanist } } change_variable = { which = local_madame_preference value = 0.2 } }
+					if = { limit = { is_jacobinist_religion_trigger = yes ROOT = { has_character_modifier = madame_wants_jacobinist } } change_variable = { which = local_madame_preference value = 0.2 } }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { ROOT = { has_character_modifier = madame_wants_female } }
+		if = { limit = { is_female = yes } change_variable = { which = local_madame_preference value = 0.2 } }
+		if = { limit = { is_female = no } subtract_variable = { which = local_madame_preference value = 0.2 } }
+	}
+	if = {
+		limit = { ROOT = { has_character_modifier = madame_wants_male } }
+		if = { limit = { is_female = no } change_variable = { which = local_madame_preference value = 0.2 } }
+		if = { limit = { is_female = yes } subtract_variable = { which = local_madame_preference value = 0.2 } }
 	}
 	# Should be at least 0.1
 	if = {
