@@ -1,6 +1,6 @@
 namespace = jacobinists
-# 1-500: 	Jacobinist sacrifice events started by targeted decision
-# 500-600:	Jacobinist sacrifice need events
+# 1-99: 	Jacobinist sacrifice events started by targeted decision
+# 100-1000:	Jacobinist sacrifice quests
 # 5001-5100	Jacobinist revolution and stuff like that
 # jacobinists.1 got deleted
 character_event = {
@@ -298,23 +298,34 @@ character_event = {
 						ROOT = { character_event = { id = jacobinists.6 } }
 					}
 					5 = { # Madame gives you a special opportunity
-						modifier = { factor = 0 }
-						modifier = {
-							factor = 0
+						trigger = {
 							ROOT = {
-								NOR = {
+								OR = {
 									trait = guillotine_master_2
 									trait = guillotine_master_3
-									has_character_flag = ongoing_quest_madame
 								}
+								OR = {
+									NOT = { has_character_flag = had_madame_quest_find_peasant }
+									had_character_flag = { flag = had_madame_quest_find_peasant days = 1095 }
+									NOT = { has_character_flag = had_madame_quest_blood_tribuntary }
+									had_character_flag = { flag = had_madame_quest_blood_tribuntary days = 1095 } #should wait at least 3 years to get again
+									NOT = { has_character_flag = had_madame_quest_sacred_raid }
+									had_character_flag = { flag = had_madame_quest_sacred_raid days = 1095 } #should wait at least 3 years to get again
+									NOT = { has_character_flag = had_madame_quest_devistate_holding }
+									had_character_flag = { flag = had_madame_quest_devistate_holding days = 1095 } #should wait at least 3 years to get again
+								}
+								NOT = { has_character_flag = ongoing_quest_madame }
 							}
 						}
+						modifier = { factor = 0 }
 						modifier = { factor = 1.1 character = ROOT } #bonus for doing it yourself
 						modifier = { factor = 1.1 learning = 18 } #bonus for really high learning
 						modifier = { factor = 1.1 learning = 19 }
 						modifier = { factor = 1.1 learning = 20 }
 						modifier = { factor = 1.1 learning = 21 }
 						modifier = { factor = 1.1 learning = 22 }
+						ROOT = { character_event = { id = jacobinists.7 } } # Quest pool
+						set_character_flag = ongoing_madame_quest
 					}
 					1 = { # Madame asks you to begin a legendary journey
 						modifier = { factor = 0 }
@@ -323,7 +334,7 @@ character_event = {
 							ROOT = {
 								NOR = {
 									trait = guillotine_master_3
-									has_character_flag = legendary_journey_madame
+									has_character_flag = ongoing_quest_madame
 								}
 							}
 						}
@@ -336,6 +347,7 @@ character_event = {
 						modifier = { factor = 1.1 check_variable = { which = finished_madame_quests value = 1 } } # bonus if finished quests for the madame
 						modifier = { factor = 1.1 check_variable = { which = finished_madame_quests value = 2 } }
 						modifier = { factor = 1.1 check_variable = { which = finished_madame_quests value = 3 } }
+						set_character_flag = ongoing_madame_quest
 					}
 				}
 			}
@@ -912,6 +924,132 @@ character_event = {
 		else_if = { limit = { is_variable_equal = { which = local_madame_new_preference value = 32 }  } add_character_modifier = { name = madame_wants_male years = 5 } }
 	}
 	jacobinist_gain_tiered_traits_effect = yes
+}
+character_event = {
+	id = jacobinists.7
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_list = {
+			5 = {
+				trigger = {
+					OR = {
+						NOT = { has_character_flag = had_madame_quest_find_peasant }
+						had_character_flag = { flag = had_madame_quest_find_peasant days = 1095 } #should wait at least 3 years to get again
+					}
+				}
+				modifier = {
+					factor = 0.5 # less likely to see twince
+					has_character_flag = had_madame_quest_find_peasant
+				}
+				character_event = { id = jacobinists.100 }
+			}
+			5 = {
+				trigger = {
+					OR = {
+						NOT = { has_character_flag = had_madame_quest_blood_tribuntary }
+						had_character_flag = { flag = had_madame_quest_blood_tribuntary days = 1095 } #should wait at least 3 years to get again
+					}
+				}
+				modifier = {
+					factor = 0.5 # less likely to see twince
+					has_character_flag = had_madame_quest_blood_tribuntary
+				}
+				character_event = { id = jacobinists.200 }
+			}
+			5 = {
+				trigger = {
+					OR = {
+						NOT = { has_character_flag = had_madame_quest_sacred_raid }
+						had_character_flag = { flag = had_madame_quest_sacred_raid days = 1095 } #should wait at least 3 years to get again
+					}
+				}
+				modifier = {
+					factor = 0.5 # less likely to see twince
+					has_character_flag = had_madame_quest_sacred_raid
+				}
+				character_event = { id = jacobinists.210 }
+			}
+			5 = {
+				trigger = {
+					OR = {
+						NOT = { has_character_flag = had_madame_quest_devistate_holding }
+						had_character_flag = { flag = had_madame_quest_devistate_holding days = 1095 } #should wait at least 3 years to get again
+					}
+				}
+				modifier = {
+					factor = 0.5 # less likely to see twince
+					has_character_flag = had_madame_quest_devistate_holding
+				}
+				character_event = { id = jacobinists.300 }
+			}
+		}
+	}
+}
+character_event = {
+	id = jacobinists.200
+	picture = GFX_evt_beheading
+	border = GFX_event_normal_frame_war
+	desc = {
+		trigger = {
+			event_target:message_reader = {
+				NOT = {
+					character = ROOT
+				}
+			}
+		}
+		text = EVTDESCJB6A
+	}
+	desc = {
+		trigger = {
+			event_target:message_reader = {
+				character = ROOT
+			}
+		}
+		text = EVTDESCJB6B
+	}
+	is_triggered_only = yes
+	show_from_from = yes
+	option = {
+		trigger = {
+			event_target:message_reader = {
+				NOT = {
+					character = ROOT
+				}
+			}
+			is_variable_equal = { which = local_madame_liked value = 1.0 }
+		}
+		name = EVTOPTAJB6 # Just gets modifier
+		event_target:message_reader = {
+			piety = 5
+		}
+		piety = 5
+	}
+	option = {
+		trigger = {
+			event_target:message_reader = {
+				character = ROOT
+			}
+			is_variable_equal = { which = local_madame_liked value = 1.0 }
+		}
+		name = EVTOPTBJB6 # Just gets modifier
+		piety = 10
+	}
+	option = {
+		trigger = {
+			event_target:message_reader = {
+				NOT = {
+					character = ROOT
+				}
+			}
+			NOT = { check_variable = { which = local_madame_liked value = 1.0 } }
+		}
+		name = EVTOPTCJB6 # Gave bad sacrifice
+		event_target:message_reader = {
+			piety = -5
+		}
+		piety = -10
+	}
 }
 # JACOBINS RISE UP, BOTTOM TEXT
 narrative_event = {
