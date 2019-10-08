@@ -879,3 +879,159 @@ narrative_event = {#Notification that the Chinese have lost and are beginning to
 		name = "EVTOPTA_INVADERS2"
 	}
 }
+
+narrative_event = {#Notification that mass settlement is taking place
+	id = invaders.6
+	title = "EVTNAMEINVADERS6"
+	desc = "EVTDESCINVADERS6"
+	picture = GFX_evt_construction_site_wol
+	border = "GFX_event_narrative_frame_war"
+	major = yes
+	
+	trigger = {
+		OR = {
+			primary_title = { title = e_chinese_invaders }
+			primary_title = { title = e_siberian_invaders }
+		}
+		demesne_size = 1#they need to have conquered at least one county for this to happen
+		NOT = {
+			has_global_flag = invader_settlement_begun
+		}
+	}
+	mean_time_to_happen = {
+		months = 6
+	}
+	immediate = {
+		set_global_flag = invader_settlement_begun
+		set_variable = { which = global_numsettlements value = 1 }	
+	}
+	option = {#Cool bruh
+		name = "EVTOPTA_INVADERS6"
+		trigger = {
+			OR = {
+				primary_title = { title = e_chinese_invaders }
+				primary_title = { title = e_siberian_invaders }
+			}
+		}
+		if = {
+			limit = {
+				primary_title = { title = e_chinese_invaders }
+			}
+			capital_scope = {
+				culture = han
+				religion = maoist
+				build_holding = {
+					type = castle
+					holder = ROOT
+				}			
+			}
+		}
+		else_if = {
+			limit = {
+				primary_title = { title = e_siberian_invaders }
+			}
+			capital_scope = {
+				culture = east_sibiran
+				religion = nousthreskeia
+				build_holding = {
+					type = castle
+					holder = ROOT
+				}			
+			}
+		}
+		if = {#helping the Siberians to settle down as they should
+			limit = {
+				is_tribal = yes
+			}
+			set_government_type = feudal_government			
+		}
+	}
+	option = {#Everyone else
+		name = "EVTOPTB_INVADERS6"
+	}
+}
+
+province_event = {#Private events for the invaders to settle some lands, establishing a decent base for themselves. This converts a few provinces to their culture and religion, and (if in a province with very few holdings) adds holdings. 
+				##This should only last for a short while, enough to give them a basic beginning
+	id = invaders.7
+	desc = "EVTDESCINVADERS7"
+	picture = GFX_evt_construction_site_wol
+	
+	trigger = {
+		NOT = {
+			check_variable = { which = global_numsettlements value = 5}#This is a kinda clunky way of doing it but I think this should mean "as long as this variable is less than 5"
+			}
+		has_global_flag = invader_settlement_begun
+	}
+	mean_time_to_happen = {
+		months = 12
+	}
+	immediate = {
+		#WE MIGHT NEED TO ADD A 'ROOT' TO THIS ONE, I'M NOT EXPERIENCED WITH PROVINCE EVENTS
+		any_province_holding = { 
+				limit = { holding_type = tribal } 
+				convert_to = CASTLE#since there can only ever be one tribe in an area this is fine
+		}
+		change_variable = { which = global_numsettlements value = 1 }
+	}
+	option = {
+		name = "EVTOPTA_INVADER7"
+		if = {
+			limit = {
+				owner = {
+					primary_title = { title = e_chinese_invaders }
+				}
+			}
+			religion = maoist
+			culture = han
+		}
+		else_if = {
+			limit = {
+				owner = {
+					primary_title = { title = e_siberian_invaders }
+				}
+			}
+			religion = nousthreskeia
+			culture = east_sibiran
+		}
+		if = {
+			limit = {
+				num_of_settlements = 0#should never be true but hey, why take the chance
+			}
+			build_holding = {
+				type = castle
+				holder = ROOT
+			}
+			build_holding = {
+				type = city
+				holder = ROOT
+			}
+			build_holding = {
+				type = temple
+				holder = ROOT
+			}			
+		}
+		else_if = {
+			limit = {
+				num_of_settlements = 1
+			}
+			build_holding = {
+				type = city
+				holder = ROOT
+			}
+			build_holding = {
+				type = temple
+				holder = ROOT
+			}			
+		}
+		else_if = {
+			limit = {
+				num_of_settlements = 2
+			}
+			build_holding = {#Tribal provinces can have temples but not cities, so it's a safe bet that, if a province has 2 holdings already, they're a Tribe/Castle and a Temple
+				type = city
+				holder = ROOT
+			}		
+		}		
+	}
+}
