@@ -899,7 +899,7 @@ narrative_event = {#Notification that mass settlement is taking place
 		}
 	}
 	mean_time_to_happen = {
-		months = 6
+		months = 1
 	}
 	immediate = {
 		set_global_flag = invader_settlement_begun
@@ -920,10 +920,19 @@ narrative_event = {#Notification that mass settlement is taking place
 			capital_scope = {
 				culture = han
 				religion = maoist
+				any_province_holding = { 
+					limit = { holding_type = tribal } 
+					convert_to = CASTLE#since there can only ever be one tribe in an area this is fine
+				}
+				set_province_flag = eastern_settlers				
 				build_holding = {
-					type = castle
+					type = city
 					holder = ROOT
-				}			
+					}
+				build_holding = {
+					type = temple
+					holder = ROOT
+				}					
 			}
 		}
 		else_if = {
@@ -933,10 +942,19 @@ narrative_event = {#Notification that mass settlement is taking place
 			capital_scope = {
 				culture = east_sibiran
 				religion = nousthreskeia
+				set_province_flag = eastern_settlers
+				any_province_holding = { 
+					limit = { holding_type = tribal } 
+					convert_to = CASTLE#since there can only ever be one tribe in an area this is fine
+				}
 				build_holding = {
-					type = castle
+					type = city
 					holder = ROOT
-				}			
+				}
+				build_holding = {
+					type = temple
+					holder = ROOT
+				}				
 			}
 		}
 		if = {#helping the Siberians to settle down as they should
@@ -945,9 +963,16 @@ narrative_event = {#Notification that mass settlement is taking place
 			}
 			set_government_type = feudal_government			
 		}
+		
 	}
 	option = {#Everyone else
 		name = "EVTOPTB_INVADERS6"
+		trigger = {
+			NOR = {
+				primary_title = { title = e_chinese_invaders }
+				primary_title = { title = e_siberian_invaders }
+			}
+		}		
 	}
 }
 
@@ -957,42 +982,64 @@ province_event = {#Private events for the invaders to settle some lands, establi
 	desc = "EVTDESCINVADERS7"
 	picture = GFX_evt_construction_site_wol
 	
+	only_playable = yes
+	min_age = 16
+	
 	trigger = {
-		NOT = {
+		NOR = {
 			check_variable = { which = global_numsettlements value = 5}#This is a kinda clunky way of doing it but I think this should mean "as long as this variable is less than 5"
+			has_province_flag = eastern_settlers
+			num_of_settlements = 4#it's meant to buff up weak provinces, not overpower moderate provinces
 			}
 		has_global_flag = invader_settlement_begun
+		OR = {#only fires for the invaders or their vassals
+			primary_title = { title = e_chinese_invaders }
+			primary_title = { title = e_siberian_invaders }
+			top_liege = {
+				primary_title = {
+					title = e_chinese_invaders
+				}
+			}
+			top_liege = {
+				primary_title = {
+					title = e_siberian_invaders
+				}
+			}			
+		}
 	}
 	mean_time_to_happen = {
-		months = 12
+		months = 3
 	}
 	immediate = {
 		#WE MIGHT NEED TO ADD A 'ROOT' TO THIS ONE, I'M NOT EXPERIENCED WITH PROVINCE EVENTS
+		ROOT = {
 		any_province_holding = { 
 				limit = { holding_type = tribal } 
 				convert_to = CASTLE#since there can only ever be one tribe in an area this is fine
 		}
+		}
 		change_variable = { which = global_numsettlements value = 1 }
+		set_province_flag = eastern_settlers
 	}
 	option = {
 		name = "EVTOPTA_INVADER7"
 		if = {
 			limit = {
-				owner = {
-					primary_title = { title = e_chinese_invaders }
-				}
+				has_global_flag = chinese_arrival
 			}
+			ROOT = {
 			religion = maoist
 			culture = han
+			}
 		}
 		else_if = {
 			limit = {
-				owner = {
-					primary_title = { title = e_siberian_invaders }
-				}
+				has_global_flag = siberian_arrival
 			}
+			ROOT = {
 			religion = nousthreskeia
 			culture = east_sibiran
+			}
 		}
 		if = {
 			limit = {
@@ -1000,15 +1047,15 @@ province_event = {#Private events for the invaders to settle some lands, establi
 			}
 			build_holding = {
 				type = castle
-				holder = ROOT
+				holder = FROM
 			}
 			build_holding = {
 				type = city
-				holder = ROOT
+				holder = FROM
 			}
 			build_holding = {
 				type = temple
-				holder = ROOT
+				holder = FROM
 			}			
 		}
 		else_if = {
@@ -1017,11 +1064,11 @@ province_event = {#Private events for the invaders to settle some lands, establi
 			}
 			build_holding = {
 				type = city
-				holder = ROOT
+				holder = FROM
 			}
 			build_holding = {
 				type = temple
-				holder = ROOT
+				holder = FROM
 			}			
 		}
 		else_if = {
@@ -1030,7 +1077,7 @@ province_event = {#Private events for the invaders to settle some lands, establi
 			}
 			build_holding = {#Tribal provinces can have temples but not cities, so it's a safe bet that, if a province has 2 holdings already, they're a Tribe/Castle and a Temple
 				type = city
-				holder = ROOT
+				holder = FROM
 			}		
 		}		
 	}
