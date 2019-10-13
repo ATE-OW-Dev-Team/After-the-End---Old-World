@@ -1,0 +1,132 @@
+namespace=sikh
+#########################################
+#
+#	Sikh religious events
+#
+#########################################
+# Your Khalsa Baptism
+narrative_event = {
+	id = sikh.1
+	is_triggered_only = yes
+	picture = GFX_evt_cathedral_indian_group
+	border = GFX_event_normal_frame_war
+
+	hide_from = yes
+
+	desc = {
+		text = sikh1Desc
+
+	}
+
+	
+	option = {#You swear to follow the Khalsa
+		name = EVTOPTA_sikh1
+		add_trait = khalsa_baptism
+	}
+
+}
+
+character_event = {#You lose the Khalsa Baptism for having bad traits, breaking one of the four rules
+	id = sikh.2
+
+	picture = GFX_evt_scandal
+	border = GFX_event_normal_frame_war
+
+	trigger = {
+		has_trait = khalsa_baptism
+		OR = {
+			has_trait = gluttonous
+			has_trait = drunkard
+			has_trait = hedonist
+			has_trait = lustful
+		}
+	}
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	hide_from = yes
+
+	desc = {
+		text = sikh2Desc
+	}
+
+	
+	option = {#Oof
+		name = EVTOPTA_sikh2
+		remove_trait = khalsa_baptism
+		piety = -100	
+	}
+
+}
+narrative_event = {#Formation of the Sikh Empire
+	id = sikh.3
+    picture = GFX_evt_throne_room_indo_aryan_group
+    border = GFX_event_narrative_frame_diplomacy
+    is_triggered_only = yes
+
+	hide_from = yes
+
+	desc = {
+		text = sikh3Desc
+
+	}
+	option = {#Yay (for the Emperor only)
+		name = EVTOPTA_sikh3
+		trigger = {
+			primary_title = { title = e_sikh_empire }
+		}
+		religion_authority = {
+			modifier = sikh_empire_founded
+			years = 30
+		}		
+	}
+	option = {#Yay (for other Sikhs)
+		name = EVTOPTB_sikh3
+		trigger = {
+			religion = sikh
+			NOT = {
+				primary_title = { title = e_sikh_empire }
+			}
+		}
+	}
+	option = {#Other Dharmics are iffy
+		name = EVTOPTC_sikh3
+		trigger = {
+			OR = {
+				AND = {
+					religion_group = indian_group
+						NOT = {
+							religion = sikh
+						}
+					}
+				religion_group = buddhist_group
+		}
+	}
+	option = {#Muslims really don't like it
+		name = EVTOPTD_sikh3
+		trigger = {
+			religion_group = muslim
+		}
+	}	
+	option = {#Everyone else
+		name = EVTOPTE_sikh3
+		trigger = {
+			NOR = {
+				religion_group = muslim
+				religion_group = indian_group
+				religion = naxalite_reformed
+				religion = naxalite
+			}
+		}
+	}
+	option = {#Oh and one other for the Naxalites. Since the Sikhs were the first to abolish castes they'd probably like them
+		name = EVTOPTF_sikh3
+		trigger = {
+			OR = {
+				religion = naxalite
+				religion = naxalite_reformed
+			}
+		}
+	}	
+}
