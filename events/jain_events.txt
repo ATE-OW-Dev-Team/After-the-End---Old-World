@@ -1,0 +1,131 @@
+namespace=jain
+#########################################
+#
+#	Neovedantic religious events
+#
+#########################################
+
+province_event = {#Neerajis show up. Since this event can happen for literally every county in India, we need to be very careful with its MTTH. It shouldn't fire more than 1-3 times per year at max
+	id = jain.1
+	picture = GFX_evt_cathedral_indian_group
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	desc = {
+		text = jain1Desc
+	}
+	option = {#Persecute them
+		name = EVTOPTA_jain1
+			trigger = {
+				NOR = {#the nice religions can't persecute them
+					religion = jain
+					religion = neovedantic
+					religion = ahmadiyya
+				}
+			}
+			ROOT={
+				add_province_modifier = {
+					name = religious_unrest
+					duration = 1750 #5 years
+				}
+			}
+			set_character_flag = hostile_to_jains#Neerajis won't come here again while you're alive
+			
+	}
+	option = {#Grudgingly accept them
+		name = EVTOPTB_jain1
+		ROOT = {#Reminder that ROOT in a province_event is the province, while the default context is the character
+			religion = jain
+			add_province_modifier = {#permanent modifier, at least until a later ruler does something to them
+				name = neeraji_monastery
+				duration = -1
+			}
+			add_province_modifier = {
+				name = religious_fervor
+				duration = 3500 #10 years, roughly
+			}
+		}
+	}
+	option = {#Encourage them
+		name = EVTOPTC_jain1
+		ROOT = {#Reminder that ROOT in a province_event is the province, while the default context is the character
+			religion = jain
+			add_province_modifier = {#permanent modifier, at least until a later ruler does something to them
+				name = neeraji_monastery
+				duration = -1
+			}
+			add_province_modifier = {
+				name = religious_fervor
+				duration = 3500 #10 years, roughly
+			}
+		}
+		scaled_wealth = -0.5
+		economy_techpoints = 50
+		culture_techpoints = 50
+		set_character_flag = friendly_to_jains
+	}
+	option = {#Next event
+		name = EVTOPTD_jain1
+		ROOT = {#Reminder that ROOT in a province_event is the province, while the default context is the character
+			religion = jain
+			add_province_modifier = {#permanent modifier, at least until a later ruler does something to them
+				name = neeraji_monastery
+				duration = -1
+			}
+			add_province_modifier = {
+				name = religious_fervor
+				duration = 3500 #10 years, roughly
+			}
+		}
+		if = {
+			limit = {
+				top_liege = {
+					NOT = {
+						religion = jain
+					}
+				}
+			}
+			top_liege = {#A bit clunky but simply converting without using top_liege didn't seem to work, even though it realistically should since the default scope is the person getting the event
+				religion = jain
+			}
+		}
+		else = {#if you're already Jain you get 100 Piety instead
+			piety = 100
+		}
+		set_character_flag = friendly_to_jains		
+	}
+}
+
+character_event = {#Society member gets an event to go and proselytise
+	id = jain.2
+	picture = GFX_evt_cathedral_indian_group
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	desc = {
+		text = jain2Desc
+	}
+	option = {
+		name = EVTOPTA_jain2
+		random_province = {
+			limit = {
+				region = world_india #only in India
+				NOT = {
+					religion = jain # no point in sending missionaries to the faithful
+				}
+				NOT = {
+					owner = {
+					has_character_flag = hostile_to_jains # They don't return to a kingdom if the ruler persecuted them last time, not until the King is gone
+					}
+				}			
+			}
+			province_event = { id = jain.1 }
+		}
+	}#Yes
+	option = {
+		name = EVTOPTB_jain2
+	}#No
+}
+
