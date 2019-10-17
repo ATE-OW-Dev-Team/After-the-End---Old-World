@@ -4,94 +4,104 @@ namespace=jain
 #	Jain religious events
 #
 #########################################
-
-#character_event = {#Neerajis show up. It shouldn't fire more than 1-3 times per year at max
-#	id = jain.1
-#	picture = GFX_evt_cathedral_indian_group
-#	border = GFX_event_normal_frame_religion
-#	
-#	is_triggered_only = yes
-#	
-#	desc = {
-#		text = jain1Desc
-#	}
-#	option = {#Persecute them
-#		name = EVTOPTA_jain1
-#			trigger = {
-#				NOR = {#the nice religions can't persecute them
-#					religion = jain
-#					religion = neovedantic
-#					religion = ahmadiyya
-#				}
-#			}
-#			random_demesne_province = {
-#				add_province_modifier = {
-#					name = religious_unrest
-#					duration = 1750 #5 years
-#				}
-#			}
-#			set_character_flag = hostile_to_jains#Neerajis won't come here again while you're alive
-#			
-#	}
-#	option = {#Grudgingly accept them
-#		name = EVTOPTB_jain1
-#		random_demesne_province = {
-#			religion = jain
-#			add_province_modifier = {#permanent modifier, at least until a later ruler does something to them
-#				name = neeraji_monastery
-#				duration = -1
-#			}
-#			add_province_modifier = {
-#				name = religious_fervor
-#				duration = 3500 #10 years, roughly
-#			}
-#		}
-#	}
-#	option = {#Encourage them
-#		name = EVTOPTC_jain1
-#		  random_demesne_province = {
-#			religion = jain
-#			add_province_modifier = {#permanent modifier, at least until a later ruler does something to them
-#				name = neeraji_monastery
-#				duration = -1
-#			}
-#			add_province_modifier = {
-#				name = religious_fervor
-#				duration = 3500 #10 years, roughly
-#			}
-#		   }
-#		scaled_wealth = -0.5
-#		economy_techpoints = 50
-#		culture_techpoints = 50
-#		set_character_flag = friendly_to_jains
-#	}
-#	option = {#Adopt their ways whole heartedly
-#		name = EVTOPTD_jain1
-#		   random_demesne_province = {
-#			religion = jain
-#			add_province_modifier = {#permanent modifier, at least until a later ruler does something to them
-#				name = neeraji_monastery
-#				duration = -1
-#			}
-#			add_province_modifier = {
-#				name = religious_fervor
-#				duration = 3500 #10 years, roughly
-#			}
-#		  }
-#		if = {
-#			limit = {
-#				NOT = {
-#					religion = jain
-#				}	
-#			}
-#			religion = jain
-#		}
-#		else = {#if you're already Jain you get 100 Piety instead
-#			piety = 100
-#		}
-#		set_character_flag = friendly_to_jains		
-#	}
-#}
+province_event = {#Neerajis show up. It shouldn't fire more than 1-3 times per year at max
+	id = jain.1
+	picture = GFX_evt_cathedral_indian_group
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	desc = {
+		text = jain1Desc
+	}
+	option = {#Persecute them
+		name = EVTOPTA_jain1
+			trigger = {
+				NOR = {#the nice religions can't persecute them
+					religion = jain
+					religion = neovedantic
+					religion = ahmadiyya
+				}
+			}
+			ROOT = {#should be the province itself
+				add_province_modifier = {
+					name = religious_unrest
+					duration = 1750 #5 years
+				}
+			}
+			set_character_flag = hostile_to_jains#Neerajis won't come here again while you're alive
+			FROM = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
+				character_event = { id = jain.9 }
+			}
+	}
+	option = {#Grudgingly accept them
+		name = EVTOPTB_jain1
+		ROOT = {
+			religion = jain
+			add_province_modifier = {#permanent modifier, at least until a later ruler does something to them
+				name = neeraji_monastery
+				duration = -1
+			}
+			add_province_modifier = {
+				name = religious_fervor
+				duration = 3500 #10 years, roughly
+			}
+		}
+		FROM = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
+			character_event = { id = jain.10 }
+		}		
+	}
+	option = {#Encourage them
+		name = EVTOPTC_jain1
+		  ROOT = {
+			religion = jain
+			add_province_modifier = {#permanent modifier, at least until a later ruler does something to them
+				name = neeraji_monastery
+				duration = -1
+			}
+			add_province_modifier = {
+				name = religious_fervor
+				duration = 3500 #10 years, roughly
+			}
+		   }
+		scaled_wealth = -0.5
+		economy_techpoints = 50
+		culture_techpoints = 50
+		set_character_flag = friendly_to_jains
+		FROM = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
+			character_event = { id = jain.11 }
+		}			
+	}
+	option = {#Adopt their ways whole heartedly
+		name = EVTOPTD_jain1
+		   ROOT = {
+			religion = jain
+			add_province_modifier = {#permanent modifier, at least until a later ruler does something to them
+				name = neeraji_monastery
+				duration = -1
+			}
+			add_province_modifier = {
+				name = religious_fervor
+				duration = 3500 #10 years, roughly
+			}
+		  }
+		if = {
+			limit = {
+				NOT = {
+					religion = jain
+				}	
+			}
+			religion = jain
+		}
+		else = {#if you're already Jain you get 100 Piety instead
+			piety = 100
+		}
+		set_character_flag = friendly_to_jains	
+		FROM = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
+			character_event = { id = jain.12 }
+		}			
+	}
+}
 
 society_quest_event = {
 	id = jain.2
@@ -99,16 +109,73 @@ society_quest_event = {
 	border = GFX_event_letter_frame_religion
 
 	is_triggered_only = yes
+	is_in_society = yes
+	only_capable = yes
+
+	trigger = {
+		society_member_of = neeraji_order
+		has_any_quest = no
+		same_society_as = FROM
+		NOT = { has_character_modifier = quest_cooldown_timer }
+		NOT = { is_inaccessible_trigger = yes }
+		is_landed = yes
+		is_allowed_to_loot = yes
+		OR = {
+			independent = yes
+			top_liege = {
+				is_allowed_to_loot = yes
+			}
+		}
+	}
+	immediate = {##For SOME reason that utterly eludes me, this section being uncommented causes EEEVERYTHING to break. None of the events later than it will ever be recognised
+				 ##Soo, for some reason I think random_province isn't actually able to accept being used as a trigger (note that the looting mission uses instead a system involving getting a random ruler then getting a random realm province
+		random_independent_ruler = {
+			limit = {
+				NOR = { 
+					war_with = ROOT#somehow I think your enemy won't want to listen to you
+					religion = jain#no point sending missionaries to the faithful
+					has_character_flag = hostile_to_jains
+					}
+				any_realm_province = {
+					region = world_india#the capital doesn't need to be in india, but the ruler must hold at least some land in India
+					NOT = {
+						religion = jain
+					}
+					holder_scope = {
+						NOT = {
+							character = ROOT#You can't mission to yourself, lol
+						}
+					}
+					holder_scope = {#You also can't join if the target or their top liege is a Neeraji (that'd mean they were Jain)
+						NOT = { same_society_as = ROOT }
+						top_liege = { NOT = { same_society_as = ROOT } }
+					}
+				}
+			}##while we're not using it right now, reminder that preferred_limit exists, which lets you specify a hierarchy among the random choices (ie, choose randomly but choose among only Jains if there are any valid Jains, then choose randomly among the Dharmics if there are no Jains, then randomly among anyone if there's none of either
+			
+			random_realm_province = {
+				save_event_target_as = neeraji_mission_target
+			}
+		}
+	}
+	quest_target = event_target:neeraji_mission_target##Yes this is meant to be outside the immediate
 
 
 	option = {
 		name = ACCEPT
-		set_quest = neeraji_go_on_mission_flag
+		event_target:neeraji_mission_target= {
+			show_scope_change = no
+			set_quest_target = {
+				id = quest_neeraji_mission
+				holder = ROOT
+			}
+		}	
 	}
 	option = {
 		name = DECLINE
 		custom_tooltip = { text = decline_quest_tooltip }
 
+		
 		add_character_modifier = {
 			name = quest_cooldown_timer
 			hidden = yes
@@ -118,46 +185,6 @@ society_quest_event = {
 		ai_chance = { factor = 0 }
 	}
 }
-
-#character_event = {#Society member gets an event to go and proselytise
-#	id = jain.2
-#	picture = GFX_evt_cathedral_indian_group
-#	border = GFX_event_normal_frame_religion
-#	
-#	is_triggered_only = yes
-#	trigger = {
-#		society_member_of = neeraji_order
-#		has_any_quest = no
-#		NOT = { has_character_modifier = quest_cooldown_timer }
-#		is_society_grandmaster = no
-#		NOT = { is_inaccessible_trigger = yes }
-#	}
-#	desc = {
-#		text = jain2Desc
-#	}
-#	option = {
-#		name = EVTOPTA_jain2
-#		random_province = {
-#			limit = {
-#				region = world_india #only in India
-#				NOT = {
-#					religion = jain # no point in sending missionaries to the faithful
-#				}
-#				NOT = {
-#					owner = {
-#					has_character_flag = hostile_to_jains # They don't return to a kingdom if the ruler persecuted them last time, not until the King is gone
-#					}
-#				}			
-#			}
-#			owner = {
-#				character_event = { id = jain.1 }
-#			}
-#		}
-#	}#Yes
-#	option = {
-#		name = EVTOPTB_jain2
-#	}#No
-#}
 
 character_event = {
     id = jain.3
@@ -237,7 +264,13 @@ character_event = {
 			save_event_target_as = monastic_leader
 		}
 
-		random_list = {
+		random_list = {##Neerajis should share a few missions. In particular, the "Build Temple" and "Give to Charity" missions makes sense for both
+					##Build Temple
+					##Give to Charity
+					##Donate to the Order
+					##Go on a mission
+					##Save the Persecuted
+					##Make someone friendly_to_jains
 			200 = {
 				set_character_flag = neeraji_go_on_mission
 			}
@@ -393,4 +426,71 @@ character_event = {
 			}
 		}
 	}
+}
+
+narrative_event = {
+    id = jain.8
+    desc = EVTDESC_JAIN8
+    border = GFX_event_narrative_frame_religion
+
+    is_triggered_only = yes
+		
+    option = {#Let's go - we can think up more varied approaches after we've got this working basically 
+        name = EVTOPTA_JAIN8
+			quest_target = {#This should fire the event 
+				province_event = { id = jain.1 }
+			}
+    }
+}
+narrative_event = {Informed about being persecuted
+    id = jain.9
+    desc = EVTDESC_JAIN8
+    border = GFX_event_narrative_frame_religion
+
+    is_triggered_only = yes
+		
+    option = {#Let's go - we can think up more varied approaches after we've got this working basically 
+        name = EVTOPTA_JAIN8
+		clr_quest = quest_neeraji_mission
+		add_society_currency_medium_effect = yes
+    }
+}
+narrative_event = {Informed about being grudgingly accepted
+    id = jain.10
+    desc = EVTDESC_JAIN8
+    border = GFX_event_narrative_frame_religion
+
+    is_triggered_only = yes
+		
+    option = {#Let's go - we can think up more varied approaches after we've got this working basically 
+        name = EVTOPTA_JAIN8
+		clr_quest = quest_neeraji_mission
+		add_society_currency_medium_effect = yes
+    }
+}
+narrative_event = {Informed about being enthusiastically accepted
+    id = jain.11
+    desc = EVTDESC_JAIN8
+    border = GFX_event_narrative_frame_religion
+
+    is_triggered_only = yes
+		
+    option = {#Let's go - we can think up more varied approaches after we've got this working basically 
+        name = EVTOPTA_JAIN8
+		clr_quest = quest_neeraji_mission
+		add_society_currency_medium_effect = yes
+    }
+}
+narrative_event = {Informed about the King having converted
+    id = jain.12
+    desc = EVTDESC_JAIN8
+    border = GFX_event_narrative_frame_religion
+
+    is_triggered_only = yes
+		
+    option = {#Let's go - we can think up more varied approaches after we've got this working basically 
+        name = EVTOPTA_JAIN8
+		clr_quest = quest_neeraji_mission
+		add_society_currency_medium_effect = yes
+    }
 }
