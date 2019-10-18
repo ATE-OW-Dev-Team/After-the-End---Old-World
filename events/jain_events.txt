@@ -1,0 +1,496 @@
+namespace=jain
+#########################################
+#
+#	Jain religious events
+#
+#########################################
+province_event = {#Neerajis show up. It shouldn't fire more than 1-3 times per year at max
+	id = jain.1
+	picture = GFX_evt_cathedral_indian_group
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	desc = {
+		text = jain1Desc
+	}
+	option = {#Persecute them
+		name = EVTOPTA_jain1
+			trigger = {
+				NOR = {#the nice religions can't persecute them
+					religion = jain
+					religion = neovedantic
+					religion = ahmadiyya
+				}
+			}
+			ROOT = {#should be the province itself
+				add_province_modifier = {
+					name = religious_unrest
+					duration = 1750 #5 years
+				}
+			}
+			set_character_flag = hostile_to_jains#Neerajis won't come here again while you're alive
+			FROM = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
+				character_event = { id = jain.9 }
+			}
+	}
+	option = {#Grudgingly accept them
+		name = EVTOPTB_jain1
+		ROOT = {
+			religion = jain
+			add_province_modifier = {#permanent modifier, at least until a later ruler does something to them
+				name = neeraji_monastery
+				duration = -1
+			}
+			add_province_modifier = {
+				name = religious_fervor
+				duration = 3500 #10 years, roughly
+			}
+		}
+		FROM = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
+			character_event = { id = jain.10 }
+		}		
+	}
+	option = {#Encourage them
+		name = EVTOPTC_jain1
+		  ROOT = {
+			religion = jain
+			add_province_modifier = {#permanent modifier, at least until a later ruler does something to them
+				name = neeraji_monastery
+				duration = -1
+			}
+			add_province_modifier = {
+				name = religious_fervor
+				duration = 3500 #10 years, roughly
+			}
+		   }
+		scaled_wealth = -0.5
+		economy_techpoints = 50
+		culture_techpoints = 50
+		set_character_flag = friendly_to_jains
+		FROM = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
+			character_event = { id = jain.11 }
+		}			
+	}
+	option = {#Adopt their ways whole heartedly
+		name = EVTOPTD_jain1
+		   ROOT = {
+			religion = jain
+			add_province_modifier = {#permanent modifier, at least until a later ruler does something to them
+				name = neeraji_monastery
+				duration = -1
+			}
+			add_province_modifier = {
+				name = religious_fervor
+				duration = 3500 #10 years, roughly
+			}
+		  }
+		if = {
+			limit = {
+				NOT = {
+					religion = jain
+				}	
+			}
+			religion = jain
+		}
+		else = {#if you're already Jain you get 100 Piety instead
+			piety = 100
+		}
+		set_character_flag = friendly_to_jains	
+		FROM = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
+			character_event = { id = jain.12 }
+		}			
+	}
+}
+
+society_quest_event = {
+	id = jain.2
+	desc = jain2Desc
+	border = GFX_event_letter_frame_religion
+
+	is_triggered_only = yes
+	is_in_society = yes
+	only_capable = yes
+
+	trigger = {
+		society_member_of = neeraji_order
+		has_any_quest = no
+		same_society_as = FROM
+		NOT = { has_character_modifier = quest_cooldown_timer }
+		NOT = { is_inaccessible_trigger = yes }
+		is_landed = yes
+		is_allowed_to_loot = yes
+		OR = {
+			independent = yes
+			top_liege = {
+				is_allowed_to_loot = yes
+			}
+		}
+	}
+	immediate = {##For SOME reason that utterly eludes me, this section being uncommented causes EEEVERYTHING to break. None of the events later than it will ever be recognised
+				 ##Soo, for some reason I think random_province isn't actually able to accept being used as a trigger (note that the looting mission uses instead a system involving getting a random ruler then getting a random realm province
+		random_independent_ruler = {
+			limit = {
+				NOR = { 
+					war_with = ROOT#somehow I think your enemy won't want to listen to you
+					religion = jain#no point sending missionaries to the faithful
+					has_character_flag = hostile_to_jains
+					}
+				any_realm_province = {
+					region = world_india#the capital doesn't need to be in india, but the ruler must hold at least some land in India
+					NOT = {
+						religion = jain
+					}
+					holder_scope = {
+						NOT = {
+							character = ROOT#You can't mission to yourself, lol
+						}
+					}
+					holder_scope = {#You also can't join if the target or their top liege is a Neeraji (that'd mean they were Jain)
+						NOT = { same_society_as = ROOT }
+						top_liege = { NOT = { same_society_as = ROOT } }
+					}
+				}
+			}##while we're not using it right now, reminder that preferred_limit exists, which lets you specify a hierarchy among the random choices (ie, choose randomly but choose among only Jains if there are any valid Jains, then choose randomly among the Dharmics if there are no Jains, then randomly among anyone if there's none of either
+			
+			random_realm_province = {
+				save_event_target_as = neeraji_mission_target
+			}
+		}
+	}
+	quest_target = event_target:neeraji_mission_target##Yes this is meant to be outside the immediate
+
+
+	option = {
+		name = ACCEPT
+		event_target:neeraji_mission_target= {
+			show_scope_change = no
+			set_quest_target = {
+				id = quest_neeraji_mission
+				holder = ROOT
+			}
+		}	
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = decline_quest_tooltip }
+
+		
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+
+		ai_chance = { factor = 0 }
+	}
+}
+
+character_event = {
+    id = jain.3
+	hide_window = yes
+    is_triggered_only = yes
+    trigger = {
+    	FROM = { leader = { society_member_of = neeraji_order } }
+    }
+    immediate = {
+    	FROM = { leader = { character_event = { id = jain.4 } } }
+    }
+}
+
+#Ping event
+character_event = {
+    id = jain.4
+	hide_window = yes
+    is_triggered_only = yes
+    immediate = {
+    	FROM = { letter_event = { id = jain.5 } }
+    }
+}
+
+#Neerajis aren't a traditional Monastic Order and need their own events for accepting people in
+letter_event = {
+    id = jain.5
+    desc = EVTDESC_MNM_4452
+    border = GFX_event_letter_frame_religion
+
+    is_triggered_only = yes
+	
+	immediate = { set_character_flag = society_join_block }
+	
+    option = { 
+        name = EVTOPTA_MNM_44511
+
+        FROM = {
+        	show_scope_change = no
+        	ROOT = {
+        		show_scope_change = no
+				join_society = neeraji_order
+			}
+        }
+		
+		scaled_wealth = -0.25
+
+        #FROM = { society = { save_event_target_as = joining_society } }
+        #join_society = event_target:joining_society
+		
+		clr_character_flag = society_join_block
+    }
+}
+
+#Neeraji Order Society quests
+character_event = {
+	id = jain.6
+	hide_window = yes
+
+	is_triggered_only = yes
+	is_in_society = yes
+	only_capable = yes
+
+	trigger = {
+		is_monastic_member_trigger = yes
+		is_society_grandmaster = no
+		has_any_quest = no
+		NOT = { is_inaccessible_trigger = yes }
+		NOT = { has_character_modifier = quest_cooldown_timer }
+	}
+
+	immediate = {
+		random_society_member = {
+			limit = {
+				is_society_grandmaster = yes
+				same_society_as = ROOT
+			}
+			save_event_target_as = monastic_leader
+		}
+
+		random_list = {##Neerajis should share a few missions. In particular, the "Build Temple" and "Give to Charity" missions makes sense for both
+					##Build Temple
+					##Give to Charity
+					##Donate to the Order
+					##Go on a mission
+					##Save the Persecuted
+					##Make someone friendly_to_jains
+			200 = {
+				set_character_flag = neeraji_go_on_mission
+			}
+			10 = { 
+				set_character_flag = monastic_orders_holy_seclusion
+			}
+			10 = { 
+				modifier = { factor = 0 is_playable = no }
+				modifier = { factor = 0 society_member_of = monastic_order_stoics }
+				set_character_flag = monastic_orders_mission_charity
+			}
+			10 = {
+				modifier = { factor = 0 NOT = { has_dlc ="Way of Life" } }
+				modifier = { factor = 0 has_focus = focus_theology }
+				modifier = { factor = 0 is_playable = no } # Only playable characters get focuses
+				set_character_flag = monastic_orders_mission_theology
+			}
+			10 = {
+				modifier = { factor = 0 is_playable = no }
+				modifier = {
+					NOT = { religion_group = christian}
+					factor = 0
+				}
+				modifier = {
+					trait = pilgrim
+					factor = 0
+				}
+				modifier = {
+					trait = on_pilgrimage
+					factor = 0
+				}
+				modifier = {
+					has_alternate_start_parameter = { key = religion_names value = random }
+					factor = 0
+				}
+				modifier = {
+					NOT = {
+						has_dlc = "Sons of Abraham"
+					}
+					factor = 0
+				}
+				set_character_flag = monastic_orders_mission_christian_pilgrimage
+			}
+			10 = {
+				modifier = { factor = 0 is_playable = no }
+				modifier = {
+					NOT = { religion_group = indian_group }
+					factor = 0
+				}
+				modifier = {
+					trait = indian_pilgrim
+					factor = 0
+				}
+				modifier = {
+					trait = on_indian_pilgrimage
+					factor = 0
+				}
+				modifier = {
+					has_alternate_start_parameter = { key = religion_names value = random }
+					factor = 0
+				}
+				set_character_flag = monastic_orders_mission_dharmic_pilgrimage
+			}
+			10 = {
+				trigger = {
+					is_playable = yes
+					any_demesne_province = {
+						num_of_empty_holdings = 1			
+					}
+				}
+				modifier = {
+					factor = 0 
+					society_member_of = monastic_order_stoics
+				}
+				modifier = {
+					factor = 0 is_tribal = yes
+				}
+				modifier = {
+					factor = 0 is_nomadic = yes
+				}
+				modifier = { factor = 0 is_playable = no }
+				set_character_flag = monastic_orders_mission_temple
+			}
+			50 = { # AI bypasses missions at times
+				modifier = {
+					factor = 0
+					ai = no
+				}
+				random_list = {
+					70 = {
+						modifier = {
+							factor = 0.9
+							society_influence >= 30
+						}
+						modifier = {
+							factor = 0.9
+							society_influence >= 40
+						}
+						modifier = {
+							factor = 0.8
+							society_influence >= 50
+						}
+						modifier = {
+							factor = 0.7
+							society_influence >= 70
+						}
+						modifier = {
+							factor = 0.6
+							society_influence >= 80
+						}
+						modifier = {
+							factor = 0.5
+							society_influence >= 90
+						}
+						add_mission_succeed_influence_effect = yes
+						monastic_order_purity_effect = yes
+					}
+					30 = {
+						add_mission_fail_influence_effect = yes
+					}
+				}
+			}
+			85 = {
+				modifier = {
+					factor = 0
+					ai = no
+				}
+				#Do nothing for AI
+			}
+		}
+		event_target:monastic_leader = { character_event = { id = jain.7 days = 7 random = 7 } }
+	}
+}
+
+#Tombola Ping Event
+character_event = {
+	id = jain.7
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = {
+			trigger_switch = {
+				on_trigger = has_character_flag
+				monastic_orders_holy_seclusion = 				{ clr_character_flag = monastic_orders_holy_seclusion society_quest_event = { id = MNM.4402 } }
+				monastic_orders_mission_charity = 				{ clr_character_flag = monastic_orders_mission_charity society_quest_event = { id = MNM.4011 } }
+				monastic_orders_mission_theology = 				{ clr_character_flag = monastic_orders_mission_theology society_quest_event = { id = MNM.4015 } }
+				monastic_orders_mission_christian_pilgrimage = 	{ clr_character_flag = monastic_orders_mission_christian_pilgrimage society_quest_event = { id = MNM.4019 } }
+				monastic_orders_mission_dharmic_pilgrimage = 	{ clr_character_flag = monastic_orders_mission_dharmic_pilgrimage society_quest_event = { id = MNM.8095 } }
+				monastic_orders_mission_temple = 				{ clr_character_flag = monastic_orders_mission_temple society_quest_event = { id = MNM.4023 } }
+				neeraji_go_on_mission =							{ clr_character_flag = neeraji_go_on_mission society_quest_event = { id = jain.2 } }
+			}
+		}
+	}
+}
+
+narrative_event = {
+    id = jain.8
+    desc = EVTDESC_JAIN8
+    border = GFX_event_narrative_frame_religion
+
+    is_triggered_only = yes
+		
+    option = {#Let's go - we can think up more varied approaches after we've got this working basically 
+        name = EVTOPTA_JAIN8
+			quest_target = {#This should fire the event 
+				province_event = { id = jain.1 }
+			}
+    }
+}
+narrative_event = {Informed about being persecuted
+    id = jain.9
+    desc = EVTDESC_JAIN8
+    border = GFX_event_narrative_frame_religion
+
+    is_triggered_only = yes
+		
+    option = {#Let's go - we can think up more varied approaches after we've got this working basically 
+        name = EVTOPTA_JAIN8
+		clr_quest = quest_neeraji_mission
+		add_society_currency_medium_effect = yes
+    }
+}
+narrative_event = {Informed about being grudgingly accepted
+    id = jain.10
+    desc = EVTDESC_JAIN8
+    border = GFX_event_narrative_frame_religion
+
+    is_triggered_only = yes
+		
+    option = {#Let's go - we can think up more varied approaches after we've got this working basically 
+        name = EVTOPTA_JAIN8
+		clr_quest = quest_neeraji_mission
+		add_society_currency_medium_effect = yes
+    }
+}
+narrative_event = {Informed about being enthusiastically accepted
+    id = jain.11
+    desc = EVTDESC_JAIN8
+    border = GFX_event_narrative_frame_religion
+
+    is_triggered_only = yes
+		
+    option = {#Let's go - we can think up more varied approaches after we've got this working basically 
+        name = EVTOPTA_JAIN8
+		clr_quest = quest_neeraji_mission
+		add_society_currency_medium_effect = yes
+    }
+}
+narrative_event = {Informed about the King having converted
+    id = jain.12
+    desc = EVTDESC_JAIN8
+    border = GFX_event_narrative_frame_religion
+
+    is_triggered_only = yes
+		
+    option = {#Let's go - we can think up more varied approaches after we've got this working basically 
+        name = EVTOPTA_JAIN8
+		clr_quest = quest_neeraji_mission
+		add_society_currency_medium_effect = yes
+    }
+}
