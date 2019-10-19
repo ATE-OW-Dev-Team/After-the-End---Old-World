@@ -83,8 +83,8 @@ decisions = {
 				give_nickname = nick_the_magnificent
 			}
 			if = {
-				limit = { ai = no }
-				set_character_flag = achievement_my_very_own_subcontinent
+				limit = { ai = no NOT = { has_global_flag = achievement_my_very_own_subcontinent } }
+				achievement_my_very_own_subcontinent_done_effect = yes
 			}
 			if = {
 				limit = {
@@ -726,7 +726,6 @@ decisions = {
 					gain_empire_effect = yes
 				}
 			}
-				
 			hidden_tooltip = {
 				###Europe unites!
 				k_france = { de_jure_liege = e_european_union }
@@ -758,6 +757,10 @@ decisions = {
 				}
 				any_playable_ruler = {
 					narrative_event = { id = ATEOW_realm_event.99994 }
+				}
+				if = {
+					limit = { ai = no }
+					in_varietate_concordia_done_effect = yes
 				}
 			}
 		}
@@ -821,7 +824,7 @@ decisions = {
 					k_slovenia 			= { k_slovenia 			= { de_jure_liege = e_austria_hungary } }
 					k_chorwatia 		= { k_chorwatia 		= { de_jure_liege = e_austria_hungary } }
 				}
-
+				achievement_who_are_we_playing_against_done_effect = yes
 				# ROOT = {
 				# 	narrative_event = { id = ATEOW_realm_event.99998 }
 				# }
@@ -890,7 +893,108 @@ decisions = {
 					k_slovenia 			= { k_slovenia 			= { de_jure_liege = e_austria_hungary } }
 					k_chorwatia 		= { k_chorwatia 		= { de_jure_liege = e_austria_hungary } }
 				}
+				achievement_who_are_we_playing_against_done_effect = yes
+				# ROOT = {
+				# 	narrative_event = { id = ATEOW_realm_event.99998 }
+				# }
+				# any_playable_ruler = {
+				# 	narrative_event = { id = ATEOW_realm_event.99998 }
+				# }
+			}
+		}
+	}
+	
+	restore_byzantine_empire = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 24
+		potential = {
+			form_empire_potential = yes
+			OR = {
+				culture_group = byzantine
+				religion_openly_hellenic_or_reformed_trigger = yes
+			}
+			e_byzantium = {
+				OR = {
+					is_titular = yes
+					has_holder = no
+				}
+			}
+			OR = {
+				culture = greek
+				has_landed_title = k_byzantium
+				has_landed_title = k_epirus
+				has_landed_title = k_turkey
+				has_landed_title = k_bulgaria
+				has_landed_title = k_georgia
+				has_landed_title = k_cyprus
+				has_landed_title = k_anatolia
+				has_landed_title = k_trebizond
+				has_landed_title = k_amalfi
+			}
+		}
 
+		allow = {
+			form_empire_allow = yes
+			AND = {
+				completely_controls = k_byzantium
+				completely_controls = k_epirus
+				OR = {
+					conditional_tooltip = {
+						trigger = { k_turkey = { is_titular = no } }
+						completely_controls = k_turkey
+					}
+					conditional_tooltip = {
+						trigger = { k_armenia = { is_titular = no } }
+						completely_controls = k_armenia
+					}
+					conditional_tooltip = {
+						trigger = { k_bulgaria = { is_titular = no } }
+						completely_controls = k_bulgaria
+					}
+					conditional_tooltip = {
+						trigger = { k_georgia = { is_titular = no } }
+						completely_controls = k_georgia
+					}
+					conditional_tooltip = {
+						trigger = { k_cyprus = { is_titular = no } }
+						completely_controls = k_cyprus
+					}
+					conditional_tooltip = {
+						trigger = { k_trebizond = { is_titular = no } }
+						completely_controls = k_trebizond
+					}
+					conditional_tooltip = {
+						trigger = { k_amalfi = { is_titular = no } }
+						completely_controls = k_amalfi
+					}
+				}
+			}
+			e_ottoman = {
+				has_holder = no
+			}
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = restore_byzantine_empire_TT
+				e_byzantium = {
+					gain_empire_effect = yes
+					add_law = succ_byzantine_elective
+				}
+				k_byzantium = { de_jure_liege = e_byzantium }
+				k_epirus = { de_jure_liege = e_byzantium }
+				trigger_switch = {
+					on_trigger = completely_controls
+					k_turkey 			= { k_turkey 			= { de_jure_liege = e_byzantium } }
+					k_armenia 			= { k_armenia 			= { de_jure_liege = e_byzantium } }
+					k_bulgaria 			= { k_bulgaria 			= { de_jure_liege = e_byzantium } }
+					k_georgia 			= { k_georgia 			= { de_jure_liege = e_byzantium } }
+					k_cyprus 			= { k_cyprus 			= { de_jure_liege = e_byzantium } }
+					k_trebizond 		= { k_trebizond 		= { de_jure_liege = e_byzantium } }
+					k_amalfi 			= { k_amalfi 			= { de_jure_liege = e_byzantium } }
+				}
+				achievement_purple_phoenix_done_effect = yes
 				# ROOT = {
 				# 	narrative_event = { id = ATEOW_realm_event.99998 }
 				# }
