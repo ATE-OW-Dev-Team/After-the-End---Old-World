@@ -30,7 +30,7 @@ province_event = {#Neerajis show up. It shouldn't fire more than 1-3 times per y
 				}
 			}
 			set_character_flag = hostile_to_jains#Neerajis won't come here again while you're alive
-			FROM = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
+			any_quester_targeting_this = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
 				character_event = { id = jain.9 }
 			}
 	}
@@ -47,7 +47,7 @@ province_event = {#Neerajis show up. It shouldn't fire more than 1-3 times per y
 				duration = 3500 #10 years, roughly
 			}
 		}
-		FROM = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
+		any_quester_targeting_this = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
 			character_event = { id = jain.10 }
 		}		
 	}
@@ -68,7 +68,7 @@ province_event = {#Neerajis show up. It shouldn't fire more than 1-3 times per y
 		economy_techpoints = 50
 		culture_techpoints = 50
 		set_character_flag = friendly_to_jains
-		FROM = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
+		any_quester_targeting_this = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
 			character_event = { id = jain.11 }
 		}			
 	}
@@ -97,7 +97,7 @@ province_event = {#Neerajis show up. It shouldn't fire more than 1-3 times per y
 			piety = 100
 		}
 		set_character_flag = friendly_to_jains	
-		FROM = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
+		any_quester_targeting_this = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
 			character_event = { id = jain.12 }
 		}			
 	}
@@ -119,13 +119,6 @@ society_quest_event = {
 		NOT = { has_character_modifier = quest_cooldown_timer }
 		NOT = { is_inaccessible_trigger = yes }
 		is_landed = yes
-		is_allowed_to_loot = yes
-		OR = {
-			independent = yes
-			top_liege = {
-				is_allowed_to_loot = yes
-			}
-		}
 	}
 	immediate = {##For SOME reason that utterly eludes me, this section being uncommented causes EEEVERYTHING to break. None of the events later than it will ever be recognised
 				 ##Soo, for some reason I think random_province isn't actually able to accept being used as a trigger (note that the looting mission uses instead a system involving getting a random ruler then getting a random realm province
@@ -248,7 +241,7 @@ character_event = {
 	only_capable = yes
 
 	trigger = {
-		is_monastic_member_trigger = yes
+		society_member_of = neeraji_order
 		is_society_grandmaster = no
 		has_any_quest = no
 		NOT = { is_inaccessible_trigger = yes }
@@ -271,89 +264,89 @@ character_event = {
 					##Go on a mission
 					##Save the Persecuted
 					##Make someone friendly_to_jains
-			200 = {
+			10 = {
 				set_character_flag = neeraji_go_on_mission
 			}
-			10 = { 
-				set_character_flag = monastic_orders_holy_seclusion
-			}
-			10 = { 
-				modifier = { factor = 0 is_playable = no }
-				modifier = { factor = 0 society_member_of = monastic_order_stoics }
-				set_character_flag = monastic_orders_mission_charity
-			}
-			10 = {
-				modifier = { factor = 0 NOT = { has_dlc ="Way of Life" } }
-				modifier = { factor = 0 has_focus = focus_theology }
-				modifier = { factor = 0 is_playable = no } # Only playable characters get focuses
-				set_character_flag = monastic_orders_mission_theology
-			}
-			10 = {
-				modifier = { factor = 0 is_playable = no }
-				modifier = {
-					NOT = { religion_group = christian}
-					factor = 0
-				}
-				modifier = {
-					trait = pilgrim
-					factor = 0
-				}
-				modifier = {
-					trait = on_pilgrimage
-					factor = 0
-				}
-				modifier = {
-					has_alternate_start_parameter = { key = religion_names value = random }
-					factor = 0
-				}
-				modifier = {
-					NOT = {
-						has_dlc = "Sons of Abraham"
-					}
-					factor = 0
-				}
-				set_character_flag = monastic_orders_mission_christian_pilgrimage
-			}
-			10 = {
-				modifier = { factor = 0 is_playable = no }
-				modifier = {
-					NOT = { religion_group = indian_group }
-					factor = 0
-				}
-				modifier = {
-					trait = indian_pilgrim
-					factor = 0
-				}
-				modifier = {
-					trait = on_indian_pilgrimage
-					factor = 0
-				}
-				modifier = {
-					has_alternate_start_parameter = { key = religion_names value = random }
-					factor = 0
-				}
-				set_character_flag = monastic_orders_mission_dharmic_pilgrimage
-			}
-			10 = {
-				trigger = {
-					is_playable = yes
-					any_demesne_province = {
-						num_of_empty_holdings = 1			
-					}
-				}
-				modifier = {
-					factor = 0 
-					society_member_of = monastic_order_stoics
-				}
-				modifier = {
-					factor = 0 is_tribal = yes
-				}
-				modifier = {
-					factor = 0 is_nomadic = yes
-				}
-				modifier = { factor = 0 is_playable = no }
-				set_character_flag = monastic_orders_mission_temple
-			}
+#			10 = { 
+#				set_character_flag = monastic_orders_holy_seclusion
+#			}
+#			10 = { 
+#				modifier = { factor = 0 is_playable = no }
+#				modifier = { factor = 0 society_member_of = monastic_order_stoics }
+#				set_character_flag = monastic_orders_mission_charity
+#			}
+#			10 = {
+#				modifier = { factor = 0 NOT = { has_dlc ="Way of Life" } }
+#				modifier = { factor = 0 has_focus = focus_theology }
+#				modifier = { factor = 0 is_playable = no } # Only playable characters get focuses
+#				set_character_flag = monastic_orders_mission_theology
+#			}
+#			10 = {
+#				modifier = { factor = 0 is_playable = no }
+#				modifier = {
+#					NOT = { religion_group = christian}
+#					factor = 0
+#				}
+#				modifier = {
+#					trait = pilgrim
+#					factor = 0
+#				}
+#				modifier = {
+#					trait = on_pilgrimage
+#					factor = 0
+#				}
+#				modifier = {
+#					has_alternate_start_parameter = { key = religion_names value = random }
+#					factor = 0
+#				}
+#				modifier = {
+#					NOT = {
+#						has_dlc = "Sons of Abraham"
+#					}
+#					factor = 0
+#				}
+#				set_character_flag = monastic_orders_mission_christian_pilgrimage
+#			}
+#			10 = {
+#				modifier = { factor = 0 is_playable = no }
+#				modifier = {
+#					NOT = { religion_group = indian_group }
+#					factor = 0
+#				}
+#				modifier = {
+#					trait = indian_pilgrim
+#					factor = 0
+#				}
+#				modifier = {
+#					trait = on_indian_pilgrimage
+#					factor = 0
+#				}
+#				modifier = {
+#					has_alternate_start_parameter = { key = religion_names value = random }
+#					factor = 0
+#				}
+#				set_character_flag = monastic_orders_mission_dharmic_pilgrimage
+#			}
+#			10 = {
+#				trigger = {
+#					is_playable = yes
+#					any_demesne_province = {
+#						num_of_empty_holdings = 1			
+#					}
+#				}
+#				modifier = {
+#					factor = 0 
+#					society_member_of = monastic_order_stoics
+#				}
+#				modifier = {
+#					factor = 0 is_tribal = yes
+#				}
+#				modifier = {
+#					factor = 0 is_nomadic = yes
+#				}
+#				modifier = { factor = 0 is_playable = no }
+#				set_character_flag = monastic_orders_mission_temple
+#			}
 			50 = { # AI bypasses missions at times
 				modifier = {
 					factor = 0
