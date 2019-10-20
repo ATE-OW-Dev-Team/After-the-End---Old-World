@@ -1906,7 +1906,7 @@ claim_all = {
 			}
 			if = { #China with no land calculates what to do with nomad provinces
 				limit = { 
-					is_offmap_governor = yes
+					is_real_offmap_governor = yes
 					offmap_power = { is_offmap_tag = offmap_china }
 					offmap_china = { has_offmap_tmp_flag = WP_is_not_on_map }
 					NOT = { wealth = 2500 } #unless already rich from tributes
@@ -4029,9 +4029,8 @@ crusade = {
 		any_attacker = {
 			limit = {
 				ai = no
-				NOT = { has_character_flag = achievement_crusader }
 			}
-			set_character_flag = achievement_crusader
+			achievement_crusader_done_effect = yes
 		}
 		
 		ROOT = {
@@ -5368,9 +5367,8 @@ new_crusade = {
 			any_attacker = {
 				limit = {
 					ai = no
-					NOT = { has_character_flag = achievement_crusader }
 				}
-				set_character_flag = achievement_crusader
+				achievement_crusader_done_effect = yes
 			}
 
 			# Nickname for the most participating Crusader
@@ -5779,7 +5777,7 @@ new_crusade = {
 				ai = no
 				religion_group = pagan_group
 			}
-			set_character_flag = achievement_pagan_fury
+			achievement_pagan_fury_done_effect = yes
 		}
 
 		# Chance to start a Shepherd's Crusade
@@ -6936,6 +6934,15 @@ bid_for_independence = {
 		}
 		FROM = {
 			prestige = 50
+			hidden_tooltip = {
+				if = {
+					limit = {
+						ai = no
+						ROOT = { culture = british }
+					}
+					achievement_no_deal_done_effect = yes
+				}
+			}
 		}
 	}
 
@@ -8877,10 +8884,10 @@ decadence_invasion = {
 			limit = {
 				FROM = {
 					ai = no
-					NOT = { has_character_flag = achievement_decadent_warrior }
+					NOT = { has_global_flag = achievement_decadent_warrior }
 				}
 			}
-			FROM = { set_character_flag = achievement_decadent_warrior }
+			FROM = { achievement_decadent_warrior_done_effect = yes }
 		}
 	}
 
@@ -9537,6 +9544,15 @@ cb_faction_independence = {
 						who = ROOT
 						modifier = opinion_traitor
 					}
+				}
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						ai = no
+						ROOT = { culture = british }
+					}
+					achievement_no_deal_done_effect = yes
 				}
 			}
 		}
@@ -10475,7 +10491,7 @@ pagan_subjugation = {
 			in_revolt = no
 			religion_group = pagan_group
 			is_nomadic = no
-			NOT = { is_offmap_governor = yes }
+			NOT = { is_real_offmap_governor = yes }
 			OR = {
 				is_reformed_religion = no
 				is_reformed_religion = ROOT
@@ -11248,6 +11264,15 @@ liberation_revolt = {
 				add_character_modifier = { 
 					name = crushed_major_revolt
 					days = 3650
+				}
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						ai = no
+						ROOT = { culture = british }
+					}
+					achievement_no_deal_done_effect = yes
 				}
 			}
 		}
@@ -12311,7 +12336,7 @@ caliphal_subjugation = {
 		}
 		FROM = {
 			religion = ROOT
-			NOT = { is_offmap_governor = yes }
+			NOT = { is_real_offmap_governor = yes }
 		}
 	}
 	
@@ -15152,7 +15177,7 @@ indian_subjugation = {
 			mercenary = no
 		}
 		FROM = {
-			NOT = { is_offmap_governor = yes }
+			NOT = { is_real_offmap_governor = yes }
 			OR = {
 				has_dharmic_religion_trigger = yes
 				religion = nobelian
@@ -15942,7 +15967,7 @@ rivalry_cb = {
 						}
 					}
 				}
-				set_character_flag = achievement_sibling_rival_war
+				achievement_sibling_rival_war_done_effect = yes
 			}
 			remove_opinion = {
 				who = FROM
@@ -16005,7 +16030,7 @@ rivalry_cb = {
 						}
 					}
 				}
-				set_character_flag = achievement_sibling_rival_war
+				achievement_sibling_rival_war_done_effect = yes
 			}
 		}
 	}
@@ -16074,7 +16099,7 @@ tributary_cb = {
 		FROM = {
 			higher_tier_than = BARON
 			NOT = {
-				is_offmap_governor = yes
+				is_real_offmap_governor = yes
 			}
 			NAND = {
 				holy_order = yes
@@ -17662,7 +17687,7 @@ nomad_subjugation = {
 		FROM = {
 			in_revolt = no
 			is_nomadic = no # Nomads cannot be subjugated
-			NOT = { is_offmap_governor = yes }
+			NOT = { is_real_offmap_governor = yes }
 			NOT = {
 				any_war = {
 					defender = { character = PREVPREV }
@@ -21531,6 +21556,7 @@ jacobin_rising = {
 			religion_authority = {
 				modifier = rise_of_jacobinism
 			}
+			achievement_liberte_done_effect = yes
 			clr_character_flag = jacobinist_leader
 		}
 		FROM = {
