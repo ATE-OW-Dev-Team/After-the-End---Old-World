@@ -31,7 +31,7 @@ province_event = {#Neerajis show up. It shouldn't fire more than 1-3 times per y
 			}
 			set_character_flag = hostile_to_jains#Neerajis won't come here again while you're alive
 			any_quester_targeting_this = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
-				character_event = { id = jain.9 }
+				character_event = { id = jain.9 days = 9 }
 			}
 	}
 	option = {#Grudgingly accept them
@@ -48,7 +48,7 @@ province_event = {#Neerajis show up. It shouldn't fire more than 1-3 times per y
 			}
 		}
 		any_quester_targeting_this = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
-			character_event = { id = jain.10 }
+			character_event = { id = jain.10 days = 9}
 		}		
 	}
 	option = {#Encourage them
@@ -69,7 +69,7 @@ province_event = {#Neerajis show up. It shouldn't fire more than 1-3 times per y
 		culture_techpoints = 50
 		set_character_flag = friendly_to_jains
 		any_quester_targeting_this = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
-			character_event = { id = jain.11 }
+			character_event = { id = jain.11 days = 9}
 		}			
 	}
 	option = {#Adopt their ways whole heartedly
@@ -98,7 +98,7 @@ province_event = {#Neerajis show up. It shouldn't fire more than 1-3 times per y
 		}
 		set_character_flag = friendly_to_jains	
 		any_quester_targeting_this = {#I sure hope FROM in a province_event works like this, it's meant to inform the Neeraji of the result
-			character_event = { id = jain.12 }
+			character_event = { id = jain.12 days = 9}
 		}			
 	}
 }
@@ -264,17 +264,17 @@ character_event = {
 					##Go on a mission
 					##Save the Persecuted
 					##Make someone friendly_to_jains
-			10 = {
+			30 = {
 				set_character_flag = neeraji_go_on_mission
 			}
 #			10 = { 
 #				set_character_flag = monastic_orders_holy_seclusion
 #			}
-#			10 = { 
-#				modifier = { factor = 0 is_playable = no }
-#				modifier = { factor = 0 society_member_of = monastic_order_stoics }
-#				set_character_flag = monastic_orders_mission_charity
-#			}
+			10 = { 
+				modifier = { factor = 0 is_playable = no }
+				modifier = { factor = 0 society_member_of = monastic_order_stoics }
+				set_character_flag = monastic_orders_mission_charity
+			}
 #			10 = {
 #				modifier = { factor = 0 NOT = { has_dlc ="Way of Life" } }
 #				modifier = { factor = 0 has_focus = focus_theology }
@@ -307,46 +307,91 @@ character_event = {
 #				}
 #				set_character_flag = monastic_orders_mission_christian_pilgrimage
 #			}
-#			10 = {
-#				modifier = { factor = 0 is_playable = no }
-#				modifier = {
-#					NOT = { religion_group = indian_group }
-#					factor = 0
-#				}
-#				modifier = {
-#					trait = indian_pilgrim
-#					factor = 0
-#				}
-#				modifier = {
-#					trait = on_indian_pilgrimage
-#					factor = 0
-#				}
-#				modifier = {
-#					has_alternate_start_parameter = { key = religion_names value = random }
-#					factor = 0
-#				}
-#				set_character_flag = monastic_orders_mission_dharmic_pilgrimage
-#			}
-#			10 = {
-#				trigger = {
-#					is_playable = yes
-#					any_demesne_province = {
-#						num_of_empty_holdings = 1			
-#					}
-#				}
-#				modifier = {
-#					factor = 0 
-#					society_member_of = monastic_order_stoics
-#				}
-#				modifier = {
-#					factor = 0 is_tribal = yes
-#				}
-#				modifier = {
-#					factor = 0 is_nomadic = yes
-#				}
-#				modifier = { factor = 0 is_playable = no }
-#				set_character_flag = monastic_orders_mission_temple
-#			}
+			10 = {
+				modifier = { factor = 0 is_playable = no }
+				modifier = {
+					NOT = { religion_group = indian_group }
+					factor = 0
+				}
+				modifier = {
+					trait = indian_pilgrim
+					factor = 0
+				}
+				modifier = {
+					trait = on_indian_pilgrimage
+					factor = 0
+				}
+				modifier = {
+					has_alternate_start_parameter = { key = religion_names value = random }
+					factor = 0
+				}
+				set_character_flag = monastic_orders_mission_dharmic_pilgrimage
+			}
+			10 = {
+				trigger = {
+					is_playable = yes
+					any_demesne_province = {
+						num_of_empty_holdings = 1			
+					}
+				}
+				modifier = {
+					factor = 0 
+					society_member_of = monastic_order_stoics
+				}
+				modifier = {
+					factor = 0 is_tribal = yes
+				}
+				modifier = {
+					factor = 0 is_nomadic = yes
+				}
+				modifier = { factor = 0 is_playable = no }
+				set_character_flag = monastic_orders_mission_temple
+			}
+			10 = {	
+				trigger = {#use religious liberation on someone who has Jain land
+					is_playable = yes
+					is_independent = yes
+					OR = {
+						has_dlc = "Holy Fury" 
+						has_dlc = "Jade Dragon"
+					}						
+					any_realm_province = { 											# You need a province...
+						any_neighbor_province = { 									# ...that has a neighbor province...
+							holder_scope = { 										# ...whos holder is...
+								NOT = { same_realm = ROOT } 						# ...not in your realm...
+								top_liege = { 										# ...and has a Top Liege...
+									NOT = { religion = ROOT } 						# ...that is NOT of your religion...
+									any_realm_province = { 							# ...that has any province in their realm...
+										religion = ROOT 							# ...that is of your religion...
+										kingdom = { 								# ...and a De Jure part of a Kingdom, created or not...
+											any_de_jure_vassal_title = { 			# ...who contains any title...
+												tier = COUNT 						# ...of Count tier...
+												holder_scope = { same_realm = PREVPREVPREVPREV } # ...that is in the same realm as the Top Liege of the neighbor Province's holder...
+												location = { 						# ...and where the associated province...
+													any_neighbor_province = { 		# ...has a neighboring province...
+														holder_scope = { 			# ...whos holder...
+															top_liege = { 			# ...has a Top Liege...
+																character = ROOT 	# ...that is you!
+															}
+														}
+													}	
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					NOR = {
+						has_character_flag = had_liberate_opportunity
+						has_character_flag = denied_liberate_opportunity
+					}
+							
+				}
+				modifier = { factor = 0 is_playable = no }
+				set_character_flag = mission_neeraji_liberation
+			}			
 			50 = { # AI bypasses missions at times
 				modifier = {
 					factor = 0
@@ -416,6 +461,7 @@ character_event = {
 				monastic_orders_mission_dharmic_pilgrimage = 	{ clr_character_flag = monastic_orders_mission_dharmic_pilgrimage society_quest_event = { id = MNM.8095 } }
 				monastic_orders_mission_temple = 				{ clr_character_flag = monastic_orders_mission_temple society_quest_event = { id = MNM.4023 } }
 				neeraji_go_on_mission =							{ clr_character_flag = neeraji_go_on_mission society_quest_event = { id = jain.2 } }
+				mission_neeraji_liberation =					{ clr_character_flag = mission_neeraji_liberation society_quest_event = { id = jain.13 } }
 			}
 		}
 	}
@@ -423,6 +469,7 @@ character_event = {
 
 narrative_event = {
     id = jain.8
+	title = EVTTITLE_JAIN8
     desc = EVTDESC_JAIN8
     border = GFX_event_narrative_frame_religion
 
@@ -435,55 +482,95 @@ narrative_event = {
 			}
     }
 }
-narrative_event = {Informed about being persecuted
+narrative_event = {#Informed about being persecuted
     id = jain.9
-    desc = EVTDESC_JAIN8
+	title = EVTTITLE_JAIN9	
+    desc = EVTDESC_JAIN9
     border = GFX_event_narrative_frame_religion
 
     is_triggered_only = yes
 		
     option = {#Let's go - we can think up more varied approaches after we've got this working basically 
-        name = EVTOPTA_JAIN8
+        name = EVTOPTA_JAIN9
 		clr_quest = quest_neeraji_mission
 		add_society_currency_medium_effect = yes
     }
 }
-narrative_event = {Informed about being grudgingly accepted
+narrative_event = {#Informed about being grudgingly accepted
     id = jain.10
-    desc = EVTDESC_JAIN8
+	title = EVTTITLE_JAIN10	
+    desc = EVTDESC_JAIN10
     border = GFX_event_narrative_frame_religion
 
     is_triggered_only = yes
 		
     option = {#Let's go - we can think up more varied approaches after we've got this working basically 
-        name = EVTOPTA_JAIN8
+        name = EVTOPTA_JAIN10
 		clr_quest = quest_neeraji_mission
 		add_society_currency_medium_effect = yes
     }
 }
-narrative_event = {Informed about being enthusiastically accepted
+narrative_event = {#Informed about being enthusiastically accepted
     id = jain.11
-    desc = EVTDESC_JAIN8
+	title = EVTTITLE_JAIN10
+    desc = EVTDESC_JAIN10
     border = GFX_event_narrative_frame_religion
 
     is_triggered_only = yes
 		
     option = {#Let's go - we can think up more varied approaches after we've got this working basically 
-        name = EVTOPTA_JAIN8
+        name = EVTOPTA_JAIN10
 		clr_quest = quest_neeraji_mission
 		add_society_currency_medium_effect = yes
     }
 }
-narrative_event = {Informed about the King having converted
+narrative_event = {#Informed about the King having converted
     id = jain.12
-    desc = EVTDESC_JAIN8
+	title = EVTTITLE_JAIN12
+    desc = EVTDESC_JAIN12
     border = GFX_event_narrative_frame_religion
 
     is_triggered_only = yes
 		
     option = {#Let's go - we can think up more varied approaches after we've got this working basically 
-        name = EVTOPTA_JAIN8
+        name = EVTOPTA_JAIN12
 		clr_quest = quest_neeraji_mission
 		add_society_currency_medium_effect = yes
     }
+}
+society_quest_event = {#Told to religiously liberate a Kingdom
+	id = jain.13
+	desc = jain13Desc
+	border = GFX_event_letter_frame_religion
+
+	is_triggered_only = yes
+	is_in_society = yes
+	only_capable = yes
+
+	trigger = {
+		society_member_of = neeraji_order
+		has_any_quest = no
+		same_society_as = FROM
+		NOT = { has_character_modifier = quest_cooldown_timer }
+		NOT = { is_inaccessible_trigger = yes }
+		is_landed = yes
+	}
+
+	option = {
+		name = ACCEPT
+		set_quest = quest_neeraji_liberate
+		set_character_flag = had_liberate_opportunity
+	}
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = decline_quest_tooltip }
+		
+		add_character_modifier = {
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+
+		ai_chance = { factor = 0 }
+	}
 }
