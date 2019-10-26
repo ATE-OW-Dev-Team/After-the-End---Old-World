@@ -11,30 +11,31 @@ narrative_event = {#Rumours of War in the East
 	only_playable = yes
 	religion = catholic
 	min_age = 16
+	show_root = no
+	hide_from = yes
 	
 	trigger = {
 		OR = {
 			year = 2705 #About 150 years after game start
 			AND = {
 				has_game_rule = {
-					name = mongol_invasion
+					name = eastern_invasion
 					value = random
 				}
 				total_years_played = 50
 			}
 			AND = {
 				has_game_rule = {
-					name = mongol_invasion
+					name = eastern_invasion
 					value = delayed_random
 				}
-				year = 2600
-				total_years_played = 50
+				total_years_played = 100
 			}
 		}
 		NOR = { 
-			year = 2705
+			year = 2723
 			has_game_rule = {
-				name = mongol_invasion
+				name = eastern_invasion
 				value = off
 			}
 		}
@@ -57,14 +58,14 @@ narrative_event = {#Rumours of War in the East
 		modifier = {
 			factor = 100 #If game has historical rule, ensure that the Mongol Invasion WILL happen when the time comes.
 			has_game_rule = {
-				name = mongol_invasion
+				name = eastern_invasion
 				value = historical
 			}
 		}
 		modifier = {
 			factor = 0.5
 			has_game_rule = {
-				name = mongol_invasion
+				name = eastern_invasion
 				value = random
 			}
 			NOT = { total_years_played = 100 }
@@ -72,22 +73,14 @@ narrative_event = {#Rumours of War in the East
 		modifier = {
 			factor = 0.5
 			has_game_rule = {
-				name = mongol_invasion
-				value = delayed_random
-			}
-			NOT = { total_years_played = 100 }
-		}
-		modifier = {
-			factor = 0.5
-			has_game_rule = {
-				name = mongol_invasion
+				name = eastern_invasion
 				value = random
 			}
 		}
 		modifier = {
 			factor = 0.6
 			has_game_rule = {
-				name = mongol_invasion
+				name = eastern_invasion
 				value = delayed_random
 			}
 		}
@@ -107,6 +100,30 @@ narrative_event = {#Rumours of War in the East
 	option = {
 		name = "EVTOPTA_INVADERS1"
 	}
+	option = {
+		name = "EVTOPTB_INVADERS1"
+		trigger = {
+			can_choose_invader_trigger = yes
+		}
+		tooltip_info = yes
+		custom_tooltip = {
+			text = PLAYER_CHOOSING_INVADER_TT
+			set_global_flag = siberia_will_invade
+			clr_global_flag = china_will_invade
+		}
+	}
+	option = {
+		name = "EVTOPTC_INVADERS1"
+		trigger = {
+			can_choose_invader_trigger = yes
+		}
+		tooltip_info = yes
+		custom_tooltip = {
+			text = PLAYER_CHOOSING_INVADER_TT
+			clr_global_flag = siberia_will_invade
+			set_global_flag = china_will_invade
+		}
+	}
 }
 
 narrative_event = {#Notification that the Siberians have lost and are beginning to move west
@@ -121,7 +138,9 @@ narrative_event = {#Notification that the Siberians have lost and are beginning 
 	religion = catholic
 	min_age = 16
 	has_global_flag = siberia_will_invade
-	portrait = event_target:siberian_leader
+	portrait = event_target:invasion_leader
+	show_root = no
+	hide_from = yes
 	
 	trigger = {
 		controls_religion = yes
@@ -165,7 +184,7 @@ narrative_event = {#Notification that the Siberians have lost and are beginning 
 					wealth = 12000
 					prestige = 10000
 					set_character_flag = horde_invader
-					save_event_target_as = siberian_leader
+					save_event_target_as = invasion_leader
 						
 					remove_trait = slow
 					remove_trait = imbecile
@@ -255,6 +274,14 @@ narrative_event = {#Notification that the Siberians have lost and are beginning 
 	}
 	option = {
 		name = "EVTOPTA_INVADERS2"
+	}
+	option = {
+		name = "EVTOPTB_INVADERS2"
+		tooltip_info = yes
+		trigger = {
+			can_plays_as_invader_trigger = yes
+		}
+		play_as_invasion_leader_effect = yes
 	}
 }
 character_event = {#Invader gets their generals - why have two such events when one will do?
@@ -741,7 +768,9 @@ narrative_event = {#Notification that the Chinese have lost and are beginning to
 	religion = catholic
 	min_age = 16
 	has_global_flag = china_will_invade
-	portrait = event_target:chinese_leader
+	portrait = event_target:invasion_leader
+	show_root = no
+	hide_from = yes
 	
 	trigger = {
 		controls_religion = yes
@@ -787,7 +816,7 @@ narrative_event = {#Notification that the Chinese have lost and are beginning to
 					set_character_flag = horde_invader
 					character_event = { id = invaders.3 } # Spawn courtiers
 					character_event = { id = invaders.4 } # Spawn troops
-					save_event_target_as = chinese_leader
+					save_event_target_as = invasion_leader
 						
 					remove_trait = slow
 					remove_trait = imbecile
@@ -878,6 +907,15 @@ narrative_event = {#Notification that the Chinese have lost and are beginning to
 	option = {
 		name = "EVTOPTA_INVADERS2"
 	}
+	option = {
+		name = "EVTOPTB_INVADERS2"
+		tooltip_info = yes
+		trigger = {
+			can_plays_as_invader_trigger = yes
+		}
+		play_as_invasion_leader_effect = yes
+	}
+
 }
 
 narrative_event = {#Notification that mass settlement is taking place
