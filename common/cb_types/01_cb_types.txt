@@ -1540,7 +1540,6 @@ liberate_religion = { # New6
 						ROOT = {
 							any_owned_bloodline = {  
 								has_bloodline_flag = bloodline_religious_liberation
-								bloodline_is_active_for = PREV
 							}
 						}
 					}
@@ -1580,7 +1579,6 @@ liberate_religion = { # New6
 			OR = {
 				any_owned_bloodline = {  
 					has_bloodline_flag = bloodline_religious_liberation
-					bloodline_is_active_for = PREV
 				}
 				NOT = {
 					has_game_rule = {
@@ -1593,7 +1591,6 @@ liberate_religion = { # New6
 			OR = {
 				any_owned_bloodline = {  
 					has_bloodline_flag = bloodline_religious_liberation
-					bloodline_is_active_for = PREV
 				}
 				has_character_flag = had_liberate_opportunity
 			}
@@ -1715,7 +1712,7 @@ liberate_religion = { # New6
 	}
 	
 	on_success = {
-		hidden_tooltip = { 
+		hidden_tooltip = {
 			any_attacker = {
 				limit = { NOT = { character = ROOT } }
 				
@@ -5327,7 +5324,6 @@ pepin_religious = {
 	check_de_jure_tier = DUKE # this scans all dejure duchies for the counties which are held by or vassals(or below) of selected character. Only valid if is_permanent = yes
 
 	allowed_to_target_tributaries = yes
-	attacker_rel_head_is_ally = yes # The attacker can call his (main) Pope into the war
 	
 	sort_priority = 790
 	
@@ -5408,6 +5404,27 @@ pepin_religious = {
 			title = d_ancona
 			title = d_ferrara
 			title = d_benevento
+
+			d_latium = {
+				any_de_jure_vassal_title = { title = PREVPREV }
+			}
+			d_spoleto = {
+				any_de_jure_vassal_title = { title = PREVPREV }
+			}
+			d_ancona = {
+				any_de_jure_vassal_title = { title = PREVPREV }
+			}
+			d_ferrara = {
+				any_de_jure_vassal_title = { title = PREVPREV }
+			}
+			d_benevento = {
+				any_de_jure_vassal_title = { title = PREVPREV }
+			}
+		}
+		any_de_jure_vassal_title = {
+			location = {
+				region = world_europe_south_italy
+			}
 		}
 	}
 
@@ -5432,38 +5449,8 @@ pepin_religious = {
 				religion = fraticelli
 			}
 		}
-		FROM = {
-			NOT = { has_landed_title = k_papacy }
-			NOT = { has_landed_title = d_fraticelli }
-			OR = { 		#Target must either be a pagan or heretic of any government form, or it must be a disliked Catholic/Fraticelli who is not a bishop.
-				AND = { 
-					is_theocracy = no 
-					religion = ROOT
-					ROOT = { 
-						religion_head = { 
-							NOT = { 
-								opinion = { 
-									who = FROM
-									value = 50 # should be high to cancel
-								}
-							}
-						} 
-					} 
-				}
-				excommunicated_for = ROOT
-				NOT = { religion_group = ROOT } 
-				is_heresy_of = ROOT
-				ROOT = { has_character_flag = flag_pepin_for_coronation } # don't mess up his journey
-			}
-		}
 	}
-	is_valid_title = {
-		FROM = {
-			any_realm_province = {
-				de_jure_liege_or_above = PREVPREV
-			}
-		}
-	}
+
 	on_invalidation = {
 		ROOT = { 
 			clr_character_flag = flag_pepin_for_coronation
@@ -5581,7 +5568,7 @@ pepin_religious = {
 			if = {
 				limit = {
 					NOT = {
-						religion = ROOT
+						has_character_modifier = known_satanist
 					}
 				}
 				religion_authority = {
@@ -5660,7 +5647,6 @@ pepin_religious = {
 					if = {
 						limit = {
 							has_ambition = obj_strengthen_religion
-							NOT = { religion = ROOT }
 						}
 						change_variable = { which = strengthen_religion value = 1 }
 					}
@@ -5690,21 +5676,16 @@ pepin_religious = {
 			}
 		}
 		FROM = { 
-			if = {
-				limit = {
-					NOT = { religion = ROOT }
-				}
-				religion_authority = {
-					modifier = won_holy_war
-					years = 20
-				}
-				hidden_tooltip = {
-					if = {
-						limit = {
-							has_ambition = obj_strengthen_religion
-						}
-						change_variable = { which = strengthen_religion value = 1 }
+			religion_authority = {
+				modifier = won_holy_war
+				years = 20
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						has_ambition = obj_strengthen_religion
 					}
+					change_variable = { which = strengthen_religion value = 1 }
 				}
 			}
 		}
@@ -5767,56 +5748,46 @@ pepin_religious = {
 		}
 		modifier = { #I like the Pope and I will help him.
 			factor = 1.5
-			ROOT = {
-				religion_head = {
-					reverse_opinion = { 
-						who = ROOT 
-						value = 50 
-					}
+			religion_head = {
+				reverse_opinion = { 
+					who = ROOT 
+					value = 50 
 				}
 			}
 		}
 		modifier = { #I like the Pope and I will help him.
 			factor = 1.5
-			ROOT = {
-				religion_head = {
-					reverse_opinion = { 
-						who = ROOT 
-						value = 60 
-					}
+			religion_head = {
+				reverse_opinion = { 
+					who = ROOT 
+					value = 60 
 				}
 			}
 		}
 		modifier = { #I like the Pope and I will help him.
 			factor = 1.5
-			ROOT = {
-				religion_head = {
-					reverse_opinion = { 
-						who = ROOT 
-						value = 70 
-					}
+			religion_head = {
+				reverse_opinion = { 
+					who = ROOT 
+					value = 70 
 				}
 			}
 		}
 		modifier = { #I like the Pope and I will help him.
 			factor = 2
-			ROOT = {
-				religion_head = {
-					reverse_opinion = { 
-						who = ROOT 
-						value = 80 
-					}
+			religion_head = {
+				reverse_opinion = { 
+					who = ROOT 
+					value = 80 
 				}
 			}
 		}
 		modifier = { #I like the Pope and I will help him.
 			factor = 2
-			ROOT = {
-				religion_head = {
-					reverse_opinion = { 
-						who = ROOT 
-						value = 90 
-					}
+			religion_head = {
+				reverse_opinion = { 
+					who = ROOT 
+					value = 90 
 				}
 			}
 		}
@@ -5833,15 +5804,39 @@ pepin_religious = {
 		}
 		modifier = { #The Papacy doesn't hold Rome, take action!
 			factor = 5
-			title = d_latium
+			FROM = {
+				OR = {
+					has_landed_title = d_latium
+					any_vassal = { has_landed_title = d_latium }
+					d_latium = {
+						any_de_jure_vassal_title = { owner = { character = PREVPREVPREV } }
+					}
+				}
+			}
 		}
 		modifier = { 
 			factor = 2
-			title = d_spoleto
+			FROM = {
+				OR = {
+					has_landed_title = d_spoleto
+					any_vassal = { has_landed_title = d_spoleto }
+					d_spoleto = {
+						any_de_jure_vassal_title = { owner = { character = PREVPREVPREV } }
+					}
+				}
+			}
 		}
 		modifier = { #Historical tweaking
 			factor = 0.25
-			title = d_benevento
+			FROM = {
+				OR = {
+					has_landed_title = d_benevento
+					any_vassal = { has_landed_title = d_benevento }
+					d_benevento = {
+						any_de_jure_vassal_title = { owner = { character = PREVPREVPREV } }
+					}
+				}
+			}
 		}
 		modifier = {
 			factor = 0.8
@@ -6769,7 +6764,6 @@ childrens_crusade = {
 						inheritance = matrilineal
 					}  
 				}
-				set_bloodline_founder_religion_flag_effect = yes
 				any_player = { 
 					limit = {
 						religion_group = christian
@@ -7083,7 +7077,6 @@ matriarchal_deposition_war = {
 		FROM = {
 			is_nomadic = no
 			is_merchant_republic = no
-			is_theocracy = no
 			is_female = no 
 			independent = yes
 		}
@@ -7101,7 +7094,6 @@ matriarchal_deposition_war = {
 		FROM = {
 			is_nomadic = no
 			is_merchant_republic = no
-			is_theocracy = no
 		}
 	}
 	
@@ -7556,7 +7548,6 @@ patriarchal_deposition_war = {
 		FROM = {
 			is_nomadic = no
 			is_merchant_republic = no
-			is_theocracy = no
 		}
 	}
 
@@ -7571,7 +7562,6 @@ patriarchal_deposition_war = {
 		FROM = {
 			is_nomadic = no
 			is_merchant_republic = no
-			is_theocracy = no
 			is_female = yes 
 			independent = yes
 		}
@@ -8211,7 +8201,6 @@ shepherds_crusade_invasion = {
 						inheritance = matrilineal
 					}
 				}
-				set_bloodline_founder_religion_flag_effect = yes
 				event_target:shepherds_kingdom = {
 					capital_scope = {
 						ROOT = {
