@@ -1,0 +1,468 @@
+# Colonization events by Sam
+
+namespace = col
+
+# cleanup event if invader is an unlanded republic
+#character_event = {
+#	id = col.1
+#	desc = EVTDESC_bounce
+#	picture = GFX_evt_merchant_ship_at_sea_republic
+#	hide_window = yes
+#
+#	trigger = {
+#		is_ruler = yes
+#		OR = {
+#			has_landed_title = e_edokko
+#			has_landed_title = e_novorusskiy
+#		}
+#		government = colonial_government
+#		NOT = { demesne_size = 1 }
+#		NOT = { has_character_flag = colonist }
+#	}
+#	
+#	mean_time_to_happen = {
+#		days = 1
+#	}
+#	
+#	immediate = {
+#		set_government_type = feudal_government
+#		if = {
+#			limit = { has_landed_title = e_edokko }
+#			e_edokko = { destroy_landed_title = THIS }
+#		}
+#		if = {
+#			limit = { has_landed_title = e_novorusskiy }
+#			e_novorusskiy = { destroy_landed_title = THIS }
+#		}
+#	}
+#	
+#	option = {
+#		name = OK
+#		set_government_type = feudal_government
+#		family_palace = { destroy_landed_title = THIS }
+#		if = {
+#			limit = { has_landed_title = e_edokko }
+#			activate_title = { title = e_edokko status = no } 
+#		}
+#		if = {
+#			limit = { has_landed_title = e_novorusskiy }
+#			activate_title = { title = e_novorusskiy status = no } 
+#		}
+#	}
+#}	
+	
+# Siam decides to colonize province
+province_event = {
+	id = col.10
+	desc = EVTDESC_bounce
+	picture = GFX_evt_china_civil_war
+	hide_window = yes
+	
+	trigger = {
+		OR = {
+			AND = {
+				has_game_rule = {
+					name = coloniser
+					value = historical
+				}
+				year = 2640
+				total_years_played = 50
+			}
+			AND = {
+				has_game_rule = {
+					name = coloniser
+					value = random
+				}
+				year = 2550
+				total_years_played = 50
+			}
+		}
+		NOT = { 
+			has_game_rule = {
+				name = coloniser
+				value = off
+			}
+		}
+		NOT = { is_title_active = e_siamese_invaders }
+		NOT = { has_global_flag = siam_defeated }
+		port = yes
+		any_province_holding = { holding_type = city }
+		county = {
+			region = world_india
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1 # temp, meant to be years = 1000
+		modifier = {
+			factor = 0.75
+			has_global_flag = siam_victorious
+		}
+		modifier = {
+			factor = 0.95
+			num_of_settlements = 4
+		}
+		modifier = {
+			factor = 0.9
+			num_of_settlements = 6
+		}
+		modifier = {
+			factor = 1.1
+			NOT = { num_of_settlements = 3 }
+		}
+	}
+	
+	option = {
+		set_government_type = feudal_government
+		holder_scope = {
+			top_liege = {
+				activate_title = { title = e_siamese_invaders status = yes }
+				create_character = {
+					random_traits = no
+					dynasty = none
+					culture = siamese
+					religion = theravada
+					age = 30
+				}
+				new_character = {
+					#add_artifact = ate_firearm
+					e_siamese_invaders = {
+						grant_title = PREV
+					}
+					random_list = {
+						10 = { add_trait = midas_touched }
+						10 = { add_trait = brilliant_strategist }
+					}
+					random_list = {
+						25 = { }
+						10 = { add_trait = quick }
+						10 = { add_trait = strong }
+						5 = { add_trait = genius }
+					}
+					random_list = {
+						25 = { }
+						20 = { add_trait = duelist }
+						15 = { add_trait = gardener }
+						10 = { add_trait = strategist }
+						5 =  { add_trait = impaler }
+					}
+					add_trait = ambitious
+					add_trait = brave
+					random = { chance = 80 add_trait = zealous }
+					random = { chance = 80 add_trait = diligent }
+					random = { chance = 80 add_trait = patient }
+					random = { chance = 50 add_trait = just }
+					random = { chance = 50 add_trait = scarred }
+					random = { chance = 40 add_trait = cruel }
+					random = { chance = 40 add_trait = greedy }
+					random = { chance = 40 add_trait = wroth }
+					random = { chance = 40 add_trait = proud }
+					wealth = 5000
+					#character_event = { id = salvage.140 } # Give random salvage
+					#character_event = { id = salvage.140 } # Give random salvage
+					set_character_flag = colonist
+					set_defacto_liege = THIS
+					#character_event = { id = misc.3 } # Diversity
+					narrative_event = { id = col.11 }
+				}
+			}
+		}
+	}
+}
+
+# Siam declares war
+narrative_event = {
+	id = col.11
+	title = col.11.title
+	desc = col.11.text
+	major = yes
+	is_triggered_only = yes
+	hide_new = yes
+	
+	picture = "GFX_evt_china_civil_war"
+	border = "GFX_event_narrative_frame_war"
+
+	option = {
+		name = col.11.optA
+		trigger = { NOT = { has_landed_title = e_siamese_invaders} }
+	}
+	
+	option = {
+		name = col.11.optB
+		trigger = { has_landed_title = e_siamese_invaders }
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = theravada
+			culture = siamese
+			female = no
+			age = 30
+		}
+		new_character = {
+			#add_artifact = ate_firearm
+			spawn_unit = {
+				province = FROM
+				troops =
+				{
+					horse_archers = { 500 500 }
+					light_infantry = { 400 400 }
+					heavy_infantry = { 750 750 }
+					pikemen = { 600 600 }
+					archers = { 250 250 }
+				}
+				attrition = 0.25
+			}
+			#character_event = { id = salvage.140 } # Give random salvage
+			#character_event = { id = misc.3 } # Diversity
+			#character_event = { id = misc.4 } # Physique
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = theravada
+			culture = siamese
+			female = no
+			age = 35
+		}
+		new_character = {
+			#add_artifact = ate_firearm
+			spawn_unit = {
+				province = FROM
+				troops =
+				{
+					horse_archers = { 500 500 }
+					light_infantry = { 400 400 }
+					heavy_infantry = { 750 750 }
+					pikemen = { 600 600 }
+					archers = { 250 250 }
+				}
+				attrition = 0.25
+			}
+			#character_event = { id = salvage.140 } # Give random salvage
+			#character_event = { id = misc.3 } # Diversity
+			#character_event = { id = misc.4 } # Physique
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = theravada
+			culture = siamese
+			female = no
+			age = 39
+		}
+		new_character = {
+			#add_artifact = ate_firearm
+			spawn_unit = {
+				province = FROM
+				troops =
+				{
+					horse_archers = { 500 500 }
+					light_infantry = { 400 400 }
+					heavy_infantry = { 750 750 }
+					pikemen = { 600 600 }
+					archers = { 250 250 }
+				}
+				attrition = 0.25
+			}
+			#character_event = { id = salvage.140 } # Give random salvage
+			#character_event = { id = misc.3 } # Diversity
+			#character_event = { id = misc.4 } # Physique
+		}
+		# Some extra courtiers
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = theravada
+			culture = siamese
+			female = no
+			age = 16
+		}
+		new_character = {
+			#character_event = { id = misc.3 } # Diversity
+			#character_event = { id = misc.4 } # Physique
+			#character_event = { id = salvage.140 } # Give random salvage
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = theravada
+			culture = siamese
+			female = no
+			age = 18
+		}
+		new_character = {
+			#character_event = { id = misc.3 } # Diversity
+			#character_event = { id = misc.4 } # Physique
+			#character_event = { id = salvage.140 } # Give random salvage
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = theravada
+			culture = siamese
+			female = no
+			age = 18
+		}
+		new_character = {
+			#character_event = { id = misc.3 } # Diversity
+			#character_event = { id = misc.4 } # Physique
+			#character_event = { id = salvage.140 } # Give random salvage
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = theravada
+			culture = siamese
+			female = no
+			age = 20
+		}
+		new_character = {
+			#character_event = { id = misc.3 } # Diversity
+			#character_event = { id = misc.4 } # Physique
+			#character_event = { id = salvage.140 } # Give random salvage
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = theravada
+			culture = siamese
+			female = no
+			age = 25
+		}
+		new_character = {
+			#character_event = { id = misc.3 } # Diversity
+			#character_event = { id = misc.4 } # Physique
+			#character_event = { id = salvage.140 } # Give random salvage
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = theravada
+			culture = siamese
+			female = no
+			age = 26
+		}
+		new_character = {
+			#character_event = { id = misc.3 } # Diversity
+			#character_event = { id = misc.4 } # Physique
+			#character_event = { id = salvage.140 } # Give random salvage
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = theravada
+			culture = siamese
+			female = no
+			age = 28
+		}
+		new_character = {
+			#character_event = { id = misc.3 } # Diversity
+			#character_event = { id = misc.4 } # Physique
+			#character_event = { id = salvage.140 } # Give random salvage
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = theravada
+			culture = siamese
+			female = yes
+			age = 18
+		}
+		new_character = {
+			#character_event = { id = misc.3 } # Diversity
+			#character_event = { id = misc.4 } # Physique
+			#character_event = { id = salvage.140 } # Give random salvage
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = theravada
+			culture = siamese
+			female = yes
+			age = 18
+		}
+		new_character = {
+			#character_event = { id = misc.3 } # Diversity
+			#character_event = { id = misc.4 } # Physique
+			#character_event = { id = salvage.140 } # Give random salvage
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = random
+			religion = theravada
+			culture = siamese
+			female = yes
+			age = 20
+		}
+		new_character = {
+			#character_event = { id = misc.3 } # Diversity
+			#character_event = { id = misc.4 } # Physique
+			#character_event = { id = salvage.140 } # Give random salvage
+		}
+		
+		FROM = { # triggering province
+			duchy = {
+				ROOT = {
+					war = {
+						casus_belli = colonization
+						target = PREVPREV # The top liege of the owner
+						thirdparty_title = PREV # The de jure duchy
+					}
+				}
+			}
+		}
+	}
+}
+
+# Siam victorious
+narrative_event = {
+	id = col.12
+	title = col.12.title
+	desc = col.12.text
+	major = yes
+	is_triggered_only = yes
+	
+	picture = "GFX_evt_china_civil_war"
+	border = "GFX_event_narrative_frame_war"
+	
+	option = {
+		name = col.12.optA
+		trigger = { NOT = { has_landed_title = e_siamese_invaders } }
+		set_global_flag = siam_victorious
+	}
+	
+	option = {
+		#set_government_type = colonial_government
+		name = col.12.optB
+		trigger = { has_landed_title = e_siamese_invaders }
+		set_global_flag = siam_victorious
+		military_techpoints = 5000
+		economy_techpoints = 5000
+		culture_techpoints = 5000
+		e_siamese_invaders = {
+			any_realm_lord = {
+				limit = { is_patrician = yes }
+				wealth = 5000 # help them set up their trade empire
+			}
+		}
+	}
+}
+
+#I deleted the player-controlled code for now, can get it back from the colonization_events file from ATE
+
+# Siam defeated
+narrative_event = {
+	id = col.13
+	title = col.13.title
+	desc = col.13.text
+	major = yes
+	is_triggered_only = yes
+	
+	picture = "GFX_evt_china_civil_war"
+	border = "GFX_event_narrative_frame_war"
+	
+	option = {
+		name = col.13.optA
+		set_global_flag = siam_defeated
+	}
+}
