@@ -1,0 +1,111 @@
+namespace = america
+#Declare the beginning of the Redcoat Invasion
+narrative_event = {
+	id = america.1
+	is_triggered_only = yes
+	title = america1Title
+	picture = GFX_evt_gathering_of_minds
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america1Desc
+	}
+	immediate = {
+		set_global_flag = invading_america
+		activate_title = { title = e_redcoats status = yes }
+		d_redcoats = {
+			holder_scope = {
+				save_event_target_as = redcoat_leader
+				abdicate = yes#Abdicates to his heir, the Redcoats are disabled		
+				e_redcoats = {
+					grant_title = PREV
+				}
+			}
+			activate_title = { title = THIS status = no }					
+		}
+		narrative_event = { id = america.2 days = 300 }		
+	}
+	option = {#Hail Britannia
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				primary_title = { title = e_britannia }#in case the Brits somehow stop being Thelemic
+			}
+		}
+	}
+	option = {#F the British
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}	
+}
+narrative_event = {
+	id = america.2
+	is_triggered_only = yes
+	title = america2Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america2Desc
+	}
+	immediate = {
+		set_global_flag = american_invasion_launched
+		random_list = {#90% chance to conquer New England, 10% chance of Chad Mahonic Mega Kingdom driving you out
+			90 = {
+				narrative_event = { id = america.3 days = 300 }	#New England conquered	
+			}
+			10 = {}
+		}
+		narrative_event = { id = america.4 days = 300 }	#Mega Mahonic kicks you out
+	}
+	option = {#Hail Britannia
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				primary_title = { title = e_britannia }#in case the Brits somehow stop being Thelemic
+			}
+		}
+	}
+	option = {#F the British
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}	
+}
