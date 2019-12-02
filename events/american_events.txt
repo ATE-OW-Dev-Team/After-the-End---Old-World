@@ -28,6 +28,7 @@ narrative_event = {
 		narrative_event = { id = america.2 days = 300 }		
 	}
 	option = {#Hail Britannia
+		name = america1A
 		trigger = {
 			OR = {
 				religion = thelemic_reformed
@@ -37,6 +38,7 @@ narrative_event = {
 		}
 	}
 	option = {#F the British
+		name = america1B	
 		trigger = {
 			OR = {
 				religion_group = christian
@@ -46,6 +48,7 @@ narrative_event = {
 		}
 	}
 	option = {#Who?
+		name = america1C	
 		trigger = {
 			NOR = {
 				religion = thelemic_reformed
@@ -75,11 +78,13 @@ narrative_event = {
 			90 = {
 				narrative_event = { id = america.3 days = 300 }	#New England conquered	
 			}
-			10 = {}
+			10 = {
+				narrative_event = { id = america.4 days = 300 }	#Mega Mahonic kicks you out
+			}
 		}
-		narrative_event = { id = america.4 days = 300 }	#Mega Mahonic kicks you out
 	}
 	option = {#Hail Britannia
+		name = america2A	
 		trigger = {
 			OR = {
 				religion = thelemic_reformed
@@ -89,6 +94,7 @@ narrative_event = {
 		}
 	}
 	option = {#F the British
+		name = america2B	
 		trigger = {
 			OR = {
 				religion_group = christian
@@ -98,6 +104,7 @@ narrative_event = {
 		}
 	}
 	option = {#Who?
+		name = america2C	
 		trigger = {
 			NOR = {
 				religion = thelemic_reformed
@@ -107,5 +114,117 @@ narrative_event = {
 				religion = novelist_reformed
 			}
 		}
+	}	
+}
+
+narrative_event = {#New England conquered
+	id = america.3
+	is_triggered_only = yes
+	title = america3Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america3Desc
+	}
+	immediate = {
+	}
+	option = {#Hail Britannia
+		name = america3A	
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+			}
+			NOT = {
+				primary_title = { title = e_britannia }				
+			}			
+		}
+	}
+	option = {#F the British
+		name = america3B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#send them more money - increases odds of success at next step
+		name = america3D
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		wealth = -1000
+			create_random_soldier = {#The King of the New Englanders
+				random_traits = yes
+				culture = yankee
+				religion = occultist
+				dynasty = random
+				female = no
+				attributes = {
+					diplomacy = 2
+					learning = 5
+					stewardship = 6
+					intrigue = 2
+					martial = 9
+				}
+			}	
+			new_character = {
+				add_trait = mystic
+				add_trait = brawny
+				remove_trait = slow
+				remove_trait = imbecile
+				remove_trait = dull
+				
+				remove_lifestyle_trait_effect = yes
+				
+				random_list = { # Flavor Randomization
+					20 = {  } # Nothing
+					20 = { change_martial = 2 }
+					15 = { change_martial = 4 }
+					10 = { change_martial = 6 }
+					20 = { add_trait = duelist }
+					15 = { add_trait = scholar }
+					15 = { add_trait = shrewd }
+				}
+			}
+		random_list = {
+			75 = {
+				narrative_event = { id = america.5 days = 300 }	#Defeat the Americanists	
+			}
+			25 = {
+				narrative_event = { id = america.6 days = 300 }	#A Second Bunker Hill
+			}
+		} 
+	}
+	option = {#no more money - increases odds of failure at next step
+		name = america3D
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		random_list = {
+			50 = {
+				narrative_event = { id = america.5 days = 300 }	#Defeat the Americanists	
+			}
+			50 = {
+				narrative_event = { id = america.6 days = 300 }	#A Second Bunker Hill
+			}
+		} 
 	}	
 }
