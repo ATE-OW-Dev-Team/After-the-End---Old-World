@@ -190,21 +190,43 @@ character_event = { # Give Indian characters appropriate schools at game start
 	}
 }
 
-character_event = { # If the Irish win the Rebellion
+character_event = { # If the Irish lose the Rebellion
 	id = cleanup.3
-	#hide_window = yes
+	hide_window = yes
 
 	is_triggered_only = yes
 	
 	trigger = {
-		primary_title = { title = k_irish_rebels }
+		primary_title = { title = e_britannia }
 		is_save_game = no#shouldn't happen when you reload a save
 	}
 	immediate = {
-		usurp_title = { target = k_ireland type = invasion }
+		k_ireland = {
+			any_de_jure_vassal = {
+				set_defacto_liege = ROOT
+			}
+		}
+	}
+	option = {
 		k_irish_rebels = {
 			activate_title = { title = THIS status = no }
 			unsafe_destroy_landed_title = THIS
-		}			
+		}	
+	}
+}
+
+character_event = {#sets the irish revolter with the irish_revolter character flag
+	id = cleanup.4
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		primary_title = { title = k_irish_rebels }
+		is_save_game = no
+	}
+	immediate = {
+		set_character_flag = irish_revolter
+		save_event_target_as = rebel_leader
 	}
 }
