@@ -1,0 +1,143 @@
+british_invasion = {
+    name = CB_NAME_BRITISH_INVASION
+	war_name = WAR_NAME_BRITISH_INVASION
+	sprite = 17
+	truce_days = 3650
+	is_permanent = yes
+	check_de_jure_tier = KING # this scans all dejure kingdoms for the (counties or duchies? idk) which are held by or vassals(or below) of selected character. Only valid if is_permanent = yes
+
+	allowed_to_target_tributaries = no
+	
+	sort_priority = 1900
+
+#	can_use_gui = {
+#
+#	}
+
+	can_use = {
+		ROOT = {
+			has_landed_title = e_british_india
+			independent = yes
+			OR = {		#Must be British or Anglo-Indian
+				culture = angrezi
+				culture = british
+				culture = westlander
+				culture = old_welsh
+				culture = farlander
+			}
+			religion_group = esoteric #Thelemic
+			NOT = { same_realm = FROM }
+			mercenary = no
+		}
+	}
+
+	can_use_title = {
+		OR = {
+			de_jure_liege_or_above = e_bengal
+			de_jure_liege_or_above = e_deccan
+			de_jure_liege_or_above = e_rajastan
+			de_jure_liege_or_above = e_mughalstan
+		}
+	}
+	
+	is_valid = {
+		ROOT = {
+			independent = yes
+			has_landed_title = e_british_india
+			OR = {		#Must be British or Esoteric
+			    culture = angrezi
+				culture = british
+				culture = westlander
+				culture = old_welsh
+				culture = farlander
+				religion_group = esoteric
+			}
+			NOT = { same_realm = FROM }
+		}
+	}
+	on_add = {
+		if = {
+			limit = { defender = { is_offmap_governor = offmap_china } }
+			attacker = {  
+				sound_effect = china_angered_emperor
+				detract_grace_super_huge_effect = yes 
+			}
+		}
+	}
+	
+	on_success = {
+		ROOT = {
+			participation_scaled_prestige = 100
+		}
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			hidden_tooltip = { 
+				participation_scaled_prestige = 100
+			}
+		}
+		
+		FROM = { prestige = -100 }
+	}
+
+	on_success_title = {
+		custom_tooltip = { 
+			text = other_invasion_succ_tip
+			hidden_tooltip = {
+				ROOT = {
+					vassalize_or_take_under_title = {
+						title = PREV
+						enemy = FROM
+						type = invasion
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				holder_scope = { character = FROM }
+			}
+			usurp_title_only = { target = ROOT type = invasion }
+		}
+	}
+
+	on_fail = {
+		ROOT = { prestige = -150 }
+	}
+
+	on_reverse_demand = {
+		ROOT = {
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 10.0
+			}
+			ROOT = { prestige = -200 }
+		}
+		FROM = {
+			participation_scaled_piety = 100
+			participation_scaled_prestige = 200
+		}
+		any_defender = {
+			limit = { NOT = { character = FROM } }
+			hidden_tooltip = { 
+				participation_scaled_piety = 100
+				participation_scaled_prestige = 200
+			}
+		}
+	}
+
+	attacker_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	attacker_ai_defeat_worth = {
+		factor = 100
+	}
+
+	defender_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	defender_ai_defeat_worth = {
+		factor = 100
+	}
+}
