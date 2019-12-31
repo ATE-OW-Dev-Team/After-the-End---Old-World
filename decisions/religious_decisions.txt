@@ -24,6 +24,85 @@ decisions = {
 		}
 	}
 
+	celebrate_stalinmas = {
+		only_playable = yes
+		ai_check_interval = 2
+
+		potential = {
+			is_playable = yes
+			  OR = {
+                is_feudal = yes
+                is_tribal = yes
+                is_nomadic = yes
+            }
+			prisoner = no
+			religion = stalinist
+			NOT = {	has_character_modifier = celebrated_stalinmas }
+		}
+		allow = {
+			war = no
+			custom_tooltip = {
+				text = UNOCCUPIED_DEMESNE_TITLE
+				hidden_tooltip = {
+					any_demesne_title = {
+						NOT = { higher_tier_than = count }
+						is_occupied = no
+					}
+				}
+			}
+			month = 11
+			wealth = 100
+			prisoner = no
+			NOT = { is_inaccessible_trigger = yes }
+			custom_tooltip = {
+				text = is_not_busy_trigger_tooltip
+				hidden_tooltip = { NOT = { has_character_flag = do_not_disturb } }
+			}
+		}
+		effect = {
+			add_character_modifier = {
+				name = celebrated_stalinmas
+				duration = -1
+			}			
+			set_character_flag = recent_minor_decision
+			set_character_flag = do_not_disturb
+			hidden_tooltip = { character_event = { id = 36999 days = 150 } } # Safety catch flag clearing
+			hidden_tooltip = { 
+				character_event = { id = stalinmas.1  }
+			}
+			if = {
+				limit = {
+					has_dlc = "Reapers"
+				}
+				custom_tooltip = {
+					text = capital_prospers_custom_tooltip
+					hidden_tooltip = {
+						capital_scope = {
+							change_variable = { which = prosperity_value value = 8 }
+						}
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			
+			
+			modifier = {
+				factor = 0
+				has_character_flag = recent_minor_decision
+				NOT = {
+					had_character_flag = {
+						flag = recent_minor_decision
+						days = 730
+					}
+				}
+			}
+		}
+	}
 	form_shiv_sena = {
 			only_playable = yes
 			is_high_prio = yes
@@ -1810,6 +1889,9 @@ targeted_decisions = {
 			}
 		}
 	}
+	
+	
+	
 	jacobinist_sacrifice_decision = {
 		only_playable = yes
 		ai_check_interval = 2
