@@ -159,7 +159,8 @@ narrative_event = {#DIO reawakens
 				grant_title = PREV
 			}
 			wealth = 500		
-			set_character_flag = is_dio	
+			set_character_flag = is_dio
+			save_event_target_as = DIO_sama
 			random_list = {
 				20 = {
 					change_martial = 3
@@ -298,6 +299,9 @@ narrative_event = {#DIO creates a random assassin
 		NOT = {
 			has_character_flag = assassin_active
 		}
+	}
+	mean_time_to_happen = {
+		days = 90
 	}
 	immediate={
 		set_character_flag = assassin_active
@@ -724,5 +728,336 @@ narrative_event = {#DIO creates a random assassin
 	   }	   
 		new_character = {
 			set_character_flag = is_DIO_assassin
+			save_event_target_as = dios_assassin
 		}	
+}
+}
+
+narrative_event = {#Assassin chooses a random Joestar to attack
+	id= jojo.8
+	title = "EVTNAMEJOJO8"
+	desc = "EVTDESCJOJO8"
+	picture = GFX_evt_battle_scene
+	border = GFX_event_narrative_frame_diplomacy
+	
+	#show_ROOT = yes
+	hide_new = yes
+	
+	trigger={#for the assassins
+		has_character_flag = is_DIO_assassin
+		NOT = {
+			has_character_flag = is_hunting_joestars
+		}
+	}
+	mean_time_to_happen = {
+		days = 90
+	}
+	immediate={
+		set_character_flag = is_hunting_joestars
+	}	
+	option = {#Choose a random Joestar to attack
+		name = "EVTOPTA_jojo.8"
+		random_character = {
+			limit = {
+				any_owned_bloodline = {
+					has_bloodline_flag = joestar_blood
+				}			
+			}
+			hidden_effect = {
+               character_event = { id = jojo.9 }#You ambush the Joestar and engage them in a duel
+            }
+		}
+	}
+}
+
+narrative_event = {#Attacked by an assassin!
+	id= jojo.9
+	title = "EVTNAMEJOJO9"
+	desc = "EVTDESCJOJO9"
+	picture = GFX_evt_battle_scene
+	border = GFX_event_narrative_frame_diplomacy
+	
+	show_ROOT = yes
+	hide_new = yes
+	is_triggered_only = yes
+	
+	immediate={
+	}	
+	option = {#Fight back - result influenced by Martial
+		name = "EVTOPTA_jojo.9"
+		if={
+			limit = {
+				FROM = {#if they have 10+ martial and we don't
+					martial = 10
+				}
+				ROOT = {
+					NOT = {
+						martial = 10
+					}
+				}
+			}
+			random_list = {
+			   75 = {
+				narrative_event = { id = jojo.10 }#You died
+				}
+				25 = {
+				narrative_event = { id = jojo.11 }#You killed them
+				}
+			}
+		}
+		if={
+			limit = {
+				FROM = {#if they have 20+ martial and we don't have 10
+					martial = 20
+				}
+				ROOT = {
+					NOT = {
+						martial = 10
+					}
+				}
+			}
+			random_list = {
+			   99 = {
+				narrative_event = { id = jojo.10 }#You died
+				}
+				1 = {
+				narrative_event = { id = jojo.11 }#You killed them
+				}
+			}
+		}
+		if={
+			limit = {
+				ROOT = {#if we have 20+ martial and they don't have 10
+					martial = 20
+				}
+				FROM = {
+					NOT = {
+						martial = 10
+					}
+				}
+			}
+			random_list = {
+			   99 = {
+				narrative_event = { id = jojo.11 }#You killed them
+				}
+				1 = {
+				narrative_event = { id = jojo.10 }#You died
+				}
+			}
+		}
+		if={
+			limit = {
+				ROOT = {#if we have 10+ martial and they don't have 10
+					martial = 10
+				}
+				FROM = {
+					NOT = {
+						martial = 10
+					}
+				}
+			}
+			random_list = {
+			   75 = {
+				narrative_event = { id = jojo.11 }#You killed them
+				}
+				25 = {
+				narrative_event = { id = jojo.10 }#You died
+				}
+			}
+		}		
+	}
+	option = {#Try to trick them and kill them with treachery
+		name = "EVTOPTB_jojo.9"
+		if={
+			limit = {
+				FROM = {#if they have 10+ intrigue and we don't
+					intrigue = 10
+				}
+				ROOT = {
+					NOT = {
+						intrigue = 10
+					}
+				}
+			}
+			random_list = {
+			   75 = {
+				narrative_event = { id = jojo.10 }#You died
+				}
+				25 = {
+				narrative_event = { id = jojo.11 }#You killed them
+				}
+			}
+		}
+		if={
+			limit = {
+				FROM = {#if they have 20+ intrigue and we don't have 10
+					intrigue = 20
+				}
+				ROOT = {
+					NOT = {
+						intrigue = 10
+					}
+				}
+			}
+			random_list = {
+			   99 = {
+				narrative_event = { id = jojo.10 }#You died
+				}
+				1 = {
+				narrative_event = { id = jojo.11 }#You killed them
+				}
+			}
+		}
+		if={
+			limit = {
+				ROOT = {#if we have 20+ intrigue and they don't have 10
+					intrigue = 20
+				}
+				FROM = {
+					NOT = {
+						intrigue = 10
+					}
+				}
+			}
+			random_list = {
+			   99 = {
+				narrative_event = { id = jojo.11 }#You killed them
+				}
+				1 = {
+				narrative_event = { id = jojo.10 }#You died
+				}
+			}
+		}
+		if={
+			limit = {
+				ROOT = {#if we have 10+ intrigue and they don't have 10
+					intrigue = 10
+				}
+				FROM = {
+					NOT = {
+						intrigue = 10
+					}
+				}
+			}
+			random_list = {
+			   75 = {
+				narrative_event = { id = jojo.11 }#You killed them
+				}
+				25 = {
+				narrative_event = { id = jojo.10 }#You died
+				}
+			}
+		}		
+	}	
+}
+
+narrative_event = {#Killed by an assassin!
+	id= jojo.10
+	title = "EVTNAMEJOJO10"
+	desc = "EVTDESCJOJO10"
+	picture = GFX_evt_battle_scene
+	border = GFX_event_narrative_frame_diplomacy
+	
+	show_ROOT = yes
+	hide_new = yes
+	is_triggered_only = yes
+	
+	immediate={
+	}	
+	option = {#Oh no!
+		name = "EVTOPTA_jojo.10"
+		death = { death_reason = death_murder }
+		event_target:dios_assassin = {#killer clears their 'on the hunt' variable
+			clr_character_flag = is_hunting_joestars
+		}
+	}
+}
+
+narrative_event = {#Killed the assassin!
+	id= jojo.11
+	title = "EVTNAMEJOJO11"
+	desc = "EVTDESCJOJO11"
+	picture = GFX_evt_battle_scene
+	border = GFX_event_narrative_frame_diplomacy
+	
+	show_ROOT = yes
+	hide_new = yes
+	is_triggered_only = yes
+	
+	immediate={
+	}	
+	option = {#Oh no!
+		name = "EVTOPTA_jojo.11"
+		event_target:dios_assassin = {
+			death = { death_reason = death_murder }
+		}
+		narrative_event = {
+			id = jojo.12 #You decide whether to pursue DIO or not
+		}
+	}
+}
+
+narrative_event = {#What do you do now?
+	id= jojo.12
+	title = "EVTNAMEJOJO12"
+	desc = "EVTDESCJOJO12"
+	picture = GFX_evt_battle_scene
+	border = GFX_event_narrative_frame_diplomacy
+	
+	show_ROOT = yes
+	hide_new = yes
+	is_triggered_only = yes
+	
+	immediate={
+	}	
+	option = {#I'll go after DIO!
+		name = "EVTOPTA_jojo.12"
+		narrative_event = {
+			id = jojo.13 #
+		}
+	}
+	option = {#I'll leave it to someone else!
+		name = "EVTOPTB_jojo.12"
+	}	
+}
+
+narrative_event = {#Oh, you're approaching me?
+	id= jojo.13
+	title = "EVTNAMEJOJO13"
+	desc = "EVTDESCJOJO13"
+	picture = GFX_evt_battle_scene
+	border = GFX_event_narrative_frame_diplomacy
+	
+	show_ROOT = yes
+	hide_new = yes
+	is_triggered_only = yes
+	
+	immediate={
+	}	
+	option = {#I can't beat the shit out of you without getting closer
+		name = "EVTOPTA_jojo.13"
+		narrative_event = {
+			id = jojo.14
+		}
+	}	
+}
+narrative_event = {#
+	id= jojo.14
+	title = "EVTNAMEJOJO13"
+	desc = "EVTDESCJOJO13"
+	picture = GFX_evt_battle_scene
+	border = GFX_event_narrative_frame_diplomacy
+	
+	show_ROOT = yes
+	hide_new = yes
+	is_triggered_only = yes
+	
+	immediate={
+	}	
+	option = {#I can't beat the shit out of you without getting closer
+		name = "EVTOPTA_jojo.13"
+		narrative_event = {
+			id = jojo.14
+		}
+	}	
 }
