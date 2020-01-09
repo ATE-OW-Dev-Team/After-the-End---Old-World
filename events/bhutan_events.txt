@@ -7,10 +7,11 @@ namespace=bhutan
 # New Emperor has to get a new Policy Trait
 narrative_event = {
 	id = bhutan.1
-	is_triggered_only = yes
 	title = bhutan1Title
 	picture = GFX_evt_roi_elephants_in_battle
 	border = GFX_event_narrative_frame_religion
+	
+	hide_window = yes # For some reason this event is firing, but not showing up, for each new Emperor. I'm guessing that the event fires while the character is still an AI, so I'm trying to delay it by a day to see what happens
 	
 	desc = {
 		text = bhutan1Desc
@@ -22,9 +23,54 @@ narrative_event = {
 			has_trait = bhutan_isolationist
 			has_trait = bhutan_open
 		}
+		has_landed_title = e_bhutan
+	}
+	is_triggered_only = yes	
+	
+	immediate = {
 	}
 	
-	immediate = {		
+	option = {#
+		name = EVTOPTA_bhutan1
+		narrative_event = { id = bhutan.2 days = 1 }
+	}
+	#option = {#Openness
+	#	name = EVTOPTB_bhutan1
+	#	add_trait = bhutan_open
+	#}
+	#option = {#Expansionism
+	#	name = EVTOPTC_bhutan1
+	#	piety = -200
+	#	add_trait = bhutan_expansionist
+	#}
+	
+}
+
+narrative_event = {
+	id = bhutan.2
+	title = bhutan1Title
+	picture = GFX_evt_roi_elephants_in_battle
+	border = GFX_event_narrative_frame_religion
+		
+	desc = {
+		text = bhutan1Desc
+	}
+	
+	trigger = {
+		NOR = {#don't get this event if you already have a position
+			has_trait = bhutan_expansionist
+			has_trait = bhutan_isolationist
+			has_trait = bhutan_open
+		}
+		has_landed_title = e_bhutan
+		NOT = {
+			has_character_flag = has_bhutan_policy
+		}
+	}
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = has_bhutan_policy
 	}
 	
 	option = {#Isolationism
