@@ -26,17 +26,7 @@ character_event = {
 			}
 		}			
 		hidden_tooltip = {
-		random_list = {
-				33 = {#1/3 chance he asks for a ton of money
-					character_event = { id = nobelian.2 days = 35 }#You look for a mentor
-				}
-				33 = {#1/3 chance he asks for an unspecified future payment (bad events may happen to you because of this, later)
-					character_event = { id = nobelian.3 days = 35 }#You look for a mentor
-				}
-				33 = {#1/3 chance he asks for a pound of flesh
-					character_event = { id = nobelian.4 days = 35 }#You look for a mentor
-				}
-		}
+			character_event = { id = nobelian.2 days = 35 }#You look for a mentor
 		}
 	}
 	
@@ -54,7 +44,7 @@ character_event = {
 		character_event = { id = nobelian.8 days = 7 }
 	}
 }
-character_event = {#Mentor asks for money
+character_event = {#You can hire the Mentor by donating to his religious order, or by giving away an important artifact, or by having a Laureate's bloodline
 	id = nobelian.2
 	is_triggered_only = yes
 	picture = GFX_evt_book_carolingian_script
@@ -66,12 +56,32 @@ character_event = {#Mentor asks for money
 	immediate = {
 		create_nobelian_mentor_effect = yes
 	}	
-	option = {#OK
+	option = {#Pay Money
 		name = EVTOPTA_nobelian2
 		scaled_wealth = -2	
 	}
-	option = {#I've changed my mind
+	option = {#Free if you have 15 Diplomacy
 		name = EVTOPTB_nobelian2
+		tooltip_info = diplomacy
+		trigger = {
+			OR = {
+				diplomacy = 15
+				trait = grey_eminence
+			}
+		}
+	}
+	option = {#Free if you are a Laureate
+		name = EVTOPTC_nobelian2
+		tooltip_info_custom = laureate_blood
+		trigger = {
+			any_owned_bloodline = {
+				has_bloodline_flag = laureate_lit_bloodline #Despite the name, this counts all Laureate bloodlines, not just the literature one
+				bloodline_is_active_for = PREV
+			}
+		}
+	}	
+	option = {#I've changed my mind
+		name = EVTOPTD_nobelian2
 		
 		hidden_tooltip = {
 			event_target:invited_character = { 
@@ -1712,5 +1722,196 @@ character_event = {#Create Artillery Book
 	option = {#Excellent
 		name = EVTOPTA_nobelian33
 		add_artifact = artillery_book
+	}
+}
+character_event = {#Sell your Scrap
+	id = nobelian.34
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian34Desc
+	}
+	
+	option = {#Sell one
+		name = EVTOPTA_nobelian34
+		destroy_artifact = scrap
+		wealth = 20
+	}
+	option = {#Sell three
+		name = EVTOPTB_nobelian34
+		trigger = {
+			any_artifact = {
+				artifact_type = scrap
+				count = 3
+			}			
+		}
+		destroy_artifact = scrap
+		destroy_artifact = scrap
+		destroy_artifact = scrap
+		wealth = 60
+	}
+	option = {#Sell five
+		name = EVTOPTB_nobelian34
+		trigger = {
+			any_artifact = {
+				artifact_type = scrap
+				count = 5
+			}
+		}
+		destroy_artifact = scrap
+		destroy_artifact = scrap
+		destroy_artifact = scrap
+		destroy_artifact = scrap
+		destroy_artifact = scrap		
+		wealth = 100
+	}	
+}
+character_event = {#Study your scrap for a slim chance at some progress, and more likely to destroy it
+	id = nobelian.35
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian35Desc
+	}
+	
+	option = {#Study one
+		name = EVTOPTA_nobelian34
+		destroy_artifact = scrap
+		hidden_effect = {
+			random_list = {
+				90 = {
+					character_event = { id = nobelian.36 } # failure
+				}
+				9 = {
+					character_event = { id = nobelian.37 } #success
+				}
+				1 = {
+					character_event = { id = nobelian.38 } #epic success
+				}
+			}
+		}
+	}
+	option = {#Study three
+		name = EVTOPTB_nobelian34
+		trigger = {
+			any_artifact = {
+				artifact_type = scrap
+				count = 3
+			}			
+		}
+		destroy_artifact = scrap
+		destroy_artifact = scrap
+		destroy_artifact = scrap
+			random_list = {
+				70 = {
+					character_event = { id = nobelian.36 } # failure
+				}
+				27 = {
+					character_event = { id = nobelian.37 } #success
+				}
+				3 = {
+					character_event = { id = nobelian.38 } #epic success
+				}
+			}	
+		}
+	option = {#Study five
+		name = EVTOPTB_nobelian34
+		trigger = {
+			any_artifact = {
+				artifact_type = scrap
+				count = 5
+			}
+		}
+		destroy_artifact = scrap
+		destroy_artifact = scrap
+		destroy_artifact = scrap
+		destroy_artifact = scrap
+		destroy_artifact = scrap		
+			random_list = {
+				50 = {
+					character_event = { id = nobelian.36 } # failure
+				}
+				40 = {
+					character_event = { id = nobelian.37 } #success
+				}
+				10 = {
+					character_event = { id = nobelian.38 } #epic success
+				}
+			}	
+		}	
+}
+
+character_event = {#Failure
+	id = nobelian.36
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian36Desc
+	}
+	
+	option = {#Mission Failed, We'll Get 'Em Next Time
+		name = EVTOPTA_nobelian36
+	}
+}
+
+character_event = {#Mild Success
+	id = nobelian.37
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian37Desc
+	}
+	
+	option = {#Pretty Deece
+		name = EVTOPTA_nobelian37
+		prestige = 100
+		piety = 100
+		random_list = {
+			70 = {}
+			30 = {
+				add_artifact = mystic_insight
+			}
+		}
+	}
+}
+
+character_event = {#Great Success
+	id = nobelian.38
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = nobelian38Desc
+	}
+	
+	option = {#Pretty Deece
+		name = EVTOPTA_nobelian38
+		prestige = 500
+		piety = 500
+		add_artifact = mystic_insight
+		random_list = {
+			10 = {
+				add_artifact = ancient_chemicals
+			}
+			10 = {
+				add_artifact = manuscript_fragment
+			}			
+			10 = {
+				add_artifact = instructions
+			}			
+			5 = {
+				add_artifact = partial_manuscript
+			}
+			65 = {}
+		}
 	}
 }
