@@ -409,12 +409,24 @@ monastic_elective = {
 			is_landed = yes
 			primary_title = { real_tier = BARON }
 		}
-		additive_modifier = { #Counts have extra power - Holy Order are Duke-tier so there can't be any vassals higher than Count
+		additive_modifier = { #Counts have extra power
 			value = 10 
 			localisation_key = tooltip_me_count
 			is_landed = yes
 			primary_title = { real_tier = COUNT }
 		}
+		additive_modifier = { #Dukes have extra power
+			value = 15 
+			localisation_key = tooltip_me_duke
+			is_landed = yes
+			primary_title = { real_tier = DUKE }
+		}
+		additive_modifier = { #Kings have extra power
+			value = 20 
+			localisation_key = tooltip_me_king
+			is_landed = yes
+			primary_title = { real_tier = KING }
+		}		
 		additive_modifier = { #Being a physician earns influence among the Hospitalers and Lazareans
 			value = 10 
 			localisation_key = tooltip_me_physician
@@ -426,7 +438,13 @@ monastic_elective = {
 		additive_modifier = { #Being a crusader is respected
 			value = 10 
 			localisation_key = tooltip_me_crusader
-			trait = crusader
+			FROMFROM = { 
+				holder_scope = { religion = ROOT }#if you're the same religion as the ruler
+			}			
+			OR = {
+				trait = crusader
+				trait = mujahid
+			}
 		}
 		additive_modifier = { #Being a commander
 			value = 5
@@ -435,8 +453,8 @@ monastic_elective = {
 		}		
 	elector_selection = {
 		days = -5 
-		max_amount = 10 #Grandmaster and the Nine Worthies
-		additive_modifier = { #Grandmaster always an elector
+		##max_amount = 10 #Grandmaster and the Nine Worthies
+		additive_modifier = { #Ruler always an elector
 			value = 30
 			FROMFROM = { 
 				holder_scope = { character = ROOT }
@@ -450,18 +468,23 @@ monastic_elective = {
 				has_job_title = job_spiritual
 			}
 		}
-		additive_modifier = { #Then counts
+		additive_modifier = { #Then Kings
+			value = 20
+			vassal_of = FROMFROM 
+			primary_title = { real_tier = KING }			
+		}
+		additive_modifier = { #Then Dukes
 			value = 15
 			vassal_of = FROMFROM 
-			primary_title = { real_tier = COUNT }			
+			primary_title = { real_tier = DUKE }			
 		}
-		additive_modifier = { #Then barons
+		additive_modifier = { #Then Counts
 			value = 10
 			vassal_of = FROMFROM 
-			primary_title = { real_tier = BARON }			
+			primary_title = { real_tier = COUNT }			
 		}		
-		additive_modifier = { #Generals have a say
-			value = 10
+		additive_modifier = { #Generals have a say before Counts
+			value = 12
 			vassal_of = FROMFROM 
 			has_minor_title = title_commander
 		}
