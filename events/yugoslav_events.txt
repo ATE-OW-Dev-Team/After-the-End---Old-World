@@ -21,6 +21,7 @@ narrative_event = {
 		}
 		NOT = { has_global_flag = yugoslav_crisis_started }
 		controls_religion = yes
+		year = 2560 # This can't happen before five years have passed
 	}
 	
 	mean_time_to_happen = {
@@ -216,6 +217,7 @@ narrative_event = {#You mostly succeeded, there'll be a mild unrest
 				duration = 7300 #20 years, the duration of the crisis
 			}			
 		}
+		add_character_modifier = { name = yugo_sided_with_jugo duration = -1 } #20 years					
 	}
 }
 
@@ -236,6 +238,7 @@ narrative_event = {#Moderate success, there'll be some unpleasantness but it sho
 				duration = 7300 #20 years, the duration of the crisis
 			}			
 		}
+		add_character_modifier = { name = yugo_sided_with_jugo duration = -1 } #20 years							
 	}
 }
 
@@ -256,6 +259,7 @@ narrative_event = {#Total failure, this is gonna suck
 				duration = 7300 #20 years, the duration of the crisis
 			}			
 		}
+		add_character_modifier = { name = yugo_sided_with_jugo duration = -1 } #20 years							
 	}
 }
 
@@ -290,6 +294,7 @@ narrative_event = {#So you abandoned Yugoslavist? Good, but now what?
 				duration = 7300 #20 years, the duration of the crisis
 			}			
 		}
+		add_character_modifier = { name = yugo_sided_with_orthodox duration = -1 } #20 years							
 	}
 	option = {#Catholic
 	   name = "EVTOPTB_yugoslav.6"
@@ -316,6 +321,7 @@ narrative_event = {#So you abandoned Yugoslavist? Good, but now what?
 				duration = 7300 #20 years, the duration of the crisis
 			}			
 		}
+		add_character_modifier = { name = yugo_sided_with_catholic duration = -1 } #20 years									
 	}
 	option = {#Islam
 	   name = "EVTOPTC_yugoslav.6"
@@ -347,6 +353,7 @@ narrative_event = {#So you abandoned Yugoslavist? Good, but now what?
 				duration = 7300 #20 years, the duration of the crisis
 			}			
 		}
+		add_character_modifier = { name = yugo_sided_with_muslims duration = -1 }								
 	}
 }
 
@@ -369,12 +376,12 @@ narrative_event = {#The event that marks the end of the Great Unrest
 		NOT = {
 			has_alternate_start_parameter = { key = religion_names value = random }
 		}
-		has_global_flag = yugoslav_crisis_started
+		had_global_flag = { flag = yugoslav_crisis_started days = 7300 }#you need to have survived for 20 years
 		controls_religion = yes#make it fire since the Propiciater should always be Jugo, and should always exist (for now) no matter what happened in the intervening two decades
 	}
 	
 	mean_time_to_happen = {
-		years = 20
+		months = 24 #it'll fire roughly two years after the 20 year condition is fulfilled
 	}
 	
 	option = {#OK, let's see what happened
@@ -445,6 +452,10 @@ narrative_event = {#The event that marks the end of the Great Unrest
 				modifier = yug_triumph
 				years = 1000
 			}
+		remove_character_modifier = yugo_sided_with_catholic
+		remove_character_modifier = yugo_sided_with_orthodox
+		remove_character_modifier = yugo_sided_with_muslims
+		remove_character_modifier = yugo_sided_with_jugo				
 	}
 	
 	option = {#The Emperor is happy
@@ -453,6 +464,7 @@ narrative_event = {#The event that marks the end of the Great Unrest
 			primary_title = { title = e_yugoslavia }
 			religion = jugoslavist
 		}
+		
 		any_realm_character = {
 			limit = {
 				NOT = {
@@ -516,6 +528,10 @@ narrative_event = {#The event that marks the end of the Great Unrest
 				modifier = yug_endured
 				years = 1000
 			}
+		remove_character_modifier = yugo_sided_with_catholic
+		remove_character_modifier = yugo_sided_with_orthodox
+		remove_character_modifier = yugo_sided_with_muslims
+		remove_character_modifier = yugo_sided_with_jugo			
 	}
 	
 	option = {#The Emperor is happy
@@ -524,6 +540,10 @@ narrative_event = {#The event that marks the end of the Great Unrest
 			primary_title = { title = e_yugoslavia }
 			religion = jugoslavist
 		}
+		remove_character_modifier = yugo_sided_with_catholic
+		remove_character_modifier = yugo_sided_with_orthodox
+		remove_character_modifier = yugo_sided_with_muslims
+		remove_character_modifier = yugo_sided_with_jugo		
 		any_realm_character = {
 			limit = {
 				NOT = {
@@ -586,7 +606,11 @@ narrative_event = {#The event that marks the end of the Great Unrest
 		k_serbia_triumvirate = {
 			activate_title = { title = THIS status = no }
 			unsafe_destroy_landed_title = THIS
-		}	
+		}
+		remove_character_modifier = yugo_sided_with_catholic
+		remove_character_modifier = yugo_sided_with_orthodox
+		remove_character_modifier = yugo_sided_with_muslims
+		remove_character_modifier = yugo_sided_with_jugo		
 	}
 	
 	option = {#The Emperor is obviously sad
@@ -595,6 +619,10 @@ narrative_event = {#The event that marks the end of the Great Unrest
 			primary_title = { title = e_yugoslavia }
 			religion = jugoslavist
 		}
+		remove_character_modifier = yugo_sided_with_catholic
+		remove_character_modifier = yugo_sided_with_orthodox
+		remove_character_modifier = yugo_sided_with_muslims
+		remove_character_modifier = yugo_sided_with_jugo		
 	}
 	option = {#So are other Yugos
 		name = "EVTOPTB_yugoslav.10"
@@ -940,4 +968,58 @@ narrative_event = {##Order of St.Tito formed
 			NOT = { religion = ROOT }
 		}
 	}
+}
+
+narrative_event = {#Ensuring Yugo Emperor's 'Yugoslav chaos' modifier gets inherited
+	id = yugoslav.16
+	title = "EVTNAMEYUGO16"
+	desc = "EVTDESCYUGO16"
+	picture = GFX_evt_bishop_byzantine
+	border = GFX_event_narrative_frame_religion
+	hide_window = yes #Should be secret
+	trigger = {
+		primary_title = { title = e_yugoslavia }
+		has_global_flag = yugoslav_crisis_started
+		NOR = {
+			has_global_flag = yugoslavism_dead
+			has_global_flag = yugoslavism_survives
+			has_global_flag = yugoslavism_triumphant
+		}
+	}
+	ìmmediate = {
+	
+	}
+	is_triggered_only = yes
+	
+	option = {#Oh Mercy
+	   name = "EVTOPTA_yugoslav.5"
+		remove_character_modifier = yugo_sided_with_catholic
+		remove_character_modifier = yugo_sided_with_orthodox
+		remove_character_modifier = yugo_sided_with_muslims
+		remove_character_modifier = yugo_sided_with_jugo	   
+		if = {
+			limit = {
+				religion = catholic
+			}
+		add_character_modifier = { name = yugo_sided_with_catholic duration = -1 }			
+		}
+		if = {
+			limit = {
+				religion = orthodox
+			}
+		add_character_modifier = { name = yugo_sided_with_orthodox duration = -1 }						
+		}
+		if = {
+			limit = {
+				religion_group = muslim
+			}
+		add_character_modifier = { name = yugo_sided_with_muslims duration = -1 }				
+		}
+		if = {
+			limit = {
+				religion = jugoslavist
+			}
+		add_character_modifier = { name = yugo_sided_with_jugo duration = -1 }			
+		}
+		}
 }

@@ -18,6 +18,27 @@ claim = {
 	can_use_gui = {
 		check_if_crusader_trigger = yes
 	}
+	can_use = {
+		#Bhutan can only use this if Expansionist
+		ROOT = {
+			OR = {
+				NOT = {
+					government = bhutanese_decayed_government
+				}
+				trait = bhutan_expansionist
+				}
+			#Bhutan can also use this when Open if they Reformed their Government
+				OR = {
+				NOT = {
+					government = bhutanese_restored_government
+				}
+				OR = {
+					trait = bhutan_open
+					trait = bhutan_expansionist
+				}
+			}
+		}		
+	}
 
 	can_use_title = {
 		OR = {
@@ -315,6 +336,22 @@ other_claim = {
 	can_use = {
 		ROOT = {
 			mercenary = no
+			OR = {
+				NOT = {
+					government = bhutanese_decayed_government
+				}
+				trait = bhutan_expansionist
+				}
+			#Bhutan can also use this when Open if they Reformed their Government
+				OR = {
+				NOT = {
+					government = bhutanese_restored_government
+				}
+				OR = {
+					trait = bhutan_open
+					trait = bhutan_expansionist
+				}
+			}		
 		}
 	}
 
@@ -761,6 +798,25 @@ claim_on_liege = {
 	can_use_gui = {
 		check_if_crusader_trigger = yes
 	}
+	can_use = {
+		#Bhutan can only use this if Expansionist
+		OR = {
+			NOT = {
+				government = bhutanese_decayed_government
+			}
+			trait = bhutan_expansionist
+		}
+		#Bhutan can also use this when Open if they Reformed their Government
+		OR = {
+			NOT = {
+				government = bhutanese_restored_government
+			}
+			OR = {
+				trait = bhutan_open
+				trait = bhutan_expansionist
+			}
+		}		
+	}	
 
 	can_use_title = {
 		OR = {
@@ -1837,6 +1893,23 @@ claim_all = {
 				strong = yes # Count only strong claims
 				value = 2
 			}
+			OR = {
+				NOT = {
+					government = bhutanese_decayed_government
+				}
+				trait = bhutan_expansionist
+				}
+			#Bhutan can also use this when Open if they Reformed their Government
+				OR = {
+				NOT = {
+					government = bhutanese_restored_government
+				}
+				OR = {
+					trait = bhutan_open
+					trait = bhutan_expansionist
+				}
+			}
+				
 		}
 	}
 
@@ -5876,6 +5949,7 @@ religious = {
 	can_use = {
 		ROOT = {
 			is_nomadic = no
+			NOT = { government = confederation_government }
 			NOT = { religion_group = pagan_group }
 			NOT = { pacifist = yes }
 			NOT = { religion = taoist }
@@ -5901,7 +5975,13 @@ religious = {
 					religion = gelugpa
 					religion = karmapa
 				}
-			 }
+				}
+				AND = {
+					religion_group = old_world_cultist_group
+					NOT = {
+						religion = FROM
+					}
+				}
 				is_heresy_of = FROM
 				is_parent_religion = FROM
 				AND = {	
@@ -14794,6 +14874,18 @@ buddhist_holy_war = {
 	
 	can_use = {
 		ROOT = {
+			OR = {
+				NOT = {
+					government = bhutanese_decayed_government
+				}
+				trait = bhutan_expansionist				
+			}
+			OR = {
+				NOT = {
+					government = bhutanese_restored_government
+				}
+				trait = bhutan_expansionist				
+			}			
 		    OR = {
 				religion = neovedantic
 				AND = {
@@ -15175,6 +15267,19 @@ indian_subjugation = {
 			has_horde_culture = no # Should use tribal invasion instead
 			is_nomadic = no
 			mercenary = no
+			#Bhutan can only use this if they Restore their Government AND are Expansionist
+				NOT = {
+					government = bhutanese_decayed_government
+				}
+				OR = {
+				NOT = {
+					government = bhutanese_restored_government
+				}
+				OR = {
+					trait = bhutan_open
+					trait = bhutan_expansionist
+				}
+			}		
 		}
 		FROM = {
 			NOT = { is_real_offmap_governor = yes }
@@ -16077,6 +16182,11 @@ tributary_cb = {
 
 		ROOT = {
 			mercenary = no
+			#Bhutan can't use this if Isolationist -> actually, decided to try giving Isolationist Bhutan one CB, to make Open have a purpose
+			#NAND = {
+			#	government = bhutanese_decayed_government
+			#	trait = bhutan_isolationist
+			#}
 			OR = {
 				is_tributary = no
 				is_tributary = {
@@ -21839,7 +21949,6 @@ invade_numenor = {##Designed to reclaim Numenor if you're of Bonaparte blood
 		factor = 100
 	}
 }
-
 unite_russia = {##Designed to help the Zarists consolidate
 	name = CB_NAME_RUSSIA
 	war_name = WAR_NAME_RUSSIA
@@ -21870,6 +21979,179 @@ unite_russia = {##Designed to help the Zarists consolidate
 	can_use_title = {
 			de_jure_liege_or_above = e_russia
 	}
+	
+	is_valid = {
+	}
+
+	on_add = {
+		hidden_tooltip = { fire_haruspicy_event_effect = yes }
+		if = {
+			limit = { defender = { is_offmap_governor = offmap_china } }
+			attacker = {  
+				sound_effect = china_angered_emperor
+				detract_grace_super_huge_effect = yes 
+			}
+		}
+	}
+	
+	on_success = {
+		ROOT = {
+			participation_scaled_prestige = 100
+		}
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			hidden_tooltip = { 
+				participation_scaled_prestige = 100
+			}
+		}
+		
+		FROM = { prestige = -100 }
+	}
+
+	on_success_title = {
+		# Usurp the target kingdom itself, if the enemy holds it
+		if = {
+			limit = {
+				holder_scope = {
+					character = FROM
+				}
+				NOT = { ROOT = { tier = EMPEROR } }
+			}
+			ROOT = { usurp_title = { target = PREV type = invasion } }
+		}
+		
+		if = {
+			# Take the enemy's duchies within the target kingdom, if we are the same or lower tier
+			limit = {
+				ROOT = {
+					NOT = { higher_tier_than = FROM }
+				}
+			}
+			FROM = {
+				any_demesne_title = {
+					limit = {
+						tier = DUKE
+						OR = {
+							title = PREVPREV
+							de_jure_liege_or_above = PREVPREV
+						}
+					}
+					ROOT = { usurp_title = { target = PREV type = invasion } }
+				}
+			}
+		}
+		
+		# Have I become the vassal of the loser due to taking a duchy or kingdom?
+		if = {
+			limit = {
+				ROOT = {
+					is_liege_or_above = FROM	
+				}
+			}
+			ROOT = {
+				set_defacto_liege = ROOT
+			}
+		}
+		
+		# Vassalize the rest
+		custom_tooltip = {
+			text = pagan_subjugation_tip
+			hidden_tooltip = {
+				ROOT = {
+					subjugate_or_take_under_title = { # If the target only has territory within the kingdom, he is simply vassalized
+						title = PREV
+						enemy = FROM
+					}
+				}
+			}
+		}
+	}
+
+	on_fail = {
+		ROOT = { prestige = -200 }
+	}
+
+	on_reverse_demand = {
+		ROOT = {
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 3.0
+			}
+			ROOT = { prestige = -500 }
+		}
+		FROM = {
+			participation_scaled_piety = 250
+			participation_scaled_prestige = 300
+			if = {
+				limit = {
+					uses_decadence = yes
+				}
+				participation_scaled_decadence = -10
+			}
+		}
+		any_defender = {
+			limit = { NOT = { character = FROM } }
+			hidden_tooltip = { 
+				participation_scaled_piety = 100
+				participation_scaled_prestige = 200
+				if = {
+					limit = {
+						uses_decadence = yes
+					}
+					participation_scaled_decadence = -10
+				}
+			}
+		}
+	}
+
+	attacker_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	attacker_ai_defeat_worth = {
+		factor = 100
+	}
+
+	defender_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	defender_ai_defeat_worth = {
+		factor = 100
+	}
+}
+
+defend_germany = {##Designed to help the German Confederation protect Germany
+	name = CB_NAME_GERMANY
+	war_name = WAR_NAME_GERMANY
+	sprite = 17
+	truce_days = 3650
+	is_permanent = yes
+	check_de_jure_tier = DUKE #
+
+	allowed_to_target_tributaries = yes
+	
+	sort_priority = 1900
+
+	can_use_gui = {
+	}
+
+	can_use = {
+		ROOT = {
+			primary_title = {
+				title = e_german_confederation
+			}
+		}
+		FROM = {
+			NOT = {
+				culture_group = germanic
+			}
+		}
+	}
+
+	can_use_title = {
+			de_jure_liege_or_above = e_germany
+		}
 	
 	is_valid = {
 	}

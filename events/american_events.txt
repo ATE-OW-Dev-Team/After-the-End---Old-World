@@ -1,0 +1,1815 @@
+namespace = america
+#Declare the beginning of the Redcoat Invasion
+narrative_event = {
+	id = america.1
+	is_triggered_only = yes
+	title = america1Title
+	picture = GFX_evt_gathering_of_minds
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america1Desc
+	}
+	immediate = {
+		set_global_flag = invading_america
+		activate_title = { title = e_redcoats status = yes }
+		d_redcoats = {
+			holder_scope = {
+				save_event_target_as = redcoat_leader
+				abdicate = yes#Abdicates to his heir, the Redcoats are disabled		
+				e_redcoats = {
+					grant_title = PREV
+				}
+			}
+			activate_title = { title = THIS status = no }					
+		}
+		narrative_event = { id = america.2 days = 300 }		
+	}
+	option = {#Hail Britannia
+		name = america1A
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				primary_title = { title = e_britannia }#in case the Brits somehow stop being Thelemic
+			}
+		}
+	}
+	option = {#F the British
+		name = america1B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america1C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}	
+}
+narrative_event = {
+	id = america.2
+	is_triggered_only = yes
+	title = america2Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america2Desc
+	}
+	immediate = {
+		set_global_flag = american_invasion_launched
+		random_list = {#90% chance to conquer New England, 10% chance of Chad Mahonic Mega Kingdom driving you out
+			90 = {
+				narrative_event = { id = america.3 days = 300 }	#New England conquered	
+			}
+			10 = {
+				narrative_event = { id = america.4 days = 300 }	#Mega Mahonic kicks you out
+			}
+		}
+	}
+	option = {#Hail Britannia
+		name = america2A	
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				primary_title = { title = e_britannia }#in case the Brits somehow stop being Thelemic
+			}
+		}
+	}
+	option = {#F the British
+		name = america2B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america2C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}	
+}
+
+narrative_event = {#New England conquered
+	id = america.3
+	is_triggered_only = yes
+	title = america3Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america3Desc
+	}
+	immediate = {
+	}
+	option = {#Hail Britannia
+		name = america3A	
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+			}
+			NOT = {
+				primary_title = { title = e_britannia }				
+			}			
+		}
+	}
+	option = {#F the British
+		name = america3B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Send them north
+		name = america3D
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+			create_random_soldier = {#The King of the New Englanders
+				random_traits = yes
+				culture = yankee
+				religion = occultist
+				dynasty = random
+				female = no
+				attributes = {
+					diplomacy = 2
+					learning = 5
+					stewardship = 6
+					intrigue = 2
+					martial = 9
+				}
+			}	
+			new_character = {
+				add_trait = mystic
+				add_trait = brawny
+				remove_trait = slow
+				remove_trait = imbecile
+				remove_trait = dull
+				
+				remove_lifestyle_trait_effect = yes
+				
+				random_list = { # Flavor Randomization
+					20 = {  } # Nothing
+					20 = { change_martial = 2 }
+					15 = { change_martial = 4 }
+					10 = { change_martial = 6 }
+					20 = { add_trait = duelist }
+					15 = { add_trait = scholar }
+					15 = { add_trait = shrewd }
+				}
+			}
+			set_global_flag = redcoats_vs_hudsonians
+			narrative_event = { id = america.5 days = 3 }#This event is a generic "give them more support
+	}
+	option = {#Send them south
+		name = america3D
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+			create_random_soldier = {#The King of the New Englanders
+				random_traits = yes
+				culture = yankee
+				religion = occultist
+				dynasty = random
+				female = no
+				attributes = {
+					diplomacy = 2
+					learning = 5
+					stewardship = 6
+					intrigue = 2
+					martial = 9
+				}
+			}	
+			new_character = {
+				add_trait = mystic
+				add_trait = brawny
+				remove_trait = slow
+				remove_trait = imbecile
+				remove_trait = dull
+				
+				remove_lifestyle_trait_effect = yes
+				
+				random_list = { # Flavor Randomization
+					20 = {  } # Nothing
+					20 = { change_martial = 2 }
+					15 = { change_martial = 4 }
+					10 = { change_martial = 6 }
+					20 = { add_trait = duelist }
+					15 = { add_trait = scholar }
+					15 = { add_trait = shrewd }
+				}
+			}
+			set_global_flag = redcoats_vs_americanists			
+			narrative_event = { id = america.5 days = 3 }#This event is a generic "give them more support
+	}
+	option = {#Fallback option for the Redcoats to decide their own direction if 
+		name = america3E
+		trigger = {
+			primary_title = { title = e_redcoats }
+			e_britannia = {
+				has_holder = no
+			}
+		}
+		random_list = {
+			50 = {
+			set_global_flag = redcoats_vs_hudsonians
+			narrative_event = { id = america.5 days = 3 }				
+			}
+			50 = {
+			set_global_flag = redcoats_vs_americanists
+			narrative_event = { id = america.5 days = 3 }				
+			}			
+		}
+	}
+}
+
+narrative_event = {#New England repelled you, oh noh
+	id = america.4
+	is_triggered_only = yes
+	title = america4Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america4Desc
+	}
+	immediate = {
+		set_global_flag = americans_coming
+		set_global_flag = americans_are_yankees
+	}
+	option = {#Oh sh-
+		name = america3A	
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+			}
+		
+		}
+	}
+	option = {#F the British
+		name = america3B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+}
+
+narrative_event = {#Generic "give the Redcoats more money?" event
+	id = america.5
+	is_triggered_only = yes
+	title = america5Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	desc = {
+		text = america5Desc
+	}
+	option = {#Yes
+		name = america5A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		wealth = -1000
+		if = {
+			limit = {#If going South, stage 1
+				has_global_flag = redcoats_vs_americanists
+			}
+			clr_global_flag = redcoats_vs_americanists			
+			random_list = {
+			75 = {
+				narrative_event = { id = america.6 days = 3 }#300 in the real thing
+			}#75/25 chance of victory
+			25 = {
+				narrative_event = { id = america.7 days = 3 } #300 in the real thing
+			}
+			}
+		}
+		if = {
+			limit = {#If going South, stage 2
+				has_global_flag = redcoats_vs_appalachians
+			}
+			clr_global_flag = redcoats_vs_appalachians
+			random_list = {
+			50 = {
+				narrative_event = { id = america.8 days = 300 }
+			}#50/50 chance of victory, supply lines becoming stretched
+			50 = {
+				narrative_event = { id = america.9 days = 300 }
+			}
+			}
+		}
+		if = {
+			limit = {#If going South, stage 3 - the HCC
+				has_global_flag = redcoats_vs_dixies
+			}
+			clr_global_flag = redcoats_vs_dixies
+			random_list = {
+			20 = {
+				narrative_event = { id = america.10 days = 300 }
+			}#Unlikely to win but possible
+			80 = {
+				narrative_event = { id = america.11 days = 300 }
+			}
+			}
+		}		
+		if = {
+			limit = {#If going North, stage 1
+				has_global_flag = redcoats_vs_hudsonians
+			}
+			clr_global_flag = redcoats_vs_hudsonians
+			random_list = {
+			75 = {
+				narrative_event = { id = america.12 days = 300 }
+			}
+			25 = {
+				narrative_event = { id = america.13 days = 300 }
+			}
+			}
+		}#75% chance to beat the Hudsonians if you pay
+		if = {
+			limit = {#If going North, stage 2
+				has_global_flag = redcoats_vs_anglicans
+			}
+			clr_global_flag = redcoats_vs_anglicans
+			random_list = {
+			50 = {
+				narrative_event = { id = america.14 days = 300 }
+			}
+			50 = {
+				narrative_event = { id = america.15 days = 300 }
+			}
+			}
+		}
+		if = {
+			limit = {#If going North, stage 3
+				has_global_flag = redcoats_vs_nuns
+			}
+			clr_global_flag = redcoats_vs_nuns
+			random_list = {
+			20 = {
+				narrative_event = { id = america.16 days = 300 }
+			}
+			80 = {
+				narrative_event = { id = america.17 days = 300 }
+			}
+			}
+		}		
+	}
+	option = {#No, let them do it alone
+		name = america5B	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		if = {
+			limit = {#If going South, stage 1
+				has_global_flag = redcoats_vs_americanists
+			}
+			clr_global_flag = redcoats_vs_americanists
+			random_list = {
+			50 = {
+				narrative_event = { id = america.6 days = 300 }
+			}
+			50 = {
+				narrative_event = { id = america.7 days = 300 }
+			}
+			}
+		}
+		if = {
+			limit = {#If going South, stage 2
+				has_global_flag = redcoats_vs_appalachians
+			}
+			clr_global_flag = redcoats_vs_appalachians
+			random_list = {
+			35 = {
+				narrative_event = { id = america.8 days = 300 }
+			}#
+			65 = {
+				narrative_event = { id = america.9 days = 300 }
+			}
+			}
+		}
+		if = {
+			limit = {#If going South, stage 3 - the HCC
+				has_global_flag = redcoats_vs_dixies
+			}
+			clr_global_flag = redcoats_vs_dixies
+			random_list = {
+			5 = {
+				narrative_event = { id = america.10 days = 300 }
+			}#Very Unlikely to win but possible
+			95 = {
+				narrative_event = { id = america.11 days = 300 }
+			}
+			}
+		}		
+		if = {
+			limit = {#If going North, stage 1
+				has_global_flag = redcoats_vs_hudsonians
+			}
+			clr_global_flag = redcoats_vs_hudsonians
+			random_list = {
+			50 = {
+				narrative_event = { id = america.12 days = 300 }
+			}
+			50 = {
+				narrative_event = { id = america.13 days = 300 }
+			}
+			}
+		}
+		if = {
+			limit = {#If going North, stage 2
+				has_global_flag = redcoats_vs_anglicans
+			}
+			clr_global_flag = redcoats_vs_anglicans
+			random_list = {
+			35 = {
+				narrative_event = { id = america.14 days = 300 }
+			}
+			65 = {
+				narrative_event = { id = america.15 days = 300 }
+			}
+			}
+		}
+		if = {
+			limit = {#If going North, stage 3
+				has_global_flag = redcoats_vs_nuns
+			}
+			clr_global_flag = redcoats_vs_nuns
+			random_list = {
+			5 = {
+				narrative_event = { id = america.16 days = 300 }
+			}
+			95 = {
+				narrative_event = { id = america.17 days = 300 }
+			}
+			}
+		}	
+	}
+	option = {#If Britain is gone, the Redcoats do it themselves, but never get extra funding
+		name = america5C	
+		trigger = {
+			primary_title = { title = e_redcoats }
+			e_britannia = {
+				has_holder = no
+			}
+		}
+		if = {
+			limit = {#If going South, stage 1
+				has_global_flag = redcoats_vs_americanists
+			}
+			clr_global_flag = redcoats_vs_americanists
+			random_list = {
+			50 = {
+				narrative_event = { id = america.6 days = 300 }
+			}
+			50 = {
+				narrative_event = { id = america.7 days = 300 }
+			}
+			}
+		}
+		if = {
+			limit = {#If going South, stage 2
+				has_global_flag = redcoats_vs_appalachians
+			}
+			clr_global_flag = redcoats_vs_appalachians
+			random_list = {
+			35 = {
+				narrative_event = { id = america.8 days = 300 }
+			}#
+			65 = {
+				narrative_event = { id = america.9 days = 300 }
+			}
+			}
+		}
+		if = {
+			limit = {#If going South, stage 3 - the HCC
+				has_global_flag = redcoats_vs_dixies
+			}
+			clr_global_flag = redcoats_vs_dixies
+			random_list = {
+			5 = {
+				narrative_event = { id = america.10 days = 300 }
+			}#Very Unlikely to win but possible
+			95 = {
+				narrative_event = { id = america.11 days = 300 }
+			}
+			}
+		}		
+		if = {
+			limit = {#If going North, stage 1
+				has_global_flag = redcoats_vs_hudsonians
+			}
+			clr_global_flag = redcoats_vs_hudsonians
+			random_list = {
+			50 = {
+				narrative_event = { id = america.12 days = 300 }
+			}
+			50 = {
+				narrative_event = { id = america.13 days = 300 }
+			}
+			}
+		}
+		if = {
+			limit = {#If going North, stage 2
+				has_global_flag = redcoats_vs_anglicans
+			}
+			clr_global_flag = redcoats_vs_anglicans
+			random_list = {
+			35 = {
+				narrative_event = { id = america.14 days = 300 }
+			}
+			65 = {
+				narrative_event = { id = america.15 days = 300 }
+			}
+			}
+		}
+		if = {
+			limit = {#If going North, stage 3
+				has_global_flag = redcoats_vs_nuns
+			}
+			clr_global_flag = redcoats_vs_nuns
+			random_list = {
+			5 = {
+				narrative_event = { id = america.16 days = 300 }
+			}
+			95 = {
+				narrative_event = { id = america.17 days = 300 }
+			}
+			}
+		}	
+	}	
+}
+narrative_event = {#Victory against the Americanists
+	id = america.6
+	is_triggered_only = yes
+	title = america6Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america6Desc
+	}
+	option = {#Sweet
+		name = america6A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		set_global_flag = redcoats_vs_appalachians
+		narrative_event = { id = america.5 days = 3 }#This event is a generic "give them more support	
+		prestige = 2000
+		piety = 1000
+			create_random_priest = {#A scholar of the Americanists
+				random_traits = yes
+				culture = beltway
+				religion = americanist
+				dynasty = random
+				female = no
+				attributes = {
+					diplomacy = 2
+					learning = 11
+					stewardship = 6
+					intrigue = 2
+					martial = 9
+				}
+			}	
+			new_character = {
+				add_trait = mystic
+				add_trait = scholar
+				remove_trait = slow
+				remove_trait = imbecile
+				remove_trait = dull
+				
+				remove_lifestyle_trait_effect = yes
+				
+				random_list = { # Flavor Randomization
+					20 = {  } # Nothing
+					20 = { change_learning = 2 }
+					15 = { change_learning = 4 }
+					10 = { change_learning = 6 }
+					20 = { add_trait = theologian }
+					15 = { add_trait = quick }
+					15 = { add_trait = shrewd }
+				}
+			}		
+	}
+	option = {#F the British
+		name = america3B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Cool, but not the LP
+		name = thelemaresponse
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion = summer_queen
+			}
+			NOT = {
+				primary_title = { title = e_britannia }
+			}
+		}
+	}
+}
+
+narrative_event = {#Defeat against the Americanists
+	id = america.7
+	is_triggered_only = yes
+	title = america7Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america7Desc
+	}
+	option = {#Oh no
+		name = america7A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		narrative_event = { id = america.18 days = 7} #setup event for the American counter-invasion
+		set_global_flag = americans_coming
+		set_global_flag = americans_are_americanists
+	}
+	option = {#F the British
+		name = america4B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Oh no, but not the LP
+		name = thelemaresponseBad
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion = summer_queen
+			}
+			NOT = {
+				primary_title = { title = e_britannia }
+			}
+		}
+	}
+}
+narrative_event = {#Victory against the Appalachians
+	id = america.8
+	is_triggered_only = yes
+	title = america8Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america8Desc
+	}
+	option = {#Sweet
+		name = america8A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		set_global_flag = redcoats_vs_dixies
+		narrative_event = { id = america.5 days = 3 }#This event is a generic "give them more support		
+		prestige = 2000
+		piety = 1000
+			create_random_soldier = {#A soldier of the Appalachians
+				random_traits = yes
+				culture = appalachian
+				religion = evangelical
+				dynasty = random
+				female = no
+				attributes = {
+					diplomacy = 2
+					learning = 5
+					stewardship = 6
+					intrigue = 2
+					martial = 13
+				}
+			}	
+			new_character = {
+				remove_trait = slow
+				remove_trait = imbecile
+				remove_trait = dull
+				remove_trait = weak
+				remove_trait = craven
+				add_trait = strong
+				
+				remove_lifestyle_trait_effect = yes
+				
+				random_list = { # Flavor Randomization
+					20 = {  } # Nothing
+					20 = { change_martial = 2 }
+					15 = { change_martial = 4 }
+					10 = { change_martial = 6 }
+					20 = { add_trait = duelist }
+					15 = { add_trait = quick }
+					15 = { add_trait = shrewd }
+				}
+			}		
+	}
+	option = {#F the British
+		name = america3B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Cool, but not the LP
+		name = thelemaresponse
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion = summer_queen
+			}
+			NOT = {
+				primary_title = { title = e_britannia }
+			}
+		}
+	}
+}
+
+narrative_event = {#Defeat against the Appalachians
+	id = america.9
+	is_triggered_only = yes
+	title = america9Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america9Desc
+	}
+	option = {#Oh no
+		name = america9A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		set_global_flag = americans_coming
+		set_global_flag = americans_are_appalachian
+		narrative_event = { id = america.18 days = 7}#setup for counter-invasion
+	}
+	option = {#F the British
+		name = america4B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Oh no, but not the LP
+		name = thelemaresponseBad
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion = summer_queen
+			}
+			NOT = {
+				primary_title = { title = e_britannia }
+			}
+		}
+	}
+}
+
+narrative_event = {#Victory against the HCC
+	id = america.10
+	is_triggered_only = yes
+	title = america10Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america10Desc
+	}
+	option = {#Sweet
+		name = america10A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		narrative_event = { id = america.21 days = 1500 }#The event where they win and you simply never hear from them again
+		prestige = 5000
+		piety = 2000
+			create_random_priest = {#A scholar of the Dixies
+				random_traits = yes
+				culture = dixie
+				religion = evangelical
+				dynasty = random
+				female = no
+				attributes = {
+					diplomacy = 2
+					learning = 11
+					stewardship = 6
+					intrigue = 2
+					martial = 9
+				}
+			}	
+			new_character = {
+				add_trait = mystic
+				add_trait = scholar
+				remove_trait = slow
+				remove_trait = imbecile
+				remove_trait = dull
+				
+				remove_lifestyle_trait_effect = yes
+				
+				random_list = { # Flavor Randomization
+					20 = {  } # Nothing
+					20 = { change_learning = 2 }
+					15 = { change_learning = 4 }
+					10 = { change_learning = 6 }
+					20 = { add_trait = theologian }
+					15 = { add_trait = quick }
+					15 = { add_trait = shrewd }
+				}
+			}		
+	}
+	option = {#F the British
+		name = america3B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Cool, but not the LP
+		name = thelemaresponse
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion = summer_queen
+			}
+			NOT = {
+				primary_title = { title = e_britannia }
+			}
+		}
+	}
+}
+
+narrative_event = {#Defeat against the HCC
+	id = america.11
+	is_triggered_only = yes
+	title = america11Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america11Desc
+	}
+	option = {#Oh no
+		name = america11A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		set_global_flag = americans_coming
+		set_global_flag = americans_are_dixies
+		narrative_event = { id = america.18 days = 7 }
+	}
+	option = {#F the British
+		name = america4B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Oh no, but not the LP
+		name = thelemaresponseBad
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion = summer_queen
+			}
+			NOT = {
+				primary_title = { title = e_britannia }
+			}
+		}
+	}
+}
+
+narrative_event = {#Victory against the Hudsonians
+	id = america.12
+	is_triggered_only = yes
+	title = america12Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america12Desc
+	}
+	option = {#Sweet
+		name = america12A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		set_global_flag = redcoats_vs_anglicans
+		narrative_event = { id = america.5 days = 3 }#This event is a generic "give them more support
+		prestige = 2000
+		piety = 1000
+			create_random_soldier = {#A soldier of the Hudsonians
+				random_traits = yes
+				culture = hudsonian
+				religion = batenburger
+				dynasty = random
+				female = no
+				attributes = {
+					diplomacy = 2
+					learning = 6
+					stewardship = 6
+					intrigue = 2
+					martial = 12
+				}
+			}
+			hidden_effect = {
+			new_character = {
+				add_trait = mystic
+				add_trait = strong
+				remove_trait = slow
+				remove_trait = imbecile
+				remove_trait = dull
+				remove_trait = weak
+				remove_trait = craven
+				
+				remove_lifestyle_trait_effect = yes
+				
+				random_list = { # Flavor Randomization
+					20 = {  } # Nothing
+					20 = { change_martial = 2 }
+					15 = { change_martial = 4 }
+					10 = { change_martial = 6 }
+					20 = { add_trait = strategist }
+					15 = { add_trait = quick }
+					15 = { add_trait = shrewd }
+				}
+			}
+		   }
+	}
+	option = {#F the British
+		name = america3B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Cool, but not the LP
+		name = thelemaresponse
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion = summer_queen
+			}
+			NOT = {
+				primary_title = { title = e_britannia }
+			}
+		}
+	}
+}
+
+narrative_event = {#Defeat against the Hudsonians
+	id = america.13
+	is_triggered_only = yes
+	title = america13Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america13Desc
+	}
+	option = {#Oh no
+		name = america13A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		set_global_flag = americans_coming
+		set_global_flag = americans_are_hudsonian
+		narrative_event = { id = america.18 days = 3 }
+	}
+	option = {#F the British
+		name = america4B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Oh no, but not the LP
+		name = thelemaresponseBad
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion = summer_queen
+			}
+			NOT = {
+				primary_title = { title = e_britannia }
+			}
+		}
+	}
+}
+
+narrative_event = {#Victory against the Anglicans
+	id = america.14
+	is_triggered_only = yes
+	title = america14Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america14Desc
+	}
+	option = {#Sweet
+		name = america14A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		set_global_flag = redcoats_vs_nuns
+		narrative_event = { id = america.5 days = 3 }#This event is a generic "give them more support		
+		prestige = 2000
+		piety = 1000
+			create_random_soldier = {#A soldier of the Canadians
+				random_traits = yes
+				culture = ontarian
+				religion = high_church
+				dynasty = random
+				female = no
+				attributes = {
+					diplomacy = 2
+					learning = 6
+					stewardship = 6
+					intrigue = 2
+					martial = 12
+				}
+			}
+			hidden_effect = {
+			new_character = {
+				add_trait = fair
+				add_trait = strong
+				remove_trait = slow
+				remove_trait = imbecile
+				remove_trait = dull
+				remove_trait = weak
+				remove_trait = craven
+				
+				remove_lifestyle_trait_effect = yes
+				
+				random_list = { # Flavor Randomization
+					20 = {  } # Nothing
+					20 = { change_martial = 2 }
+					15 = { change_martial = 4 }
+					10 = { change_martial = 6 }
+					20 = { add_trait = strategist }
+					15 = { add_trait = quick }
+					15 = { add_trait = shrewd }
+				}
+			}
+		   }
+	}
+	option = {#F the British
+		name = america3B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Cool, but not the LP
+		name = thelemaresponse
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion = summer_queen
+			}
+			NOT = {
+				primary_title = { title = e_britannia }
+			}
+		}
+	}
+}
+
+narrative_event = {#Defeat against the Anglicans
+	id = america.15
+	is_triggered_only = yes
+	title = america15Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america15Desc
+	}
+	option = {#Oh no
+		name = america15A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		set_global_flag = americans_coming
+		set_global_flag = americans_are_ontarian
+		narrative_event = { id = america.18 days = 7 }
+	}
+	option = {#F the British
+		name = america4B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Oh no, but not the LP
+		name = thelemaresponseBad
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion = summer_queen
+			}
+			NOT = {
+				primary_title = { title = e_britannia }
+			}
+		}
+	}
+}
+narrative_event = {#Victory against the Ursulines
+	id = america.16
+	is_triggered_only = yes
+	title = america16Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america16Desc
+	}
+	option = {#Sweet
+		name = america16A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		narrative_event = { id = america.21 days = 1500 }#The event where they win and you simply never hear from them again
+		prestige = 5000
+		piety = 2000
+			create_random_soldier = {#A nun of the Ursulines
+				random_traits = yes
+				culture = quebecois
+				religion = ursuline
+				dynasty = random
+				female = yes
+				attributes = {
+					diplomacy = 2
+					learning = 13
+					stewardship = 6
+					intrigue = 2
+					martial = 4
+				}
+			}	
+			new_character = {
+				add_trait = fair
+				add_trait = theologian
+				remove_trait = slow
+				remove_trait = imbecile
+				remove_trait = dull
+				remove_trait = weak
+				remove_trait = craven
+				
+				remove_lifestyle_trait_effect = yes
+				
+				random_list = { # Flavor Randomization
+					20 = {  } # Nothing
+					20 = { change_learning = 2 }
+					15 = { change_learning = 4 }
+					10 = { change_learning = 6 }
+					20 = { add_trait = scholar }
+					15 = { add_trait = quick }
+					15 = { add_trait = shrewd }
+				}
+			}		
+	}
+	option = {#F the British
+		name = america3B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Cool, but not the LP
+		name = thelemaresponse
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion = summer_queen
+			}
+			NOT = {
+				primary_title = { title = e_britannia }
+			}
+		}
+	}
+}
+
+narrative_event = {#Defeat against the Ursulines
+	id = america.17
+	is_triggered_only = yes
+	title = america17Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america17Desc
+	}
+	option = {#Oh no
+		name = america17A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		set_global_flag = americans_coming
+		set_global_flag = americans_are_ursuline
+		narrative_event = { id = america.18 days = 7 }
+	}
+	option = {#F the British
+		name = america4B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Oh no, but not the LP
+		name = thelemaresponseBad
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion = summer_queen
+			}
+			NOT = {
+				primary_title = { title = e_britannia }
+			}
+		}
+	}
+}
+
+narrative_event = {#Setup event that fires and results in the creation of the invader tag
+	id = america.18
+	is_triggered_only = yes
+	title = america18Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america18Desc
+	}
+	immediate = {
+		
+	}
+	option = {#Oh no
+		name = america18A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+		narrative_event = { id = america.19 days = 1500 }#in 1500 days/5 years you get wrecked
+	}
+	option = {#F the British
+		name = america3B	
+		trigger = {
+			OR = {
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Who?
+		name = america3C	
+		trigger = {
+			NOR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion_group = christian
+				religion = novelist
+				religion = novelist_reformed
+			}
+		}
+	}
+	option = {#Oh no, but not the LP
+		name = thelemaresponseBad
+		trigger = {
+			OR = {
+				religion = thelemic_reformed
+				religion = old_thelemic
+				religion = summer_queen
+			}
+			NOT = {
+				primary_title = { title = e_britannia }
+			}
+		}
+	}	
+}
+
+narrative_event = {#The Invasion actually happens
+	id = america.19
+	is_triggered_only = yes
+	title = america19Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	
+	desc = {
+		text = america19Desc
+	}
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = americans_are_yankees
+			}
+			spawn_yankee_horde_effect = yes
+			e_yankee_invaders = {
+				holder_scope = {
+					spawn_american_invader_troops = yes
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = americans_are_americanists
+			}
+			spawn_americanist_horde_effect = yes
+			e_americanist_invaders = {
+				holder_scope = {
+					spawn_american_invader_troops = yes
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = americans_are_appalachian
+			}
+			spawn_appalachian_horde_effect = yes
+			e_appalachian_invaders = {
+				holder_scope = {
+					spawn_american_invader_troops = yes
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = americans_are_dixies
+			}
+			spawn_dixie_horde_effect = yes
+			e_dixie_invaders = {
+				holder_scope = {
+					spawn_american_invader_troops = yes
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = americans_are_hudsonian
+			}
+			spawn_hudsonian_horde_effect = yes
+			e_hudsonian_invaders = {
+				holder_scope = {
+					spawn_american_invader_troops = yes
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = americans_are_ontarian
+			}
+			spawn_canadian_horde_effect = yes
+			e_canadian_invaders = {
+				holder_scope = {
+					spawn_american_invader_troops = yes
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = americans_are_ursuline
+			}
+			spawn_ursuline_horde_effect = yes
+			e_ursuline_invaders = {
+				holder_scope = {
+					spawn_american_invader_troops = yes
+				}
+			}
+		}		
+	}
+	option = {#Oh no
+		name = america19A	
+		trigger = {
+			primary_title = { title = e_britannia }
+		}
+	}
+	option = {#The Americans still exist?
+		name = america19B	
+		trigger = {
+			NOT = {
+				primary_title = { title = e_britannia }
+			}
+			OR = {#All the people who had American colonies
+				culture_group = celtic
+				culture_group = new_anglo
+				culture_group = francophone
+				culture_group = iberian
+				culture = dutch
+			}
+		}
+	}
+	option = {#Who?
+		name = america19C	
+		trigger = {
+			NOR = {
+				culture_group = celtic
+				culture_group = new_anglo
+				culture_group = francophone
+				culture_group = iberian
+				culture = dutch
+				primary_title = { title = e_britannia }
+			}
+		}
+	}		
+}
+
+narrative_event = {#The Redcoats leave on their own, if you don't launch it yourself
+	id = america.20
+	title = america20Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	only_playable = yes
+	religion = catholic#Intended to fire for the Pope, since we can't be sure that any Thelemic rulers will exist by this point, though they probably will
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	
+	trigger = {
+		controls_religion = yes#The Pope, since this only fires for Catholics
+		year = 2800#About the time it happens in ATE
+		NOT = {
+			has_global_flag = invading_america
+		}
+	}
+	
+	desc = {
+		text = america20Desc
+	}
+	immediate = {
+		set_global_flag = invading_america
+	}
+	option = {#Oh no
+		name = america20A
+			trigger = {
+				controls_religion = yes
+				religion = catholic#I want this to fire only once even though the event will be seen by everyone
+			}
+			narrative_event = { id = america.3 days = 500 }
+	}
+	option = {#Thelemic response
+		name = america20B
+			trigger = {
+				religion = thelemic_reformed
+			}
+	}
+	option = {#Anti-Thelemic response
+		name = america20C
+			trigger = {
+				OR = {
+					religion = novelist
+					religion = novelist_reformed
+					religion_group = christian
+				}
+			}
+	}
+	option = {#Who?
+		name = america20D
+			trigger = {
+				NOR = {
+					religion = thelemic_reformed
+					religion = novelist
+					religion = novelist_reformed
+					religion_group = christian
+				}
+			}
+	}	
+}
+narrative_event = {#The Redcoats just never report back after winning
+	id = america.21
+	is_triggered_only = yes
+	title = america21Title
+	picture = GFX_evt_aztec_arrival
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes
+	only_playable = yes
+	religion = catholic#Intended to fire for the Pope, since we can't be sure that any Thelemic rulers will exist by this point, though they probably will
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	
+	desc = {
+		text = america21Desc
+	}
+	immediate = {
+	}
+	option = {#Oh no
+		name = america21A
+			trigger = {
+				controls_religion = yes
+				religion = catholic#I want this to fire only once even though the event will be seen by everyone
+			}
+	}	
+	option = {#Thelemic response
+		name = america21B
+			trigger = {
+				religion = thelemic_reformed
+			}
+	}
+	option = {#Anti-Thelemic response
+		name = america21C
+			trigger = {
+				OR = {
+					religion = novelist
+					religion = novelist_reformed
+					religion_group = christian
+				}
+			}
+	}
+	option = {#Who?
+		name = america21D
+			trigger = {
+				NOR = {
+					religion = thelemic_reformed
+					religion = novelist
+					religion = novelist_reformed
+					religion_group = christian
+				}
+			}
+	}
+}

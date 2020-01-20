@@ -1,0 +1,363 @@
+namespace=bhutan
+#########################################
+#
+#	Bhutan events
+#
+#########################################
+# New Emperor has to get a new Policy Trait
+narrative_event = {
+	id = bhutan.1
+	title = bhutan1Title
+	picture = GFX_evt_roi_elephants_in_battle
+	border = GFX_event_narrative_frame_religion
+	
+	hide_window = yes # For some reason this event is firing, but not showing up, for each new Emperor. I'm guessing that the event fires while the character is still an AI, so I'm trying to delay it by a day to see what happens
+	
+	desc = {
+		text = bhutan1Desc
+	}
+	
+	trigger = {
+		NOR = {#don't get this event if you already have a position
+			has_trait = bhutan_expansionist
+			has_trait = bhutan_isolationist
+			has_trait = bhutan_open
+		}
+		has_landed_title = e_bhutan
+	}
+	is_triggered_only = yes	
+	
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = bhutan_reformed_diplo
+			}
+			add_character_modifier = { name = bhutan_reformed_diplomacy duration = -1 }			
+		}
+		if = {
+			limit = {
+				has_global_flag = bhutan_reformed_martial
+			}
+			add_character_modifier = { name = bhutan_reformed_martial duration = -1 }			
+		}
+		if = {
+			limit = {
+				has_global_flag = bhutan_reformed_stewardship
+			}
+			add_character_modifier = { name = bhutan_reformed_stewardship duration = -1 }			
+		}
+		if = {
+			limit = {
+				has_global_flag = bhutan_reformed_intrigue
+			}
+			add_character_modifier = { name = bhutan_reformed_intrigue duration = -1 }			
+		}
+		if = {
+			limit = {
+				has_global_flag = bhutan_reformed_learning
+			}
+			add_character_modifier = { name = bhutan_reformed_learning duration = -1 }			
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = bhutan_reformed_diplo
+				}
+			}
+			add_character_modifier = { name = bhutan_crumbled_diplomacy duration = -1 }
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = bhutan_reformed_martial
+				}
+			}
+			add_character_modifier = { name = bhutan_crumbled_martial duration = -1 }
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = bhutan_reformed_stewardship
+				}
+			}
+			add_character_modifier = { name = bhutan_crumbled_stewardship duration = -1 }
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = bhutan_reformed_intrigue
+				}
+			}
+			add_character_modifier = { name = bhutan_crumbled_intrigue duration = -1 }
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = bhutan_reformed_learning
+				}
+			}
+			add_character_modifier = { name = bhutan_crumbled_learning duration = -1 }
+		}		
+	}
+	
+	option = {#
+		name = EVTOPTA_bhutan1
+		narrative_event = { id = bhutan.2 days = 1 }
+	}
+	
+}
+
+narrative_event = {#New emperor gets new policy trait
+	id = bhutan.2
+	title = bhutan2Title
+	picture = GFX_evt_roi_elephants_in_battle
+	border = GFX_event_narrative_frame_religion
+		
+	desc = {
+		text = bhutan2Desc
+	}
+	
+	trigger = {
+		NOR = {#don't get this event if you already have a position
+			has_trait = bhutan_expansionist
+			has_trait = bhutan_isolationist
+			has_trait = bhutan_open
+		}
+		has_landed_title = e_bhutan
+		NOT = {
+			has_character_flag = has_bhutan_policy
+		}
+	}
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = has_bhutan_policy
+	}
+	
+	option = {#Isolationism
+		name = EVTOPTA_bhutan2
+		add_trait = bhutan_isolationist
+		#first get back de jure Bhutan, if you gave it away
+		custom_tooltip = {
+		 text = bhutan_will_lose_land
+		if = {
+		limit = {
+			c_bumthang = {
+				holder_scope = {
+					vassal_of = ROOT
+				}
+			}
+		}
+		c_bumthang = {
+			usurp_title = ROOT
+		}
+		}
+		if = {
+			limit = {
+				c_paro = {
+					holder_scope = {
+					vassal_of = ROOT
+					any_realm_title = {
+						NOT = {
+							title = c_paro
+						}
+					}
+					}
+				}
+			}
+		c_paro = {
+			usurp_title = ROOT
+		}
+		}
+		#then make any vassals outside of the De Jure Bhutan independent - by this point you can be sure that either bhutan is controlled by you and an OPM count, or that you control it all
+		any_vassal = {
+			limit = {
+				NOT = {
+					primary_title = {
+						de_jure_liege_or_above = e_bhutan
+					}
+				}
+				primary_title = { higher_tier_than = BARON }
+			}
+			set_defacto_liege = THIS#makes you independent
+		}
+		any_demesne_province = {
+			limit = {
+				NOT = {
+					de_jure_liege_or_above = e_bhutan
+				}				
+			}
+			county = {
+			# generate
+			create_character = {
+				dynasty = random
+				culture = THIS
+				religion = THIS
+			}
+			new_character = { gain_title_plus_barony_if_unlanded = PREV set_defacto_liege = THIS }
+			}
+		}
+		}
+	}
+	option = {#Openness
+		name = EVTOPTB_bhutan2
+		add_trait = bhutan_open
+	}
+	option = {#Expansionism
+		name = EVTOPTC_bhutan2
+		piety = -200
+		add_trait = bhutan_expansionist
+	}
+	
+}
+
+narrative_event = {#World informed of Bhutanese reform
+	id = bhutan.3
+	title = bhutan3Title
+	picture = GFX_evt_roi_elephants_in_battle
+	border = GFX_event_narrative_frame_religion
+	
+	is_triggered_only = yes
+	
+	major = yes
+		
+	desc = {
+		text = bhutan3Desc
+	}
+	
+	trigger = {
+
+	}
+	is_triggered_only = yes
+	
+	immediate = {
+	}
+	
+	option = {#Yey
+		name = EVTOPTA_bhutan3
+		trigger = {
+			government = bhutanese_decayed_government
+		}
+		primary_title = {
+			set_title_flag = reformed_bhutan_gov
+		}
+		set_government_type = bhutanese_restored_government
+	}
+	option = {#Tibetans and Indians
+		name = EVTOPTB_bhutan3
+		trigger = {
+			OR = {
+				culture_group = tibetan_group
+				culture_group = indo_aryan_group
+				culture_group = dravidian_group
+				culture = angrezi
+			}
+			NOT = {
+				government = bhutanese_decayed_government
+			}
+		}
+	}
+	option = {#Who cares?
+		name = EVTOPTC_bhutan1
+		trigger = {
+			NOR = {
+				culture_group = tibetan_group
+				culture_group = indo_aryan_group
+				culture_group = dravidian_group
+				culture = angrezi				
+			}
+		}
+	}
+	
+}
+
+narrative_event = {#Sets up negative modifiers at the start of the game
+	id = bhutan.4
+	title = bhutan4Title
+	picture = GFX_evt_roi_elephants_in_battle
+	border = GFX_event_narrative_frame_religion
+	
+	hide_window = yes # For some reason this event is firing, but not showing up, for each new Emperor. I'm guessing that the event fires while the character is still an AI, so I'm trying to delay it by a day to see what happens
+	
+	desc = {
+		text = bhutan1Desc
+	}
+	
+	trigger = {
+		has_landed_title = e_bhutan
+	}
+	is_triggered_only = yes	
+	
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = bhutan_reformed_diplo
+			}
+			add_character_modifier = { name = bhutan_reformed_diplomacy duration = -1 }			
+		}
+		if = {
+			limit = {
+				has_global_flag = bhutan_reformed_martial
+			}
+			add_character_modifier = { name = bhutan_reformed_martial duration = -1 }			
+		}
+		if = {
+			limit = {
+				has_global_flag = bhutan_reformed_stewardship
+			}
+			add_character_modifier = { name = bhutan_reformed_stewardship duration = -1 }			
+		}
+		if = {
+			limit = {
+				has_global_flag = bhutan_reformed_intrigue
+			}
+			add_character_modifier = { name = bhutan_reformed_intrigue duration = -1 }			
+		}
+		if = {
+			limit = {
+				has_global_flag = bhutan_reformed_learning
+			}
+			add_character_modifier = { name = bhutan_reformed_learning duration = -1 }			
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = bhutan_reformed_diplo
+				}
+			}
+			add_character_modifier = { name = bhutan_crumbled_diplomacy duration = -1 }
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = bhutan_reformed_martial
+				}
+			}
+			add_character_modifier = { name = bhutan_crumbled_martial duration = -1 }
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = bhutan_reformed_stewardship
+				}
+			}
+			add_character_modifier = { name = bhutan_crumbled_stewardship duration = -1 }
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = bhutan_reformed_intrigue
+				}
+			}
+			add_character_modifier = { name = bhutan_crumbled_intrigue duration = -1 }
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_global_flag = bhutan_reformed_learning
+				}
+			}
+			add_character_modifier = { name = bhutan_crumbled_learning duration = -1 }
+		}		
+	}
+}
