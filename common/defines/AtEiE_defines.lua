@@ -31,7 +31,7 @@ NDefines.NEndGame.DYN9_SCORE = 20000
 NDefines.NEndGame.DYN9_ID = 26560134
 
 NDefines.NEndGame.DYN10_SCORE = 15000
-NDefines.NEndGame.DYN10_ID = 36669125 
+NDefines.NEndGame.DYN10_ID = 25559124
 
 NDefines.NEndGame.DYN11_SCORE = 10000
 NDefines.NEndGame.DYN11_ID = 2081258 
