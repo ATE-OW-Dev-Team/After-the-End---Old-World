@@ -46,4 +46,4 @@ NDefines.NEndGame.DYN14_SCORE = 2000
 NDefines.NEndGame.DYN14_ID = 25554016
 
 NDefines.NEndGame.DYN15_SCORE = 1000
-NDefines.NEndGame.DYN15_ID = 0
+NDefines.NEndGame.DYN15_ID = 26560307
