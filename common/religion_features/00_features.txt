@@ -632,6 +632,7 @@ religion_doctrine = {
 				has_selected_religion_feature = religion_feature_bon # Redundant Doctrine
 				has_selected_religion_feature = religion_patriarchal # Incompatible
 				has_selected_religion_feature = religion_matriarchal # Incompatible
+				has_selected_religion_feature = religion_feature_naxalite #Redundant				
 			}
 		}
 		effect = {
@@ -852,6 +853,8 @@ religion_doctrine = {
 				has_selected_religion_feature = religion_matriarchal
 				has_selected_religion_feature = religion_patriarchal
 				has_selected_religion_feature = religion_feature_bon
+				has_selected_religion_feature = religion_feature_naxalite #Redundant
+
 				trigger_if = {
 					limit = { has_game_started = yes }
 					FROM = { 
@@ -1127,6 +1130,8 @@ religion_doctrine = {
 			NOR = {
 				religion = west_african_pagan #Redundant
 				religion = west_african_pagan_reformed #Redundant
+				has_selected_religion_feature = religion_feature_naxalite #Redundant
+				
 			}
 		}
 		effect = {
@@ -1602,7 +1607,7 @@ religion_doctrine = {
 				fertility = 0.15
 				learning = 2
 				key = "FAMILY_ATTR_RELIGION"
-			}
+			}			
 			}	
 			
 
@@ -1623,13 +1628,13 @@ religion_doctrine = {
 		trigger = {
 			religion = folklorist_reformed
 			NOR = { 
-				has_selected_religion_feature = religion_astrology #redundant
+				has_selected_religion_feature = religion_monastic #redundant
 				has_selected_religion_feature = religion_syncretic #redundant
 
 			}
 		}
 		effect = {
-			custom_tooltip = { text = tooltip_religion_feature_astrology }
+			custom_tooltip = { text = tooltip_religion_feature_monastic }
 			custom_tooltip = { text = tooltip_religion_feature_syncretic }
 			custom_tooltip = { text = tooltip_religion_feature_eldership }
 		}
@@ -1637,6 +1642,47 @@ religion_doctrine = {
 			factor = 50
 		}
 	}
+	religion_feature_naxalite = {
+		picture = GFX_religion_feature_folklorist
+		potential = {
+			has_game_started = yes
+			religion = naxalite_reformed
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		trigger = {
+			religion = naxalite_reformed
+			NOR = { 
+				has_selected_religion_feature = religion_animistic #redundant
+				has_selected_religion_feature = religion_equal #redundant
+				has_selected_religion_feature = religion_meritocratic #redundant
+			}
+		}
+		effect = {
+			custom_tooltip = { text = tooltip_religion_feature_land_morale }
+			custom_tooltip = { text = tooltip_religion_feature_adulthood_rite }
+			custom_tooltip = { text = tooltip_religion_feature_feminist }
+			custom_tooltip = { text = tooltip_religion_feature_meritocratic }
+			hidden_tooltip = { 
+				set_unit_modifier = { 
+					land_morale = 0.05
+					key = "ANIMISTIC_RELIGION"
+				}
+				set_allows_matrilineal_marriage = yes
+				set_feminist = yes
+				set_women_can_take_consorts = yes
+				set_men_can_take_consorts = yes
+				set_female_temple_holders = yes
+				set_male_temple_holders = yes
+				set_heir_designation = yes
+				#FROM = { any_demesne_title = { add_law = status_of_women_4 } } 
+			}			
+		}
+		ai_will_do = {
+			factor = 50
+		}
+	}	
 }
 
 religion_leadership = {
@@ -1824,7 +1870,10 @@ religion_leadership = {
 							religion = folklorist
 						}
 					}
-					has_selected_religion_feature = religion_monastic
+					OR = {
+						has_selected_religion_feature = religion_monastic
+						has_selected_religion_feature = religion_feature_folklorist
+					}
 				}
 				set_character_modifier = {
 					intrigue = 2
