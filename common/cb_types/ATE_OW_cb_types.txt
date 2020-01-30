@@ -2306,10 +2306,13 @@ anti_british_rebellion = {
 	sprite = 8
 	truce_days = 365
 	hostile_against_others = yes
-	is_permanent = yes
+	is_permanent = no
 	check_de_jure_tier = KING
 	apply_short_occ_mod = no #No 'recently_conquered', they're taking back their own land
 	can_use = {
+		NOT = {
+			ROOT = { any_war = { using_cb = anti_british_rebellion } }
+		}
 		ROOT = {
 			OR = {
 				primary_title = k_irish_rebels
@@ -2317,31 +2320,62 @@ anti_british_rebellion = {
 				primary_title = k_scottish_rebels
 			}
 		}
+		FROM = { has_landed_title = e_britannia }
+	}
+	can_use_title = {
+		OR = {
+			AND = {
+				ROOT = { primary_title = k_irish_rebels }
+				title = k_ireland
+			}
+			AND = {
+				ROOT = { primary_title = k_french_rebels }
+				title = k_france
+			}
+			AND = {
+				ROOT = { primary_title = k_scottish_rebels }
+				title = k_scotland
+			}
+		}
 	}
 	is_valid_title = {
-		ROOT = {
-			OR = {
-				primary_title = k_irish_rebels
-				primary_title = k_french_rebels
-				primary_title = k_scottish_rebels
-			}		
+		OR = {
+			AND = {
+				ROOT = { primary_title = k_irish_rebels }
+				title = k_ireland
+			}
+			AND = {
+				ROOT = { primary_title = k_french_rebels }
+				title = k_france
+			}
+			AND = {
+				ROOT = { primary_title = k_scottish_rebels }
+				title = k_scotland
+			}
 		}
+		FROM = { has_landed_title = e_britannia }
 	}
 	
 #We're skipping the thing that makes lose lose Grace with China if you declare on them or their Protectorates, since this is a specific CB that can literally never be used against them	
 	on_success = {#this is what happens to the character when he wins
 		ROOT = {
-		prestige = 1000
-		piety = 500
-		if = {
-			limit = {
-				ROOT = {
+			prestige = 1000
+			piety = 500
+			if = {
+				limit = {
 					primary_title = k_irish_rebels
 				}
+				clr_global_flag = irish_rebellion_happening
+				set_global_flag = irish_rebellion_successful
+				if = {
+					limit = {
+						NOT = {
+							has_global_flag = ira_bloodline_founded
+						}
+						narrative_event = { id = ATV.1 }
+					}
+				}
 			}
-			clr_global_flag = irish_rebellion_happening
-			set_global_flag = irish_rebellion_successful
-		}
 		}
 	}
 	on_success_title = {#this is what titles change hands when 
@@ -2351,12 +2385,17 @@ anti_british_rebellion = {
 			#		primary_title = k_irish_rebels
 			#	}
 			#}
-			k_ireland = {
-				usurp_title = ROOT
+			ROOT = {
+				vassalize_or_take_under_title = {
+					title = PREV
+					enemy = FROM
+					type = invasion
+				}
 			}
 			c_hy_many = {
 				usurp_title = ROOT
 			}
+		
 		#}
 
 		FROM = {
@@ -2366,6 +2405,16 @@ anti_british_rebellion = {
 	on_reverse_demand = {#there's no on_fail because this war can't be white peaced out of
 		ROOT = {#Every attacker gets imprisoned if they fail
 			prisoner = FROM
+			set_defacto_liege = FROM
+			any_demesne_title = {
+				OR = {
+					title = k_irish_rebels
+					title = k_french_rebels
+					title = k_scottish_rebels
+				}
+				activate_title = { title = THIS status = no }
+				unsafe_destroy_landed_title = THIS
+			}
 		}
 		any_attacker = {
 			prisoner = FROM

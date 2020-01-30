@@ -190,31 +190,6 @@ character_event = { # Give Indian characters appropriate schools at game start
 	}
 }
 
-character_event = { # If the Irish lose the Rebellion
-	id = cleanup.3
-	hide_window = yes
-
-	is_triggered_only = yes
-	
-	trigger = {
-		primary_title = { title = e_britannia }
-		is_save_game = no#shouldn't happen when you reload a save
-	}
-	immediate = {
-		k_ireland = {
-			any_de_jure_vassal = {
-				set_defacto_liege = ROOT
-			}
-		}
-	}
-	option = {
-		k_irish_rebels = {
-			activate_title = { title = THIS status = no }
-			unsafe_destroy_landed_title = THIS
-		}	
-	}
-}
-
 character_event = {#sets the irish revolter with the irish_revolter character flag
 	id = cleanup.4
 	hide_window = yes
@@ -238,97 +213,9 @@ character_event = {#ensures each newly formed Oligarchic Republic has the Oligar
 	
 	trigger = {
 		government = oligarchic_republic
+		NOT = { primary_title = { has_law = succ_oligarchic_elective } }
 	}
 	immediate = {
 		primary_title = { add_law = succ_oligarchic_elective }
-	}
-}
-narrative_event = {#Gives the Irish their bloodline if they win the Revolt
-	id = cleanup.6
-	title = cleanup6Title
-	desc = cleanup6Desc
-	picture = GFX_evt_melee
-	border = "GFX_event_narrative_frame_war"	
-	major = yes
-	
-	trigger = {
-		primary_title = { title = k_irish_rebels }
-		war = no#must have won the war
-		is_save_game = no
-		NOT = {
-			has_global_flag = ira_bloodline_founded
-		}
-	}
-	mean_time_to_happen = {
-		days = 1
-	}
-	immediate = {
-		set_global_flag = ira_bloodline_founded
-	}
-	option = {
-		name = cleanup6A
-		trigger = {
-			OR = {
-			culture = irish
-			culture = aeslabh
-			}
-		}
-		if = {
-			limit = {
-				primary_title = {
-					title = k_irish_rebels
-				}
-			}
-			create_bloodline = {
-				type = ira_bloodline
-			}
-			new_bloodline = {
-				set_description = "bloodline_desc_ira_bloodline"
-			}			
-		}
-	}
-	option = {
-		name = cleanup6B
-		trigger = {
-			culture = british
-		}		
-	}
-	option = {
-		name = cleanup6C
-		trigger = {
-			OR = {
-				culture = scottish
-				culture = old_welsh
-			}
-		}		
-	}
-	option = {
-		name = cleanup6D
-		trigger = {
-			NOR = {
-				culture = irish
-				culture = aeslabh
-				culture = british
-				culture = scottish
-				culture = old_welsh
-			}
-		}		
-	}	
-}
-
-narrative_event = {#Maintenance Event
-	id = cleanup.7
-	is_triggered_only = yes
-	hide_window = yes
-	
-	trigger = {
-		primary_title = { title = k_irish_rebels }
-		is_save_game = no
-		NOT = {
-			has_global_flag = ira_bloodline_founded
-		}
-	}
-	immediate = {
-		FROM = { narrative_event = { id = cleanup.6 } }
 	}
 }
