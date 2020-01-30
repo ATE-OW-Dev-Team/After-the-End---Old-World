@@ -632,7 +632,9 @@ religion_doctrine = {
 				has_selected_religion_feature = religion_feature_bon # Redundant Doctrine
 				has_selected_religion_feature = religion_patriarchal # Incompatible
 				has_selected_religion_feature = religion_matriarchal # Incompatible
-			}
+				has_selected_religion_feature = religion_feature_naxalite #Redundant				
+				has_selected_religion_feature = religion_feature_americanist
+				}
 		}
 		effect = {
 			custom_tooltip = { text = tooltip_religion_feature_meritocratic }
@@ -852,6 +854,8 @@ religion_doctrine = {
 				has_selected_religion_feature = religion_matriarchal
 				has_selected_religion_feature = religion_patriarchal
 				has_selected_religion_feature = religion_feature_bon
+				has_selected_religion_feature = religion_feature_naxalite #Redundant
+				has_selected_religion_feature = religion_feature_americanist
 				trigger_if = {
 					limit = { has_game_started = yes }
 					FROM = { 
@@ -977,6 +981,7 @@ religion_doctrine = {
 				has_selected_religion_feature = religion_feature_norse
 				has_selected_religion_feature = religion_feature_celtic
 				has_selected_religion_feature = religion_feature_hellenic
+				has_selected_religion_feature = religion_feature_americanist
 			}
 		}
 		effect = {
@@ -1010,7 +1015,8 @@ religion_doctrine = {
 				has_selected_religion_feature = religion_feature_norse #Redundant
 				has_selected_religion_feature = religion_feature_aztec
 				has_selected_religion_feature = religion_feature_celtic
-				has_selected_religion_feature = religion_feature_finnish				
+				has_selected_religion_feature = religion_feature_finnish
+				has_selected_religion_feature = religion_feature_americanist				
 			}
 		}
 		effect = {
@@ -1127,6 +1133,8 @@ religion_doctrine = {
 			NOR = {
 				religion = west_african_pagan #Redundant
 				religion = west_african_pagan_reformed #Redundant
+				has_selected_religion_feature = religion_feature_naxalite #Redundant
+				
 			}
 		}
 		effect = {
@@ -1602,7 +1610,7 @@ religion_doctrine = {
 				fertility = 0.15
 				learning = 2
 				key = "FAMILY_ATTR_RELIGION"
-			}
+			}			
 			}	
 			
 
@@ -1623,13 +1631,13 @@ religion_doctrine = {
 		trigger = {
 			religion = folklorist_reformed
 			NOR = { 
-				has_selected_religion_feature = religion_astrology #redundant
+				has_selected_religion_feature = religion_monastic #redundant
 				has_selected_religion_feature = religion_syncretic #redundant
-
+				has_selected_religion_feature = religion_feature_folklorist_2 #incompatible
 			}
 		}
 		effect = {
-			custom_tooltip = { text = tooltip_religion_feature_astrology }
+			custom_tooltip = { text = tooltip_religion_feature_monastic }
 			custom_tooltip = { text = tooltip_religion_feature_syncretic }
 			custom_tooltip = { text = tooltip_religion_feature_eldership }
 		}
@@ -1637,6 +1645,185 @@ religion_doctrine = {
 			factor = 50
 		}
 	}
+
+	religion_feature_folklorist_2 = {
+		picture = GFX_religion_feature_folklorist
+		potential = {
+			has_game_started = yes
+			religion = folklorist_reformed
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		trigger = {
+			religion = folklorist_reformed
+			NOR = { 
+				has_selected_religion_feature = religion_astrology #redundant
+				has_selected_religion_feature = religion_relentless #redundant
+				has_selected_religion_feature = religion_feature_folklorist #incompatible
+			}
+		}
+		effect = {
+			custom_tooltip = { text = tooltip_religion_feature_astrology }
+			custom_tooltip = { text = tooltip_religion_feature_anti_attrition }
+			custom_tooltip = { text = tooltip_religion_feature_eldership }
+			hidden_tooltip = {
+				set_ignores_defensive_attrition = yes
+				set_unit_modifier = { 
+					light_infantry_offensive = 0.1
+					heavy_infantry_offensive = 0.1
+					light_cavalry_offensive = 0.1 
+					knights_offensive = 0.1 
+					pikemen_offensive = 0.1 
+					archers_offensive = 0.1
+					horse_archers_offensive = 0.1
+					camel_cavalry_offensive = 0.1
+					war_elephants_offensive = 0.1
+					key = "RELENTLESS_RELIGION"
+				}				
+			}
+		}
+		ai_will_do = {
+			factor = 50
+		}
+	}	
+	
+	religion_feature_naxalite = {
+		picture = GFX_religion_feature_folklorist
+		potential = {
+			has_game_started = yes
+			religion = naxalite_reformed
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		trigger = {
+			religion = naxalite_reformed
+			NOR = { 
+				has_selected_religion_feature = religion_animistic #redundant
+				has_selected_religion_feature = religion_equal #redundant
+				has_selected_religion_feature = religion_meritocratic #redundant
+			}
+		}
+		effect = {
+			custom_tooltip = { text = tooltip_religion_feature_land_morale }
+			custom_tooltip = { text = tooltip_religion_feature_adulthood_rite }
+			custom_tooltip = { text = tooltip_religion_feature_feminist }
+			custom_tooltip = { text = tooltip_religion_feature_meritocratic }
+			hidden_tooltip = { 
+				set_unit_modifier = { 
+					land_morale = 0.05
+					key = "ANIMISTIC_RELIGION"
+				}
+				set_allows_matrilineal_marriage = yes
+				set_feminist = yes
+				set_women_can_take_consorts = yes
+				set_men_can_take_consorts = yes
+				set_female_temple_holders = yes
+				set_male_temple_holders = yes
+				set_heir_designation = yes
+				#FROM = { any_demesne_title = { add_law = status_of_women_4 } } 
+			}			
+		}
+		ai_will_do = {
+			factor = 50
+		}
+	}
+	religion_feature_americanist = {
+		picture = GFX_religion_feature_folklorist
+		potential = {
+			has_game_started = yes
+			religion = americanist_reformed
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		trigger = {
+			religion = americanist_reformed
+			NOR = { 
+				has_selected_religion_feature = religion_seafaring #redundant
+				has_selected_religion_feature = religion_equal #redundant
+				has_selected_religion_feature = religion_meritocratic #redundant
+				has_selected_religion_feature = religion_adventuring #redundant
+			}
+		}
+		effect = {
+			custom_tooltip = { text = tooltip_religion_feature_seafaring }
+			custom_tooltip = { text = tooltip_religion_feature_adventuring }
+			custom_tooltip = { text = tooltip_religion_feature_feminist }
+			custom_tooltip = { text = tooltip_religion_feature_meritocratic }
+			hidden_tooltip = { 
+				set_allow_looting = yes
+				set_seafaring = yes
+				enable_prepared_invasion = yes
+				set_allows_matrilineal_marriage = yes
+				set_feminist = yes
+				set_women_can_take_consorts = yes
+				set_men_can_take_consorts = yes
+				set_female_temple_holders = yes
+				set_male_temple_holders = yes
+				set_heir_designation = yes
+				#FROM = { any_demesne_title = { add_law = status_of_women_4 } } 
+			}			
+		}
+		ai_will_do = {
+			factor = 50
+		}
+	}							   #Thanks ATE
+	religion_feature_occultist = { #Combination of Haruspicy and Astrology. (Also retains access to Eldership succession)
+		picture = GFX_religion_feature_slavic
+		potential = {
+			has_game_started = yes
+			religion = occultist_reformed
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		trigger = {
+			religion = occultist_reformed
+			NOR = { 
+				has_selected_religion_feature = religion_haruspicy
+				has_selected_religion_feature = religion_astrology
+			}
+		}
+		effect = {
+			custom_tooltip = { text = tooltip_religion_feature_haruspicy }
+			custom_tooltip = { text = tooltip_religion_feature_astrology }
+			custom_tooltip = { text = tooltip_religion_feature_hermetics }
+			custom_tooltip = { text = tooltip_religion_feature_eldership }
+		}
+		ai_will_do = {
+			factor = 50
+		}
+	}
+	religion_feature_nousthreskeia = {
+		picture = GFX_religion_feature_folklorist
+		potential = {
+			has_game_started = yes
+			religion = nousthreskeia_reformed
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		trigger = {
+			religion = nousthreskeia_reformed
+			NOR = { 
+				has_selected_religion_feature = religion_syncretic#redundant
+				has_selected_religion_feature = religion_stable#redundant
+			}
+		}
+		effect = {
+			custom_tooltip = { text = tooltip_religion_feature_syncretic }
+			custom_tooltip = { text = tooltip_religion_feature_stable }
+			custom_tooltip = { text = tooltip_religion_feature_meliorism } 
+			hidden_tooltip = { 
+				set_short_reign_opinion_year_mult = 0
+			}			
+		}
+		ai_will_do = {
+			factor = 50
+		}
+	}	
 }
 
 religion_leadership = {
@@ -1763,7 +1950,7 @@ religion_leadership = {
 						character = yes 
 						OR = { 
 							religion = celtic_pagan 
-							religion = hellenic_pagan 
+							religion = hellenic_pagan
 						} 
 					}
 					has_selected_religion_feature = religion_monastic
@@ -1793,7 +1980,10 @@ religion_leadership = {
 				limit = { 
 					FROM = { 
 						character = yes 
-							religion = baltic_pagan
+							OR = {
+								religion = baltic_pagan
+								religion = americanist
+							}
 					}
 					has_selected_religion_feature = religion_monastic
 				}
@@ -1807,7 +1997,8 @@ religion_leadership = {
 				limit = { 
 					FROM = { 
 						character = yes 
-						religion = baltic_pagan 
+						religion = baltic_pagan
+						religion = americanist
 					}
 				}
 				set_character_modifier = {
@@ -1822,9 +2013,14 @@ religion_leadership = {
 						OR = {
 							religion = finnish_pagan
 							religion = folklorist
+							religion = occultist
+							religion = naxalite
 						}
 					}
-					has_selected_religion_feature = religion_monastic
+					OR = {
+						has_selected_religion_feature = religion_monastic
+						has_selected_religion_feature = religion_feature_folklorist
+					}
 				}
 				set_character_modifier = {
 					intrigue = 2
@@ -1839,6 +2035,8 @@ religion_leadership = {
 						OR = {
 							religion = finnish_pagan
 							religion = folklorist
+							religion = occultist
+							religion = naxalite
 						}
 					}
 				}
@@ -1854,6 +2052,7 @@ religion_leadership = {
 						OR = { 
 							religion = west_african_pagan
 							religion = zun_pagan
+							religion = nousthreskeia
 						}
 					}
 					has_selected_religion_feature = religion_monastic
@@ -1871,6 +2070,7 @@ religion_leadership = {
 						OR = { 
 							religion = west_african_pagan
 							religion = zun_pagan
+							religion = nousthreskeia
 						}
 					}
 				}
