@@ -1833,4 +1833,83 @@ decisions = {
 			factor = 0
 		}
 	}
+	organize_legata_guard = {
+		only_independent = yes
+		is_high_prio = yes
+		ai_check_interval = 24
+		
+		potential = {
+			is_playable = yes
+			independent = yes
+			OR = {
+				is_female = no
+				gender_equality_trigger = yes
+			}
+			prisoner = no
+			is_adult = yes
+			NOT = { trait = incapable }
+			OR = {
+				has_landed_title = e_transnistria
+			}
+			NOT = { has_global_flag = legata_guard_founded }
+			any_playable_ruler = {
+				religion = hellenic_pagan
+				capital_scope = {
+					distance = {
+						where = 541	# Peresechen
+						value = 400	# Not too far away
+					}
+				}
+			}
+		}
+		allow = {
+			prestige = 300
+			wealth = 300
+		}
+		effect = {
+			set_global_flag = legata_guard_founded
+			prestige = -300
+			wealth = -300
+			activate_title = { title = d_legata_guard status = yes }
+			hidden_tooltip = {
+				narrative_event = { id = AOTG.1 }
+				if = {
+					limit = {
+						gender_equality_trigger = yes
+					}
+					create_character = {
+						random_traits = yes
+						religion = hellenic_pagan
+						culture = greek
+						dynasty = NONE
+						female = 50
+						age = 34
+						trait = skilled_tactician
+					}
+				}
+				else = {
+					create_character = {
+						random_traits = yes
+						religion = hellenic_pagan
+						culture = greek
+						dynasty = NONE
+						female = no
+						age = 34
+						trait = skilled_tactician
+					}
+				}
+				new_character = {
+					add_trait = legatian
+					set_character_flag = is_chosen_legatian_leader
+					d_legata_guard = {
+						grant_title = PREV
+					}
+					set_defacto_liege = ROOT
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
 }
