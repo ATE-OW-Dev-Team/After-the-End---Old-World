@@ -99,26 +99,23 @@ character_event = {
     trigger = {
     	NOT = { has_character_flag = legatian_title_sorted }
     	NOT = { has_character_flag = is_chosen_legatian_leader }
-    	has_landed_title = d_legata_guard
+    	FROM = { title = d_legata_guard }
     	is_female = no
-    	OR = {
-	    	top_liege = {
-	    		gender_equality_trigger = yes
-	    	}
-	    	any_playable_ruler = {
-	    		religion_openly_norse_or_reformed_trigger = yes
-	    		has_religion_feature = religion_matriarchal
-	    	}
-    	}
+    	top_liege = {
+			OR = {
+				gender_equality_trigger = yes
+				has_religion_feature = religion_matriarchal
+			}
+		}
     }
 
     immediate = {
     	set_character_flag = legatian_title_sorted
 
     	liege = { save_event_target_as = true_liege }
-
+		
     	if = {
-			limit = { gender_equality_trigger = yes }
+			limit = { top_liege = { gender_equality_trigger = yes } }
 			create_character = {
 				random_traits = yes
 				religion = hellenic_pagan
@@ -131,8 +128,7 @@ character_event = {
 		}
 		else_if = {
 			limit = {
-				any_playable_ruler = {
-		    		religion_openly_norse_or_reformed_trigger = yes
+				top_liege = {
 		    		has_religion_feature = religion_matriarchal
 		    	}
 			}
@@ -154,6 +150,7 @@ character_event = {
 			}
 			set_defacto_liege = event_target:true_liege
 		}
+    	clr_character_flag = legatian_title_sorted
     }
 }
 	# drukian Captain gets drukian trait
@@ -192,17 +189,14 @@ character_event = {
     trigger = {
     	NOT = { has_character_flag = drukian_title_sorted }
 		NOT = { has_character_flag = is_chosen_drukian_leader }
-    	has_landed_title = d_druk_guard
+    	FROM = { title = d_druk_guard }
     	is_female = no
-    	OR = {
-	    	top_liege = {
-	    		gender_equality_trigger = yes
-	    	}
-	    	any_playable_ruler = {
-	    		religion_openly_hellenic_or_reformed_trigger = yes
-	    		has_religion_feature = religion_matriarchal
-	    	}
-    	}
+    	top_liege = {
+			OR = {
+				gender_equality_trigger = yes
+				has_religion_feature = religion_matriarchal
+			}
+		}
     }
 
     immediate = {
@@ -211,7 +205,7 @@ character_event = {
     	liege = { save_event_target_as = true_liege }
 
     	if = {
-			limit = { gender_equality_trigger = yes }
+			limit = { top_liege = { gender_equality_trigger = yes } }
 			create_character = {
 				random_traits = yes
 				religion =gelugpa
@@ -224,8 +218,7 @@ character_event = {
 		}
 		else_if = {
 			limit = {
-				any_playable_ruler = {
-		    		religion_openly_norse_or_reformed_trigger = yes
+				top_liege = {
 		    		has_religion_feature = religion_matriarchal
 		    	}
 			}
@@ -247,5 +240,6 @@ character_event = {
 			}
 			set_defacto_liege = event_target:true_liege
 		}
+		clr_character_flag = drukian_title_sorted
     }
 }
