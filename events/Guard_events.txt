@@ -1,0 +1,245 @@
+namespace = AOTG
+narrative_event = {
+	id = AOTG.1
+	title = EVTNAME_AOTG_1
+	desc = EVTDESC_AOTG_1
+	picture = GFX_evt_viking_battle_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = EVTOPTA_AOTG_1
+		hidden_tooltip = {
+			any_playable_ruler = {
+				limit = {
+					ai = no
+					culture_group = byzantine
+				}
+				narrative_event = { id = AOTG.1 }
+			}
+		}
+	}
+}
+
+# legatian Guard Founded (greek)
+narrative_event = {
+	id = AOTG.11
+	title = EVTNAME_AOTG_11
+	picture = GFX_evt_viking_battle_oldgods
+	border = GFX_event_narrative_frame_war
+	
+	desc = {
+		text = EVTDESC_AOTG_11_A
+		trigger = { # Men want to join the guard!
+			gender_equality_trigger = no
+			NOT = {
+				has_religion_feature = religion_matriarchal
+			}
+		}
+	}
+	desc = {
+		text = EVTDESC_AOTG_11_B
+		trigger = { # Men *and* women want to join the guard
+			gender_equality_trigger = yes
+			NOT = {
+				has_religion_feature = religion_matriarchal
+			}
+		}
+	}
+	desc = {
+		text = EVTDESC_AOTG_11_C
+		trigger = { # Women want to join the guard!
+			has_religion_feature = religion_matriarchal
+		}
+	}
+
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_AOTG_11
+		custom_tooltip = { text = legatians_organized }
+	}
+}
+# legatian Captain gets legatian trait
+character_event = {
+	id = AOTG.2
+	hide_window = yes	
+	only_rulers = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_landed_title = d_legata_guard
+		NOT = { trait = legatian }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		add_trait = legatian
+	}
+}
+
+# Hack to deal with male only inheritance (sent from on_new_holder_inheritance)
+# (ROOT is the character, FROM is the title, FROMFROM is the old holder)
+character_event = {
+    id = AOTG.3
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+    	NOT = { has_character_flag = legatian_title_sorted }
+    	NOT = { has_character_flag = is_chosen_legatian_leader }
+    	has_landed_title = d_legatian_guard
+    	is_female = no
+    	OR = {
+	    	top_liege = {
+	    		gender_equality_trigger = yes
+	    	}
+	    	any_playable_ruler = {
+	    		religion_openly_norse_or_reformed_trigger = yes
+	    		has_religion_feature = religion_matriarchal
+	    	}
+    	}
+    }
+
+    immediate = {
+    	set_character_flag = legatian_title_sorted
+
+    	liege = { save_event_target_as = true_liege }
+
+    	if = {
+			limit = { gender_equality_trigger = yes }
+			create_character = {
+				random_traits = yes
+				religion = hellenic_pagan
+				culture = greek
+				dynasty = NONE
+				female = 50
+				age = 34
+				trait = skilled_tactician
+			}
+		}
+		else_if = {
+			limit = {
+				any_playable_ruler = {
+		    		religion_openly_norse_or_reformed_trigger = yes
+		    		has_religion_feature = religion_matriarchal
+		    	}
+			}
+			create_character = {
+				random_traits = yes
+				religion = hellenic_pagan
+				culture = greek
+				dynasty = NONE
+				female = yes
+				age = 34
+				trait = skilled_tactician
+			}
+		}
+		new_character = {
+			add_trait = legatian
+			set_character_flag = is_chosen_legatian_leader
+			d_legatian_guard = {
+				grant_title = PREV
+			}
+			set_defacto_liege = event_target:true_liege
+		}
+    }
+}
+	# drukian Captain gets drukian trait
+	character_event = {
+	id = AOTG.4
+	hide_window = yes	
+	only_rulers = yes
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	
+	trigger = {
+		has_landed_title = d_druk_guard
+		NOT = { trait = drukian }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		add_trait = drukian
+	}
+}
+
+# Hack to deal with male only inheritance (sent from on_new_holder_inheritance)
+# (ROOT is the character, FROM is the title, FROMFROM is the old holder)
+character_event = {
+    id = AOTG.5
+    is_triggered_only = yes
+    hide_window = yes
+
+    trigger = {
+    	NOT = { has_character_flag = drukian_title_sorted }
+		NOT = { has_character_flag = is_chosen_drukian_leader }
+    	has_landed_title = d_druk_guard
+    	is_female = no
+    	OR = {
+	    	top_liege = {
+	    		gender_equality_trigger = yes
+	    	}
+	    	any_playable_ruler = {
+	    		religion_openly_hellenic_or_reformed_trigger = yes
+	    		has_religion_feature = religion_matriarchal
+	    	}
+    	}
+    }
+
+    immediate = {
+    	set_character_flag = drukian_title_sorted
+
+    	liege = { save_event_target_as = true_liege }
+
+    	if = {
+			limit = { gender_equality_trigger = yes }
+			create_character = {
+				random_traits = yes
+				religion =gelugpa
+				culture = bhutanese
+				dynasty = NONE
+				female = 50
+				age = 34
+				trait = skilled_tactician
+			}
+		}
+		else_if = {
+			limit = {
+				any_playable_ruler = {
+		    		religion_openly_norse_or_reformed_trigger = yes
+		    		has_religion_feature = religion_matriarchal
+		    	}
+			}
+			create_character = {
+				random_traits = yes
+				religion =gelugpa
+				culture = bhutanese
+				dynasty = NONE
+				female = yes
+				age = 34
+				trait = skilled_tactician
+			}
+		}
+		new_character = {
+			add_trait = drukian
+			set_character_flag = is_chosen_drukian_leader
+			d_druk_guard = {
+				grant_title = PREV
+			}
+			set_defacto_liege = event_target:true_liege
+		}
+    }
+}
