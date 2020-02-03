@@ -1,0 +1,119 @@
+namespace = overseas
+
+province_event = {
+	id = overseas.1
+	desc = EVTDESC_overseas_arrive
+	picture = GFX_evt_busy_trading_dock_republic
+	hide_window = yes
+	
+	trigger = {
+		year = 2600
+		port = yes
+		is_alternate_start = no
+		OR = {
+			# places where Farlanders or Newfies may spawn
+			de_jure_liege_or_above = k_ireland
+			de_jure_liege_or_above = k_scotland
+			de_jure_liege_or_above = k_britannia
+			de_jure_liege_or_above = k_wales
+			de_jure_liege_or_above = k_iceland
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 300
+	}
+	
+	immediate = {
+			owner = {
+				top_liege = {
+					narrative_event = { id = overseas.2 }
+				}
+			}
+	}
+	
+	option = { }
+}
+
+narrative_event = {
+	id = overseas.2
+	title = EVTTITLE_overseas2
+	desc = EVTDESC_overseas2
+	picture = GFX_evt_busy_trading_dock_republic
+
+	is_triggered_only = yes
+	
+	immediate = {
+		create_random_priest = {
+				culture = farlander
+				religion = high_church
+				random_traits = yes
+				dynasty = random
+				female = no
+				attributes = {
+					diplomacy = 2
+					learning = 10
+					stewardship = 2
+					intrigue = 2
+					martial = 2
+				}
+			}	
+			new_character = {
+				add_trait = mystic
+				remove_trait = slow
+				remove_trait = imbecile
+				remove_trait = dull
+				
+				remove_lifestyle_trait_effect = yes
+				
+				random_list = { # Flavor Randomization
+					20 = {  } # Nothing
+					20 = { change_learning = 2 }
+					15 = { change_learning = 4 }
+					10 = { change_learning = 6 }
+					20 = { add_trait = theologian }
+					15 = { add_trait = scholar }
+					15 = { add_trait = shrewd }
+				}
+
+				#If we have a wonder upgrade with "inpires_learning" flag, the priest will be better
+				if = {
+					limit = { ROOT = { realm_wonder_or_upgrade_has_flag_inspires_learning_trigger = yes } }
+					random_list = { 
+						15 = { add_trait = scholar change_learning = 1 }
+						10 = { add_trait = scholar change_learning = 2 }
+						 5 = { add_trait = scholar change_learning = 3 }
+						10 = { add_trait = erudite }
+						10 = { add_trait = physician }
+						10 = { remove_education_effect = yes add_trait = scholarly_theologian }
+						10 = { remove_education_effect = yes add_trait = mastermind_theologian }
+					}
+					random_list = {
+						50 = {  } # Nothing
+						10 = { add_trait = genius }
+						10 = { add_trait = chaste }
+						10 = { add_trait = poet }
+						10 = { add_trait = proud }
+						10 = { add_trait = humble }
+					}
+				}
+				save_event_target_as = farlander_arrival
+			}	
+	}
+	
+	option = {#Cool
+		name = EVTOPTA_overseas2
+		wealth = -50
+	}
+	option = {#I don't want him, for some reason
+		name = EVTOPTB_overseas2
+		hidden_tooltip = {
+			event_target:farlander_arrival = { 
+				any_artifact = { destroy_artifact = yes }
+				death = {
+					death_reason = death_missing
+				}
+			}
+		}	
+	}
+}
