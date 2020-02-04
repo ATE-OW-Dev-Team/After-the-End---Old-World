@@ -2308,7 +2308,7 @@ anti_british_rebellion = {
 	hostile_against_others = yes
 	is_permanent = no
 	is_independence = yes	
-	check_de_jure_tier = KING
+	#check_de_jure_tier = KING
 	apply_short_occ_mod = no #No 'recently_conquered', they're taking back their own land
 	can_use = {
 		ROOT = {
@@ -2320,60 +2320,71 @@ anti_british_rebellion = {
 		}
 		FROM = { has_landed_title = e_britannia }
 	}
-	can_use_title = {
-		OR = {
-			AND = {
-				ROOT = { primary_title = { title = k_irish_rebels } }
-				title = k_ireland
-			}
-			AND = {
-				ROOT = { primary_title = { title = k_french_rebels } }
-				title = k_france
-			}
-			AND = {
-				ROOT = { primary_title = { title = k_scottish_rebels } }
-				title = k_scotland
-			}
-		}
-	}
-	is_valid_title = {
-		OR = {
-			AND = {
-				ROOT = { primary_title = { title = k_irish_rebels } }
-				title = k_ireland
-			}
-			AND = {
-				ROOT = { primary_title = { title = k_french_rebels } }
-				title = k_france
-			}
-			AND = {
-				ROOT = { primary_title = { title = k_scottish_rebels } }
-				title = k_scotland
+	is_valid = {
+		ROOT = {
+			OR = {
+				primary_title = { title = k_irish_rebels }
+				primary_title = { title = k_french_rebels }
+				primary_title = { title = k_scottish_rebels }
 			}
 		}
 		FROM = { has_landed_title = e_britannia }
 	}
-	
-#We're skipping the thing that makes lose lose Grace with China if you declare on them or their Protectorates, since this is a specific CB that can literally never be used against them	
+	on_invalidation = {
+		ROOT = {
+			show_scope_change = no
+			if = {
+				limit = { FROM = { has_landed_title = e_britannia } }
+				set_defacto_liege = FROM
+				disband_event_forces = anti_british_revolts
+			}
+			any_demesne_title = {
+				show_scope_change = no
+				limit = {
+					OR = {
+						title = k_irish_rebels
+						title = k_french_rebels
+						title = k_scottish_rebels
+					}
+				}
+				unsafe_destroy_landed_title = THIS
+				activate_title = { title = THIS status = no }
+			}
+		}
+	}
+	#We're skipping the thing that makes lose lose Grace with China if you declare on them or their Protectorates, since this is a specific CB that can literally never be used against them	
 	on_success = {#this is what happens to the character when he wins
 		ROOT = {
 			show_scope_change = no
 			participation_scaled_prestige = 500
 			participation_scaled_piety = 250
-			if = {
-				limit = {
-					primary_title = { OR = { title = k_irish_rebels title = k_ireland } }
-				}
-				clr_global_flag = irish_rebellion_happening
-				set_global_flag = irish_rebellion_successful
-				if = {
-					limit = {
-						NOT = {
-							has_global_flag = ira_bloodline_founded
+			primary_title = {
+				show_scope_change = no
+				capital_scope = {
+					show_scope_change = no
+					kingdom = {
+						show_scope_change = no
+						ROOT = {
+							show_scope_change = no
+							usurp_title = { target = PREV type = revolt }
+							vassalize_or_take_under_title = {
+								title = PREV
+								enemy = FROM
+								type = revolt
+							}
+							if = {
+								limit = {
+									PREV = { title = k_ireland }
+									NOT = { has_global_flag = ira_bloodline_founded }
+								}
+								character_event = { id = ATV.1 }
+							}
 						}
 					}
 					narrative_event = { id = ATV.1 }					
 				}
+				unsafe_destroy_landed_title = THIS
+				activate_title = { title = THIS status = no }
 			}
 		}
 		hidden_tooltip = {
@@ -2396,20 +2407,6 @@ anti_british_rebellion = {
 			}
 		}
 	}
-	on_success_title = {#this is what titles change hands when
-		ROOT = {
-			usurp_title = { target = PREV type = revolt }
-			vassalize_or_take_under_title = {
-				title = PREV
-				enemy = FROM
-				type = revolt
-			}
-			primary_title = {
-				unsafe_destroy_landed_title = THIS
-				activate_title = { title = THIS status = no }
-			}
-		}
-	}
 	on_fail = {
 		ROOT = {
 			show_scope_change = no
@@ -2418,6 +2415,7 @@ anti_british_rebellion = {
 			set_defacto_liege = FROM
 			disband_event_forces = anti_british_revolts
 			primary_title = {
+				show_scope_change = no
 				unsafe_destroy_landed_title = THIS
 				activate_title = { title = THIS status = no }
 			}
@@ -2453,11 +2451,13 @@ anti_british_rebellion = {
 				limit = {
 					higher_tier_than = BARON
 				}
+				show_scope_change = no
 				imprison = FROM
 			}
 			set_defacto_liege = FROM
 			disband_event_forces = anti_british_revolts
 			primary_title = {
+				show_scope_change = no
 				unsafe_destroy_landed_title = THIS
 				activate_title = { title = THIS status = no }
 			}
