@@ -2153,7 +2153,7 @@ colonization = {
 						limit = {
 							port = yes
 							de_jure_liege_or_above = PREVPREV
-							any_province_holding = { holding_type = city }
+							any_province_holding = { holding_type = city holder_scope = { same_realm = FROM } }
 							#OR = {
 							#	NOT = { culture = ROOT }
 							#	NOT = { religion = ROOT }
@@ -2164,7 +2164,7 @@ colonization = {
 						
 						# Make it a merchant republic
 						random_province_holding = {
-							limit = { holding_type = city }
+							limit = { holding_type = city holder_scope = { same_realm = FROM } }
 							province_capital = yes
 							grant_title = ROOT
 						}
@@ -2172,7 +2172,7 @@ colonization = {
 						duchy = { grant_title = ROOT }
 						# Give them the old capital too
 						any_province_holding = {
-							limit = { same_realm = FROM }
+							limit = { holder_scope = { same_realm = FROM } }
 							grant_title = ROOT
 						}
 					}
@@ -2308,113 +2308,177 @@ anti_british_rebellion = {
 	hostile_against_others = yes
 	is_permanent = no
 	is_independence = yes	
-	check_de_jure_tier = KING
+	#check_de_jure_tier = KING
 	apply_short_occ_mod = no #No 'recently_conquered', they're taking back their own land
 	can_use = {
-		NOT = {
-			ROOT = { any_war = { using_cb = anti_british_rebellion } }
-		}
 		ROOT = {
 			OR = {
-				primary_title = k_irish_rebels
-				primary_title = k_french_rebels
-				primary_title = k_scottish_rebels
+				primary_title = { title = k_irish_rebels }
+				primary_title = { title = k_french_rebels }
+				primary_title = { title = k_scottish_rebels }
 			}
 		}
 		FROM = { has_landed_title = e_britannia }
 	}
-	can_use_title = {
-		OR = {
-			AND = {
-				ROOT = { primary_title = k_irish_rebels }
-				title = k_ireland
-			}
-			AND = {
-				ROOT = { primary_title = k_french_rebels }
-				title = k_france
-			}
-			AND = {
-				ROOT = { primary_title = k_scottish_rebels }
-				title = k_scotland
-			}
-		}
-	}
-	is_valid_title = {
-		OR = {
-			AND = {
-				ROOT = { primary_title = k_irish_rebels }
-				title = k_ireland
-			}
-			AND = {
-				ROOT = { primary_title = k_french_rebels }
-				title = k_france
-			}
-			AND = {
-				ROOT = { primary_title = k_scottish_rebels }
-				title = k_scotland
-			}
-		}
-		FROM = { has_landed_title = e_britannia }
-	}
-	
-#We're skipping the thing that makes lose lose Grace with China if you declare on them or their Protectorates, since this is a specific CB that can literally never be used against them	
-	on_success = {#this is what happens to the character when he wins
+	is_valid = {
 		ROOT = {
-			prestige = 1000
-			piety = 500
+			OR = {
+				primary_title = { title = k_irish_rebels }
+				primary_title = { title = k_french_rebels }
+				primary_title = { title = k_scottish_rebels }
+			}
+		}
+		FROM = { has_landed_title = e_britannia }
+	}
+	on_invalidation = {
+		ROOT = {
+			show_scope_change = no
 			if = {
+				limit = { FROM = { has_landed_title = e_britannia } }
+				set_defacto_liege = FROM
+				disband_event_forces = anti_british_revolts
+			}
+			any_demesne_title = {
+				show_scope_change = no
 				limit = {
-					primary_title = k_irish_rebels
-				}
-				clr_global_flag = irish_rebellion_happening
-				set_global_flag = irish_rebellion_successful
-				if = {
-					limit = {
-						NOT = {
-							has_global_flag = ira_bloodline_founded
-						}
-						narrative_event = { id = ATV.1 }
+					OR = {
+						title = k_irish_rebels
+						title = k_french_rebels
+						title = k_scottish_rebels
 					}
 				}
+				unsafe_destroy_landed_title = THIS
+				activate_title = { title = THIS status = no }
 			}
 		}
 	}
-	on_success_title = {#this is what titles change hands when 
-		#if = {
-			#limit = {
-			#	ROOT = {
-			#		primary_title = k_irish_rebels
-			#	}
-			#}
-			ROOT = {
-				vassalize_or_take_under_title = {
-					title = PREV
-					enemy = FROM
-					type = invasion
+	#We're skipping the thing that makes lose lose Grace with China if you declare on them or their Protectorates, since this is a specific CB that can literally never be used against them	
+	on_success = {#this is what happens to the character when he wins
+		ROOT = {
+			show_scope_change = no
+			participation_scaled_prestige = 500
+			participation_scaled_piety = 250
+			primary_title = {
+				show_scope_change = no
+				capital_scope = {
+					show_scope_change = no
+					kingdom = {
+						show_scope_change = no
+						ROOT = {
+							show_scope_change = no
+							usurp_title = { target = PREV type = revolt }
+							vassalize_or_take_under_title = {
+								title = PREV
+								enemy = FROM
+								type = revolt
+							}
+							if = {
+								limit = {
+									PREV = { title = k_ireland }
+									NOT = { has_global_flag = ira_bloodline_founded }
+								}
+								character_event = { id = ATV.1 }
+							}
+						}
+					}
+					narrative_event = { id = ATV.1 }					
 				}
+				unsafe_destroy_landed_title = THIS
+				activate_title = { title = THIS status = no }
 			}
-			c_hy_many = {
-				usurp_title = ROOT
-			}
-		
-		#}
-
-		FROM = {
-			prestige = -500
 		}
+		hidden_tooltip = {
+			any_attacker = {
+				limit = { NOT = { character = ROOT } }
+				participation_scaled_prestige = 500
+				participation_scaled_piety = 250
+			}
+		}
+		FROM = {
+			show_scope_change = no
+			participation_scaled_prestige = -500
+			participation_scaled_piety = -250
+		}
+		hidden_tooltip = {
+			any_defender = {
+				limit = { NOT = { character = FROM } }
+				participation_scaled_prestige = -500
+				participation_scaled_piety = -250
+			}
+		}
+	}
+	on_fail = {
+		ROOT = {
+			show_scope_change = no
+			participation_scaled_prestige = -250
+			participation_scaled_piety = -100
+			set_defacto_liege = FROM
+			disband_event_forces = anti_british_revolts
+			primary_title = {
+				show_scope_change = no
+				unsafe_destroy_landed_title = THIS
+				activate_title = { title = THIS status = no }
+			}
+		}
+		hidden_tooltip = {
+			any_attacker = {
+				limit = { NOT = { character = ROOT } }
+				participation_scaled_prestige = -250
+				participation_scaled_piety = -100
+			}
+		}
+		FROM = {
+			show_scope_change = no
+			participation_scaled_prestige = 125
+			participation_scaled_piety = 50
+		}
+		hidden_tooltip = {
+			any_defender = {
+				limit = { NOT = { character = FROM } }
+				participation_scaled_prestige = 125
+				participation_scaled_piety = 50
+			}
+		}
+
 	}
 	on_reverse_demand = {#there's no on_fail because this war can't be white peaced out of
 		ROOT = {#Every attacker gets imprisoned if they fail
+			show_scope_change = no
+			participation_scaled_prestige = -500
+			participation_scaled_piety = -250
 			imprison = FROM
-			set_defacto_liege = FROM
-			any_demesne_title = {
-				OR = {
-					title = k_irish_rebels
-					title = k_french_rebels
-					title = k_scottish_rebels
+			any_vassal = {
+				limit = {
+					higher_tier_than = BARON
 				}
-				activate_title = { title = THIS status = no }
+				show_scope_change = no
+				imprison = FROM
+			}
+			set_defacto_liege = FROM
+			disband_event_forces = anti_british_revolts
+			primary_title = {
+				show_scope_change = no
 				unsafe_destroy_landed_title = THIS
+				activate_title = { title = THIS status = no }
+			}
+		}
+		hidden_tooltip = {
+			any_attacker = {
+				limit = { NOT = { character = ROOT } }
+				participation_scaled_prestige = -500
+				participation_scaled_piety = -250
+			}
+		}
+		FROM = {
+			show_scope_change = no
+			participation_scaled_prestige = 250
+			participation_scaled_piety = 100
+		}
+		hidden_tooltip = {
+			any_defender = {
+				limit = { NOT = { character = FROM } }
+				participation_scaled_prestige = 250
+				participation_scaled_piety = 100
 			}
 		}
 	}
