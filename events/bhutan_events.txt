@@ -390,7 +390,7 @@ narrative_event = {#Bhutan prospers in isolation
 	
 	option = {#Accept immediate gold payment
 		name = EVTOPTA_bhutan4 
-		scaled_wealth = 0.33
+		scaled_wealth = 0.2
 	}
 	option = {#Demesne Prosperity
 		name = EVTOPTB_bhutan4
@@ -432,7 +432,7 @@ narrative_event = {#Bhutan struggles to control land outside their normal limit
 				}
 			}
 			add_province_modifier = {
-				name = peasant_unrest
+				name = extreme_peasant_unrest
 				duration = 730
 			}			
 		}	
@@ -441,31 +441,68 @@ narrative_event = {#Bhutan struggles to control land outside their normal limit
 	
 }
 
-narrative_event = {#Druk Guard ask for a ""contribution""
-	id = bhutan.6
-	title = bhutan6Title
-	picture = GFX_evt_roi_elephants_in_battle
-	border = GFX_event_narrative_frame_religion
-	
-	is_triggered_only = yes
-			
-	desc = {
-		text = bhutan6Desc
-	}
-	
-	trigger = {
-		OR = {
-			government = bhutanese_decayed_government		
-			government = bhutanese_restored_government
-		}
-	}	
-	immediate = {
-	}
-	
-	option = {#Oof
-		name = EVTOPTA_bhutan6
-	
-	}
+#narrative_event = {#Druk Guard ask for a ""contribution""
+#	id = bhutan.6
+#	title = bhutan6Title
+#	picture = GFX_evt_roi_elephants_in_battle
+#	border = GFX_event_narrative_frame_religion
+#	
+#	is_triggered_only = yes
+#			
+#	desc = {
+#		text = bhutan6Desc
+#	}
+#	
+#	trigger = {
+#		OR = {
+#			government = bhutanese_decayed_government		
+#			government = bhutanese_restored_government
+#		}
+#	}	
+#	immediate = {
+#	}
+#	
+#	option = {#Oof
+#		name = EVTOPTA_bhutan6
+#	
+#	}
+#
+#	
+#}
 
+character_event = {
+	id = bhutan.7
+	is_triggered_only = yes
+	picture = "GFX_evt_prospering_province"
+	border = GFX_event_normal_frame_economy
+
+	hide_from = yes
+
+	desc = {
+		text = bhutan.7.d
+
+	}
 	
+	option = {#this is supposed to remove your money and give you piety and lower revolt risk and increase prosperity
+		name = EVTOPTA_bhutan.7
+		wealth = -4000	
+		prestige = 400
+		piety = 400
+		add_character_modifier = {
+				name = province_gifts_to_people
+				duration = 365
+			}		
+		trigger_switch = {
+					on_trigger	= terrain
+					farmlands	= { change_variable = { which = prosperity_value value = 7 } } #gain depends on terrain type
+					plains		= { change_variable = { which = prosperity_value value = 7 } }
+					steppe 		= { change_variable = { which = prosperity_value value = 4 } }
+					forest 		= { change_variable = { which = prosperity_value value = 5 } }
+					hills		= { change_variable = { which = prosperity_value value = 5 } }
+					jungle		= { change_variable = { which = prosperity_value value = 4 } }
+					desert		= { change_variable = { which = prosperity_value value = 4 } }
+					mountain	= { change_variable = { which = prosperity_value value = 5 } }
+					arctic		= { change_variable = { which = prosperity_value value = 2 } }
+				}
+	}
 }
