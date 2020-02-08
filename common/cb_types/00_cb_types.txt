@@ -3686,6 +3686,8 @@ tribal_invasion = {
 	}
 }
 
+## EDITED BY CRUSADES IMPROVED BY YARD1 ##
+
 crusade = {
 	name = CB_NAME_CRUSADE
 	war_name = WAR_NAME_CRUSADE
@@ -3807,16 +3809,38 @@ crusade = {
 	}
 
 	can_use_title = {
-		FROM = {
-			any_realm_title = {
-				de_jure_liege_or_above = PREVPREV
+		OR = {
+			FROM = {
+				any_realm_title = {
+					de_jure_liege_or_above = PREVPREV
+				}
+				
+				independent = yes # Don't declare Crusades on revolters - chances are high the war will invalidate
+				
+				OR = {
+					has_landed_title = PREV
+					num_of_realm_counties = {
+						value = 6
+						title = PREV
+					}
+				}
 			}
-			
-			independent = yes # Don't declare Crusades on revolters - chances are high the war will invalidate
-			
-			num_of_realm_counties = {
-				value = 6
-				title = PREV
+			AND = {
+				OR = {
+					has_holder = no
+					holder_scope = { religion = ROOT }
+				}
+				NOT = {
+					any_independent_ruler = {
+						any_realm_title = {
+							de_jure_liege_or_above = PREVPREV
+						}
+						NOR = { 
+							religion = FROM 
+							religion = ROOT
+						}
+					}
+				}
 			}
 		}
 	}
@@ -3857,6 +3881,22 @@ crusade = {
 		}
 	}
 
+	on_add_title = {
+		any_independent_ruler = {
+			limit = {
+				mercenary = no
+				NOT = { character = FROM }
+				religion = FROM
+				NOT = { war_with = FROM }
+				NOT = { war_with = ROOT }
+				any_realm_title = {
+					de_jure_liege_or_above = PREVPREV
+				}
+			}
+			join_defender_wars = FROM
+		}
+	}
+
 	on_success_title = {
 	
 		# Should we give the seized land to its current king?
@@ -3868,11 +3908,41 @@ crusade = {
 				}
 			}
 			holder_scope = {
-				gain_settlements_under_title = {
-					title = PREV
-					enemy = FROM
-					is_crusade = yes # Even if the title holder is not participating in the war, gain holdings occupied by all Crusade participants
-					type = holy_war
+				save_event_target_as = new_owner
+			}
+
+			if = {
+				limit = { ROOT = { NOT = { war_with = FROM } } } #just for a tooltip
+				any_independent_ruler = {
+					limit = {
+						mercenary = no
+						religion = FROM
+						any_realm_title = {
+							de_jure_liege_or_above = PREVPREV
+						}
+					}
+					show_scope_change = no
+					event_target:new_owner = {
+						gain_settlements_under_title = {
+							title = PREVPREV
+							enemy = PREV
+							is_crusade = yes
+							type = holy_war
+						}
+					}
+				}
+			}
+			else = {
+				any_defender = {
+					show_scope_change = no
+					event_target:new_owner = {
+						gain_settlements_under_title = {
+							title = PREVPREV
+							enemy = PREV
+							is_crusade = yes
+							type = holy_war
+						}
+					}
 				}
 			}
 		}
@@ -3898,12 +3968,45 @@ crusade = {
 					limit = { is_ruler = no }
 					set_character_flag = set_feudal_gov
 				}
-				gain_settlements_under_title = {
-					title = PREV
-					enemy = FROM
-					is_crusade = yes # Even if the title holder is not participating in the war, gain holdings occupied by all Crusade participants
-					type = holy_war
+				save_event_target_as = new_owner
+			}
+
+			if = {
+				limit = { ROOT = { NOT = { war_with = FROM } } } #just for a tooltip
+				any_independent_ruler = {
+					limit = {
+						mercenary = no
+						religion = FROM
+						any_realm_title = {
+							de_jure_liege_or_above = PREVPREV
+						}
+					}
+					show_scope_change = no
+					event_target:new_owner = {
+						gain_settlements_under_title = {
+							title = PREVPREV
+							enemy = PREV
+							is_crusade = yes
+							type = holy_war
+						}
+					}
 				}
+			}
+			else = {
+				any_defender = {
+					show_scope_change = no
+					event_target:new_owner = {
+						gain_settlements_under_title = {
+							title = PREVPREV
+							enemy = PREV
+							is_crusade = yes
+							type = holy_war
+						}
+					}
+				}
+			}
+
+			best_crusade_claimant = {
 				if = {
 					limit = {
 						top_liege = {
@@ -3958,11 +4061,42 @@ crusade = {
 				}
 			}
 			most_participating_crusader = {
-				gain_settlements_under_title = {
-					title = PREV
-					enemy = FROM
-					type = holy_war
+				save_event_target_as = new_owner
+			}
+			if = {
+				limit = { ROOT = { NOT = { war_with = FROM } } } #just for a tooltip
+				any_independent_ruler = {
+					limit = {
+						mercenary = no
+						religion = FROM
+						any_realm_title = {
+							de_jure_liege_or_above = PREVPREV
+						}
+					}
+					show_scope_change = no
+					event_target:new_owner = {
+						gain_settlements_under_title = {
+							title = PREVPREV
+							enemy = PREV
+							is_crusade = yes
+							type = holy_war
+						}
+					}
 				}
+			}
+			else = {
+				any_defender = {
+					show_scope_change = no
+					event_target:new_owner = {
+						gain_settlements_under_title = {
+							title = PREVPREV
+							enemy = PREV
+							type = holy_war
+						}
+					}
+				}
+			}
+			most_participating_crusader = {
 				if  = {
 					limit = {
 						primary_title = { is_primary_type_title = no } # Mercs, the Pope, Holy Orders, etc
@@ -4344,6 +4478,9 @@ new_crusade = {
 		ROOT = {
 			uses_new_crusade = yes
 			can_call_crusade = yes
+			hidden_tooltip = {
+				NOT = { has_character_modifier = cancel_crusade_cooldown }
+			}
 		}
 		
 		FROM = {
@@ -4383,21 +4520,46 @@ new_crusade = {
 	}
 
 	can_use_title = {
-		FROM = {
-			any_realm_title = {
-				de_jure_liege_or_above = PREVPREV
-			}
-			
-			independent = yes # Don't declare Crusades on revolters - chances are high the war will invalidate
-			
-			OR = {
-				num_of_realm_counties = {
-					value = 6
-					title = PREV
+		OR = {
+			FROM = {
+				any_realm_title = {
+					de_jure_liege_or_above = PREVPREV
 				}
-				PREV = {
-					title = k_thrace	
-				} 
+				
+				independent = yes # Don't declare Crusades on revolters - chances are high the war will invalidate
+				
+				OR = {
+					has_landed_title = PREV
+					num_of_realm_counties = {
+						value = 6
+						title = PREV
+					}
+					PREV = {
+						title = k_thrace	
+						FROM = { 
+							has_landed_title = e_byzantium 
+							religion_group = christian
+						}
+					} 
+				}
+			}
+			AND = {
+				OR = {
+					has_holder = no
+					holder_scope = { religion = ROOT }
+				}
+				NOT = {
+					any_independent_ruler = {
+						mercenary = no
+						any_realm_title = {
+							de_jure_liege_or_above = PREVPREV
+						}
+						NOR = { 
+							religion = FROM 
+							religion = ROOT
+						}
+					}
+				}
 			}
 		}
 	}
@@ -4425,6 +4587,14 @@ new_crusade = {
 			any_realm_province = {
 				de_jure_liege_or_above = PREVPREV
 			}
+		}
+	}
+
+	on_add_title = {
+		ROOT = { save_event_target_as = crusade_attacker }
+		save_event_target_as = crusade_title
+		FROM = {
+			character_event = { id = CI_EVENTS.1 days = 1 }
 		}
 	}
 
@@ -4720,6 +4890,7 @@ new_crusade = {
 							limit = {
 								any_owned_bloodline = {
 									has_bloodline_flag = grand_crusader_bloodline
+									bloodline_is_active_for = PREV
 								}
 							}
 							set_crusade_pot_multiplier = 0.2
@@ -4995,10 +5166,27 @@ new_crusade = {
 						}
 					}
 					most_participating_crusader = {
-						gain_settlements_under_title = {
-							title = PREVPREV
-							enemy = FROM
-							type = holy_war
+						save_event_target_as = new_owner
+					}
+					any_independent_ruler = {
+						limit = {
+							OR = {
+								character = FROM
+								AND = {
+									religion = FROM
+									any_war = {
+										using_cb = new_crusade
+										any_attacker = { character = ROOT }
+									}
+								}
+							}
+						}
+						event_target:new_owner = {
+							gain_settlements_under_title = {
+								title = event_target:new_crusade_title
+								enemy = PREV
+								type = holy_war
+							}
 						}
 					}
 					any_playable_ruler = {
@@ -5308,6 +5496,22 @@ new_crusade = {
 				}
 				# Otherwise
 				else = {
+					any_independent_ruler = {
+						limit = {
+							NOT = { character = FROM }
+							religion = FROM
+							any_war = {
+								using_cb = new_crusade
+								any_attacker = { character = ROOT }
+							}
+						}
+						FROM = {
+							vassalize_or_take_under_title = {
+								title = event_target:new_crusade_title
+								enemy = PREV
+							}
+						}
+					}
 					FROM = {
 						any_realm_character = {
 							limit = {
@@ -5521,6 +5725,7 @@ new_crusade = {
 								religion = THIS
 								inheritance = matrilineal
 							}
+							set_bloodline_founder_religion_flag_effect = yes
 						}
 					}
 					else = {
@@ -5530,6 +5735,7 @@ new_crusade = {
 								religion = THIS
 								inheritance = patrilineal
 							}
+							set_bloodline_founder_religion_flag_effect = yes
 						}
 					}
 				}
@@ -5550,10 +5756,16 @@ new_crusade = {
 				limit = {
 					OR = {
 						has_character_flag = crusade_selfish_stance
-						most_participating_crusader = {
-							crusader_king = {
-								character = PREV
-								character = PREVPREV
+						AND = {
+							NOR = {
+								has_character_flag = crusade_papal_stance
+                				has_character_flag = crusade_beneficiary_stance
+							}
+							most_participating_crusader = {
+								crusader_king = {
+									character = PREV
+									character = PREVPREV
+								}
 							}
 						}
 					}
@@ -5846,6 +6058,8 @@ new_crusade = {
 	}
 }
 
+## END CRUSADES IMPROVED BY YARD1 ##
+
 # Regular Holy War CB
 religious = {
 	name = CB_NAME_RELIGIOUS
@@ -5891,6 +6105,7 @@ religious = {
 
 	can_use = {
 		ROOT = { bhutan_medium_cb = yes	}
+		ROOT = { bhutan_major_cb = yes	}
 		ROOT = {
 			is_nomadic = no
 			NOT = { government = confederation_government }
@@ -5913,12 +6128,15 @@ religious = {
 			OR = {
 			  AND = {##Neovedantics have to use minor holy wars against other religions other than Bharatva 
 				NOT = { religion_group = FROM }
-				NOR = {
-					religion = neovedantic
-					religion = theravada
-					religion = gelugpa
-					religion = karmapa
-				}
+				 NOR = {
+                    religion = neovedantic
+                    religion = theravada
+                    AND = {
+                      religion = gelugpa
+                      NOT = { government = bhutanese_restored_government }
+                    }
+                    religion = karmapa
+                }
 				}
 				AND = {
 					religion_group = old_world_cultist_group
