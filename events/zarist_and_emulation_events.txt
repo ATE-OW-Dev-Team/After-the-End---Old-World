@@ -177,7 +177,7 @@ character_event = {#Skilled woman becomes a secret Katerinist
 	}
 	option = {
 		name = EVTOPTAJB3
-		set_secret_religion = katerinist
+		religion = katerinist
 	}
 }
 
@@ -874,6 +874,7 @@ character_event = {
 		add_character_modifier = { name = emulation_failed years = 5 }
 		cancel_ambition = yes
 		clr_character_flag = emulation_too_long
+		emulation_ambition_clear_effect = yes
 		ai_chance = {
 			factor = 50
 			modifier = {
@@ -966,8 +967,510 @@ character_event = {
 		prestige = -50
 		add_character_modifier = { name = emulation_failed years = 5 }
 		cancel_ambition = yes
+		emulation_ambition_clear_effect = yes
 		ai_chance = {
 			factor = 0
 		}
+	}
+}
+
+character_event = {
+	id = zarist.200
+	is_triggered_only = yes
+	desc = "EVTDESCZARIST200"
+	picture = GFX_evt_library
+	trigger = {
+		OR = {
+			has_zarist_emulate_ambition = yes
+			has_lutheran_emulate_ambition = yes
+		}
+		NOT = { has_character_modifier = emulation_studies_a_lot }
+	}
+	option = {
+		name = "EVTOPTAZARIST200"
+		ai_chance = {
+			factor = 30
+		}
+		add_character_modifier = { name = emulation_studies_a_lot days = 1095 }
+		hidden_tooltip = {
+			if = {
+				limit = {
+					any_courtier_or_vassal = { age = 12 religion = ROOT ai = no }
+					always = no
+				}
+				set_variable = { which = local_emulation_opinion_subject value = 1 }
+				random_list = {
+					10 = { character_event = { id = zarist.201 days = 3 random = 90 } } # courtier likes
+					10 = { character_event = { id = zarist.202 days = 3 random = 90 } } # courtier dislikes
+					30 = { }
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTBZARIST200"
+		ai_chance = {
+			factor = 20
+		}
+		if = {
+			limit = { NOT = { trait = slothful } }
+			random = {
+				chance = 30
+				
+				add_trait = slothful
+				hidden_tooltip = {
+					character_event = {
+						id = 38251 #Notify Slothful
+					}
+				}
+			}
+		}
+	}
+}
+character_event = {
+	id = zarist.201
+	is_triggered_only = yes
+	desc = "EVTDESCZARIST201"
+	picture = GFX_evt_courtiers_talking
+	portrait = event_target:emulation_likes
+	trigger = {
+		OR = {
+			has_zarist_emulate_ambition = yes
+			has_lutheran_emulate_ambition = yes
+		}
+		OR = {
+			AND = {
+				has_character_modifier = emulation_studies_a_lot
+				is_variable_equal = { which = local_emulation_opinion_subject value = 1 }
+			}
+			AND = {
+				has_character_modifier = wears_cilice
+				is_variable_equal = { which = local_emulation_opinion_subject value = 2 }
+			}
+		}
+		any_courtier_or_vassal = { age = 12 religion = ROOT ai = no }
+	}
+	immediate = {
+		random_courtier_or_vassal ={
+			limit = { age = 12 religion = ROOT ai = no }
+			preferred_limit = {
+				OR = {
+					AND = {
+						is_learned_trigger = yes
+						is_variable_equal = { which = local_emulation_opinion_subject value = 1 }
+					}
+					AND = {
+						trait = humble
+						is_variable_equal = { which = local_emulation_opinion_subject value = 2 }
+					}
+				}
+				trait = zealous
+			}
+			preferred_limit = {
+				OR = {
+					AND = {
+						is_learned_trigger = yes
+						is_variable_equal = { which = local_emulation_opinion_subject value = 1 }
+					}
+					AND = {
+						trait = humble
+						is_variable_equal = { which = local_emulation_opinion_subject value = 2 }
+					}
+				}
+			}
+			preferred_limit = {
+				trait = zealous
+			}
+			preferred_limit = {
+				NOT = { trait = cynical }
+			}
+			preferred_limit = {
+				age = 16
+			}
+			save_event_target_as = emulation_likes
+		}
+	}
+	option = {
+		name = "EVTOPTAZARIST201"
+		random_list = {
+			50 = {
+				opinion = {
+					who = event_target:emulation_likes
+					modifier = approves_of_my_behaviour
+					years = 5
+				}
+			}
+			25 = {
+				opinion = {
+					who = event_target:emulation_likes
+					modifier = opinion_budding_friendship
+					years = 5
+				}
+				event_target:emulation_likes = {
+					show_scope_change = no
+					opinion = {
+						who = ROOT
+						modifier = opinion_budding_friendship
+						years = 5
+					}
+				}
+			}
+			25 = {
+				add_friend = event_target:emulation_likes
+			}
+		}
+		ai_chance = {
+			factor = 40
+		}
+	}
+	option = {
+		name = "EVTOPTBZARIST201"
+		piety = 25
+		event_target:emulation_likes = {
+			show_scope_change = no
+			opinion = {
+				who = ROOT
+				modifier = not_feeling_apreciated
+				years = 5
+			}
+		}
+		ai_chance = {
+			factor = 10
+		}
+	}
+}
+character_event = {
+	id = zarist.202
+	is_triggered_only = yes
+	desc = "EVTDESCZARIST202"
+	picture = GFX_evt_scandal
+	portrait = event_target:emulation_dislikes
+	trigger = {
+		OR = {
+			has_zarist_emulate_ambition = yes
+			has_lutheran_emulate_ambition = yes
+		}
+		OR = {
+			AND = {
+				has_character_modifier = emulation_studies_a_lot
+				is_variable_equal = { which = local_emulation_opinion_subject value = 1 }
+			}
+			AND = {
+				has_character_modifier = wears_cilice
+				is_variable_equal = { which = local_emulation_opinion_subject value = 2 }
+			}
+		}
+		any_courtier_or_vassal = { age = 12 religion = ROOT ai = no }
+	}
+	immediate = {
+		random_courtier_or_vassal ={
+			limit = { age = 12 religion = ROOT ai = no }
+			preferred_limit = {
+				trait = cynical
+			}
+			preferred_limit = {
+				NOT = { trait = zealous }
+			}
+			preferred_limit = {
+				age = 16
+			}
+			save_event_target_as = emulation_dislikes
+		}
+	}
+	option = {
+		name = "EVTOPTAZARIST202"
+		random_list = {
+			50 = {
+				opinion = {
+					who = event_target:emulation_dislikes
+					modifier = resentful_of_my_behaviour
+					years = 5
+				}
+			}
+			25 = {
+				opinion = {
+					who = event_target:emulation_dislikes
+					modifier = opinion_furious
+					years = 5
+				}
+				event_target:emulation_dislikes = {
+					show_scope_change = no
+					opinion = {
+						who = ROOT
+						modifier = opinion_furious
+						years = 5
+					}
+				}
+			}
+			25 = {
+				add_rival = event_target:emulation_dislikes
+			}
+		}
+		ai_chance = {
+			factor = 40
+		}
+	}
+	option = {
+		name = "EVTOPTBZARIST202"
+		piety = -50
+		prestige = 50
+		if = {
+			limit = { is_variable_equal = { which = local_emulation_opinion_subject value = 1 } }
+			remove_character_modifier = emulation_studies_a_lot
+		}
+		else_if = {
+			limit = { is_variable_equal = { which = local_emulation_opinion_subject value = 2 } }
+			remove_character_modifier = wears_cilice
+		}
+		ai_chance = {
+			factor = 10
+		}
+	}
+}
+character_event = {
+	id = zarist.205
+	is_triggered_only = yes
+	desc = "EVTDESCZARIST205"
+	picture = GFX_evt_hooded_figure_hf
+	trigger = {
+		OR = {
+			has_zarist_emulate_ambition = yes
+			has_lutheran_emulate_ambition = yes
+		}
+		NOT = { has_character_modifier = wears_cilice }
+	}
+	option = {
+		name = "EVTOPTAZARIST205"
+		ai_chance = {
+			factor = 30
+		}
+		add_character_modifier = { name = wears_cilice days = 1095 }
+		hidden_tooltip = {
+			if = {
+				limit = {
+					any_courtier_or_vassal = { age = 12 religion = ROOT ai = no }
+					always = no
+				}
+				set_variable = { which = local_emulation_opinion_subject value = 2 }
+				random_list = {
+					10 = { character_event = { id = zarist.201 days = 3 random = 90 } } # courtier likes
+					10 = { character_event = { id = zarist.202 days = 3 random = 90 } } # courtier dislikes
+					30 = { }
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTBZARIST205"
+		ai_chance = {
+			factor = 20
+		}
+		if = {
+			limit = { NOT = { trait = proud } }
+			random = {
+				chance = 30
+				add_trait = proud
+				hidden_tooltip = {
+					character_event = {
+						id = 38261 #Notify Proud
+					}
+				}
+			}
+		}
+	}
+}
+character_event = {
+	id = zarist.209
+	hide_window = yes
+	is_triggered_only = yes
+	religion_group = old_world_cultist_group
+	only_playable = yes
+	capable_only = yes
+	prisoner = no
+	trigger = {
+		is_inaccessible_trigger = no
+		has_zarist_emulate_ambition = yes
+		NOT = {
+			any_artifact = {
+				has_artifact_flag = zarist_painting
+			}
+		}
+	}
+	immediate = { character_event = { id = zarist.210 } }
+}
+character_event = {
+	id = zarist.210
+	desc = "EVTDESCZARIST210"
+	picture = GFX_evt_throne_room
+	is_triggered_only = yes
+	religion_group = old_world_cultist_group
+	only_playable = yes
+	capable_only = yes
+	prisoner = no
+	min_age = 12
+	trigger = {
+		is_zarist_religion_trigger = yes
+		NOT = {
+			any_artifact = {
+				has_artifact_flag = zarist_painting
+			}
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+		modifier = { # Get it by tombola
+			factor = 0
+			has_zarist_emulate_ambition = yes
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				has_zarist_emulate_ambition = no
+			}
+			trigger_switch = {
+				on_trigger = religion
+				zarist = {
+					random_list = {
+						1 = { set_character_flag = temp_zarist_emulate_peter }
+						1 = { set_character_flag = temp_zarist_emulate_nicholas }
+						1 = { set_character_flag = temp_zarist_emulate_ivan }
+						1 = { set_character_flag = temp_zarist_emulate_catherine }
+						1 = { set_character_flag = temp_zarist_emulate_alexander }
+						1 = { set_character_flag = temp_zarist_emulate_alexis }
+						1 = { set_character_flag = temp_lutheran_zealous_humble }
+					}
+				}
+				katerinist = { set_character_flag = temp_zarist_emulate_catherine }
+				petrist = { set_character_flag = temp_zarist_emulate_peter }
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTAZARIST210"
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				NOT = { scaled_wealth = 1 }
+			}
+		}
+		prestige = 50
+		scaled_wealth = { value = -1 max = -50 }
+		if = {
+			limit = { has_zarist_emulate_ambition = yes }
+			trigger_switch = {
+				on_trigger = has_ambition
+				obj_zarist_emulate_peter		= { add_artifact = zarist_painting_peter }
+				obj_zarist_emulate_nicholas		= { add_artifact = zarist_painting_nicholas }
+				obj_zarist_emulate_ivan			= { add_artifact = zarist_painting_ivan }
+				obj_zarist_emulate_catherine	= { add_artifact = zarist_painting_catherine }
+				obj_zarist_emulate_alexander	= { add_artifact = zarist_painting_alexander }
+				obj_zarist_emulate_alexis		= { add_artifact = zarist_painting_alexis }
+				obj_lutheran_zealous_humble		= { add_artifact = zarist_painting_humble }
+			}
+		}
+		else = {
+			trigger_switch = {
+				on_trigger = has_character_flag
+				temp_zarist_emulate_peter			= { add_artifact = zarist_painting_peter }
+				temp_zarist_emulate_nicholas		= { add_artifact = zarist_painting_nicholas }
+				temp_zarist_emulate_ivan			= { add_artifact = zarist_painting_ivan }
+				temp_zarist_emulate_catherine		= { add_artifact = zarist_painting_catherine }
+				temp_zarist_emulate_alexander		= { add_artifact = zarist_painting_alexander }
+				temp_zarist_emulate_alexis			= { add_artifact = zarist_painting_alexis }
+				temp_lutheran_zealous_humble		= { add_artifact = zarist_painting_humble }
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTBZARIST210"
+		ai_chance = {
+			factor = 30
+			modifier = {
+				factor = 0
+				NOT = { scaled_wealth = 1 }
+			}
+			modifier = {
+				factor = 2
+				trait = charitable
+			}
+		}
+		trigger = {
+			NOT = { trait = greedy }
+		}
+		piety = 50
+		scaled_wealth = { value = -1 max = -50 }
+		add_character_modifier = { name = recently_donated_to_charity days = 1825 }
+		if = {
+			limit = { NOT = { trait = charitable } }
+			random = {
+				chance = 50
+				add_trait = charitable
+				hidden_tooltip = {
+					character_event = {
+						id = 38273 #Notify Charitable
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTCZARIST210"
+		tooltip_info = intrigue
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				trait = greedy
+			}
+			modifier = {
+				factor = 2
+				trait = deceitful
+			}
+		}
+		trigger = {
+			intrigue = 14
+			NOT = { trait = kind }
+		}
+		random_list = {
+			30 = {
+				trigger = { NOT = { trait = arbitrary } }
+				add_trait = arbitrary
+				hidden_tooltip = {
+					character_event = {
+						id = 38266 #Notify Arbitrary
+					}
+				}
+			}
+			30 = {
+				trigger = { NOT = { trait = greedy } }
+				add_trait = greedy
+				hidden_tooltip = {
+					character_event = {
+						id = 38252 #Notify Greedy
+					}
+				}
+			}
+			30 = {
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTDZARIST210"
+		ai_chance = {
+			factor = 50
+		}
+		piety = -25
+		prestige = -25
+	}
+	after = {
+		clr_character_flag = temp_zarist_emulate_peter
+		clr_character_flag = temp_zarist_emulate_nicholas
+		clr_character_flag = temp_zarist_emulate_ivan
+		clr_character_flag = temp_zarist_emulate_catherine
+		clr_character_flag = temp_zarist_emulate_alexander
+		clr_character_flag = temp_zarist_emulate_alexis
+		clr_character_flag = temp_lutheran_zealous_humble
 	}
 }
