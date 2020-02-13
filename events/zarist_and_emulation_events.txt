@@ -851,7 +851,15 @@ character_event = { # yearly calculation
 			character_event = { id = zarist.104 } # Fail!
 		}
 		else_if = {
-			limit = { check_variable = { which = emulation_years value = 9 } }
+			limit = {
+				OR = {
+					check_variable = { which = emulation_years value = 9 }
+					AND = {
+						check_variable = { which = emulation_years value = 7 }
+						has_lutheran_emulate_ambition = yes
+					}
+				}
+			}
 			subtract_variable = { which = emulation_years value = 4 }
 			set_character_flag = emulation_too_long
 			character_event = { id = zarist.104 } # Fail!
@@ -962,6 +970,10 @@ character_event = {
 				factor = 2
 				trait = patient
 			}
+			modifier = {
+				factor = 0
+				has_character_modifier = emulation_is_destinity
+			}
 		}
 	}
 }
@@ -1017,7 +1029,6 @@ character_event = {
 			obj_zarist_emulate_catherine	= { add_character_modifier = { name = zarist_emulated_catherine years = 10 } }
 			obj_zarist_emulate_alexander	= { add_character_modifier = { name = zarist_emulated_alexander years = 10 } }
 			obj_zarist_emulate_alexis		= { add_character_modifier = { name = zarist_emulated_alexis years = 10 } }
-			obj_lutheran_zealous_humble		= { add_character_modifier = { name = lutheran_emulated_zealous_humble years = 10 } }
 			obj_lutheran_exodus				= { add_character_modifier = { name = lutheran_emulated_exodus years = 10 } }
 			obj_lutheran_luke				= { add_character_modifier = { name = lutheran_emulated_luke years = 10 } }
 			obj_lutheran_ephesians			= { add_character_modifier = { name = lutheran_emulated_ephesians years = 10 } }
@@ -1154,6 +1165,10 @@ character_event = {
 			modifier = {
 				factor = 2
 				trait = stubborn
+			}
+			modifier = {
+				factor = 0
+				has_character_modifier = emulation_is_destinity
 			}
 		}
 	}
@@ -1601,7 +1616,6 @@ character_event = {
 						1 = { set_character_flag = temp_zarist_emulate_catherine }
 						1 = { set_character_flag = temp_zarist_emulate_alexander }
 						1 = { set_character_flag = temp_zarist_emulate_alexis }
-						1 = { set_character_flag = temp_lutheran_zealous_humble }
 					}
 				}
 				katerinist = { set_character_flag = temp_zarist_emulate_catherine }
@@ -1743,6 +1757,11 @@ character_event = {
 				if = {
 					limit = { trait = kind }
 					remove_trait = kind
+					hidden_tooltip = {
+						character_event = {
+							id = 38307 #Notify
+						}
+					}
 				}
 			}
 		}
@@ -1762,6 +1781,47 @@ character_event = {
 		clr_character_flag = temp_zarist_emulate_catherine
 		clr_character_flag = temp_zarist_emulate_alexander
 		clr_character_flag = temp_zarist_emulate_alexis
-		clr_character_flag = temp_lutheran_zealous_humble
+	}
+}
+character_event = {
+	id = zarist.215
+	is_triggered_only = yes
+	desc = "EVTDESCZARIST215"
+	picture = GFX_evt_bad_news
+	trigger = {
+		OR = {
+			has_zarist_emulate_ambition = yes
+			has_lutheran_emulate_ambition = yes
+		}
+		NOR = {
+			has_character_modifier = emulation_is_destinity
+			trait = possessed
+		}
+	}
+	option = {
+		name = "EVTOPTAZARIST215"
+		ai_chance = {
+			factor = 10
+		}
+		add_character_modifier = { name = emulation_is_destinity days = -1 }
+		add_trait = possessed
+	}
+	option = {
+		name = "EVTOPTBZARIST215"
+		ai_chance = {
+			factor = 20
+		}
+		if = {
+			limit = { NOT = { trait = cynical } }
+			random = {
+				chance = 30
+				add_trait = cynical
+				hidden_tooltip = {
+					character_event = {
+						id = 38258 #Notify Cynical
+					}
+				}
+			}
+		}
 	}
 }
