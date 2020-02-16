@@ -1,0 +1,1 @@
+To install the mod you'll need to unzip it, rename it to remove the master part and then take the .mod file out of the mod folder. So at the end you should have a After-the-End---Old-World folder and a After-the-End---Old-World.mod file in the mod folder.
