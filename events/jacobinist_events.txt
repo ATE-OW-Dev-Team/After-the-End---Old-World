@@ -901,6 +901,7 @@ character_event = {
 		piety = 40
 	}
 	after = {
+		jacobinist_gain_tiered_traits_effect = yes
 		if = { limit = { is_variable_equal = { which = local_madame_new_preference value = 1 }  } add_character_modifier = { name = madame_wants_strong years = 5 } }
 		else_if = { limit = { is_variable_equal = { which = local_madame_new_preference value = 2 }  } add_character_modifier = { name = madame_wants_weak years = 5 } }
 		else_if = { limit = { is_variable_equal = { which = local_madame_new_preference value = 3 }  } add_character_modifier = { name = madame_wants_smart years = 5 } }
@@ -934,7 +935,6 @@ character_event = {
 		else_if = { limit = { is_variable_equal = { which = local_madame_new_preference value = 31 }  } add_character_modifier = { name = madame_wants_female years = 5 } }
 		else_if = { limit = { is_variable_equal = { which = local_madame_new_preference value = 32 }  } add_character_modifier = { name = madame_wants_male years = 5 } }
 	}
-	jacobinist_gain_tiered_traits_effect = yes
 }
 character_event = {
 	id = jacobinists.7
@@ -1122,7 +1122,7 @@ narrative_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 3000
+		months = 1
 		modifier = {
 			factor = 0.25
 	
@@ -1162,74 +1162,47 @@ narrative_event = {
 	immediate = {
 		set_character_flag = jacobin_revolt
 		set_global_flag = jacobin_revolt_ongoing
-				
-		if = {
+		random_realm_province = {
 			limit = {
-				ai = yes
-				capital_scope = {
-					kingdom = {
-						OR = {
-							has_holder = no
-							holder_scope = {
-								character = ROOT
-							}
+				kingdom = {
+					OR = {
+						has_holder = no
+						holder_scope = {
+							character = ROOT
 						}
-						#num_title_realm_provs = {
-						#	who = ROOT
-						#	value = 6
-						#}##apparently this doesn't work
+					}
+					num_title_realm_provs = {
+						who = ROOT
+						value = 4
 					}
 				}
 			}
-			capital_scope = { save_event_target_as = spawn_province }
-		}
-		
-		if = {
-			limit = {
-				NOT = { event_target:spawn_province = { always = yes } }
-			}
-			random_realm_province = {
-				limit = {
-					kingdom = {
-						OR = {
-							has_holder = no
-							holder_scope = {
-								character = ROOT
-							}
-						}
-						num_title_realm_provs = {
-							who = ROOT
-							value = 10
-						}
+			preferred_limit = {
+				ROOT = {
+					ai = yes
+					capital_scope = {
+						at_location = PREVPREV
 					}
 				}
-				save_event_target_as = spawn_province
 			}
-		}
-		
-		if = {
-			limit = {
-				NOT = { event_target:spawn_province = { always = yes } }
-			}
-			random_realm_province = {
-				limit = {
-					kingdom = {
-						OR = {
-							has_holder = no
-							holder_scope = {
-								character = ROOT
-							}
-						}
-						num_title_realm_provs = {
-							who = ROOT
-							value = 6
-						}
+			preferred_limit = {
+				kingdom = {
+					num_title_realm_provs = {
+						who = ROOT
+						value = 10
 					}
 				}
-				save_event_target_as = spawn_province
 			}
-		}
-		
+			preferred_limit = {
+				kingdom = {
+					num_title_realm_provs = {
+						who = ROOT
+						value = 6
+					}
+				}
+			}
+			save_event_target_as = spawn_province
+		}		
 		event_target:spawn_province = {
 	
 			religion = jacobinist
