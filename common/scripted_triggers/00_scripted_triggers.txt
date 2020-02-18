@@ -3353,19 +3353,19 @@ has_assassins_prerequisites = {
 		OR = {
 			FROM = { ai = no }
 			hidden_trigger = { ai = no }
-			religion_group = muslim
+			is_communist_religion_trigger = yes
 		}
 	}
 	conditional_tooltip = { #showing interest via interface
 		trigger = { NOT = { FROM = { society_member_of = the_assassins } } }
 		OR = {
-			true_religion = shiite
-			religion_group = muslim
+			true_religion = stalinist
+			is_communist_religion_trigger = yes
 			AND = {
 				ai = no
 				NOT = { trait = zealous }
 				any_playable_ruler = {
-					religion = shiite
+					religion = stalinist
 					NOT = {
 						distance_from_realm = { value = 300 who = ROOT }
 					}
@@ -8509,4 +8509,97 @@ have_duplicate_smith_artifacts_flag_expensive_optionC_trigger = {
        		has_artifact = armor_tier_3_warden
        	}
     }
+}
+
+ROOTs_secret_religion_is_playable_trigger = { 
+# To block players from getting a game over if they don't own all DLCs
+	hidden_tooltip = {
+		OR = {
+			secret_religion_group  = christian
+			secret_religion_group = OWC_group
+			secret_religion_group = esoteric
+			secret_religion_group = pirate
+			AND = {
+				secret_religion_group  = jewish_group
+				has_dlc = "Sons of Abraham"
+			}
+			AND = {
+				secret_religion_group  = muslim
+				has_dlc = "The Sword of Islam" 
+			}
+			AND = {
+				secret_religion_group = buddhist_group
+				secret_religion_group  = indian_group
+				has_dlc = "Rajas of India" 
+			}
+			AND = {
+				secret_religion_group = pagan_group
+				OR = {
+					has_dlc = "The Old Gods" 
+					has_dlc = "Holy Fury" 
+				}
+			}
+			AND = {
+				secret_religion_group = zoroastrian_group
+				has_dlc = "The Old Gods"
+			}
+		}	
+	}
+
+	trigger_if = {
+		limit = {
+			secret_religion_group  = jewish_group
+			NOT = { has_dlc = "Sons of Abraham" }
+		}
+		AND = {
+			secret_religion_group  = jewish_group
+			has_dlc = "Sons of Abraham"
+		}
+	}
+	trigger_if = {
+		limit = {
+			secret_religion_group  = muslim
+			NOT = { has_dlc = "The Sword of Islam" }
+		}
+		AND = {
+			secret_religion_group  = muslim
+			has_dlc = "The Sword of Islam" 
+		}
+	}
+	trigger_if = {
+		limit = {
+			secret_religion_group  = indian_group
+			NOT = { has_dlc = "Rajas of India" }
+		}
+		AND = {
+			secret_religion_group  = indian_group
+				has_dlc = "Rajas of India" 
+		}
+	}
+	trigger_if = {
+		limit = {
+			secret_religion_group  = pagan_group
+			NOR = { 
+				has_dlc = "The Old Gods" 
+				has_dlc = "Holy Fury"
+			}
+		}
+		AND = {
+			secret_religion_group = pagan_group
+			OR = {
+				has_dlc = "The Old Gods" 
+				has_dlc = "Holy Fury" 
+			}
+		}
+	}
+	trigger_if = {
+		limit = {
+			secret_religion_group  = pagan_group
+			NOT = { has_dlc = "The Old Gods" }
+		}
+		AND = {
+			secret_religion_group = zoroastrian_group
+			has_dlc = "The Old Gods"
+		}
+	}
 }

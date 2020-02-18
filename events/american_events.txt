@@ -18,21 +18,22 @@ narrative_event = {
 		d_redcoats = {
 			holder_scope = {
 				save_event_target_as = redcoat_leader
-				abdicate = yes#Abdicates to his heir, the Redcoats are disabled		
-				e_redcoats = {
-					grant_title = PREV
-				}
 			}
-			activate_title = { title = THIS status = no }					
+			unsafe_destroy_landed_title = THIS
+			activate_title = { title = THIS status = no }
 		}
-		narrative_event = { id = america.2 days = 300 }		
+		event_target:redcoat_leader = {
+			e_redcoats = {
+				grant_title = PREV
+			}
+		}
+		#narrative_event = { id = america.2 days = 200 random = 200 }		
 	}
 	option = {#Hail Britannia
 		name = america1A
 		trigger = {
 			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
+				is_esoteric_religion_trigger = yes
 				primary_title = { title = e_britannia }#in case the Brits somehow stop being Thelemic
 			}
 		}
@@ -40,29 +41,22 @@ narrative_event = {
 	option = {#F the British
 		name = america1B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
+			NOT = { primary_title = { title = e_britannia } }
 		}
 	}
 	option = {#Who?
 		name = america1C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
+			NOT = { primary_title = { title = e_britannia } }
 		}
 	}	
 }
 narrative_event = {
 	id = america.2
-	is_triggered_only = yes
+	
 	title = america2Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
@@ -72,14 +66,30 @@ narrative_event = {
 	desc = {
 		text = america2Desc
 	}
+	has_global_flag = invading_america
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		NOT = { has_global_flag = american_invasion_launched }
+		had_global_flag = { flag = invading_america days = 365 }
+		controls_religion = yes
+	}
+	
+	mean_time_to_happen = {
+		days = 365
+	}
 	immediate = {
 		set_global_flag = american_invasion_launched
 		random_list = {#90% chance to conquer New England, 10% chance of Chad Mahonic Mega Kingdom driving you out
 			90 = {
-				narrative_event = { id = america.3 days = 300 }	#New England conquered	
+				set_global_flag = NA_win	#New England conquered	
 			}
 			10 = {
-				narrative_event = { id = america.4 days = 300 }	#Mega Mahonic kicks you out
+				set_global_flag = NA_lose	#Mega Mahonic kicks you out
 			}
 		}
 	}
@@ -96,73 +106,71 @@ narrative_event = {
 	option = {#F the British
 		name = america2B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
 		}
 	}
 	option = {#Who?
 		name = america2C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
 		}
 	}	
 }
 
 narrative_event = {#New England conquered
 	id = america.3
-	is_triggered_only = yes
+	
 	title = america3Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = NA_win
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = NA_win days = 365 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 365
+		modifier = {
+			factor = 2
+			has_global_flag = redcoats_auto_start #takes longer
+		}
+	}
 	desc = {
 		text = america3Desc
 	}
 	immediate = {
+		clr_global_flag = NA_win
 	}
 	option = {#Hail Britannia
 		name = america3A	
 		trigger = {
-			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-			}
-			NOT = {
-				primary_title = { title = e_britannia }				
-			}			
+			is_esoteric_religion_trigger = yes
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#F the British
 		name = america3B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#Send them north
@@ -218,7 +226,7 @@ narrative_event = {#New England conquered
 				}
 			}
 			set_global_flag = redcoats_vs_hudsonians
-			narrative_event = { id = america.5 days = 3 }#This event is a generic "give them more support
+			narrative_event = { id = america.5 }	#This event is a generic "give them more support
 	}
 	option = {#Send them south
 		name = america3D
@@ -273,7 +281,7 @@ narrative_event = {#New England conquered
 				}
 			}
 			set_global_flag = redcoats_vs_americanists			
-			narrative_event = { id = america.5 days = 3 }#This event is a generic "give them more support
+			narrative_event = { id = america.5 }	#This event is a generic "give them more support
 	}
 	option = {#Fallback option for the Redcoats to decide their own direction if 
 		name = america3E
@@ -286,11 +294,11 @@ narrative_event = {#New England conquered
 		random_list = {
 			50 = {
 			set_global_flag = redcoats_vs_hudsonians
-			narrative_event = { id = america.5 days = 3 }				
+			narrative_event = { id = america.5 }					
 			}
 			50 = {
 			set_global_flag = redcoats_vs_americanists
-			narrative_event = { id = america.5 days = 3 }				
+			narrative_event = { id = america.5 }					
 			}			
 		}
 	}
@@ -298,50 +306,57 @@ narrative_event = {#New England conquered
 
 narrative_event = {#New England repelled you, oh noh
 	id = america.4
-	is_triggered_only = yes
+	
 	title = america4Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = NA_lose
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = NA_lose days = 365 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 365
+	}
 	desc = {
 		text = america4Desc
 	}
 	immediate = {
-		set_global_flag = americans_coming
+		set_global_flag = redcoats_lose
 		set_global_flag = americans_are_yankees
+		clr_global_flag = NA_lose
 	}
 	option = {#Oh sh-
 		name = america3A	
 		trigger = {
 			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
+				is_esoteric_religion_trigger = yes
+				primary_title = { title = e_britannia }#in case the Brits somehow stop being Thelemic
 			}
-		
 		}
 	}
 	option = {#F the British
 		name = america3B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
+			NOT = { primary_title = { title = e_britannia } }
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
+			NOT = { primary_title = { title = e_britannia } }
 		}
 	}
 }
@@ -352,7 +367,7 @@ narrative_event = {#Generic "give the Redcoats more money?" event
 	title = america5Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
-	
+	hide_from = yes
 	desc = {
 		text = america5Desc
 	}
@@ -362,180 +377,184 @@ narrative_event = {#Generic "give the Redcoats more money?" event
 			primary_title = { title = e_britannia }
 		}
 		wealth = -1000
-		if = {
-			limit = {#If going South, stage 1
-				has_global_flag = redcoats_vs_americanists
+		hidden_tooltip = {
+			if = {
+				limit = {#If going South, stage 1
+					has_global_flag = redcoats_vs_americanists
+				}
+				clr_global_flag = redcoats_vs_americanists			
+				random_list = {
+				75 = {
+					set_global_flag = americanists_win
+				}#75/25 chance of victory
+				25 = {
+					set_global_flag = americanists_lose
+				}
+				}
 			}
-			clr_global_flag = redcoats_vs_americanists			
-			random_list = {
-			75 = {
-				narrative_event = { id = america.6 days = 3 }#300 in the real thing
-			}#75/25 chance of victory
-			25 = {
-				narrative_event = { id = america.7 days = 3 } #300 in the real thing
+			if = {
+				limit = {#If going South, stage 2
+					has_global_flag = redcoats_vs_appalachians
+				}
+				clr_global_flag = redcoats_vs_appalachians
+				random_list = {
+				50 = {
+					set_global_flag = appalachians_win
+				}#50/50 chance of victory, supply lines becoming stretched
+				50 = {
+					set_global_flag = appalachians_lose
+				}
+				}
 			}
+			if = {
+				limit = {#If going South, stage 3 - the HCC
+					has_global_flag = redcoats_vs_dixies
+				}
+				clr_global_flag = redcoats_vs_dixies
+				random_list = {
+				20 = {
+					set_global_flag = dixies_win
+				}#Unlikely to win but possible
+				80 = {
+					set_global_flag = dixies_lose
+				}
+				}
+			}		
+			if = {
+				limit = {#If going North, stage 1
+					has_global_flag = redcoats_vs_hudsonians
+				}
+				clr_global_flag = redcoats_vs_hudsonians
+				random_list = {
+				75 = {
+					set_global_flag = hudsonians_win
+				}
+				25 = {
+					set_global_flag = hudsonians_lose
+				}
+				}
+			}#75% chance to beat the Hudsonians if you pay
+			if = {
+				limit = {#If going North, stage 2
+					has_global_flag = redcoats_vs_anglicans
+				}
+				clr_global_flag = redcoats_vs_anglicans
+				random_list = {
+				50 = {
+					set_global_flag = anglicans_win
+				}
+				50 = {
+					set_global_flag = anglicans_lose
+				}
+				}
+			}
+			if = {
+				limit = {#If going North, stage 3
+					has_global_flag = redcoats_vs_nuns
+				}
+				clr_global_flag = redcoats_vs_nuns
+				random_list = {
+				20 = {
+					set_global_flag = nuns_win
+				}
+				80 = {
+					set_global_flag = nuns_lose
+				}
+				}
 			}
 		}
-		if = {
-			limit = {#If going South, stage 2
-				has_global_flag = redcoats_vs_appalachians
-			}
-			clr_global_flag = redcoats_vs_appalachians
-			random_list = {
-			50 = {
-				narrative_event = { id = america.8 days = 300 }
-			}#50/50 chance of victory, supply lines becoming stretched
-			50 = {
-				narrative_event = { id = america.9 days = 300 }
-			}
-			}
-		}
-		if = {
-			limit = {#If going South, stage 3 - the HCC
-				has_global_flag = redcoats_vs_dixies
-			}
-			clr_global_flag = redcoats_vs_dixies
-			random_list = {
-			20 = {
-				narrative_event = { id = america.10 days = 300 }
-			}#Unlikely to win but possible
-			80 = {
-				narrative_event = { id = america.11 days = 300 }
-			}
-			}
-		}		
-		if = {
-			limit = {#If going North, stage 1
-				has_global_flag = redcoats_vs_hudsonians
-			}
-			clr_global_flag = redcoats_vs_hudsonians
-			random_list = {
-			75 = {
-				narrative_event = { id = america.12 days = 300 }
-			}
-			25 = {
-				narrative_event = { id = america.13 days = 300 }
-			}
-			}
-		}#75% chance to beat the Hudsonians if you pay
-		if = {
-			limit = {#If going North, stage 2
-				has_global_flag = redcoats_vs_anglicans
-			}
-			clr_global_flag = redcoats_vs_anglicans
-			random_list = {
-			50 = {
-				narrative_event = { id = america.14 days = 300 }
-			}
-			50 = {
-				narrative_event = { id = america.15 days = 300 }
-			}
-			}
-		}
-		if = {
-			limit = {#If going North, stage 3
-				has_global_flag = redcoats_vs_nuns
-			}
-			clr_global_flag = redcoats_vs_nuns
-			random_list = {
-			20 = {
-				narrative_event = { id = america.16 days = 300 }
-			}
-			80 = {
-				narrative_event = { id = america.17 days = 300 }
-			}
-			}
-		}		
 	}
 	option = {#No, let them do it alone
 		name = america5B	
 		trigger = {
 			primary_title = { title = e_britannia }
 		}
-		if = {
-			limit = {#If going South, stage 1
-				has_global_flag = redcoats_vs_americanists
+		hidden_tooltip = {
+			if = {
+				limit = {#If going South, stage 1
+					has_global_flag = redcoats_vs_americanists
+				}
+				clr_global_flag = redcoats_vs_americanists			
+				random_list = {
+				50 = {
+					set_global_flag = americanists_win
+				}#75/25 chance of victory
+				50 = {
+					set_global_flag = americanists_lose
+				}
+				}
 			}
-			clr_global_flag = redcoats_vs_americanists
-			random_list = {
-			50 = {
-				narrative_event = { id = america.6 days = 300 }
+			if = {
+				limit = {#If going South, stage 2
+					has_global_flag = redcoats_vs_appalachians
+				}
+				clr_global_flag = redcoats_vs_appalachians
+				random_list = {
+				65 = {
+					set_global_flag = appalachians_win
+				}#50/50 chance of victory, supply lines becoming stretched
+				35 = {
+					set_global_flag = appalachians_lose
+				}
+				}
 			}
-			50 = {
-				narrative_event = { id = america.7 days = 300 }
+			if = {
+				limit = {#If going South, stage 3 - the HCC
+					has_global_flag = redcoats_vs_dixies
+				}
+				clr_global_flag = redcoats_vs_dixies
+				random_list = {
+				5 = {
+					set_global_flag = dixies_win
+				}#Unlikely to win but possible
+				95 = {
+					set_global_flag = dixies_lose
+				}
+				}
+			}		
+			if = {
+				limit = {#If going North, stage 1
+					has_global_flag = redcoats_vs_hudsonians
+				}
+				clr_global_flag = redcoats_vs_hudsonians
+				random_list = {
+				50 = {
+					set_global_flag = hudsonians_win
+				}
+				50 = {
+					set_global_flag = hudsonians_lose
+				}
+				}
+			}#75% chance to beat the Hudsonians if you pay
+			if = {
+				limit = {#If going North, stage 2
+					has_global_flag = redcoats_vs_anglicans
+				}
+				clr_global_flag = redcoats_vs_anglicans
+				random_list = {
+				35 = {
+					set_global_flag = anglicans_win
+				}
+				60 = {
+					set_global_flag = anglicans_lose
+				}
+				}
 			}
+			if = {
+				limit = {#If going North, stage 3
+					has_global_flag = redcoats_vs_nuns
+				}
+				clr_global_flag = redcoats_vs_nuns
+				random_list = {
+				5 = {
+					set_global_flag = nuns_win
+				}
+				95 = {
+					set_global_flag = nuns_lose
+				}
+				}
 			}
 		}
-		if = {
-			limit = {#If going South, stage 2
-				has_global_flag = redcoats_vs_appalachians
-			}
-			clr_global_flag = redcoats_vs_appalachians
-			random_list = {
-			35 = {
-				narrative_event = { id = america.8 days = 300 }
-			}#
-			65 = {
-				narrative_event = { id = america.9 days = 300 }
-			}
-			}
-		}
-		if = {
-			limit = {#If going South, stage 3 - the HCC
-				has_global_flag = redcoats_vs_dixies
-			}
-			clr_global_flag = redcoats_vs_dixies
-			random_list = {
-			5 = {
-				narrative_event = { id = america.10 days = 300 }
-			}#Very Unlikely to win but possible
-			95 = {
-				narrative_event = { id = america.11 days = 300 }
-			}
-			}
-		}		
-		if = {
-			limit = {#If going North, stage 1
-				has_global_flag = redcoats_vs_hudsonians
-			}
-			clr_global_flag = redcoats_vs_hudsonians
-			random_list = {
-			50 = {
-				narrative_event = { id = america.12 days = 300 }
-			}
-			50 = {
-				narrative_event = { id = america.13 days = 300 }
-			}
-			}
-		}
-		if = {
-			limit = {#If going North, stage 2
-				has_global_flag = redcoats_vs_anglicans
-			}
-			clr_global_flag = redcoats_vs_anglicans
-			random_list = {
-			35 = {
-				narrative_event = { id = america.14 days = 300 }
-			}
-			65 = {
-				narrative_event = { id = america.15 days = 300 }
-			}
-			}
-		}
-		if = {
-			limit = {#If going North, stage 3
-				has_global_flag = redcoats_vs_nuns
-			}
-			clr_global_flag = redcoats_vs_nuns
-			random_list = {
-			5 = {
-				narrative_event = { id = america.16 days = 300 }
-			}
-			95 = {
-				narrative_event = { id = america.17 days = 300 }
-			}
-			}
-		}	
 	}
 	option = {#If Britain is gone, the Redcoats do it themselves, but never get extra funding
 		name = america5C	
@@ -545,101 +564,120 @@ narrative_event = {#Generic "give the Redcoats more money?" event
 				has_holder = no
 			}
 		}
-		if = {
-			limit = {#If going South, stage 1
-				has_global_flag = redcoats_vs_americanists
+		hidden_tooltip = {
+			if = {
+				limit = {#If going South, stage 1
+					has_global_flag = redcoats_vs_americanists
+				}
+				clr_global_flag = redcoats_vs_americanists			
+				random_list = {
+				50 = {
+					set_global_flag = americanists_win
+				}#75/25 chance of victory
+				50 = {
+					set_global_flag = americanists_lose
+				}
+				}
 			}
-			clr_global_flag = redcoats_vs_americanists
-			random_list = {
-			50 = {
-				narrative_event = { id = america.6 days = 300 }
+			if = {
+				limit = {#If going South, stage 2
+					has_global_flag = redcoats_vs_appalachians
+				}
+				clr_global_flag = redcoats_vs_appalachians
+				random_list = {
+				65 = {
+					set_global_flag = appalachians_win
+				}#50/50 chance of victory, supply lines becoming stretched
+				35 = {
+					set_global_flag = appalachians_lose
+				}
+				}
 			}
-			50 = {
-				narrative_event = { id = america.7 days = 300 }
+			if = {
+				limit = {#If going South, stage 3 - the HCC
+					has_global_flag = redcoats_vs_dixies
+				}
+				clr_global_flag = redcoats_vs_dixies
+				random_list = {
+				5 = {
+					set_global_flag = dixies_win
+				}#Unlikely to win but possible
+				95 = {
+					set_global_flag = dixies_lose
+				}
+				}
+			}		
+			if = {
+				limit = {#If going North, stage 1
+					has_global_flag = redcoats_vs_hudsonians
+				}
+				clr_global_flag = redcoats_vs_hudsonians
+				random_list = {
+				50 = {
+					set_global_flag = hudsonians_win
+				}
+				50 = {
+					set_global_flag = hudsonians_lose
+				}
+				}
+			}#75% chance to beat the Hudsonians if you pay
+			if = {
+				limit = {#If going North, stage 2
+					has_global_flag = redcoats_vs_anglicans
+				}
+				clr_global_flag = redcoats_vs_anglicans
+				random_list = {
+				35 = {
+					set_global_flag = anglicans_win
+				}
+				60 = {
+					set_global_flag = anglicans_lose
+				}
+				}
 			}
+			if = {
+				limit = {#If going North, stage 3
+					has_global_flag = redcoats_vs_nuns
+				}
+				clr_global_flag = redcoats_vs_nuns
+				random_list = {
+				5 = {
+					set_global_flag = nuns_win
+				}
+				95 = {
+					set_global_flag = nuns_lose
+				}
+				}
 			}
 		}
-		if = {
-			limit = {#If going South, stage 2
-				has_global_flag = redcoats_vs_appalachians
-			}
-			clr_global_flag = redcoats_vs_appalachians
-			random_list = {
-			35 = {
-				narrative_event = { id = america.8 days = 300 }
-			}#
-			65 = {
-				narrative_event = { id = america.9 days = 300 }
-			}
-			}
-		}
-		if = {
-			limit = {#If going South, stage 3 - the HCC
-				has_global_flag = redcoats_vs_dixies
-			}
-			clr_global_flag = redcoats_vs_dixies
-			random_list = {
-			5 = {
-				narrative_event = { id = america.10 days = 300 }
-			}#Very Unlikely to win but possible
-			95 = {
-				narrative_event = { id = america.11 days = 300 }
-			}
-			}
-		}		
-		if = {
-			limit = {#If going North, stage 1
-				has_global_flag = redcoats_vs_hudsonians
-			}
-			clr_global_flag = redcoats_vs_hudsonians
-			random_list = {
-			50 = {
-				narrative_event = { id = america.12 days = 300 }
-			}
-			50 = {
-				narrative_event = { id = america.13 days = 300 }
-			}
-			}
-		}
-		if = {
-			limit = {#If going North, stage 2
-				has_global_flag = redcoats_vs_anglicans
-			}
-			clr_global_flag = redcoats_vs_anglicans
-			random_list = {
-			35 = {
-				narrative_event = { id = america.14 days = 300 }
-			}
-			65 = {
-				narrative_event = { id = america.15 days = 300 }
-			}
-			}
-		}
-		if = {
-			limit = {#If going North, stage 3
-				has_global_flag = redcoats_vs_nuns
-			}
-			clr_global_flag = redcoats_vs_nuns
-			random_list = {
-			5 = {
-				narrative_event = { id = america.16 days = 300 }
-			}
-			95 = {
-				narrative_event = { id = america.17 days = 300 }
-			}
-			}
-		}	
 	}	
 }
 narrative_event = {#Victory against the Americanists
 	id = america.6
-	is_triggered_only = yes
+	
 	title = america6Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = americanists_win
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = americanists_win days = 365 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 365
+	}
+	immediate = {
+		clr_global_flag = americanists_win
+	}
 	desc = {
 		text = america6Desc
 	}
@@ -649,7 +687,7 @@ narrative_event = {#Victory against the Americanists
 			primary_title = { title = e_britannia }
 		}
 		set_global_flag = redcoats_vs_appalachians
-		narrative_event = { id = america.5 days = 3 }#This event is a generic "give them more support	
+		narrative_event = { id = america.5 }	#This event is a generic "give them more support	
 		prestige = 2000
 		piety = 1000
 			random_list = {#Random chance of getting artifacts
@@ -706,49 +744,66 @@ narrative_event = {#Victory against the Americanists
 	option = {#F the British
 		name = america3B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#Cool, but not the LP
 		name = thelemaresponse
 		trigger = {
-			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion = summer_queen
-			}
-			NOT = {
-				primary_title = { title = e_britannia }
+			is_esoteric_religion_trigger = yes
+			should_handle_american_invasion = no
+		}
+	}
+	option = {#Fallback option for the Redcoats to decide their own direction if 
+		name = america3E
+		trigger = {
+			primary_title = { title = e_redcoats }
+			e_britannia = {
+				has_holder = no
 			}
 		}
+		set_global_flag = redcoats_vs_appalachians
+		narrative_event = { id = america.5 }
 	}
 }
 
 narrative_event = {#Defeat against the Americanists
 	id = america.7
-	is_triggered_only = yes
+	
 	title = america7Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = americanists_lose
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = americanists_lose days = 365 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 365
+	}
+	immediate = {
+		clr_global_flag = americanists_lose
+		set_global_flag = redcoats_lose
+		set_global_flag = americans_are_americanists
+	}
 	desc = {
 		text = america7Desc
 	}
@@ -757,40 +812,24 @@ narrative_event = {#Defeat against the Americanists
 		trigger = {
 			primary_title = { title = e_britannia }
 		}
-		narrative_event = { id = america.18 days = 7} #setup event for the American counter-invasion
-		set_global_flag = americans_coming
-		set_global_flag = americans_are_americanists
 	}
 	option = {#F the British
 		name = america4B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
 		}
 	}
 	option = {#Oh no, but not the LP
 		name = thelemaresponseBad
 		trigger = {
-			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion = summer_queen
-			}
+			is_esoteric_religion_trigger = yes
 			NOT = {
 				primary_title = { title = e_britannia }
 			}
@@ -799,13 +838,30 @@ narrative_event = {#Defeat against the Americanists
 }
 narrative_event = {#Victory against the Appalachians
 	id = america.8
-	is_triggered_only = yes
+	
 	title = america8Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = appalachians_win
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = appalachians_win days = 365 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 365
+	}
+	immediate = {
+		clr_global_flag = appalachians_win
+	}
 	desc = {
 		text = america8Desc
 	}
@@ -815,7 +871,7 @@ narrative_event = {#Victory against the Appalachians
 			primary_title = { title = e_britannia }
 		}
 		set_global_flag = redcoats_vs_dixies
-		narrative_event = { id = america.5 days = 3 }#This event is a generic "give them more support		
+		narrative_event = { id = america.5 }	#This event is a generic "give them more support		
 		prestige = 2000
 		piety = 1000
 
@@ -872,49 +928,68 @@ narrative_event = {#Victory against the Appalachians
 	option = {#F the British
 		name = america3B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#Cool, but not the LP
 		name = thelemaresponse
 		trigger = {
-			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion = summer_queen
-			}
-			NOT = {
-				primary_title = { title = e_britannia }
+			is_esoteric_religion_trigger = yes
+			should_handle_american_invasion = no
+		}
+	}
+	option = {#Fallback option for the Redcoats to decide their own direction if 
+		name = america3E
+		trigger = {
+			AND = { 
+				primary_title = { title = e_redcoats }
+				e_britannia = {
+					has_holder = no
+				}
 			}
 		}
+		set_global_flag = redcoats_vs_dixies
+		narrative_event = { id = america.5 }
 	}
 }
 
 narrative_event = {#Defeat against the Appalachians
 	id = america.9
-	is_triggered_only = yes
+	
 	title = america9Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = appalachians_lose
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = appalachians_lose days = 365 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 365
+	}
+	immediate = {
+		clr_global_flag = appalachians_lose
+		set_global_flag = redcoats_lose
+		set_global_flag = americans_are_appalachian
+	}
 	desc = {
 		text = america9Desc
 	}
@@ -923,40 +998,24 @@ narrative_event = {#Defeat against the Appalachians
 		trigger = {
 			primary_title = { title = e_britannia }
 		}
-		set_global_flag = americans_coming
-		set_global_flag = americans_are_appalachian
-		narrative_event = { id = america.18 days = 7}#setup for counter-invasion
 	}
 	option = {#F the British
 		name = america4B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
 		}
 	}
 	option = {#Oh no, but not the LP
 		name = thelemaresponseBad
 		trigger = {
-			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion = summer_queen
-			}
+			is_esoteric_religion_trigger = yes
 			NOT = {
 				primary_title = { title = e_britannia }
 			}
@@ -966,13 +1025,31 @@ narrative_event = {#Defeat against the Appalachians
 
 narrative_event = {#Victory against the HCC
 	id = america.10
-	is_triggered_only = yes
+	
 	title = america10Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = dixies_win
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = dixies_win days = 365 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 365
+	}
+	immediate = {
+		clr_global_flag = dixies_win
+		set_global_flag = redcoats_win
+	}
 	desc = {
 		text = america10Desc
 	}
@@ -981,7 +1058,7 @@ narrative_event = {#Victory against the HCC
 		trigger = {
 			primary_title = { title = e_britannia }
 		}
-		narrative_event = { id = america.21 days = 1500 }#The event where they win and you simply never hear from them again
+		narrative_event = { id = america.21 days = 1000 random = 1000 }#The event where they win and you simply never hear from them again
 		prestige = 5000
 		piety = 2000
 
@@ -1036,49 +1113,55 @@ narrative_event = {#Victory against the HCC
 	option = {#F the British
 		name = america3B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#Cool, but not the LP
 		name = thelemaresponse
 		trigger = {
-			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion = summer_queen
-			}
-			NOT = {
-				primary_title = { title = e_britannia }
-			}
+			is_esoteric_religion_trigger = yes
+			should_handle_american_invasion = no
 		}
 	}
 }
 
 narrative_event = {#Defeat against the HCC
 	id = america.11
-	is_triggered_only = yes
+	
 	title = america11Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = dixies_lose
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = dixies_lose days = 365 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 365
+	}
+	immediate = {
+		clr_global_flag = dixies_lose
+		set_global_flag = redcoats_lose
+		set_global_flag = americans_are_dixies
+	}
 	desc = {
 		text = america11Desc
 	}
@@ -1087,40 +1170,24 @@ narrative_event = {#Defeat against the HCC
 		trigger = {
 			primary_title = { title = e_britannia }
 		}
-		set_global_flag = americans_coming
-		set_global_flag = americans_are_dixies
-		narrative_event = { id = america.18 days = 7 }
 	}
 	option = {#F the British
 		name = america4B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
 		}
 	}
 	option = {#Oh no, but not the LP
 		name = thelemaresponseBad
 		trigger = {
-			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion = summer_queen
-			}
+			is_esoteric_religion_trigger = yes
 			NOT = {
 				primary_title = { title = e_britannia }
 			}
@@ -1130,13 +1197,30 @@ narrative_event = {#Defeat against the HCC
 
 narrative_event = {#Victory against the Hudsonians
 	id = america.12
-	is_triggered_only = yes
+	
 	title = america12Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = hudsonians_win
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = hudsonians_win days = 365 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 365
+	}
+	immediate = {
+		clr_global_flag = hudsonians_win
+	}
 	desc = {
 		text = america12Desc
 	}
@@ -1146,7 +1230,7 @@ narrative_event = {#Victory against the Hudsonians
 			primary_title = { title = e_britannia }
 		}
 		set_global_flag = redcoats_vs_anglicans
-		narrative_event = { id = america.5 days = 3 }#This event is a generic "give them more support
+		narrative_event = { id = america.5 }	#This event is a generic "give them more support
 		prestige = 2000
 		piety = 1000
 			random_list = {#Random chance of getting artifacts
@@ -1204,49 +1288,68 @@ narrative_event = {#Victory against the Hudsonians
 	option = {#F the British
 		name = america3B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#Cool, but not the LP
 		name = thelemaresponse
 		trigger = {
-			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion = summer_queen
-			}
-			NOT = {
-				primary_title = { title = e_britannia }
+			is_esoteric_religion_trigger = yes
+			should_handle_american_invasion = no
+		}
+	}
+	option = {#Fallback option for the Redcoats to decide their own direction if 
+		name = america3E
+		trigger = {
+			AND = { 
+				primary_title = { title = e_redcoats }
+				e_britannia = {
+					has_holder = no
+				}
 			}
 		}
+		set_global_flag = redcoats_vs_anglicans
+		narrative_event = { id = america.5 }
 	}
 }
 
 narrative_event = {#Defeat against the Hudsonians
 	id = america.13
-	is_triggered_only = yes
+	
 	title = america13Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = hudsonians_lose
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = hudsonians_lose days = 365 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 365
+	}
+	immediate = {
+		clr_global_flag = hudsonians_lose
+		set_global_flag = redcoats_lose
+		set_global_flag = americans_are_hudsonian
+	}
 	desc = {
 		text = america13Desc
 	}
@@ -1255,40 +1358,24 @@ narrative_event = {#Defeat against the Hudsonians
 		trigger = {
 			primary_title = { title = e_britannia }
 		}
-		set_global_flag = americans_coming
-		set_global_flag = americans_are_hudsonian
-		narrative_event = { id = america.18 days = 3 }
 	}
 	option = {#F the British
 		name = america4B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
 		}
 	}
 	option = {#Oh no, but not the LP
 		name = thelemaresponseBad
 		trigger = {
-			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion = summer_queen
-			}
+			is_esoteric_religion_trigger = yes
 			NOT = {
 				primary_title = { title = e_britannia }
 			}
@@ -1298,13 +1385,30 @@ narrative_event = {#Defeat against the Hudsonians
 
 narrative_event = {#Victory against the Anglicans
 	id = america.14
-	is_triggered_only = yes
+	
 	title = america14Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = anglicans_win
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = anglicans_win days = 365 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 365
+	}
+	immediate = {
+		clr_global_flag = anglicans_win
+	}
 	desc = {
 		text = america14Desc
 	}
@@ -1314,7 +1418,7 @@ narrative_event = {#Victory against the Anglicans
 			primary_title = { title = e_britannia }
 		}
 		set_global_flag = redcoats_vs_nuns
-		narrative_event = { id = america.5 days = 3 }#This event is a generic "give them more support		
+		narrative_event = { id = america.5 }	#This event is a generic "give them more support		
 		prestige = 2000
 		piety = 1000
 		
@@ -1370,49 +1474,68 @@ narrative_event = {#Victory against the Anglicans
 	option = {#F the British
 		name = america3B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#Cool, but not the LP
 		name = thelemaresponse
 		trigger = {
-			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion = summer_queen
-			}
-			NOT = {
-				primary_title = { title = e_britannia }
+			is_esoteric_religion_trigger = yes
+			should_handle_american_invasion = no
+		}
+	}
+	option = {#Fallback option for the Redcoats to decide their own direction if 
+		name = america3E
+		trigger = {
+			AND = { 
+				primary_title = { title = e_redcoats }
+				e_britannia = {
+					has_holder = no
+				}
 			}
 		}
+		set_global_flag = redcoats_vs_nuns
+		narrative_event = { id = america.5 }
 	}
 }
 
 narrative_event = {#Defeat against the Anglicans
 	id = america.15
-	is_triggered_only = yes
+	
 	title = america15Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = anglicans_lose
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = anglicans_lose days = 365 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 365
+	}
+	immediate = {
+		clr_global_flag = anglicans_lose
+		set_global_flag = redcoats_lose
+		set_global_flag = americans_are_ontarian
+	}
 	desc = {
 		text = america15Desc
 	}
@@ -1421,40 +1544,24 @@ narrative_event = {#Defeat against the Anglicans
 		trigger = {
 			primary_title = { title = e_britannia }
 		}
-		set_global_flag = americans_coming
-		set_global_flag = americans_are_ontarian
-		narrative_event = { id = america.18 days = 7 }
 	}
 	option = {#F the British
 		name = america4B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
 		}
 	}
 	option = {#Oh no, but not the LP
 		name = thelemaresponseBad
 		trigger = {
-			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion = summer_queen
-			}
+			is_esoteric_religion_trigger = yes
 			NOT = {
 				primary_title = { title = e_britannia }
 			}
@@ -1463,13 +1570,31 @@ narrative_event = {#Defeat against the Anglicans
 }
 narrative_event = {#Victory against the Ursulines
 	id = america.16
-	is_triggered_only = yes
+	
 	title = america16Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = nuns_win
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = nuns_win days = 365 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 365
+	}
+	immediate = {
+		clr_global_flag = nuns_win
+		set_global_flag = redcoats_win
+	}
 	desc = {
 		text = america16Desc
 	}
@@ -1478,7 +1603,7 @@ narrative_event = {#Victory against the Ursulines
 		trigger = {
 			primary_title = { title = e_britannia }
 		}
-		narrative_event = { id = america.21 days = 1500 }#The event where they win and you simply never hear from them again
+		#The event where they win and you simply never hear from them again
 		prestige = 5000
 		piety = 2000
 
@@ -1530,49 +1655,55 @@ narrative_event = {#Victory against the Ursulines
 	option = {#F the British
 		name = america3B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
+			should_handle_american_invasion = no
 		}
 	}
 	option = {#Cool, but not the LP
 		name = thelemaresponse
 		trigger = {
-			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion = summer_queen
-			}
-			NOT = {
-				primary_title = { title = e_britannia }
-			}
+			is_esoteric_religion_trigger = yes
+			should_handle_american_invasion = no
 		}
 	}
 }
 
 narrative_event = {#Defeat against the Ursulines
 	id = america.17
-	is_triggered_only = yes
+	
 	title = america17Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = nuns_lose
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = nuns_lose days = 365 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 365
+	}
+	immediate = {
+		clr_global_flag = nuns_lose
+		set_global_flag = redcoats_lose
+		set_global_flag = americans_are_ursuline
+	}
 	desc = {
 		text = america17Desc
 	}
@@ -1581,40 +1712,24 @@ narrative_event = {#Defeat against the Ursulines
 		trigger = {
 			primary_title = { title = e_britannia }
 		}
-		set_global_flag = americans_coming
-		set_global_flag = americans_are_ursuline
-		narrative_event = { id = america.18 days = 7 }
 	}
 	option = {#F the British
 		name = america4B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
 		}
 	}
 	option = {#Oh no, but not the LP
 		name = thelemaresponseBad
 		trigger = {
-			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion = summer_queen
-			}
+			is_esoteric_religion_trigger = yes
 			NOT = {
 				primary_title = { title = e_britannia }
 			}
@@ -1624,7 +1739,7 @@ narrative_event = {#Defeat against the Ursulines
 
 narrative_event = {#Setup event that fires and results in the creation of the invader tag
 	id = america.18
-	is_triggered_only = yes
+	
 	title = america18Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
@@ -1634,66 +1749,95 @@ narrative_event = {#Setup event that fires and results in the creation of the in
 	desc = {
 		text = america18Desc
 	}
+	has_global_flag = redcoats_lose
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = redcoats_lose days = 710 }
+		controls_religion = yes
+	}
 	immediate = {
-		
+		clr_global_flag = redcoats_lose
+		set_global_flag = americans_coming
+	}
+	mean_time_to_happen = {
+		days = 710
 	}
 	option = {#Oh no
 		name = america18A	
 		trigger = {
 			primary_title = { title = e_britannia }
 		}
-		narrative_event = { id = america.19 days = 1500 }#in 1500 days/5 years you get wrecked
 	}
 	option = {#F the British
 		name = america3B	
 		trigger = {
-			OR = {
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			religion_openly_novelist_or_reformed_trigger = yes
+			NOT = { primary_title = { title = e_redcoats } }
 		}
 	}
 	option = {#Who?
 		name = america3C	
 		trigger = {
-			NOR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion_group = christian
-				religion = novelist
-				religion = novelist_reformed
-			}
+			is_esoteric_religion_trigger = no
+			religion_openly_novelist_or_reformed_trigger = no
+			NOT = { primary_title = { title = e_redcoats } }
 		}
 	}
 	option = {#Oh no, but not the LP
 		name = thelemaresponseBad
 		trigger = {
-			OR = {
-				religion = thelemic_reformed
-				religion = old_thelemic
-				religion = summer_queen
-			}
+			is_esoteric_religion_trigger = yes
 			NOT = {
 				primary_title = { title = e_britannia }
 			}
+			NOT = { primary_title = { title = e_redcoats } }
 		}
+	}	
+	option = {#Oh no
+		name = america21A
+			trigger = {
+				primary_title = { title = e_redcoats }
+			}
+			e_redcoats = {
+				unsafe_destroy_landed_title = THIS
+				activate_title = { title = THIS status = no }
+			}
 	}	
 }
 
 narrative_event = {#The Invasion actually happens
 	id = america.19
-	is_triggered_only = yes
+	
 	title = america19Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
 	
+	has_global_flag = americans_coming
+	only_playable = yes
+	religion = catholic #Fired for the pope
+	min_age = 16
+	show_root = no
+	hide_from = yes
+	portrait = event_target:invasion_leader
+	trigger = {
+		had_global_flag = { flag = americans_coming days = 1460 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 1460
+	}
 	desc = {
 		text = america19Desc
 	}
 	immediate = {
+		clr_global_flag = americans_coming
 		if = {
 			limit = {
 				has_global_flag = americans_are_yankees
@@ -1805,7 +1949,15 @@ narrative_event = {#The Invasion actually happens
 				primary_title = { title = e_britannia }
 			}
 		}
-	}		
+	}
+	option = {
+		name = america19D
+		tooltip_info = yes
+		trigger = {
+			can_plays_as_invader_trigger = yes
+		}
+		play_as_invasion_leader_effect = yes
+	}
 }
 
 narrative_event = {#The Redcoats leave on their own, if you don't launch it yourself
@@ -1828,12 +1980,31 @@ narrative_event = {#The Redcoats leave on their own, if you don't launch it your
 			has_global_flag = invading_america
 		}
 	}
+	mean_time_to_happen = {
+		days = 365
+	}
 	
 	desc = {
 		text = america20Desc
 	}
 	immediate = {
 		set_global_flag = invading_america
+		set_global_flag = american_invasion_launched
+		set_global_flag = NA_win
+		set_global_flag = redcoats_auto_start
+		activate_title = { title = e_redcoats status = yes }
+		d_redcoats = {
+			holder_scope = {
+				save_event_target_as = redcoat_leader
+			}
+			unsafe_destroy_landed_title = THIS
+			activate_title = { title = THIS status = no }
+		}
+		event_target:redcoat_leader = {
+			e_redcoats = {
+				grant_title = PREV
+			}
+		}
 	}
 	option = {#Oh no
 		name = america20A
@@ -1841,7 +2012,6 @@ narrative_event = {#The Redcoats leave on their own, if you don't launch it your
 				controls_religion = yes
 				religion = catholic#I want this to fire only once even though the event will be seen by everyone
 			}
-			narrative_event = { id = america.3 days = 500 }
 	}
 	option = {#Thelemic response
 		name = america20B
@@ -1873,22 +2043,31 @@ narrative_event = {#The Redcoats leave on their own, if you don't launch it your
 }
 narrative_event = {#The Redcoats just never report back after winning
 	id = america.21
-	is_triggered_only = yes
+	
 	title = america21Title
 	picture = GFX_evt_aztec_arrival
 	border = GFX_event_narrative_frame_religion
 	
 	major = yes
+	has_global_flag = redcoats_win
 	only_playable = yes
-	religion = catholic#Intended to fire for the Pope, since we can't be sure that any Thelemic rulers will exist by this point, though they probably will
+	religion = catholic #Fired for the pope
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	
+	portrait = e_redcoats
+	trigger = {
+		had_global_flag = { flag = redcoats_win days = 2190 }
+		controls_religion = yes
+	}
+	mean_time_to_happen = {
+		days = 1095
+	}
 	desc = {
 		text = america21Desc
 	}
 	immediate = {
+		clr_global_flag = redcoats_win
 	}
 	option = {#Oh no
 		name = america21A
@@ -1901,6 +2080,7 @@ narrative_event = {#The Redcoats just never report back after winning
 		name = america21B
 			trigger = {
 				religion = thelemic_reformed
+				NOT = { primary_title = { title = e_redcoats } }
 			}
 	}
 	option = {#Anti-Thelemic response
@@ -1911,6 +2091,7 @@ narrative_event = {#The Redcoats just never report back after winning
 					religion = novelist_reformed
 					religion_group = christian
 				}
+				NOT = { primary_title = { title = e_redcoats } }
 			}
 	}
 	option = {#Who?
@@ -1922,6 +2103,17 @@ narrative_event = {#The Redcoats just never report back after winning
 					religion = novelist_reformed
 					religion_group = christian
 				}
+				NOT = { primary_title = { title = e_redcoats } }
 			}
 	}
+	option = {#Oh no
+		name = america21A
+			trigger = {
+				primary_title = { title = e_redcoats }
+			}
+			e_redcoats = {
+				unsafe_destroy_landed_title = THIS
+				activate_title = { title = THIS status = no }
+			}
+	}	
 }

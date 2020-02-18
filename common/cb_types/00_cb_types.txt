@@ -16234,7 +16234,7 @@ rivalry_cb = {
 						}
 					}
 				}
-				achievement_sibling_rival_war_done_effect = yes
+				achievement_lets_go_out_into_the_field_done_effect = yes
 			}
 			remove_opinion = {
 				who = FROM
@@ -16297,7 +16297,7 @@ rivalry_cb = {
 						}
 					}
 				}
-				achievement_sibling_rival_war_done_effect = yes
+				achievement_lets_go_out_into_the_field_done_effect = yes
 			}
 		}
 	}
@@ -22711,6 +22711,7 @@ unite_russia = {##Designed to help the Zarists consolidate
 	sort_priority = 1900
 
 	can_use_gui = {
+		prestige = 200
 		check_if_crusader_trigger = yes
 	}
 
@@ -22719,15 +22720,16 @@ unite_russia = {##Designed to help the Zarists consolidate
 			bhutan_major_cb = yes
 			independent = yes
 			OR = {
-				religion = zarist
+				is_zarist_religion_trigger = yes
 				religion = stalinist
+				religion = trotskyite
 			}
 			primary_title = { holy_order = no }	#This stops the KGB from steamrolling Russia
 		}
 	}
 
 	can_use_title = {
-			de_jure_liege_or_above = e_russia
+		de_jure_liege_or_above = e_russia
 	}
 	
 	is_valid = {
@@ -22735,6 +22737,7 @@ unite_russia = {##Designed to help the Zarists consolidate
 
 	on_add = {
 		hidden_tooltip = { fire_haruspicy_event_effect = yes }
+		prestige = -200
 		if = {
 			limit = { defender = { is_offmap_governor = offmap_china } }
 			attacker = {  
@@ -22765,30 +22768,8 @@ unite_russia = {##Designed to help the Zarists consolidate
 				holder_scope = {
 					character = FROM
 				}
-				NOT = { ROOT = { tier = EMPEROR } }
 			}
 			ROOT = { usurp_title = { target = PREV type = invasion } }
-		}
-		
-		if = {
-			# Take the enemy's duchies within the target kingdom, if we are the same or lower tier
-			limit = {
-				ROOT = {
-					NOT = { higher_tier_than = FROM }
-				}
-			}
-			FROM = {
-				any_demesne_title = {
-					limit = {
-						tier = DUKE
-						OR = {
-							title = PREVPREV
-							de_jure_liege_or_above = PREVPREV
-						}
-					}
-					ROOT = { usurp_title = { target = PREV type = invasion } }
-				}
-			}
 		}
 		
 		# Have I become the vassal of the loser due to taking a duchy or kingdom?
@@ -22830,7 +22811,6 @@ unite_russia = {##Designed to help the Zarists consolidate
 			ROOT = { prestige = -500 }
 		}
 		FROM = {
-			participation_scaled_piety = 250
 			participation_scaled_prestige = 300
 			if = {
 				limit = {
@@ -22842,8 +22822,7 @@ unite_russia = {##Designed to help the Zarists consolidate
 		any_defender = {
 			limit = { NOT = { character = FROM } }
 			hidden_tooltip = { 
-				participation_scaled_piety = 100
-				participation_scaled_prestige = 200
+				participation_scaled_prestige = 300
 				if = {
 					limit = {
 						uses_decadence = yes
