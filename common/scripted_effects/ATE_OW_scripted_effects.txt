@@ -3076,3 +3076,171 @@ adopt_faith_special_title_effect = {
 		}
 	}
 }
+select_random_character_to_fatima_effect = {
+	any_realm_character = {
+		limit = {
+			NOR = { trait = cynical trait = pilgrim }
+			is_inaccessible_or_incapable_trigger = no
+			religion = event_target:fatima_religion
+			is_adult = yes
+			ai = yes
+			location = {
+				at_fatima_region_trigger = yes
+			}
+		}
+		score_value = {
+			value = 10
+			interesting_courtier_selection_score = yes
+		}
+		add_trait = on_pilgrimage
+		set_character_flag = on_fatima_pilgrimage
+	}
+}
+select_random_ruler_to_fatima_effect = {
+	random_independent_ruler = {
+		limit = {
+			religion = event_target:fatima_religion
+			any_realm_province = {
+				at_fatima_region_trigger = yes
+			}
+		}
+		preferred_limit = {
+			capital_scope = {
+				at_fatima_region_trigger = yes
+			}
+		}
+		random = {
+			chance = 20
+			modifier = {
+				factor = 1.5
+				trait = zealous
+			}
+			modifier = {
+				factor = 0
+				NAND = {
+					NOR = { trait = cynical trait = pilgrim }
+					is_inaccessible_or_incapable_trigger = no
+					ai = yes
+					is_adult = yes
+				}
+			}
+			modifier = {
+				factor = 0
+				controls_religion = yes
+			}
+			add_trait = on_pilgrimage
+			set_character_flag = on_fatima_pilgrimage
+		}
+		select_random_character_to_fatima_effect = yes
+		select_random_character_to_fatima_effect = yes
+		if = {
+			limit = { higher_tier_than = DUKE }
+			select_random_character_to_fatima_effect = yes
+		}
+		if = {
+			limit = { higher_tier_than = KING }
+			select_random_character_to_fatima_effect = yes
+		}
+	}
+}
+select_fatima_province_effect = {
+	random_independent_ruler = {
+		limit = {
+			any_realm_province = {
+				at_fatima_region_trigger = yes
+				OR = {
+					port = yes
+					NOT = { has_global_flag = fatima_at_italy }
+				}
+			}
+			religion = event_target:fatima_religion
+		}
+		preferred_limit = {
+			capital_scope = {
+				at_fatima_region_trigger = yes
+			}
+			higher_tier_than = KING
+		}
+		preferred_limit = {
+			capital_scope = {
+				at_fatima_region_trigger = yes
+			}
+			higher_tier_than = DUKE
+		}
+		preferred_limit = {
+			higher_tier_than = KING
+		}
+		preferred_limit = {
+			capital_scope = {
+				at_fatima_region_trigger = yes
+			}
+			higher_tier_than = COUNT
+		}
+		preferred_limit = {
+			higher_tier_than = DUKE
+		}
+		preferred_limit = {
+			capital_scope = {
+				at_fatima_region_trigger = yes
+			}
+		}
+		preferred_limit = {
+			higher_tier_than = COUNT
+		}
+		random_realm_province = {
+			limit = {
+				at_fatima_region_trigger = yes
+				OR = {
+					port = yes
+					NOT = { has_global_flag = fatima_at_italy }
+				}
+			}
+			preferred_limit = {
+				holder_scope = {
+					higher_tier_than = KING
+					religion = event_target:fatima_religion
+					capital_scope = {
+						province = PREVPREV
+					}
+				}
+			}
+			preferred_limit = {
+				holder_scope = {
+					higher_tier_than = DUKE
+					religion = event_target:fatima_religion
+					capital_scope = {
+						province = PREVPREV
+					}
+				}
+			}
+			preferred_limit = {
+				holder_scope = {
+					higher_tier_than = COUNT
+					religion = event_target:fatima_religion
+					capital_scope = {
+						province = PREVPREV
+					}
+				}
+			}
+			preferred_limit = {
+				holder_scope = {
+					religion = event_target:fatima_religion
+					capital_scope = {
+						province = PREVPREV
+					}
+				}
+			}
+			save_global_event_target_as = fatima_current_province
+		}
+		select_random_character_to_fatima_effect = yes
+		select_random_character_to_fatima_effect = yes
+		if = {
+			limit = { higher_tier_than = DUKE }
+			select_random_character_to_fatima_effect = yes
+		}
+		if = {
+			limit = { higher_tier_than = KING }
+			select_random_character_to_fatima_effect = yes
+		}
+	}
+}

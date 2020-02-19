@@ -4488,15 +4488,7 @@ new_crusade = {
 			OR = {
 				NOT = { religion_group = ROOT }
 				AND = {
-					has_character_flag = fourth_crusade_target
-					NOR = { 
-						has_character_flag = fourth_crusade_recipient 
-						religion = ROOT
-					}
-				}
-				AND = {
-					has_global_flag = 4th_crusade_official
-					has_landed_title = e_byzantium
+					has_global_flag = fatima_massacre_crusade
 					NOT = { religion = ROOT }
 				}
 				is_heresy_of = ROOT
@@ -4535,9 +4527,8 @@ new_crusade = {
 						title = PREV
 					}
 					PREV = {
-						title = k_thrace	
-						FROM = { 
-							has_landed_title = e_byzantium 
+						title = event_target:fatima_massacre_kingdom
+						FROM = {
 							religion_group = christian
 						}
 					} 
@@ -4561,6 +4552,23 @@ new_crusade = {
 					}
 				}
 			}
+		}
+		OR = {
+			NOT = { has_global_flag = fatima_massacre_crusade }
+			NOT = {
+				any_province = {
+					kingdom = {
+						title = event_target:fatima_massacre_kingdom
+					}
+					holder_scope = {
+						top_liege = {
+							NOT = { religion = ROOT }
+							independent = yes
+						}
+					}
+				}
+			}
+			title = event_target:fatima_massacre_kingdom
 		}
 	}
 	
@@ -4685,16 +4693,18 @@ new_crusade = {
 				}
 			}
 
-			if = {
-				limit = {
-					ai = yes
-					NOT = {
-						crusade_beneficiary = {
-							always = yes
+			any_attacker = {
+				if = {
+					limit = {
+						ai = yes
+						NOT = {
+							crusade_beneficiary = {
+								always = yes
+							}
 						}
 					}
+					character_event = { id = HFP.41007 }
 				}
-				character_event = { id = HFP.41007 }
 			}
 		
 			# Should we give the seized land to the Official Crusade Recipient?
@@ -5193,228 +5203,100 @@ new_crusade = {
 						narrative_event = { id = HFP.41160 }
 					}
 				}
-				# If it is a Fourth Crusade
+				# If it is a Fatima Massacre crusade
 				else_if = {
 					limit = {
-						has_global_flag = 4th_crusade_official
+						has_global_flag = fatima_massacre_crusade
 						crusade_target_title = {
-							title = k_thrace
+							title = event_target:fatima_massacre_kingdom
 						}
 						FROM = {
 							religion_group = ROOT
-						}
-						FROM = {
 							NOT = {
 								religion = ROOT
 							}
-						}
-						crusade_target_char = {
-							e_byzantium = {
-								owner = {
-									character = PREVPREV
-								}
-							}
-						}
-					}
-					# Find a King for Trebizond
-					e_byzantium = {
-						owner = {
-							if = {
-								limit = {
-									NOT = {
-										any_playable_ruler = {
-											has_landed_title = k_trebizond
-										}
-									}
-								}
-								random_vassal = {
-									limit = {
-										OR = {
-											has_landed_title = d_trebizond
-											has_landed_title = d_armeniacon
-										}
-									}
-									preferred_limit = {
-										has_landed_title = d_trebizond
-									}
-									grant_title_no_opinion = k_trebizond
-								}
-							}
-
-						}
-					}
-					# Set vassals for Trebizond
-					k_trebizond = {
-						owner = {
-							e_byzantium = {
-								owner = {
-									any_vassal = {
-										limit = {
-											de_jure_liege = k_trebizond
-										}
-										set_defacto_liege = PREVPREVPREV
-									}
-								}
-							}
-						}
-					}
-					# Find a Catholic/Fraticelli lord for Cyprus
-					if = {
-						limit = {
-							c_famagusta = {
-								owner = {
-									religion = FROM
-									culture = FROM
-									ai = yes
-								}
-							}
-							c_limisol = {
-								owner = {
-									religion = FROM
-									culture = FROM
-									ai = yes
-								}
-							}
-							k_cyprus = {
-								has_holder = no
-							}
-						}
-						any_crusade_participant = {
-							limit = {
-								ai = yes
-								NOT = {
-									most_participating_crusader = {
-										character = PREV
-									}
-								}
-							}
-							crusade_beneficiary = {
-								grant_title_no_opinion = c_famagusta
-								grant_title_no_opinion = c_limisol
-								grant_title_no_opinion = d_cyprus
-								grant_title_no_opinion = k_cyprus
-								d_cyprus = {
-									de_jure_liege = k_cyprus
-								}
-								set_defacto_liege = THIS
-								character_event = { id = HFP.41090 days = 1 }
-								if = {
-									limit = {
-										NOR = {
-											trait = crusader
-											trait = crusader_king
-											trait = crusader_queen
-										}
-									}
-									add_trait = crusader
-								}
-							}
-							character_event = { id = HFP.41007 }
 						}
 					}
 					distribute_crusade_target_title = yes
 					#The Crusader King becomes an Emperor and gets a bloodline
 					crusader_king = {
-						grant_title_no_opinion = e_latin_empire
+						grant_title_no_opinion = e_apostolic_empire
 					}
-					# Find random vassal and make a king out of them
-					e_byzantium = {
-						owner = {
-							random_vassal = {
-								limit = {
-									tier = DUKE
-									ai = yes
+					# Find random vassals and make kings out of them
+					FROM = {
+						random_vassal = {
+							limit = {
+								tier = DUKE
+								ai = yes
+							}
+							primary_title = {
+								create_title = {
+									tier = KING
+									landless = no
+									temporary = no
+									name = "fatima_independet_kingdom_name"
+									holder = PREV
+									culture = PREV
+									custom_created = yes
+									base_title = THIS
+									copy_title_laws = yes
 								}
-								preferred_limit = {
-									de_jure_liege = k_byzantium
-								}
-								preferred_limit = {
-									de_jure_liege = k_anatolia
-								}
-								preferred_limit = {
-									de_jure_liege = k_sicily
-								}
-								primary_title = {
-									create_title = {
-										tier = KING
-										landless = no
-										temporary = no
-										name = "fourth_crusade_greek_kingdom_name"
-										holder = PREV
-										culture = PREV
-										custom_created = yes
-										base_title = THIS
-										copy_title_laws = yes
-									}
+							}
+						}
+						random_vassal = {
+							limit = {
+								tier = DUKE
+								ai = yes
+							}
+							primary_title = {
+								create_title = {
+									tier = KING
+									landless = no
+									temporary = no
+									name = "fatima_independet_kingdom_name"
+									holder = PREV
+									culture = PREV
+									custom_created = yes
+									base_title = THIS
+									copy_title_laws = yes
 								}
 							}
 						}
 					}
 					# All Byzantine vassals go independent except those neighboring the old Emperor, and he/she gets an inferior Empire title while the Byzantine title is broken
-					e_byzantium = {
-						owner = {
-							any_vassal = {
-								limit = {
-									higher_tier_than = BARON
-								}
-								set_defacto_liege = this
+					FROM = {
+						any_vassal = {
+							limit = {
+								higher_tier_than = BARON
 							}
-							if = {
-								limit = {
-									primary_title = {
-										title = e_byzantium
-									}
-									has_landed_title = c_nikaea
+							set_defacto_liege = this
+							set_character_flag = fatima_released
+						}
+						if = {
+							limit = {
+								tier = EMPEROR
+							}
+							primary_title = {
+								create_title = {
+									tier = EMPEROR
+									landless = no
+									temporary = no
+									name = "fatima_independet_empire_name"
+									holder = PREV
+									culture = PREV
+									custom_created = yes
+									base_title = THIS
 								}
-								grant_title = e_nicaea
-								e_nicaea = {
-									copy_title_laws = e_byzantium
-									copy_title_history = e_byzantium
-									make_primary_title = yes
-								}
-								any_demesne_title = {
-									limit = {
-										tier = EMPEROR
-										NOT = {
-											title = e_nicaea
+								new_title = {
+									holder_scope = {
+										any_demesne_title = {
+											limit = {
+												tier = EMPEROR
+												NOT = { title = PREV }
+											}
+											destroy_landed_title = THIS
 										}
 									}
-									destroy_landed_title = THIS
-								}
-								any_neighbor_independent_ruler = {
-									limit = {
-										ai = yes
-										culture = PREV
-										religion = PREV
-										lower_tier_than = KING
-									}
-									set_defacto_liege = PREV
-								}
-							}
-							else_if = {
-								limit = {
-									primary_title = {
-										title = e_byzantium
-									}
-								}
-								capital_scope = {
-									create_title = {
-										tier = EMPEROR
-										landless = no
-										temporary = no
-										name = "fourth_crusade_greek_empire_name"
-										holder = PREV
-										culture = PREV
-										custom_created = yes
-										base_title = THIS
-									}
-								}
-								any_demesne_title = {
-									limit = {
-										tier = EMPEROR
-										is_titular = no
-									}
-									destroy_landed_title = THIS
 								}
 							}
 							any_neighbor_independent_ruler = {
@@ -5427,71 +5309,24 @@ new_crusade = {
 								set_defacto_liege = PREV
 							}
 						}
-					}
-					# Crete is taken by a Merchant Lord
-					if = {
-						limit = {
-							c_kaneia = {
-								owner = {
-									ai = yes
+						else = {
+							any_neighbor_independent_ruler = {
+								limit = {
+									#ai = yes
+									culture = PREV
+									religion = PREV
+									lower_tier_than = KING
+									has_character_flag = fatima_released
 								}
-							} 
-							c_chandax = {
-								owner = {
-									ai = yes
-								}
+								set_defacto_liege = PREV
 							}
-							any_crusade_participant = {
-								is_patrician = yes
-								higher_tier_than = COUNT
-							}
-						}
-						random_crusade_participant = {
-							limit = {
-								is_patrician = yes
-								higher_tier_than = COUNT
-							}
-							preferred_limit = {
-								has_landed_title = k_venice
-							}
-							preferred_limit = {
-								has_landed_title = d_venice
-							}
-							preferred_limit = {
-								tier = EMPEROR
-							}
-							preferred_limit = {
-								tier = KING
-							}
-							grant_title_no_opinion = d_krete 
-							grant_title_no_opinion = c_kaneia
-							grant_title_no_opinion = c_chandax
-						}
-					}
-
-					if = {
-						limit = {
-							official_crusade_recipient = {
-								has_character_flag = fourth_crusade_recipient
-							}
-						}
-						official_crusade_recipient = {
-							save_event_target_as = byzantine_refugee
 						}
 					}
 					# Narrative event explaining that Byzantium has been taken out
-					any_character = {
-						narrative_event = { id = HF.49008 }
-					}
-					event_target:byzantine_refugee = {
-						death = {
-							death_reason = death_battle
-							killer = FROM
+					e_apostolic_empire = {
+						holder_scope = {
+							narrative_event = { id = AEC.1006 }
 						}
-					}
-					# Making sure the Byzantine Empire is destroyed
-					e_byzantium = {
-						unsafe_destroy_landed_title = THIS
 					}
 				}
 				# Otherwise
@@ -22737,7 +22572,10 @@ unite_russia = {##Designed to help the Zarists consolidate
 
 	on_add = {
 		hidden_tooltip = { fire_haruspicy_event_effect = yes }
-		prestige = -200
+		ROOT = {
+			show_scope_change = no
+			prestige = -200
+		}
 		if = {
 			limit = { defender = { is_offmap_governor = offmap_china } }
 			attacker = {  

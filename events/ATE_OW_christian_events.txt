@@ -1,0 +1,1126 @@
+namespace = AEC
+narrative_event = {
+	id = AEC.1
+	title = AEO1title
+	picture = GFX_evt_virgin_mary_icon
+	border = GFX_event_narrative_frame_religion
+	
+	desc = {
+		text = AEO1desc
+	}
+	trigger = {
+        religion = orthodox
+	    NOT = { trait = orthodox_athos }
+	    NOT = { trait = orthodox_andrian }
+	    NOT = { trait = orthodox_giorgi }
+	    NOT = { trait = orthodox_mykola }
+	    NOT = { trait = orthodox_vasiliy }
+	}
+    mean_time_to_happen = {
+		days = 1
+    }
+	option = {
+		name = AEO1A
+		ai_chance = {
+	    factor = 20
+	       modifier = {
+		    factor = 10
+		    OR = {
+			   culture_group = byzantine
+			   culture = bulgarian
+			    } 
+		   }
+		    modifier = {
+		    factor = 0.1
+		    NOR = {
+			   culture_group = byzantine
+			   culture = bulgarian
+			    } 
+		   }
+	    }  
+	    add_trait = orthodox_athos
+		
+	}
+	option = {
+		name = AEO1B
+		ai_chance = {
+	    factor = 20
+	       modifier = {
+		    factor = 10
+		    culture_group = transnistrian
+		   }
+		   modifier = {
+		    factor = 1.5
+		    is_landed = yes
+			NOT = { culture = ukrainer }
+			NOT = { culture = bielaruskaja }
+		   }
+	    }
+	    add_trait = orthodox_andrian
+    }
+	option = {
+		name = AEO1C
+		ai_chance = {
+	    factor = 20
+	       modifier = {
+		    factor = 10
+		    culture_group = caucasian
+		   }
+		    modifier = {
+		    factor = 2
+		    culture_group = east_slavic
+		    NOT = { culture = ukrainer }
+			NOT = { culture = bielaruskaja}
+		   }
+		   modifier = {
+		    factor = 10
+		    culture_group = south_slavic
+			NOT = {
+			    culture = bulgarian
+			}
+		   }
+		   modifier = {
+		    factor = 2
+			   culture_group = baltic
+		   }
+	    }
+	    add_trait = orthodox_giorgi
+    } 
+	option = {
+		name = AEO1D
+		ai_chance = {
+	    factor = 40
+		    modifier = {
+		    factor = 10
+               OR = {
+			   culture = ukrainer
+			   culture = bielaruskaja
+			   culture_group = west_slavic
+			   }
+		    }
+			modifier = {
+		    factor = 1.5
+               culture_group = east_slavic
+		       NOT = { culture = ukrainer }
+			   NOT = { culture = bielaruskaja}
+			   NOT = { culture = cossack }
+		    }
+			modifier = {
+		    factor = 1.5
+			   culture_group = baltic
+		    }
+	    }
+		narrative_event = { id = AEC.2 days = 1 }
+	}
+
+}
+narrative_event = {
+	id = AEC.2
+	title = AEO2title
+	picture = GFX_evt_virgin_mary_icon
+	border = GFX_event_narrative_frame_religion
+	
+	desc = {
+		text = AEO2desc
+	}
+	is_triggered_only = yes
+	option = {
+	    name = AEO2A
+		ai_chance = {
+		factor = 50
+		    modifier = { 
+			factor = 100
+			    OR = {
+			   culture = ukrainer
+			   culture = bielaruskaja
+			   culture_group = west_slavic
+			   culture_group = baltic
+			   }
+			}
+		}
+		add_trait = orthodox_mykola
+	}
+	option = {
+	    name = AEO2B
+		ai_chance = {
+		factor = 50
+		    modifier = { 
+			factor = 100
+			   culture_group = east_slavic
+		       NOT = { culture = ukrainer }
+			   NOT = { culture = bielaruskaja}
+			   NOT = { culture = cossack }
+			}
+	    }
+		add_trait = orthodox_vasiliy
+    }
+    option = {
+	   name = AEO2C
+		ai_chance = { factor = 0 }
+		narrative_event = { id = AEC.1 days = 1 } 
+	}
+}
+#narrative_event = {
+#	id = AEO.3
+#	title = AEO3title
+#	picture = GFX_evt_fancy_feast_icon
+#	border = GFX_event_narrative_frame_religion
+#	is_triggered_only = yes
+#	
+#	desc = {
+#		text = AEO3desc
+#	}
+#	hide_from = yes
+#	
+#	option = {
+#		name = AEO3A
+#		wealth = 200	
+#		piety = 200
+#
+#		add_character_modifier = {
+#				name = province_celebrated_stalinmas
+#				duration = 365
+#			}		
+#   }
+#}
+
+## Massacre of Fatima Crusade
+# Start event (the moment the Crusade starts)
+character_event = {
+    id = AEC.1000
+    hide_window = yes
+    is_triggered_only = yes
+	religion_group = christian
+    trigger = {
+		uses_new_crusade = yes
+    	has_global_flag = first_crusade_complete
+        NOT = { has_global_flag = fatima_massacre_crusade }
+		NOT = { has_global_flag = fatima_started }
+    	any_independent_ruler = {
+			realm_size = 50
+			NOT = {
+				religion = ROOT
+			}
+			religion_group = ROOT
+			higher_tier_than = DUKE
+			OR = {
+				capital_scope = {
+					region = world_europe_west_iberia
+				}
+				any_demesne_title = {
+					higher_tier_than = DUKE
+					is_titular = no
+					is_primary_type_title = no
+					capital_scope = {
+						region = world_europe_west_iberia
+					}
+				}
+				any_vassal = {
+					any_demesne_title = {
+						higher_tier_than = DUKE
+						is_titular = no
+						is_primary_type_title = no
+						capital_scope = {
+							region = world_europe_west_iberia
+						}
+					}
+				}
+			}
+    	}
+        e_apostolic_empire = {
+            has_holder = no
+        }
+		always = no
+    }
+
+    immediate = {
+		religion_scope = { save_global_event_target_as = fatima_religion }
+    	random_independent_ruler = {
+			limit = {
+				fatima_massacre_ruler_potential = yes
+			}
+			preferred_limit = {
+				tier = EMPEROR
+				realm_size = 200
+			}
+			preferred_limit = {
+				tier = EMPEROR
+				realm_size = 160
+			}
+			preferred_limit = {
+				realm_size = 200
+			}
+			preferred_limit = {
+				tier = EMPEROR
+				realm_size = 110
+			}
+			preferred_limit = {
+				realm_size = 160
+			}
+			preferred_limit = {
+				tier = EMPEROR
+				realm_size = 75
+			}
+			preferred_limit = {
+				realm_size = 110
+			}
+			preferred_limit = {
+				realm_size = 75
+			}
+			save_global_event_target_as = fatima_massacre_ruler
+			random = {
+				chance = 10
+				modifier = {
+					factor = 1.5
+					tier = EMPEROR
+				}
+				modifier = {
+					factor = 1.5
+					realm_size = 200
+				}
+				modifier = {
+					factor = 1.5
+					realm_size = 160
+				}
+				modifier = {
+					factor = 1.5
+					realm_size = 110
+				}
+				modifier = {
+					factor = 1.5
+					realm_size = 75
+				}
+				set_global_flag = fatima_started
+				if = {
+					limit = {
+						any_independent_ruler = {
+							religion = ROOT
+							any_realm_province = {
+								region = world_europe_east
+							}
+						}
+					}
+					clr_global_flag = fatima_starts_in_italy # best to be safe
+					333 = {
+						province_event = { id = AEC.1011 days = 20 random = 20 } # Ping event
+					}
+				}
+				else = {
+					set_global_flag = fatima_starts_in_italy
+					333 = {
+						province_event = { id = AEC.1012 days = 40 random = 40 } # Ping event
+					}
+				}
+			}
+    	}
+    }
+}
+province_event = {
+    id = AEC.1011
+    hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		set_global_flag = fatima_at_east_europe
+		clr_global_flag = fatima_at_italy
+		select_fatima_province_effect = yes
+		if = { # Fail trigger
+			limit = {
+				NOT = {
+					event_target:fatima_current_province = { always = yes }
+				}
+			}
+			444 = { # Esztergom
+				save_global_event_target_as = fatima_current_province
+			}
+			create_random_priest = {
+				random_traits = yes
+				dynasty = random
+				culture = lithuanian
+				religion = event_target:fatima_religion
+				female = no
+			}
+			new_character = {
+				add_trait = on_pilgrimage
+				set_character_flag = on_fatima_pilgrimage
+			}
+			create_random_soldier = {
+				random_traits = yes
+				dynasty = random
+				culture = hungarian
+				religion = event_target:fatima_religion
+				female = no
+			}
+			new_character = {
+				add_trait = on_pilgrimage
+				set_character_flag = on_fatima_pilgrimage
+			}
+			create_random_diplomat = {
+				random_traits = yes
+				dynasty = random
+				culture = polish
+				religion = event_target:fatima_religion
+				female = yes
+			}
+			new_character = {
+				add_trait = on_pilgrimage
+				set_character_flag = on_fatima_pilgrimage
+			}
+		}
+		else = {
+			select_random_ruler_to_fatima_effect = yes
+			select_random_ruler_to_fatima_effect = yes
+			random = {
+				chance = 30
+				select_random_ruler_to_fatima_effect = yes
+			}
+			random = {
+				chance = 30
+				select_random_ruler_to_fatima_effect = yes
+			}
+		}
+		333 = {
+			province_event = { id = AEC.1012 days = 20 random = 20 }
+		}
+		random_playable_ruler = {
+			limit = {
+				religion = event_target:fatima_religion
+				controls_religion = yes
+			}
+			narrative_event = { id = AEC.1001 }
+		}
+	}
+}
+province_event = {
+    id = AEC.1012
+    hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		set_global_flag = fatima_at_italy
+		clr_global_flag = fatima_at_east_europe
+		select_fatima_province_effect = yes
+		if = { # Fail trigger
+			limit = {
+				NOT = {
+					event_target:fatima_current_province = { always = yes }
+				}
+			}
+			333 = { # Roma
+				save_global_event_target_as = fatima_current_province
+			}
+			create_random_priest = {
+				random_traits = yes
+				dynasty = random
+				culture = lazian
+				religion = event_target:fatima_religion
+				female = yes
+			}
+			new_character = {
+				add_trait = on_pilgrimage
+				set_character_flag = on_fatima_pilgrimage
+			}
+			create_random_soldier = {
+				random_traits = yes
+				dynasty = random
+				culture = piemontese
+				religion = event_target:fatima_religion
+				female = no
+			}
+			new_character = {
+				add_trait = on_pilgrimage
+				set_character_flag = on_fatima_pilgrimage
+			}
+			create_random_diplomat = {
+				random_traits = yes
+				culture = random
+				dynasty = random
+				religion = event_target:fatima_religion
+				female = no
+			}
+			new_character = {
+				add_trait = on_pilgrimage
+				set_character_flag = on_fatima_pilgrimage
+			}
+		}
+		else = {
+			select_random_ruler_to_fatima_effect = yes
+			select_random_ruler_to_fatima_effect = yes
+			random = {
+				chance = 30
+				select_random_ruler_to_fatima_effect = yes
+			}
+			random = {
+				chance = 30
+				select_random_ruler_to_fatima_effect = yes
+			}
+		}
+		333 = {
+			province_event = { id = AEC.1013 days = 20 random = 20 }
+		}
+		random_playable_ruler = {
+			limit = {
+				religion = event_target:fatima_religion
+				controls_religion = yes
+			}
+			narrative_event = { id = AEC.1002 }
+		}
+	}
+}
+province_event = {
+    id = AEC.1013
+    hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					event_target:fatima_massacre_ruler = {
+						is_alive = yes
+						fatima_massacre_ruler_potential = yes
+					}
+				}
+				NOT = {
+					event_target:fatima_massacre_province = { always = yes }
+				}
+			}
+			random_independent_ruler = {
+				limit = {
+					fatima_massacre_ruler_potential = yes
+				}
+				preferred_limit = {
+					tier = EMPEROR
+					realm_size = 200
+				}
+				preferred_limit = {
+					tier = EMPEROR
+					realm_size = 160
+				}
+				preferred_limit = {
+					realm_size = 200
+				}
+				preferred_limit = {
+					tier = EMPEROR
+					realm_size = 110
+				}
+				preferred_limit = {
+					realm_size = 160
+				}
+				preferred_limit = {
+					tier = EMPEROR
+					realm_size = 75
+				}
+				preferred_limit = {
+					realm_size = 110
+				}
+				preferred_limit = {
+					realm_size = 75
+				}
+				save_global_event_target_as = fatima_massacre_ruler
+			}
+			if = {
+				limit = {
+					NOT = {
+						event_target:fatima_massacre_ruler = {
+							is_alive = yes
+						}
+					}
+				}
+				set_global_flag = fatima_killed_by_bandits
+				random_province = {
+					limit = { region = world_europe_west_iberia }
+					save_global_event_target_as = fatima_massacre_province
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = random
+						female = no
+					}
+					new_character = {
+						save_global_event_target_as = fatima_massacre_commander
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					event_target:fatima_massacre_province = { always = yes }
+				}
+			}
+			event_target:fatima_massacre_ruler = {
+				random_realm_province = {
+					limit = { region = world_europe_west_iberia }
+					preferred_limit = {
+						kingdom = {
+							num_title_realm_provs = {
+								who = event_target:fatima_massacre_ruler
+								value = 12
+							}
+						}
+					}
+					preferred_limit = {
+						kingdom = {
+							num_title_realm_provs = {
+								who = event_target:fatima_massacre_ruler
+								value = 10
+							}
+						}
+					}
+					preferred_limit = {
+						kingdom = {
+							num_title_realm_provs = {
+								who = event_target:fatima_massacre_ruler
+								value = 8
+							}
+						}
+					}
+					preferred_limit = {
+						kingdom = {
+							num_title_realm_provs = {
+								who = event_target:fatima_massacre_ruler
+								value = 6
+							}
+						}
+					}
+					preferred_limit = {
+						kingdom = {
+							num_title_realm_provs = {
+								who = event_target:fatima_massacre_ruler
+								value = 4
+							}
+						}
+					}
+					preferred_limit = {
+						kingdom = {
+							num_title_realm_provs = {
+								who = event_target:fatima_massacre_ruler
+								value = 2
+							}
+						}
+					}
+					save_global_event_target_as = fatima_massacre_province
+				}
+				random_courtier = {
+					limit = {
+						has_minor_title = title_commander
+					}
+					preferred_limit = { trait = cruel }
+					save_global_event_target_as = fatima_massacre_commander
+				}
+				if = {
+					limit = { NOT = { event_target:fatima_massacre_commander = { always = yes } } }
+					create_random_soldier = {
+						random_traits = yes
+						dynasty = random
+						female = no
+					}
+					new_character = {
+						give_minor_title = title_commander
+						save_global_event_target_as = fatima_massacre_commander
+					}
+				}
+			}
+		}
+		on_pilgrimage = {
+			limit = {
+				has_character_flag = on_fatima_pilgrimage
+				OR = {
+					ai = yes
+					NOT = { has_global_flag = fatima_player_stays }
+				}
+			}
+			preferred_limit = {
+				ai = no
+				intrigue = 21
+			}
+			preferred_limit = {
+				intrigue = 21
+			}
+			preferred_limit = {
+				ai = no
+				intrigue = 18
+			}
+			preferred_limit = {
+				intrigue = 18
+			}
+			preferred_limit = {
+				ai = no
+				intrigue = 15
+			}
+			preferred_limit = {
+				intrigue = 15
+			}
+			preferred_limit = {
+				ai = no
+				intrigue = 12
+			}
+			preferred_limit = {
+				intrigue = 12
+			}
+			preferred_limit = {
+				ai = no
+				intrigue = 9
+			}
+			preferred_limit = {
+				intrigue = 9
+			}
+			preferred_limit = {
+				ai = no
+				intrigue = 6
+			}
+			preferred_limit = {
+				intrigue = 6
+			}
+			preferred_limit = {
+				ai = no
+				intrigue = 3
+			}
+			preferred_limit = {
+				intrigue = 3
+			}
+			save_global_event_target_as = fatima_survivor
+		}
+		if = {
+			limit = { NOT = { event_target:fatima_survivor = { always = yes } } }
+			create_random_priest = {
+				random_traits = yes
+				dynasty = random
+				female = no
+			}
+			new_character = {
+				add_trait = on_pilgrimage
+				set_character_flag = on_fatima_pilgrimage
+				save_global_event_target_as = fatima_survivor
+			}
+		}
+		event_target:fatima_survivor = {
+			narrative_event = { id = AEC.1003 }
+		}
+	}
+}
+province_event = {
+    id = AEC.1014
+    hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_independent_ruler = {
+			limit = {
+				religion = event_target:fatima_religion
+				any_realm_province = {
+					region = world_europe_west_iberia
+				}
+				ai = yes
+			}
+			preferred_limit = {
+				is_theocracy = yes
+				higher_tier_than = DUKE
+				capital_scope = {
+					region = world_europe_west_iberia
+				}
+			}
+			preferred_limit = {
+				is_theocracy = yes
+				higher_tier_than = COUNT
+				capital_scope = {
+					region = world_europe_west_iberia
+				}
+			}
+			preferred_limit = {
+				higher_tier_than = KING
+				capital_scope = {
+					region = world_europe_west_iberia
+				}
+			}
+			preferred_limit = {
+				higher_tier_than = DUKE
+				capital_scope = {
+					region = world_europe_west_iberia
+				}
+			}
+			preferred_limit = {
+				is_theocracy = yes
+				capital_scope = {
+					region = world_europe_west_iberia
+				}
+			}
+			preferred_limit = {
+				higher_tier_than = COUNT
+				capital_scope = {
+					region = world_europe_west_iberia
+				}
+			}
+			preferred_limit = {
+				higher_tier_than = DUKE
+			}
+			preferred_limit = {
+				higher_tier_than = COUNT
+			}
+			save_global_event_target_as = fatima_messenger_ruler
+		}
+		if = {
+			limit = {
+				NOT = {
+					event_target:fatima_messenger_ruler = { always = yes }
+				}
+			}
+			set_global_flag = fatima_survivor_at_hermits
+		}
+		event_target:fatima_survivor = {
+			character_event = { id = AEC.1015 }
+		}
+	}
+}
+character_event = {
+    id = AEC.1015
+    hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { event_target:fatima_massacre_ruler = { is_alive = yes } }
+			event_target:fatima_massacre_ruler = { narrative_event = { id = AEC.1005 } }
+		}
+		else = {
+			event_target:fatima_massacre_province = {
+				holder_scope = {
+					top_liege = {
+						event_target:fatima_massacre_ruler = { narrative_event = { id = AEC.1005 } }
+					}
+				}
+			}
+		}
+	}
+}
+## Story Events prior to the Massacre of Fatima Crusade launch
+# Part 1
+narrative_event = {
+    id = AEC.1001
+    title = EVTTITLE_AEC_1001
+    desc = EVTDESC_AEC_1001
+    picture = GFX_evt_quarrel
+    border = GFX_event_narrative_frame_religion
+    religion_group = christian
+    is_triggered_only = yes
+	major = yes
+	show_ROOT = yes
+	hide_from = yes
+	major_trigger = {
+		ai = no
+	}
+    immediate = {
+    }
+
+    option = {
+        name = EVTOPTA_AEC_1001
+		trigger = {
+			religion = ROOT
+			is_inaccessible_or_incapable_trigger = no
+			location = {
+				at_fatima_region_trigger = yes
+			}
+			NOT = { trait = pilgrim }
+			is_adult = yes
+		}
+		add_trait = on_pilgrimage
+		set_character_flag = on_fatima_pilgrimage
+    }
+    option = {
+        name = EVTOPTB_AEC_1001
+		trigger = {
+			religion_group = ROOT
+			OR = {
+				NOT = {
+					location = {
+						region = world_europe_west_iberia
+					}
+				}
+				religion = ROOT
+			}
+		}
+    }
+    option = {
+        name = EVTOPTC_AEC_1001
+		trigger = {
+			location = {
+				region = world_europe_west_iberia
+			}
+			NOT = { religion = ROOT }
+		}
+    }
+    option = {
+        name = EVTOPTD_AEC_1001
+		trigger = {
+			NOR = {
+				location = {
+					region = world_europe_west_iberia
+				}
+				religion_group = ROOT
+			}
+		}
+    }
+}
+narrative_event = {
+    id = AEC.1002
+    title = EVTTITLE_AEC_1002
+    desc = {
+		trigger = {
+			NOT = {
+				has_global_flag = fatima_starts_in_italy
+			}
+		}
+		text = EVTDESC_AEC_1002_A
+	}
+    desc = {
+		trigger = {
+			has_global_flag = fatima_starts_in_italy
+		}
+		text = EVTDESC_AEC_1002_B
+	}
+    picture = GFX_evt_quarrel
+    border = GFX_event_narrative_frame_religion
+    religion_group = christian
+    is_triggered_only = yes
+	major = yes
+	show_ROOT = yes
+	hide_from = yes
+	major_trigger = {
+		ai = no
+	}
+
+    option = {
+        name = EVTOPTA_AEC_1001
+		trigger = {
+			religion = ROOT
+			is_inaccessible_or_incapable_trigger = no
+			location = {
+				at_fatima_region_trigger = yes
+			}
+			is_adult = yes
+			NOT = { trait = pilgrim }
+		}
+		add_trait = on_pilgrimage
+		set_character_flag = on_fatima_pilgrimage
+    }
+    option = {
+        name = EVTOPTB_AEC_1001
+		trigger = {
+			religion_group = ROOT
+			OR = {
+				NOT = {
+					location = {
+						region = world_europe_west_iberia
+					}
+				}
+				religion = ROOT
+			}
+		}
+    }
+    option = {
+        name = EVTOPTC_AEC_1001
+		trigger = {
+			location = {
+				region = world_europe_west_iberia
+			}
+			NOT = { religion = ROOT }
+		}
+    }
+    option = {
+        name = EVTOPTD_AEC_1001
+		trigger = {
+			NOR = {
+				location = {
+					region = world_europe_west_iberia
+				}
+				religion_group = ROOT
+			}
+		}
+    }
+}
+narrative_event = {
+    id = AEC.1003
+    title = EVTTITLE_AEC_1003
+    desc = EVTDESC_AEC_1003
+    picture = GFX_evt_quarrel
+    border = GFX_event_narrative_frame_religion
+    religion_group = christian
+    is_triggered_only = yes
+	hide_from = yes
+	option = {
+        name = EVTOPTA_AEC_1003
+		tooltip_info = intrigue
+		ai_chance = {
+			factor = 100
+		}
+		hidden_tooltip = {
+			any_character = { narrative_event = { id = AEC.1004 } }
+			333 = { province_event = { id = AEC.1014 days = 10 random = 10 } }
+		}
+	}
+	option = {
+        name = EVTOPTB_AEC_1003
+		ai_chance = {
+			factor = 0
+		}
+		piety = 200
+		remove_trait_craven_effect = yes
+		random_list = {
+			50 = {
+				add_trait_zealous_effect = yes
+			}
+			50 = {
+				add_trait_brave_effect = yes
+			}
+		}
+		hidden_tooltip = {
+			set_global_flag = fatima_player_stays
+			clear_global_event_target = fatima_survivor
+			333 = { province_event = { id = AEC.1013 } }
+		}
+	}
+}
+narrative_event = {
+    id = AEC.1004
+    title = EVTTITLE_AEC_1004
+    desc = EVTDESC_AEC_1004
+    picture = GFX_evt_quarrel
+    border = GFX_event_narrative_frame_religion
+    religion_group = christian
+    is_triggered_only = yes
+	show_portrait = event_target:fatima_massacre_commander
+	trigger = {
+		has_character_flag = on_fatima_pilgrimage
+		trait = on_pilgrimage
+		NOT = { character = event_target:fatima_survivor }
+	}
+	option = {
+        name = EVTOPTA_AEC_1004
+		piety = 500 # Saint material
+		death = { death_reason = death_massacre killer = event_target:fatima_massacre_commander }
+	}
+}
+narrative_event = {
+    id = AEC.1005
+    title = EVTTITLE_AEC_1005
+    desc = {
+		trigger = {
+			NOT = {
+				has_global_flag = fatima_killed_by_bandits
+			}
+		}
+		text = EVTDESC_AEC_1005_A
+	}
+    desc = {
+		trigger = {
+			has_global_flag = fatima_killed_by_bandits
+		}
+		text = EVTDESC_AEC_1005_B
+	}
+    picture = GFX_evt_quarrel
+    border = GFX_event_narrative_frame_religion
+    religion_group = christian
+    is_triggered_only = yes
+	show_ROOT = yes
+	major = yes
+	major_trigger = {
+		ai = no
+	}
+    immediate = {
+		if = {
+			limit = { NOT = { has_global_flag = fatima_killed_by_bandits } }
+			set_global_flag = fatima_massacre_crusade
+			clr_global_flag = palmarians_can_join
+			event_target:fatima_massacre_province = {
+				kingdom = {
+					save_global_event_target_as = fatima_massacre_kingdom
+				}
+			}
+			event_target:fatima_religion = {
+				set_crusade_target = {
+					character = ROOT
+					title = event_target:fatima_massacre_kingdom
+				}
+				set_official_crusade_recipient = event_target:fatima_survivor
+			}
+		}
+		event_target:fatima_survivor = {
+			remove_trait = on_pilgrimage
+			add_trait = pilgrim
+			clr_character_flag = on_fatima_pilgrimage
+			prestige = 250
+			piety = 250
+		}
+    }
+
+    option = {
+        name = EVTOPTA_AEC_1005
+		trigger = {
+			religion = ROOT
+		}
+    }
+    option = {
+        name = EVTOPTB_AEC_1005
+		trigger = {
+			religion = event_target:fatima_religion
+		}
+    }
+    option = {
+        name = EVTOPTC_AEC_1005
+		trigger = {
+			religion_group = ROOT
+			NOR = {
+				religion = ROOT
+				religion = event_target:fatima_religion
+			}
+		}
+    }
+    option = {
+        name = EVTOPTD_AEC_1005
+		trigger = {
+			NOT = { religion_group = ROOT }
+		}
+    }
+}
+narrative_event = {
+    id = AEC.1006
+    title = EVTTITLE_AEC_1006
+    desc = EVTDESC_AEC_1006
+    picture = GFX_evt_quarrel
+    border = GFX_event_narrative_frame_religion
+	sound = crusade_outcome_positive
+    religion_group = christian
+    is_triggered_only = yes
+	major = yes
+	show_ROOT = yes
+	major_trigger = {
+		ai = no
+	}
+    immediate = {
+		clr_global_flag = fatima_massacre_crusade
+    }
+
+    option = {
+        name = EVTOPTA_AEC_1006
+		trigger = {
+			religion = ROOT
+		}
+    }
+    option = {
+        name = EVTOPTB_AEC_1006
+		trigger = {
+			religion = event_target:fatima_religion
+		}
+    }
+    option = {
+        name = EVTOPTC_AEC_1006
+		trigger = {
+			religion_group = ROOT
+			NOR = {
+				religion = ROOT
+				religion = event_target:fatima_religion
+			}
+		}
+    }
+    option = {
+        name = EVTOPTD_AEC_1006
+		trigger = {
+			NOT = { religion_group = ROOT }
+		}
+    }
+}
