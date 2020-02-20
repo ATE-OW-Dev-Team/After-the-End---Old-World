@@ -230,7 +230,6 @@ character_event = {
         e_apostolic_empire = {
             has_holder = no
         }
-		always = no
     }
 
     immediate = {
@@ -300,15 +299,16 @@ character_event = {
 							}
 						}
 					}
-					clr_global_flag = fatima_starts_in_italy # best to be safe
+					#clr_global_flag = fatima_starts_in_italy # best to be safe
 					333 = {
 						province_event = { id = AEC.1011 days = 20 random = 20 } # Ping event
 					}
 				}
 				else = {
-					set_global_flag = fatima_starts_in_italy
+					#set_global_flag = fatima_starts_in_italy
 					333 = {
-						province_event = { id = AEC.1012 days = 40 random = 40 } # Ping event
+						province_event = { id = AEC.1011 days = 20 random = 20 } # Ping event
+						#province_event = { id = AEC.1012 days = 40 random = 40 } # Ping event
 					}
 				}
 			}
@@ -526,7 +526,7 @@ province_event = {
 				}
 				set_global_flag = fatima_killed_by_bandits
 				random_province = {
-					limit = { region = world_europe_west_iberia }
+					limit = { region = world_europe_west_iberia is_island = no }
 					save_global_event_target_as = fatima_massacre_province
 					create_random_soldier = {
 						random_traits = yes
@@ -555,6 +555,7 @@ province_event = {
 								value = 12
 							}
 						}
+						is_island = no
 					}
 					preferred_limit = {
 						kingdom = {
@@ -563,6 +564,7 @@ province_event = {
 								value = 10
 							}
 						}
+						is_island = no
 					}
 					preferred_limit = {
 						kingdom = {
@@ -571,6 +573,7 @@ province_event = {
 								value = 8
 							}
 						}
+						is_island = no
 					}
 					preferred_limit = {
 						kingdom = {
@@ -579,6 +582,7 @@ province_event = {
 								value = 6
 							}
 						}
+						is_island = no
 					}
 					preferred_limit = {
 						kingdom = {
@@ -587,6 +591,7 @@ province_event = {
 								value = 4
 							}
 						}
+						is_island = no
 					}
 					preferred_limit = {
 						kingdom = {
@@ -595,6 +600,7 @@ province_event = {
 								value = 2
 							}
 						}
+						is_island = no
 					}
 					save_global_event_target_as = fatima_massacre_province
 				}
@@ -701,7 +707,7 @@ province_event = {
     hide_window = yes
 	is_triggered_only = yes
 	immediate = {
-		random_independent_ruler = {
+		random_playable_ruler = {
 			limit = {
 				religion = event_target:fatima_religion
 				any_realm_province = {
@@ -781,7 +787,7 @@ character_event = {
 			event_target:fatima_massacre_province = {
 				holder_scope = {
 					top_liege = {
-						event_target:fatima_massacre_ruler = { narrative_event = { id = AEC.1005 } }
+						narrative_event = { id = AEC.1005 }
 					}
 				}
 			}
@@ -794,7 +800,7 @@ narrative_event = {
     id = AEC.1001
     title = EVTTITLE_AEC_1001
     desc = EVTDESC_AEC_1001
-    picture = GFX_evt_quarrel
+    picture = GFX_evt_pilgrims_epic_journey
     border = GFX_event_narrative_frame_religion
     religion_group = christian
     is_triggered_only = yes
@@ -858,7 +864,7 @@ narrative_event = {
 }
 narrative_event = {
     id = AEC.1002
-    title = EVTTITLE_AEC_1002
+    title = EVTTITLE_AEC_1001
     desc = {
 		trigger = {
 			NOT = {
@@ -873,7 +879,7 @@ narrative_event = {
 		}
 		text = EVTDESC_AEC_1002_B
 	}
-    picture = GFX_evt_quarrel
+    picture = GFX_evt_pilgrims_epic_journey
     border = GFX_event_narrative_frame_religion
     religion_group = christian
     is_triggered_only = yes
@@ -937,19 +943,31 @@ narrative_event = {
     id = AEC.1003
     title = EVTTITLE_AEC_1003
     desc = EVTDESC_AEC_1003
-    picture = GFX_evt_quarrel
+    picture = GFX_evt_dead_body_hf
     border = GFX_event_narrative_frame_religion
     religion_group = christian
     is_triggered_only = yes
 	hide_from = yes
+	show_portrait = event_target:fatima_massacre_commander
+	trigger = {
+		has_character_flag = on_fatima_pilgrimage
+		trait = on_pilgrimage
+		#NOT = { character = event_target:fatima_survivor }
+	}
 	option = {
         name = EVTOPTA_AEC_1003
 		tooltip_info = intrigue
+		trigger = {
+			character = event_target:fatima_survivor
+		}
 		ai_chance = {
 			factor = 100
 		}
 		hidden_tooltip = {
-			any_character = { narrative_event = { id = AEC.1004 } }
+			any_character = {
+				limit = { NOT = { character = ROOT } }
+				narrative_event = { id = AEC.1003 }
+			}
 			333 = { province_event = { id = AEC.1014 days = 10 random = 10 } }
 		}
 	}
@@ -958,7 +976,10 @@ narrative_event = {
 		ai_chance = {
 			factor = 0
 		}
-		piety = 200
+		trigger = {
+			character = event_target:fatima_survivor
+		}
+		piety = 500
 		remove_trait_craven_effect = yes
 		random_list = {
 			50 = {
@@ -968,36 +989,25 @@ narrative_event = {
 				add_trait_brave_effect = yes
 			}
 		}
+		death = { death_reason = death_massacre killer = event_target:fatima_massacre_commander }
 		hidden_tooltip = {
 			set_global_flag = fatima_player_stays
 			clear_global_event_target = fatima_survivor
 			333 = { province_event = { id = AEC.1013 } }
 		}
 	}
-}
-narrative_event = {
-    id = AEC.1004
-    title = EVTTITLE_AEC_1004
-    desc = EVTDESC_AEC_1004
-    picture = GFX_evt_quarrel
-    border = GFX_event_narrative_frame_religion
-    religion_group = christian
-    is_triggered_only = yes
-	show_portrait = event_target:fatima_massacre_commander
-	trigger = {
-		has_character_flag = on_fatima_pilgrimage
-		trait = on_pilgrimage
-		NOT = { character = event_target:fatima_survivor }
-	}
 	option = {
-        name = EVTOPTA_AEC_1004
+        name = EVTOPTC_AEC_1003
+		trigger = {
+			NOT = { character = event_target:fatima_survivor }
+		}
 		piety = 500 # Saint material
 		death = { death_reason = death_massacre killer = event_target:fatima_massacre_commander }
 	}
 }
 narrative_event = {
     id = AEC.1005
-    title = EVTTITLE_AEC_1005
+    title = EVTTITLE_AEC_1003
     desc = {
 		trigger = {
 			NOT = {
@@ -1012,11 +1022,12 @@ narrative_event = {
 		}
 		text = EVTDESC_AEC_1005_B
 	}
-    picture = GFX_evt_quarrel
+    picture = GFX_evt_dead_body_hf
     border = GFX_event_narrative_frame_religion
     religion_group = christian
     is_triggered_only = yes
 	show_ROOT = yes
+	show_from_from = yes
 	major = yes
 	major_trigger = {
 		ai = no
@@ -1051,13 +1062,31 @@ narrative_event = {
     option = {
         name = EVTOPTA_AEC_1005
 		trigger = {
-			religion = ROOT
+			religion = event_target:fatima_massacre_ruler
+			NOT = { has_global_flag = fatima_killed_by_bandits }
+		}
+		if = {
+			limit = { 
+				has_power_omen_modifier_trigger = yes
+			}
+			set_character_flag = negative_event_flag
+			calculate_scrying_outcome_effect = yes
+			remove_scrying_omen_modifiers_effect = yes
 		}
     }
     option = {
         name = EVTOPTB_AEC_1005
 		trigger = {
 			religion = event_target:fatima_religion
+			NOT = { has_global_flag = fatima_killed_by_bandits }
+		}
+		if = {
+			limit = { 
+				has_power_omen_modifier_trigger = yes
+			}
+			set_character_flag = negative_event_flag
+			calculate_scrying_outcome_effect = yes
+			remove_scrying_omen_modifiers_effect = yes
 		}
     }
     option = {
@@ -1065,8 +1094,9 @@ narrative_event = {
 		trigger = {
 			religion_group = ROOT
 			NOR = {
-				religion = ROOT
+				religion = event_target:fatima_massacre_ruler
 				religion = event_target:fatima_religion
+				has_global_flag = fatima_killed_by_bandits
 			}
 		}
     }
@@ -1074,6 +1104,29 @@ narrative_event = {
         name = EVTOPTD_AEC_1005
 		trigger = {
 			NOT = { religion_group = ROOT }
+			NOT = { has_global_flag = fatima_killed_by_bandits }
+		}
+    }
+    option = {
+        name = EVTOPTE_AEC_1005
+		trigger = {
+			religion_group = event_target:fatima_religion
+			has_global_flag = fatima_killed_by_bandits
+		}
+		if = {
+			limit = { 
+				has_power_omen_modifier_trigger = yes
+			}
+			set_character_flag = negative_event_flag
+			calculate_scrying_outcome_effect = yes
+			remove_scrying_omen_modifiers_effect = yes
+		}
+    }
+    option = {
+        name = EVTOPTD_AEC_1001
+		trigger = {
+			NOT = { religion_group = event_target:fatima_religion }
+			has_global_flag = fatima_killed_by_bandits
 		}
     }
 }
@@ -1081,7 +1134,7 @@ narrative_event = {
     id = AEC.1006
     title = EVTTITLE_AEC_1006
     desc = EVTDESC_AEC_1006
-    picture = GFX_evt_quarrel
+    picture = GFX_evt_mass_crusade
     border = GFX_event_narrative_frame_religion
 	sound = crusade_outcome_positive
     religion_group = christian
@@ -1108,7 +1161,7 @@ narrative_event = {
 		}
     }
     option = {
-        name = EVTOPTC_AEC_1006
+        name = EVTOPTC_AEC_1005
 		trigger = {
 			religion_group = ROOT
 			NOR = {
@@ -1118,7 +1171,7 @@ narrative_event = {
 		}
     }
     option = {
-        name = EVTOPTD_AEC_1006
+        name = EVTOPTD_AEC_1005
 		trigger = {
 			NOT = { religion_group = ROOT }
 		}
