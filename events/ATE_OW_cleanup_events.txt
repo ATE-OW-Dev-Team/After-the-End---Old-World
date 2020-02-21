@@ -116,3 +116,70 @@ character_event = {
 		set_character_flag = ai_flag_refuse_conversion
 	}
 }
+character_event = {
+	id = cleanup.12
+	desc = cleanup12Desc
+	picture = "GFX_evt_emissary"
+	only_playable = yes
+	mean_time_to_happen = {
+		days = 1
+	}
+	trigger = {
+		any_demesne_title = {
+			has_title_flag = cypriote_member_state
+		}
+		rebel = no
+		war = no
+		OR = {
+			any_demesne_title = {
+				count = 2
+				tier = DUKE
+			}
+			AND = {
+				NOT = { has_landed_title = k_cyprus_league }
+				OR = {
+					any_demesne_title = {
+						higher_tier_than = DUKE
+					}
+					liege = {
+						NOT = { has_landed_title = k_cyprus_league }
+					}
+					independent = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = cleanup12Opt
+		if = {
+			limit = {
+				any_demesne_title = {
+					count = 2
+					has_title_flag = cypriote_member_state
+				}
+			}
+			random_demesne_title = {
+				limit = { has_title_flag = cypriote_member_state }
+				preferred_limit = {
+					NOT = {
+						ROOT = {
+							primary_title = {
+								title = PREVPREV
+							}
+						}
+					}
+				}
+				unsafe_destroy_landed_title = THIS
+				activate_title = { title = THIS status = no }
+				character_event = { id = cleanup.11 }
+			}
+		}
+		else = {
+			any_demesne_title = {
+				limit = { has_title_flag = cypriote_member_state }
+				unsafe_destroy_landed_title = THIS
+				activate_title = { title = THIS status = no }
+			}
+		}
+	}
+}
