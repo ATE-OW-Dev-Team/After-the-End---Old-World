@@ -109,12 +109,14 @@ character_event = {
 		OR = {
 			interested_in_society = the_assassins
 			interested_in_society = the_satanists
-			interested_in_society = the_trollcrafters
 			interested_in_society = the_cult_of_kali
 			interested_in_society = the_cold_ones
 			interested_in_society = the_plaguebringers
-			interested_in_society = the_vodouns
 			interested_in_society = the_bacchants
+			interested_in_society = unseelie_petitioners
+			interested_in_society = starry_wisdom
+			interested_in_society = davy_jones_mates
+			interested_in_society = the_illuminati
 			interested_in_society = secret_religious_cult
 		}
 	}
@@ -135,12 +137,14 @@ character_event = {
 		OR = {
 			interested_in_society = the_assassins
 			interested_in_society = the_satanists
-			interested_in_society = the_trollcrafters
 			interested_in_society = the_cult_of_kali
 			interested_in_society = the_cold_ones
 			interested_in_society = the_plaguebringers
-			interested_in_society = the_vodouns
 			interested_in_society = the_bacchants
+			interested_in_society = unseelie_petitioners
+			interested_in_society = starry_wisdom
+			interested_in_society = davy_jones_mates
+			interested_in_society = the_illuminati
 			interested_in_society = secret_religious_cult		
 		}
 	}
@@ -168,125 +172,15 @@ character_event = {
 				character_event = { id = MNM.10012 }
 			}
 		}
-		#Satanists
-		if = {
-			limit = {
-				interested_in_society = the_satanists
-				NOT = { has_character_flag = being_recruited_by_the_satanists }
-			}
-			random_society_member = {
-				limit = {
-					society_member_of = the_satanists
-					#is_within_diplo_range = ROOT
-					is_society_grandmaster = no
-				}
-				save_event_target_as = satanists_recruiter
-				character_event = { id = MNM.10013 }
-			}
-		}
-		#Trollcrafters
-		if = {
-			limit = {
-				interested_in_society = the_trollcrafters
-				NOT = { has_character_flag = being_recruited_by_the_trollcrafters }
-			}
-			random_society_member = {
-				limit = {
-					society_member_of = the_trollcrafters
-					#is_within_diplo_range = ROOT
-					is_society_grandmaster = no
-				}
-				save_event_target_as = satanists_recruiter
-				character_event = { id = MNM.10014 }
-			}
-		}
-		#Cult of Kali
-		if = {
-			limit = {
-				interested_in_society = the_cult_of_kali
-				NOT = { has_character_flag = being_recruited_by_the_cult_of_kali }
-			}
-			random_society_member = {
-				limit = {
-					society_member_of = the_cult_of_kali
-					#is_within_diplo_range = ROOT
-					is_society_grandmaster = no
-				}
-				save_event_target_as = satanists_recruiter
-				character_event = { id = MNM.10015 }
-			}
-		}
-		#Cold ones
-		if = {
-			limit = {
-				interested_in_society = the_cold_ones
-				NOT = { has_character_flag = being_recruited_by_the_cold_ones }
-			}
-			random_society_member = {
-				limit = {
-					society_member_of = the_cold_ones
-					#is_within_diplo_range = ROOT
-					is_society_grandmaster = no
-				}
-				save_event_target_as = satanists_recruiter
-				character_event = { id = MNM.10016 }
-			}
-		}
-		#Plaguebringers
-		if = {
-			limit = {
-				interested_in_society = the_plaguebringers
-				NOT = { has_character_flag = being_recruited_by_the_plaguebringers }
-			}
-			random_society_member = {
-				limit = {
-					society_member_of = the_plaguebringers
-					#is_within_diplo_range = ROOT
-					is_society_grandmaster = no
-				}
-				save_event_target_as = satanists_recruiter
-				character_event = { id = MNM.10017 }
-			}
-		}
-		#Vodunons
-		if = {
-			limit = {
-				interested_in_society = the_vodouns
-				NOT = { has_character_flag = being_recruited_by_the_vodouns }
-			}
-			random_society_member = {
-				limit = {
-					society_member_of = the_vodouns
-					#is_within_diplo_range = ROOT
-					is_society_grandmaster = no
-				}
-				save_event_target_as = satanists_recruiter
-				character_event = { id = MNM.10027 }
-			}
-		}
-		#Bacchants
-		if = {
-			limit = {
-				interested_in_society = the_bacchants
-				NOT = { has_character_flag = being_recruited_by_the_bacchants }
-			}
-			random_society_member = {
-				limit = {
-					society_member_of = the_bacchants
-					#is_within_diplo_range = ROOT
-					is_society_grandmaster = no
-				}
-				save_event_target_as = satanists_recruiter
-				character_event = { id = MNM.10026 }
-			}
-		}
 		#Secret religious society
-		if = {
+		else_if = {
 			limit = {
 				interested_in_society = secret_religious_cult
 				NOT = { has_character_modifier = secret_religions_recruitment_timer }
 		    	any_society_member = {
-		    	 	is_in_prevs_interesting_society_trigger = yes
+		    	 	ROOT = {
+						interested_in_society_of_character = PREV
+					}
 		    	}
 			}
     		add_character_modifier = {
@@ -295,6 +189,23 @@ character_event = {
 				hidden = yes
 			}
 			character_event = { id = MNM.3420 } 
+		}
+		#Satanists
+		else_if = {
+			limit = {
+				NOT = { has_character_flag = being_recruited_by_the_satanists }
+			}
+			random_society_member = {
+				limit = {
+					ROOT = {
+						interested_in_society_of_character = PREV
+					}
+					#is_within_diplo_range = ROOT
+					is_society_grandmaster = no
+				}
+				save_event_target_as = satanists_recruiter
+				character_event = { id = MNM.10013 }
+			}
 		}
 	}	
 }
@@ -331,6 +242,9 @@ character_event = {
 	is_triggered_only = yes
 
 	immediate = { 
+		society = {
+			save_event_target_as = satanist_society_to_join
+		}
 		FROM = {
 			set_character_flag = satanists_attempted_recruitment
 			set_character_flag = being_recruited_by_the_satanists
@@ -338,100 +252,6 @@ character_event = {
 		}
 	}
 }
-
-character_event = {
-	id = MNM.10014
-	hide_window = yes
-
-	is_triggered_only = yes
-
-	immediate = { 
-		FROM = {
-			set_character_flag = trollcrafters_attempted_recruitment
-			set_character_flag = being_recruited_by_the_trollcrafters
-			character_event = { id = MNM.7001 }
-		}
-	}
-}
-
-character_event = {
-	id = MNM.10015
-	hide_window = yes
-
-	is_triggered_only = yes
-
-	immediate = { 
-		FROM = {
-			set_character_flag = cult_of_kali_attempted_recruitment
-			set_character_flag = being_recruited_by_the_cult_of_kali
-			character_event = { id = MNM.7001 }
-		}
-	}
-}
-
-character_event = {
-	id = MNM.10016
-	hide_window = yes
-
-	is_triggered_only = yes
-
-	immediate = { 
-		FROM = {
-			set_character_flag = cold_ones_attempted_recruitment
-			set_character_flag = being_recruited_by_the_cold_ones
-			character_event = { id = MNM.7001 }
-		}
-	}
-}
-
-character_event = {
-	id = MNM.10017
-	hide_window = yes
-
-	is_triggered_only = yes
-
-	immediate = { 
-		FROM = {
-			set_character_flag = plaguebringers_attempted_recruitment
-			set_character_flag = being_recruited_by_the_plaguebringers
-			character_event = { id = MNM.7001 }
-		}
-	}
-}
-character_event = {
-	id = MNM.10026
-	hide_window = yes
-
-	is_triggered_only = yes
-
-	immediate = { 
-		FROM = {
-			set_character_flag = bacchants_attempted_recruitment
-			set_character_flag = being_recruited_by_the_bacchants
-			character_event = { id = MNM.7001 }
-		}
-	}
-}
-
-character_event = {
-	id = MNM.10027
-	hide_window = yes
-
-	is_triggered_only = yes
-
-	immediate = { 
-		FROM = {
-			set_character_flag = vodouns_attempted_recruitment
-			set_character_flag = being_recruited_by_the_vodouns
-			character_event = { id = MNM.7001 }
-		}
-	}
-}
-
-
-
-
-
 
 #Becoming stressed about keeping a secret
 character_event = {
@@ -1601,53 +1421,6 @@ character_event = {
 					}
 					50 = { 
 						trigger = {
-							can_join_society = the_trollcrafters
-						}
-						modifier = {
-							factor = 5
-							OR = {
-								has_impious_trait_trigger = yes
-								has_vice_trigger = yes
-								trait = drunkard
-								trait = possessed
-								trait = lunatic
-							}
-						}
-						modifier = {
-							factor = 2
-							the_trollcrafters = { num_of_society_members < 15 }
-						}
-						modifier = {
-							factor = 2
-							the_trollcrafters = { num_of_society_members < 10 }
-						}
-						join_society = the_trollcrafters
-						random_list = { # Artificially increase society influence for balance purposes
-							75 = {
-								modifier = {
-									factor = 0
-									society_influence >= 30
-								}
-								add_mission_succeed_influence_effect = yes
-							}
-							25 = {
-							}
-						}
-						if = {
-							limit = {
-								NOT = {
-									society = {
-										any_society_member = {
-											is_society_grandmaster = yes
-										}
-									}
-								}
-							}
-							set_society_grandmaster = yes
-						}
-					}
-					50 = { 
-						trigger = {
 							can_join_society = the_cult_of_kali
 						}
 						modifier = {
@@ -1789,7 +1562,7 @@ character_event = {
 					}
 					50 = {
 						trigger = {
-							can_join_society = the_vodouns
+							can_join_society = the_bacchants
 						}
 						modifier = {
 							factor = 5
@@ -1803,13 +1576,13 @@ character_event = {
 						}
 						modifier = {
 							factor = 2
-							the_vodouns = { num_of_society_members < 15 }
+							the_bacchants = { num_of_society_members < 15 }
 						}
 						modifier = {
 							factor = 2
-							the_vodouns = { num_of_society_members < 10 }
+							the_bacchants = { num_of_society_members < 10 }
 						}
-						join_society = the_vodouns
+						join_society = the_bacchants
 						random_list = { # Artificially increase society influence for balance purposes
 							75 = {
 								modifier = {
@@ -1834,9 +1607,9 @@ character_event = {
 							set_society_grandmaster = yes
 						}
 					}
-					50 = {
+					50 = { 
 						trigger = {
-							can_join_society = the_bacchants
+							can_join_society = unseelie_petitioners
 						}
 						modifier = {
 							factor = 5
@@ -1850,13 +1623,154 @@ character_event = {
 						}
 						modifier = {
 							factor = 2
-							the_bacchants = { num_of_society_members < 15 }
+							unseelie_petitioners = { num_of_society_members < 15 }
 						}
 						modifier = {
 							factor = 2
-							the_bacchants = { num_of_society_members < 10 }
+							unseelie_petitioners = { num_of_society_members < 10 }
 						}
-						join_society = the_bacchants
+						join_society = unseelie_petitioners
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					50 = { 
+						trigger = {
+							can_join_society = starry_wisdom
+						}
+						modifier = {
+							factor = 5
+							OR = {
+								has_impious_trait_trigger = yes
+								has_vice_trigger = yes
+								trait = drunkard
+								trait = possessed
+								trait = lunatic
+							}
+						}
+						modifier = {
+							factor = 2
+							starry_wisdom = { num_of_society_members < 15 }
+						}
+						modifier = {
+							factor = 2
+							starry_wisdom = { num_of_society_members < 10 }
+						}
+						join_society = starry_wisdom
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					50 = { 
+						trigger = {
+							can_join_society = davy_jones_mates
+						}
+						modifier = {
+							factor = 5
+							OR = {
+								has_impious_trait_trigger = yes
+								has_vice_trigger = yes
+								trait = drunkard
+								trait = possessed
+								trait = lunatic
+							}
+						}
+						modifier = {
+							factor = 2
+							davy_jones_mates = { num_of_society_members < 15 }
+						}
+						modifier = {
+							factor = 2
+							davy_jones_mates = { num_of_society_members < 10 }
+						}
+						join_society = davy_jones_mates
+						random_list = { # Artificially increase society influence for balance purposes
+							75 = {
+								modifier = {
+									factor = 0
+									society_influence >= 30
+								}
+								add_mission_succeed_influence_effect = yes
+							}
+							25 = {
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									society = {
+										any_society_member = {
+											is_society_grandmaster = yes
+										}
+									}
+								}
+							}
+							set_society_grandmaster = yes
+						}
+					}
+					50 = { 
+						trigger = {
+							can_join_society = the_illuminati
+						}
+						modifier = {
+							factor = 5
+							OR = {
+								has_impious_trait_trigger = yes
+								has_vice_trigger = yes
+								trait = drunkard
+								trait = possessed
+								trait = lunatic
+							}
+						}
+						modifier = {
+							factor = 2
+							the_illuminati = { num_of_society_members < 15 }
+						}
+						modifier = {
+							factor = 2
+							the_illuminati = { num_of_society_members < 10 }
+						}
+						join_society = the_illuminati
 						random_list = { # Artificially increase society influence for balance purposes
 							75 = {
 								modifier = {

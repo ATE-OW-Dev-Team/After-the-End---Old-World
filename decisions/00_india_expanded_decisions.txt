@@ -1,4 +1,78 @@
 decisions = {
+	organize_cricket_match = { #ruler selects a side to support, outcome is random
+		only_playable = yes
+		ai_check_interval = 120
+		
+		potential = {
+		    OR = {
+		        culture_group = indo_aryan_group
+				culture_group = dravidian_group
+				culture = brytwysher
+			}
+			is_playable = yes
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		allow = {
+		    NOT = { has_character_modifier = recent_cricket_game }
+			NOT = { has_character_flag = cricket_in_progress }
+			war = no
+			in_command = no
+			scaled_wealth = 0.5
+			prestige = 25
+			custom_tooltip = {
+				text = UNOCCUPIED_DEMESNE_TITLE
+				hidden_tooltip = {
+					any_demesne_title = {
+						NOT = { higher_tier_than = count }
+						is_occupied = no
+					}
+				}
+			}
+			prisoner = no
+			NOT = { is_inaccessible_trigger = yes }
+			NOT = {	trait = incapable }
+			is_adult = yes
+		}
+		effect = {
+			scaled_wealth = -0.5
+			set_character_flag = do_not_disturb
+			set_character_flag = recent_minor_decision
+			hidden_tooltip = { 
+				character_event = { id = indian_flavor.200 } 
+			}
+			if = {
+				limit = {
+					has_dlc = "Reapers"
+				}
+				custom_tooltip = {
+					text = capital_prospers_custom_tooltip
+					hidden_tooltip = {
+						capital_scope = {
+							change_variable = { which = prosperity_value value = 8 }
+						}
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = {
+					scaled_wealth = 5
+				}
+			}
+			modifier = {
+				factor = 0.5
+				trait = shy
+			}
+		}
+	}
 	unite_the_ganges = {
 		is_high_prio = yes
 		only_playable = yes
