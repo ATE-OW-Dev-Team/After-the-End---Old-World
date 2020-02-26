@@ -7151,29 +7151,37 @@ byzantine_elective = {
 		additive_modifier = { #If candidate is elected, he will rule from a capital outside this dejure.
 			value = -15
 			localisation_key = tooltip_feudal_elector_vote_political_concerns
-			capital_scope = { de_jure_liege = FROMFROM }
+			capital_scope = { de_jure_liege_or_above = FROMFROM }
 			FROM = {
 				is_ruler = yes 
-				vassal_of = FROMFROM
-				capital_scope = { NOT = { de_jure_liege = ROOT_FROMFROM } }
+				is_vassal_or_below_of = ROOT_FROMFROM
+				capital_scope = { NOT = { de_jure_liege_or_above = ROOT_FROMFROM } }
 			}
 		}
 		additive_modifier = { #Candidate is a foreign ruler.
 			value = -30
 			localisation_key = tooltip_feudal_elector_vote_encroaching_foreigner
-			capital_scope = { de_jure_liege = FROMFROM }
+			capital_scope = { de_jure_liege_or_above = FROMFROM }
 			FROM = {
 				is_ruler = yes 
 				NOT = { is_vassal_or_below_of = ROOT_FROMFROM }
+				OR = {
+					capital_scope = { de_jure_liege_or_above = ROOT_FROMFROM }
+					de_jure_liege_or_above = ROOT_FROMFROM
+				}
 			}
 		}
 		additive_modifier = { #Candidate is a foreign non-dejure ruler.
 			value = -500
 			localisation_key = tooltip_feudal_elector_vote_encroaching_foreigner
-			NOT = { capital_scope = { de_jure_liege = FROMFROM } }
+			capital_scope = { de_jure_liege_or_above = FROMFROM }
 			FROM = {
 				is_ruler = yes 
 				NOT = { is_vassal_or_below_of = ROOT_FROMFROM }
+				NOR = {
+					capital_scope = { de_jure_liege_or_above = ROOT_FROMFROM }
+					de_jure_liege_or_above = ROOT_FROMFROM
+				}
 			}
 		}
 
@@ -7508,14 +7516,14 @@ byzantine_elective = {
 			value = 30
 			localisation_key = tooltip_feudal_elector_vote_strong_claimant
 			FROM = { 
-				has_claim = FROMFROM
+				has_claim = ROOT_FROMFROM
 			}
 		}
 		additive_modifier = {
 			value = 15
 			localisation_key = tooltip_feudal_elector_vote_weak_claimant
 			FROM = { 
-				has_weak_claim = FROMFROM
+				has_weak_claim = ROOT_FROMFROM
 			}
 		}
 
@@ -7980,17 +7988,18 @@ byzantine_elective = {
 			}
 		}
 		additive_modifier = {
-			value = 50
+			value = 25
 			localisation_key = tooltip_feudal_elector_vote_born_in_the_purple
 			NOT = { character = FROM } #Do not judge yourself.
 			FROMFROM = { title = e_byzantium }
 			culture_group = byzantine
 			FROM = { 
 				trait = born_in_the_purple
+				NOT = { has_minor_title = title_despot } #Override
 			}
 		}
 		additive_modifier = {
-			value = 50
+			value = 25
 			localisation_key = tooltip_feudal_elector_vote_despot
 			NOT = { character = FROM } #Do not judge yourself.
 			culture_group = byzantine
@@ -9962,7 +9971,7 @@ byzantine_elective = {
 					character = ROOT
 				} 
 				is_ruler = no
-				FROMFROM = { holder_scope = { independent = yes } }
+				ROOT_FROMFROM = { holder_scope = { independent = yes } }
 				NOR = { 
 					ROOT_FROMFROM = { has_law = out_of_realm_inheritance_law_1 } 
 					ROOT_FROMFROM = { has_law = crown_authority_3 } 
@@ -10046,9 +10055,8 @@ hre_feudal_elective = {
 	elector_vote_strength = {
 		days = 1
 		#Power to the Church. Double voting power for theocratic electors when under Papal Investiture.
-		additive_modifier = { 
+		additive_modifier = {
 			localisation_key = tooltip_hre_vote_strength_theocracy
-			has_landed_title = c_mainz
 			is_theocracy = yes
 			FROMFROM = {
 				OR = { 
@@ -10060,58 +10068,6 @@ hre_feudal_elective = {
 				}
 			}
 			NOT = { has_landed_title = e_hre }
-			value = 1
-		}
-		additive_modifier = { 
-			localisation_key = tooltip_hre_vote_strength_theocracy
-			has_landed_title = c_koln
-			is_theocracy = yes
-			FROMFROM = {
-				OR = { 
-					has_law = investiture_law_0 
-					holder_scope = { has_religion_feature = religion_dogmatic }
-				}
-				holder_scope = {
-					religion = ROOT
-				}
-			}
-			NOT = { has_landed_title = e_hre }
-			value = 1
-		}
-		additive_modifier = { 
-			localisation_key = tooltip_hre_vote_strength_theocracy
-			has_landed_title = c_trier
-			is_theocracy = yes
-			FROMFROM = {
-				OR = { 
-					has_law = investiture_law_0 
-					holder_scope = { has_religion_feature = religion_dogmatic }
-				}
-				holder_scope = {
-					religion = ROOT
-				}
-			}
-			NOT = { has_landed_title = e_hre }
-			value = 1
-		}
-		additive_modifier = { #Generic fallback theocratic elector.
-			localisation_key = tooltip_hre_vote_strength_theocracy
-			is_theocracy = yes
-			FROMFROM = {
-				OR = { 
-					has_law = investiture_law_0 
-					holder_scope = { has_religion_feature = religion_dogmatic }
-				}
-				holder_scope = {
-					religion = ROOT
-				}
-			}
-			NOR = { 
-				has_landed_title = e_hre 
-				has_landed_title = c_trier
-				has_landed_title = c_koln
-				has_landed_title = c_mainz
-			}
 			value = 1
 		}
 	}
@@ -10149,6 +10105,7 @@ hre_feudal_elective = {
 	#	}
 		additive_modifier = { # Prince-Electors.
 			value = 75
+			is_alternate_start = no #Random worlds do whatever they want!
 			FROMFROM = { #Either title is higher than Duke-tier, or must be primary.
 				OR = { 
 					higher_tier_than = DUKE
@@ -10284,7 +10241,7 @@ hre_feudal_elective = {
 		additive_modifier = {
 			value = -5
 			is_nomadic = yes
-		}
+		}				
 	}
 	candidate_vote_score = {
 		days = 0
@@ -10631,29 +10588,37 @@ hre_feudal_elective = {
 		additive_modifier = { #If candidate is elected, he will rule from a capital outside this dejure.
 			value = -15
 			localisation_key = tooltip_feudal_elector_vote_political_concerns
-			capital_scope = { de_jure_liege = FROMFROM }
+			capital_scope = { de_jure_liege_or_above = FROMFROM }
 			FROM = {
 				is_ruler = yes 
-				vassal_of = FROMFROM
-				capital_scope = { NOT = { de_jure_liege = ROOT_FROMFROM } }
+				is_vassal_or_below_of = ROOT_FROMFROM
+				capital_scope = { NOT = { de_jure_liege_or_above = ROOT_FROMFROM } }
 			}
 		}
 		additive_modifier = { #Candidate is a foreign ruler.
 			value = -30
 			localisation_key = tooltip_feudal_elector_vote_encroaching_foreigner
-			capital_scope = { de_jure_liege = FROMFROM }
+			capital_scope = { de_jure_liege_or_above = FROMFROM }
 			FROM = {
 				is_ruler = yes 
 				NOT = { is_vassal_or_below_of = ROOT_FROMFROM }
+				OR = {
+					capital_scope = { de_jure_liege_or_above = ROOT_FROMFROM }
+					de_jure_liege_or_above = ROOT_FROMFROM
+				}
 			}
 		}
 		additive_modifier = { #Candidate is a foreign non-dejure ruler.
 			value = -500
 			localisation_key = tooltip_feudal_elector_vote_encroaching_foreigner
-			NOT = { capital_scope = { de_jure_liege = FROMFROM } }
+			capital_scope = { de_jure_liege_or_above = FROMFROM }
 			FROM = {
 				is_ruler = yes 
 				NOT = { is_vassal_or_below_of = ROOT_FROMFROM }
+				NOR = {
+					capital_scope = { de_jure_liege_or_above = ROOT_FROMFROM }
+					de_jure_liege_or_above = ROOT_FROMFROM
+				}
 			}
 		}
 
@@ -10965,14 +10930,14 @@ hre_feudal_elective = {
 			value = 30
 			localisation_key = tooltip_feudal_elector_vote_strong_claimant
 			FROM = { 
-				has_claim = FROMFROM
+				has_claim = ROOT_FROMFROM
 			}
 		}
 		additive_modifier = {
 			value = 15
 			localisation_key = tooltip_feudal_elector_vote_weak_claimant
 			FROM = { 
-				has_weak_claim = FROMFROM
+				has_weak_claim = ROOT_FROMFROM
 			}
 		}
 
@@ -13066,6 +13031,18 @@ hre_feudal_elective = {
 					trait = hedonist
 					trait = is_fat
 					trait = shy
+				}
+			}
+		}
+		#Bloodlines
+		additive_modifier = {
+			value = 25
+			localisation_key = tooltip_feudal_elector_vote_bloodline
+			NOT = { character = FROM } # Do not judge yourself
+			FROM = {
+				any_owned_bloodline = {
+					bloodline_is_active_for = PREV
+					has_bloodline_flag = bloodline_princely_elective_bonus
 				}
 			}
 		}
