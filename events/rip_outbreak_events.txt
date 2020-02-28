@@ -28,7 +28,22 @@ narrative_event = {
 	picture = GFX_evt_plague_doctor
 	border = GFX_event_narrative_frame_religion
 
-	desc = EVTDESC_RIP_10001
+	desc = {
+		text = EVTDESC_RIP_10001
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = yes
+			}
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_10001B
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = no
+			}
+		}
+	}
 
 	is_triggered_only = yes
 
@@ -71,7 +86,22 @@ narrative_event = {
 	picture = GFX_evt_danse_macabre
 	border = GFX_event_narrative_frame_religion
 
-	desc = EVTDESC_RIP_10002
+	desc = {
+		text = EVTDESC_RIP_10002
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = yes
+			}
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_10002B
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = no
+			}
+		}
+	}
 
 	only_playable = yes
 	is_triggered_only = yes
@@ -236,8 +266,23 @@ narrative_event = {
 	title = EVTNAME_RIP_10002
 	picture = GFX_evt_bring_out_your_dead
 	border = GFX_event_narrative_frame_religion
-
-	desc = EVTDESC_RIP_10003
+	
+	desc = {
+		text = EVTDESC_RIP_10003
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = yes
+			}
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_10003B
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = no
+			}
+		}
+	}
 
 	only_playable = yes
 	is_triggered_only = yes
@@ -402,8 +447,23 @@ narrative_event = {
 	picture = GFX_evt_bring_out_your_dead
 	border = GFX_event_narrative_frame_religion
 
-	desc = EVTDESC_RIP_10001
-
+	desc = {
+		text = EVTDESC_RIP_10001
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = yes
+			}
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_10001B
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = no
+			}
+		}
+	}
+	
 	only_playable = yes
 	is_triggered_only = yes
 	ai = no
@@ -764,6 +824,7 @@ character_event = {
 			has_global_flag = bp_world_europe_west_broadcasted
 			has_global_flag = bp_world_europe_north_broadcasted
 			has_global_flag = bp_world_steppe_broadcasted
+			has_global_flag = bp_world_far_north_broadcasted
 		}
 	}
 
@@ -965,6 +1026,26 @@ character_event = {
 			capital_scope = { province_event = { id = RIP.10124 } }
 			chronicle = {
 			entry = CHRONICLE_STEPPE_GONE
+			picture = GFX_evt_monk
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_global_flag = bp_world_far_north_broadcasted }
+				regional_percentage = {
+					region = world_far_north
+					percentage = 0.5
+					OR = {
+						has_province_modifier = depopulated_1
+						has_province_modifier = depopulated_2
+						has_province_modifier = depopulated_3
+					}
+				}
+			}
+			set_global_flag = bp_world_far_north_broadcasted
+			capital_scope = { province_event = { id = RIP.10125 } }
+			chronicle = {
+			entry = CHRONICLE_FAR_NORTH_GONE
 			picture = GFX_evt_monk
 			}
 		}
@@ -1322,6 +1403,41 @@ narrative_event = {
 	}
 }
 
+# The Black Death has ravaged the Far North
+province_event = {
+	id = RIP.10125
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = { province_event = { id = RIP.10225 days = 100 random = 250 } } 
+}
+
+province_event = {
+	id = RIP.10225
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = { owner = { narrative_event = { id = RIP.10025 } } }
+}
+
+narrative_event = {
+	id = RIP.10025
+	title = EVTNAME_RIP_10025
+	picture = GFX_evt_danse_macabre
+	border = GFX_event_narrative_frame_religion
+
+	desc = EVTDESC_RIP_10025
+
+	is_triggered_only = yes
+	hide_from = yes
+
+	major = yes
+	
+	option = {
+		name = EVTOPTA_RIP_10015
+	}
+}
+
 #depopulation modifier dissipating
 province_event = {
 	id = RIP.10030
@@ -1554,6 +1670,15 @@ character_event = {
 					has_province_modifier = depopulated_3
 				}
 			}
+			regional_percentage = {
+				region = world_far_north
+				percentage = 0.5
+				OR = {
+					has_province_modifier = depopulated_1
+					has_province_modifier = depopulated_2
+					has_province_modifier = depopulated_3
+				}
+			}
 		}
 	}
 
@@ -1569,5 +1694,6 @@ character_event = {
 		clr_global_flag = bp_world_europe_west_broadcasted
 		clr_global_flag = bp_world_europe_north_broadcasted
 		clr_global_flag = bp_world_steppe_broadcasted
+		clr_global_flag = bp_world_far_north_broadcasted
 	}
 }
