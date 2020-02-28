@@ -768,3 +768,407 @@ character_event = {
 		name = EVTOPTA_SoA_200
 	}
 }
+### Siberian Bards
+
+# Famed Bard enters realm(+ explanaition of wtf is bards even)
+character_event = {
+	id = COURTE.690
+	desc = EVTDESCCOURTE.690
+	picture = GFX_evt_bandits
+
+	capable_only = yes
+	only_playable = yes
+	prisoner = no
+	min_age = 16
+	
+	trigger = {
+		in_command = no
+		
+		OR = { 
+			religion = folklorist
+			religion = folklorist_reformed
+		    capital_scope = {
+			    region = world_siberia
+		    }
+		}
+		NOT = { is_inaccessible_trigger = yes }
+		NOT = {
+			has_alternate_start_parameter = {
+				key = culture_names
+				value = random
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1200
+	}
+	
+	option = {
+		name = EVTOPTACOURTE.690
+		custom_tooltip = { text = let_him_in }
+		character_event = { id = COURTE.691 days = 3}
+	}
+	option = {
+		name = EVTOPTBCOURTE.690
+		custom_tooltip = { text = i_dont_care_about_bards }
+		prestige = 50
+	}
+}
+
+# You invite him in an have a chat
+character_event = {
+	id = COURTE.691
+	desc = EVTDESCCOURTE.691
+	picture = GFX_evt_feast
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTACOURTE.691
+		character_event = { id = COURTE.692 days = 3}
+		custom_tooltip = { text = sing_your_song }
+	}
+	option = {
+		name = EVTOPTBCOURTE.691
+		custom_tooltip = { text = get_out_of_here_bard }
+		random_list = {
+			10 = {
+				add_trait = cynical
+			}
+			90 = {}
+		}
+	}
+}
+	
+	
+	
+	
+character_event = {
+	id = COURTE.692
+	desc = EVTDESCCOURTE.692
+	picture = GFX_evt_siberian_bard
+	immediate = {
+	    sound_effect = siberan_ballad_red
+	}
+	hide_from = yes
+	sound_effet = siberan_ballad_red
+	is_triggered_only = yes
+	option = {
+		name = EVTOPTACOURTE.692
+		wealth = -5
+		piety = 5
+		custom_tooltip = { 
+		    text = minted_coin 
+		}
+		ai_chance = {
+	    factor = 40
+	    }
+	}
+	option = {
+		name = EVTOPTBCOURTE.692
+		prestige = -25
+		piety = -75
+        custom_tooltip = { 
+			text = arrest_him_lol
+			hidden_tooltip = {
+				random_list = {
+					10 = { wealth = 25 }
+					45 = { wealth = 50 }
+					35 = { wealth = 100 }
+					10 = { wealth = 150 }
+				}
+			}
+		} 
+	    ai_chance = {
+			factor = 30
+			modifier = {
+				factor = 3
+				religion = old_believer
+				} 
+			modifier = {
+				factor = 2
+				religion = zarist
+				} 
+			modifier = {
+				factor = 1.5
+				NOR = {
+					religion = old_believer 
+					religion = zarist
+					religion = folklorist
+					religion = folklorist_reformed
+					religion = nousthreskeia
+					religion = nousthreskeia_reformed
+				} 
+			}
+			modifier = {
+				factor = 0.5
+				OR ={
+					religion = folklorist
+					religion = folklorist_reformed
+					religion = nousthreskeia
+					religion = nousthreskeia_reformed			
+				} 
+			}
+		    modifier = {
+				factor = 0.1
+				NOR = {
+					culture_group = byzantine
+					culture = bulgarian
+			    } 
+		    }
+			modifier = {
+				factor = 2
+				OR ={
+					has_trait = greedy
+					has_trait = falconer
+					has_trait = cruel			
+				} 
+			}		
+		} 
+	}
+	option = {
+		name = EVTOPTCCOURTE.692
+		ai_chance = {
+			factor = 40
+			modifier = {
+				factor = 3
+				OR ={
+					has_trait = poet
+					AND = {
+						OR = {
+							religion = folklorist
+							religion = folklorist_reformed
+						}
+						has_trait = zealous					
+					} 
+				}		
+			}
+		}
+		wealth = -50
+		custom_tooltip = { 
+			text = offer_to_stay_as_an_official
+			hidden_tooltip = {
+				random_list = {
+					25 = { character_event = { id = COURTE.693 days = 3 } }
+					50 = { character_event = { id = COURTE.694 days = 3 } }
+					25 = { character_event = { id = COURTE.695 days = 3 } }
+				}
+			}
+     	}
+    }  
+}
+#Wise Scholar of Old
+character_event = {
+	id = COURTE.693
+	desc = EVTDESCCOURTE.693
+	picture = GFX_evt_emissary
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_random_priest = {
+			random_traits = no
+			dynasty = NONE
+			age = 22
+			religion = ROOT
+			culture = sibiran
+			attributes = {
+				learning = 12
+			}
+			trait = poet
+			trait = shrewd
+			trait = erudite
+			trait = diligent
+		}
+		new_character = {
+			opinion = {
+				modifier = opinion_loyal_servant
+				who = ROOT
+			}
+			random_list = {
+				25 = {
+					add_trait = just
+				}
+				25 = {
+					add_trait = chaste
+				}
+				25 = {
+					add_trait = stubborn
+				}
+				25 = {
+					add_trait = patient
+				}
+			}
+			random_list = {
+				33 = {
+					add_trait = mystic
+				}
+				33 = {
+					add_trait = scholar
+				}
+				33 = {
+					add_trait = theologian
+				}
+			}
+			save_event_target_as = eunuch_gift
+			set_character_flag = eunuch_gift
+		}
+	}
+	
+	option = {
+		name = EVTOPTACOURTE.693
+		custom_tooltip = {
+			text = eunuch_gift_tooltip
+		}
+	}
+}
+
+#A Classical Bard
+character_event = {
+	id = COURTE.694
+	desc = EVTDESCCOURTE.694
+	picture = GFX_evt_emissary
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		create_random_diplomat = {
+			random_traits = no
+			dynasty = NONE
+			age = 22
+			religion = ROOT
+			culture = sibiran
+			attributes = {
+				diplomacy = 6
+				learning = 6
+			}
+			trait = poet
+			trait = shrewd
+			trait = gregarious
+			trait = diligent
+		}
+		new_character = {
+			opinion = {
+				modifier = opinion_loyal_servant
+				who = ROOT
+			}
+			random_list = {
+				25 = {
+					add_trait = honest
+				}
+				25 = {
+					add_trait = kind
+				}
+				25 = {
+					add_trait = charitable
+				}
+				25 = {
+					add_trait = trusting
+				}
+			}
+			random_list = {
+				67 = {
+					add_trait = socializer
+				}
+				33 = {
+					add_trait = gamer
+				}
+			}
+			save_event_target_as = eunuch_gift
+			set_character_flag = eunuch_gift
+		}
+	}
+	option = {
+		name = EVTOPTACOURTE.694
+		custom_tooltip = {
+			text = bard_at_your_command
+		}
+	}
+}
+
+#A Warrior-Poet
+character_event = {
+	id = COURTE.695
+	desc = EVTDESCCOURTE.695
+	picture = GFX_evt_emissary
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+			create_random_soldier = {
+			random_traits = no
+			dynasty = NONE
+			age = 22
+			religion = ROOT
+			culture = sibiran
+			attributes = {
+		    martial = 6
+			learning = 6
+			}
+			trait = poet
+			trait = shrewd
+			trait = brave
+			trait = diligent
+		}
+		new_character = {
+			opinion = {
+				modifier = opinion_loyal_servant
+				who = ROOT
+			}
+			random_list = {
+				25 = {
+					add_trait = zealous
+				}
+				25 = {
+					add_trait = wroth
+				}
+				25 = {
+					add_trait = cruel
+				}
+				25 = {
+					add_trait = robust
+				}
+			}
+			random_list = {
+				25 = {
+					add_trait = aggressive_leader
+				}
+				25 = {
+					add_trait = inspiring_leader
+				}
+				25 = {
+					add_trait = trickster
+				}
+				25 = {
+					add_trait = winter_soldier
+				}
+			}
+			random_list = {
+				50 = {
+					add_trait = duelist
+				}
+				50 = {
+					add_trait = strategist
+				}
+			}
+			save_event_target_as = eunuch_gift
+			set_character_flag = eunuch_gift
+		}
+	}
+	
+	option = {
+		name = EVTOPTACOURTE.695
+		custom_tooltip = {
+			text = bard_at_your_command
+		}
+	}
+}
