@@ -73,41 +73,41 @@ decisions = {
 		}
 	}
 	
-	buy_indulgence_for_sins = {
-		only_playable = yes
-		ai_check_interval = 6
-		potential = {
-			religion = catholic
-			age = 16
-			demesne_size = 1
-			NOT = { has_character_flag = ask_for_indulgence }
-			NOT = { trait = excommunicated }
-		}
-		allow = {
-			prisoner = no
-			NOT = { trait = incapable }
-			NOT = { is_inaccessible_trigger = yes }
-			scaled_wealth = 1.0
-			wealth = 25
-			is_heretic = no
-		}
-		effect = {
-			set_character_flag = ask_for_indulgence
-			rightful_religious_head_scope = {
-				character_event = { id = 39250 days = 5 random = 12 tooltip = "indulgence_ask" }
-			}
-		}
-		ai_will_do = {
-			factor = 1
-			modifier = {
-				factor = 0
-				OR = {
-					NOT = { scaled_wealth = 10.0 }
-					piety = 0
-				}
-			}
-		}
-	}
+	#buy_indulgence_for_sins = {
+	#	only_playable = yes
+	#	ai_check_interval = 6
+	#	potential = {
+	#		religion = catholic
+	#		age = 16
+	#		demesne_size = 1
+	#		NOT = { has_character_flag = ask_for_indulgence }
+	#		NOT = { trait = excommunicated }
+	#	}
+	#	allow = {
+	#		prisoner = no
+	#		NOT = { trait = incapable }
+	#		NOT = { is_inaccessible_trigger = yes }
+	#		scaled_wealth = 1.0
+	#		wealth = 25
+	#		is_heretic = no
+	#	}
+	#	effect = {
+	#		set_character_flag = ask_for_indulgence
+	#		rightful_religious_head_scope = {
+	#			character_event = { id = 39250 days = 5 random = 12 tooltip = "indulgence_ask" }
+	#		}
+	#	}
+	#	ai_will_do = {
+	#		factor = 1
+	#		modifier = {
+	#			factor = 0
+	#			OR = {
+	#				NOT = { scaled_wealth = 10.0 }
+	#				piety = 0
+	#			}
+	#		}
+	#	}
+	#}
 
 	issue_declaration_of_repentance = {
 		only_playable = yes
@@ -1878,7 +1878,34 @@ decisions = {
 		}
 		
 		ai_will_do = {
-			factor = 0
+			factor = 0.75
+			modifier = {
+				factor = 0.01
+				liege = {
+					OR = {
+						NOT = { religion_group = ROOT }
+						AND = {
+							religion_group = pagan_group
+							NOT = { religion = ROOT }
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				liege = {
+					NOT = { culture_group = ROOT }
+				}
+			}
+			
+			modifier = {
+				factor = 0.1
+				liege = {
+					religion_group = ROOT
+					NOT = { religion_group = pagan_group }
+					NOT = { religion = ROOT }
+				}
+			}
 		}
 	}
 	organize_legata_guard = {
