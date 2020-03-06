@@ -31,8 +31,6 @@ decisions = {
 					make_primary_title = yes
 				}
 			}
-			unsafe_destroy_landed_title = d_knights_hospitaler
-			activate_title = { title = d_knights_hospitaler status = no }
 			set_government_type = order_government
 		}
 	}
@@ -68,9 +66,200 @@ decisions = {
 					make_primary_title = yes
 				}
 			}
-			unsafe_destroy_landed_title = d_holy_sepulchre
-			activate_title = { title = d_holy_sepulchre status = no }
 			set_government_type = order_government
+		}
+	}
+	form_tectonic_state = {
+		is_high_prio = yes
+		only_playable = no
+		ai_check_interval = 24
+		potential = {
+			form_kingdom_potential = yes
+			has_landed_title = d_tectonic_order
+			k_tectonic_state = {
+				is_titular = yes
+				has_holder = no
+			}
+		}
+
+		allow = {
+			is_adult = yes
+			prisoner = no
+			NOT = { trait = incapable }
+			prestige = 500
+			piety = 500
+			realm_size = 30
+			war = no
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = form_sepulchre_state_tt
+				k_tectonic_state = {
+					gain_title_effect = yes
+					show_scope_change = no
+					make_primary_title = yes
+				}
+			}
+			set_government_type = order_government
+		}
+	}
+	donate_money_to_knights_lazarus = {
+		only_playable = yes
+		ai_check_interval = 80
+
+		potential = {
+			is_playable = yes
+			
+			OR = {
+				AND = {
+					wealth = 1000
+					NOR = {
+						trait = cynical
+						piety = 50
+					}
+				}
+				ai = no
+			}
+
+			NOT = { government = order_government }
+			
+			is_title_active = d_knights_lazarus
+			
+			d_knights_lazarus = {
+				holder_scope = { 
+					religion = ROOT
+				}
+			}
+			
+			NOT = { has_character_modifier = expelled_d_knights_lazarus }
+			
+			has_dlc = "Sons of Abraham"
+			
+			d_knights_lazarus = {
+				holder_scope = {
+					liege = {
+						NOT = { character = ROOT }
+					}
+				}
+			}
+		}
+		
+		allow = {
+			wealth = 300
+			custom_tooltip = {
+				text = holy_order_donate_cooldown_tt
+				NOT = { has_character_modifier = donate_to_holy_order_cooldown }
+			}
+		}
+		
+		effect = {
+			hidden_effect = {
+				add_character_modifier = {
+					modifier = donate_to_holy_order_cooldown
+					hidden = yes
+					years = 1
+				}
+			}
+			if = {
+				limit = { 
+					NOT = { has_character_modifier = donated_to_holy_order }
+				}
+				add_character_modifier = {
+					name = donated_to_holy_order
+					duration = -1
+				}
+			}
+			
+			hidden_tooltip = {
+				d_knights_lazarus = {
+					holder_scope = {
+						character_event = {
+							id = SoA.2640
+						}
+					}
+				}
+			}
+			
+			wealth = -300
+			piety = 100
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1 # Slow it down
+			}
+		}
+	}
+	
+	expel_knights_lazarus = {
+		only_independent = yes
+		ai = no
+
+		potential = {
+			OR = {
+				religion = catholic
+				religion = cadaverist
+				religion = fraticelli
+			}
+			is_heretic = no
+			higher_tier_than = DUKE
+			independent = yes
+			is_title_active = d_knights_lazarus
+			NOT = { has_character_modifier = expelled_knights_lazarus }
+			
+			any_realm_province = {
+				any_province_lord = {
+					d_knights_lazarus = {
+						holder_scope = {
+							OR = {
+								character = PREVPREV
+								is_vassal_or_below = PREVPREV
+							}
+						}
+					}
+				}
+			}
+			
+			has_dlc = "Sons of Abraham"
+		}
+		
+		allow = {
+			piety = 1000
+			custom_tooltip = {
+				text = expelling_holy_order_decision_tooltip
+				hidden_tooltip = {
+					NOT = { has_character_flag = expel_knights_lazarus_check }
+				}
+			}
+		}
+		
+		effect = {
+			set_character_flag = expel_knights_lazarus_check
+			custom_tooltip = {
+				text = expelling_holy_order_decision_tooltip_b
+				hidden_tooltip = {
+					character_event = { id = SoA.2990 }
+				}
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				factor = 0.25
+				trait = cynical
+				wealth = -100
+			}
 		}
 	}
 }
