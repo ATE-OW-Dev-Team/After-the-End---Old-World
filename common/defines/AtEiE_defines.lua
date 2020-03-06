@@ -10,28 +10,28 @@ NDefines.NEndGame.DYN2_SCORE = 90000
 NDefines.NEndGame.DYN2_ID = 26560140
 
 NDefines.NEndGame.DYN3_SCORE = 80000
-NDefines.NEndGame.DYN3_ID = 0
+NDefines.NEndGame.DYN3_ID = 25559129
 
 NDefines.NEndGame.DYN4_SCORE = 70000
 NDefines.NEndGame.DYN4_ID = 25551100
 
 NDefines.NEndGame.DYN5_SCORE = 60000
-NDefines.NEndGame.DYN5_ID = 25559000
+NDefines.NEndGame.DYN5_ID = 25554000
 
 NDefines.NEndGame.DYN6_SCORE = 50000
-NDefines.NEndGame.DYN6_ID = 25554000
+NDefines.NEndGame.DYN6_ID = 25554044
 
 NDefines.NEndGame.DYN7_SCORE = 40000
-NDefines.NEndGame.DYN7_ID = 25554044
+NDefines.NEndGame.DYN7_ID = 25551202
 
 NDefines.NEndGame.DYN8_SCORE = 30000
-NDefines.NEndGame.DYN8_ID = 25551202
+NDefines.NEndGame.DYN8_ID = 26560134
 
 NDefines.NEndGame.DYN9_SCORE = 20000
-NDefines.NEndGame.DYN9_ID = 26560134
+NDefines.NEndGame.DYN9_ID = 25559124
 
 NDefines.NEndGame.DYN10_SCORE = 15000
-NDefines.NEndGame.DYN10_ID = 25559124
+NDefines.NEndGame.DYN10_ID = 25559000
 
 NDefines.NEndGame.DYN11_SCORE = 10000
 NDefines.NEndGame.DYN11_ID = 2081258 
