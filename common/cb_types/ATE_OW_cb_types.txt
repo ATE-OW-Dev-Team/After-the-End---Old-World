@@ -996,6 +996,39 @@ jacobinist_start_of_revolution_invasion = {
 		custom_tooltip = { 
 			text = other_invasion_succ_tip
 			hidden_tooltip = {
+				if = {
+					limit = {
+						OR = {
+							has_holder = no
+							holder_scope = {
+								character = FROM
+							}
+						}
+					}
+					usurp_title = { target = ROOT type = invasion }
+				}
+				else_if = {
+					limit = {
+						ROOT = {
+							NOT = { higher_tier_than = DUKE }
+						}
+					}
+					ROOT = {
+						create_title = {
+							tier = KING
+							landless = no
+							temporary = no
+							custom_created = yes
+							culture = event_target:new_ruler
+							holder = event_target:new_ruler
+							name = "REVOLUTIONARY_KINGDOM"
+							base_title = PREV
+						}
+						new_title = {
+							save_persistent_event_target = { name = jacobinist_base_kingdom scope = PREVPREV }
+						}
+					}
+				}
 				ROOT = {
 					vassalize_or_take_under_title = {
 						title = PREV
@@ -1509,7 +1542,14 @@ jacobinist_restore_republic_boarders = {
 	can_use_title = {
 		ROOT = {
 			NOT = { persistent_event_target:jacobinist_revolution_target = { title = PREVPREV } }
-			has_landed_title = PREV
+			OR = {
+				has_landed_title = PREV
+				any_demesne_title = {
+					persistent_event_target:jacobinist_base_kingdom = {
+						title = PREVPREVPREV
+					}
+				}
+			}
 		}
 	}
 	
@@ -1522,6 +1562,26 @@ jacobinist_restore_republic_boarders = {
 	}
 	
 	is_valid_title = {
+		ROOT = {
+			OR = {
+				has_landed_title = PREV
+				any_demesne_title = {
+					persistent_event_target:jacobinist_base_kingdom = {
+						title = PREVPREVPREV
+					}
+				}
+			}
+			any_vassal = {
+				OR = {
+					has_landed_title = PREV
+					any_demesne_title = {
+						persistent_event_target:jacobinist_base_kingdom = {
+							title = PREVPREVPREV
+						}
+					}
+				}
+			}
+		}
 		FROM = {
 			any_realm_province = {
 				de_jure_liege_or_above = PREVPREV
@@ -1746,15 +1806,50 @@ jacobinist_spread_revolution = {
 	}
 	
 	can_use_title = {
-		# The attacker needs at least one county in the target kingdom, or a border, or be only two sea zones away from one of your counties
-		any_de_jure_vassal_title = {
-			OR = {
-				holder_scope = {
-					OR = {
-						character = ROOT
-						is_liege_or_above = ROOT
+		ROOT = {
+			NOT = { persistent_event_target:jacobinist_revolution_target = { title = PREVPREV } }
+			NOT = { has_landed_title = PREV }
+			NOT = {
+				any_demesne_title = {
+					persistent_event_target:jacobinist_base_kingdom = {
+						title = PREVPREVPREV
 					}
 				}
+			}
+			NOT = {
+				any_vassal = {
+					OR = {
+						has_landed_title = PREVPREV
+						any_demesne_title = {
+							persistent_event_target:jacobinist_base_kingdom = {
+								title = PREVPREVPREVPREV
+							}
+						}
+					}
+				}
+			}
+		}
+		# The attacker needs at least one county in the target kingdom, or a border, or be only two sea zones away from one of your counties
+		FROM = {
+			OR = {
+				num_of_realm_counties = { value = 4 title = PREV }
+				has_landed_title = PREV
+				PREV = {
+					NOT = {
+						any_de_jure_vassal_title = {
+							tier = COUNT
+							owner = {
+								NOT = {
+									same_realm = ROOT_FROM
+								}
+							}
+						}
+					}
+				}
+			}
+			any_realm_title = {
+				tier = COUNT
+				de_jure_liege_or_above = PREVPREV
 				location = {
 					any_neighbor_province = {
 						OR = {
@@ -1912,7 +2007,12 @@ jacobinist_spread_revolution = {
 				}
 				if = {
 					limit = {
-						has_holder = no
+						OR = {
+							has_holder = no
+							holder_scope = {
+								character = FROM
+							}
+						}
 					}
 					usurp_title = { target = event_target:new_ruler type = invasion }
 				}
@@ -1927,6 +2027,9 @@ jacobinist_spread_revolution = {
 							holder = event_target:new_ruler
 							name = "REVOLUTIONARY_KINGDOM"
 							base_title = PREV
+						}
+						new_title = {
+							save_persistent_event_target = { name = jacobinist_base_kingdom scope = PREVPREV }
 						}
 					}
 				}
