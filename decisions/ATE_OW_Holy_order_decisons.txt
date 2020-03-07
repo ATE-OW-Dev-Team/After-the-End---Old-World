@@ -105,3 +105,218 @@ decisions = {
 		}
 	}
 }
+title_decisions = {
+	holy_order_construct_castle = {
+		ai_target_filter = capital
+		filter = all
+		ai = no
+		from_potential = {
+			holy_order = yes
+			tier = DUKE
+			NOT = { realm_size = 20 }
+		}
+		potential = {
+			tier = COUNT
+			owner = {
+				religion = ROOT
+				top_liege = {
+					religion = ROOT
+				}
+				NOT = { government = order_government }
+				holy_order = no
+				liege = {
+					holy_order = no
+					NOT = { government = order_government }
+					liege = {
+						holy_order = no
+						NOT = { government = order_government }
+					}
+				}
+				is_within_diplo_range = FROM
+			}
+			location = {
+				has_empty_holding = yes
+			}
+		}
+		allow = {
+			FROM = {
+				wealth = 300
+				OR = {
+					NOT = { realm_size = 10 }
+					piety = 200
+				}
+				custom_tooltip = {
+					text = didnt_tried_to_construct_castle_tt
+					OR = {
+						NOT = { has_character_flag = ho_tried_to_construct_castle }
+						had_character_flag = { flag = ho_tried_to_construct_castle days = 365 }
+					}
+				}
+				custom_tooltip = {
+					text = didnt_tried_to_construct_castle_this_tt
+					ROOT = {
+						owner = {
+							NOT = {
+								has_opinion_modifier = {
+									who = FROM modifier = refused_castle_construction
+								}
+							}
+						}
+					}
+				}
+				custom_tooltip = {
+					text = isnt_expelled_tt
+					ROOT = {
+						owner = {
+							OR = {
+								AND = {
+									NOT = { has_character_modifier = expelled_one_holy_order }
+									NOT = {
+										any_liege = {
+											has_character_modifier = expelled_one_holy_order
+										}
+									}
+									religion_scope = {
+										persistent_event_target:one_holy_order = {
+											holder_scope = {
+												character = FROM
+											}
+										}
+									}
+								}
+								AND = {
+									NOT = { has_character_modifier = expelled_d_legion_of_mary }
+									NOT = {
+										any_liege = {
+											has_character_modifier = expelled_d_legion_of_mary
+										}
+									}
+									d_legion_of_mary = {
+										holder_scope = {
+											character = FROM
+										}
+									}
+									OR = {
+										religion = catholic
+										religion = cadaverist
+										religion = fraticelli
+									}
+								}
+								AND = {
+									NOT = { has_character_modifier = expelled_d_knights_templar }
+									NOT = {
+										any_liege = {
+											has_character_modifier = expelled_d_knights_templar
+										}
+									}
+									d_knights_templar = {
+										holder_scope = {
+											character = FROM
+										}
+									}
+									OR = {
+										religion = catholic
+										religion = cadaverist
+										religion = fraticelli
+									}
+								}
+								AND = {
+									NOT = { has_character_modifier = expelled_d_knights_hospitaler }
+									NOT = {
+										any_liege = {
+											has_character_modifier = expelled_d_knights_hospitaler
+										}
+									}
+									d_knights_hospitaler = {
+										holder_scope = {
+											character = FROM
+										}
+									}
+									OR = {
+										religion = catholic
+										religion = cadaverist
+										religion = fraticelli
+									}
+								}
+								AND = {
+									NOT = { has_character_modifier = expelled_d_knights_lazarus }
+									NOT = {
+										any_liege = {
+											has_character_modifier = expelled_d_knights_lazarus
+										}
+									}
+									d_knights_lazarus = {
+										holder_scope = {
+											character = FROM
+										}
+									}
+									OR = {
+										religion = catholic
+										religion = cadaverist
+										religion = fraticelli
+									}
+								}
+								AND = {
+									NOT = { has_character_modifier = expelled_d_columbus_knights }
+									NOT = {
+										any_liege = {
+											has_character_modifier = expelled_d_columbus_knights
+										}
+									}
+									d_columbus_knights = {
+										holder_scope = {
+											character = FROM
+										}
+									}
+									OR = {
+										religion = palmarian
+										religion = transatlantic
+									}
+								}
+								AND = {
+									NOT = { has_character_modifier = expelled_d_carmelites }
+									NOT = {
+										any_liege = {
+											has_character_modifier = expelled_d_carmelites
+										}
+									}
+									d_carmelites = {
+										holder_scope = {
+											character = FROM
+										}
+									}
+									OR = {
+										religion = palmarian
+										religion = transatlantic
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			hidden_tooltip = {
+				FROM = {
+					set_character_flag = ho_tried_to_construct_castle
+					primary_title = { save_event_target_as = holy_order_to_build }
+				}
+				owner = {
+					character_event = { id = holyorder.23 }
+				}
+			}
+			tooltip = {
+				FROM = {
+					wealth = -300
+					if = {
+						limit = {
+							realm_size = 10
+						}
+						piety = -200
+					}
+				}
+			}
+		}
+	}
+}

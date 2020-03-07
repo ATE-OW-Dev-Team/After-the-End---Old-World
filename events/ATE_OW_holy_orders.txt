@@ -246,7 +246,7 @@ character_event = {
 	}
 }
 
-# The son of a ruler volunteers to join the Knights Templar
+# The son of a ruler volunteers to join the Holy Order
 character_event = {
 	id = holyorder.5
 	hide_window = yes
@@ -379,6 +379,10 @@ character_event = {
 			liege = {
 				holy_order = no
 				NOT = { government = order_government }
+				liege = {
+					holy_order = no
+					NOT = { government = order_government }
+				}
 			}
 		}
 		
@@ -618,7 +622,7 @@ character_event = {
 	}
 }
 
-# Son or brother asks to join the Knights Templar
+# Son or brother asks to join the Holy Order
 character_event = {
 	id = holyorder.6
 	desc = EVTDESC_HOLY_ORDER_6
@@ -720,7 +724,7 @@ character_event = {
 	}
 }
 
-# Son or brother joins the Knights Templar
+# Son or brother joins the Holy Order
 character_event = {
 	id = holyorder.7
 	hide_window = yes
@@ -739,7 +743,7 @@ character_event = {
 	}
 }
 
-# Liege refuses request to join the Knights Templar
+# Liege refuses request to join Holy Order
 character_event = {
 	id = holyorder.8
 	hide_window = yes
@@ -955,7 +959,16 @@ character_event = {
 				}
 			}
 		}
-		
+		NOT = { government = order_government }
+		holy_order = no
+		liege = {
+			holy_order = no
+			NOT = { government = order_government }
+			liege = {
+				holy_order = no
+				NOT = { government = order_government }
+			}
+		}
 		is_heretic = no
 		top_liege = {
 			religion = ROOT
@@ -1493,6 +1506,10 @@ character_event = {
 				religion = fraticelli
 			}
 		}
+		modifier = {
+			factor = 0.001
+			ai = no
+		}
 	}
 	
 	immediate = {
@@ -1836,11 +1853,36 @@ letter_event = {
 		name = EVTOPTA_SOA_1023 # Agree
 		ai_chance = {
 			factor = 80
+			modifier = {
+				factor = 2
+				trait = zealous
+				has_secret_religion = no
+			}
+			modifier = {
+				factor = 0.5
+				trait = cynical
+				has_secret_religion = no
+			}
+			modifier = {
+				factor = 0.5
+				has_secret_religion = yes
+			}
+			modifier = {
+				factor = 1.5
+				trait = trusting
+			}
+			modifier = {
+				factor = 0.5
+				trait = paranoid
+			}
 		}
 		
 		hidden_tooltip = {
 			FROMFROM = {
 				province_event = { id = holyorder.14 }
+			}
+			FROM = {
+				character_event = { id = holyorder.22 }
 			}
 		}
 		
@@ -1853,7 +1895,11 @@ letter_event = {
 		ai_chance = {
 			factor = 20
 		}
-		
+		hidden_tooltip = {
+			FROM = {
+				character_event = { id = holyorder.21 }
+			}
+		}
 		piety = -100
 	}
 }
@@ -1867,17 +1913,13 @@ province_event = {
 	
 	is_triggered_only = yes
 	
-	immediate = {
-		FROMFROM = {
-			wealth = -300
-		}
-	}
-	
 	option = {
 		name = EVTOPTA_SOA_1024
-		build_holding = {
-		   type = castle
-		   holder = FROMFROM
+		tooltip = {
+			build_holding = {
+			   type = castle
+			   holder = FROMFROM
+			}
 		}
 	}
 }
@@ -1902,7 +1944,7 @@ character_event = {
 	}
 }
 
-# Notification event when donating money to the Cult of Huitzilopochtli
+# Notification event when donating money Holy Order
 letter_event = {
 	id = holyorder.16
 	desc = EVTDESC_HOLY_ORDER_16
@@ -1915,7 +1957,7 @@ letter_event = {
 	}
 }
 
-# Ping event when expelling a Christian Holy Order
+# Ping event when expelling a Holy Order
 character_event = {
 	id = holyorder.17
 	hide_window = yes
@@ -1958,7 +2000,7 @@ character_event = {
 	}
 }
 
-# Notification event when expelling a Christian Holy Order
+# Notification event when expelling a Holy Order
 letter_event = {
 	id = holyorder.18
 	desc = EVTDESC_HOLY_ORDER_18
@@ -2036,3 +2078,64 @@ character_event = {
 	}
 }
 
+letter_event = {
+	id = holyorder.21
+	desc = EVTDESC_HOLY_ORDER_21
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_HOLY_ORDER_21
+		opinion = {
+			modifier = refused_castle_construction who = FROM years = 10
+		}
+	}
+}
+
+character_event = {
+	id = holyorder.22
+	desc = EVTDESC_HOLY_ORDER_22
+	picture = GFX_evt_castle_construction
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SOA_1024
+		opinion = {
+			modifier = accepted_castle_construction who = FROM years = 5
+		}
+		wealth = -300
+		if = {
+			limit = {
+				realm_size = 10
+			}
+			piety = -200
+		}
+		FROMFROMFROM = {
+			show_scope_change = no
+			build_holding = {
+			   type = castle
+			   holder = ROOT
+			}
+		}
+	}
+}
+
+character_event = {
+	id = holyorder.23
+	desc = EVTDESC_HOLY_ORDER_23
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		FROM = {
+			location = {
+				province_event = { id = holyorder.11 days = 3 random = 3 }
+			}
+		}
+	}
+}
