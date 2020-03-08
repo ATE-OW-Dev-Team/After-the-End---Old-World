@@ -1360,7 +1360,7 @@ character_event = {
 					save_event_target_as = chinese_silk_road_target
 				}
 				create_character = {
-					religion = taoist
+					religion = maoist
 					culture = han
 					dynasty = none
 					age = 50
@@ -2058,30 +2058,65 @@ character_event = {
 				}
 				modifier = {
 					factor = 0
-					religion_group = pagan_group
+					OR = {
+						capital_scope = {
+							NOR = {
+								region = world_europe_east
+								region = world_steppe
+								region = world_asia_minor
+								region = world_middle_east
+								region = world_europe_south_east
+								ROOT = { culture_group = magyar }
+							}
+						}
+						religion = mesopotamian
+					}
+					OR = {
+						capital_scope = {
+							NOR = {
+								region = world_india
+								region = world_steppe
+								region = world_asia_minor
+								region = world_persia
+								region = world_siberia
+								ROOT = { culture_group = mongolic }
+							}
+						}
+						religion = khanist
+					}
+					OR = {
+						capital_scope = {
+							NOR = {
+								region = world_europe_east
+								region = world_far_north
+								region = world_siberia
+								ROOT = { culture_group = east_slavic }
+							}
+						}
+						religion_openly_folklorist_or_reformed_trigger = yes
+					}
 				}
 				random_list = {
-					50 = { # Tengri Mystic
+					50 = { # Hungarian Mesopotamian Mystic
 						modifier = {
 							factor = 0
-							NOR = {
+							OR = {
 								capital_scope = {
-									region = world_india
+									NOR = {
+										region = world_europe_east
+										region = world_steppe
+										region = world_asia_minor
+										region = world_middle_east
+										region = world_europe_south_east
+										ROOT = { culture_group = magyar }
+									}
 								}
-								capital_scope = {
-									region = world_steppe
-								}
-								capital_scope = {
-									region = world_asia_minor
-								}
-								capital_scope = {
-									region = world_persia
-								}
+								religion = mesopotamian
 							}
 						}
 						create_character = {
-							culture = cuman
-							religion = tengri_pagan
+							culture = hungarian
+							religion = mesopotamian
 							dynasty = none
 							age = 33
 							random_traits = yes
@@ -2128,24 +2163,30 @@ character_event = {
 							character_event = { id = RIP.11052 }
 						}
 					}
-					50 = { # Slavic Mystic
+					50 = { # Khanist Mystic
 						modifier = {
 							factor = 0
-							NOR = {
+							OR = {
 								capital_scope = {
-									region = world_europe_east
+									NOR = {
+										region = world_india
+										region = world_steppe
+										region = world_asia_minor
+										region = world_persia
+										region = world_siberia
+										ROOT = { culture_group = mongolic }
+									}
 								}
-								capital_scope = {
-									region = world_europe_south_east
-								}
-								capital_scope = {
-									region = world_asia_minor
-								}
+								religion = khanist
 							}
 						}
+						modifier = {
+							factor = 0
+							religion = khanist
+						}
 						create_character = {
-							culture = croatian
-							religion = slavic_pagan
+							culture = mongol
+							religion = khanist
 							dynasty = none
 							age = 33
 							random_traits = yes
@@ -2192,85 +2233,29 @@ character_event = {
 							character_event = { id = RIP.11052 }
 						}
 					}
-					50 = { # Norse Mystic
+					
+					50 = { # Folklorist Mystic
 						modifier = {
 							factor = 0
-							NOR = {
+							OR = {
 								capital_scope = {
-									region = world_europe_north
+									NOR = {
+										region = world_europe_east
+										region = world_far_north
+										region = world_siberia
+										ROOT = { culture_group = east_slavic }
+									}
 								}
-								capital_scope = {
-									region = world_europe_west
-								}
-								capital_scope = {
-									region = world_europe_south
-								}
+								religion_openly_folklorist_or_reformed_trigger = yes
 							}
 						}
-						create_character = {
-							culture = norse
-							religion = norse_pagan
-							dynasty = none
-							age = 33
-							random_traits = yes
-							female = no
-							attributes = {
-								learning = 5
-							}
-							health = 6
-							trait = martial_cleric 
-							trait = mystic
-							trait = zealous
-							flag = is_court_physician
-							flag = physician_pagan_mystic
-							flag = ai_flag_refuse_conversion
-						}
-						new_character = {
-							set_character_flag = no_court_invites
-							remove_trait = cynical
-							remove_trait = scholar
-							remove_trait = socializer
-							remove_trait = gamer
-							remove_trait = hedonist
-							remove_trait = duelist
-							remove_trait = hunter
-							remove_trait = strategist
-							remove_trait = administrator
-							remove_trait = architect
-							remove_trait = gardener
-							remove_trait = schemer
-							remove_trait = impaler
-							remove_trait = seducer
-							remove_trait = seductress
-							remove_trait = theologian
-							remove_trait = imbecile
-							remove_trait = slow
-							random_list = { # Is the Physician a Quack?
-								90 = {
-								}
-								10 = {
-									set_character_flag = physician_is_quack
-								}
-							}
-							save_event_target_as = recruited_physician_target
-							character_event = { id = RIP.11052 }
-						}
-					}
-					50 = { # African Mystic
 						modifier = {
 							factor = 0
-							NOR = {
-								capital_scope = {
-									region = world_africa
-								}
-								capital_scope = {
-									region = world_middle_east
-								}
-							}
+							religion_openly_folklorist_or_reformed_trigger = yes
 						}
 						create_character = {
-							culture = manden
-							religion = west_african_pagan
+							culture = sibiran
+							religion = folklorist
 							dynasty = none
 							age = 33
 							random_traits = yes
@@ -3653,7 +3638,15 @@ character_event = {
 		text = EVTDESC_RIP_11053_PAGAN_MYSTIC
 		picture = GFX_evt_shaman
 		trigger = {
-			event_target:recruited_physician_target = { has_character_flag = physician_pagan_mystic }
+			event_target:recruited_physician_target = { has_character_flag = physician_pagan_mystic NOT = { religion = mesopotamian } }
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_RIP_11053_PAGAN_MYSTIC
+		picture = GFX_evt_sirius
+		trigger = {
+			event_target:recruited_physician_target = { has_character_flag = physician_pagan_mystic religion = mesopotamian }
 		}
 	}
 	
