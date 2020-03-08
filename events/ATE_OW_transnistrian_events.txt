@@ -1,0 +1,620 @@
+namespace=nistr
+#########################################
+#
+#	Transnistrian events
+#
+#########################################
+# 
+character_event = { #Ukraine invisible
+	id = nistr.99
+	hide_window = yes
+	trigger = {
+		FROM = { title = k_ukraine }
+		NOR = {
+			has_character_flag = ciprian_iii_dragos
+			has_character_flag = nistr_rump_state
+			has_character_flag = taras_kobzar
+			has_character_flag = vassal_korol
+		}
+		culture = ukrainer
+		ROOT = { de_facto_liege_title = e_transnistria }
+	}
+	immediate = {
+		set_character_flag = vassal_korol
+	}
+}
+narrative_event = {  #Ukraine lore
+	id = nistr.100
+	title = nistr1title
+	picture = GFX_evt_stone_church
+	border = GFX_event_narrative_frame_religion
+	desc = {
+		text = nistr99desc
+	}
+	trigger = {
+		has_character_flag = taras_kobzar
+		c_26667104 = {
+			has_landed_title = k_ukraine
+		}
+		NOT = {
+			has_character_flag = vassal_korol
+		}
+		ROOT = { de_facto_liege_title = e_transnistria }
+	}
+	option = {
+		name = EVTOPTA_nistr99
+		set_character_flag = vassal_korol
+	}
+}
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+character_event = { #The rump state but not narrative
+	id = nistr.0
+	hide_window = yes
+	trigger = {
+		ROOT = {has_landed_title = e_transnistria}
+		NOR = {
+			has_character_flag = ciprian_iii_dragos
+			has_character_flag = nistr_rump_state
+		}
+		NOT = {
+		    year = 2600
+		}
+	}
+	immediate = {
+		set_character_flag = nistr_rump_state
+	}
+}
+narrative_event = {  #The Rump Empire
+	id = nistr.1
+	title = nistr1title
+	picture = GFX_evt_leaning_tower
+	border = GFX_event_narrative_frame_religion
+	desc = {
+		text = nistr1desc
+	}
+	trigger = {
+		has_character_flag = ciprian_iii_dragos
+		c_26669000 = {
+			has_landed_title = e_transnistria
+		}
+		NOT = {
+			has_character_flag = nistr_rump_state
+		}
+	}
+	option = {
+		name = EVTOPTA_nistr1
+		set_character_flag = nistr_rump_state
+		add_weak_claim = k_ukraine
+		
+	}
+}
+####Chancellor warns of impending demise 
+
+narrative_event = {  #war
+	id = nistr.211
+	title = nistr211title
+	picture = GFX_evt_council_quarrelling
+	border = GFX_event_narrative_frame_religion
+	desc = {
+		text = nistr211desc
+	}
+	immediate = {
+		set_character_flag = bad_vibes_mil
+	}
+	trigger = {
+		NOT = {
+			has_character_flag = bad_vibes_mil
+		}
+		OR = { 
+           AND = {
+                    ROOT = {has_character_flag = nistr_rump_state}
+                    FROM = {has_character_flag = vassal_korol}
+          }
+          AND = {
+                    ROOT = {has_character_flag = vassal_korol}
+                    FROM = {has_character_flag = nistr_rump_state}
+          }
+	    }
+	}
+	option = {
+		name = EVTOPTA_nistr211
+		 character_event = { id = nistr.210 years = 3 }
+		custom_tooltip = {
+		 text = nistr_concerns_war
+		 }
+    
+    }
+}
+character_event = {
+	id = nistr.2110
+	hide_window = yes
+	trigger = {
+		has_character_flag = bad_vibes_mil
+		NOR = { 
+           AND = {
+                    ROOT = {has_character_flag = nistr_rump_state}
+                    FROM = {has_character_flag = vassal_korol}
+          }
+          AND = {
+                    ROOT = {has_character_flag = vassal_korol}
+                    FROM = {has_character_flag = nistr_rump_state}
+          }
+	    }
+	}
+	immediate = {
+		clr_flag = bad_vibes_mil
+	}
+}
+narrative_event = {  #war2
+	id = nistr.210
+	title = nistr210title
+	picture = GFX_evt_mounted_combat_day_hf
+	border = GFX_event_narrative_frame_religion
+	is_triggered_only = yes
+	desc = {
+		text = nistr210desc
+	}
+	trigger = {
+		any_war = { OR = {
+			AND = { attacker = { character = ROOT } defender = { character = FROMFROM } }
+			AND = { defender = { character = ROOT } attacker = { character = FROMFROM } }
+		}}
+	}
+	option = {
+		name = EVTOPTA_nistr210
+		 character_event = { id = nistr.21 days = 1 }
+		custom_tooltip = {
+		 text = nistr_f
+		 }
+    
+    }
+}
+narrative_event = {  #overgrowth
+	id = nistr.221
+	title = nistr221title
+	picture = GFX_evt_council_quarrelling
+	border = GFX_event_narrative_frame_religion
+	desc = {
+		text = nistr221desc
+	}
+	immediate = {
+		set_character_flag = bad_vibes_growth
+	}
+	trigger = {
+		NOT = {
+			has_character_flag = bad_vibes_growth
+		}
+		ROOT = {has_character_flag = nistr_rump_state}
+		realm_size = 125
+		ROOT = {has_landed_title = e_transnistria}
+	}
+	option = {
+		name = EVTOPTA_nistr221
+		 character_event = { id = nistr.220 years = 3 }
+		custom_tooltip = {
+		 text = nistr_concerns_overgrowth
+		 }
+    }
+	option = {
+		name = EVTOPTB_nistr221
+		 character_event = { id = nistr.220 years = 3 }
+		custom_tooltip = {
+		 text = nistr_no_concerns_overgrowth
+		 }
+		 prestige = 100
+		 add_trait = arbitrary
+    
+    }
+}
+character_event = {
+	id = nistr.2210
+	hide_window = yes
+	trigger = {
+		has_character_flag = bad_vibes_growth
+		NOT = { realm_size = 125 }
+	}
+	immediate = {
+		clr_flag = bad_vibes_growth
+	}
+}
+narrative_event = {  #overgrowth2
+	id = nistr.220
+	title = nistr220title
+	picture = GFX_evt_sleeping_town_hf
+	border = GFX_event_narrative_frame_religion
+	is_triggered_only = yes
+	desc = {
+		text = nistr220desc
+	}
+	trigger = {
+		ROOT = {has_character_flag = nistr_rump_state}
+		realm_size = 150
+		ROOT = {has_landed_title = e_transnistria}
+	}
+	immediate = {
+		destroy_landed_title = e_transnistria
+	}
+	option = {
+		name = EVTOPTA_nistr220
+		 character_event = { id = nistr.22 days = 1 }
+		custom_tooltip = {
+		 text = nistr_f
+		 }
+    
+    }
+}
+narrative_event = {  #ruler1
+	id = nistr.231
+	title = nistr231title
+	picture = GFX_evt_council_quarrelling
+	border = GFX_event_narrative_frame_religion
+	immediate = {
+		set_character_flag = bad_vibes_ruler
+	}
+	desc = {
+		text = nistr231desc
+	}
+	trigger = {
+		ROOT = {has_character_flag = nistr_rump_state}
+		ROOT = {has_landed_title = e_transnistria}
+		NOR = { 
+			diplomacy = 15
+			stewardship = 15
+		}
+		NOT = {
+			has_character_flag = bad_vibes_ruler 
+		}
+		NOT = {
+			any_vassal = { 
+				NOT = { 
+					opinion = { 
+						who = ROOT 
+						value = 0 
+					} 
+				} 
+			}
+		}
+	}
+	option = {
+		name = EVTOPTA_nistr231
+		 character_event = { id = nistr.230 years = 3 }
+		 
+		custom_tooltip = {
+		 text = nistr_concerns_badruler
+		}
+    }
+	option = {
+		name = EVTOPTB_nistr231
+		 character_event = { id = nistr.230 years = 3 }
+		custom_tooltip = {
+		 text = nistr_no_concerns_badruler
+		 }
+		 prestige = 50
+		 add_trait = arbitrary
+		 add_trait = proud
+    
+    }
+}
+character_event = {
+	id = nistr.2310
+	hide_window = yes
+	trigger = {
+		has_character_flag = bad_vibes_ruler
+		OR = { 
+			diplomacy = 15
+			stewardship = 15
+			any_vassal = { 
+				NOT = { 
+					opinion = { 
+						who = ROOT 
+						value = 0 
+					} 
+				} 
+			}
+		}
+		
+	}
+	immediate = {
+		clr_flag = bad_vibes_ruler
+	}
+}
+narrative_event = {  #ruler2
+	id = nistr.230
+	title = nistr230title
+	picture = GFX_evt_less_evil_beheading
+	border = GFX_event_narrative_frame_religion
+	is_triggered_only = yes
+	desc = {
+		text = nistr230desc
+	}
+	trigger = {
+		ROOT = {has_character_flag = nistr_rump_state}
+		ROOT = {has_landed_title = e_transnistria}
+		NOR = { 
+			diplomacy = 15
+			stewardship = 15
+		}
+		NOT = {
+			has_character_flag = bad_vibes_ruler 
+		}
+		NOT = {
+			any_vassal = { 
+				NOT = { 
+					opinion = { 
+						who = ROOT 
+						value = 0 
+					} 
+				} 
+			}
+		}
+	}
+	option = {
+		name = EVTOPTA_nistr230
+		 character_event = { id = nistr.23 days = 1 }
+		custom_tooltip = {
+		 text = nistr_f
+		 }
+    
+    }
+}
+
+
+
+
+##
+Ends
+#########bad ending
+
+narrative_event = {  #war3
+	id = nistr.21
+	title = nistr21title
+	picture = GFX_evt_mountaintop_castle_hf
+	border = GFX_event_narrative_frame_religion
+	major = yes
+	immediate = {
+		clr_flag = nistr_rump_state	
+		destroy_landed_title = e_transnistria
+	}
+	is_triggered_only = yes
+	desc = {
+		text = nistr21desc
+	}
+	option = {
+		name = EVTOPTA_nistr21
+		trigger = {
+			culture_group = transnistrian 
+			religion = orthodox
+		}	
+    }
+	option = {
+		name = EVTOPTB_nistr21
+		trigger = {
+			OR = {
+				AND = {
+					culture_group = transnistrian 
+					NOT = {religion = orthodox}
+				}
+				AND = {
+					culture_group = byzantine 
+					NOT = {culture = yoonaanee}
+				}
+				culture_group = west_slavic 
+				culture_group = south_slavic
+				culture_group = baltic
+				culture = ukrainer
+				culture = bielaruskaja 
+				culture = cossack
+			}
+		}	
+	}
+	option = {
+		name = EVTOPTC_nistr21
+		trigger = {
+			NOR = {
+				culture_group = transnistrian 
+				AND = {
+					culture_group = byzantine 
+					NOT = {culture = yoonaanee}
+				}
+				culture_group = west_slavic 
+				culture_group = south_slavic
+				culture_group = baltic
+				culture = ukrainer
+				culture = bielaruskaja 
+				culture = cossack
+			}	
+		}
+	}
+}
+narrative_event = {  #overgrowth3
+	id = nistr.22
+	title = nistr22title
+	picture = GFX_evt_mountaintop_castle_hf
+	border = GFX_event_narrative_frame_religion
+	major = yes
+	is_triggered_only = yes
+	immediate = {
+		clr_flag = nistr_rump_state	
+		destroy_landed_title = e_transnistria
+	}
+	desc = {
+		text = nistr22desc
+	}
+	option = {
+		name = EVTOPTA_nistr22
+		trigger = {
+			culture_group = transnistrian 
+			religion = orthodox
+		}	
+    }
+	option = {
+		name = EVTOPTB_nistr22
+		trigger = {
+			OR = {
+				AND = {
+					culture_group = transnistrian 
+					NOT = {religion = orthodox}
+				}
+				AND = {
+					culture_group = byzantine 
+					NOT = {culture = yoonaanee}
+				}
+				culture_group = west_slavic 
+				culture_group = south_slavic
+				culture_group = baltic
+				culture = ukrainer
+				culture = bielaruskaja 
+				culture = cossack
+			}
+		}	
+	}
+	option = {
+		name = EVTOPTC_nistr22
+		trigger = {
+			NOR = {
+				
+				culture_group = transnistrian 
+				AND = {
+					culture_group = byzantine 
+					NOT = {culture = yoonaanee}
+				}
+				culture_group = west_slavic 
+				culture_group = south_slavic
+				culture_group = baltic
+				culture = ukrainer
+				culture = bielaruskaja 
+				culture = cossack
+			
+			}	
+		}
+	}
+}
+narrative_event = {  #ruler3
+	id = nistr.23
+	title = nistr23title
+	picture = GFX_evt_mountaintop_castle_hf
+	border = GFX_event_narrative_frame_religion
+	major = yes
+	is_triggered_only = yes
+	desc = {
+		text = nistr23desc
+	}
+	immediate = {
+		clr_flag = nistr_rump_state	
+		destroy_landed_title = e_transnistria
+	}
+	option = {
+		name = EVTOPTA_nistr23
+		trigger = {
+			culture_group = transnistrian 
+			religion = orthodox
+		}	
+    }
+	option = {
+		name = EVTOPTB_nistr23
+		trigger = {
+			OR = {
+				AND = {
+					culture_group = transnistrian 
+					NOT = {religion = orthodox}
+				}
+				AND = {
+					culture_group = byzantine 
+					NOT = {culture = yoonaanee}
+				}
+				culture_group = west_slavic 
+				culture_group = south_slavic
+				culture_group = baltic
+				culture = ukrainer
+				culture = bielaruskaja 
+				culture = cossack
+			}
+		}	
+	}
+	option = {
+		name = EVTOPTC_nistr23
+		trigger = {
+			NOR = {
+				
+				culture_group = transnistrian 
+				AND = {
+					culture_group = byzantine 
+					NOT = {culture = yoonaanee}
+				}
+				culture_group = west_slavic 
+				culture_group = south_slavic
+				culture_group = baltic
+				culture = ukrainer
+				culture = bielaruskaja 
+				culture = cossack
+			
+			}	
+		}
+	}
+}
+##########mediocre ending
+
+narrative_event = { 
+	id = nistr.3
+	title = nistr3title
+	picture = GFX_evt_castle_construction
+	border = GFX_event_narrative_frame_religion
+	major = yes
+	desc = {
+		text = nistr3desc
+	}
+	trigger = {
+		has_character_flag = nistr_rump_state
+		year = 2600
+		ROOT = {has_landed_title = e_transnistria}
+
+	}
+		immediate = {
+		clr_flag = nistr_rump_state	
+	}
+	option = {
+		name = EVTOPTA_nistr3
+		trigger = {
+			OR = {
+				culture_group = transnistrian 
+				religion = orthodox
+			}
+		}	
+    }
+	option = {
+		name = EVTOPTB_nistr3
+		trigger = {
+			NOR = { 
+				culture_group = transnistrian 
+				religion = orthodox
+			}
+		}	
+	}
+}
+
+##########good ending
