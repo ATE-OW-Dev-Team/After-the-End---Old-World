@@ -7,5 +7,6 @@ tags=
 {
 	 "AtEOW"
 	 "Exonyms"
+	 "Submod"
 }
 
