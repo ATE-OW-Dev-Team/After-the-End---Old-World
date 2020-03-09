@@ -5,72 +5,6 @@ namespace=nistr
 #
 #########################################
 # 
-character_event = { #Ukraine invisible
-	id = nistr.99
-	hide_window = yes
-	trigger = {
-		FROM = { title = k_ukraine }
-		NOR = {
-			has_character_flag = ciprian_iii_dragos
-			has_character_flag = nistr_rump_state
-			has_character_flag = taras_kobzar
-			has_character_flag = vassal_korol
-		}
-		culture = ukrainer
-		ROOT = { de_facto_liege_title = e_transnistria }
-	}
-	immediate = {
-		set_character_flag = vassal_korol
-	}
-}
-narrative_event = {  #Ukraine lore
-	id = nistr.100
-	title = nistr100title
-	picture = GFX_evt_stone_church
-	border = GFX_event_narrative_frame_religion
-	desc = {
-		text = nistr100desc
-	}
-	trigger = {
-		has_character_flag = taras_kobzar
-		c_26667104 = {
-			has_landed_title = k_ukraine
-		}
-		NOT = {
-			has_character_flag = vassal_korol
-		}
-		ROOT = { de_facto_liege_title = e_transnistria }
-	}
-	option = {
-		name = EVTOPTA_nistr100
-		set_character_flag = vassal_korol
-	}
-}
-#
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 character_event = { #The rump state but not narrative
 	id = nistr.0
@@ -404,6 +338,9 @@ narrative_event = {  #war3
 	desc = {
 		text = nistr21desc
 	}
+	immediate = {
+		set_global_flag = nistr_dead_lol
+	}
 	option = {
 		name = EVTOPTA_nistr21
 		trigger = {
@@ -461,6 +398,9 @@ narrative_event = {  #overgrowth3
 	immediate = {
 		clr_flag = nistr_rump_state	
 		destroy_landed_title = e_transnistria
+	}
+	immediate = {
+		set_global_flag = nistr_dead_lol
 	}
 	desc = {
 		text = nistr22desc
@@ -521,6 +461,9 @@ narrative_event = {  #ruler3
 	border = GFX_event_narrative_frame_religion
 	major = yes
 	is_triggered_only = yes
+	immediate = {
+		set_global_flag = nistr_dead_lol
+	}
 	desc = {
 		text = nistr23desc
 	}
@@ -618,3 +561,278 @@ narrative_event = {
 }
 
 ##########good ending
+
+narrative_event = { 
+	id = nistr.4
+	title = nistr4title
+	picture = GFX_evt_magnificent_castle_wol
+	border = GFX_event_narrative_frame_religion
+	desc = {
+		text = nistr4desc
+	}
+	trigger = {
+		has_character_flag = nistr_rump_state
+		year = 2600
+		ROOT = {has_landed_title = e_transnistria}
+		OR = {
+			ROOT = {has_landed_title = k_ukraine}
+			k_ukraine = {has_holder = no}
+		}
+	}
+	immediate = {
+		clr_flag = nistr_rump_state
+	}
+	option = {
+		name = EVTOPTA_nistr4	
+		character_event = { id = nistr.41 days = 1 }
+		###Should somehow give born in purple & augustus mechanics 
+	}
+}
+
+narrative_event = { 
+	id = nistr.41
+	title = nistr41title
+	picture = GFX_evt_magnificent_castle_wol
+	border = GFX_event_narrative_frame_religion
+	major = yes
+	is_triggered_only = yes
+	desc = {
+		text = nistr41desc
+	}
+	option = {
+		name = EVTOPTA_nistr41
+		trigger = {
+			OR = {
+				AND = {
+					culture_group = byzantine 
+					NOT = {culture = yoonaanee}
+				}
+				culture_group = west_slavic 
+				culture_group = south_slavic
+				culture_group = baltic
+				culture = ukrainer
+				culture = bielaruskaja 
+				culture = cossack
+			}
+		}	
+	}
+	option = {
+		name = EVTOPTB_nistr41
+		trigger = {
+			OR = {
+				culture_group = transnistrian 
+				religion = orthodox
+			}
+		}	
+    }
+	option = {
+		name = EVTOPTC_nistr41
+		trigger = {
+			NOR = { 
+				culture_group = transnistrian 
+				religion = orthodox
+				AND = {
+					culture_group = byzantine 
+					NOT = {culture = yoonaanee}
+				}
+				culture_group = west_slavic 
+				culture_group = south_slavic
+				culture_group = baltic
+				culture = ukrainer
+				culture = bielaruskaja 
+				culture = cossack
+			}
+		}	
+	}
+}
+
+##########Ukrainer Stuff
+character_event = { #Ukraine invisible
+	id = nistr.99
+	hide_window = yes
+	trigger = {
+		FROM = { title = k_ukraine }
+		NOR = {
+			has_character_flag = ciprian_iii_dragos
+			has_character_flag = nistr_rump_state
+			has_character_flag = taras_kobzar
+			has_character_flag = vassal_korol
+		}
+		culture = ukrainer
+		ROOT = { de_facto_liege_title = e_transnistria }
+	}
+	immediate = {
+		set_character_flag = vassal_korol
+	}
+}
+character_event = { 
+	id = nistr.999
+	hide_window = yes
+	mean_time_to_happen = {
+	months = 1
+	}
+	trigger = {
+		NOR = {
+			culture = ukrainer
+			ROOT = { de_facto_liege_title = e_transnistria }
+		}
+		has_character_flag = vassal_korol
+	}
+	immediate = {
+		clr_flag = vassal_korol
+		}
+}
+narrative_event = {  #Ukraine lore
+	id = nistr.100
+	title = nistr100title
+	picture = GFX_evt_stone_church
+	border = GFX_event_narrative_frame_religion
+	desc = {
+		text = nistr100desc
+	}
+	trigger = {
+		has_character_flag = taras_kobzar
+		c_26667104 = {
+			has_landed_title = k_ukraine
+		}
+		NOT = {
+			has_character_flag = vassal_korol
+		}
+		ROOT = { de_facto_liege_title = e_transnistria }
+	}
+	option = {
+		name = EVTOPTA_nistr100
+		set_character_flag = vassal_korol
+	}
+}
+narrative_event = {  #STOP BECOMING EMPEROR GOD DAMN IT
+	id = nistr.101
+	title = nistr101title
+	picture = GFX_evt_burning_castle_hf
+	border = GFX_event_narrative_frame_religion
+	desc = {
+		text = nistr101desc
+	}
+	trigger = {
+		has_character_flag = vassal_korol
+		ROOT = {has_landed_title = e_transnistria}
+	}
+	immediate = {
+		clr_flag = vassal_korol
+	}
+	option = {
+		name = EVTOPTA_nistr101
+		culture = moldavian
+		add_character_modifier = {
+			name = nistr_ukr_bad
+			duration = -1
+		}
+		prestige = -100
+	}
+	option = {
+		name = EVTOPTB_nistr101
+		character_event = { id = nistr.102 days = 1 }
+		add_character_modifier = {
+			name = nistr_ukr_good
+			duration = -1
+		}
+		prestige = 300
+#		any_vassal = {
+#			de_jure_liege = k_moldavia
+#			NOT = {culture = ukrainer}
+#			set_defacto_liege = THIS
+#		}
+#this should make all non-ukrainer vassals in de-jure moldavia independent but i have no idea how to make it work...
+	}
+}
+narrative_event = {  #omg transnistria had been killed guys this is so sad 
+	id = nistr.102
+	title = nistr102title
+	picture = GFX_evt_burning_castle_hf
+	border = GFX_event_narrative_frame_religion
+	is_triggered_only = yes
+	desc = {
+		text = nistr102desc			
+	}
+	immediate = {
+		set_global_flag = nistr_dead_lol
+		destroy_landed_title = e_transnistria
+	}
+	option = {
+		name = EVTOPTA_nistr102
+		trigger = {
+			culture = ukrainer
+		}	
+	}
+	option = {
+		name = EVTOPTB_nistr102
+		trigger = {
+			culture_group = transnistrian 
+			religion = orthodox
+		}	
+	}
+	option = {
+		name = EVTOPTC_nistr102
+		trigger = {
+			OR = {
+				AND = {
+					culture_group = transnistrian
+					NOT = {religion = orthodox}
+				}
+				AND = {
+					culture_group = byzantine 
+					NOT = {culture = yoonaanee}
+				}
+				culture_group = west_slavic 
+				culture_group = south_slavic
+				culture_group = baltic
+				culture = bielaruskaja 
+				culture = cossack
+			}
+		}	
+	}
+	option = {
+		name = EVTOPTD_nistr102
+		trigger = {
+			NOR = {
+				culture_group = transnistrian
+				AND = {
+					culture_group = byzantine 
+					NOT = {culture = yoonaanee}
+				}
+				culture_group = west_slavic 
+				culture_group = south_slavic
+				culture_group = baltic
+				culture = ukrainer
+				culture = bielaruskaja 
+				culture = cossack
+			}
+		}	
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
