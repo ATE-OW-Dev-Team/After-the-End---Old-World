@@ -2020,12 +2020,12 @@
 		}
 		modifier = {
 			factor = 0
-			is_republic = yes
+			OR = { is_republic = yes government = oligarchic_republic }
 			is_alive = no
 		}
 		modifier = {
 			factor = 0 
-			spouse = { is_republic = yes } #Dead wives of Patricians are nogovernment, thus they would wear crowns for being married to a King-tier.
+			spouse = { OR = { is_republic = yes government = oligarchic_republic } } #Dead wives of Patricians are nogovernment, thus they would wear crowns for being married to a King-tier.
 			is_alive = no
 			is_ruler = no
 		}
@@ -2166,12 +2166,12 @@
 		}
 		modifier = {
 			factor = 0
-			is_republic = yes
+			OR = { is_republic = yes government = oligarchic_republic }
 			is_alive = no
 		}
 		modifier = {
 			factor = 0 
-			spouse = { is_republic = yes } #Dead wives of Patricians are nogovernment, thus they would wear crowns for being married to a King-tier.
+			spouse = { OR = { is_republic = yes government = oligarchic_republic } } #Dead wives of Patricians are nogovernment, thus they would wear crowns for being married to a King-tier.
 			is_alive = no
 			is_ruler = no
 		}
@@ -2303,12 +2303,12 @@
 		}
 		modifier = {
 			factor = 0
-			is_republic = yes
+			OR = { is_republic = yes government = oligarchic_republic }
 			is_alive = no
 		}
 		modifier = {
 			factor = 0 
-			spouse = { is_republic = yes } #Dead wives of Patricians are nogovernment, thus they would wear crowns for being married to a King-tier.
+			spouse = { OR = { is_republic = yes government = oligarchic_republic } } #Dead wives of Patricians are nogovernment, thus they would wear crowns for being married to a King-tier.
 			is_alive = no
 			is_ruler = no
 		}
@@ -2372,12 +2372,12 @@
 		}
 		modifier = {
 			factor = 0
-			is_republic = yes
+			OR = { is_republic = yes government = oligarchic_republic }
 			is_alive = no
 		}
 		modifier = {
 			factor = 0 
-			spouse = { is_republic = yes } #Dead wives of Patricians are nogovernment, thus they would wear crowns for being married to a King-tier.
+			spouse = { OR = { is_republic = yes government = oligarchic_republic } } #Dead wives of Patricians are nogovernment, thus they would wear crowns for being married to a King-tier.
 			is_alive = no
 			is_ruler = no
 		}
@@ -2476,6 +2476,7 @@
 			factor = 0
 			has_dlc = "Holy Fury" #Ignore Coronation triggers if Holy Fury is disabled.
 				#is_feudal = yes
+			NOT = { government = oligarchic_republic }
 			OR = { 
 				AND = { 
 					higher_real_tier_than = DUKE 
@@ -2535,11 +2536,19 @@
 			factor = 0
 			NOT = { has_dlc = "Holy Fury" }
 			higher_real_tier_than = DUKE
+			NOT = { government = oligarchic_republic }
 		}
 		modifier = {
 			factor = 0
 			NOT = { has_dlc = "Holy Fury" }
-			spouse = { higher_real_tier_than = DUKE }
+			OR = {
+				is_ruler = no
+				NOT = { government = oligarchic_republic }
+			}
+			spouse = {
+				higher_real_tier_than = DUKE
+				NOT = { government = oligarchic_republic }
+			}
 		}
 		modifier = {
 			factor = 0
@@ -2548,6 +2557,7 @@
 			NOT = { religion = catholic }
 			NOT = { religion = fraticelli }
 			higher_real_tier_than = DUKE
+			NOT = { government = oligarchic_republic }
 			OR = { 
 				is_nomadic = no 
 				population = 5000
@@ -4208,17 +4218,8 @@
 				}
 			}
 			OR = {
-				trait = dead_crown_hre #Dead kings don't have artifacts
-				trait = dead_crown_byzantine #Dead kings don't have artifacts
-				trait = dead_crown_pahlavi #Dead kings don't have artifacts
-				trait = dead_crown_fylkir #Dead kings don't have artifacts
-				trait = dead_crown_tengri_fylkir #Dead kings don't have artifacts
-				trait = dead_crown_finnish_fylkir #Dead kings don't have artifacts
-				trait = dead_crown_slavic_fylkir
-				trait = dead_crown_romuva_fylkir
-				trait = dead_crown_zun_fylkir
-				trait = dead_crown_west_african_fylkir
-				trait = dead_crown_aztec_fylkir
+				trait = dead_crown_transnistria #Dead kings don't have artifacts
+				trait = dead_crown_bhutan #Dead kings don't have artifacts
 				trait = augustus # Laurels
 			}
 		}
@@ -4233,18 +4234,8 @@
 			}
 			any_artifact = {
 				OR = {
-					artifact_type = crown_hre
-					artifact_type = crown_byzantine
-					artifact_type = crown_pahlavi
-					artifact_type = crown_fylkir
-					artifact_type = crown_tengri_fylkir
-					artifact_type = crown_finnish_fylkir
-					artifact_type = crown_slavic_fylkir
-					artifact_type = crown_romuva_fylkir
-					artifact_type = crown_zun_fylkir
-					artifact_type = crown_west_african_fylkir
-					artifact_type = crown_aztec_fylkir
-					artifact_type = iron_crown_of_lombardy
+					artifact_type = crown_transnistria
+					artifact_type = crown_bhutan
 					artifact_type = cursed_diamond_crown
 				}
 				is_artifact_equipped = yes 
@@ -4384,6 +4375,7 @@
 			OR = {
 				trait = dead_crown_transnistria #Dead kings don't have artifacts
 				trait = dead_crown_bhutan #Dead kings don't have artifacts
+				trait = augustus # Laurels
 			}
 		}
 		modifier = {
@@ -4399,6 +4391,7 @@
 				OR = {
 					artifact_type = crown_transnistria
 					artifact_type = crown_bhutan
+					artifact_type = cursed_diamond_crown
 				}
 				is_artifact_equipped = yes 
 			}
@@ -4452,13 +4445,45 @@
 	}
 	
 	3 = {
-		factor = 0
+		factor = 100
+		hide_layers = { 5 = { } } #Hide layer 5 (headgear) when this frame is picked.
+		modifier = {
+			factor = 0
+			in_command = yes
+			has_game_rule = {
+				name = martial_headgear
+				value = on
+			}
+		}
+		modifier = { #Cursed Diamond Crown
+			factor = 0
+			NOR = { 
+				any_artifact = {
+					artifact_type = cursed_diamond_crown
+					is_artifact_equipped = yes 
+				}
+				trait = dead_cursed_diamond_crown
+			}
+		}
 	}
 	4 = {
 		factor = 0
 	}
 	5 = {
-		factor = 0
+		factor = 100
+		hide_layers = { 5 = { } } #Hide layer 5 (headgear) when this frame is picked.
+		modifier = {
+			factor = 0
+			in_command = yes
+			has_game_rule = {
+				name = martial_headgear
+				value = on
+			}
+		}
+		modifier = { #Imperial Laurels
+			factor = 0
+			NOT = { trait = augustus }
+		}
 	}
 	6 = {
 		factor = 0
@@ -4501,6 +4526,7 @@
 	}
 	15 = { 
 		factor = 100
+		hide_layers = { 3 = { } } #Hide layer 3 (clothes) when this frame is picked.
 		hide_layers = { 5 = { } } #Hide layer 5 (headgear) when this frame is picked.
 		modifier = {
 			factor = 0
