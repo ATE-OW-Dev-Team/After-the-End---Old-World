@@ -3369,3 +3369,84 @@ new_order_effect = {
 		age = 17
 	}
 }
+
+set_feudal_government_effect = {
+	if = {
+		limit = {
+			OR = {
+				top_liege = {
+					primary_title = { 
+						title = e_bhutan 
+						NOT = {
+							has_title_flag = reformed_bhutan_gov
+						}
+					}
+				}
+				primary_title = { 
+					title = e_bhutan 
+					NOT = {
+						has_title_flag = reformed_bhutan_gov
+					}
+				}
+			}
+		}
+		set_government_type = bhutanese_decayed_government
+	}
+	else_if = {
+		limit = {
+			OR = {
+				top_liege = {
+					primary_title = { 
+						title = e_bhutan 
+						has_title_flag = reformed_bhutan_gov
+					}
+				}
+				primary_title = { 
+					title = e_bhutan 
+					has_title_flag = reformed_bhutan_gov
+				}
+			}
+		}
+		set_government_type = bhutanese_restored_government
+	}
+	else_if = {
+		limit = {
+			religion_group = muslim
+		}
+		set_government_type = muslim_government
+	}
+	else_if = {
+		limit = {
+			religion = calvinist
+			higher_tier_than = BARON
+		}
+		set_government_type = calvinist_government
+	}
+	else_if = {
+		limit = {
+			OR = {
+				culture_group = tibetan_group
+				culture = nepali
+			}
+			religion_group = buddhist_group
+			higher_tier_than = BARON
+		}
+		set_government_type = theocratic_feudal_government
+	}
+	else_if = {
+		limit = {
+			OR = {
+				culture_group = chinese_group
+				culture_group = korean_group
+				religion = naxalite_reformed
+				religion = xinjiao
+				religion = maoist
+			}
+			higher_tier_than = BARON
+		}
+		set_government_type = eastern_feudal
+	}
+	else = {
+		set_government_type = feudal_government
+	}
+}
