@@ -253,3 +253,127 @@ character_event = {
 		}
 	}
 }
+character_event = {
+	id = cleanup.13
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	ai = no
+	
+	trigger = {
+		current_heir = {
+			NOT = {
+				dynasty = ROOT
+			}
+		}
+		OR = {
+			has_game_rule = {
+				name = non_dynastic_succession
+				value = on
+			}
+			AND = {
+				has_game_rule = {
+					name = non_dynastic_succession
+					value = limited
+				}
+				government = oligarchic_republic
+			}
+		}
+		NOT = { holy_order = yes }
+	}
+	
+	immediate = {
+		current_heir = {
+			ROOT = { set_player_character = PREV }
+		}
+	}
+}
+character_event = {
+	id = cleanup.14
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		government = order_government
+		holy_order = yes
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				ai = no
+				has_game_rule = {
+					name = non_dynastic_succession
+					value = off
+				}
+				current_heir = {
+					NOT = {
+						dynasty = ROOT
+					}
+				}
+			}
+			random_demesne_title = {
+				limit = {
+					NOT = {
+						location = {
+							ROOT = {
+								capital_scope = {
+									province = PREVPREV
+								}
+							}
+						}
+					}
+				}
+				ROOT = {
+					random_dynasty_member = {
+						limit = {
+							religion = ROOT
+							OR = {
+								is_ruler = no
+								vassal_of = ROOT
+							}
+						}
+						preferred_limit = {
+							vassal_of = ROOT
+							is_close_relative = ROOT
+						}
+						preferred_limit = {
+							vassal_of = ROOT
+						}
+						preferred_limit = {
+							is_close_relative = ROOT
+						}
+						grant_title_no_opinion = PREVPREV
+						ROOT = { set_player_character = PREV }
+					}
+				}
+			}
+		}
+		current_heir = {
+			wealth = ROOT
+			ROOT = {
+				if = {
+					limit = {
+						ai = no
+						NOT = {
+							has_game_rule = {
+								name = non_dynastic_succession
+								value = off
+							}
+						}
+					}
+					set_player_character = PREV
+				}
+				abdicate_to = PREV
+				clear_wealth = yes
+				any_artifact = {
+					transfer_artifact = { from = ROOT to = PREVPREV }
+				}
+			}
+		}
+	}
+}
