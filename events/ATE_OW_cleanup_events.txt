@@ -54,10 +54,76 @@ character_event = {#ensures each newly formed Oligarchic Republic has the Oligar
 	
 	trigger = {
 		government = oligarchic_republic
-		NOT = { primary_title = { has_law = succ_oligarchic_elective } }
+		any_demesne_title = {
+			NOR = {
+				confederation_title_trigger = yes
+				has_law = succ_oligarchic_elective
+				has_law = succ_papal_succession
+				has_law = succ_offmap_succession
+				has_law = succ_byzantine_elective
+			}
+		}
 	}
 	immediate = {
-		primary_title = { add_law = succ_oligarchic_elective }
+		any_demesne_title = {
+			limit = {
+				NOR = {
+					confederation_title_trigger = yes
+					has_law = succ_oligarchic_elective
+					has_law = succ_papal_succession
+					has_law = succ_offmap_succession
+					has_law = succ_byzantine_elective
+				}
+			}
+			add_law = {
+				law = succ_oligarchic_elective
+				cooldown = no
+				opinion_effect = no
+			}
+		}
+	}
+}
+character_event = {#ensures each newly formed Oligarchic Republic has the Oligarchic Elective government
+	id = cleanup.6
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			government = calvinist_government
+			AND = {
+				holy_order = yes
+				government = order_government
+			}
+		}
+		any_demesne_title = {
+			NOR = {
+				confederation_title_trigger = yes
+				has_law = succ_monastic_elective
+				has_law = succ_papal_succession
+				has_law = succ_offmap_succession
+				has_law = succ_byzantine_elective
+			}
+		}
+	}
+	immediate = {
+		any_demesne_title = {
+			limit = {
+				NOR = {
+					confederation_title_trigger = yes
+					has_law = succ_monastic_elective
+					has_law = succ_papal_succession
+					has_law = succ_offmap_succession
+					has_law = succ_byzantine_elective
+				}
+			}
+			add_law = {
+				law = succ_monastic_elective
+				cooldown = no
+				opinion_effect = no
+			}
+		}
 	}
 }
 character_event = {
