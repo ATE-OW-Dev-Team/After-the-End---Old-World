@@ -537,6 +537,7 @@ narrative_event = {
 	}
 		immediate = {
 		clr_flag = nistr_rump_state	
+		set_global_flag = transnistria_medium
 	}
 	option = {
 		name = EVTOPTA_nistr3
@@ -576,14 +577,23 @@ narrative_event = {
 			ROOT = {has_landed_title = k_ukraine}
 			k_ukraine = {has_holder = no}
 		}
+		any_vassal = { 
+				NOT = { 
+					opinion = { 
+						who = ROOT 
+						value = 0 
+					} 
+				} 
+		}
 	}
 	immediate = {
 		clr_flag = nistr_rump_state
+		set_global_flag = transnistria_good
 	}
 	option = {
 		name = EVTOPTA_nistr4	
 		character_event = { id = nistr.41 days = 1 }
-		###Should somehow give born in purple & augustus mechanics 
+		give_title = d_purple_throne
 	}
 }
 
@@ -643,6 +653,143 @@ narrative_event = {
 		}	
 	}
 }
+### The Augustus Trait
+
+# Augustus Trait Gained
+character_event = {
+	id = LoR.45
+	desc = {
+		text = EVTDESCLoR.45
+		trigger = { 
+			is_alternate_start = no
+		}
+	}
+	desc = {
+		text = EVTDESCLoR45_HF
+		trigger = { 
+			is_alternate_start = yes
+		}
+	}
+	picture = GFX_evt_magnificent_castle_wol
+	
+	only_playable = yes
+	has_global_flag = transnistria_good
+	
+	trigger = {
+		has_landed_title = e_transnistria
+		NOT = { trait = augustus }
+	}
+	
+	is_triggered_only = yes
+	
+	
+	option = {
+		name = EVTOPTALoR.45
+		add_trait = augustus
+		give_title = d_purple_throne
+	}
+}
+
+# Augustus Trait Lost
+character_event = {
+	id = LoR.46
+	desc = EVTDESCLoR.46
+	picture = GFX_evt_magnificent_castle_wol
+	
+	has_global_flag = transnistria_good
+		
+	trigger = {
+		trait = augustus
+		NOT = { has_landed_title = e_transnistria }
+		is_alive = yes
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.46
+		remove_trait = augustus
+	}
+}
+
+#On_death Augustus Trait inheritance
+character_event = {
+	id = LoR.47
+	hide_window = yes
+	
+	only_playable = yes
+	has_global_flag = transnistria_good
+	
+	trigger = {
+		has_landed_title = e_transnistria
+	}
+	
+	is_triggered_only = yes
+	
+	
+	immediate = {
+		e_transnistria = { current_heir = { character_event = { id = LoR.45 days = 2 } } }
+	}
+}
+
+#On_title_usurped Augustus Trait inheritance
+character_event = {
+	id = LoR.48
+	hide_window = yes
+	
+	only_playable = yes
+	has_global_flag = transnistria_good
+	
+	trigger = {
+		FROM = { title = e_transnistria }
+		NOT = { trait = augustus }
+	}
+	
+	is_triggered_only = yes
+	
+	
+	immediate = {
+		ROOT = { character_event = { id = LoR.45 days = 2 } }
+	}
+}
+
+character_event = {
+	id = nistr.410
+	hide_window = yes
+	
+	has_global_flag = transnistria_good
+		
+	trigger = {
+		has_landed_title = d_purple_throne
+		is_alive = yes
+		e_transnistria = {has_holder = no}
+	}
+	
+	is_triggered_only = yes
+	immediate =	{
+		destroy_landed_title = d_purple_throne
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ##########Ukrainer Stuff
 character_event = { #Ukraine invisible
