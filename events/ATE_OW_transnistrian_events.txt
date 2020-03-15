@@ -39,6 +39,9 @@ narrative_event = {  #The Rump Empire
 		NOT = {
 			has_character_flag = nistr_rump_state
 		}
+		NOT = {
+		    year = 2600
+		}
 	}
 	option = {
 		name = EVTOPTA_nistr1
@@ -54,7 +57,6 @@ narrative_event = {  #war
 	title = nistr211title
 	picture = GFX_evt_council_quarrelling
 	border = GFX_event_narrative_frame_religion
-	is_triggered_only = yes
 	desc = {
 		text = nistr211desc
 	}
@@ -565,7 +567,7 @@ narrative_event = {
 narrative_event = { 
 	id = nistr.4
 	title = nistr4title
-	picture = GFX_evt_magnificent_castle_wol
+	picture = GFX_evt_magnificent_castle
 	border = GFX_event_narrative_frame_religion
 	desc = {
 		text = nistr4desc
@@ -594,14 +596,14 @@ narrative_event = {
 	option = {
 		name = EVTOPTA_nistr4	
 		character_event = { id = nistr.41 days = 1 }
-		give_title = d_purple_throne
+		grant_title = d_purple_throne
 	}
 }
 
 narrative_event = { 
 	id = nistr.41
 	title = nistr41title
-	picture = GFX_evt_magnificent_castle_wol
+	picture = GFX_evt_magnificent_castle
 	border = GFX_event_narrative_frame_religion
 	major = yes
 	is_triggered_only = yes
@@ -658,120 +660,79 @@ narrative_event = {
 
 # Augustus Trait Gained
 character_event = {
-	id = LoR.45
+	id = nistr.245
 	desc = {
-		text = EVTDESCLoR.45
-		trigger = { 
-			is_alternate_start = no
-		}
+		text = EVTDESCnistr.245
 	}
-	desc = {
-		text = EVTDESCLoR45_HF
-		trigger = { 
-			is_alternate_start = yes
-		}
-	}
-	picture = GFX_evt_magnificent_castle_wol
+	picture = GFX_evt_magnificent_castle
 	
 	only_playable = yes
-	has_global_flag = transnistria_good
 	
 	trigger = {
-		has_landed_title = e_transnistria
-		NOT = { trait = augustus }
+		has_global_flag = transnistria_good
+		ROOT = {
+			has_landed_title = e_transnistria
+			NOT = { trait = augustus }
+		}
 	}
 	
-	is_triggered_only = yes
-	
-	
 	option = {
-		name = EVTOPTALoR.45
-		add_trait = augustus
-		give_title = d_purple_throne
+		name = EVTOPTAnistr.245
+		ROOT = {
+			grant_title = d_purple_throne
+			add_trait = augustus
+		}
 	}
 }
 
 # Augustus Trait Lost
 character_event = {
-	id = LoR.46
-	desc = EVTDESCLoR.46
-	picture = GFX_evt_magnificent_castle_wol
-	
-	has_global_flag = transnistria_good
+	id = nistr.246
+	desc = EVTDESCnistr.246
+	picture = GFX_evt_magnificent_castle
 		
 	trigger = {
-		trait = augustus
-		NOT = { has_landed_title = e_transnistria }
-		is_alive = yes
+	has_global_flag = transnistria_good
+		ROOT = {
+			trait = augustus
+			NOT = { has_landed_title = e_transnistria }
+			is_alive = yes
+		}
 	}
-	
-	is_triggered_only = yes
+
 	
 	option = {
-		name = EVTOPTALoR.46
+		name = EVTOPTALoRnistr.246
 		remove_trait = augustus
 	}
 }
 
-#On_death Augustus Trait inheritance
-character_event = {
-	id = LoR.47
-	hide_window = yes
-	
-	only_playable = yes
-	has_global_flag = transnistria_good
-	
-	trigger = {
-		has_landed_title = e_transnistria
-	}
-	
-	is_triggered_only = yes
-	
-	
-	immediate = {
-		e_transnistria = { current_heir = { character_event = { id = LoR.45 days = 2 } } }
-	}
-}
-
-#On_title_usurped Augustus Trait inheritance
-character_event = {
-	id = LoR.48
-	hide_window = yes
-	
-	only_playable = yes
-	has_global_flag = transnistria_good
-	
-	trigger = {
-		FROM = { title = e_transnistria }
-		NOT = { trait = augustus }
-	}
-	
-	is_triggered_only = yes
-	
-	
-	immediate = {
-		ROOT = { character_event = { id = LoR.45 days = 2 } }
-	}
-}
 
 character_event = {
 	id = nistr.410
-	hide_window = yes
-	
-	has_global_flag = transnistria_good
-		
+	hide_window = yes	
 	trigger = {
 		has_landed_title = d_purple_throne
 		is_alive = yes
 		e_transnistria = {has_holder = no}
 	}
-	
-	is_triggered_only = yes
 	immediate =	{
 		destroy_landed_title = d_purple_throne
 	}
 }
-
+character_event = {
+	id = nistr.4100
+	hide_window = yes	
+	trigger = {
+		NOT = { has_landed_title = d_purple_throne }
+		is_alive = yes
+		has_landed_title = e_transnistria
+		trait = augustus
+	}
+	immediate =	{
+		grant_title = d_purple_throne
+	}
+}
 
 
 
@@ -968,17 +929,20 @@ character_event = {
 	id = nistr.103
 	hide_window = yes
 	trigger = {
-		FROM = { title = k_orthodox }
+		ROOT = { has_landed_title = k_orthodox }
 		has_global_flag = nistr_dead_lol
 		NOT = {
 			has_global_flag = patriarch_takes_over
 		}
 	}
 	immediate = {
-		give_title = c_peresechen
-		give_title = c_tiraspol
-		give_title = c_ribnita
-		give_title = d_nistrenia
+		ROOT = {
+		usurp_title = c_peresechen
+		usurp_title = c_tiraspol
+		usurp_title = c_ribnita
+		usurp_title = d_nistrenia
+		usurp_title = k_moldavia
+		}
 		set_global_flag = patriarch_takes_over
 		character_event = { id = nistr.104 days = 1 }
 	}
@@ -1021,7 +985,104 @@ narrative_event = {
 
 
 
+### The Augustus Trait
 
+# Augustus Trait Gained
+character_event = {
+	id = LoR.45
+	hide_window = yes
+	desc = {
+		text = EVTDESCLoR.45
+		trigger = { 
+			is_alternate_start = no
+		}
+	}
+	desc = {
+		text = EVTDESCLoR45_HF
+		trigger = { 
+			is_alternate_start = yes
+		}
+	}
+	picture = GFX_evt_rome_restored_byzantine
+	
+	only_playable = yes
+	has_dlc = "Legacy of Rome"
+	has_global_flag = rome_restored
+	
+	trigger = {
+		has_landed_title = e_roman_empire
+		NOT = { trait = augustus }
+	}
+	
+	is_triggered_only = yes
+	
+	
+	option = {
+	}
+}
+
+# Augustus Trait Lost
+character_event = {
+	id = LoR.46
+	hide_window = yes
+	desc = EVTDESCLoR.46
+	picture = GFX_evt_rome_restored_byzantine
+	
+	has_dlc = "Legacy of Rome"
+	has_global_flag = rome_restored
+		
+	trigger = {
+		trait = augustus
+		NOT = { has_landed_title = e_roman_empire }
+		is_alive = yes
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+	}
+}
+
+#On_death Augustus Trait inheritance
+character_event = {
+	id = LoR.47
+	hide_window = yes
+	
+	only_playable = yes
+	has_global_flag = rome_restored
+	has_dlc = "Legacy of Rome"
+	
+	trigger = {
+		has_landed_title = e_roman_empire
+	}
+	
+	is_triggered_only = yes
+	
+	
+	immediate = {
+	}
+}
+
+#On_title_usurped Augustus Trait inheritance
+character_event = {
+	id = LoR.48
+	hide_window = yes
+	
+	only_playable = yes
+	has_global_flag = rome_restored
+	has_dlc = "Legacy of Rome"
+	
+	trigger = {
+		FROM = { title = e_roman_empire }
+		NOT = { trait = augustus }
+	}
+	
+	is_triggered_only = yes
+	
+	
+	immediate = {
+	}
+}
 
 
 
