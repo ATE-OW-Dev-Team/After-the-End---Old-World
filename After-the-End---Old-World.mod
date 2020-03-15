@@ -1,4 +1,4 @@
-name="After-the-End---Old-World"
+name="After the End Old World"
 path="mod/After-the-End---Old-World"
 replace_path="history/characters"
 replace_path="history/provinces"
@@ -15,3 +15,5 @@ replace_path="gfx/flags"
 replace_path="events"
 replace_path="music"
 user_dir="After-the-End---Old-World"
+picture="ATEOWICON.png"
+tags = {"After The End" "Old World" "Europe" "Overhaul" "Total Conversion"}

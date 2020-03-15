@@ -1,12 +1,13 @@
 name="ATEOW Exonyms"
-archive="mod/ATEOW_Exonyms"
+path="mod/ATEOW_Exonyms"
 dependencies = { 
-	"After-the-End---Old-World"
+	"After the End Old World"
 }
 tags=
 {
 	 "AtEOW"
 	 "Exonyms"
 	 "Submod"
+	 "After The End" "Old World"
 }
 
