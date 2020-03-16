@@ -1,5 +1,6 @@
 name="ATEOW Exonyms"
 path="mod/ATEOW_Exonyms"
+picture="ATEOWICON.png"
 dependencies = { 
 	"After the End Old World"
 }

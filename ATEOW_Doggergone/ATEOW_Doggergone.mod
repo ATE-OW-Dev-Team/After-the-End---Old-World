@@ -1,5 +1,6 @@
 name="ATEOW Doggergone"
 path="mod/ATEOW_Doggergone"
+picture="ATEOWICON.png"
 dependencies = { 
 	"After the End Old World"
 }
