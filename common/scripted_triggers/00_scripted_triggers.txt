@@ -2096,108 +2096,14 @@ is_widow_or_widower_trigger = {
 }
 
 FROMs_religion_is_playable_trigger = {
-	NOR = {
-		AND = { #Means you're not allowed to play Muslims
-			FROM = { religion_group = muslim }
-			NOT = { has_dlc = "The Sword of Islam" }
-		}
-		AND = { #Means you're not allowed to play Jewish
-			FROM = { religion_group = jewish_group }
-			NOT = { has_dlc = "Sons of Abraham" }
-		}
-		AND = { #Means you're not allowed to play (most) Pagans
-			FROM = {
-				religion_group = pagan_group
-				NOT = { religion = bon }
-				NOT = { religion = bon_reformed }
-			}
-			NOT = { has_dlc = "The Old Gods" }
-		}
-		AND = { #Means you're not allowed to play the Bön religion (Pagan)
-			FROM = { 
-				OR = { 
-					religion = bon
-					religion = bon_reformed
-				}
-			}
-			NOR = {
-				has_dlc = "The Old Gods"
-				has_dlc = "Jade Dragon"
-			}
-		}
-		AND = { #Means you're not allowed to play the Eastern Religions
-			FROM = { religion_group = indian_group }
-			NOT = { 
-				FROM = { 
-					religion = taoist
-				} 
-			}
-			NOT = {	has_dlc = "Rajas of India" }
-		}
-		AND = { #Means you're not allowed to play the Zoroastrians
-			FROM = { religion_group = zoroastrian_group }
-			NOT = { has_dlc = "The Old Gods" }
-		}
-		AND = { #Means you're not allowed to play the Taoist religion 
-			FROM = { religion = taoist }
-			NOR = { 
-				has_dlc = "Jade Dragon"
-				has_dlc = "Rajas of India"
-			}
-		}
+	FROM = {
+		dlc_religion_check_trigger = yes
 	}
 }
 
 ROOTs_religion_is_playable_trigger = { #For targeted decision where FROM is the player
-	NOR = {
-		AND = { #Means you're not allowed to play Muslims
-			ROOT = { religion_group = muslim }
-			NOT = { has_dlc = "The Sword of Islam" }
-		}
-		AND = { #Means you're not allowed to play Jewish
-			ROOT = { religion_group = jewish_group }
-			NOT = { has_dlc = "Sons of Abraham" }
-		}
-		AND = { #Means you're not allowed to play (most) Pagans
-			ROOT = {
-				religion_group = pagan_group
-				NOT = { religion = bon }
-				NOT = { religion = bon_reformed }
-			}
-			NOT = { has_dlc = "The Old Gods" }
-		}
-		AND = { #Means you're not allowed to play the Bön religion (Pagan)
-			ROOT = { 
-				OR = { 
-					religion = bon 
-					religion = bon_reformed
-				} 
-			}
-			NOR = {
-				has_dlc = "The Old Gods"
-				has_dlc = "Jade Dragon"
-			}
-		}
-		AND = { #Means you're not allowed to play the Eastern Religions
-			ROOT = { religion_group = indian_group }
-			NOT = { 
-				ROOT = { 
-					religion = taoist
-				} 
-			}
-			NOT = {	has_dlc = "Rajas of India" }
-		}
-		AND = { #Means you're not allowed to play the Zoroastrians
-			ROOT = { religion_group = zoroastrian_group }
-			NOT = { has_dlc = "The Old Gods" }
-		}
-		AND = { #Means you're not allowed to play the Taoist religion 
-			ROOT = { religion = taoist }
-			NOR = { 
-				has_dlc = "Jade Dragon"
-				has_dlc = "Rajas of India"
-			}
-		}
+	ROOT = {
+		dlc_religion_check_trigger = yes
 	}
 }
 ###Use the actual is_<family member>_of = scope triggers now
@@ -7187,43 +7093,35 @@ has_any_astrology_trait_trigger = {
 
 dlc_religion_check_trigger = {
 	OR = {
+		religion_group = christian
+		religion_group = old_world_cultist_group
+		religion_group = esoteric
+		religion_group = pirate
 		AND = {
-			religion_group = muslim
-			has_dlc = "The Sword of Islam"
+			religion_group  = jewish_group
+			has_dlc = "Sons of Abraham"
 		}
 		AND = {
-			religion_group = jewish_group
-			has_dlc = "Sons of Abraham"
+			religion_group  = muslim
+			has_dlc = "The Sword of Islam" 
+		}
+		AND = {
+			OR = {
+				religion_group = buddhist_group
+				religion_group  = indian_group
+			}
+			has_dlc = "Rajas of India" 
 		}
 		AND = {
 			religion_group = pagan_group
 			OR = {
-				has_dlc = "The Old Gods"
-				has_dlc = "Holy Fury"
+				has_dlc = "The Old Gods" 
+				has_dlc = "Holy Fury" 
 			}
-		}
-		AND = {
-			OR = {
-				religion = bon
-				religion = bon_reformed
-			}
-			has_dlc = "Jade Dragon"
 		}
 		AND = {
 			religion_group = zoroastrian_group
 			has_dlc = "The Old Gods"
-		}
-		AND = {
-			religion = khurmazta
-			has_dlc = "Jade Dragon"
-		}
-		AND = {
-			religion_group = indian_group
-			has_dlc = "Rajas of India"
-		}
-		AND = {
-			religion = taoist
-			has_dlc = "Jade Dragon"
 		}
 	}
 }
@@ -8117,7 +8015,10 @@ ROOTs_secret_religion_is_playable_trigger = {
 	}
 	trigger_if = {
 		limit = {
-			secret_religion_group  = indian_group
+			OR = {
+				secret_religion_group  = indian_group
+				secret_religion_group = buddhist_group
+			}
 			NOT = { has_dlc = "Rajas of India" }
 		}
 		AND = {
