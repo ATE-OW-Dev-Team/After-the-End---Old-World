@@ -213,3 +213,52 @@ character_event = {
 		set_player_character = c_26673000
 	}
 }
+
+character_event = {
+	id = ATV.5
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		NOT = { has_character_flag = diversity }
+		culture = tuareg
+	}
+	
+	immediate = {
+		set_character_flag = diversity
+		if = {
+			limit = {
+				NOR = {
+					father_even_if_dead = { always = yes }
+					mother_even_if_dead = { always = yes }
+				}
+			}
+			random_list = {
+				50 = {
+					set_graphical_culture = tuareg
+				}
+				50 = {
+					set_graphical_culture = malian
+				}
+			}
+		}
+		any_child_even_if_dead = {
+			character_event = { id = ATV.6 }
+		}
+	}
+}
+character_event = {
+	id = ATV.6
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		culture = tuareg
+	}
+	
+	immediate = {
+		set_character_flag = diversity
+		set_graphical_culture = FROM
+		any_child_even_if_dead = {
+			character_event = { id = ATV.6 }
+		}
+	}
+}
