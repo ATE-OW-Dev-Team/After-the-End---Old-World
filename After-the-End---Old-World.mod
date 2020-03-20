@@ -13,7 +13,6 @@ replace_path="common/dynasties"
 replace_path="common/trade_routes"
 replace_path="gfx/flags"
 replace_path="events"
-replace_path="music"
 user_dir="After-the-End---Old-World"
 picture="ATEOWICON.png"
 tags = {"After The End" "Old World" "Europe" "Overhaul" "Total Conversion"}
