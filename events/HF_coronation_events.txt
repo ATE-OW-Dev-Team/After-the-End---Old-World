@@ -202,10 +202,7 @@ character_event = {
 				any_claim = { title = d_fraticelli } 
 			}
 			preferred_limit = { 
-				has_minor_title = title_cardinal
-			}
-			preferred_limit = { 
-				has_minor_title = title_fraticelli_cardinal
+				is_cardinal_trigger = yes
 			}
 			hidden_tooltip = { letter_event = { id = HF.20201 days = 30 random = 5 } } 
 			break = yes
@@ -1371,6 +1368,10 @@ letter_event = {
 					factor = 0
 					FROM = { lower_tier_than = EMPEROR }
 				} 
+				modifier = {
+					factor = 0
+					religion = palmarian
+				} 
 				modifier = { #Check if you or your vassals hold lands within Italy
 					factor = 0
 					FROM = { 
@@ -1884,6 +1885,10 @@ letter_event = {
 						}
 					}
 				}
+				modifier = {
+					factor = 0
+					religion = palmarian
+				} 
 				modifier = {
 					factor = 0.25
 					FROM = { NOT = { realm_size = 40 } }
@@ -12134,23 +12139,12 @@ character_event = {
 						OR = { 
 							trait = excommunicated
 							trait = possessed 
-							NOT = { religion_head = { has_landed_title = k_papacy } }
 							has_landed_title = e_latin_empire #Disavowed historically.
 						}
-					}
-					modifier = { #More distant/Less powerful Kingdom less likely to be crowned by the Pope.
-						factor = 0.5
-						has_coronation_trigger = yes
-						NOR = {  
-							has_landed_title = k_france
-							has_landed_title = k_burgundy
-							has_landed_title = k_aquitaine
-							has_landed_title = k_germany
-							has_landed_title = k_lotharingia
-							has_landed_title = k_italy
-							has_landed_title = k_sicily
-							has_landed_title = k_naples
-						} 
+						NOR = {
+							religion_head = { has_landed_title = k_papacy }
+							religion_head = { has_landed_title = k_palmarian_pope }
+						}
 					}
 					modifier = { #If the Pope disliked him, less likely to be crowned by him.
 						factor = 0.5
@@ -12176,7 +12170,10 @@ character_event = {
 						factor = 0.1
 						NOT = { trait = excommunicated }
 						NOT = { trait = possessed }
-						religion_head = { has_landed_title = k_papacy } 
+						OR = {
+							religion_head = { has_landed_title = k_papacy }
+							religion_head = { has_landed_title = k_palmarian_pope }
+						}
 						tier = EMPEROR
 					}
 					modifier = { #Checking if Emperor, Bishop Coronation unavailable when without investiture law.
