@@ -14,17 +14,9 @@ narrative_event = {
 	}
 	immediate = {
 		set_global_flag = invading_america
-		activate_title = { title = e_redcoats status = yes }
 		d_redcoats = {
 			holder_scope = {
-				save_event_target_as = redcoat_leader
-			}
-			unsafe_destroy_landed_title = THIS
-			activate_title = { title = THIS status = no }
-		}
-		event_target:redcoat_leader = {
-			e_redcoats = {
-				grant_title = PREV
+				character_event = { id = america.25 }
 			}
 		}
 		#narrative_event = { id = america.2 days = 200 random = 200 }		
@@ -72,7 +64,7 @@ narrative_event = {
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		NOT = { has_global_flag = american_invasion_launched }
 		had_global_flag = { flag = invading_america days = 365 }
@@ -133,7 +125,7 @@ narrative_event = {#New England conquered
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = NA_win days = 365 }
 		controls_religion = yes
@@ -286,10 +278,8 @@ narrative_event = {#New England conquered
 	option = {#Fallback option for the Redcoats to decide their own direction if 
 		name = america3E
 		trigger = {
-			primary_title = { title = e_redcoats }
-			e_britannia = {
-				has_holder = no
-			}
+			should_handle_american_invasion = yes
+			NOT = { primary_title = { title = e_britannia } }
 		}
 		random_list = {
 			50 = {
@@ -319,7 +309,7 @@ narrative_event = {#New England repelled you, oh noh
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = NA_lose days = 365 }
 		controls_religion = yes
@@ -559,10 +549,8 @@ narrative_event = {#Generic "give the Redcoats more money?" event
 	option = {#If Britain is gone, the Redcoats do it themselves, but never get extra funding
 		name = america5C	
 		trigger = {
-			primary_title = { title = e_redcoats }
-			e_britannia = {
-				has_holder = no
-			}
+			should_handle_american_invasion = yes
+			NOT = { primary_title = { title = e_britannia } }
 		}
 		hidden_tooltip = {
 			if = {
@@ -667,7 +655,7 @@ narrative_event = {#Victory against the Americanists
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = americanists_win days = 365 }
 		controls_religion = yes
@@ -766,10 +754,8 @@ narrative_event = {#Victory against the Americanists
 	option = {#Fallback option for the Redcoats to decide their own direction if 
 		name = america3E
 		trigger = {
-			primary_title = { title = e_redcoats }
-			e_britannia = {
-				has_holder = no
-			}
+			should_handle_american_invasion = yes
+			NOT = { primary_title = { title = e_britannia } }
 		}
 		set_global_flag = redcoats_vs_appalachians
 		narrative_event = { id = america.5 }
@@ -791,7 +777,7 @@ narrative_event = {#Defeat against the Americanists
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = americanists_lose days = 365 }
 		controls_religion = yes
@@ -851,7 +837,7 @@ narrative_event = {#Victory against the Appalachians
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = appalachians_win days = 365 }
 		controls_religion = yes
@@ -950,12 +936,8 @@ narrative_event = {#Victory against the Appalachians
 	option = {#Fallback option for the Redcoats to decide their own direction if 
 		name = america3E
 		trigger = {
-			AND = { 
-				primary_title = { title = e_redcoats }
-				e_britannia = {
-					has_holder = no
-				}
-			}
+			should_handle_american_invasion = yes
+			NOT = { primary_title = { title = e_britannia } }
 		}
 		set_global_flag = redcoats_vs_dixies
 		narrative_event = { id = america.5 }
@@ -977,7 +959,7 @@ narrative_event = {#Defeat against the Appalachians
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = appalachians_lose days = 365 }
 		controls_religion = yes
@@ -1038,7 +1020,7 @@ narrative_event = {#Victory against the HCC
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = dixies_win days = 365 }
 		controls_religion = yes
@@ -1149,7 +1131,7 @@ narrative_event = {#Defeat against the HCC
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = dixies_lose days = 365 }
 		controls_religion = yes
@@ -1210,7 +1192,7 @@ narrative_event = {#Victory against the Hudsonians
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = hudsonians_win days = 365 }
 		controls_religion = yes
@@ -1310,12 +1292,8 @@ narrative_event = {#Victory against the Hudsonians
 	option = {#Fallback option for the Redcoats to decide their own direction if 
 		name = america3E
 		trigger = {
-			AND = { 
-				primary_title = { title = e_redcoats }
-				e_britannia = {
-					has_holder = no
-				}
-			}
+			should_handle_american_invasion = yes
+			NOT = { primary_title = { title = e_britannia } }
 		}
 		set_global_flag = redcoats_vs_anglicans
 		narrative_event = { id = america.5 }
@@ -1337,7 +1315,7 @@ narrative_event = {#Defeat against the Hudsonians
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = hudsonians_lose days = 365 }
 		controls_religion = yes
@@ -1398,7 +1376,7 @@ narrative_event = {#Victory against the Anglicans
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = anglicans_win days = 365 }
 		controls_religion = yes
@@ -1496,12 +1474,8 @@ narrative_event = {#Victory against the Anglicans
 	option = {#Fallback option for the Redcoats to decide their own direction if 
 		name = america3E
 		trigger = {
-			AND = { 
-				primary_title = { title = e_redcoats }
-				e_britannia = {
-					has_holder = no
-				}
-			}
+			should_handle_american_invasion = yes
+			NOT = { primary_title = { title = e_britannia } }
 		}
 		set_global_flag = redcoats_vs_nuns
 		narrative_event = { id = america.5 }
@@ -1523,7 +1497,7 @@ narrative_event = {#Defeat against the Anglicans
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = anglicans_lose days = 365 }
 		controls_religion = yes
@@ -1583,7 +1557,7 @@ narrative_event = {#Victory against the Ursulines
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = nuns_win days = 365 }
 		controls_religion = yes
@@ -1691,7 +1665,7 @@ narrative_event = {#Defeat against the Ursulines
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = nuns_lose days = 365 }
 		controls_religion = yes
@@ -1755,7 +1729,7 @@ narrative_event = {#Setup event that fires and results in the creation of the in
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = redcoats_lose days = 710 }
 		controls_religion = yes
@@ -1777,7 +1751,6 @@ narrative_event = {#Setup event that fires and results in the creation of the in
 		name = america3B	
 		trigger = {
 			religion_openly_novelist_or_reformed_trigger = yes
-			NOT = { primary_title = { title = e_redcoats } }
 		}
 	}
 	option = {#Who?
@@ -1785,7 +1758,6 @@ narrative_event = {#Setup event that fires and results in the creation of the in
 		trigger = {
 			is_esoteric_religion_trigger = no
 			religion_openly_novelist_or_reformed_trigger = no
-			NOT = { primary_title = { title = e_redcoats } }
 		}
 	}
 	option = {#Oh no, but not the LP
@@ -1795,31 +1767,11 @@ narrative_event = {#Setup event that fires and results in the creation of the in
 			NOT = {
 				primary_title = { title = e_britannia }
 			}
-			NOT = { primary_title = { title = e_redcoats } }
 		}
-	}	
-	option = {#Oh no
-		name = america21A
-			trigger = {
-				primary_title = { title = e_redcoats }
-			}
-			e_redcoats = {
-				unsafe_destroy_landed_title = THIS
-				activate_title = { title = THIS status = no }
-			}
 	}
 	option = {
 		name = america18D
 		tooltip_info = yes
-		if = {
-			limit = {
-				primary_title = { title = e_redcoats }
-			}
-			e_redcoats = {
-				unsafe_destroy_landed_title = THIS
-				activate_title = { title = THIS status = no }
-			}
-		}
 		custom_tooltip = {
 			text = PLAYER_CHOOSING_INVADER_TT
 			character_event = { id = america.22 }
@@ -2009,17 +1961,9 @@ narrative_event = {#The Redcoats leave on their own, if you don't launch it your
 		set_global_flag = american_invasion_launched
 		set_global_flag = NA_win
 		set_global_flag = redcoats_auto_start
-		activate_title = { title = e_redcoats status = yes }
 		d_redcoats = {
 			holder_scope = {
-				save_event_target_as = redcoat_leader
-			}
-			unsafe_destroy_landed_title = THIS
-			activate_title = { title = THIS status = no }
-		}
-		event_target:redcoat_leader = {
-			e_redcoats = {
-				grant_title = PREV
+				character_event = { id = america.25 }
 			}
 		}
 	}
@@ -2072,7 +2016,7 @@ narrative_event = {#The Redcoats just never report back after winning
 	min_age = 16
 	show_root = no
 	hide_from = yes
-	portrait = e_redcoats
+	portrait = event_target:last_redcoat
 	trigger = {
 		had_global_flag = { flag = redcoats_win days = 2190 }
 		controls_religion = yes
@@ -2097,7 +2041,6 @@ narrative_event = {#The Redcoats just never report back after winning
 		name = america21B
 			trigger = {
 				religion = thelemic_reformed
-				NOT = { primary_title = { title = e_redcoats } }
 			}
 	}
 	option = {#Anti-Thelemic response
@@ -2108,7 +2051,6 @@ narrative_event = {#The Redcoats just never report back after winning
 					religion = novelist_reformed
 					religion_group = christian
 				}
-				NOT = { primary_title = { title = e_redcoats } }
 			}
 	}
 	option = {#Who?
@@ -2120,19 +2062,8 @@ narrative_event = {#The Redcoats just never report back after winning
 					religion = novelist_reformed
 					religion_group = christian
 				}
-				NOT = { primary_title = { title = e_redcoats } }
 			}
 	}
-	option = {#Oh no
-		name = america21A
-			trigger = {
-				primary_title = { title = e_redcoats }
-			}
-			e_redcoats = {
-				unsafe_destroy_landed_title = THIS
-				activate_title = { title = THIS status = no }
-			}
-	}	
 }
 
 character_event = {
@@ -2209,5 +2140,82 @@ character_event = {
 	option = {
 		name = america22D
 		character_event = { id = america.22 }
+	}
+}
+
+character_event = {
+	id = america.25
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		save_global_event_target_as = last_redcoat
+		any_realm_character = {
+			if = {
+				limit = {
+					NOT = {
+						religion = ROOT
+					}
+				}
+				if = {
+					limit = {
+						is_ruler = yes
+						liege = {
+							religion = ROOT
+						}
+					}
+					set_defacto_liege = THIS
+				}
+				else_if = {
+					limit = {
+						liege = {
+							religion = ROOT
+						}
+					}
+					banish = yes
+				}
+			}
+			else_if = {
+				limit = {
+					is_ruler = yes
+					is_theocracy = no
+					is_republic = no
+				}
+				death = { death_reason = left_redcoat }
+				any_demesne_title = {
+					grant_title_no_opinion = ROOT
+				}
+			}
+			else_if = {
+				limit = {
+					is_theocracy = no
+					is_republic = no
+				}
+				death = { death_reason = left_redcoat }
+			}
+		}
+		any_demesne_title = {
+			limit = {
+				NOT = { title = d_redcoats }
+			}
+			location = {
+				create_character = {
+					religion = THIS
+					culture = THIS
+					female = 20
+				}
+				new_character = {
+					grant_title = PREVPREV
+					set_defacto_liege = THIS
+				}
+			}
+		}
+		any_vassal = {
+			set_defacto_liege = THIS
+		}
+		death = { death_reason = left_redcoat }
+		d_redcoats = {
+			unsafe_destroy_landed_title = THIS
+			activate_title = { title = THIS status = no }
+		}
 	}
 }
