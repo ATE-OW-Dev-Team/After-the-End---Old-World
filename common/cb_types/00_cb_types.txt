@@ -5896,11 +5896,18 @@ religious = {
 	can_use_gui = {
 		ROOT = {
 			show_scope_change = no
+			holy_war_start_trigger = yes
 			conditional_tooltip = {
 				trigger = {
 					religion = neovedantic
 				}
 				piety = 250
+			}
+			conditional_tooltip = {
+				trigger = {
+					NOT = { religion = neovedantic }
+				}
+				piety = 100
 			}
 		}
 	}
@@ -5908,11 +5915,15 @@ religious = {
 	on_add = {
 		ROOT = {
 			show_scope_change = no
+			holy_war_start_effect = yes
 			if = {
 				limit = {
 					religion = neovedantic
 				}
 				piety = -250
+			}
+			else = {
+				piety = -100
 			}
 		}
 		hidden_tooltip = { fire_haruspicy_event_effect = yes }
@@ -11968,12 +11979,17 @@ pagan_holy_war = {
 	
 	can_use_gui = {
 		ROOT = {
+			holy_war_start_trigger = yes
 			piety = 100
 		}
 	}
 	
 	on_add = {
-		ROOT = { piety = -100 }
+		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
+			piety = -100
+		}
 		hidden_tooltip = { fire_haruspicy_event_effect = yes }
 		if = {
 			limit = { defender = { is_offmap_governor = offmap_china } }
@@ -14453,7 +14469,12 @@ buddhist_holy_war = {
 	allowed_to_target_tributaries = no
 	
 	sort_priority = 800
-	
+	can_use_gui = {
+		ROOT = {
+			show_scope_change = no
+			holy_war_start_trigger = yes
+		}
+	}
 	can_use = {
 		ROOT = {
 			bhutan_medium_cb = yes
@@ -14523,25 +14544,12 @@ buddhist_holy_war = {
 					AND = {
 						is_land = no
 						any_neighbor_province = {
-							OR = {
-								AND = {
-									has_owner = yes
-									owner = {
-										OR = {
-											character = ROOT
-											is_liege_or_above = ROOT
-										}
-									}
-								}
-								AND = {
-									is_land = no
-									any_neighbor_province = {
-										owner = {
-											OR = {
-												character = ROOT
-												is_liege_or_above = ROOT
-											}
-										}
+							AND = {
+								has_owner = yes
+								owner = {
+									OR = {
+										character = ROOT
+										is_liege_or_above = ROOT
 									}
 								}
 							}
@@ -14555,7 +14563,7 @@ buddhist_holy_war = {
 	is_valid = {
 		ROOT = {
 			OR = {
-			religion = neovedantic
+				religion = neovedantic
 				AND = {
 					religion_group = buddhist_group
 					NOT = {
@@ -14599,6 +14607,10 @@ buddhist_holy_war = {
 	}
 
 	on_add = {
+		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
+		}
 		hidden_tooltip = { fire_haruspicy_event_effect = yes }
 		if = {
 			limit = { defender = { is_offmap_governor = offmap_china } }
