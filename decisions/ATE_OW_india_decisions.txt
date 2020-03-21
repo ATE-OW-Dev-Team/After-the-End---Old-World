@@ -980,6 +980,20 @@ decisions = {
 			}
 			NOT = { culture_group = indo_aryan_group }
 			NOT = { culture_group = dravidian_group }
+			NOT = { culture_group = new_anglo_group }
+			NOT = { culture = british }
+			any_realm_province = {
+			    region = world_india
+			}
+			e_india = {
+				has_holder = no
+			}
+			e_indian_empire = {
+				has_holder = no
+			}
+			e_british_india = {
+				has_holder = no
+			}
 		}
 		allow = {
 			is_adult = yes
@@ -988,108 +1002,66 @@ decisions = {
 			independent = yes
 			war = no
 			wealth = 1000
-			has_landed_title = c_delhi
-			OR = {
-				has_landed_title = e_mughalstan
-				completely_controls = e_mughalstan
-			}
-			OR = {
-				has_landed_title = e_rajastan
-				completely_controls = e_rajastan
-			}
-			OR = {
-				has_landed_title = e_deccan
-				completely_controls = e_deccan
-				has_landed_title = e_karnataka
-				completely_controls = e_karnataka
-				has_landed_title = e_deccan_sangama
-				completely_controls = e_deccan_sangama
-				has_landed_title = e_deccan_hyderabadi
-				completely_controls = e_deccan_hyderabadi
-				has_landed_title = e_deccan_purandara
-				completely_controls = e_deccan_purandara
-				has_landed_title = e_deccan_angrezi
-				completely_controls = e_deccan_angrezi
-			}
-			OR = {
-				has_landed_title = e_bengal
-				completely_controls = e_bengal
-				has_landed_title = e_ganges
-				completely_controls = e_ganges
-				has_landed_title = e_delhi
-				completely_controls = e_delhi
-			}
+			completely_controls_region = world_india
 		}
 		effect = {
 			wealth = -1000
-			prestige = 2000
-			set_global_flag = formed_indian_empire
-			primary_title = {
-				e_indian_empire = {
-					grant_title = ROOT
-					copy_title_laws = PREV
-					copy_title_history = PREV
-				}
+			prestige = 1000
+			activate_title = { title = e_indian_empire status = yes }
+			e_indian_empire = {
+				gain_empire_effect = yes
 			}
-# former north indian kingdoms become de-jure e_mughalstan vassals
-			e_mughalstan = {
-			    any_direct_de_jure_vassal_title = {
-				    de_jure_liege = e_indian_empire
-			    }
-		    }
-			e_rajastan = {
-			    any_direct_de_jure_vassal_title = {
-				    de_jure_liege = e_indian_empire
-			    }
-		    }
-			e_deccan = {
-			    any_direct_de_jure_vassal_title = {
-				    de_jure_liege = e_indian_empire
-			    }
-		    }
-			e_deccan_sangama = {
-			    any_direct_de_jure_vassal_title = {
-				    de_jure_liege = e_indian_empire
-			    }
-		    }
-			e_deccan_purandara = {
-			    any_direct_de_jure_vassal_title = {
-				    de_jure_liege = e_indian_empire
-			    }
-		    }
-			e_deccan_hyderabadi = {
-			    any_direct_de_jure_vassal_title = {
-				    de_jure_liege = e_indian_empire
-			    }
-		    }
-			e_deccan_angrezi = {
-			    any_direct_de_jure_vassal_title = {
-				    de_jure_liege = e_indian_empire
-			    }
-		    }
-			e_karnataka = {
-			    any_direct_de_jure_vassal_title = {
-				    de_jure_liege = e_indian_empire
-			    }
-		    }
-			e_bengal = {
-			    any_direct_de_jure_vassal_title = {
-				    de_jure_liege = e_indian_empire
-			    }
-		    }
-			e_ganges = {
-			    any_direct_de_jure_vassal_title = {
-				    de_jure_liege = e_indian_empire
-			    }
-		    }
-			e_delhi = {
-			    any_direct_de_jure_vassal_title = {
-				    de_jure_liege = e_indian_empire
-			    }
-		    }
+			hidden_tooltip = { e_indian_empire = { make_primary_title = yes }
+				#ROOT = {
+				#	narrative_event = { id = bharatva.3 }
+				#}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_landed_title = e_rajastan
+						e_rajastan = { has_holder = no }
+					}
+				}
+				e_rajastan = { destroy_landed_title = THIS }
+				activate_title = { title = e_rajastan status = no }
+			}
+			if = {
+				limit = {
+					OR = {
+						has_landed_title = e_bengal
+						e_bengal = { has_holder = no }
+					}
+				}
+				e_bengal = { destroy_landed_title = THIS }
+				activate_title = { title = e_bengal status = no }
+			}
+			if = {
+				limit = {
+					OR = {
+						has_landed_title = e_deccan
+						e_deccan = { has_holder = no }
+					}
+				}
+				e_deccan = { destroy_landed_title = THIS }
+				activate_title = { title = e_deccan status = no }
+			}
 			if = {
 				limit = { has_nickname = no }
-				give_nickname = nick_the_great
+				give_nickname = nick_the_magnificent
+			}
+			if = {
+				limit = { ai = no NOT = { has_global_flag = achievement_my_very_own_subcontinent } }
+				achievement_my_very_own_subcontinent_done_effect = yes
+			}
+			hidden_tooltip = {
+				any_title = {
+					limit = {
+						tier = KING
+						region = world_india
+					}
+					de_jure_liege = e_indian_empire
+				}
 			}
 		}
 		revoke_allowed = {
@@ -1113,6 +1085,9 @@ decisions = {
 				has_holder = no
 			}
 			e_indian_empire = {
+				has_holder = no
+			}
+			e_british_india = {
 				has_holder = no
 			}
 		}
