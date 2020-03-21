@@ -5896,6 +5896,7 @@ religious = {
 	can_use_gui = {
 		ROOT = {
 			show_scope_change = no
+			holy_war_start_trigger = yes
 			conditional_tooltip = {
 				trigger = {
 					religion = neovedantic
@@ -5904,28 +5905,9 @@ religious = {
 			}
 			conditional_tooltip = {
 				trigger = {
-					religion_group = old_world_cultist_group
+					NOT = { religion = neovedantic }
 				}
-				OR = {
-					piety = 100
-					is_heresy_of = FROM
-					is_parent_religion = FROM
-					NOT = { religion_group = FROM }
-					AND = {
-						is_communist_religion_trigger = yes
-						FROM = {
-							show_scope_change = no
-							is_zarist_religion_trigger = yes
-						}
-					}
-					AND = {
-						is_zarist_religion_trigger = yes
-						FROM = {
-							show_scope_change = no
-							is_communist_religion_trigger = yes
-						}
-					}
-				}
+				piety = 100
 			}
 		}
 	}
@@ -5933,35 +5915,14 @@ religious = {
 	on_add = {
 		ROOT = {
 			show_scope_change = no
+			holy_war_start_effect = yes
 			if = {
 				limit = {
 					religion = neovedantic
 				}
 				piety = -250
 			}
-			if = {
-				limit = {
-					religion_group = old_world_cultist_group
-					NOR = {
-						is_heresy_of = FROM
-						is_parent_religion = FROM
-						NOT = { religion_group = FROM }
-						AND = {
-							is_communist_religion_trigger = yes
-							FROM = {
-								show_scope_change = no
-								is_zarist_religion_trigger = yes
-							}
-						}
-						AND = {
-							is_zarist_religion_trigger = yes
-							FROM = {
-								show_scope_change = no
-								is_communist_religion_trigger = yes
-							}
-						}
-					}
-				}
+			else = {
 				piety = -100
 			}
 		}
@@ -6013,6 +5974,15 @@ religious = {
 					religion_group = old_world_cultist_group
 					NOT = {
 						religion = FROM
+					}
+					FROM = {
+						NOT = { 
+							any_current_enemy = {
+								NOT = {
+									religion_group = old_world_cultist_group
+								}
+							}
+						}
 					}
 				}
 				is_heresy_of = FROM
@@ -12009,12 +11979,17 @@ pagan_holy_war = {
 	
 	can_use_gui = {
 		ROOT = {
+			holy_war_start_trigger = yes
 			piety = 100
 		}
 	}
 	
 	on_add = {
-		ROOT = { piety = -100 }
+		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
+			piety = -100
+		}
 		hidden_tooltip = { fire_haruspicy_event_effect = yes }
 		if = {
 			limit = { defender = { is_offmap_governor = offmap_china } }
@@ -12031,7 +12006,6 @@ pagan_holy_war = {
 			OR ={
 				religion_group = pagan_group
 				religion_group = pirate
-				religion_group = old_world_cultist_group
 			}
 			is_reformed_religion = yes
 			NOT = { has_religion_feature = religion_peaceful }
@@ -12095,7 +12069,6 @@ pagan_holy_war = {
 			OR ={
 				religion_group = pagan_group
 				religion_group = pirate
-				religion_group = old_world_cultist_group
 			}
 			NOT = { same_realm = FROM }
 			NOT = { religion = FROM }
@@ -12806,7 +12779,6 @@ pagan_county_conquest = {
 					OR = {
 						religion_group = pagan_group
 						religion_group = pirate
-						religion_group = old_world_cultist_group
 					}
 					NOT = { same_realm = FROM }
 				}
@@ -12877,7 +12849,6 @@ pagan_county_conquest = {
 					OR = {
 						religion_group = pagan_group
 						religion_group = pirate
-						religion_group = old_world_cultist_group
 					}
 					NOT = { same_realm = FROM }
 				}
@@ -14498,7 +14469,12 @@ buddhist_holy_war = {
 	allowed_to_target_tributaries = no
 	
 	sort_priority = 800
-	
+	can_use_gui = {
+		ROOT = {
+			show_scope_change = no
+			holy_war_start_trigger = yes
+		}
+	}
 	can_use = {
 		ROOT = {
 			bhutan_medium_cb = yes
@@ -14568,25 +14544,12 @@ buddhist_holy_war = {
 					AND = {
 						is_land = no
 						any_neighbor_province = {
-							OR = {
-								AND = {
-									has_owner = yes
-									owner = {
-										OR = {
-											character = ROOT
-											is_liege_or_above = ROOT
-										}
-									}
-								}
-								AND = {
-									is_land = no
-									any_neighbor_province = {
-										owner = {
-											OR = {
-												character = ROOT
-												is_liege_or_above = ROOT
-											}
-										}
+							AND = {
+								has_owner = yes
+								owner = {
+									OR = {
+										character = ROOT
+										is_liege_or_above = ROOT
 									}
 								}
 							}
@@ -14600,7 +14563,7 @@ buddhist_holy_war = {
 	is_valid = {
 		ROOT = {
 			OR = {
-			religion = neovedantic
+				religion = neovedantic
 				AND = {
 					religion_group = buddhist_group
 					NOT = {
@@ -14644,6 +14607,10 @@ buddhist_holy_war = {
 	}
 
 	on_add = {
+		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
+		}
 		hidden_tooltip = { fire_haruspicy_event_effect = yes }
 		if = {
 			limit = { defender = { is_offmap_governor = offmap_china } }
@@ -19229,6 +19196,8 @@ reconquista_na = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -19435,6 +19404,8 @@ reconquista_istanbul = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -19637,6 +19608,8 @@ reconquista_west_anatolia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -19846,6 +19819,8 @@ reconquista_south_anatolia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -20056,6 +20031,8 @@ reconquista_wc_anatolia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -20263,6 +20240,8 @@ reconquista_ec_anatolia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -20470,6 +20449,8 @@ reconquista_anatolian_heartland = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -20677,6 +20658,8 @@ reconquista_trebizond = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -20883,6 +20866,8 @@ reconquista_west_armenia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -21087,6 +21072,8 @@ reconquista_east_armenia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -21290,6 +21277,8 @@ reconquista_east_georgia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -21493,6 +21482,8 @@ reconquista_west_georgia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -21697,6 +21688,8 @@ reconquista_azerbaijan = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
