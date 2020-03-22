@@ -3723,20 +3723,6 @@ crusade = {
 							has_global_flag = pagan_ghws_unlocked
 						}
 					}
-					AND = { 
-						religion = palmarian
-						custom_tooltip = {
-							text = CTT_CHRISTIAN_CRUSADES_UNLOCKED
-							has_global_flag = palmarian_crusades_unlocked
-						}
-					}
-					AND = { 
-						religion = bharatva
-						custom_tooltip = {
-							text = CTT_CHRISTIAN_CRUSADES_UNLOCKED#Since you can't play as the Bharatva religious head, shouldn't need its own tooltip
-							has_global_flag = bharatva_crusades
-						}
-					}					
 					AND = {
 						religion = jugoslavist
 						custom_tooltip = {
@@ -4435,6 +4421,7 @@ new_crusade = {
 					has_global_flag = muslim_jihads_unlocked
 					has_global_flag = pagan_ghws_unlocked
 					has_global_flag = christian_crusades_unlocked
+					has_global_flag = bharatva_crusades
 				}
 			}
 			conditional_tooltip = {
@@ -4446,10 +4433,31 @@ new_crusade = {
 						}
 					}
 				}
-				religion_group = christian
-				custom_tooltip = {
-					text = CTT_CHRISTIAN_CRUSADES_UNLOCKED
-					has_global_flag = christian_crusades_unlocked
+				OR = {
+					AND = { 
+						religion = palmarian
+						custom_tooltip = {
+							text = CTT_CHRISTIAN_CRUSADES_UNLOCKED
+							has_global_flag = palmarian_crusades_unlocked
+						}
+					}
+					AND = { 
+						religion = bharatva
+						custom_tooltip = {
+							text = CTT_CHRISTIAN_CRUSADES_UNLOCKED#Since you can't play as the Bharatva religious head, shouldn't need its own tooltip
+							has_global_flag = bharatva_crusades
+						}
+					}
+					AND = {
+						OR = {
+							religion = catholic
+							religion = fraticelli
+						}
+						custom_tooltip = {
+							text = CTT_CHRISTIAN_CRUSADES_UNLOCKED
+							has_global_flag = christian_crusades_unlocked
+						}
+					}
 				}
 			}
 			mercenary = no
@@ -4470,15 +4478,22 @@ new_crusade = {
 			OR = {
 				NOT = { religion_group = ROOT }
 				AND = {
-					has_global_flag = fatima_massacre_crusade
+					OR = {
+						religion_group = pagan_group
+						religion_group = old_world_cultist_group
+						religion = bharatva
+						AND = {
+							has_global_flag = fatima_massacre_crusade
+							OR = {
+								religion = catholic
+								religion = fraticelli
+							}
+						}
+					}
 					NOT = { religion = ROOT }
 				}
 				is_heresy_of = ROOT
 				is_parent_religion = ROOT
-				AND = {
-					religion_group = pagan_group
-					NOT = { religion = ROOT }
-				}
 			}
 		}
 		
