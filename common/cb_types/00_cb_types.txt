@@ -3723,20 +3723,6 @@ crusade = {
 							has_global_flag = pagan_ghws_unlocked
 						}
 					}
-					AND = { 
-						religion = palmarian
-						custom_tooltip = {
-							text = CTT_CHRISTIAN_CRUSADES_UNLOCKED
-							has_global_flag = palmarian_crusades_unlocked
-						}
-					}
-					AND = { 
-						religion = bharatva
-						custom_tooltip = {
-							text = CTT_CHRISTIAN_CRUSADES_UNLOCKED#Since you can't play as the Bharatva religious head, shouldn't need its own tooltip
-							has_global_flag = bharatva_crusades
-						}
-					}					
 					AND = {
 						religion = jugoslavist
 						custom_tooltip = {
@@ -3769,7 +3755,11 @@ crusade = {
 				is_heresy_of = ROOT
 				is_parent_religion = ROOT
 				AND = {
-					religion_group = pagan_group
+					OR = {
+						religion_group = pagan_group
+						religion_group = old_world_cultist_group
+						religion = bharatva
+					}
 					NOT = { religion = ROOT }
 				}
 			}
@@ -4431,6 +4421,7 @@ new_crusade = {
 					has_global_flag = muslim_jihads_unlocked
 					has_global_flag = pagan_ghws_unlocked
 					has_global_flag = christian_crusades_unlocked
+					has_global_flag = bharatva_crusades
 				}
 			}
 			conditional_tooltip = {
@@ -4442,10 +4433,31 @@ new_crusade = {
 						}
 					}
 				}
-				religion_group = christian
-				custom_tooltip = {
-					text = CTT_CHRISTIAN_CRUSADES_UNLOCKED
-					has_global_flag = christian_crusades_unlocked
+				OR = {
+					AND = { 
+						religion = palmarian
+						custom_tooltip = {
+							text = CTT_CHRISTIAN_CRUSADES_UNLOCKED
+							has_global_flag = palmarian_crusades_unlocked
+						}
+					}
+					AND = { 
+						religion = bharatva
+						custom_tooltip = {
+							text = CTT_CHRISTIAN_CRUSADES_UNLOCKED#Since you can't play as the Bharatva religious head, shouldn't need its own tooltip
+							has_global_flag = bharatva_crusades
+						}
+					}
+					AND = {
+						OR = {
+							religion = catholic
+							religion = fraticelli
+						}
+						custom_tooltip = {
+							text = CTT_CHRISTIAN_CRUSADES_UNLOCKED
+							has_global_flag = christian_crusades_unlocked
+						}
+					}
 				}
 			}
 			mercenary = no
@@ -4466,15 +4478,22 @@ new_crusade = {
 			OR = {
 				NOT = { religion_group = ROOT }
 				AND = {
-					has_global_flag = fatima_massacre_crusade
+					OR = {
+						religion_group = pagan_group
+						religion_group = old_world_cultist_group
+						religion = bharatva
+						AND = {
+							has_global_flag = fatima_massacre_crusade
+							OR = {
+								religion = catholic
+								religion = fraticelli
+							}
+						}
+					}
 					NOT = { religion = ROOT }
 				}
 				is_heresy_of = ROOT
 				is_parent_religion = ROOT
-				AND = {
-					religion_group = pagan_group
-					NOT = { religion = ROOT }
-				}
 			}
 		}
 		
@@ -5896,11 +5915,25 @@ religious = {
 	can_use_gui = {
 		ROOT = {
 			show_scope_change = no
+			holy_war_start_trigger = yes
 			conditional_tooltip = {
 				trigger = {
 					religion = neovedantic
 				}
 				piety = 250
+			}
+			conditional_tooltip = {
+				trigger = {
+					religion = stalinist
+				}
+				piety = 150
+			}
+			conditional_tooltip = {
+				trigger = {
+					NOT = { religion = neovedantic }
+					NOT = { religion = stalinist }
+				}
+				piety = 100
 			}
 		}
 	}
@@ -5908,11 +5941,21 @@ religious = {
 	on_add = {
 		ROOT = {
 			show_scope_change = no
+			holy_war_start_effect = yes
 			if = {
 				limit = {
 					religion = neovedantic
 				}
 				piety = -250
+			}
+			if = {
+				limit = {
+					religion = stalinist
+				}
+				piety = -150
+			}
+			else = {
+				piety = -100
 			}
 		}
 		hidden_tooltip = { fire_haruspicy_event_effect = yes }
@@ -5932,7 +5975,6 @@ religious = {
 			NOT = { government = confederation_government }
 			NOT = { religion_group = pagan_group }
 			NOT = { pacifist = yes }
-			NOT = { religion = taoist }
 			NOT = { religion = jacobinist } # Have other CBs
 			NAND = {
 				OR = {
@@ -5950,13 +5992,18 @@ religious = {
 				AND = {##Neovedantics have to use minor holy wars against other religions other than Bharatva 
 					NOT = { religion_group = FROM }
 					NOR = {
-						religion = neovedantic
-						religion = theravada
 						AND = {
-							religion = gelugpa
-							NOT = { government = bhutanese_restored_government }
+							religion_group = buddhist_group
+							NOR = {
+								religion = vajrayana
+								religion = thaislam
+								AND = {
+									religion = gelugpa
+									government = bhutanese_restored_government
+								}
+							}
 						}
-						religion = karmapa
+						religion = neovedantic
 					}
 				}
 				AND = {
@@ -6132,19 +6179,25 @@ religious = {
 			NOT = { pacifist = yes }
 			NOT = { same_realm = FROM }
 			OR = {
-				AND = {
-					religion_group = old_world_cultist_group
-					NOT = {
-						religion = FROM
+				AND = {##Neovedantics have to use minor holy wars against other religions other than Bharatva 
+					NOT = { religion_group = FROM }
+					NOR = {
+						AND = {
+							religion_group = buddhist_group
+							NOR = {
+								religion = vajrayana
+								religion = thaislam
+								AND = {
+									religion = gelugpa
+									government = bhutanese_restored_government
+								}
+							}
+						}
+						religion = neovedantic
 					}
-				}			
-				NOT = { religion_group = FROM }
+				}
 				is_heresy_of = FROM
 				is_parent_religion = FROM
-				AND = {
-					has_dharmic_religion_trigger = yes
-					FROM = { religion = taoist }
-				}
 				AND = {
 					religion_group = FROM
 					FROM = {
@@ -6157,7 +6210,21 @@ religious = {
 					}
 				}
 				AND = {
-					religion_group = muslim
+					OR = {
+						religion_group = muslim
+						AND = {
+							religion_group = indian_group
+							OR = {#Neovedantics can only use full Holy Wars against Bharatvans, who they regard as heretics and perverters of Dharma
+								NOT = {
+									religion = neovedantic
+								}
+								FROM = {
+									religion = bharatva
+								}
+							}
+						}
+						religion_group = old_world_cultist_group
+					}
 					NOT = { religion = FROM }
 				}
 			}
@@ -11968,12 +12035,17 @@ pagan_holy_war = {
 	
 	can_use_gui = {
 		ROOT = {
+			holy_war_start_trigger = yes
 			piety = 100
 		}
 	}
 	
 	on_add = {
-		ROOT = { piety = -100 }
+		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
+			piety = -100
+		}
 		hidden_tooltip = { fire_haruspicy_event_effect = yes }
 		if = {
 			limit = { defender = { is_offmap_governor = offmap_china } }
@@ -12763,6 +12835,8 @@ pagan_county_conquest = {
 					OR = {
 						religion_group = pagan_group
 						religion_group = pirate
+						religion = trotskyite
+						religion = khanist
 					}
 					NOT = { same_realm = FROM }
 				}
@@ -12833,6 +12907,8 @@ pagan_county_conquest = {
 					OR = {
 						religion_group = pagan_group
 						religion_group = pirate
+						religion = trotskyite
+						religion = khanist
 					}
 					NOT = { same_realm = FROM }
 				}
@@ -13047,39 +13123,10 @@ pagan_county_conquest = {
 		factor = 1
 		
 		modifier = {
-			factor = 4.0
+			factor = 3.0
 			ROOT = {
-				OR = {
-					religion_group = pirate
-				}
+				religion_group = pirate
 			}
-			OR = {
-				empire = { title = e_scandinavia }
-				kingdom = { title = k_rus }
-			}
-		}
-		modifier = {
-			factor = 2.0
-			ROOT = {
-				OR = {
-					religion_group = pirate
-				}
-			}
-			OR = {
-				empire = { title = e_britannia }
-				kingdom = { title = k_brittany }
-				kingdom = { title = k_france }
-				kingdom = { title = k_frisia }
-			}
-		}
-		modifier = {
-			factor = 2.0
-			ROOT = {
-				OR = {
-					religion_group = pirate
-				}
-			}
-			FROM = { NOT = { religion_group = pagan_group } }
 			location = { port = yes }
 		}
 		modifier = {
@@ -14453,7 +14500,12 @@ buddhist_holy_war = {
 	allowed_to_target_tributaries = no
 	
 	sort_priority = 800
-	
+	can_use_gui = {
+		ROOT = {
+			show_scope_change = no
+			holy_war_start_trigger = yes
+		}
+	}
 	can_use = {
 		ROOT = {
 			bhutan_medium_cb = yes
@@ -14461,8 +14513,9 @@ buddhist_holy_war = {
 				religion = neovedantic
 				AND = {
 					religion_group = buddhist_group
-					NOT = {
+					NOR = {
 						religion = vajrayana
+						religion = thaislam
 					}
 				}
 			}
@@ -14523,25 +14576,12 @@ buddhist_holy_war = {
 					AND = {
 						is_land = no
 						any_neighbor_province = {
-							OR = {
-								AND = {
-									has_owner = yes
-									owner = {
-										OR = {
-											character = ROOT
-											is_liege_or_above = ROOT
-										}
-									}
-								}
-								AND = {
-									is_land = no
-									any_neighbor_province = {
-										owner = {
-											OR = {
-												character = ROOT
-												is_liege_or_above = ROOT
-											}
-										}
+							AND = {
+								has_owner = yes
+								owner = {
+									OR = {
+										character = ROOT
+										is_liege_or_above = ROOT
 									}
 								}
 							}
@@ -14555,13 +14595,14 @@ buddhist_holy_war = {
 	is_valid = {
 		ROOT = {
 			OR = {
-			religion = neovedantic
+				religion = neovedantic
 				AND = {
 					religion_group = buddhist_group
-					NOT = {
+					NOR = {
 						religion = vajrayana
+						religion = thaislam
 					}
-				}	
+				}
 			}
 			NOT = { same_realm = FROM }
 			OR = {
@@ -14599,6 +14640,10 @@ buddhist_holy_war = {
 	}
 
 	on_add = {
+		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
+		}
 		hidden_tooltip = { fire_haruspicy_event_effect = yes }
 		if = {
 			limit = { defender = { is_offmap_governor = offmap_china } }
@@ -19184,6 +19229,8 @@ reconquista_na = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -19390,6 +19437,8 @@ reconquista_istanbul = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -19592,6 +19641,8 @@ reconquista_west_anatolia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -19801,6 +19852,8 @@ reconquista_south_anatolia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -20011,6 +20064,8 @@ reconquista_wc_anatolia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -20218,6 +20273,8 @@ reconquista_ec_anatolia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -20425,6 +20482,8 @@ reconquista_anatolian_heartland = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -20632,6 +20691,8 @@ reconquista_trebizond = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -20838,6 +20899,8 @@ reconquista_west_armenia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -21042,6 +21105,8 @@ reconquista_east_armenia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -21245,6 +21310,8 @@ reconquista_east_georgia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -21448,6 +21515,8 @@ reconquista_west_georgia = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
@@ -21652,6 +21721,8 @@ reconquista_azerbaijan = {
 	on_add = {
 		custom_tooltip = { text = add_allies_reconquista_TT }
 		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
 			character_event = { id = HF.49210 }
 		}
 	}
