@@ -1925,3 +1925,129 @@ character_event = {#Great Success
 		}
 	}
 }
+
+narrative_event = {#NORTH - PART 1 - Troubling Dreams give you hints about the Way North. Foreshadows that you need to be immortal.
+	id = nobelian.39
+	title = "EVTTITLENOBEL39"
+	picture = GFX_evt_woman_at_window_hf
+	border = GFX_event_narrative_frame_religion
+
+	desc = {
+		text = nobelian39Desc
+	}
+	immediate = {
+		set_character_flag = dreams_of_the_north
+	}
+	trigger = {
+		religion = nobelian
+		NOT = {
+			has_character_flag = dreams_of_the_north
+		}
+	}
+	mean_time_to_happen = {
+		months = 300 #About once every 25 years or so
+		modifier = {#10 times faster if you're Immortal
+			factor = 0.1
+			trait = immortal
+		}
+	}
+	option = {#I wonder what it could mean...
+		name = EVTOPTA_nobelian39
+		trigger = {
+			NOT = {
+				trait = immortal
+			}
+		}
+	}
+	option = {#I feel that I could make that trip...
+		name = EVTOPTB_nobelian39
+		trigger = {
+			trait = immortal
+		}
+	}
+}
+narrative_event = {#Hidden tombola for the Nobelian stuff
+	id = nobelian.1234
+	is_triggered_only = yes
+	hide_window = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				NOT = {
+					check_variable = { which = ascension_progress value = 2 }
+				}
+			}
+			narrative_event = { id = nobelian.40 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { which = ascension_progress value = 2 }
+				NOT = {
+					check_variable = { which = ascension_progress value = 3 }				
+				}
+			}
+			narrative_event = { id = nobelian.41 }
+		}
+	}
+}
+narrative_event = {#NORTH - PART 2 - You build a monstrously expensive effigy of yourself
+	id = nobelian.40
+	is_triggered_only = yes
+	title = "EVTTITLENOBEL40"
+	picture = GFX_evt_woman_at_window_hf
+	border = GFX_event_narrative_frame_religion
+
+	desc = {
+		text = nobelian40Desc
+	}
+	immediate = {
+	}
+	option = {#A small price to pay for the truth
+		name = EVTOPTA_nobelian40
+		destroy_artifact = mystic_insight		
+		scaled_wealth = -5
+		add_artifact = statue_of_yourself
+	}
+	option = {#I cannot afford such a ridiculous price
+		name = EVTOPTB_nobelian40
+		change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something	
+	}
+}	
+narrative_event = {#NORTH - PART 3 - You sacrifice a very rare artifact 
+	id = nobelian.41
+	is_triggered_only = yes
+	title = "EVTTITLENOBEL41"
+	picture = GFX_evt_hooded_figure_hf
+	border = GFX_event_narrative_frame_religion
+
+	desc = {
+		text = nobelian41Desc
+	}
+	immediate = {
+	}
+	option = {#I must keep sacrificing
+		name = EVTOPTA_nobelian41
+		trigger = {
+		ROOT = {
+			any_artifact = {
+				quality >= 5
+			}
+		}
+		}
+		destroy_artifact = mystic_insight
+		ROOT = {
+			random_artifact = {
+				limit = {
+					quality >= 5
+				}
+				destroy_artifact = yes
+			}
+		}
+		
+	}
+	option = {#I cannot afford such a ridiculous price
+		name = EVTOPTB_nobelian41
+		change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something	
+	}
+}	
