@@ -1952,8 +1952,9 @@ narrative_event = {#NORTH - PART 1 - Troubling Dreams give you hints about the W
 	}
 	trigger = {
 		religion = nobelian
-		NOT = {
+		NOR = {
 			has_character_flag = dreams_of_the_north
+			has_character_flag = abandoned_the_north
 		}
 	}
 	mean_time_to_happen = {
@@ -2001,6 +2002,60 @@ narrative_event = {#Hidden tombola for the Nobelian stuff
 			}
 			narrative_event = { id = nobelian.41 }
 		}
+		else_if = {
+			limit = {
+				check_variable = { which = ascension_progress value = 3 }
+				NOT = {
+					check_variable = { which = ascension_progress value = 4 }				
+				}
+			}
+			narrative_event = { id = nobelian.42 }
+		}	
+		else_if = {
+			limit = {
+				check_variable = { which = ascension_progress value = 4 }
+				NOT = {
+					check_variable = { which = ascension_progress value = 5 }				
+				}
+			}
+			narrative_event = { id = nobelian.44 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { which = ascension_progress value = 5 }
+				NOT = {
+					check_variable = { which = ascension_progress value = 6 }				
+				}
+			}
+			narrative_event = { id = nobelian.45 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { which = ascension_progress value = 6 }
+				NOT = {
+					check_variable = { which = ascension_progress value = 7 }				
+				}
+			}
+			narrative_event = { id = nobelian.46 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { which = ascension_progress value = 7 }
+				NOT = {
+					check_variable = { which = ascension_progress value = 8 }				
+				}
+			}
+			narrative_event = { id = nobelian.47 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { which = ascension_progress value = 7 }
+				NOT = {
+					check_variable = { which = ascension_progress value = 8 }				
+				}
+			}
+			narrative_event = { id = nobelian.43 }
+		}			
 	}
 }
 narrative_event = {#NORTH - PART 2 - You build a monstrously expensive effigy of yourself
@@ -2062,4 +2117,267 @@ narrative_event = {#NORTH - PART 3 - You sacrifice a very rare artifact
 		name = EVTOPTB_nobelian41
 		change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something	
 	}
+}
+narrative_event = {#NORTH - PART 4 - You sacrifice a body part
+	id = nobelian.42
+	is_triggered_only = yes
+	title = "EVTTITLENOBEL42"
+	picture = GFX_evt_hooded_figure_hf
+	border = GFX_event_narrative_frame_religion
+
+	desc = {
+		text = nobelian42Desc
+	}
+	immediate = {
+	}
+	option = {#I must keep sacrificing
+		name = EVTOPTA_nobelian42
+		trigger = {
+			NAND = {
+				trait = disfigured
+				trait = one_eyed
+				trait = one_handed
+				trait = one_legged
+			}
+		}
+		destroy_artifact = mystic_insight
+		add_trait = severely_injured
+	}
+	option = {#I cannot afford such a ridiculous price
+		name = EVTOPTB_nobelian42
+		change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something	
+	}
+	option = {#You finally pass by having four Wounds
+		name = EVTOPTC_nobelian42
+		trigger = {
+			AND = {
+				trait = disfigured
+				trait = one_eyed
+				trait = one_handed
+				trait = one_legged
+			}
+		}
+		destroy_artifact = mystic_insight
+		change_variable = {	which = ascension_progress value = -1 }		
+	}	
+}
+
+narrative_event = {#NORTH - PART 6 - You sacrifice your own heart (Out of order, sorry!)
+	id = nobelian.43
+	is_triggered_only = yes
+	title = "EVTTITLENOBEL43"
+	picture = GFX_evt_hooded_figure_hf
+	border = GFX_event_narrative_frame_religion
+
+	desc = {
+		text = nobelian43Desc
+	}
+	immediate = {
+	}
+	option = {#I must keep sacrificing
+		name = EVTOPTA_nobelian43
+
+		destroy_artifact = mystic_insight
+		add_trait = literally_heartless
+	}
+	option = {#I cannot afford such a ridiculous price
+		name = EVTOPTB_nobelian42
+		change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something	
+	}	
+}
+
+narrative_event = {#NORTH - PART 5A - You sacrifice your Diplomacy
+	id = nobelian.44
+	is_triggered_only = yes
+	title = "EVTTITLENOBEL44"
+	picture = GFX_evt_hooded_figure_hf
+	border = GFX_event_narrative_frame_religion
+
+	desc = {
+		text = nobelian44Desc
+	}
+	immediate = {
+	}
+	option = {#I must keep sacrificing
+		name = EVTOPTA_nobelian44
+		trigger = {
+			diplomacy > 5
+		}
+		destroy_artifact = mystic_insight
+		change_diplomacy = -5
+		if = {
+			limit = {
+				diplomacy > 5
+			}
+			change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something			
+		}
+	}
+	option = {#I cannot afford such a ridiculous price
+		name = EVTOPTB_nobelian42
+		change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something	
+	}	
 }	
+
+narrative_event = {#NORTH - PART 5B - You sacrifice your Martial
+	id = nobelian.45
+	is_triggered_only = yes
+	title = "EVTTITLENOBEL45"
+	picture = GFX_evt_hooded_figure_hf
+	border = GFX_event_narrative_frame_religion
+
+	desc = {
+		text = nobelian45Desc
+	}
+	immediate = {
+	}
+	option = {#I must keep sacrificing
+		name = EVTOPTA_nobelian45
+		trigger = {
+			martial > 5
+		}
+		destroy_artifact = mystic_insight
+		change_martial = -5
+		if = {
+			limit = {
+				martial > 5
+			}
+			change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something			
+		}		
+	}
+	option = {#I cannot afford such a ridiculous price
+		name = EVTOPTB_nobelian42
+		change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something	
+	}	
+}
+
+narrative_event = {#NORTH - PART 5C - You sacrifice your Stewardship
+	id = nobelian.46
+	is_triggered_only = yes
+	title = "EVTTITLENOBEL46"
+	picture = GFX_evt_hooded_figure_hf
+	border = GFX_event_narrative_frame_religion
+
+	desc = {
+		text = nobelian46Desc
+	}
+	immediate = {
+	}
+	option = {#I must keep sacrificing
+		name = EVTOPTA_nobelian46
+		trigger = {
+			stewardship > 5
+		}
+		destroy_artifact = mystic_insight
+		change_stewardship = -5
+		if = {
+			limit = {
+				stewardship > 5
+			}
+			change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something			
+		}		
+	}
+	option = {#I cannot afford such a ridiculous price
+		name = EVTOPTB_nobelian42
+		change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something	
+	}	
+}
+narrative_event = {#NORTH - PART 5D - You sacrifice your Intrigue
+	id = nobelian.47
+	is_triggered_only = yes
+	title = "EVTTITLENOBEL47"
+	picture = GFX_evt_hooded_figure_hf
+	border = GFX_event_narrative_frame_religion
+
+	desc = {
+		text = nobelian47Desc
+	}
+	immediate = {
+	}
+	option = {#I must keep sacrificing
+		name = EVTOPTA_nobelian47
+		trigger = {
+			intrigue > 5
+		}
+		destroy_artifact = mystic_insight
+		change_intrigue = -5
+		if = {
+			limit = {
+				intrigue > 5
+			}
+			change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something			
+		}		
+	}
+	option = {#I cannot afford such a ridiculous price
+		name = EVTOPTB_nobelian42
+		change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something	
+	}	
+}
+
+narrative_event = {#NORTH - PART 5E - You sacrifice your Learning
+	id = nobelian.48
+	is_triggered_only = yes
+	title = "EVTTITLENOBEL48"
+	picture = GFX_evt_hooded_figure_hf
+	border = GFX_event_narrative_frame_religion
+
+	desc = {
+		text = nobelian48Desc
+	}
+	immediate = {
+	}
+	option = {#I must keep sacrificing
+		name = EVTOPTA_nobelian48
+		trigger = {
+			learning > 5
+		}
+		destroy_artifact = mystic_insight
+		change_learning = -5
+		if = {
+			limit = {
+				learning > 5
+			}
+			change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something			
+		}		
+	}
+	option = {#I cannot afford such a ridiculous price
+		name = EVTOPTB_nobelian42
+		change_variable = {	which = ascension_progress value = -1 }	#this is to ensure you can't progress along the path without actually committing to something	
+	}	
+}
+
+narrative_event = {#NORTH NORTH NORTH NORTH NORTH NORTH NORTH
+	id = nobelian.7777
+	is_triggered_only = yes
+	title = "EVTTITLENOBEL7777"
+	picture = GFX_evt_hooded_figure_hf
+	border = GFX_event_narrative_frame_religion
+
+	desc = {
+		text = nobelian7777Desc
+	}
+	immediate = {
+	}
+	option = {#THE TRUTH
+		name = EVTOPTA_nobelian7777
+		death = { death_reason = death_ascension }			
+	}	
+}
+
+narrative_event = {#Thank God. You would, in any event, have failed
+	id = nobelian.9999
+	is_triggered_only = yes
+	title = "EVTTITLENOBEL9999"
+	picture = GFX_evt_hooded_figure_hf
+	border = GFX_event_narrative_frame_religion
+
+	desc = {
+		text = nobelian9999Desc
+	}
+	immediate = {
+	}
+	option = {#Salvation...I think
+		name = EVTOPTA_nobelian9999
+		clr_character_flag = dreams_of_the_north
+		set_character_flag = abandoned_the_north
+	}	
+}
