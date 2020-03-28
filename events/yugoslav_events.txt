@@ -34,327 +34,32 @@ narrative_event = {
 	option = {
 		name = "EVTOPTA_yugoslav.1"
 		trigger = {
-			primary_title = { title = e_yugoslavia }
+			has_landed_title = e_yugoslavia
 		}
-		set_global_flag = YUG_supported_yugoslavism
-		religion_authority = {
-			modifier = yugo_crisis_supported
-			years = 20
-		}
-		character_event = {
-			id = yugoslav.2	
-		}
-	}
-	option = {
-		name = "EVTOPTB_yugoslav.1"
-		trigger = {
-			primary_title = { title = e_yugoslavia }
-		}
-		religion_authority = {
-			modifier = yugo_crisis_did_nothing
-			years = 20
-		}
-		set_global_flag = YUG_did_nothing
-	}
-	option = {
-		name = "EVTOPTC_yugoslav.1"
-		trigger = {
-			primary_title = { title = e_yugoslavia }
-		}
-		religion_authority = {
-			modifier = yugo_crisis_abandoned
-			years = 20
-		}
-		set_global_flag = YUG_abandoned_yugoslavism
-		character_event = {
-			id = yugoslav.6	
-		}
+		hidden_tooltip = { set_variable = { which = global_yugo_crisis value = 35 } }
+		add_character_modifier = { name = yugo_crisis_2 days = -1 }
 	}
 	option = {#Option for Balkaners other than the Emperor
 		name = "EVTOPTD_yugoslav.1"
 		trigger = {
-			OR = {
-				culture = croatian
-				culture = slovenian
-				culture = serbian
-				culture = bosnian
+			top_liege = {
+				has_landed_title = e_yugoslavia
 			}
-			NOT = {
-				primary_title = { title = e_yugoslavia }
-			}
+			NOT = { has_landed_title = e_yugoslavia }
 		}
 	}
 	option = {#Option for everyone else in the world
 		name = "EVTOPTE_yugoslav.1"
 		trigger = {
-			NOR = {
-				culture = croatian
-				culture = slovenian
-				culture = serbian
-				culture = bosnian
-			}
 			NOT = {
-				primary_title = { title = e_yugoslavia }
-			}
-		}
-	}
-	
-}
- #You've chosen to support the Propiciater, but how?
-narrative_event = {
-	id = yugoslav.2
-	title = "EVTNAMEYUGO2"
-	desc = "EVTDESCYUGO2"
-	picture = GFX_evt_bishop_byzantine
-	border = GFX_event_narrative_frame_religion
-	
-	is_triggered_only = yes
-	
-	option = {#With violence
-		name = "EVTOPTA_yugoslav.2"
-		set_global_flag = YUG_violent_solution
-		if = {
-			limit = {#if you have 12+ in martial and intrigue
-				martial = 12
-				intrigue = 12
-			}
-		character_event = { id = yugoslav.3 days = 180 tooltip = EVTTOOLTIPVIOLENTYUGO }
-		}
-		else_if = {
-			limit = {#if you have 12+ in martial or intrigue, but not both
-				OR = {
-					AND = {
-						martial = 12
-						NOT = {
-							intrigue = 12
-						}
-					}
-					AND = {
-						intrigue = 12
-						NOT = {
-							martial = 12
-						}
-					}
+				top_liege = {
+					has_landed_title = e_yugoslavia
 				}
 			}
-		character_event = { id = yugoslav.4 days = 180 tooltip = EVTTOOLTIPVIOLENTYUGO }
-		}
-		else_if = {
-		  limit = {#if you don't have either
-			 NOR = {
-				martial = 12
-				intrigue = 12
-			 }
-		  }
-		character_event = { id = yugoslav.5 days = 180 tooltip = EVTTOOLTIPVIOLENTYUGO }
+			NOT = { has_landed_title = e_yugoslavia }
 		}
 	}
-	option = {#With reason
-		name = "EVTOPTB_yugoslav.2"
-		set_global_flag = YUG_rational_solution
-		
-		if = {
-			limit = {#if you have 12+ in diplomacy and learning
-				diplomacy = 12
-				learning = 12
-			}
-		character_event = { id = yugoslav.3 days = 180 tooltip = EVTTOOLTIPREASONYUGO }
-		}
-		else_if = {
-			limit = {#if you have 12+ in martial or intrigue, but not both
-				OR = {
-					AND = {
-						diplomacy = 12
-						NOT = {
-							learning = 12
-						}
-					}
-					AND = {
-						learning = 12
-						NOT = {
-							diplomacy = 12
-						}
-					}
-				}
-			}
-		character_event = { id = yugoslav.4 days = 180 tooltip = EVTTOOLTIPREASONYUGO }
-		}
-		else_if = {
-		  limit = {#if you don't have either
-			 NOR = {
-				diplomacy = 12
-				learning = 12
-			 }
-		  }
-		character_event = { id = yugoslav.5 days = 180 tooltip = EVTTOOLTIPREASONYUGO }
-		}		
-		
-	}
-	option = {#With empty words
-		name = "EVTOPTC_yugoslav.2"
-		set_global_flag = YUG_did_nothing
-		religion_authority = {
-			modifier = yugo_crisis_changed_mind
-			years = 20
-		}
-	}	
-}
-
-narrative_event = {#You mostly succeeded, there'll be a mild unrest
-	id = yugoslav.3
-	title = "EVTNAMEYUGO3"
-	desc = "EVTDESCYUGO3"
-	picture = GFX_evt_bishop_byzantine
-	border = GFX_event_narrative_frame_religion
 	
-	is_triggered_only = yes
-	
-	option = {#Great, I suppose
-	   name = "EVTOPTA_yugoslav.3"
-		any_realm_province = {
-			add_province_modifier = {
-				name = yugo_unrest_mild
-				duration = 7300 #20 years, the duration of the crisis
-			}			
-		}
-		add_character_modifier = { name = yugo_sided_with_jugo duration = -1 } #20 years					
-	}
-}
-
-narrative_event = {#Moderate success, there'll be some unpleasantness but it should be survivable
-	id = yugoslav.4
-	title = "EVTNAMEYUGO4"
-	desc = "EVTDESCYUGO4"
-	picture = GFX_evt_bishop_byzantine
-	border = GFX_event_narrative_frame_religion
-	
-	is_triggered_only = yes
-	
-	option = {#It could be worse
-	   name = "EVTOPTA_yugoslav.4"
-		any_realm_province = {
-			add_province_modifier = {
-				name = yugo_unrest_med
-				duration = 7300 #20 years, the duration of the crisis
-			}			
-		}
-		add_character_modifier = { name = yugo_sided_with_jugo duration = -1 } #20 years							
-	}
-}
-
-narrative_event = {#Total failure, this is gonna suck
-	id = yugoslav.5
-	title = "EVTNAMEYUGO5"
-	desc = "EVTDESCYUGO5"
-	picture = GFX_evt_bishop_byzantine
-	border = GFX_event_narrative_frame_religion
-	
-	is_triggered_only = yes
-	
-	option = {#Oh Mercy
-	   name = "EVTOPTA_yugoslav.5"
-		any_realm_province = {
-			add_province_modifier = {
-				name = yugo_unrest_severe
-				duration = 7300 #20 years, the duration of the crisis
-			}			
-		}
-		add_character_modifier = { name = yugo_sided_with_jugo duration = -1 } #20 years							
-	}
-}
-
-narrative_event = {#So you abandoned Yugoslavist? Good, but now what?
-	id = yugoslav.6
-	title = "EVTNAMEYUGO6"
-	desc = "EVTDESCYUGO6"
-	picture = GFX_evt_bishop_byzantine
-	border = GFX_event_narrative_frame_religion
-	
-	is_triggered_only = yes
-	
-	option = {#Orthodox
-	   name = "EVTOPTA_yugoslav.6"
-	   ai_chance = {
-		 factor = 1
-		 
-		 modifier = {
-			factor = 5
-			culture = serbian
-		 }
-	   }
-	   religion = orthodox
-		any_realm_province = {
-			limit = {
-				NOT = {
-					religion = orthodox
-				}
-			}
-			add_province_modifier = {
-				name = yugo_unrest_severe
-				duration = 7300 #20 years, the duration of the crisis
-			}			
-		}
-		add_character_modifier = { name = yugo_sided_with_orthodox duration = -1 } #20 years							
-	}
-	option = {#Catholic
-	   name = "EVTOPTB_yugoslav.6"
-	   ai_chance = {
-		 factor = 1
-		 
-		 modifier = {
-			factor = 5
-			OR = {
-				culture = croatian
-				culture = slovenian
-			}
-		 }
-	   }
-	   religion = catholic
-		any_realm_province = {
-			limit = {
-				NOT = {
-					religion = catholic
-				}
-			}
-			add_province_modifier = {
-				name = yugo_unrest_severe
-				duration = 7300 #20 years, the duration of the crisis
-			}			
-		}
-		add_character_modifier = { name = yugo_sided_with_catholic duration = -1 } #20 years									
-	}
-	option = {#Islam
-	   name = "EVTOPTC_yugoslav.6"
-	   ai_chance = {
-		 factor = 1
-		 
-		 modifier = {
-			factor = 5
-			culture = bosnian
-		 }
-		 modifier = {
-			factor = 0.1
-			OR = {
-				culture = serbian
-				culture = croatian
-				culture = slovenian
-			}
-		 }
-	   }
-	   religion = sunni
-		any_realm_province = {
-			limit = {
-				NOT = {
-					religion = sunni
-				}
-			}
-			add_province_modifier = {
-				name = yugo_unrest_severe
-				duration = 7300 #20 years, the duration of the crisis
-			}			
-		}
-		add_character_modifier = { name = yugo_sided_with_muslims duration = -1 }								
-	}
 }
 
 narrative_event = {#The event that marks the end of the Great Unrest
@@ -381,7 +86,15 @@ narrative_event = {#The event that marks the end of the Great Unrest
 	}
 	
 	mean_time_to_happen = {
-		months = 24 #it'll fire roughly two years after the 20 year condition is fulfilled
+		years = 10 #it'll fire roughly two years after the 20 year condition is fulfilled
+		modifier = {
+			factor = 0.75
+			NOT = { check_variable = { which = global_yugo_crisis value = 20 } }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { check_variable = { which = global_yugo_crisis value = 0 } }
+		}
 	}
 	
 	option = {#OK, let's see what happened
@@ -389,11 +102,10 @@ narrative_event = {#The event that marks the end of the Great Unrest
 		
 		if = {
 			limit = {
+				NOT = { check_variable = { which = global_yugo_crisis value = 20 } }
 				e_yugoslavia = {
-					has_holder = yes#I KNOW for a fact that this one works
-					holder_scope = {#I think this should work, but I'm not sure. It should change the scope to the holder of e_yugoslavia, thus we should be able to check their religion
+					holder_scope = {
 						religion = jugoslavist
-						realm_size = 65#if you have 65 or more total realm holdings, including vassals - Yugo starts with 125 so this basically means "keep ahold of 51% of your starting realm"
 					}
 				}
 			}
@@ -401,39 +113,24 @@ narrative_event = {#The event that marks the end of the Great Unrest
 		}
 		else_if = {
 			limit = {
-				e_yugoslavia = {
-					has_holder = yes#I KNOW for a fact that this one works
-					holder_scope = {#I think this should work, but I'm not sure. It should change the scope to the holder of e_yugoslavia, thus we should be able to check their religion
-						religion = jugoslavist
-						NOT = {
-							realm_size = 65#if you have less than 65 total realm holdings, including vassals - Yugo starts with 125
+				AND = {
+					NOT = { check_variable = { which = global_yugo_crisis value = 50 } }
+					e_yugoslavia = {
+						holder_scope = {
+							religion = jugoslavist
 						}
 					}
 				}
 			}
 			character_event = { id = yugoslav.9}#survival of Yugoslavism
 		}
-		else_if = {
-			limit = {
-			OR = {
-				e_yugoslavia = {
-					has_holder = no
-				}
-				e_yugoslavia = {
-					holder_scope = {
-						NOT = {
-							religion = jugoslavist
-						}
-					}
-				}
-			}
-			}
+		else = {
 			character_event = { id = yugoslav.10}#death of Yugoslavism
 		}
 	}
-   }
+}
    
- narrative_event = {#Yugoslavism triumphs
+narrative_event = {#Yugoslavism triumphs
 	id = yugoslav.8
 	title = "EVTNAMEYUGO8"
 	desc = "EVTDESCYUGO8"
@@ -445,6 +142,7 @@ narrative_event = {#The event that marks the end of the Great Unrest
 	hide_new = yes
 	
 	is_triggered_only = yes
+	has_global_flag = yugoslav_crisis_started
 	
 	trigger = {
 		NOR = {
@@ -468,7 +166,7 @@ narrative_event = {#The event that marks the end of the Great Unrest
 	option = {#The Emperor is happy
 		name = "EVTOPTA_yugoslav.8"
 		trigger = {
-			primary_title = { title = e_yugoslavia }
+			has_landed_title = e_yugoslavia
 			religion = jugoslavist
 		}
 		
@@ -485,7 +183,7 @@ narrative_event = {#The event that marks the end of the Great Unrest
 		name = "EVTOPTB_yugoslav.8"
 		trigger = {
 		    NOT = {
-				primary_title = { title = e_yugoslavia }
+				has_landed_title = e_yugoslavia
 			}
 			religion = jugoslavist
 		}
@@ -516,7 +214,7 @@ narrative_event = {#The event that marks the end of the Great Unrest
 	}
 }
 
- narrative_event = {#Yugoslavism survives
+narrative_event = {#Yugoslavism survives
 	id = yugoslav.9
 	title = "EVTNAMEYUGO9"
 	desc = "EVTDESCYUGO9"	
@@ -528,6 +226,7 @@ narrative_event = {#The event that marks the end of the Great Unrest
 	hide_new = yes
 	
 	is_triggered_only = yes
+	has_global_flag = yugoslav_crisis_started
 	trigger = {
 		NOR = {
 			has_global_flag = yugoslavism_triumphant
@@ -550,7 +249,7 @@ narrative_event = {#The event that marks the end of the Great Unrest
 	option = {#The Emperor is happy
 		name = "EVTOPTA_yugoslav.9"
 		trigger = {
-			primary_title = { title = e_yugoslavia }
+			has_landed_title = e_yugoslavia
 			religion = jugoslavist
 		}
 		remove_character_modifier = yugo_sided_with_catholic
@@ -563,15 +262,13 @@ narrative_event = {#The event that marks the end of the Great Unrest
 					religion = jugoslavist
 				}
 			}
-			character_event = { id = yugoslav.13}#event that demands conversion
+			character_event = { id = yugoslav.13 }#event that demands conversion
 		}
 	}
 	option = {#So are other Yugos
 		name = "EVTOPTB_yugoslav.9"
 		trigger = {
-		    NOT = {
-				primary_title = { title = e_yugoslavia }
-			}
+		    NOT = { has_landed_title = e_yugoslavia }
 			religion = jugoslavist
 		}
 	}
@@ -601,7 +298,7 @@ narrative_event = {#The event that marks the end of the Great Unrest
 	}
 }
 
- narrative_event = {#Yugoslavism destroyed
+narrative_event = {#Yugoslavism destroyed
 	id = yugoslav.10
 	title = "EVTNAMEYUGO10"
 	desc = "EVTDESCYUGO10"
@@ -613,6 +310,8 @@ narrative_event = {#The event that marks the end of the Great Unrest
 	hide_new = yes
 	
 	is_triggered_only = yes
+	has_global_flag = yugoslav_crisis_started
+	
 	trigger = {
 		NOR = {
 			has_global_flag = yugoslavism_triumphant
@@ -626,29 +325,26 @@ narrative_event = {#The event that marks the end of the Great Unrest
 			activate_title = { title = THIS status = no }
 			unsafe_destroy_landed_title = THIS
 		}
-		destroy_landed_title = e_yugoslavia
-		remove_character_modifier = yugo_sided_with_catholic
-		remove_character_modifier = yugo_sided_with_orthodox
-		remove_character_modifier = yugo_sided_with_muslims
-		remove_character_modifier = yugo_sided_with_jugo		
+		if = {
+			limit = {
+				check_variable = { which = global_yugo_crisis value = 50 }
+			}
+			destroy_landed_title = e_yugoslavia
+		}
 	}
 	
 	option = {#The Emperor is obviously sad
 		name = "EVTOPTA_yugoslav.10"
 		trigger = {
-			primary_title = { title = e_yugoslavia }
+			has_landed_title = e_yugoslavia
 			religion = jugoslavist
 		}
-		remove_character_modifier = yugo_sided_with_catholic
-		remove_character_modifier = yugo_sided_with_orthodox
-		remove_character_modifier = yugo_sided_with_muslims
-		remove_character_modifier = yugo_sided_with_jugo		
 	}
 	option = {#So are other Yugos
 		name = "EVTOPTB_yugoslav.10"
 		trigger = {
 		    NOT = {
-				primary_title = { title = e_yugoslavia }
+				has_landed_title = e_yugoslavia
 			}
 			religion = jugoslavist
 		}
@@ -679,7 +375,7 @@ narrative_event = {#The event that marks the end of the Great Unrest
 	}
 }
 
- narrative_event = {#Yugoslavist Crusades start
+narrative_event = {#Yugoslavist Crusades start
 	id = yugoslav.11
 	title = "EVTNAMEYUGO11"
 	desc = "EVTDESCYUGO11"
@@ -828,100 +524,26 @@ character_event = {#Car demands that you convert to Yugoslavism
 	immediate = {
 	}
 	
-	option = {#I will
-		name = "EVTOPA_yugoslav.13"
-		religion = jugoslavist
-	}
 	option = {#I will...publically - am not sure if you can make it work this way, but we'll see
 		name = "EVTOPTB_yugoslav.13"
 		if = {
 			limit = {
-				religion = catholic
+				has_secret_religion = no
 			}
-			set_character_flag = YUG_cryptocatholic
+			religion_scope = { save_event_target_as = old_religion }
+			religion = jugoslavist
+			secret_religion = event_target:old_religion
 		}
-		else_if = {
-			limit = {
-				religion = orthodox
-			}
-			set_character_flag = YUG_cryptoorthodox
+		else = {
+			religion = jugoslavist
 		}
-		else_if = {
-			limit = {
-				religion = sunni
-			}
-			set_character_flag = YUG_cryptosunni
-		}
-		else_if = {
-			limit = {
-				religion = lutheran
-			}
-			set_character_flag = YUG_cryptolutheran
-		}
-		character_event = {
-			id = yugoslav.14
-		}
-		religion = jugoslavist
 	}
 	option = {#Never!
 		name = "EVTOPTC_yugoslav.13"
-			opinion = {
-				who = FROM
-				modifier = opinion_charge_traitor
-				months = 60
-			}	
-	}
-}
- character_event = {#Set your secret faith after falsely converting
-	id = yugoslav.14
-	title = "EVTNAMEYUGO14"
-	desc = "EVTDESCYUGO14"	
-	picture = GFX_evt_great_schism
-	border = GFX_event_normal_frame_religion
-	
-	#major = yes
-	show_ROOT = yes
-	hide_window = yes#this makes it hidden
-		
-	is_triggered_only = yes
-	
-	immediate = {
-	
-	}
-	
-	option = {#We will endure in secret
-		name = "EVTOPA_yugoslav.14"
-		if = {
-			limit = {
-				has_character_flag = YUG_cryptocatholic
-			}
-			set_secret_religion = catholic
-		}
-		else_if = {
-			limit = {
-				has_character_flag = YUG_cryptoorthodox
-			}
-			set_secret_religion = orthodox
-		}
-		else_if = {
-			limit = {
-				has_character_flag = YUG_cryptosunni
-			}
-			set_secret_religion = sunni
-		}
-		else_if = {
-			limit = {
-				has_character_flag = YUG_cryptolutheran
-			}
-			set_secret_religion = lutheran
-		}
-		join_society = secret_religious_cult
-		if = {#you join the secret religious cult 
-			limit = {
-				NOT = { any_society_member = { is_society_grandmaster = yes } }
-			}
-			set_society_grandmaster = yes # Set character as Grand Master
-			add_society_currency_massive_effect = yes # Give the Grand Master a start-up capital to induct members
+		opinion = {
+			who = FROM
+			modifier = opinion_charge_traitor
+			months = 60
 		}
 	}
 }
@@ -991,15 +613,321 @@ narrative_event = {##Order of St.Tito formed
 	}
 }
 
-narrative_event = {#Ensuring Yugo Emperor's 'Yugoslav chaos' modifier gets inherited
-	id = yugoslav.16
-	title = "EVTNAMEYUGO16"
-	desc = "EVTDESCYUGO16"
-	picture = GFX_evt_bishop_byzantine
-	border = GFX_event_narrative_frame_religion
+character_event = {
+	id = yugoslav.50
 	hide_window = yes #Should be secret
+	has_global_flag = yugoslav_crisis_started
 	trigger = {
-		primary_title = { title = e_yugoslavia }
+		FROM = { title = e_yugoslavia }
+		NOR = {
+			has_global_flag = yugoslavism_dead
+			has_global_flag = yugoslavism_survives
+			has_global_flag = yugoslavism_triumphant
+		}
+	}
+	is_triggered_only = yes
+	immediate = {
+		FROMFROM = { yugo_crisis_remove_modifiers_effect = yes }
+		yugo_crisis_bad_effect = yes
+		if = {
+			limit = {
+				is_adult = no
+			}
+			yugo_crisis_bad_effect = yes
+		}
+		if = {
+			limit = {
+				NOT = { culture = FROMFROM }
+			}
+			yugo_crisis_bad_effect = yes
+		}
+		calc_yugo_crisis_effect = yes
+	}
+}
+
+character_event = {
+	id = yugoslav.51
+	hide_window = yes #Should be secret
+	has_global_flag = yugoslav_crisis_started
+	trigger = {
+		FROM = {
+			has_landed_title = e_yugoslavia
+		}
+		NOR = {
+			has_global_flag = yugoslavism_dead
+			has_global_flag = yugoslavism_survives
+			has_global_flag = yugoslavism_triumphant
+		}
+	}
+	is_triggered_only = yes
+	immediate = {
+		FROM = {
+			yugo_crisis_good_effect = yes
+			calc_yugo_crisis_effect = yes
+		}
+	}
+}
+character_event = {
+	id = yugoslav.52
+	hide_window = yes #Should be secret
+	has_global_flag = yugoslav_crisis_started
+	trigger = {
+		FROM = {
+			has_landed_title = e_yugoslavia
+		}
+		NOR = {
+			has_global_flag = yugoslavism_dead
+			has_global_flag = yugoslavism_survives
+			has_global_flag = yugoslavism_triumphant
+		}
+	}
+	is_triggered_only = yes
+	immediate = {
+		FROM = {
+			yugo_crisis_bad_effect = yes
+			calc_yugo_crisis_effect = yes
+		}
+	}
+}
+character_event = {
+	id = yugoslav.53
+	hide_window = yes #Should be secret
+	has_global_flag = yugoslav_crisis_started
+	trigger = {
+		ROOT = {
+			has_landed_title = e_yugoslavia
+		}
+		NOR = {
+			has_global_flag = yugoslavism_dead
+			has_global_flag = yugoslavism_survives
+			has_global_flag = yugoslavism_triumphant
+		}
+	}
+	is_triggered_only = yes
+	immediate = {
+		ROOT = {
+			yugo_crisis_good_effect = yes
+			calc_yugo_crisis_effect = yes
+		}
+	}
+}
+character_event = {
+	id = yugoslav.54
+	hide_window = yes #Should be secret
+	has_global_flag = yugoslav_crisis_started
+	trigger = {
+		ROOT = {
+			has_landed_title = e_yugoslavia
+		}
+		NOR = {
+			has_global_flag = yugoslavism_dead
+			has_global_flag = yugoslavism_survives
+			has_global_flag = yugoslavism_triumphant
+		}
+	}
+	is_triggered_only = yes
+	immediate = {
+		ROOT = {
+			yugo_crisis_bad_effect = yes
+			calc_yugo_crisis_effect = yes
+		}
+	}
+}
+
+character_event = {
+	id = yugoslav.70
+	desc = EVTDESCYUGO70
+	picture = GFX_evt_peasants
+	
+	notification = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK 
+	}
+}
+character_event = {
+	id = yugoslav.71
+	desc = EVTDESCYUGO71
+	picture = GFX_evt_peasants
+	
+	notification = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK 
+	}
+}
+character_event = {
+	id = yugoslav.72
+	desc = EVTDESCYUGO72
+	picture = GFX_evt_peasants
+	
+	notification = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK 
+	}
+}
+character_event = {
+	id = yugoslav.73
+	desc = EVTDESCYUGO73
+	picture = GFX_evt_peasants
+	
+	notification = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK 
+	}
+}
+character_event = {
+	id = yugoslav.74
+	desc = EVTDESCYUGO74	
+	picture = GFX_evt_peasants
+	
+	notification = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = OK 
+	}
+}
+
+character_event = {
+	id = yugoslav.100
+	hide_window = yes #Should be secret
+	has_global_flag = yugoslav_crisis_started
+	trigger = {
+		has_landed_title = e_yugoslavia
+		NOR = {
+			has_global_flag = yugoslavism_dead
+			has_global_flag = yugoslavism_survives
+			has_global_flag = yugoslavism_triumphant
+		}
+	}
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			80 = {
+				character_event = { id = yugoslav.101 } # General tombola
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					has_character_flag = yugo_camp_happened
+					NOT = { had_character_flag = { flag = yugo_camp_happened days = 3650 } }
+				}
+				modifier = {
+					factor = 2
+					war = yes
+				}
+				character_event = { id = yugoslav.102 days = 1 random = 40 } # Infidel prayers in army
+			}
+			25 = {
+				modifier = {
+					factor = 0
+					has_character_flag = yugo_missionary_happened
+					NOT = { had_character_flag = { flag = yugo_missionary_happened days = 3650 } }
+				}
+				modifier = {
+					factor = 0
+					NOT = {
+						any_realm_province = {
+							NOT = { religion = ROOT }
+						}
+					}
+				}
+				character_event = { id = yugoslav.103 days = 1 random = 40 } # Inquisition
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					has_character_flag = yugo_donation_happened
+					NOT = { had_character_flag = { flag = yugo_donation_happened days = 3650 } }
+				}
+				modifier = {
+					factor = 0
+					NOT = { religion = jugoslavist }
+				}
+				modifier = {
+					factor = 2
+					religion_head = {
+						NOT = { wealth = 100 }
+					}
+				}
+				character_event = { id = yugoslav.104 days = 1 random = 40 } # Monetary help for rel head
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					has_character_flag = yugo_hide_happened
+					NOT = { had_character_flag = { flag = yugo_hide_happened days = 3650 } }
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						has_secret_religion = yes
+						trait = cynical
+					}
+				}
+				character_event = { id = yugoslav.105 days = 1 random = 40 } # Questions about ruler's faith
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					has_character_flag = yugo_traders_happened
+					NOT = { had_character_flag = { flag = yugo_traders_happened days = 3650 } }
+				}
+				modifier = {
+					factor = 2
+					yearly_income = 60 # 5 a month
+				}
+				character_event = { id = yugoslav.106 days = 1 random = 40 } # Traders bring religion too
+			}
+		}
+		calc_yugo_crisis_effect = yes
+	}
+}
+
+character_event = {
+	id = yugoslav.101
+	hide_window = yes #Should be secret
+	is_triggered_only = yes
+	
+	immediate = {
+		yugo_crisis_tobla_effect = yes
+		yugo_crisis_tobla_effect = yes
+		random_list = {
+			10 = {
+				yugo_crisis_tobla_effect = yes
+				yugo_crisis_tobla_effect = yes
+			}
+			10 = {
+				yugo_crisis_tobla_effect = yes
+			}
+			10 = {}
+		}
+		calc_yugo_crisis_effect = yes
+	}
+}
+
+character_event = {
+	id = yugoslav.102
+	picture = GFX_evt_large_army
+	border = "GFX_event_normal_frame_religion"
+	desc = "EVTDESCYUGO102"
+	is_triggered_only = yes
+	
+	trigger = {
+		has_landed_title = e_yugoslavia
 		has_global_flag = yugoslav_crisis_started
 		NOR = {
 			has_global_flag = yugoslavism_dead
@@ -1007,40 +935,550 @@ narrative_event = {#Ensuring Yugo Emperor's 'Yugoslav chaos' modifier gets inher
 			has_global_flag = yugoslavism_triumphant
 		}
 	}
-	ìmmediate = {
 	
+	immediate = {
+		set_character_flag = yugo_camp_happened
 	}
+	option = {
+		name = "EVTOPTA_yugoslav.102"
+		ai_chance = {
+			factor = 30
+			job_event_mtth_modifier_inverted_martial_score = yes
+		}
+		add_character_modifier = { name = yugo_crisis_strict_recuitment days = 3650 }
+		random_list = {
+			60 = {
+				job_event_mtth_modifier_inverted_martial_score = yes
+				custom_tooltip = {
+					text = yugo_crisis_good_tt
+					yugo_crisis_good_effect = yes
+					yugo_crisis_good_effect = yes
+				}
+			}
+			40 = {
+				custom_tooltip = {
+					text = yugo_crisis_bad_tt
+					yugo_crisis_bad_effect = yes
+					yugo_crisis_bad_effect = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB_yugoslav.102"
+		ai_chance = {
+			factor = 30
+			job_event_mtth_modifier_inverted_learning_score = yes
+		}
+		random_list = {
+			25 = {
+				job_event_mtth_modifier_inverted_learning_score = yes
+				add_character_modifier = { name = yugo_crisis_universal_prayers days = 3650 }
+				custom_tooltip = {
+					text = yugo_crisis_good_tt
+					yugo_crisis_good_effect = yes
+					yugo_crisis_good_effect = yes
+				}
+			}
+			75 = {
+				custom_tooltip = {
+					text = yugo_crisis_bad_tt
+					yugo_crisis_bad_effect = yes
+					yugo_crisis_bad_effect = yes
+					yugo_crisis_bad_effect = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC_yugoslav.102"
+		ai_chance = {
+			factor = 30
+		}
+		add_character_modifier = { name = yugo_crisis_allowed_prayers days = 3650 }
+		custom_tooltip = {
+			text = yugo_crisis_bad_tt
+			yugo_crisis_bad_effect = yes
+			yugo_crisis_bad_effect = yes
+		}
+	}
+	after = {
+		calc_yugo_crisis_effect = yes
+	}
+}
+
+character_event = {
+	id = yugoslav.103
+	picture = GFX_evt_bishop
+	border = "GFX_event_normal_frame_religion"
+	desc = "EVTDESCYUGO103"
+	is_triggered_only = yes
+	trigger = {
+		any_realm_province = {
+			NOT = { religion = ROOT }
+		}
+		has_landed_title = e_yugoslavia
+		has_global_flag = yugoslav_crisis_started
+		NOR = {
+			has_global_flag = yugoslavism_dead
+			has_global_flag = yugoslavism_survives
+			has_global_flag = yugoslavism_triumphant
+		}
+	}
+	fail_trigger_effect = {
+		character_event = { id = yugoslav.100 }
+	}
+	immediate = {
+		set_character_flag = yugo_missionary_happened
+		random_realm_province = {
+			limit = {
+				NOT = { religion = ROOT }
+			}
+			preferred_limit = {
+				owner = { character = ROOT }
+			}
+			save_event_target_as = province_to_convert
+		}
+	}
+	option = {
+		name = "EVTOPTA_yugoslav.103"
+		ai_chance = {
+			factor = 30
+			job_event_mtth_modifier_inverted_intrigue_score = yes
+		}
+		random_list = {
+			50 = {
+				job_event_mtth_modifier_inverted_intrigue_score = yes
+				custom_tooltip = {
+					text = yugo_crisis_good_tt
+					yugo_crisis_good_effect = yes
+					yugo_crisis_good_effect = yes
+				}
+			}
+			50 = {
+				add_character_modifier = { name = yugo_crisis_killed_priest days = 3650 }
+				custom_tooltip = {
+					text = yugo_crisis_bad_tt
+					yugo_crisis_bad_effect = yes
+					yugo_crisis_bad_effect = yes
+					yugo_crisis_bad_effect = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB_yugoslav.103"
+		ai_chance = {
+			factor = 30
+			job_event_mtth_modifier_inverted_diplomacy_score = yes
+		}
+		prestige = -150
+		random_list = {
+			50 = {
+				job_event_mtth_modifier_inverted_diplomacy_score = yes
+				spawn_priest_effect = yes
+				hidden_tooltip = {
+					event_target:invited_character = {
+						remove_trait = patient
+						remove_trait = kind
+						random_list = {
+							10 = { change_learning = 1 change_intrigue = 1 }
+							10 = { add_trait = cruel }
+							10 = { add_trait = wroth }
+							10 = { add_trait = cruel add_trait = wroth }
+						}
+						random_list = {
+							10 = { change_learning = 1 change_intrigue = 1 }
+							10 = { remove_lifestyle_trait_effect = yes add_trait = impaler }
+							10 = { remove_lifestyle_trait_effect = yes add_trait = theologian }
+						}
+					}
+				}
+				custom_tooltip = {
+					text = yugo_crisis_good_tt
+					yugo_crisis_good_effect = yes
+					yugo_crisis_good_effect = yes
+				}
+			}
+			50 = {
+				custom_tooltip = {
+					text = yugo_crisis_bad_tt
+					yugo_crisis_bad_effect = yes
+					yugo_crisis_bad_effect = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC_yugoslav.103"
+		ai_chance = {
+			factor = 30
+		}
+		event_target:province_to_convert = { religion = ROOT }
+		custom_tooltip = {
+			text = yugo_crisis_bad_tt
+			yugo_crisis_bad_effect = yes
+			yugo_crisis_bad_effect = yes
+		}
+	}
+	after = {
+		calc_yugo_crisis_effect = yes
+	}
+}
+
+character_event = {
+	id = yugoslav.104
+	picture = GFX_evt_pope
+	border = "GFX_event_normal_frame_religion"
+	desc = "EVTDESCYUGO104"
+	is_triggered_only = yes
+	trigger = {
+		religion = jugoslavist
+		has_landed_title = e_yugoslavia
+		has_global_flag = yugoslav_crisis_started
+		NOR = {
+			has_global_flag = yugoslavism_dead
+			has_global_flag = yugoslavism_survives
+			has_global_flag = yugoslavism_triumphant
+		}
+	}
+	fail_trigger_effect = {
+		character_event = { id = yugoslav.100 }
+	}
+	immediate = {
+		set_character_flag = yugo_donation_happened
+	}
+	option = {
+		name = "EVTOPTA_yugoslav.104"
+		ai_chance = {
+			factor = 30
+		}
+		add_character_modifier = { name = yugo_crisis_temple_tax_relief days = 3650 }
+		religion_head = {
+			show_scope_change = no
+			random_list = {
+				65 = {
+					job_event_mtth_modifier_inverted_stewardship_score = yes
+					custom_tooltip = {
+						text = yugo_crisis_good_tt
+						yugo_crisis_good_effect = yes
+						yugo_crisis_good_effect = yes
+					}
+				}
+				35 = {
+					custom_tooltip = {
+						text = yugo_crisis_bad_tt
+						yugo_crisis_bad_effect = yes
+						yugo_crisis_bad_effect = yes
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB_yugoslav.104"
+		ai_chance = {
+			factor = 30
+			modifier = {
+				factor = 2
+				trait = charitable
+			}
+			modifier = {
+				factor = 0.5
+				trait = greedy
+			}
+			modifier = {
+				factor = 0
+				NOT = { wealth = 200 }
+			}
+		}
+		wealth = -200
+		random_list = {
+			55 = {
+				modifier = {
+					factor = 0.9
+					religion_head = { ai_greed > 90 }
+				}
+				modifier = {
+					factor = 0.9
+					religion_head = { ai_greed > 80 }
+				}
+				modifier = {
+					factor = 0.9
+					religion_head = { ai_greed > 70 }
+				}
+				modifier = {
+					factor = 0.9
+					religion_head = { ai_greed > 60 }
+				}
+				modifier = {
+					factor = 0.9
+					religion_head = { ai_greed > 50 }
+				}
+				modifier = {
+					factor = 0.9
+					religion_head = { ai_greed > 40 }
+				}
+				modifier = {
+					factor = 0.9
+					religion_head = { ai_greed > 30 }
+				}
+				modifier = {
+					factor = 0.9
+					religion_head = { ai_greed > 20 }
+				}
+				modifier = {
+					factor = 0.9
+					religion_head = { ai_greed > 10 }
+				}
+				modifier = {
+					factor = 1.1
+					religion_head = { ai_greed < 0 }
+				}
+				modifier = {
+					factor = 1.1
+					religion_head = { ai_greed < -10 }
+				}
+				modifier = {
+					factor = 1.1
+					religion_head = { ai_greed < -20 }
+				}
+				modifier = {
+					factor = 1.1
+					religion_head = { ai_greed < -30 }
+				}
+				modifier = {
+					factor = 1.1
+					religion_head = { ai_greed < -40 }
+				}
+				modifier = {
+					factor = 1.1
+					religion_head = { ai_greed < -50 }
+				}
+				modifier = {
+					factor = 1.1
+					religion_head = { ai_greed < -60 }
+				}
+				modifier = {
+					factor = 1.1
+					religion_head = { ai_greed < -70 }
+				}
+				modifier = {
+					factor = 1.1
+					religion_head = { ai_greed < -80 }
+				}
+				modifier = {
+					factor = 1.1
+					religion_head = { ai_greed < -90 }
+				}
+				custom_tooltip = {
+					text = yugo_crisis_good_tt
+					yugo_crisis_good_effect = yes
+					yugo_crisis_good_effect = yes
+				}
+			}
+			45 = {
+				religion_head = {
+					wealth = 200
+				}
+				custom_tooltip = {
+					text = yugo_crisis_bad_tt
+					yugo_crisis_bad_effect = yes
+					yugo_crisis_bad_effect = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC_yugoslav.104"
+		ai_chance = {
+			factor = 30
+		}
+		prestige = 75
+		custom_tooltip = {
+			text = yugo_crisis_bad_tt
+			yugo_crisis_bad_effect = yes
+			yugo_crisis_bad_effect = yes
+		}
+	}
+	after = {
+		calc_yugo_crisis_effect = yes
+	}
+}
+
+character_event = {
+	id = yugoslav.105
+	picture = GFX_evt_scandal
+	border = "GFX_event_normal_frame_religion"
+	desc = "EVTDESCYUGO105"
 	is_triggered_only = yes
 	
-	option = {#Oh Mercy
-	   name = "EVTOPTA_yugoslav.5"
-		remove_character_modifier = yugo_sided_with_catholic
-		remove_character_modifier = yugo_sided_with_orthodox
-		remove_character_modifier = yugo_sided_with_muslims
-		remove_character_modifier = yugo_sided_with_jugo	   
-		if = {
-			limit = {
-				religion = catholic
+	trigger = {
+		has_landed_title = e_yugoslavia
+		has_global_flag = yugoslav_crisis_started
+		NOR = {
+			has_global_flag = yugoslavism_dead
+			has_global_flag = yugoslavism_survives
+			has_global_flag = yugoslavism_triumphant
+		}
+	}
+	
+	immediate = {
+		set_character_flag = yugo_hide_happened
+	}
+	option = {
+		name = "EVTOPTA_yugoslav.105"
+		ai_chance = {
+			factor = 30
+			job_event_mtth_modifier_inverted_diplomacy_score = yes
+		}
+		add_character_modifier = { name = yugo_crisis_lives_publicly days = 3650 }
+		random_list = {
+			60 = {
+				job_event_mtth_modifier_inverted_diplomacy_score = yes
+				custom_tooltip = {
+					text = yugo_crisis_good_tt
+					yugo_crisis_good_effect = yes
+					yugo_crisis_good_effect = yes
+				}
 			}
-		add_character_modifier = { name = yugo_sided_with_catholic duration = -1 }			
-		}
-		if = {
-			limit = {
-				religion = orthodox
+			40 = {
+				custom_tooltip = {
+					text = yugo_crisis_bad_tt
+					yugo_crisis_bad_effect = yes
+					yugo_crisis_bad_effect = yes
+				}
 			}
-		add_character_modifier = { name = yugo_sided_with_orthodox duration = -1 }						
 		}
-		if = {
-			limit = {
-				religion_group = muslim
+	}
+	option = {
+		name = "EVTOPTB_yugoslav.105"
+		ai_chance = {
+			factor = 30
+			job_event_mtth_modifier_inverted_learning_score = yes
+		}
+		prestige = -100
+		random_list = {
+			45 = {
+				job_event_mtth_modifier_inverted_learning_score = yes
+				piety = 50
+				custom_tooltip = {
+					text = yugo_crisis_good_tt
+					yugo_crisis_good_effect = yes
+					yugo_crisis_good_effect = yes
+				}
 			}
-		add_character_modifier = { name = yugo_sided_with_muslims duration = -1 }				
-		}
-		if = {
-			limit = {
-				religion = jugoslavist
+			55 = {
+				custom_tooltip = {
+					text = yugo_crisis_bad_tt
+					yugo_crisis_bad_effect = yes
+					yugo_crisis_bad_effect = yes
+					yugo_crisis_bad_effect = yes
+				}
 			}
-		add_character_modifier = { name = yugo_sided_with_jugo duration = -1 }			
 		}
+	}
+	option = {
+		name = "EVTOPTC_yugoslav.105"
+		ai_chance = {
+			factor = 30
 		}
+		change_intrigue = 1
+		custom_tooltip = {
+			text = yugo_crisis_bad_tt
+			yugo_crisis_bad_effect = yes
+			yugo_crisis_bad_effect = yes
+		}
+	}
+	after = {
+		calc_yugo_crisis_effect = yes
+	}
+}
+
+character_event = {
+	id = yugoslav.106
+	picture = GFX_evt_market
+	border = "GFX_event_normal_frame_religion"
+	desc = "EVTDESCYUGO106"
+	is_triggered_only = yes
+	trigger = {
+		has_landed_title = e_yugoslavia
+		has_global_flag = yugoslav_crisis_started
+		NOR = {
+			has_global_flag = yugoslavism_dead
+			has_global_flag = yugoslavism_survives
+			has_global_flag = yugoslavism_triumphant
+		}
+	}
+	
+	immediate = {
+		set_character_flag = yugo_traders_happened
+		random_demesne_province = {
+			save_event_target_as = province_with_traders
+		}
+	}
+	option = {
+		name = "EVTOPTA_yugoslav.106"
+		add_character_modifier = { name = yugo_crisis_disturb_traders days = 3650 }
+		ai_chance = {
+			factor = 30
+			job_event_mtth_modifier_inverted_stewardship_score = yes
+		}
+		random_list = {
+			65 = {
+				job_event_mtth_modifier_inverted_stewardship_score = yes
+				custom_tooltip = {
+					text = yugo_crisis_good_tt
+					yugo_crisis_good_effect = yes
+					yugo_crisis_good_effect = yes
+				}
+			}
+			35 = {
+				custom_tooltip = {
+					text = yugo_crisis_bad_tt
+					yugo_crisis_bad_effect = yes
+					yugo_crisis_bad_effect = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB_yugoslav.106"
+		ai_chance = {
+			factor = 30
+			job_event_mtth_modifier_inverted_intrigue_score = yes
+		}
+		random_list = {
+			30 = {
+				job_event_mtth_modifier_inverted_intrigue_score = yes
+				custom_tooltip = {
+					text = yugo_crisis_good_tt
+					yugo_crisis_good_effect = yes
+					yugo_crisis_good_effect = yes
+				}
+			}
+			70 = {
+				custom_tooltip = {
+					text = yugo_crisis_bad_tt
+					yugo_crisis_bad_effect = yes
+					yugo_crisis_bad_effect = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTC_yugoslav.106"
+		ai_chance = {
+			factor = 30
+		}
+		event_target:province_with_traders = { add_province_modifier = { name = yugo_crisis_flourish days = 3650 } }
+		custom_tooltip = {
+			text = yugo_crisis_bad_tt
+			yugo_crisis_bad_effect = yes
+			yugo_crisis_bad_effect = yes
+		}
+	}
+	after = {
+		calc_yugo_crisis_effect = yes
+	}
 }
