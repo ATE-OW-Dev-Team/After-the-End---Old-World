@@ -8,6 +8,113 @@
 
 decisions = {
 
+	secret_romuva_decision = {
+		only_playable = yes
+		is_high_prio = yes
+		ai_check_interval = 400 #check only once every 400 months.
+		potential = {
+			has_dlc = "The Old Gods"
+			is_adult = yes
+			is_heretic = no #Must belong to a dominant denomination of the faith.
+			culture_group = baltic 
+			OR = { #Must be eccentric or crazy or a hunter, wilderness guy
+				trait = lunatic 
+				trait = possessed
+				trait = hunter
+				trait = mystic
+				has_focus = focus_hunting
+			} 
+			OR = { #Must control a Romuva Holy Site
+				completely_controls = c_podlasie
+				completely_controls = c_chelminskie
+				completely_controls = c_riga
+				completely_controls = c_rugen
+				completely_controls = c_bryansk
+			} 
+			NOR = { #Must not have used this decision or be a Romuva already.
+				is_theocracy = yes
+				religion = baltic_pagan
+				religion = baltic_pagan_reformed
+				secret_religion = baltic_pagan
+				secret_religion = baltic_pagan_reformed
+				has_character_flag = flag_delving_into_romuva
+				has_global_flag = baltic_resurgence #No point in secrecy, there are other ways to convert.
+			}
+			capital_scope = { #Court must also be localized in Italy or Greece.
+				region = world_europe_east
+			}
+		}
+		
+		allow = {
+			prisoner = no
+			NOT = { trait = incapable }
+		}
+		
+		effect = {
+			hidden_tooltip = {
+				set_character_flag = flag_delving_into_classics
+				character_event = { id = romuva.1 }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				trait = zealous
+			}
+		}
+	}
+	begin_baltic_resurgence = {
+		only_playable = yes
+		is_high_prio = yes
+		ai_check_interval = 400 #check only once every 400 months.
+		potential = {
+			has_dlc = "The Old Gods"
+			NOT = {
+				has_global_flag = baltic_resurgence
+			}
+			is_adult = yes
+			is_heretic = no #Must belong to a dominant denomination of the faith.
+			culture_group = baltic 
+			has_landed_title = k_lithuania
+			OR = {
+				religion = baltic_pagan
+				religion = baltic_pagan_reformed
+			}
+		}
+		
+		allow = {
+			prisoner = no
+			NOT = { trait = incapable }
+			OR = {
+				d_baltic_pagan_reformed = {
+					has_holder = yes
+				}
+				AND = {
+					prestige = 3000
+					piety = 1000
+				}
+				realm_size = 120
+			}
+		}
+		
+		effect = {
+			hidden_tooltip = {
+				set_global_flag = baltic_resurgence #enables conversion to Romuva via holy site
+				narrative_event = { id = romuva.6 }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}	
+
 	form_mongol_empire = {
 		only_playable = yes
 		is_high_prio = yes
