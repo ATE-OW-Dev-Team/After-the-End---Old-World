@@ -73,9 +73,8 @@ narrative_event = {#Confederation forms in response to German land being taken o
 					lower_tier_than = KING
 				}
 				culture_group = germanic
-				NOR = {
-					culture = danzigian #Danzig shouldn't join
-					culture = wolgadeutsche #and Wolga Germans shouldn't either
+				capital_scope = {
+					region = world_europe_west_germania # only in Germany
 				}
 				is_landed = yes
 				is_feudal = yes
@@ -168,9 +167,8 @@ narrative_event = {#Confederation forms in response to Prussian expansionism
 				}
 				culture_group = germanic
 				age = 16
-				NOR = {
-					culture = danzigian #Danzig shouldn't join
-					culture = wolgadeutsche #and Wolga Germans shouldn't either
+				capital_scope = {
+					region = world_europe_west_germania # only in Germany
 				}
 				is_landed = yes #Mercenaries don't count
 				is_feudal = yes
@@ -226,47 +224,15 @@ narrative_event = {#Chosen founder is asked if they want to form the Confederati
 			gain_empire_effect = yes
 			set_government_type = confederation_government
 			add_law = { law = centralization_0 cooldown = no opinion_effect = no }
-			add_law = { law = succ_hre_elective cooldown = no opinion_effect = no }#Add check in the succession laws to prevent them from changing from this easily
+			add_law = { law = succ_feudal_elective cooldown = no opinion_effect = no }#Add check in the succession laws to prevent them from changing from this easily
 		}
-		if = {
-			limit = {
-				has_global_flag = fed_against_prussia
-			}
+		hidden_tooltip = {
 			any_independent_ruler = {
 				limit = {
 					culture_group = germanic
-					NOR = {
-						culture = danzigian #Danzig shouldn't join
-						culture = wolgadeutsche #and Wolga Germans shouldn't either
+					capital_scope = {
+						region = world_europe_west_germania # only in Germany
 					}	
-					is_landed = yes
-					NOT = {
-						controls_religion = yes
-					}
-					primary_title = {
-						lower_tier_than = EMPEROR
-					}
-					NOR = {
-						primary_title = { title = k_prussia }
-						primary_title = { title = k_switzerland }
-						primary_title = { title = k_lichtenstein }
-					}					
-				}
-
-			narrative_event = { id = confed.4 }				
-			}
-		}
-		else_if = {
-			limit = {
-				has_global_flag = fed_against_foreigners
-			}
-			any_independent_ruler = {
-				limit = {
-					culture_group = germanic
-					NOR = {
-						culture = danzigian #Danzig shouldn't join
-						culture = wolgadeutsche #and Wolga Germans shouldn't either
-					}					
 					is_landed = yes #no mercenaries
 					NOT = {
 						controls_religion = yes
@@ -274,13 +240,16 @@ narrative_event = {#Chosen founder is asked if they want to form the Confederati
 					primary_title = {
 						lower_tier_than = EMPEROR
 					}
+					trigger_if = {
+						limit = { has_global_flag = fed_against_prussia }
+						NOT = { has_landed_title = k_prussia }
+					}
 					NOR = {
-						primary_title = { title = k_switzerland }
-						primary_title = { title = k_lichtenstein }
-					}				
+						has_landed_title = k_switzerland
+						has_landed_title = k_lichtenstein
+					}
 				}
-
-			narrative_event = { id = confed.4 }				
+				narrative_event = { id = confed.4 }				
 			}
 		}		
 	}
