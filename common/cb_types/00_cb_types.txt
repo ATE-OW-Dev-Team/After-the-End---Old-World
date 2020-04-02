@@ -3710,37 +3710,46 @@ crusade = {
 						}
 					}
 				}
-				OR = {
-					religion_group = zoroastrian_group
-					religion_group = jewish_group
-					religion_group = old_world_cultist_group
-					religion = prussianist
-					religion = transatlantic
-					AND = {
-						religion_group = pagan_group
-						custom_tooltip = {
-							text = CTT_PAGAN_GHWS_UNLOCKED
-							has_global_flag = pagan_ghws_unlocked
-						}
+				trigger_if = {
+					limit = { religion_group = pagan_group }
+					custom_tooltip = {
+						text = CTT_PAGAN_GHWS_UNLOCKED
+						has_global_flag = pagan_ghws_unlocked
 					}
-					AND = {
-						religion = jugoslavist
-						custom_tooltip = {
-							text = CTT_JUGO_CRUSADES
-							has_global_flag = yugoslavist_crusades #You need to solidify the power of the Yugoslavist faith first
-						}
+				}
+				trigger_else_if = {
+					limit = { religion = jugoslavist }
+					custom_tooltip = {
+						text = CTT_JUGO_CRUSADES
+						has_global_flag = yugoslavist_crusades #You need to solidify the power of the Yugoslavist faith first
 					}
-					AND = {
-						religion_group = muslim
-						custom_tooltip = {
-							text = CTT_MUSLIM_JIHADS_UNLOCKED
-							has_global_flag = muslim_jihads_unlocked
-						}
+				}
+				trigger_else_if = {
+					limit = { religion_group = muslim }
+					custom_tooltip = {
+						text = CTT_MUSLIM_JIHADS_UNLOCKED
+						has_global_flag = muslim_jihads_unlocked
 					}
-					AND = {
-						religion = calvinist
-						text = CTT_CHRISTIAN_CRUSADES_UNLOCKED
-						has_global_flag = calvinist_crusades_unlocked						
+				}
+				trigger_else_if = {
+					limit = { religion = calvinist }
+					text = CTT_CHRISTIAN_CRUSADES_UNLOCKED
+					has_global_flag = calvinist_crusades_unlocked						
+				}
+				trigger_else_if = { 
+					limit = { religion = bharatva }
+					custom_tooltip = {
+						text = CTT_CHRISTIAN_CRUSADES_UNLOCKED#Since you can't play as the Bharatva religious head, shouldn't need its own tooltip
+						has_global_flag = bharatva_crusades
+					}
+				}
+				trigger_else = {
+					OR = {
+						religion_group = zoroastrian_group
+						religion_group = jewish_group
+						religion_group = old_world_cultist_group
+						religion = prussianist
+						religion = transatlantic
 					}
 				}
 			}
@@ -4444,13 +4453,6 @@ new_crusade = {
 						custom_tooltip = {
 							text = CTT_CHRISTIAN_CRUSADES_UNLOCKED
 							has_global_flag = palmarian_crusades_unlocked
-						}
-					}
-					AND = { 
-						religion = bharatva
-						custom_tooltip = {
-							text = CTT_CHRISTIAN_CRUSADES_UNLOCKED#Since you can't play as the Bharatva religious head, shouldn't need its own tooltip
-							has_global_flag = bharatva_crusades
 						}
 					}
 					AND = {
@@ -5649,6 +5651,7 @@ new_crusade = {
 	}
 
 	on_fail = {
+		clr_global_flag = palmarians_can_join #this flag is meant to allow Palmarian lords to get events where they participate personally in the Crusade, even though they're not formally allowed to
 		ROOT = {
 			character_event = { id = HFP.41199}
 		}
@@ -5725,6 +5728,7 @@ new_crusade = {
 	}
 
 	on_reverse_demand = {
+		clr_global_flag = palmarians_can_join #this flag is meant to allow Palmarian lords to get events where they participate personally in the Crusade, even though they're not formally allowed to
 		ROOT = {
 			character_event = { id = HFP.41199 }
 		}
