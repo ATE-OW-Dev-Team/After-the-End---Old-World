@@ -141,3 +141,140 @@ british_invasion = {
 		factor = 100
 	}
 }
+yama_conquest = {
+    name = CB_NAME_YAMA_CONQUEST
+	war_name = WAR_NAME_YAMA_CONQUEST
+	sprite = 17
+	truce_days = 365
+	is_permanent = yes
+	is_holy_war = yes
+	check_de_jure_tier = DUKE
+	allowed_to_target_tributaries = yes
+	
+	sort_priority = 1900
+
+	can_use_gui = {
+		ROOT = {
+			k_rajputana = { show_scope_change = no province_completely_controls_trigger = yes }
+		}
+	}
+
+	can_use = {
+		ROOT = {
+			dynasty = 26560313 #Kardi
+			independent = yes
+			religion = orthodox
+			culture = yoonaanee
+			NOT = { same_realm = FROM }
+			NOT = { religion_group = FROM }
+			mercenary = no
+		}
+	}
+
+	can_use_title = {
+		OR = {
+			de_jure_liege_or_above = k_gujarat
+			de_jure_liege_or_above = k_sindh
+			de_jure_liege_or_above = k_madhya_pradesh
+			de_jure_liege_or_above = k_yunan
+			de_jure_liege_or_above = k_punjab
+		}
+	}
+	
+	is_valid = {
+		ROOT = {
+			dynasty = 26560313 #Kardi
+			independent = yes
+			religion = orthodox
+			culture = yoonaanee
+			NOT = { same_realm = FROM }
+			NOT = { religion_group = FROM }
+			k_rajputana = { show_scope_change = no province_completely_controls_trigger = yes }
+		}
+	}
+	on_add = {
+		if = {
+			limit = { defender = { is_offmap_governor = offmap_china } }
+			attacker = {  
+				sound_effect = china_angered_emperor
+				detract_grace_super_huge_effect = yes 
+			}
+		}
+	}
+	
+	on_success = {
+		ROOT = {
+			participation_scaled_prestige = 100
+		}
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			hidden_tooltip = { 
+				participation_scaled_prestige = 100
+			}
+		}
+		
+		FROM = { prestige = -100 }
+	}
+
+	on_success_title = {
+		custom_tooltip = { 
+			text = other_invasion_succ_tip
+			hidden_tooltip = {
+				ROOT = {
+					vassalize_or_take_under_title = {
+						title = PREV
+						enemy = FROM
+						type = invasion
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				holder_scope = { character = FROM }
+			}
+			usurp_title_only = { target = ROOT type = invasion }
+		}
+	}
+
+	on_fail = {
+		ROOT = { prestige = -150 }
+	}
+
+	on_reverse_demand = {
+		ROOT = {
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 4.0
+			}
+			ROOT = { prestige = -200 }
+		}
+		FROM = {
+			participation_scaled_piety = 100
+			participation_scaled_prestige = 200
+		}
+		any_defender = {
+			limit = { NOT = { character = FROM } }
+			hidden_tooltip = { 
+				participation_scaled_piety = 100
+				participation_scaled_prestige = 200
+			}
+		}
+	}
+
+	attacker_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	attacker_ai_defeat_worth = {
+		factor = 100
+	}
+
+	defender_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	defender_ai_defeat_worth = {
+		factor = 100
+	}
+}
