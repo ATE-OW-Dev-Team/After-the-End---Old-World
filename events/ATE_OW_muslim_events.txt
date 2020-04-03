@@ -328,9 +328,9 @@ character_event = {
 	is_triggered_only = yes
 	picture = GFX_evt_mesopotamian_emulation
 	border = GFX_event_normal_frame_religion
-	desc = EVTDESCAOS1000
+	desc = EVTDESCAOS1001
 	option = {
-		name = EVTOPTAAOS1000
+		name = EVTOPTAAOS1001
 		trigger = {
 			NOR = {
 				trait = arbitrary
@@ -340,7 +340,7 @@ character_event = {
 		add_trait = emul_hammurabi
 	}
 	option = {
-		name = EVTOPTBAOS1000
+		name = EVTOPTBAOS1001
 		trigger = {
 			NOR = {
 				trait = craven
@@ -350,7 +350,7 @@ character_event = {
 		add_trait = emul_ashurbanipal
 	}
 	option = {
-		name = EVTOPTCAOS1000
+		name = EVTOPTCAOS1001
 		trigger = {
 			NOR = {
 				trait = charitable
@@ -360,18 +360,21 @@ character_event = {
 		add_trait = emul_nabuchadnezzar
 	}
 	option = {
-		name = EVTOPTDAOS1000
+		name = EVTOPTDAOS1001
 		character_event = { id = AOS.1002 }
+	}
+	after = {
+		clr_character_flag = selecting_emul_trait
 	}
 }
 character_event = {
 	id = AOS.1002
 	is_triggered_only = yes
-	picture = GFX_evt_aztec_arrival
+	picture = GFX_evt_mesopotamian_emulation
 	border = GFX_event_normal_frame_religion
-	desc = EVTDESCAOS1001
+	desc = EVTDESCAOS1002
 	option = {
-		name = EVTOPTAAOS1001
+		name = EVTOPTAAOS1002
 		trigger = {
 			NOR = {
 				trait = honest
@@ -382,7 +385,7 @@ character_event = {
 		add_trait = emul_nimrod
 	}
 	option = {
-		name = EVTOPTBAOS1001
+		name = EVTOPTBAOS1002
 		trigger = {
 			NOR = {
 				trait = craven
@@ -395,12 +398,15 @@ character_event = {
 		add_trait = emul_gilgamesh
 	}
 	option = {
-		name = EVTOPTCAOS1001
+		name = EVTOPTCAOS1002
 		piety = 100
 	}
 	option = {
-		name = EVTOPTDAOS1001
+		name = EVTOPTDAOS1002
 		character_event = { id = AOS.1001 }
+	}
+	after = {
+		clr_character_flag = selecting_emul_trait
 	}
 }
 
@@ -721,8 +727,12 @@ letter_event = {
 			}
 		}
 	}
+	after = {
+		clr_character_flag = selecting_emul_trait
+	}
 }
 
+# Hammurabi bonus
 character_event = {
 	id = AOS.1004
 	hide_window = yes
@@ -744,7 +754,7 @@ character_event = {
 				}
 				trait = emul_hammurabi
 			}
-			NOT = { has_character_modifier = hammurabi_unrest_malus_2 }
+			NOT = { has_character_modifier = hammurabi_bonus_2 }
 		}
 		trigger_else = {
 			OR = {
@@ -753,7 +763,7 @@ character_event = {
 					trait = emul_hammurabi
 				}
 			}
-			NOT = { has_character_modifier = hammurabi_unrest_malus_1 }
+			NOT = { has_character_modifier = hammurabi_bonus_1 }
 		}
 	}
 	mean_time_to_happen = {
@@ -767,28 +777,27 @@ character_event = {
 				}
 				trait = emul_hammurabi
 			}
-			remove_character_modifier = hammurabi_unrest_malus_1
-			add_character_modifier = { name = hammurabi_unrest_malus_2 duration = -1 }
+			remove_character_modifier = hammurabi_bonus_1
+			add_character_modifier = { name = hammurabi_bonus_2 duration = -1 }
 		}
 		else = {
-			remove_character_modifier = hammurabi_unrest_malus_2
-			add_character_modifier = { name = hammurabi_unrest_malus_1 duration = -1 }
+			remove_character_modifier = hammurabi_bonus_2
+			add_character_modifier = { name = hammurabi_bonus_1 duration = -1 }
 		}
-		set_character_flag = hammurabi_unrest_malus # For pleasing the CPU gods
+		set_character_flag = hammurabi_bonus # For pleasing the CPU gods
 	}
 }
-
 character_event = {
 	id = AOS.1005
 	hide_window = yes
 
 	min_age = 16
-	has_character_flag = hammurabi_unrest_malus
+	has_character_flag = hammurabi_bonus
 	
 	trigger = {
 		OR = {
-			has_character_modifier = hammurabi_unrest_malus_1
-			has_character_modifier = hammurabi_unrest_malus_2
+			has_character_modifier = hammurabi_bonus_1
+			has_character_modifier = hammurabi_bonus_2
 		}
 		OR = {
 			NOR = {
@@ -797,7 +806,7 @@ character_event = {
 			}
 			trigger_if = {
 				limit = {
-					has_character_modifier = hammurabi_unrest_malus_2
+					has_character_modifier = hammurabi_bonus_2
 				}
 				NAND = {
 					liege = {
@@ -807,7 +816,7 @@ character_event = {
 				}
 			}
 			trigger_else = {
-				has_character_modifier = hammurabi_unrest_malus_1
+				has_character_modifier = hammurabi_bonus_1
 				NOR = {
 					trait = emul_hammurabi
 					liege = {
@@ -821,9 +830,257 @@ character_event = {
 		days = 1
 	}
 	immediate = {
-		remove_character_modifier = hammurabi_unrest_malus_1
-		remove_character_modifier = hammurabi_unrest_malus_2
-		clr_character_flag = hammurabi_unrest_malus
+		remove_character_modifier = hammurabi_bonus_1
+		remove_character_modifier = hammurabi_bonus_2
+		clr_character_flag = hammurabi_bonus
 		character_event = { id = AOS.1004 }
+	}
+}
+
+# Lose emulation trait
+character_event = {
+	id = AOS.1006
+	
+	picture = GFX_evt_mesopotamian_emulation
+	border = GFX_event_normal_frame_religion
+	desc = EVTDESCAOS1006
+	
+	min_age = 16
+	religion = mesopotamian
+	
+	trigger = {
+		trigger_if = {
+			limit = { trait = emul_hammurabi }
+			OR = {
+				trait = arbitrary
+				trait = wroth
+			}
+		}
+		trigger_else_if = {
+			limit = { trait = emul_ashurbanipal }
+			OR = {
+				trait = craven
+				trait = cruel
+			}
+		}
+		trigger_else_if = {
+			limit = { trait = emul_nabuchadnezzar }
+			OR = {
+				trait = charitable
+				trait = patient
+			}
+		}
+		trigger_else_if = {
+			limit = { trait = emul_nimrod }
+			OR = {
+				trait = honest
+				trait = content
+				trait = trusting
+			}
+		}
+		trigger_else = {
+			trait = emul_gilgamesh
+			OR = {
+				trait = craven
+				trait = content
+				trait = deceitful
+				trait = arbitrary
+				trait = dull
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTAAOS1001
+		if = {
+			limit = { trait = emul_hammurabi }
+			remove_trait = emul_hammurabi
+		}
+		else_if = {
+			limit = { trait = emul_ashurbanipal }
+			remove_trait = emul_ashurbanipal
+		}
+		else_if = {
+			limit = { trait = emul_nabuchadnezzar }
+			remove_trait = emul_nabuchadnezzar
+		}
+		else_if = {
+			limit = { trait = emul_nimrod }
+			remove_trait = emul_nimrod
+		}
+		else = {
+			remove_trait = emul_gilgamesh
+		}
+	}
+	option = {
+		name = EVTOPTBAOS1001
+		tooltip_info = stubborn
+		trigger = {
+			trait = stubborn
+			trigger_if = {
+				limit = { trait = emul_hammurabi }
+				NAND = {
+					trait = arbitrary
+					trait = wroth
+				}
+			}
+			trigger_else_if = {
+				limit = { trait = emul_ashurbanipal }
+				NAND = {
+					trait = craven
+					trait = cruel
+				}
+			}
+			trigger_else_if = {
+				limit = { trait = emul_nabuchadnezzar }
+				NAND = {
+					trait = charitable
+					trait = patient
+				}
+			}
+			trigger_else_if = {
+				limit = { trait = emul_nimrod }
+				NAND = {
+					trait = honest
+					trait = content
+					trait = trusting
+				}
+			}
+			trigger_else = {
+				trait = emul_gilgamesh
+				calc_true_if = {
+					amount = 2
+					trait = craven
+					trait = content
+					trait = deceitful
+					trait = arbitrary
+					trait = dull
+				}
+			}
+			NAND = {
+				has_character_flag = emulation_used_stubborn
+				NOT = { had_character_flag = { flag = emulation_used_stubborn days = 3650 } }
+			}
+		}
+		if = {
+			limit = { trait = emul_hammurabi }
+			remove_trait_wroth_effect = yes
+			remove_trait_arbitrary_effect = yes
+		}
+		else_if = {
+			limit = { trait = emul_ashurbanipal }
+			remove_trait_cruel_effect = yes
+			remove_trait_silently_craven_effect = yes
+		}
+		else_if = {
+			limit = { trait = emul_nabuchadnezzar }
+			remove_trait_silently_charitable_effect = yes
+			remove_trait_silently_patient_effect = yes
+		}
+		else_if = {
+			limit = { trait = emul_nimrod }
+			remove_trait_silently_content_effect = yes
+			remove_trait_silently_honest_effect = yes
+			remove_trait_silently_trusting_effect = yes
+		}
+		else = {
+			remove_trait_silently_craven_effect = yes
+			remove_trait_silently_content_effect = yes
+			remove_trait_deceitful_effect = yes
+			remove_trait_arbitrary_effect = yes
+			remove_trait_dull_effect = yes
+		}
+		clr_character_flag = emulation_used_stubborn
+		set_character_flag = emulation_used_stubborn
+	}
+}
+
+# Confusion of Babel
+character_event = {
+	id = AOS.1007
+	title = EVTNAMEAOS1007
+	desc = EVTDESCAOS1007
+	picture = "GFX_evt_culture_change"
+	border = GFX_event_normal_frame_intrigue
+
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_job_title = yes
+
+	trigger = {
+		has_job_action = action_sabotage_province
+		NOT = { has_character_modifier = in_seclusion }
+		is_incapable = no
+		liege = {
+			trait = emul_nimrod
+			ROOT = {
+				location = {
+					can_be_converted_via_babel = yes
+				}
+			}
+		}
+	}
+	
+	
+	mean_time_to_happen = {
+		months = 600
+
+		modifier = {
+			factor = 3
+			OR = {
+				has_game_rule = {
+					name = culture_conversion
+					value = slower_normal
+				}
+				has_game_rule = {
+					name = culture_conversion
+					value = faster_melting_pots_and_slower_normal
+				}
+			}
+		}
+		
+		job_event_mtth_modifier_intrigue_score = yes
+	}
+	
+	option = {
+		name = EVTOPTAAOS1007
+
+		prestige = 50
+		
+		liege = {
+			character_event = { id = AOS.1008 }
+		}
+	}
+}
+
+# The liege is informed
+character_event = {
+	id = AOS.1008
+	desc = EVTDESCAOS1008
+	picture = "GFX_evt_culture_change"
+	border = GFX_event_normal_frame_intrigue
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTAAOS1008
+		FROM = {
+			location = {
+				culture = ROOT
+				if = {
+					limit = {
+						has_province_modifier = nomad_agitation
+					}
+					remove_province_modifier = nomad_agitation
+				}
+				add_province_modifier = { name = confusion_of_babel days = 3650 }
+			}
+		}
+		opinion = {
+			who = FROM
+			modifier = opinion_grateful
+			months = 60
+		}
 	}
 }
