@@ -724,41 +724,106 @@ letter_event = {
 }
 
 character_event = {
-	id = AOS.1001
-	is_triggered_only = yes
-	picture = GFX_evt_aztec_arrival
-	border = GFX_event_normal_frame_religion
-	desc = EVTDESCAOS1001
-	option = {
-		name = EVTOPTAAOS1001
-		trigger = {
+	id = AOS.1004
+	hide_window = yes
+
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_job_title = yes
+
+	trigger = {
+		OR = {
+			has_job_action = action_proclaim_law
+			has_job_action = action_assist_arrest
+		}
+		trigger_if = {
+			limit = {
+				liege = {
+					trait = emul_hammurabi
+				}
+				trait = emul_hammurabi
+			}
+			NOT = { has_character_modifier = hammurabi_unrest_malus_2 }
+		}
+		trigger_else = {
+			OR = {
+				trait = emul_hammurabi
+				liege = {
+					trait = emul_hammurabi
+				}
+			}
+			NOT = { has_character_modifier = hammurabi_unrest_malus_1 }
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	immediate = {
+		if = {
+			limit = {
+				liege = {
+					trait = emul_hammurabi
+				}
+				trait = emul_hammurabi
+			}
+			remove_character_modifier = hammurabi_unrest_malus_1
+			add_character_modifier = { name = hammurabi_unrest_malus_2 duration = -1 }
+		}
+		else = {
+			remove_character_modifier = hammurabi_unrest_malus_2
+			add_character_modifier = { name = hammurabi_unrest_malus_1 duration = -1 }
+		}
+		set_character_flag = hammurabi_unrest_malus # For pleasing the CPU gods
+	}
+}
+
+character_event = {
+	id = AOS.1005
+	hide_window = yes
+
+	min_age = 16
+	has_character_flag = hammurabi_unrest_malus
+	
+	trigger = {
+		OR = {
+			has_character_modifier = hammurabi_unrest_malus_1
+			has_character_modifier = hammurabi_unrest_malus_2
+		}
+		OR = {
 			NOR = {
-				trait = honest
-				trait = content
-				trait = trusting
+				has_job_action = action_proclaim_law
+				has_job_action = action_assist_arrest
+			}
+			trigger_if = {
+				limit = {
+					has_character_modifier = hammurabi_unrest_malus_2
+				}
+				NAND = {
+					liege = {
+						trait = emul_hammurabi
+					}
+					trait = emul_hammurabi
+				}
+			}
+			trigger_else = {
+				has_character_modifier = hammurabi_unrest_malus_1
+				NOR = {
+					trait = emul_hammurabi
+					liege = {
+						trait = emul_hammurabi
+					}
+				}
 			}
 		}
-		add_trait = emul_nimrod
 	}
-	option = {
-		name = EVTOPTBAOS1001
-		trigger = {
-			NOR = {
-				trait = craven
-				trait = content
-				trait = deceitful
-				trait = arbitrary
-				trait = dull
-			}
-		}
-		add_trait = emul_gilgamesh
+	mean_time_to_happen = {
+		days = 1
 	}
-	option = {
-		name = EVTOPTCAOS1001
-		piety = 100
-	}
-	option = {
-		name = EVTOPTDAOS1001
-		character_event = { id = AOS.1000 }
+	immediate = {
+		remove_character_modifier = hammurabi_unrest_malus_1
+		remove_character_modifier = hammurabi_unrest_malus_2
+		clr_character_flag = hammurabi_unrest_malus
+		character_event = { id = AOS.1004 }
 	}
 }
