@@ -338,6 +338,7 @@ character_event = {
 			}
 		}
 		add_trait = emul_hammurabi
+		clr_character_flag = selecting_emul_trait
 	}
 	option = {
 		name = EVTOPTBAOS1001
@@ -348,6 +349,7 @@ character_event = {
 			}
 		}
 		add_trait = emul_ashurbanipal
+		clr_character_flag = selecting_emul_trait
 	}
 	option = {
 		name = EVTOPTCAOS1001
@@ -358,13 +360,11 @@ character_event = {
 			}
 		}
 		add_trait = emul_nabuchadnezzar
+		clr_character_flag = selecting_emul_trait
 	}
 	option = {
 		name = EVTOPTDAOS1001
 		character_event = { id = AOS.1002 }
-	}
-	after = {
-		clr_character_flag = selecting_emul_trait
 	}
 }
 character_event = {
@@ -383,6 +383,7 @@ character_event = {
 			}
 		}
 		add_trait = emul_nimrod
+		clr_character_flag = selecting_emul_trait
 	}
 	option = {
 		name = EVTOPTBAOS1002
@@ -396,17 +397,16 @@ character_event = {
 			}
 		}
 		add_trait = emul_gilgamesh
+		clr_character_flag = selecting_emul_trait
 	}
 	option = {
 		name = EVTOPTCAOS1002
 		piety = 100
+		clr_character_flag = selecting_emul_trait
 	}
 	option = {
 		name = EVTOPTDAOS1002
 		character_event = { id = AOS.1001 }
-	}
-	after = {
-		clr_character_flag = selecting_emul_trait
 	}
 }
 
@@ -890,7 +890,7 @@ character_event = {
 	}
 	
 	option = {
-		name = EVTOPTAAOS1001
+		name = EVTOPTAAOS1006
 		if = {
 			limit = { trait = emul_hammurabi }
 			remove_trait = emul_hammurabi
@@ -912,7 +912,7 @@ character_event = {
 		}
 	}
 	option = {
-		name = EVTOPTBAOS1001
+		name = EVTOPTBAOS1006
 		tooltip_info = stubborn
 		trigger = {
 			trait = stubborn
@@ -1026,6 +1026,11 @@ character_event = {
 		months = 600
 
 		modifier = {
+			factor = 0.85
+			trait = emul_nimrod
+		}
+		# Liege always has the trait
+		modifier = {
 			factor = 3
 			OR = {
 				has_game_rule = {
@@ -1039,7 +1044,7 @@ character_event = {
 			}
 		}
 		modifier = {
-			factor = 0
+			factor = 10000000000
 			NOT = {
 				liege = {
 					trait = emul_nimrod
@@ -1071,6 +1076,7 @@ character_event = {
 # The liege is informed
 character_event = {
 	id = AOS.1008
+	title = EVTNAMEAOS1007
 	desc = EVTDESCAOS1008
 	picture = "GFX_evt_culture_change"
 	border = GFX_event_normal_frame_intrigue
@@ -1095,6 +1101,106 @@ character_event = {
 			who = FROM
 			modifier = opinion_grateful
 			months = 60
+		}
+	}
+}
+
+# Chariots made
+character_event = {
+	id = AOS.1009
+	title = EVTNAMEAOS1009
+	desc = EVTDESCAOS1009
+	picture = GFX_evt_large_army
+	border = GFX_event_normal_frame_war
+
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_job_title = yes
+
+	trigger = {
+		has_job_action = action_train_troops
+		NOT = { has_character_modifier = in_seclusion }
+		is_incapable = no
+		location = {
+			owner = {
+				job_marshal = {
+					character = ROOT
+				}
+			}
+		}
+		liege = {
+			trait = emul_ashurbanipal
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 240
+		
+		modifier = {
+			factor = 0.85
+			trait = emul_ashurbanipal
+		}
+		# Liege always has the trait
+		modifier = {
+			factor = 10000000000
+			liege = {
+				NOT = { trait = emul_ashurbanipal }
+			}
+		}
+		
+		job_event_mtth_modifier_martial_score = yes
+	}
+
+	option = {
+		name = "EVTOPTAAOS1009"
+		liege = { character_event = { id = 20410 tooltip = "EVTTOOLTIP20410" } }
+	}
+}
+
+# The liege is informed
+character_event = {
+	id = AOS.1010
+	picture = GFX_evt_large_army
+	border = GFX_event_normal_frame_war
+	title = EVTNAMEAOS1009
+	desc = EVTDESCAOS1010
+	picture = GFX_evt_large_army
+
+	is_triggered_only = yes
+	immediate = {
+		FROM = {
+			location = {
+				any_province_holding = {
+					limit = { owner = { character = ROOT } }
+					score_value = {
+						value = 1
+						additive_modifier = {
+							value = 4
+							NOT = { has_province_modifier = ashurbanipal_chariot }
+						}
+						additive_modifier = {
+							value = 2
+							is_capital = yes
+						}
+						additive_modifier = {
+							value = 1
+							is_preferred_holding_type = ROOT
+						}
+					}
+					save_event_target_as = chariot_builder_target
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTAAOS1010"
+		event_target:chariot_builder_target = {
+			hidden_tooltip = { remove_province_modifier = ashurbanipal_chariot }
+			add_province_modifier = {
+				name = ashurbanipal_chariot
+				duration = 7300
+			}
 		}
 	}
 }

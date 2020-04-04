@@ -502,6 +502,15 @@ action_sabotage_province = {
 					}
 				}
 			}
+			AND = {
+				any_province_lord = {
+					higher_tier_than = BARON
+					
+					NOT = { character = FROM }
+				}
+				can_be_sabotaged_trigger = yes
+				has_dlc = "Mystics"
+			}
 		}
 		color = { 0 255 0 }
 	}
@@ -520,10 +529,9 @@ action_sabotage_province = {
 			}
 			NOT = {
 				any_province_lord = {
-					OR = {
-						character = FROM
-						is_liege_or_above = FROM
-					}
+					higher_tier_than = BARON
+					
+					NOT = { character = FROM }
 				}
 			}
 		}
@@ -543,10 +551,9 @@ action_sabotage_province = {
 				}
 			}
 			any_province_lord = {
-				OR = {
-					character = FROM
-					is_liege_or_above = FROM
-				}
+				higher_tier_than = BARON
+				
+				NOT = { character = FROM }
 			}
 		}
 		color = { 178 0 255 }
@@ -622,10 +629,45 @@ action_train_troops = {
 			character = FROM
 		}
 	}
+	
+	display_on_map = {
+		tooltip = JOB_TRAIN_TROOPS_CAN_CHAR
+
+		trigger = {
+			FROM = { trait = emul_ashurbanipal }
+			
+			any_province_holding = {
+				owner = { character = FROM }
+				NOT = { has_holding_modifier = ashurbanipal_chariot }
+			}
+		}
+		color = { 0 0 255 }
+	}
+
+	display_on_map = {
+		tooltip = JOB_TRAIN_TROOPS_CAN_NOT_CHAR
+
+		trigger = {
+			FROM = { trait = emul_ashurbanipal }
+			
+			any_province_lord = {
+				character = FROM
+			}
+			
+			NOT = {
+				any_province_holding = {
+					owner = { character = FROM }
+					NOT = { has_holding_modifier = ashurbanipal_chariot }
+				}
+			}
+		}
+		color = { 0 255 0 }
+	}
 
 	events = {
 		941 # Reinforcements arrive
 		942 # Marshal tries to train troops, noble interferes
+		AOS.1009
 	}
 }
 
