@@ -7361,10 +7361,7 @@ narrative_event = {
 		trigger = {
 			is_female = no
 			is_alternate_start = no
-			OR = {
-				religion = norse_pagan 
-				religion = norse_pagan_reformed
-			}
+			always = no
 		}
 		text = EVTDESCAHF23212
 	}
@@ -7372,10 +7369,7 @@ narrative_event = {
 		trigger = {
 			is_female = yes
 			is_alternate_start = no
-			OR = {
-				religion = norse_pagan 
-				religion = norse_pagan_reformed
-			}
+			always = no
 		}
 		text = EVTDESCBHF23212
 	}
@@ -7383,10 +7377,7 @@ narrative_event = {
 		trigger = {
 			OR = {
 				is_alternate_start = yes
-				NOR = {
-					religion = norse_pagan 
-					religion = norse_pagan_reformed
-				}
+				always = yes
 			}
 		}
 		text = EVTDESCCHF23212
@@ -7407,16 +7398,31 @@ narrative_event = {
 	has_dlc = "Holy Fury"
 
 	trigger = {
-		check_variable = { which = viking_raids value = 200 }
+		trigger_if = {
+			limit = {
+				NOR = {
+					any_owned_bloodline = {
+						has_bloodline_flag = bloodline_viking
+					}
+					any_owned_bloodline = { 
+						has_bloodline_flag = more_raiders_bloodline
+					}
+				}
+			}
+			check_variable = { which = viking_raids value = 200 }
+		}
+		trigger_else = {
+			check_variable = { which = viking_raids value = 300 } #Harder if has one of them.
+		}
 		OR = { 
 			trait = seaking
 			trait = sea_queen
 		}
-		NOR = { 
-			any_owned_bloodline = { # Not already has a Viking bloodline.
-				has_bloodline_flag = bloodline_historical_norse
+		NAND = { # Not already has both bloodline.
+			any_owned_bloodline = {
+				has_bloodline_flag = bloodline_viking
 			}
-			any_owned_bloodline = { # Not already has a this bloodline.
+			any_owned_bloodline = { 
 				has_bloodline_flag = more_raiders_bloodline
 			}
 		}
@@ -7468,12 +7474,35 @@ narrative_event = {
 		}
 		if = { 
 			limit = { is_female = no }
-			create_bloodline = {
-				type = seaking_bloodline
+			random_list = {
+				10 = {
+					trigger = {
+						NOT = {
+							any_owned_bloodline = { 
+								has_bloodline_flag = more_raiders_bloodline
+							}
+						}
+					}
+					create_bloodline = {
+						type = seaking_bloodline
+					}
+				}
+				5 = { # The other is better
+					trigger = {
+						NOT = {
+							any_owned_bloodline = { 
+								has_bloodline_flag = bloodline_viking
+							}
+						}
+					}
+					create_bloodline = {
+						type = seaking_bloodline_trait
+					}
+				}
 			}
 			set_bloodline_founder_religion_flag_effect = yes
 			if = { 
-				limit = { OR = { religion = norse_pagan religion  = norse_pagan_reformed } }
+				limit = { always = no }
 				new_bloodline = {
 					set_description = "bloodline_desc_seaking_bloodline_viking"
 					random_list = { 
@@ -7484,8 +7513,7 @@ narrative_event = {
 					}
 				}		
 			}
-			if = { 
-				limit = { NOR = { religion = norse_pagan religion  = norse_pagan_reformed } }
+			else = { 
 				new_bloodline = {
 					set_description = "bloodline_desc_seaking_bloodline_pirate"
 					random_list = { 
@@ -7497,14 +7525,36 @@ narrative_event = {
 				}		
 			}	
 		}
-		if = { 
-			limit = { is_female = yes }
-			create_bloodline = {
-				type = seaqueen_bloodline
+		else = {
+			random_list = {
+				10 = {
+					trigger = {
+						NOT = {
+							any_owned_bloodline = { 
+								has_bloodline_flag = more_raiders_bloodline
+							}
+						}
+					}
+					create_bloodline = {
+						type = seaqueen_bloodline
+					}
+				}
+				5 = { # The other is better
+					trigger = {
+						NOT = {
+							any_owned_bloodline = { 
+								has_bloodline_flag = bloodline_viking
+							}
+						}
+					}
+					create_bloodline = {
+						type = seaqueen_bloodline_trait
+					}
+				}
 			}
 			set_bloodline_founder_religion_flag_effect = yes
 			if = { 
-				limit = { OR = { religion = norse_pagan religion  = norse_pagan_reformed } }
+				limit = { always = no }
 				new_bloodline = {
 					set_description = "bloodline_desc_seaking_bloodline_viking"
 					random_list = { 
@@ -7515,8 +7565,7 @@ narrative_event = {
 					}
 				}		
 			}
-			if = { 
-				limit = { NOR = { religion = norse_pagan religion  = norse_pagan_reformed } }
+			else = {
 				new_bloodline = {
 					set_description = "bloodline_desc_seaking_bloodline_pirate"
 					random_list = { 
@@ -7552,7 +7601,8 @@ narrative_event = {
 						trait = norse_tattoo_4
 						trait = norse_tattoo_5
 						trait = norse_tattoo_6
-					} 
+					}
+					always = no
 				}
 				add_trait = norse_tattoo_4		
 			}
@@ -7584,27 +7634,13 @@ narrative_event = {
 	option = {
 		name = EVTOPTAHF23213
 		trigger = { 
-			OR = { 
-				religion = norse_pagan 
-				religion = norse_pagan_reformed
-				AND = { 
-					has_religion_feature = religion_adventuring 
-					has_religion_feature = religion_seafaring
-				}
-			} 
+			pirate_raider_trait_gain_trigger = yes
 		} 
 	}
 	option = {
 		name = EVTOPTBHF23213
 		trigger = { 
-			NOR = { 
-				religion = norse_pagan 
-				religion = norse_pagan_reformed
-				AND = { 
-					has_religion_feature = religion_adventuring 
-					has_religion_feature = religion_seafaring
-				}
-			} 
+			pirate_raider_trait_gain_trigger = no
 		} 
 	}
 }

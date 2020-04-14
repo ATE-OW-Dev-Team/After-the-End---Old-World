@@ -451,74 +451,6 @@ character_event = {
 	}
 }
 
-# Hack to deal with male only inheritance (sent from on_new_holder_inheritance)
-# (ROOT is the character, FROM is the title, FROMFROM is the old holder)
-character_event = {
-    id = HFP.19100
-    is_triggered_only = yes
-    hide_window = yes
-
-    trigger = {
-    	NOT = { has_character_flag = varangian_title_sorted }
-    	NOT = { has_character_flag = is_chosen_varangian_leader }
-    	has_landed_title = d_varangian_guard
-    	is_female = no
-    	OR = {
-	    	top_liege = {
-	    		gender_equality_trigger = yes
-	    	}
-	    	any_playable_ruler = {
-	    		religion_openly_norse_or_reformed_trigger = yes
-	    		has_religion_feature = religion_matriarchal
-	    	}
-    	}
-    }
-
-    immediate = {
-    	set_character_flag = varangian_title_sorted
-
-    	liege = { save_event_target_as = true_liege }
-
-    	if = {
-			limit = { gender_equality_trigger = yes }
-			create_character = {
-				random_traits = yes
-				religion = norse_pagan
-				culture = norse
-				dynasty = NONE
-				female = 50
-				age = 34
-				trait = skilled_tactician
-			}
-		}
-		else_if = {
-			limit = {
-				any_playable_ruler = {
-		    		religion_openly_norse_or_reformed_trigger = yes
-		    		has_religion_feature = religion_matriarchal
-		    	}
-			}
-			create_character = {
-				random_traits = yes
-				religion = norse_pagan
-				culture = norse
-				dynasty = NONE
-				female = yes
-				age = 34
-				trait = skilled_tactician
-			}
-		}
-		new_character = {
-			add_trait = varangian
-			set_character_flag = is_chosen_varangian_leader
-			d_varangian_guard = {
-				grant_title = PREV
-			}
-			set_defacto_liege = event_target:true_liege
-		}
-    }
-}
-
 # Child has served a few years
 character_event = {
 	id = TOG.3108
@@ -3127,25 +3059,13 @@ character_event = {
 	id = TGF.3320
 	desc = { 
 		trigger = { 
-			OR = {
-				religion = norse_pagan
-				religion = norse_pagan_reformed
-				any_owned_bloodline = {
-					has_bloodline_flag = bloodline_viking
-				}
-			}
+			always = no
 		} 
 		text = EVTDESC_TOG_3320
 	}
 	desc = { 
 		trigger = { 
-			NOR = {
-				religion = norse_pagan
-				religion = norse_pagan_reformed
-				any_owned_bloodline = {
-					has_bloodline_flag = bloodline_viking
-				}
-			}
+			always = yes
 		} 
 		text = EVTDESC_TOG_3320_HF
 	}
@@ -3170,14 +3090,7 @@ character_event = {
 	trigger = {
 		OR = {
 			has_dlc = "The Old Gods"
-			any_owned_bloodline = {
-				has_bloodline_flag = bloodline_viking
-			}
-			AND = {
-				has_religion_feature = religion_adventuring
-				has_religion_feature = religion_seafaring
-			}
-			has_religion_feature = religion_feature_norse
+			has_dlc = "Holy Fury"
 		}
 		NOR = { 
 			trait = viking
@@ -3186,17 +3099,7 @@ character_event = {
 			trait = seaking
 			trait = sea_queen
 		}
-		OR = {
-			religion = norse_pagan
-			religion = norse_pagan_reformed
-			any_owned_bloodline = {
-				has_bloodline_flag = bloodline_viking
-			}
-			AND = {
-				has_religion_feature = religion_adventuring
-				has_religion_feature = religion_seafaring
-			}
-		}
+		pirate_raider_trait_gain_trigger = yes
 		FROM = { always = yes }
 	}
 	
@@ -3204,19 +3107,13 @@ character_event = {
 		name = EVTOPTA_TOG_3320
 		if = {
 			limit = { 
-				OR = {  
-					religion = norse_pagan
-					religion = norse_pagan_reformed
-				} 
+				always = no
 			}
-			add_trait = viking
+			add_trait = pirate
 		}
 		if = {
 			limit = { 
-				NOR = {  
-					religion = norse_pagan
-					religion = norse_pagan_reformed
-				} 
+				always = yes
 			}
 			if = {
 				limit = {
@@ -3226,7 +3123,7 @@ character_event = {
 				}
 				set_character_flag = acquired_pirate_trait_by_bloodline
 			}
-			add_trait = pirate
+			add_trait = viking
 		}
 		hidden_tooltip = {
 			set_variable = { which = viking_raids value = 0 }
@@ -3239,25 +3136,13 @@ character_event = {
 	id = TGF.3321
 	desc = { 
 		trigger = { 
-			OR = {
-				religion = norse_pagan
-				religion = norse_pagan_reformed
-				any_owned_bloodline = {
-					has_bloodline_flag = bloodline_viking
-				}
-			}
+			always = no
 		} 
 		text = TOG.3321.d
 	}
 	desc = { 
 		trigger = { 
-			NOR = {
-				religion = norse_pagan
-				religion = norse_pagan_reformed
-				any_owned_bloodline = {
-					has_bloodline_flag = bloodline_viking
-				}
-			}
+			always = yes
 		} 
 		text = EVTDESC_TOG_3321_HF
 	}
@@ -3282,14 +3167,7 @@ character_event = {
 	trigger = {
 		OR = {
 			has_dlc = "The Old Gods"
-			any_owned_bloodline = {
-				has_bloodline_flag = bloodline_viking
-			}
-			AND = {
-				has_religion_feature = religion_adventuring
-				has_religion_feature = religion_seafaring
-			}
-			has_religion_feature = religion_feature_norse
+			has_dlc = "Holy Fury"
 		}
 		OR = {
 			trait = viking
@@ -3300,17 +3178,7 @@ character_event = {
 			trait = seaking
 			trait = sea_queen
 		}
-		OR = {
-			religion = norse_pagan
-			religion = norse_pagan_reformed
-			any_owned_bloodline = {
-				has_bloodline_flag = bloodline_viking
-			}
-			AND = {
-				has_religion_feature = religion_adventuring
-				has_religion_feature = religion_seafaring
-			}
-		}
+		pirate_raider_trait_gain_trigger = yes
 		check_variable = { which = viking_raids value = 50 }
 		FROM = { always = yes }
 	}
@@ -3358,31 +3226,14 @@ character_event = {
 	trigger = {
 		OR = {
 			has_dlc = "The Old Gods"
-			any_owned_bloodline = {
-				has_bloodline_flag = bloodline_viking
-			}
-			AND = {
-				has_religion_feature = religion_adventuring
-				has_religion_feature = religion_seafaring
-			}
-			has_religion_feature = religion_feature_norse
+			has_dlc = "Holy Fury"
 		}
 		trait = ravager
 		NOR = { 
 			trait = seaking
 			trait = sea_queen
 		}
-		OR = {
-			religion = norse_pagan
-			religion = norse_pagan_reformed
-			any_owned_bloodline = {
-				has_bloodline_flag = bloodline_viking
-			}
-			AND = {
-				has_religion_feature = religion_adventuring
-				has_religion_feature = religion_seafaring
-			}
-		}
+		pirate_raider_trait_gain_trigger = yes
 		check_variable = { which = viking_raids value = 100 }
 		FROM = { always = yes }
 	}
@@ -3419,14 +3270,7 @@ character_event = {
 	trigger = {
 		OR = {
 			has_dlc = "The Old Gods"
-			any_owned_bloodline = {
-				has_bloodline_flag = bloodline_viking
-			}
-			AND = {
-				has_religion_feature = religion_adventuring
-				has_religion_feature = religion_seafaring
-			}
-			has_religion_feature = religion_feature_norse
+			has_dlc = "Holy Fury"
 		}
 		OR = {
 			trait = pirate
@@ -3435,17 +3279,7 @@ character_event = {
 			trait = seaking #Top trait, but there's still chance of gaining a Bloodline if variable goes high enough.
 			trait = sea_queen
 		}
-		OR = {
-			religion = norse_pagan
-			religion = norse_pagan_reformed
-			any_owned_bloodline = {
-				has_bloodline_flag = bloodline_viking
-			}
-			AND = {
-				has_religion_feature = religion_adventuring
-				has_religion_feature = religion_seafaring
-			}
-		}
+		pirate_raider_trait_gain_trigger = yes
 		FROM = { always = yes }
 	}
 	
