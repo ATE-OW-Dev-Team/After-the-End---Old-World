@@ -197,7 +197,8 @@ decisions = {
 
 		allow = {
 			form_kingdom_allow = yes
-			primary_title = { higher_tier_than = COUNT }
+
+			higher_real_tier_than = COUNT
 			completely_controls = c_ile_de_france
 			num_of_count_titles_in_realm = 10
 			conditional_tooltip = {
@@ -218,6 +219,14 @@ decisions = {
 						region = world_europe_france
 					}
 					de_jure_liege = k_gondor
+				}
+				# Setting de jure liege to Numenor or France
+				k_france = {
+					dejure_liege_title = {
+						k_gondor = {
+							de_jure_liege = PREV
+						}
+					}
 				}
 				#if = {
 				#	limit = {
@@ -259,7 +268,7 @@ decisions = {
 
 		allow = {
 			form_kingdom_allow = yes
-			primary_title = { higher_tier_than = COUNT }
+			higher_real_tier_than = COUNT
 			completely_controls = c_provence
 			num_of_count_titles_in_realm = 10
 			conditional_tooltip = {
@@ -280,6 +289,14 @@ decisions = {
 						region = world_europe_aquitaine
 					}
 					de_jure_liege = k_arnor
+				}
+				# Setting de jure liege to Numenor or France
+				k_aquitaine = {
+					dejure_liege_title = {
+						k_arnor = {
+							de_jure_liege = PREV
+						}
+					}
 				}
 				#if = {
 				#	limit = {
@@ -321,7 +338,7 @@ decisions = {
 
 		allow = {
 			form_kingdom_allow = yes
-			primary_title = { higher_tier_than = COUNT }
+			higher_real_tier_than = COUNT
 			completely_controls = c_al_djazair
 			num_of_count_titles_in_realm = 10
 			conditional_tooltip = {
@@ -381,6 +398,28 @@ decisions = {
 				completely_controls = c_ile_de_france
 				completely_controls = c_provence
 			}
+			OR = {
+				e_benelux = { has_holder = no }
+				has_landed_title = e_benelux
+				e_benelux = {
+					show_scope_change = no
+					holder_scope = {
+						show_scope_change = no
+						THIS = { realm_size < 30 } # A small price to pay for a tooltip
+					}
+				}
+			}
+			OR = {
+				e_france = { has_holder = no }
+				has_landed_title = e_france
+				e_france = {
+					show_scope_change = no
+					holder_scope = {
+						show_scope_change = no
+						THIS = { realm_size < 30 } # A small price to pay for a tooltip
+					}
+				}
+			}
 			calc_true_if = {
 				amount = 3
 				custom_tooltip = {
@@ -404,8 +443,18 @@ decisions = {
 					limit = {
 						tier = KING
 						OR = {
-							region = world_europe_west_francia
-							region = world_europe_west_low_countries
+							capital_scope = {
+								OR = {
+									region = world_europe_west_francia
+									region = world_europe_west_low_countries
+								}
+							}
+							dejure_liege_title = {
+								OR = {
+									title = e_benelux
+									title = e_france
+								}
+							}
 						}
 					}
 					de_jure_liege = e_numenor
@@ -2203,7 +2252,10 @@ decisions = {
 				}
 			}
 			OR = {
-				culture = greek
+				AND = {
+					culture_group = byzantine
+					religion_openly_hellenic_or_reformed_trigger = yes
+				}
 				has_landed_title = k_byzantium
 				has_landed_title = k_epirus
 				has_landed_title = k_turkey
@@ -2212,39 +2264,44 @@ decisions = {
 				has_landed_title = k_cyprus
 				has_landed_title = k_anatolia
 				has_landed_title = k_trebizond
+				has_landed_title = k_macedonia
 			}
 		}
 
 		allow = {
-			religion_openly_hellenic_or_reformed_trigger = yes
 			form_empire_allow = yes
-				k_byzantium = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_epirus = { show_scope_change = no province_completely_controls_trigger = yes }
-				OR = {
-					conditional_tooltip = {
-						trigger = { k_turkey = { is_titular = no } }
-						k_turkey = { show_scope_change = no province_completely_controls_trigger = yes }
-					}
-					conditional_tooltip = {
-						trigger = { k_armenia = { is_titular = no } }
-						k_armenia = { show_scope_change = no province_completely_controls_trigger = yes }
-					}
-					conditional_tooltip = {
-						trigger = { k_bulgaria = { is_titular = no } }
-						k_bulgaria = { show_scope_change = no province_completely_controls_trigger = yes }
-					}
-					conditional_tooltip = {
-						trigger = { k_georgia = { is_titular = no } }
-						k_georgia = { show_scope_change = no province_completely_controls_trigger = yes }
-					}
-					conditional_tooltip = {
-						trigger = { k_cyprus = { is_titular = no } }
-						k_cyprus = { show_scope_change = no province_completely_controls_trigger = yes }
-					}
-					conditional_tooltip = {
-						trigger = { k_trebizond = { is_titular = no } }
-						k_trebizond = { show_scope_change = no province_completely_controls_trigger = yes }
-					}
+			OR = {
+				conditional_tooltip = {
+					trigger = { k_turkey = { is_titular = no } }
+					k_turkey = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
+				conditional_tooltip = {
+					trigger = { k_armenia = { is_titular = no } }
+					k_armenia = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
+				conditional_tooltip = {
+					trigger = { k_bulgaria = { is_titular = no } }
+					k_bulgaria = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
+				conditional_tooltip = {
+					trigger = { k_georgia = { is_titular = no } }
+					k_georgia = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
+				conditional_tooltip = {
+					trigger = { k_cyprus = { is_titular = no } }
+					k_cyprus = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
+				conditional_tooltip = {
+					trigger = { k_trebizond = { is_titular = no } }
+					k_trebizond = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
+				conditional_tooltip = {
+					trigger = { k_anatolia = { is_titular = no } }
+					k_anatolia = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
+				conditional_tooltip = {
+					trigger = { k_macedonia = { is_titular = no } }
+					k_macedonia = { show_scope_change = no province_completely_controls_trigger = yes }
 				}
 			e_ottoman = {
 				has_holder = no
