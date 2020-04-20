@@ -136,7 +136,7 @@ european_invasion = {
     name = CB_NAME_EUROPEAN_INVASION
 	war_name = WAR_NAME_EUROPEAN_INVASION
 	sprite = 17
-	truce_days = 1
+	truce_days = 36500
 	is_permanent = yes
 	check_de_jure_tier = EMPEROR
 	allowed_to_target_tributaries = yes
@@ -157,10 +157,13 @@ european_invasion = {
 			NOT = { same_realm = FROM }
 			mercenary = no
 		}
+		hidden_tooltip = {
+		    NOT = { has_global_flag = europe_conquers_britain }
+		}
 	}
 
 	can_use_title = {
-	    title = e_britannia
+	    title = e_britannia		
 	}
 	
 	is_valid = {
@@ -183,6 +186,11 @@ european_invasion = {
 			    narrative_event = { id = european_union_event.002 }
 			}
 		}
+		#else = {
+		#	ROOT = {
+		#	    narrative_event = { id = european_union_event.004 }
+		#	}
+		#}
 		if = {
 			limit = { defender = { is_offmap_governor = offmap_china } }
 			attacker = {  
@@ -192,28 +200,58 @@ european_invasion = {
 		}
 	}
 	
+	on_add_title = {
+		any_independent_ruler = {
+			limit = {
+				mercenary = no
+				NOT = { character = FROM }
+				#religion = FROM
+				#NOT = { war_with = FROM }
+				NOT = { war_with = ROOT }
+				any_realm_title = {
+					de_jure_liege_or_above = PREVPREV
+				}
+			}
+			join_defender_wars = FROM
+		}
+	}
+	
 	on_success = {
 		ROOT = {
-			participation_scaled_prestige = 100
+			narrative_event = { id = european_union_event.003 }
 		}
 		any_attacker = {
 			limit = { NOT = { character = ROOT } }
 			hidden_tooltip = { 
-				participation_scaled_prestige = 100
+				participation_scaled_prestige = 1000
 			}
 		}
 		
-		FROM = { prestige = -100 }
+		FROM = { prestige = -4000 }
 	}
 
 	on_success_title = {
-		custom_tooltip = { 
-			text = other_invasion_succ_tip
-			hidden_tooltip = {
+		hidden_tooltip = {
+			ROOT = {
+				vassalize_or_take_under_title = {
+					title = PREV
+					enemy = FROM
+					type = invasion
+				}
+			}
+			any_independent_ruler = {
+				limit = {
+					mercenary = no
+					#religion = FROM
+					any_realm_title = {
+					    de_jure_liege_or_above = PREVPREV
+					}
+				}
+				show_scope_change = no
 				ROOT = {
 					vassalize_or_take_under_title = {
-						title = PREV
-						enemy = FROM
+						title = PREVPREV
+						enemy = PREV
 						type = invasion
 					}
 				}
@@ -228,26 +266,26 @@ european_invasion = {
 	}
 
 	on_fail = {
-		ROOT = { prestige = -150 }
+		ROOT = { prestige = -8000 }
 	}
 
 	on_reverse_demand = {
 		ROOT = {
 			transfer_scaled_wealth = {
 				to = FROM
-				value = 4.0
+				value = 40.0
 			}
-			ROOT = { prestige = -200 }
+			ROOT = { prestige = -8000 }
 		}
 		FROM = {
-			participation_scaled_piety = 100
-			participation_scaled_prestige = 200
+			participation_scaled_piety = 1000
+			participation_scaled_prestige = 2000
 		}
 		any_defender = {
 			limit = { NOT = { character = FROM } }
 			hidden_tooltip = { 
-				participation_scaled_piety = 100
-				participation_scaled_prestige = 200
+				participation_scaled_piety = 500
+				participation_scaled_prestige = 1000
 			}
 		}
 	}
