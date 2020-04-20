@@ -1,0 +1,91 @@
+#EU events
+
+namespace = european_union_event
+
+narrative_event = {
+	id = european_union_event.001
+	title = TITLE_european_union_restoration
+	desc = {
+		text = EVTDESC_european_union_restoration
+		trigger = {
+			is_alternate_start = no
+		}
+	}
+	picture = GFX_evt_european_union_restoration
+	is_triggered_only = yes
+
+	#immediate = {
+    #
+	#}
+	option = {
+		name = OPT_A_european_union_restoration
+		prestige = 2000
+		effect = { set_government = confederation_government }
+		if = { #New Imperial Bloodline.
+			limit = { 
+				has_dlc = "Holy Fury" 
+			}
+			create_bloodline = {
+				type = european_union_bloodline
+			}
+			sound_effect = bloodline_added			
+		}
+    }
+}
+narrative_event = {
+	id = european_union_event.002
+	title = TITLE_european_invasion
+	desc = {
+		text = EVTDESC_european_invasion
+		trigger = {
+			is_alternate_start = no
+		}
+	}
+	picture = GFX_evt_european_invasion
+	is_triggered_only = yes
+
+	#immediate = {
+    #
+	#}
+	option = {
+		name = OPT_A_european_invasion
+		set_global_flag = europe_invades_britain
+    }
+}
+narrative_event = {
+	id = european_union_event.003
+	title = TITLE_european_invasion_victory
+	desc = {
+		text = EVTDESC_european_invasion_victory
+		trigger = {
+			is_alternate_start = no
+		}
+	}
+	picture = GFX_evt_european_invasion_victory
+	is_triggered_only = yes
+
+	#immediate = {
+    #
+	#}
+	option = {
+		name = OPT_A_european_invasion_victory
+		clr_global_flag = europe_invades_britain
+		set_global_flag = europe_conquers_britain
+		prestige = 4000
+		e_britannia = {
+		    any_direct_de_jure_vassal_title = {
+			    de_jure_liege = e_european_union
+		    }
+		}
+		if = {
+			limit = {
+			    OR = {
+			    	has_landed_title = e_britannia
+				    e_britannia = { has_holder = no }
+			    }
+			}
+			e_britannia = { destroy_landed_title = THIS }
+			activate_title = { title = e_britannia status = no }
+		}
+    }
+}
