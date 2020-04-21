@@ -1,0 +1,1440 @@
+namespace = george
+
+#From on_character_ask_to_join_society
+character_event = {
+    id = george.100
+	hide_window = yes
+    is_triggered_only = yes
+    trigger = {
+    	FROM = { leader = { society_member_of = order_st_george } }
+    }
+    immediate = {
+    	FROM = { leader = { character_event = { id = george.101 } } } #target is the leader of the society
+    }
+}
+
+#Ping event
+character_event = {
+    id = george.101
+	hide_window = yes
+    is_triggered_only = yes
+    immediate = {
+    	FROM = { letter_event = { id = george.102 } } #send event back 
+    }
+}
+
+#Welcome letter
+letter_event = {
+    id = george.102
+    desc = EVTDESC_george_102
+    border = GFX_event_letter_frame_war
+	
+    is_triggered_only = yes
+	
+	immediate = { set_character_flag = society_join_block }
+
+    option = { #join the society
+        name = EVTOPTA_george_102
+		join_society = order_st_george
+		
+		clr_character_flag = society_join_block
+    }
+}
+
+
+character_event = { #force the AI to join a society
+	id = george.110
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		if = {
+			limit = { #if he's already a member, will force a rank up 25% of the time
+				ai = yes
+				prisoner = no
+				NOT = { trait = incapable }
+				society_member_of = order_st_george
+				society_rank <= 3
+				society_can_rank_up = yes
+			}
+			random_list = {
+				75 = {}
+				25 = {
+					society_rank_up = 1					
+				}
+			}
+		}
+		any_courtier = {  #if you want courtier in the society enable this part
+			limit = {
+				ai = yes
+				prisoner = no
+				NOT = { trait = incapable }
+				is_adult = yes
+				is_in_society = no
+				controls_religion = no
+				block_general_event_trigger = no
+			}
+			character_event = { id = george.111 }
+		}
+		if = { #force the joining event on AI
+			limit = {
+				ai = yes
+				prisoner = no
+				NOT = { trait = incapable }
+				is_adult = yes
+				is_in_society = no
+				controls_religion = no
+				block_general_event_trigger = no
+			}
+			character_event = { id = george.111 }
+		}
+	}
+}
+
+character_event = { #AI join event
+	id = george.111
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			90 = { # do nothing
+			}
+			10 = { # try to join a society 10% of the time
+				trigger = { #meet the requirement
+					can_join_society = order_st_george
+				}
+				modifier = { #things that will make that 10% of the time bigger, can be anything 
+					factor = 2
+					martial = 10
+				}
+				join_society = order_st_george #join the society
+				if = { # Make grandmaster is there is none
+					limit = {
+						NOT = {
+							society = {
+								any_society_member = {
+									is_society_grandmaster = yes
+								}
+							}
+						}
+					}
+					set_society_grandmaster = yes
+				}
+			}
+		}
+	}
+}
+
+
+
+
+# Hidden start: Send the rank-up request to the current Grandmaster (delayed event on self, from decision to rank up)
+character_event = {
+	id = george.120
+
+	hide_window = yes
+
+	trigger = { #has pressed the button
+		has_character_flag = has_sent_request_to_rank_up
+	}
+	
+	is_triggered_only = yes
+
+	immediate = {
+		if = { #if he's still a member
+			limit = { is_in_society = yes }
+			random_society_member = { #will send the request to a random top rank member of the same society
+				limit = {
+					is_society_grandmaster = yes
+					same_society_as = ROOT
+				}
+				character_event = { id = george.121 } # send request to Grand Master.
+			}
+		}
+		if = { #if he's not a member
+			limit = { is_in_society = no }
+			clr_character_flag = has_sent_request_to_rank_up
+		}
+	}
+}
+
+# Grandmaster gets the rank-up request
+character_event = {
+	id = george.121
+	
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:rank_up_target = { letter_event = { id = george.122 } } #send it back
+	}
+}
+
+#Grand master approves my request
+letter_event = {
+	id = george.122
+	desc = EVTDESC_george_122
+	border = GFX_event_letter_frame_war
+
+	trigger = {
+		society_rank < 4 #cannot rank up past 4
+		has_character_flag = has_sent_request_to_rank_up
+	}
+	
+	is_triggered_only = yes
+
+	#Rank up approved
+	option = {
+		name = EVTOPTA_george_122
+		if = { limit = { society_rank < 4 } #if not max rank, rank up
+			society_rank_up = 1
+		}
+		clr_character_flag = has_sent_request_to_rank_up
+	}
+}
+
+
+
+
+#Mission tombola, this is where an hidden event choose a quest. I have made only one quest, do look for other mission tombola in the vanilla files for more example.
+character_event = {
+    id = george.130
+    hide_window = yes
+
+    is_triggered_only = yes
+    
+	is_in_society = yes
+
+	trigger = {
+		society_member_of = order_st_george
+		has_any_quest = no #cannot have more than 1 shown
+		NOT = { has_character_modifier = quest_cooldown_timer } #to avoid spam and delay it for people who refused a quest.
+		NOT = { is_inaccessible_trigger = yes }
+		prisoner = no
+		society = { #look if there is a close member to give you the quest
+			any_society_member = {
+				NOT = { character = ROOT }
+				prisoner = no
+				is_within_diplo_range = ROOT
+				opinion = { who = ROOT value = 0 }
+			}
+		}
+	}
+
+    immediate = {
+    	#Picks out mission giver
+    	random_list = {
+    		20 = { #International society member
+    			society = {
+    				random_society_member = {
+    					limit = { 	
+							NOT = { character = ROOT }
+							prisoner = no
+    						is_within_diplo_range = ROOT
+							opinion = { who = ROOT value = 0 }
+    					}
+    					save_event_target_as = quest_collaborator
+    				}
+    			}
+    		}
+    		40 = { #Realm society member is there is any
+    			trigger = {
+    				society = {
+    					any_society_member = {
+    						NOT = { character = ROOT }
+    						prisoner = no
+    						is_within_diplo_range = ROOT
+							opinion = { who = ROOT value = 0 }
+							same_realm = ROOT
+    					}
+    				}
+    			}
+    			society = {
+    				random_society_member = {
+    					limit = { 	
+    						NOT = { character = ROOT }
+    						prisoner = no
+    						is_within_diplo_range = ROOT
+							opinion = { who = ROOT value = 0 }
+							same_realm = ROOT
+    					}
+    					save_event_target_as = quest_collaborator
+    				}
+    			}
+    		}
+    	}
+
+    	#Randomizes mission
+		#Has I have only 1 mission this random_list is unnecessary, but you will need it if you make more than one mission.
+    	random_list = {
+			100 = { #press the button, the mission
+				event_target:quest_collaborator = { character_event = { id = george.140 days = 7 random = 7 } } #will send the quest to the quest_collaborator, which will offer it back to you.
+			}
+			
+			#Drill with members
+			
+			#Put on a parade
+			
+			#Declare war on heathen nearby
+			
+			50 = { # AI bypasses missions at times and goes directly to success/failure, increase the 50% if you add more mission to balance or you could delete this whole { } if you want the AI to do real missions
+				modifier = {
+					factor = 0
+					ai = no
+				}
+				random_list = {
+					64 = { #success, harder the more influencial the society is
+						add_society_modifier = 	{
+							modifier = george_successful_mission
+							years = 10
+						}
+					}
+					36 = { #failure
+						add_society_modifier = 	{
+							modifier = george_failed_mission
+							years = 10
+						}
+					}
+				}
+			}
+			
+			100 = { #AI refuse mission
+				modifier = {
+					factor = 0
+					ai = no
+				}
+			}
+    	}
+    }
+}
+
+#This is the quest_collaborator receiving the mission and giving it back to you.
+character_event = {
+    id = george.140
+    hide_window = yes #instant event, no need to show it
+    is_triggered_only = yes
+    immediate = { FROM = { society_quest_event = { id = george.141 days = 7 random = 7 } } }
+}
+
+#This event is set as a society_quest_event, not character_event. This is the accept or refuse the quest event, the next parts of the quest use the regular character_event.
+society_quest_event = {
+    id = george.141
+    desc = EVTDESC_george_141
+
+    is_triggered_only = yes
+   
+    option = { 
+		name = ACCEPT
+
+		set_quest = quest_george_quest_drill #use this if the quest has no real target, look at other quests made by Paradox if you want something more complicated that target someone/something
+		
+		character_event = { id = george.142 }
+	}
+
+	option = {
+		name = DECLINE
+		custom_tooltip = { text = decline_quest_tooltip }
+
+		add_character_modifier = { #will delay the next quest for a while
+			name = quest_cooldown_timer
+			hidden = yes
+			days = 1000
+		}
+
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Training quest, start of the flavor event chain, the quest_collaborator/training_partner receive from the decision
+#Start training, tombola to get friend or other events
+character_event = {
+    id = george.142
+	hide_window = yes
+
+    is_triggered_only = yes
+
+    immediate = {
+		random_list = {
+			10 = { #Make Friend
+				modifier = {
+					factor = 0
+					NOT = {
+						any_society_member = {
+							same_society_as = ROOT
+							NOT = { character = ROOT }
+							ai = yes
+							opinion = {
+								who = ROOT
+								value = 0
+							}
+							reverse_opinion = {
+								who = ROOT
+								value = 0
+							}
+							NOT = {
+								is_rival = ROOT
+								is_friend = ROOT
+								is_lover = ROOT
+							}
+						}
+					}
+				}
+				save_event_target_as = st_george_befriender
+				random_society_member = {
+					limit = {
+						same_society_as = ROOT
+						NOT = { character = ROOT }
+						ai = yes
+						opinion = {
+							who = ROOT
+							value = 0
+						}
+						reverse_opinion = {
+							who = ROOT
+							value = 0
+						}
+						NOT = {
+							is_rival = ROOT
+							is_friend = ROOT
+							is_lover = ROOT
+						}
+					}
+					save_event_target_as = st_george_friend
+					character_event = { id = george.144 days = 15 random = 15 }
+				}
+			}
+			30 = { #Look good
+				character_event = { id = george.146 days = 15 random 15 }
+			}
+		}
+	}
+}
+
+#Got friend from training, start
+character_event = {
+    id = george.143
+    desc = EVTDESC_george_143
+    picture = GFX_evt_throne_room
+    border = GFX_event_normal_frame_war
+
+    is_triggered_only = yes
+
+	trigger = {
+		NOT = { is_inaccessible_trigger = yes }
+		any_society_member = {
+			same_society_as = ROOT
+			NOT = { character = ROOT }
+			ai = yes
+			opinion = {
+				who = ROOT
+				value = 0
+			}
+			reverse_opinion = {
+				who = ROOT
+				value = 0
+			}
+			NOT = {
+				is_rival = ROOT
+				is_friend = ROOT
+				is_lover = ROOT
+			}
+		}
+		society_member_of = order_st_george
+		has_quest = quest_george_quest_drill
+	}
+	
+	immediate = {
+		save_event_target_as = st_george_befriender
+		random_society_member = {
+			limit = {
+				same_society_as = ROOT
+				NOT = { character = ROOT }
+				ai = yes
+				opinion = {
+					who = ROOT
+					value = 0
+				}
+				reverse_opinion = {
+					who = ROOT
+					value = 0
+				}
+				NOT = {
+					is_rival = ROOT
+					is_friend = ROOT
+					is_lover = ROOT
+				}
+			}
+			save_event_target_as = st_george_friend
+		}
+	}
+
+    option = { #Yes
+        name = EVTOPTA_george_143
+		
+		event_target:st_george_friend = {
+			character_event = { id = george.144 days = 15 random = 15}
+		}
+    }
+}
+
+#Got friend from training, ping
+character_event = {
+    id = george.144
+    hide_window = yes
+
+    is_triggered_only = yes
+
+    immediate = {
+		event_target:st_george_befriender = {
+			character_event = { id = george.145 }
+		}
+	}
+}
+
+#Got friend from training, player
+character_event = {
+    id = george.145
+	desc = EVTDESC_george_145
+    picture = GFX_evt_throne_room
+    border = GFX_event_normal_frame_war
+
+    is_triggered_only = yes
+
+    trigger = {
+		society_member_of = order_st_george
+		has_quest = quest_george_quest_drill
+	}
+	
+	immediate = {
+		character_event = { id = george.149 days = 7 }
+	}
+	
+	option = {
+		name = EVTOPTA_george_145
+		ai_chance = {
+			factor = 1
+		}
+		add_friend = FROM
+		random_list = {
+			10 = {
+				modifier = { factor = 0 NOT = { trait = depressed }}
+				remove_trait = depressed
+			}
+			10 = {
+				modifier = { factor = 0 NOT = { trait = stressed }}
+				remove_trait = stressed
+			}
+			10 = {
+				modifier = { factor = 0 NOT = { trait = shy }}
+				remove_trait = shy
+			}
+			10 = {
+				modifier = { factor = 0 trait = gregarious }
+				modifier = { factor = 0 trait = shy }
+				add_trait = gregarious
+			}
+			70 = {
+			
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_george_145
+		ai_chance = {
+			factor = 1
+		}
+		piety = 25
+		prestige = 25
+	}
+}
+
+#Looked good training
+character_event = {
+	id = george.146
+	desc = EVTDESC_george_146
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		society_member_of = order_st_george
+		has_quest = quest_george_quest_drill
+	}
+	
+	option = {
+		name = EVTOPTA_george_146
+		
+		add_character_modifier = {
+			name = drill_cooldown
+			days = 365
+			martial = 1
+		}
+		random_list = {
+			10 = {
+				modifier = { factor = 0 has_trait = diligent }
+				modifier = { factor = 0 has_trait = slothful }
+				add_trait = diligent
+			}
+			10 = {
+				modifier = { factor = 0 NOT = { has_trait = slothful }}
+				remove_trait = slothful
+			}
+			10 = {
+				modifier = { factor = 0 has_trait = patient }
+				modifier = { factor = 0 has_trait = wroth }
+				add_trait = patient
+			}
+			10 = {
+				modifier = { factor = 0 NOT = { has_trait = wroth }}
+				remove_trait = wroth
+			}
+			60 = {
+				prestige = 25
+				piety = 25
+			}
+		}
+		character_event = { id = george.149 days = 7 random = 7 }
+	}
+}
+
+#Complete Training
+character_event = {
+    id = george.149
+	desc = EVTDESC_george_149
+    picture = GFX_evt_throne_room
+    border = GFX_event_normal_frame_war
+
+    is_triggered_only = yes
+
+    trigger = {
+		society_member_of = order_st_george
+		has_quest = quest_george_quest_drill
+	}
+	
+	option = {
+		name = EVTOPTB_george_145
+		clr_quest = quest_george_quest_drill
+		change_society_currency = 100
+	}
+}
+#####
+#Society only quest that trigger every 2 years
+character_event = {
+    id = george.150
+    desc = EVTDESC_george_150
+    picture = GFX_evt_throne_room
+    border = GFX_event_normal_frame_war
+
+    is_triggered_only = yes
+
+	trigger = {
+		society_member_of = order_st_george #Use this to limit events and decisions to your society with trigger
+		#you can also use this scripted_trigger to check several societies if you made one. (see order_st_george_scripted_triggers.txt)
+		#	is_order_st_george_trigger = yes 
+	}
+	
+    option = {
+        name = EVTOPTA_george_150
+    }
+    option = {
+        name = EVTOPTB_george_150
+    }
+}
+
+character_event = {
+	id = george.160
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = { society_member_of = order_st_george }
+	
+	immediate = {
+		clr_character_flag = st_george_knight_arriving
+		random_list = {
+			33 = {
+				create_character = {
+					random_traits = yes
+					dynasty = random
+					religion = ROOT
+					female = no
+					age = 25
+					health = 6
+				}
+				new_character = { save_event_target_as = st_george_knight }
+			}
+			33 = {
+				create_character = {
+					random_traits = yes
+					dynasty = random
+					religion = ROOT
+					female = no
+					age = 36
+					health = 6
+				}
+				new_character = { save_event_target_as = st_george_knight }
+			}
+			33 = {
+				create_character = {
+					random_traits = yes
+					dynasty = random
+					religion = ROOT
+					female = no
+					age = 47
+					health = 6
+				}
+				new_character = { save_event_target_as = st_george_knight }
+			}
+		}
+		event_target:st_george_knight = {
+			join_society = order_st_george
+			
+			remove_education_effect = yes
+			random_list = {
+				40 = { add_trait = skilled_tactician }
+				40 = { add_trait = brilliant_strategist }
+				40 = {
+					add_trait = martial_cleric
+					change_martial = 3
+				}
+			}
+			random_list = {
+				33 = { change_martial = 3 }
+				33 = { change_martial = 4 }
+				33 = { change_martial = 5 }
+			}
+			random_list = {
+				5 = { add_trait = aggressive_leader }
+				5 = { add_trait = narrow_flank_leader }
+				5 = { add_trait = defensive_leader }
+				5 = { add_trait = experimenter }
+				5 = { add_trait = flanker }
+				5 = { add_trait = holy_warrior }
+				5 = { add_trait = inspiring_leader }
+				5 = { add_trait = organizer }
+				5 = { add_trait = siege_leader }
+				5 = { add_trait = trickster }
+				5 = { add_trait = unyielding_leader }
+			}
+			random_list = {
+				3 = {
+					add_trait = genius
+					remove_trait = imbecile
+					remove_trait = quick
+					remove_trait = slow
+				}
+				5 = {
+					add_trait = quick
+					remove_trait = imbecile
+					remove_trait = genius
+					remove_trait = slow
+				}
+				10 = {
+					add_trait = strong
+					remove_trait = weak
+				}
+				100 = { }
+			}
+			random_list = {
+				5 = {
+					add_trait = one_eyed
+					remove_trait = one_handed
+					remove_trait = one_legged
+					remove_trait = disfigured
+				}
+				5 = {
+					add_trait = one_handed
+					remove_trait = one_eyed
+					remove_trait = one_legged
+					remove_trait = disfigured
+				}
+				5 = {
+					add_trait = one_legged
+					remove_trait = one_eyed
+					remove_trait = one_handed
+					remove_trait = disfigured
+				}
+				5 = {
+					add_trait = disfigured
+					remove_trait = one_eyed
+					remove_trait = one_handed
+					remove_trait = one_legged
+				}
+				100 = { }
+			}
+			remove_lifestyle_trait_effect = yes
+			random_list = {
+				33 = { add_trait = architect }
+				33 = { add_trait = strategist }
+				33 = { add_trait = gamer }
+			}
+			remove_trait = cynical
+			remove_trait = craven
+			remove_trait = lustful
+			remove_trait = wroth
+			remove_trait = gluttonous
+			remove_trait = cruel
+			remove_trait = deceitful
+			remove_trait = arbitrary
+			random = {
+				chance = 20
+				add_trait = chaste
+			}
+			random = {
+				chance = 20
+				remove_trait = envious
+				add_trait = kind
+			}
+			random = {
+				chance = 20
+				remove_trait = greedy
+				add_trait = charitable
+			}
+			random = {
+				chance = 30
+				add_trait = scarred
+			}
+			random = {
+				chance = 10
+				add_trait = temperate
+				lose_weight_small_effect = yes
+				weight_trait_check_effect = yes
+			}
+			random = {
+				chance = 5
+				add_trait = patient
+				remove_trait = wroth
+			}
+			random = {
+				chance = 10
+				add_trait = humble
+				remove_trait = proud
+			}
+			random = {
+				chance = 5
+				remove_trait = slothful
+				remove_trait = diligent
+			}
+			add_trait = zealous
+			add_trait = brave
+			
+			random = {
+				chance = 5
+				culture = ulsterite
+				give_nickname = nick_the_orangeman
+			}
+			
+			character_event = { id = george.161 }
+		}
+	}
+}
+
+character_event = {
+	id = george.161
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = { character_event = { id = george.162 } }
+	}
+}
+
+character_event = {
+	id = george.162
+	desc = EVTDESC_george_162
+	picture = GFX_evt_monastery_nuns
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_george_162
+		reverse_opinion = {
+			who = FROM
+			modifier = opinion_loyal_servant
+		}
+	}
+}
+
+
+character_event = {
+	id = george.170
+	desc = EVTDESC_george_170
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPA_george_170
+		custom_tooltip = { 
+			text = TT_EVTOPTA_george_170
+		}
+		hidden_tooltip = { character_event = { id = george.171 days = 25 random = 5 } } #Hidden random list.
+	}
+}
+
+character_event = {
+	id = george.171
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		random_list = {
+			30 = {
+				trigger = {
+					in_command = yes
+					is_at_sea = no
+					war = yes
+					has_character_modifier = st_george_just_war
+					society_member_of = order_st_george
+					society_rank = 4
+					NOT = { check_variable = { which = "st_george_just_war_variable" value = 20 } } #Stop after a while.
+				}
+				character_event = { id = george.172 } # Main reinforcement notification event.
+			}
+			50 = {
+				trigger = {
+					OR = { 
+						in_command = no
+						is_at_sea = yes
+					}
+					war = yes
+					has_character_modifier = st_george_just_war
+					society_member_of = order_st_george
+					society_rank = 4
+					NOT = { check_variable = { which = "st_george_just_war_variable" value = 20 } }
+				}
+				#If not in command, loop the event, just in case the player gets back into action.
+				character_event = { id = george.171 days = 35 random = 5 }
+			}
+			100 = { 
+				trigger = {
+					OR = { 
+						NOT = { society_member_of = order_st_george }
+						war = no 
+						AND = {
+							society_member_of = order_st_george
+							NOT = { society_rank = 4 }
+						}
+						NOT = { has_character_modifier = st_george_just_war }
+					}
+				}
+				#If basic requirements for the power are no longer met, clean everything and stop the chain.
+				remove_character_modifier = st_george_just_war
+				disband_event_forces = st_george_just_war_disciplined
+				disband_event_forces = st_george_just_war_rowdy
+				set_variable = { which = "st_george_just_war_variable" value = 0 }
+			}
+			100 = { 
+				trigger = {
+					in_command = yes
+					is_at_sea = no
+					war = yes
+					has_character_modifier = st_george_just_war
+					society_member_of = order_st_george
+					society_rank = 4
+					check_variable = { which = "st_george_just_war_variable" value = 20 }
+				}
+				character_event = { id = george.173 } #Once troops have spawned 20 times, they will stop spawning unless ruler succeeds in a persuasion check to lower the variable.
+			}
+			5 = { 
+				trigger = {
+					in_command = yes
+					is_at_sea = no
+					war = yes
+					has_character_modifier = st_george_just_war
+					society_member_of = order_st_george
+					society_rank = 4
+					has_earmarked_regiments = st_george_just_war_rowdy #should have at least some rowdy troops.
+					check_variable = { which = "st_george_just_war_variable" value = 5 } #Shouldn't happen immediately after firing the power.
+
+					NOT = { check_variable = { which = "st_george_just_war_variable" value = 20 } } #Stop after a while.
+				}
+				character_event = { id = george.174 } # Rowdy troops are threatening to leave if they are not given more spoils.
+			}
+			5 = { 
+				trigger = {
+					in_command = yes
+					is_at_sea = no
+					war = yes
+					has_character_modifier = st_george_just_war
+					society_member_of = order_st_george
+					society_rank = 4
+					check_variable = { which = "st_george_just_war_variable" value = 5 } #Shouldn't happen immediately after firing the power.
+				}
+				character_event = { id = george.175 } # Chance for either levy reinforcement bonus in capital, prestige, cheap troops, or raider ships.
+			}
+		}
+	}
+}
+
+character_event = {
+	id = george.172
+	desc = EVTDESC_george_172
+	is_triggered_only = yes
+	notification = yes
+	
+	trigger = {
+		in_command = yes
+		is_at_sea = no
+		war = yes
+		has_character_modifier = st_george_just_war
+		society_member_of = order_st_george
+		society_rank = 4
+		NOT = { check_variable = { which = "st_george_just_war_variable" value = 20 } } #Stop after a while.
+	}
+	
+	fail_trigger_effect = { 
+		if = { 
+			limit = { 
+				OR = { 
+					NOT = { society_member_of = order_st_george }
+					war = no 
+					AND = {
+						society_member_of = order_st_george
+						NOT = { society_rank = 4 }
+					}
+					NOT = { has_character_modifier = st_george_just_war }
+				}
+			}
+			#If basic requirements for the power are no longer met, clean everything and stop the chain.
+			remove_character_modifier = st_george_just_war
+			disband_event_forces = st_george_just_war_disciplined
+			disband_event_forces = st_george_just_war_rowdy
+			set_variable = { which = "st_george_just_war_variable" value = 0 }
+			break = yes
+		}
+		if = { 
+			limit = { 
+				OR = { 
+					in_command = no
+					is_at_sea = yes
+				}
+				war = yes
+				has_character_modifier = st_george_just_war
+			} 
+			#If not in command, loop the event, just in case the player gets back into action.
+			character_event = { id = george.171 days = 25 random = 5 }
+		}
+	}
+	
+	option = {
+		name = EVTOPA_george_172
+		if = { #Low spawn
+			limit = { NOT = { realm_size = 30 } }
+			location = {
+				show_scope_change = no
+				ROOT = {
+					show_scope_change = no
+					random_list = {  
+						50 = { 
+							spawn_unit = { 
+								province = PREV
+								owner = ROOT
+								troops = { 
+									heavy_infantry = { 50 50 }
+									archers = { 10 10 }
+								}
+								earmark = st_george_just_war_disciplined
+								attrition = 0
+								merge = yes
+								maintenance_multiplier = 0
+								disband_on_peace = yes
+							}
+						}
+						50 = { 
+							spawn_unit = { 
+								province = PREV
+								owner = ROOT
+								troops = { 
+									heavy_infantry = { 50 50 }
+									archers = { 25 25 }
+								}
+								earmark = st_george_just_war_rowdy #Might leave early on occasion.
+								attrition = 0
+								merge = yes
+								maintenance_multiplier = 0
+								disband_on_peace = yes
+							}
+						}
+					}
+				}
+			}
+		}
+		if = { #Mid spawn
+			limit = { realm_size = 30 NOT = { realm_size = 70 } }
+			location = {
+				show_scope_change = no
+				ROOT = {
+					show_scope_change = no
+					random_list = {  
+						50 = { 
+							spawn_unit = { 
+								province = PREV
+								owner = ROOT
+								troops = { 
+									heavy_infantry = { 100 100 }
+									archers = { 25 25 }
+								}
+								earmark = st_george_just_war_disciplined
+								attrition = 0
+								merge = yes
+								maintenance_multiplier = 0
+								disband_on_peace = yes
+							}
+						}
+						50 = { 
+							spawn_unit = { 
+								province = PREV
+								owner = ROOT
+								troops = { 
+									heavy_infantry = { 100 100 }
+									archers = { 50 50 }
+									heavy_cavalry = { 25 25 }
+								}
+								earmark = st_george_just_war_rowdy #Might leave early on occasion.
+								attrition = 0
+								merge = yes
+								maintenance_multiplier = 0
+								disband_on_peace = yes
+							}
+						}
+					}
+				}
+			}
+		}
+		if = { #Top spawn
+			limit = { realm_size = 70 }
+			location = {
+				show_scope_change = no
+				ROOT = {
+					show_scope_change = no
+					random_list = {  
+						50 = { 
+							spawn_unit = { 
+								province = PREV
+								owner = ROOT
+								troops = { 
+									heavy_infantry = { 150 150 }
+									archers = { 50 50 }
+								}
+								earmark = st_george_just_war_disciplined
+								attrition = 0
+								merge = yes
+								maintenance_multiplier = 0
+								disband_on_peace = yes
+							}
+						}
+						50 = {
+							spawn_unit = { 
+								province = PREV
+								owner = ROOT
+								troops = { 
+									heavy_infantry = { 200 200 }
+									archers = { 100 100 }
+									heavy_cavalry = { 50 50 }
+								}
+								earmark = st_george_just_war_rowdy #Might leave early on occasion.
+								attrition = 0
+								merge = yes
+								maintenance_multiplier = 0
+								disband_on_peace = yes
+							}
+						}
+					}
+				}
+			}
+		}
+		hidden_tooltip = { 
+			change_variable = { which = "st_george_just_war_variable" value = 1 }
+			character_event = { id = george.171 days = 35 random = 5 } #Hidden random list.
+		}
+	}
+}
+
+character_event = {
+	id = george.173
+	desc = EVTDESC_george.173
+	is_triggered_only = yes
+	
+	trigger = { 
+		has_character_modifier = st_george_just_war
+		war = yes
+		society_member_of = order_st_george
+		society_rank = 4
+		NOT = { check_variable = { which = "st_george_just_war_variable" value = 20 } }
+	}
+	
+	fail_trigger_effect = { 
+		if = { 
+			limit = { 
+				OR = { 
+					is_member_of_any_warrior_lodge_trigger = no
+					war = no 
+					AND = {
+						society_member_of = order_st_george
+						NOT = { society_rank = 4 }
+					}
+					NOT = { has_character_modifier = st_george_just_war }
+				}
+			}
+			#If basic requirements for the power are no longer met, clean everything and stop the chain.
+			remove_character_modifier = st_george_just_war
+			disband_event_forces = st_george_just_war_disciplined
+			disband_event_forces = st_george_just_war_rowdy
+			set_variable = { which = "st_george_just_war_variable" value = 0 }
+			break = yes
+		}
+	}
+	
+	option = { #Inspire with leadership ability.
+		name = EVTOPTA_george_173
+		trigger = { martial = 20 ai = no }
+		tooltip_info = martial
+		custom_tooltip = { text = tooltip_st_george_just_war_resume_reinforcements }
+		hidden_tooltip = { change_variable = { which = "st_george_just_war_variable" value = -10 } }
+		hidden_tooltip = { 
+			character_event = { id = george.171 days = 45 random = 5 } #Hidden random list.
+		}
+
+	}
+	option = { #Bribe them.
+		name = EVTOPTB_george_173
+		trigger = { ai = no }
+		if = { 
+			limit = { ai = no }
+			scaled_wealth = { value = -1.0 min = -150 max = -250 } 
+		}
+		custom_tooltip = { text = tooltip_st_george_just_war_resume_reinforcements }
+		hidden_tooltip = { change_variable = { which = "st_george_just_war_variable" value = -10 } }
+		hidden_tooltip = { 
+			character_event = { id = george.171 days = 45 random = 5 } #Hidden random list.
+		}
+
+	}
+	option = { #Do nothing - No more reinforcements.
+		name = EVTOPTC_george_173
+		custom_tooltip = { text = tooltip_st_george_just_war_end_reinforcements }
+		hidden_tooltip = { set_variable = { which = "st_george_just_war_variable" value = 0 } }
+	}
+}
+
+#Rowdy Troops demand a greater share of the loot or they will leave.
+character_event = {
+	id = george.174
+	desc = EVTDESC_george_174
+	picture = GFX_evt_viking_battle_oldgods
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	trigger = { 
+		has_character_modifier = st_george_just_war
+		war = yes
+		society_member_of = order_st_george
+		society_rank = 4
+		NOT = { check_variable = { which = "st_george_just_war_variable" value = 20 } }
+	}
+
+	fail_trigger_effect = { 
+		if = { 
+			limit = { 
+				OR = { 
+					is_member_of_any_warrior_lodge_trigger = no
+					war = no 
+					AND = {
+						society_member_of = order_st_george
+						NOT = { society_rank = 4 }
+					}
+					NOT = { has_character_modifier = st_george_just_war }
+				}
+			}
+			#If basic requirements for the power are no longer met, clean everything and stop the chain.
+			remove_character_modifier = st_george_just_war
+			disband_event_forces = st_george_just_war_disciplined
+			disband_event_forces = st_george_just_war_rowdy
+			set_variable = { which = "st_george_just_war_variable" value = 0 }
+			break = yes
+		}
+	}
+
+	option = { #Use diplomacy.
+		name = EVTOPTA_george_174
+		trigger = { ai = no diplomacy = 20 }
+		tooltip_info = diplomacy
+		
+	}
+	option = { #Bribe them.
+		name = EVTOPTB_george_174
+		trigger = { ai = no }
+		if = { 
+			limit = { ai = no }
+			scaled_wealth = { value = -0.8 min = -50 max = -150 } 
+		}
+
+	}
+	option = { #Let all rowdy troops go.
+		name = EVTOPTC_george_174
+		custom_tooltip = { text = tooltip_rowdy_troops_leave }
+		hidden_tooltip = { disband_event_forces = st_george_just_war_rowdy }
+		hidden_tooltip = { change_variable = { which = "st_george_just_war_variable" value = -3 } }
+	}
+	after = { 
+		hidden_tooltip = { 
+			character_event = { id = george.171 days = 25 random = 5 } #Hidden random list.
+		}
+	}
+}
+#############################
+#Surplus manpower. How to use? Chance for either levy reinforcement bonus in capital, prestige, cheap troops, or raider ships.
+character_event = {
+	id = george.175
+	desc = EVTDESC_george_175
+	picture = GFX_evt_viking_battle_oldgods
+	border = GFX_event_normal_frame_war
+
+	is_triggered_only = yes
+
+	trigger = { 
+		has_character_modifier = st_george_just_war
+		war = yes
+		society_member_of = order_st_george
+		society_rank = 4
+		NOT = { check_variable = { which = "st_george_just_war_variable" value = 20 } }
+	}
+
+	fail_trigger_effect = { 
+		if = { 
+			limit = { 
+				OR = { 
+					is_member_of_any_warrior_lodge_trigger = no
+					war = no 
+					AND = {
+						society_member_of = order_st_george
+						NOT = { society_rank = 4 }
+					}
+					NOT = { has_character_modifier = st_george_just_war }
+				}
+			}
+			#If basic requirements for the power are no longer met, clean everything and stop the chain.
+			remove_character_modifier = st_george_just_war
+			disband_event_forces = st_george_just_war_disciplined
+			disband_event_forces = st_george_just_war_rowdy
+			set_variable = { which = "st_george_just_war_variable" value = 0 }
+			break = yes
+		}
+	}
+
+	option = { #Capital levy reinforcement rate/manpower.
+		name = EVTOPTA_george_175
+		if = { 
+			limit = { is_nomadic = yes }
+			manpower = 200
+		}
+		if = { 
+			limit = { is_nomadic = no }
+			any_demesne_province = { 
+				add_province_modifier = { name = capital_st_george_just_war duration = 150 stacking = yes } 
+			}
+		}
+	}
+
+	option = { #Bonus Prestige.
+		name = EVTOPTB_george_175
+		prestige = 150
+	}
+	option = { #Bonus infantry.
+		name = EVTOPTC_george_175
+        capital_scope = {
+        	show_scope_change = no 
+        	ROOT = { 
+        	hidden_tooltip = { change_variable = { which = "st_george_just_war_variable" value = 1 } }
+	        	show_scope_change = no
+       			spawn_unit = { 
+                    province = PREV
+                    owner = ROOT
+                    troops = { 
+                  		archers = { 400 400 }
+                    }
+                    earmark = st_george_just_war_rowdy
+                    attrition = 0
+			        merge = yes
+                    maintenance_multiplier = 0
+	               disband_on_peace = yes
+	           	}
+	       	}
+       	}
+	}
+	option = { #Bonus ships.
+		name = EVTOPTD_george_175
+		spawn_fleet = {
+			province = closest # closest sea zone
+			owner = ROOT
+			disband_on_peace = yes
+			troops = {
+				galleys = { 50 50 }
+			}
+			earmark = st_george_just_war_rowdy
+		}
+	}
+	after = { 
+		hidden_tooltip = { 
+			character_event = { id = HF.25031 days = 45 random = 5 } #Hidden random list.
+		}
+	}
+}
+
+#On war over/leave_society, remove st_george_just_war modifier.
+character_event = {
+	id = george.176
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			ROOT = {
+				has_character_modifier = st_george_just_war
+			}
+			ROOT = {
+				has_character_modifier = st_george_just_war
+			}
+		}
+	}
+	immediate = { 
+		ROOT = { character_event = { id = george.177 days = 1 } } #One day delay to check for any other wars.
+		FROM = { character_event = { id = george.177 days = 1 } } #One day delay to check for any other wars.
+	}
+}
+character_event = {
+	id = george.177
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = { 
+		ROOT = { 
+			if = { 
+			limit = { 
+				has_character_modifier = st_george_just_war
+					OR = { 
+						war = no 
+						is_member_of_any_warrior_lodge_trigger = no
+						AND = { #Switched to another Warrior Lodge.
+							society_member_of = order_st_george
+							NOT = { society_rank = 4 }
+						}
+					}
+				}
+				remove_character_modifier = st_george_just_war
+				disband_event_forces = st_george_just_war_disciplined
+				disband_event_forces = st_george_just_war_rowdy
+				set_variable = { which = "st_george_just_war_variable" value = 0 } 
+				any_demesne_province = { remove_province_modifier = capital_st_george_just_war } 
+			}
+		}
+	}
+}
