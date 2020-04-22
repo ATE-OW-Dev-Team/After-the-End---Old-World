@@ -1,0 +1,341 @@
+namespace=pir
+
+#On_looted_settlement: Spots a great place for a den.
+character_event = {
+	id = pir.500
+	desc = EVTDESCAPIR500
+	picture = { 
+		trigger = { is_female = no } 
+		picture = GFX_evt_vikings_arriving_oldgods
+	}
+	picture = { 
+		trigger = { is_female = yes } 
+		picture = GFX_evt_norse_tempest
+	}
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_landed = yes
+		trigger_if = {
+			limit = {
+				NOR = {
+					has_dlc = "The Old Gods"
+					has_dlc = "Holy Fury"
+				}
+			}
+			pirate_raider_trait_gain_trigger = yes
+		}
+		trigger_else = {
+			this_is_sea_raider_trigger = yes
+		}
+		FROM = {
+			location = { capital_holding = { title = FROM } } #Do not reiterate the event after taking the capital holding.
+			is_tribal = no
+			is_nomadic = no
+			location = {
+				port = yes #Coastal provinces are what the Seaking should be terrorizing.
+				has_fort = no
+			}
+		}
+		location = { 
+			ROOT = {
+				any_realm_province = { #Avoid the event firing for raiders who raided on land all the way to the port of a sea they do not have access to.
+					port = yes 
+					TECH_NAVAL = 1
+					OR = { 
+						has_building = tb_shipyard_1
+						has_building = ca_shipyard_1
+						has_building = tp_shipyard_1
+						has_building = ct_shipyard_1
+					} 
+					can_naval_path_to = PREVPREV
+				} 
+			} 
+		}
+	}
+	immediate = {
+		FROM = { location = { save_event_target_as = scoped_province } }
+		FROM = { owner = { save_event_target_as = scoped_province_owner } }
+	}
+	
+	option = { #Build den, leave troops
+		name = EVTOPTAPIR500
+		custom_tooltip = {
+			text = TOOLTIP_EVTOPTAPIR500
+			set_character_flag = building_den
+			event_target:scoped_province = {
+				build_holding = {
+					type = fort
+					holder = ROOT
+				}
+				add_to_extra_holding = {
+					type = fort
+					building = fort_pirate_den_1
+				}
+			}
+			clr_character_flag = building_den
+		}
+		any_controlled_unit = { troops = -0.05 }
+		prestige = 25
+		ai_chance = { factor = 70 }
+	}
+	option = { #Nah
+		name = EVTOPTBPIR500
+		prestige = -10
+		ai_chance = { factor = 30 }
+	}
+}
+
+#On_looted_settlement: Person joins.
+character_event = {
+	id = pir.501
+	desc = EVTDESCAPIR501
+	picture = { 
+		trigger = { is_female = no } 
+		picture = GFX_evt_vikings_arriving_oldgods
+	}
+	picture = { 
+		trigger = { is_female = yes } 
+		picture = GFX_evt_norse_tempest
+	}
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		is_landed = yes
+		trigger_if = {
+			limit = {
+				NOR = {
+					has_dlc = "The Old Gods"
+					has_dlc = "Holy Fury"
+				}
+			}
+			pirate_raider_trait_gain_trigger = yes
+		}
+		trigger_else = {
+			this_is_sea_raider_trigger = yes
+		}
+		FROM = {
+			location = { capital_holding = { title = FROM } } #Do not reiterate the event after taking the capital holding.
+			#is_tribal = no
+			#is_nomadic = no
+			location = {
+				port = yes #Coastal provinces are what the Seaking should be terrorizing.
+				pirate_raider_trait_gain_trigger = no # Why would they join?
+			}
+			holder_scope = {
+				pirate_raider_trait_gain_trigger = no
+			}
+		}
+		location = { 
+			ROOT = {
+				any_realm_province = { #Avoid the event firing for raiders who raided on land all the way to the port of a sea they do not have access to.
+					port = yes 
+					TECH_NAVAL = 1
+					OR = { 
+						has_building = tb_shipyard_1
+						has_building = ca_shipyard_1
+						has_building = tp_shipyard_1
+						has_building = ct_shipyard_1
+					} 
+					can_naval_path_to = PREVPREV
+				} 
+			} 
+		}
+	}
+	immediate = {
+		FROM = {
+			location = { save_event_target_as = scoped_province }
+			owner = {
+				save_event_target_as = scoped_province_owner
+				any_realm_character = {
+					limit = {
+						is_incapable = no
+						is_inaccessible_trigger = no
+						is_heir = no
+						is_ruler = no
+						pirate_raider_trait_gain_trigger = no
+						location = {
+							province = event_target:scoped_province
+						}
+						trigger_if = {
+							limit = { is_female = yes }
+							ROOT = { is_feminist_religion = yes }
+						}
+						trigger_else = {
+							ROOT = {
+								OR = {
+									is_feminist_religion = no
+									is_equalist_religion = yes
+								}
+							}
+						}
+						is_benevolent_trigger = no # Matching personality
+						NOT = { trait = zealous }
+						age > 50
+						age <= 16
+					}
+					score_value = {
+						value = 10
+						# Tries to find youngsters
+						additive_modifier = {
+							value = 1
+							age < 45
+						}
+						additive_modifier = {
+							value = 1
+							age < 40
+						}
+						additive_modifier = {
+							value = 1
+							age < 35
+						}
+						additive_modifier = {
+							value = 1
+							age < 30
+						}
+						additive_modifier = {
+							value = 1
+							age < 25
+						}
+						additive_modifier = {
+							value = 1
+							age < 20
+						}
+						# Warrior
+						additive_modifier = {
+							value = 1
+							has_education_martial_trigger = yes
+						}
+						additive_modifier = {
+							value = 1
+							has_lifestyle_martial_trigger = yes
+						}
+						# Personality
+						additive_modifier = {
+							value = 2
+							has_evil_trait_trigger = yes
+						}
+						additive_modifier = {
+							value = -4
+							has_benevolent_trait_trigger = yes
+						}
+						additive_modifier = {
+							value = 2
+							trait = cynical
+						}
+						additive_modifier = {
+							value = 3
+							trait = greedy
+						}
+						additive_modifier = {
+							value = -2
+							trait = charitable
+						}
+						additive_modifier = {
+							value = 1
+							trait = brave
+						}
+						additive_modifier = {
+							value = -4
+							trait = craven
+						}
+						additive_modifier = {
+							value = 2
+							trait = ambitious
+						}
+						additive_modifier = {
+							value = -4
+							trait = content
+						}
+					}
+					save_event_target_as = character_to_join_pirates
+				}
+				if = {
+					limit = {
+						NOT = {
+							event_target:character_to_join_pirates = {
+								always = yes
+							}
+						}
+					}
+					event_target:scoped_province = {
+						if = {
+							limit = {
+								ROOT = {
+									is_feminist_religion = yes
+									is_equalist_religion = no
+								}
+							}
+							create_character = {
+								age = 23
+								culture = THIS
+								religion = THIS
+								dynasty = none
+								female = yes
+								random_traits = yes
+							}
+						}
+						else = {
+							create_character = {
+								age = 23
+								culture = THIS
+								religion = THIS
+								dynasty = none
+								female = no
+								random_traits = yes
+							}
+						}
+						new_character = {
+							remove_trait = just
+							remove_trait = kind
+							remove_trait = charitable
+							remove_trait = patient
+							remove_trait = zealous
+							random = {
+								chance = 50
+								remove_trait = charitable
+							}
+							random = {
+								chance = 50
+								remove_trait = craven
+							}
+							random = {
+								chance = 50
+								remove_trait = content
+							}
+							random_list = {
+								10 = { add_trait = brave }
+								10 = { add_trait = greedy }
+								10 = { add_trait = ambitious }
+							}
+							save_event_target_as = character_to_join_pirates
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = { #Allow them
+		name = EVTOPTAPIR501
+		event_target:character_to_join_pirates = {
+			religion = ROOT
+			move_character = ROOT
+		}
+		ai_chance = { factor = 60 }
+	}
+	option = { #Imprison
+		name = EVTOPTBPIR501
+		ai_chance = { factor = 20 }
+		imprison = event_target:character_to_join_pirates
+	}
+	option = { #Nah
+		name = EVTOPTCPIR501
+		prestige = 10
+		ai_chance = { factor = 20 }
+	}
+}

@@ -4093,3 +4093,302 @@ general_on_add_effect = {
 		}
 	}
 }
+spread_revolution_on_success_title_effect = {
+	custom_tooltip = {
+		text = religious_new_republic_cb_succ_tip
+		hidden_tooltip = {
+			FROM = {
+				random_realm_title = {
+					limit = {
+						tier = COUNT
+						kingdom = { title = PREVPREVPREV }
+					}
+					preferred_limit = {
+						location = {
+							religion = ROOT
+						}
+					}
+					location = {
+						create_character = {
+							religion = ROOT
+							culture = THIS
+							dynasty = random
+							random_traits = yes
+							female = no
+							age = 20
+							health = 7
+							fertility = 0.7
+						}
+						new_character = {
+							random_list = {
+								1 = { change_learning = 2 }
+								1 = { change_diplomacy = 2 }
+								1 = { change_stewardship = 2 }
+								1 = { change_intrigue = 2 }
+								1 = { change_martial = 2 }
+							}
+							random_list = {
+								1 = { change_learning = 2 }
+								1 = { change_diplomacy = 2 }
+								1 = { change_stewardship = 2 }
+								1 = { change_intrigue = 2 }
+								1 = { change_martial = 2 }
+							}
+							random_list = {
+								1 = { change_learning = 3 }
+								1 = { change_diplomacy = 3 }
+								1 = { change_stewardship = 3 }
+								1 = { change_intrigue = 3 }
+								1 = { change_martial = 3 }
+							}
+							remove_trait = cynical
+							add_trait = zealous
+							wealth = 500
+							prestige = 500
+							piety = 500
+							save_event_target_as = new_ruler
+							usurp_title = { target = PREVPREV type = invasion }
+							opinion = { modifier = jacobinist_liberated_me who = ROOT }
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_holder = no
+				}
+				usurp_title = { target = event_target:new_ruler type = invasion }
+			}
+			else = {
+				event_target:new_ruler = {
+					create_title = {
+						tier = KING
+						landless = no
+						temporary = no
+						custom_created = yes
+						culture = event_target:new_ruler
+						holder = event_target:new_ruler
+						name = "REVOLUTIONARY_KINGDOM"
+						base_title = PREV
+					}
+					new_title = {
+						save_persistent_event_target = { name = jacobinist_base_kingdom scope = PREVPREV }
+					}
+				}
+			}
+			
+			event_target:new_ruler = {
+				vassalize_or_take_under_title = {
+					title = PREV
+					enemy = FROM
+					same_religion = yes # Only vassalize rulers of my religion
+					is_religious = yes
+					type = holy_war
+					as_if_allied_to = ROOT
+				}
+				set_defacto_liege = THIS
+				if = {
+					limit = { religion = jacobinist }
+					save_persistent_event_target = { name = jacobinist_revolution_target scope = PREV }
+					add_character_modifier = { name = jacobinist_revolution_leader duration = -1 }
+				}
+				set_truce = { who = FROM years = 5 }
+				set_truce = { who = ROOT years = 5 }
+				ROOT = {
+					set_truce = { who = PREV years = 5 }
+				}
+			}
+			
+			if = {
+				limit = {
+					has_holder = yes
+					holder_scope = {
+						OR = {
+							character = FROM
+							is_liege_or_above = FROM
+						}
+					}
+				}
+				destroy_landed_title = THIS
+				usurp_title_only = { target = event_target:new_ruler type = invasion }
+				make_primary_title = yes
+				event_target:new_ruler = {
+					any_demesne_title = {
+						limit = {
+							tier = KING
+							is_primary_holder_title = no
+						}
+						destroy_landed_title = THIS
+					}
+				}
+			}
+			event_target:new_ruler = {
+				if = {
+					limit = {
+						primary_title = {
+							capital_scope = {
+								county = {
+									holder_scope = {
+										character = event_target:new_ruler
+									}
+								}
+							}
+						}
+					}
+					primary_title = {
+						capital_scope = {
+							event_target:new_ruler = {
+								capital = PREV
+							}
+						}
+					}
+				}
+				capital_scope = {
+					duchy = {
+						save_event_target_as = capital_duchy
+					}
+				}
+				any_realm_province = {
+					limit = {
+						OR = {
+							religion = event_target:new_ruler
+							duchy = {
+								title = event_target:capital_duchy
+							}
+						}
+					}
+					any_province_holding = {
+						limit = {
+							owner = {
+								same_realm = event_target:new_ruler
+							}
+						}
+						refill_holding_levy = yes
+					}
+				}
+			}
+			
+			ROOT = {
+				hidden_tooltip = {
+					if = {
+						limit = {
+							has_ambition = obj_strengthen_religion
+						}
+						change_variable = { which = strengthen_religion value = 1 }
+					}
+				}
+			}
+		}
+	}
+
+	hidden_tooltip = {
+		check_if_reconquista_finished_effect = yes
+		FROM = {
+			landless_pope_effect = yes
+		}
+	}
+}
+spread_revolution_on_success_effect = {
+	hidden_tooltip = { 
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			
+			participation_scaled_piety = 100
+			participation_scaled_prestige = 50
+			if = {
+				limit = {
+					has_ambition = obj_strengthen_religion
+				}
+				change_variable = { which = strengthen_religion value = 1 }
+			}
+		}
+	}
+	
+	ROOT = {
+		show_scope_change = no
+		participation_scaled_piety = 500
+		participation_scaled_prestige = 250
+		religion_authority = {
+			modifier = successful_revolution
+			years = 20
+		}
+	}
+	FROM = { show_scope_change = no piety = -100 }
+	FROM = { show_scope_change = no prestige = -50 }
+}
+spread_revolution_on_fail_effect = {	
+	ROOT = { 
+		show_scope_change = no
+		piety = -125 
+		prestige = -250
+	}
+}
+spread_revolution_on_reverse_demand_effect = {
+	ROOT = {
+		show_scope_change = no
+		transfer_scaled_wealth = {
+			to = FROM
+			value = 4.0
+		}
+		piety = -250
+		prestige = -500
+	}
+	FROM = {
+		show_scope_change = no
+		participation_scaled_piety = 200
+		participation_scaled_prestige = 100
+		if = {
+			limit = {
+				uses_decadence = yes
+			}
+			participation_scaled_decadence = -10
+		}
+	}
+	any_defender = {
+		limit = { NOT = { character = FROM } }
+		hidden_tooltip = { 
+			participation_scaled_piety = 200
+			participation_scaled_prestige = 100
+			if = {
+				limit = {
+					uses_decadence = yes
+				}
+				participation_scaled_decadence = -10
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						has_ambition = obj_strengthen_religion
+					}
+					change_variable = { which = strengthen_religion value = 1 }
+				}
+			}
+		}
+	}
+	ROOT = { 
+		religion_authority = {
+			modifier = failed_revolution
+			years = 20
+		}
+	}
+	FROM = { 
+		religion_authority = {
+			modifier = won_holy_war
+			years = 20
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					has_ambition = obj_strengthen_religion
+				}
+				change_variable = { which = strengthen_religion value = 1 }
+			}
+		}
+	}
+}
+join_prev_methodist_order_society = {
+	if = {
+		limit = { PREV = { society_member_of = monastic_order_methodist } }
+		join_society = monastic_order_methodist
+	}		
+}
