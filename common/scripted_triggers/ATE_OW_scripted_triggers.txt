@@ -1068,3 +1068,93 @@ can_be_converted_via_babel = {
 		}
 	}
 }
+spread_revolution_can_use_title_trigger = {
+	ROOT = {
+		NOT = { persistent_event_target:jacobinist_revolution_target = { title = PREVPREV } }
+		NOT = { has_landed_title = PREV }
+		NOT = {
+			any_demesne_title = {
+				persistent_event_target:jacobinist_base_kingdom = {
+					title = PREVPREVPREV
+				}
+			}
+		}
+		NOT = {
+			any_vassal = {
+				OR = {
+					has_landed_title = PREVPREV
+					any_demesne_title = {
+						persistent_event_target:jacobinist_base_kingdom = {
+							title = PREVPREVPREVPREV
+						}
+					}
+				}
+			}
+		}
+	}
+	# The attacker needs at least one county in the target kingdom, or a border, or be only two sea zones away from one of your counties
+	FROM = {
+		OR = {
+			num_of_realm_counties = { value = 4 title = PREV }
+			has_landed_title = PREV
+			PREV = {
+				NOT = {
+					any_de_jure_vassal_title = {
+						tier = COUNT
+						owner = {
+							NOT = {
+								same_realm = ROOT_FROM
+							}
+						}
+					}
+				}
+			}
+		}
+		any_realm_title = {
+			tier = COUNT
+			de_jure_liege_or_above = PREVPREV
+			location = {
+				any_neighbor_province = {
+					OR = {
+						AND = {
+							has_owner = yes
+							owner = {
+								OR = {
+									character = ROOT
+									is_liege_or_above = ROOT
+								}
+							}
+						}
+						AND = {
+							is_land = no
+							any_neighbor_province = {
+								OR = {
+									AND = {
+										has_owner = yes
+										owner = {
+											OR = {
+												character = ROOT
+												is_liege_or_above = ROOT
+											}
+										}
+									}
+									AND = {
+										is_land = no
+										any_neighbor_province = {
+											owner = {
+												OR = {
+													character = ROOT
+													is_liege_or_above = ROOT
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
