@@ -1453,6 +1453,7 @@ send_duel_result_event_effect = { # Runs via the attacker/combatant_1
 					}
 					any_owned_bloodline = { has_bloodline_flag = bloodline_legendary_warrior }
 				}
+				NOT = { has_character_flag = beast_duel }
 			}
 
 			additive_modifier = {
@@ -1849,8 +1850,14 @@ send_duel_result_event_effect = { # Runs via the attacker/combatant_1
 
 		10 = { # LEGENDARY BLOODLINES: LETHAL for attacker...
 			trigger = {
-				has_dlc = "Holy Fury"
-				is_member_of_any_warrior_lodge_trigger = yes
+				OR = {
+					AND = {
+						has_dlc = "Holy Fury"
+						is_member_of_any_warrior_lodge_trigger = yes
+					}
+					has_character_flag = beast_duel
+				}
+				
 				has_character_flag = is_legendary_duel
 
 				NOR = {
@@ -1917,7 +1924,14 @@ send_duel_result_event_effect = { # Runs via the attacker/combatant_1
 			set_character_flag = actually_injured
 			set_character_flag = injury_kills
 
-			if = { # To avoid this breaking in edge case MPs (where you accidentally got the same target, or they had time to die SOMEHOW...
+			if = {
+				limit = {
+					has_character_flag = beast_duel
+				}
+				narrative_event = { id = novelist.1114 }
+			}
+			
+			else_if = { # To avoid this breaking in edge case MPs (where you accidentally got the same target, or they had time to die SOMEHOW...
 				limit = {
 					event_target:combatant_2 = { is_alive = no }
 				}
@@ -1936,8 +1950,14 @@ send_duel_result_event_effect = { # Runs via the attacker/combatant_1
 
 		10 = { # LEGENDARY BLOODLINES: LETHAL for defender...
 			trigger = {
-				has_dlc = "Holy Fury"
-				is_member_of_any_warrior_lodge_trigger = yes
+				OR = {
+					AND = {
+						has_dlc = "Holy Fury"
+						is_member_of_any_warrior_lodge_trigger = yes
+					}
+					has_character_flag = beast_duel
+				}
+				
 				has_character_flag = is_legendary_duel
 
 				NOR = {
@@ -2005,8 +2025,14 @@ send_duel_result_event_effect = { # Runs via the attacker/combatant_1
 				set_character_flag = actually_injured
 				set_character_flag = injury_kills
 			}
-
-			if = { # To avoid this breaking in edge case MPs (where you accidentally got the same target, or they had time to die SOMEHOW...
+			if = {
+				limit = {
+					has_character_flag = beast_duel
+				}
+				narrative_event = { id = novelist.1115 }
+			}
+			
+			else_if = { # To avoid this breaking in edge case MPs (where you accidentally got the same target, or they had time to die SOMEHOW...
 				limit = {
 					event_target:combatant_2 = { is_alive = no }
 				}
@@ -2026,6 +2052,7 @@ send_duel_result_event_effect = { # Runs via the attacker/combatant_1
 				has_dlc = "Holy Fury"
 				is_member_of_any_warrior_lodge_trigger = yes
 				has_character_flag = is_legendary_duel
+				NOT = { has_character_flag = beast_duel }
 
 				NOR = {
 					has_character_flag = WL_desc_X
