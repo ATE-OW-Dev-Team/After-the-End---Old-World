@@ -4523,32 +4523,24 @@ spawn_belle_effect = {
 novelist_switch_effect = {
 	if = {
 		limit = { should_switch_to_novelist_trigger = yes }
-		persistent_event_target:novelist_title = {
-			switch_titles_effect = yes
+		persistent_event_target:non_novelist_title = {
+			insert_title_history = PREV
 		}
+		name = persistent_event_target:novelist_title
+		adjective = persistent_event_target:novelist_title
+		set_coa = persistent_event_target:novelist_title
+		insert_title_history = persistent_event_target:novelist_title
+		set_global_flag = novelist_title_@THIS
 	}
 	else_if = {
 		limit = { should_switch_to_non_novelist_trigger = yes }
 		persistent_event_target:non_novelist_title = {
-			switch_titles_effect = yes
+			insert_title_history = PREV
 		}
+		name = ""
+		adjective = ""
+		reset_coa = THIS
+		insert_title_history = persistent_event_target:non_novelist_title
+		clr_global_flag = novelist_title_@THIS
 	}
-}
-switch_titles_effect = {
-	grant_title_no_opinion = PREVPREV
-	copy_title_laws = PREV
-	PREV = {
-		dejure_liege_title = {
-			save_event_target_as = new_liege
-		}
-	}
-	de_jure_liege = event_target:new_liege
-	save_event_target_as = new_liege
-	PREV = {
-		any_direct_de_jure_vassal_title = {
-			de_jure_liege = event_target:new_liege
-		}
-		de_jure_liege = 0
-	}
-	destroy_landed_title = PREV
 }
