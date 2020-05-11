@@ -1,0 +1,83 @@
+title_decisions = {
+	purge_province = {
+		only_playable = yes
+		
+		
+		potential = {
+			primary_title = {
+				title = e_droid
+			}
+			location = { 
+				OR= {
+					NOT = { culture = android }
+					NOT = { religion = purge }
+				}
+			}
+		}
+		
+		allow = {
+			location = {
+				OR= {
+					NOT = { culture = android }
+					NOT = { religion = purge }
+				}
+				owner = { NOT = { culture = PREV } } # Cannot convert counties of owners who has that culture
+			}
+		}
+		
+		effect = {
+			location = {
+				culture = android
+				religion = purge
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	destroy_androids = {
+		only_playable = yes
+		
+		potential = {
+			location = { 
+				OR= {
+					culture = android
+					religion = purge
+				}
+			}
+		}
+		
+		allow = {
+			FROM = {
+				scaled_wealth >= 1
+			}
+			location = {
+				OR= {
+					culture = android
+					religion = purge
+				}
+				owner = { NOT = { culture = PREV } } # Cannot convert counties of owners who has that culture
+			}
+		}
+		
+		effect = {
+			FROM = {
+				change_scaled_wealth = -1
+				scaled_wealth = { value = -1 }
+			}
+			location = {
+				culture = FROM
+				religion = FROM
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}
