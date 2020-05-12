@@ -1,0 +1,450 @@
+namespace = confed
+
+narrative_event = {#Confederation forms in response to German land being taken over by foreigners
+	id = confed.1
+	title = confed1Title
+	desc = confed1Desc
+	picture = GFX_evt_german_conf
+	border = GFX_event_narrative_frame_religion
+	
+	#major = yes
+
+	hide_window = yes#shouldn't be seen by anyone
+	
+	only_playable = yes
+	min_age = 16
+	only_men = yes
+	religion = catholic
+	
+	trigger = {
+		NOR = {
+			has_alternate_start_parameter = { key = religion_names value = random }
+			has_global_flag = confederation_happened			
+		}
+		controls_religion = yes #The pope, to ensure it always happens
+		OR = {#If any of the following are owned by non-Germans
+			AND = {#Munster and Bremen, so the Dutch can take one without triggering it
+			88 = { # Munster (Germany)
+				owner = { top_liege = { NOT = { culture_group = germanic } } } 
+			}
+			848 = { # Bremen
+				owner = { top_liege = { NOT = { culture_group = germanic } } } 
+			}
+			}
+			119 = { # Cologne, this is not only a historically important city but also represents the Luxembourgers having reached the very banks of the Rhine
+				owner = { top_liege = { NOT = { culture_group = germanic } } } 
+			}
+			261 = { # Hamburg, this probably indicates an incursion through the north (Doggerland)?
+				owner = { top_liege = { NOT = { culture_group = germanic } } } 
+			}
+			262 = { # Lubeck, essentially the same reason as Hamburg
+				owner = { top_liege = { NOT = { culture_group = germanic } } } 
+			}
+			365 = { # Berlin
+				owner = { top_liege = { NOT = { culture_group = germanic } } } 
+			}
+			118 = { # Trier
+				owner = { top_liege = { NOT = { culture_group = germanic } } } 
+			}
+			360 = { # Munich
+				owner = { top_liege = { NOT = { culture_group = germanic } } } 
+			}
+			255 = { # Thuringen
+				owner = { top_liege = { NOT = { culture_group = germanic } } } 
+			}
+		}		
+	}
+	
+	mean_time_to_happen = {
+		months = 18
+	}
+	
+	immediate = {
+		set_global_flag = confederation_happened
+		set_global_flag = fed_against_foreigners
+	}
+	
+	option = {
+		name = EVTOPTA39660
+		#Randomly select a ruler who fits the criteria to be the leader of the Confederation - must be relatively small, not a King or Emperor, and Germanic but not Swiss.
+		random_independent_ruler = {
+			limit = {
+				primary_title = {
+					lower_tier_than = KING
+				}
+				culture_group = germanic
+				capital_scope = {
+					region = world_europe_west_germania # only in Germany
+				}
+				is_landed = yes
+				is_feudal = yes
+				age = 16
+				NOR = {
+					has_character_flag = refused_to_form_confed
+					controls_religion = yes #can't be any of the religious heads, just in case they gain land
+				}
+			}
+			preferred_limit = {
+				NOT = {#Prefer someone with 5 or less holdings
+					realm_size = 6
+				}
+			}
+			preferred_limit = {
+				NOT = {#Prefer someone with 10 or less holdings if there's no-one small enough
+					realm_size = 11
+				}
+			}
+			preferred_limit = {
+				NOT = {#Prefer someone with 15 or less holdings if there's nobody with 10 or less (unlikely)
+					realm_size = 16
+				}
+			}
+			narrative_event = { id = confed.3 }
+		}
+	}
+}
+
+narrative_event = {#Confederation forms in response to Prussian expansionism
+	id = confed.2
+	title = confed1Title
+	desc = confed2Desc
+	picture = GFX_evt_german_conf
+	border = GFX_event_narrative_frame_religion
+	
+	#major = yes
+
+	hide_window = yes#shouldn't be seen by anyone
+	
+	only_playable = yes
+	min_age = 16
+	only_men = yes
+	religion = catholic
+	
+	trigger = {
+		NOR = {
+			has_alternate_start_parameter = { key = religion_names value = random }
+			has_global_flag = confederation_happened
+		}
+		controls_religion = yes#The pope, to ensure it always happens
+		OR = {#If any of the following are owned by Prussia
+
+			119 = { # Cologne, the Prussians have gotten to the West rim of Germany
+				owner = { top_liege = {	primary_title = { title = k_prussia } } } 
+			}
+			120 = { # Paderborn
+				owner = { top_liege = {	primary_title = { title = k_prussia } } } 
+			}
+			118 = { # Trier
+				owner = { top_liege = {	primary_title = { title = k_prussia } } } 
+			}
+			254 = { # Wurzburg
+				owner = { top_liege = {	primary_title = { title = k_prussia } } } 
+			}
+			314 = { # Nurnberg
+				owner = { top_liege = {	primary_title = { title = k_prussia } } } 
+			}
+			1981 = { # Frankfurt
+				owner = { top_liege = {	primary_title = { title = k_prussia } } } 
+			}				
+		}		
+	}
+	
+	mean_time_to_happen = {
+		months = 18
+	}
+	
+	immediate = {
+		set_global_flag = fed_against_prussia
+	}
+	
+	option = {
+		name = EVTOPTA39660
+		#Randomly select a ruler who fits the criteria to be the leader of the Confederation - must be relatively small, not a King or Emperor, and Germanic but not Swiss.
+		random_independent_ruler = {
+			limit = {
+				primary_title = {
+					lower_tier_than = KING
+				}
+				culture_group = germanic
+				age = 16
+				capital_scope = {
+					region = world_europe_west_germania # only in Germany
+				}
+				is_landed = yes #Mercenaries don't count
+				is_feudal = yes
+				NOR = {
+					has_character_flag = refused_to_form_confed
+					controls_religion = yes #in case any German religious heads get landed
+				}				
+			}
+			preferred_limit = {
+				NOT = {#Prefer someone with 5 or less holdings
+					realm_size = 6
+				}
+			}
+			preferred_limit = {
+				NOT = {#Prefer someone with 10 or less holdings if there's no-one small enough
+					realm_size = 11
+				}
+			}
+			preferred_limit = {
+				NOT = {#Prefer someone with 15 or less holdings if there's nobody with sub 10 (unlikely)
+					realm_size = 16
+				}
+			}
+			narrative_event = { id = confed.3 }
+		}
+	}
+}
+
+narrative_event = {#Chosen founder is asked if they want to form the Confederation
+	id = confed.3
+	title = confed3Title
+	desc = confed3Desc
+	picture = GFX_evt_german_conf
+	border = GFX_event_narrative_frame_religion
+	
+	#major = yes #Shouldn't be seen except by the founder
+	is_triggered_only = yes
+	
+	immediate = {
+		narrative_event = {#The major event informing people of the founding of GC
+			id = confed.5 days = 10
+		}
+	}
+	
+	option = {#Yes, of course I will found it!
+		name = confed3A
+		ai_chance = {
+			factor = 1
+		}
+		set_global_flag = confederation_happened
+		activate_title = { title = e_german_confederation status = yes }		
+		e_german_confederation = {
+			gain_empire_effect = yes
+			set_government_type = confederation_government
+			add_law = { law = centralization_0 cooldown = no opinion_effect = no }
+			add_law = { law = succ_feudal_elective cooldown = no opinion_effect = no }#Add check in the succession laws to prevent them from changing from this easily
+		}
+		hidden_tooltip = {
+			any_independent_ruler = {
+				limit = {
+					culture_group = germanic
+					capital_scope = {
+						region = world_europe_west_germania # only in Germany
+					}	
+					is_landed = yes #no mercenaries
+					NOT = {
+						controls_religion = yes
+					}
+					primary_title = {
+						lower_tier_than = EMPEROR
+					}
+					trigger_if = {
+						limit = { has_global_flag = fed_against_prussia }
+						NOT = { has_landed_title = k_prussia }
+					}
+					NOR = {
+						has_landed_title = k_switzerland
+						has_landed_title = k_lichtenstein
+					}
+				}
+				narrative_event = { id = confed.4 }				
+			}
+		}		
+	}
+	option = {#Daga Kotowaru
+		name = confed3B
+		ai_chance = {#AI will always form the Confederation
+			factor = 0
+		}		
+		set_character_flag = refused_to_form_confed
+		if = {
+			limit = {
+				has_global_flag = fed_against_foreigners
+			}
+			FROM = {#Should send it back to the Pope
+				narrative_event = { id = confed.1 }				
+			}			
+		}
+		else_if = {
+			limit = {
+				has_global_flag = fed_against_prussia
+			}
+			FROM = {#Should send it back to the Pope
+				narrative_event = { id = confed.2 }				
+			}			
+		}
+	}
+}
+
+narrative_event = {#Asked if you want to become a vassal of the Confederation
+	id = confed.4
+	title = confed4Title
+	desc = confed4Desc
+	picture = GFX_evt_german_conf
+	border = GFX_event_narrative_frame_religion
+	
+	#major = yes #Shouldn't be seen except by the founder
+	is_triggered_only = yes
+	
+	immediate = {
+
+	}
+	
+	option = {#I will join, this seems like a good idea
+		name = confed4A
+		ai_chance = {#AI will always accept if they are less than 10 realm size and are not a King
+			factor = 10
+			modifier = {
+				factor = 0.05 #King much more likely to refuse
+				primary_title = {
+					higher_tier_than = DUKE
+				}
+			}
+			modifier = {
+				factor = 0.5 #Proud is less likely
+				has_trait = proud
+			}
+			modifier = {
+				factor = 0.5 #Brave doesn't think he needs to
+				has_trait = brave
+			}
+			modifier = {
+				factor = 0.5
+				has_trait = stubborn
+			}
+			modifier = {
+				factor = 0.05 #Almost certain to say no if over 30 realm size (they think they're OK)
+				realm_size = 30
+			}			
+		}
+		set_defacto_liege = FROM #you become a vassal of the sender of the request
+		FROM = {
+			letter_event = {
+				id = confed.6
+			}
+		}
+	}
+	option = {#I refuse
+		name = confed4B
+		ai_chance = {#AI will always accept if they are less than 10 realm size and are not a King
+			factor = 1
+		}
+		FROM = {
+			letter_event = {
+				id = confed.7
+			}
+		}			
+	}	
+}
+
+narrative_event = {#Notified about the founding of the Confederation
+	id = confed.5
+	title = confed5Title
+	desc = confed5Desc
+	picture = GFX_evt_german_conf
+	border = GFX_event_narrative_frame_religion
+	
+	major = yes #Everyone should see this
+	is_triggered_only = yes
+	
+	immediate = {
+
+	}
+	
+	option = {#German response
+		name = confed5A
+		trigger = {
+			culture_group = germanic
+		}
+	}
+	option = {#Polish Response
+		name = confed5B
+		trigger = {
+			culture = polish
+		}
+	}
+	option = {#French Response
+		name = confed5C
+		trigger = {
+			culture_group = francophone
+		}
+	}
+	option = {#Benelux response (West German)
+		name = confed5D
+		trigger = {
+			culture_group = west_german
+		}
+	}
+	option = {#Other response
+		name = confed5E
+		trigger = {
+			NOR = {
+				culture_group = germanic
+				culture_group = francophone
+				culture_group = west_german
+				culture = polish
+			}
+		}
+	}	
+}
+letter_event = {#Letter informing you that they will become vassals
+	id = confed.6
+	desc = confed6Desc
+	picture = GFX_evt_german_conf
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+
+	}
+	
+	option = {#Yay
+		name = confed6A
+	}
+
+}
+
+letter_event = {#Letter informing you that they will UNDER NO CIRCUMSTANCES become vassals
+	id = confed.7
+	desc = confed7Desc
+	picture = GFX_evt_german_conf
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+
+	}
+	
+	option = {#Yay
+		name = confed7A
+	}
+
+}
+
+character_event = {
+	id = confed.50
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = {
+			confederation_title_trigger = yes
+		}
+	}
+	
+	immediate = {
+		FROM = {
+			clr_title_flag = holder_was_@ROOT_FROMFROM
+			set_title_flag = holder_was_@ROOT_FROMFROM
+		}
+		FROMFROM = {
+			remove_character_modifiers = { modifier = confederation_declared_war amount = 1000 }
+		}
+	}
+}

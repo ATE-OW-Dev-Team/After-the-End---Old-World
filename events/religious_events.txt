@@ -3308,28 +3308,11 @@ character_event = {
 			# Always allow them if you already like that religion
 			modifier = {
 				factor = 0
-				FROM = { religion_group = christian }
-				trait = sympathy_christendom
-			}
-			modifier = {
-				factor = 0
-				FROM = { religion_group = muslim }
-				trait = sympathy_islam
-			}
-			modifier = {
-				factor = 0
-				FROM = { religion_group = jewish_group }
-				trait = sympathy_judaism
-			}
-			modifier = {
-				factor = 0
-				FROM = { religion_group = zoroastrian_group }
-				trait = sympathy_zoroastrianism
-			}
-			modifier = {
-				factor = 0
-				FROM = { religion_group = indian_group }
-				trait = sympathy_indian
+				FROM = {
+					ROOT = {
+						has_sympathy_for_public_religion_of_prev_trigger = yes
+					}
+				}
 			}
 		}
 		
@@ -3370,12 +3353,13 @@ character_event = {
 				factor = 2
 				trait = arbitrary
 			}
-			modifier = {#Elf-Friends support Christianity
-				factor = 2
+			modifier = { #Sympathiser
+				factor = 3
 				FROM = {
-					religion_group = christian
+					ROOT = {
+						has_sympathy_for_public_religion_of_prev_trigger = yes
+					}
 				}
-				trait = elf_friend
 			}
 			modifier = {#Kingsmen resent Christianity
 				factor = 0.5
@@ -3614,9 +3598,7 @@ character_event = {
 			}
 			modifier = {
 				factor = 0.2
-				NOR = {
-					religion = tengri_pagan
-					religion = aztec
+				NOT = {
 					any_realm_province = {
 						any_neighbor_province = {
 							owner = {
@@ -3686,13 +3668,6 @@ character_event = {
 				factor = 2
 				trait = arbitrary
 			}
-			modifier = {#Elf-Friends support Christianity
-				factor = 2
-				FROM = {
-					religion_group = christian
-				}
-				trait = elf_friend
-			}
 			modifier = {#Kingsmen resent Christianity
 				factor = 0.5
 				FROM = {
@@ -3702,28 +3677,7 @@ character_event = {
 			}			
 			modifier = {
 				factor = 3
-				FROM = { religion_group = christian }
-				trait = sympathy_christendom
-			}
-			modifier = {
-				factor = 3
-				FROM = { religion_group = muslim }
-				trait = sympathy_islam
-			}
-			modifier = {
-				factor = 3
-				FROM = { religion_group = jewish_group }
-				trait = sympathy_judaism
-			}
-			modifier = {
-				factor = 3
-				FROM = { religion_group = zoroastrian_group }
-				trait = sympathy_zoroastrianism
-			}
-			modifier = {
-				factor = 3
-				FROM = { religion_group = indian_group }
-				trait = sympathy_indian
+				FROM = { ROOT = { has_sympathy_for_public_religion_of_prev_trigger = yes } }
 			}
 			
 			# Personal
@@ -6019,59 +5973,9 @@ character_event = {
 		trigger = {
 			NOT = { religion_group = FROMFROM }
 		}
-		if = {
-			limit = {
-				religion_group = christian
-			}
-			add_trait = sympathy_christendom
-		}
-		if = {
-			limit = {
-				religion_group = muslim
-			}
-			add_trait = sympathy_islam
-		}
-		if = {
-			limit = {
-				religion_group = pagan_group
-			}
-			add_trait = sympathy_pagans
-		}
-		if = {
-			limit = {
-				religion_group = zoroastrian_group
-			}
-			add_trait = sympathy_zoroastrianism
-		}
-		if = {
-			limit = {
-				religion_group = jewish_group
-			}
-			add_trait = sympathy_judaism
-		}
-		if = {
-			limit = {
-				religion_group = indian_group
-			}
-			add_trait = sympathy_indian
-		}
-		if = {
-			limit = {
-				religion_group = old_world_cultist_group
-			}
-			add_trait = sympathy_old_world_cultist
-		}
-		if = {
-			limit = {
-				religion_group = buddhist_group
-			}
-			add_trait = sympathy_buddhism
-		}
-		if = {
-			limit = {
-				religion_group = esoteric
-			}
-			add_trait = sympathy_esoteric
+		THIS = {
+			show_scope_change = no
+			add_sympathy_for_prevs_open_religion_effect = yes
 		}
 		clr_religion_char_flag_effect = yes #Must clear all old flags to avoid double traits
 		add_religion_char_flag_effect = yes

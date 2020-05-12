@@ -1,4 +1,4 @@
-namespace=novelistevents
+namespace = novelist
 
 #########################################
 #
@@ -7,48 +7,322 @@ namespace=novelistevents
 #########################################
 # Gain a bonus
 character_event = {
-	id = novelistevents.1
+	id = novelist.1
 	is_triggered_only = yes
 	picture = GFX_evt_book_carolingian_script
-	border = GFX_event_normal_frame_war
+	border = GFX_event_normal_frame_religion
 
 	hide_from = yes
 
 	desc = {
-		text = novelistevents1Desc
+		text = novelist1Desc
 
+	}
+	immediate = {
+		set_character_flag = picking_novelist_patron
+	}
+	
+	option = {#School of the King, a more militant school that's focussed on the uniqueness of the Novelist faith
+		name = EVTOPTA_novelist1
+		add_trait = novelist_son_of_aslan
+	}
+	
+	option = {#School of The Cross, a pro-Christian more syncretic school that's more learning based
+		name = EVTOPTB_novelist1
+		add_trait = novelist_elf_friend
+	}
+	
+	option = {#A third school that's simultaneously allied with and at war with the other two.
+		name = EVTOPTC_novelist1
+		add_trait = novelist_star_child
+	}
+	
+	option = {#A third school that's simultaneously allied with and at war with the other two.
+		name = EVTOPTD_novelist1
+		hidden_tooltip = { character_event = { id = novelist.2 } }
+	}
+	
+	after = {
+		clr_character_flag = picking_novelist_patron
+	}
+}
+
+character_event = {
+	id = novelist.2
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	hide_from = yes
+
+	desc = {
+		text = novelist2Desc
+
+	}
+	immediate = {
+		set_character_flag = picking_novelist_patron
 	}
 
 	
 	option = {#School of the King, a more militant school that's focussed on the uniqueness of the Novelist faith
-		name = EVTOPTA_novelistevents1
-		add_trait = kings_man
+		name = EVTOPTA_novelist2
+		add_trait = novelist_kings_man
 	}
 	
 	option = {#School of The Cross, a pro-Christian more syncretic school that's more learning based
-		name = EVTOPTB_novelistevents1
-		add_trait = elf_friend
+		name = EVTOPTB_novelist2
+		add_trait = novelist_ingsoc
 	}
+	
+	option = {#A third school that's simultaneously allied with and at war with the other two.
+		name = EVTOPTC_novelist2
+		piety = 50
+	}
+	
+	option = {#A third school that's simultaneously allied with and at war with the other two.
+		name = EVTOPTD_novelist2
+		hidden_tooltip = { character_event = { id = novelist.1 } }
+	}
+	
+	after = {
+		clr_character_flag = picking_novelist_patron
+	}
+}
 
+#Scary giant letter event determining it for the AI.
+#TODO: Make personality matter.
+letter_event = {
+	id = novelist.5
+	is_triggered_only = yes
+	border = GFX_event_letter_frame_religion
+	desc = novelist5Desc
+	option = {
+		name = EVTOPTA_novelist5
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = novelist_son_of_aslan
+						}
+						mother_even_if_dead = {
+							trait = novelist_son_of_aslan
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = novelist_son_of_aslan
+								}
+								mother_even_if_dead = {
+									trait = novelist_son_of_aslan
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = novelist_son_of_aslan
+								}
+								mother_even_if_dead = {
+									trait = novelist_son_of_aslan
+								}
+							}
+						}
+					}
+				}
+				job_event_mtth_modifier_inverted_diplomacy_score = yes
+				add_trait = novelist_son_of_aslan
+			}
+			10 = {
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = novelist_kings_man
+						}
+						mother_even_if_dead = {
+							trait = novelist_kings_man
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = novelist_kings_man
+								}
+								mother_even_if_dead = {
+									trait = novelist_kings_man
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = novelist_kings_man
+								}
+								mother_even_if_dead = {
+									trait = novelist_kings_man
+								}
+							}
+						}
+					}
+				}
+				job_event_mtth_modifier_inverted_martial_score = yes
+				add_trait = novelist_kings_man
+			}
+			10 = {
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = novelist_star_child
+						}
+						mother_even_if_dead = {
+							trait = novelist_star_child
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = novelist_star_child
+								}
+								mother_even_if_dead = {
+									trait = novelist_star_child
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = novelist_star_child
+								}
+								mother_even_if_dead = {
+									trait = novelist_star_child
+								}
+							}
+						}
+					}
+				}
+				job_event_mtth_modifier_inverted_stewardship_score = yes
+				add_trait = novelist_star_child
+			}
+			10 = {
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = novelist_ingsoc
+						}
+						mother_even_if_dead = {
+							trait = novelist_ingsoc
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = novelist_ingsoc
+								}
+								mother_even_if_dead = {
+									trait = novelist_ingsoc
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = novelist_ingsoc
+								}
+								mother_even_if_dead = {
+									trait = novelist_ingsoc
+								}
+							}
+						}
+					}
+				}
+				job_event_mtth_modifier_inverted_intrigue_score = yes
+				add_trait = novelist_ingsoc
+			}
+			10 = {
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = novelist_elf_friend
+						}
+						mother_even_if_dead = {
+							trait = novelist_elf_friend
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = novelist_elf_friend
+								}
+								mother_even_if_dead = {
+									trait = novelist_elf_friend
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = novelist_elf_friend
+								}
+								mother_even_if_dead = {
+									trait = novelist_elf_friend
+								}
+							}
+						}
+					}
+				}
+				job_event_mtth_modifier_inverted_learning_score = yes
+				add_trait = novelist_elf_friend
+			}
+		}
+	}
+	after = {
+		clr_character_flag = picking_novelist_patron
+	}
 }
 
 narrative_event = {#Restoration of Numenor
-	id = novelistevents.2
+	id = novelist.50
 	is_triggered_only = yes
 	picture = GFX_evt_book_carolingian_script
 	border = GFX_event_narrative_frame_war
-	title = novelistevents2Title
+	title = novelist50Title
 	
 	hide_from = yes
 
 	desc = {
-		text = novelistevents2Desc
+		text = novelist50Desc
 
 	}
 
 	
 	option = {#Novelist Response
-		name = EVTOPTA_novelistevents2
+		name = EVTOPTA_novelist50
 		trigger = {
 			OR = {
 				religion = novelist
@@ -58,19 +332,19 @@ narrative_event = {#Restoration of Numenor
 	}
 	
 	option = {#British response
-		name = EVTOPTB_novelistevents2
+		name = EVTOPTB_novelist50
 		trigger = {
 			culture = british
 		}
 	}
 	option = {#Catholic response
-		name = EVTOPTC_novelistevents2
+		name = EVTOPTC_novelist50
 		trigger = {
 			religion = catholic
 		}
 	}
 	option = {#Other response
-		name = EVTOPTD_novelistevents2
+		name = EVTOPTD_novelist50
 		trigger = {
 			NOR = {
 				religion = novelist
@@ -79,6 +353,753 @@ narrative_event = {#Restoration of Numenor
 				culture = british
 			}
 		}
-	}	
+	}
+}
 
+character_event = {
+	id = novelist.100
+	is_triggered_only = yes
+	hide_window = yes
+	hide_from = yes
+
+	religion = catholic
+	only_playable = yes
+	min_age = 16
+
+	trigger = {
+		controls_religion = yes
+	}
+	immediate = {
+		k_france = {
+			save_persistent_event_target = { name = novelist_title scope = k_gondor }
+			save_persistent_event_target = { name = non_novelist_title scope = k_france_history }
+			persistent_event_target:non_novelist_title = {
+				set_name = PREV
+				copy_title_history = PREV
+			}
+		}
+		k_aquitaine = {
+			save_persistent_event_target = { name = novelist_title scope = k_arnor }
+			save_persistent_event_target = { name = non_novelist_title scope = k_aquitaine_history }
+			persistent_event_target:non_novelist_title = {
+				set_name = PREV
+				copy_title_history = PREV
+			}
+		}
+		k_burgundy = {
+			save_persistent_event_target = { name = novelist_title scope = k_broceliande }
+			save_persistent_event_target = { name = non_novelist_title scope = k_burgundy_history }
+			persistent_event_target:non_novelist_title = {
+				set_name = PREV
+				copy_title_history = PREV
+			}
+		}
+		k_normandy = {
+			save_persistent_event_target = { name = novelist_title scope = k_gallia }
+			save_persistent_event_target = { name = non_novelist_title scope = k_normandy_history }
+			persistent_event_target:non_novelist_title = {
+				set_name = PREV
+				copy_title_history = PREV
+			}
+		}
+		k_ireland = {
+			save_persistent_event_target = { name = novelist_title scope = k_narnia }
+			save_persistent_event_target = { name = non_novelist_title scope = k_ireland_history }
+			persistent_event_target:non_novelist_title = {
+				set_name = PREV
+				copy_title_history = PREV
+			}
+		}
+		k_britannia = {
+			save_persistent_event_target = { name = novelist_title scope = k_angband }
+			save_persistent_event_target = { name = non_novelist_title scope = k_britannia_history }
+			persistent_event_target:non_novelist_title = {
+				set_name = PREV
+				copy_title_history = PREV
+			}
+		}
+		k_wales = {
+			save_persistent_event_target = { name = novelist_title scope = k_camelot }
+			save_persistent_event_target = { name = non_novelist_title scope = k_wales_history }
+			persistent_event_target:non_novelist_title = {
+				set_name = PREV
+				copy_title_history = PREV
+			}
+		}
+		k_england = {
+			save_persistent_event_target = { name = novelist_title scope = k_shire }
+			save_persistent_event_target = { name = non_novelist_title scope = k_england_history }
+			set_title_flag = novelist_shortname
+			persistent_event_target:non_novelist_title = {
+				set_name = PREV
+				copy_title_history = PREV
+			}
+		}
+		e_britannia = {
+			save_persistent_event_target = { name = novelist_title scope = e_calormen }
+			save_persistent_event_target = { name = non_novelist_title scope = e_britannia_history }
+			persistent_event_target:non_novelist_title = {
+				set_name = PREV
+				copy_title_history = PREV
+			}
+		}
+		k_cornwall = {
+			save_persistent_event_target = { name = novelist_title scope = k_charn }
+			save_persistent_event_target = { name = non_novelist_title scope = k_cornwall_history }
+			persistent_event_target:non_novelist_title = {
+				set_name = PREV
+				copy_title_history = PREV
+			}
+		}
+		k_lichtenstein = {
+			save_persistent_event_target = { name = novelist_title scope = k_moria }
+			save_persistent_event_target = { name = non_novelist_title scope = k_lichtenstein_history }
+			persistent_event_target:non_novelist_title = {
+				set_name = PREV
+				copy_title_history = PREV
+			}
+		}
+		k_switzerland = {
+			save_persistent_event_target = { name = novelist_title scope = k_erebor }
+			save_persistent_event_target = { name = non_novelist_title scope = k_switzerland_history }
+			persistent_event_target:non_novelist_title = {
+				set_name = PREV
+				copy_title_history = PREV
+			}
+		}
+		k_brittany = {
+			save_persistent_event_target = { name = novelist_title scope = k_grey_havens }
+			save_persistent_event_target = { name = non_novelist_title scope = k_brittany_history }
+			set_title_flag = novelist_shortname
+			persistent_event_target:non_novelist_title = {
+				set_name = PREV
+				copy_title_history = PREV
+			}
+		}
+		k_romania = {
+			save_persistent_event_target = { name = novelist_title scope = k_transylvania }
+			save_persistent_event_target = { name = non_novelist_title scope = k_romania_history }
+			persistent_event_target:non_novelist_title = {
+				set_name = PREV
+				copy_title_history = PREV
+			}
+		}
+	}
+}
+
+character_event = {
+	id = novelist.101
+	is_triggered_only = yes
+	hide_window = yes
+	hide_from = yes
+	
+	trigger = {
+		FROM = { novelist_switch_trigger = yes }
+	}
+	
+	immediate = {
+		FROM = { novelist_switch_effect = yes }
+	}
+}
+
+character_event = {
+	id = novelist.102
+	is_triggered_only = yes
+	hide_window = yes
+	hide_from = yes
+	only_playable = yes
+	
+	trigger = {
+		any_demesne_title = {
+			novelist_switch_trigger = yes
+		}
+	}
+	
+	immediate = {
+		any_demesne_title = {
+			novelist_switch_effect = yes
+		}
+	}
+}
+
+#########################################
+#
+#	Novelist story events
+#
+#########################################
+
+#########################################
+#	A Quiet Front
+#########################################
+
+character_event = {
+	id = novelist.1000
+	is_triggered_only = yes
+	hide_window = yes
+	only_rulers = yes
+	trigger = {
+		religion_openly_novelist_or_reformed_trigger = yes
+		culture_group = germanic
+		killer = {
+			OR = {
+				culture_group = francophone
+				culture_group = celtic
+			}
+		}
+		OR = {
+			death_reason = death_battle
+			death_reason = death_battle_duel
+		}
+	}
+	immediate = {
+		player_heir = {
+			narrative_event = { id = novelist.1001 days = 5 }
+		}
+	}
+}
+narrative_event = {
+	id = novelist.1001
+	is_triggered_only = yes
+	
+	picture = GFX_evt_died_battle
+	border = GFX_event_narrative_frame_war
+	desc = novelist1001Desc
+	title = novelist1001Title
+	
+	only_rulers = yes
+	trigger = {
+		religion_openly_novelist_or_reformed_trigger = yes
+	}
+	
+	option = {
+		name = EVTOPTA_novelist1001
+		add_trait = depressed
+	}
+	option = {
+		name = EVTOPTB_novelist1001
+		add_trait = cynical
+	}
+	option = {
+		name = EVTOPTC_novelist1001
+		trigger = {
+			in_command = yes
+		}
+		add_trait = zealous
+	}
+	option = {
+		name = EVTOPTD_novelist1001
+		trigger = {
+			in_command = yes
+		}
+		add_trait = craven
+	}
+}
+
+#########################################
+#	Beauty and the Beast
+#########################################
+
+narrative_event = {
+	id = novelist.1100
+	
+	picture = GFX_evt_hunt
+	border = GFX_event_narrative_frame_war
+	desc = novelist1100Desc
+	title = novelist1100Title
+	
+	only_rulers = yes
+	only_capable = yes
+	min_age = 16
+	religion_group = pagan_group
+	trigger = {
+		religion_openly_novelist_or_reformed_trigger = yes
+		# Not doing anything else
+		is_inaccessible_trigger = no
+		NOT = { has_character_flag = do_not_disturb }
+		NOT = { has_character_flag = had_beauty_and_the_beast_event }
+	}
+	
+	mean_time_to_happen = {
+		months = 3600 # 300 years, that should be rare
+		modifier = {
+			factor = 0.5
+			trait = hunter
+		}
+	}
+	
+	immediate = {
+		set_character_flag = had_beauty_and_the_beast_event
+	}
+	
+	option = {
+		name = EVTOPTA_novelist1100
+		tooltip_info = hunter
+		trigger = {
+			trait = hunter
+		}
+		if = {
+			limit = {
+				trait = craven
+			}
+			remove_trait_craven_effect = yes
+		}
+		else_if = {
+			limit = {
+				NOT = { trait = brave }
+			}
+			random = {
+				chance = 50
+				add_trait_brave_effect = yes
+			}
+		}
+		custom_tooltip = {
+			text = EVTOPTA_novelist1100_tooltip
+			random_list = {
+				35 = { narrative_event = { id = novelist.1101 days = 10 random = 10 } } # Old greedy man knows the way
+				15 = { narrative_event = { id = novelist.1105 days = 10 random = 10 } } # Pretty much failed
+				50 = { narrative_event = { id = novelist.1110 days = 10 random = 20 } } # Found eventlessly
+			}
+		}
+		set_character_flag = do_not_disturb
+	}
+	option = {
+		name = EVTOPTB_novelist1100
+		trigger = {
+			NOT = { trait = hunter }
+		}
+		if = {
+			limit = {
+				trait = craven
+			}
+			remove_trait_craven_effect = yes
+		}
+		else_if = {
+			limit = {
+				NOT = { trait = brave }
+			}
+			random = {
+				chance = 50
+				add_trait_brave_effect = yes
+			}
+		}
+		custom_tooltip = {
+			text = EVTOPTA_novelist1100_tooltip
+			random_list = {
+				25 = { narrative_event = { id = novelist.1101 days = 10 random = 10 } } # Old greedy man knows the way
+				70 = { narrative_event = { id = novelist.1105 days = 10 random = 10 } } # Pretty much failed
+				5  = { narrative_event = { id = novelist.1110 days = 10 random = 20 } } # Found eventlessly
+			}
+		}
+		set_character_flag = do_not_disturb
+	}
+	option = {
+		name = EVTOPTC_novelist1100
+		random_list = {
+			50 = {
+				hidden_tooltip = { remove_trait_silently_brave_effect = yes }
+				add_trait_craven_effect = yes
+			}
+			50 = {
+				hidden_tooltip = { remove_trait_silently_ambitious_effect = yes }
+				add_trait_silently_content_effect = yes
+			}
+		}
+	}
+	option = {
+		name = EVTOPTD_novelist1100
+		random_list = {
+			50 = {
+				hidden_tooltip = { remove_trait_silently_humble_effect = yes }
+				add_trait_proud_effect = yes
+			}
+			50 = {
+				hidden_tooltip = { remove_trait_silently_just_effect = yes }
+				add_trait_arbitrary_effect = yes
+			}
+		}
+	}
+}
+narrative_event = {
+	id = novelist.1101
+	is_triggered_only = yes
+	
+	picture = GFX_evt_hunt
+	border = GFX_event_narrative_frame_war
+	desc = novelist1101Desc
+	title = novelist1100Title
+	
+	option = {
+		name = EVTOPTA_novelist1101
+		scaled_wealth = { value = -0.5 min = -10 max = -500 }
+		narrative_event = { id = novelist.1110 days = 5 random = 5 tooltip = beauty_and_the_beast_lead }
+	}
+	option = {
+		name = EVTOPTB_novelist1101
+		tooltip_info = cruel
+		trigger = {
+			trait = cruel
+		}
+		narrative_event = { id = novelist.1110 days = 5 random = 5 tooltip = beauty_and_the_beast_lead }
+	}
+	option = {
+		name = EVTOPTC_novelist1101
+		tooltip_info = diplomacy
+		trigger = {
+			diplomacy = 15
+		}
+		narrative_event = { id = novelist.1110 days = 5 random = 5 tooltip = beauty_and_the_beast_lead }
+	}
+	option = {
+		name = EVTOPTD_novelist1101
+		clr_character_flag = do_not_disturb
+		prestige = -50
+	}
+}
+narrative_event = {
+	id = novelist.1105
+	is_triggered_only = yes
+	
+	picture = GFX_evt_hunt
+	border = GFX_event_narrative_frame_war
+	desc = novelist1105Desc
+	title = novelist1100Title
+	
+	option = {
+		name = EVTOPTA_novelist1105
+		tooltip_info = stubborn
+		trigger = {
+			trait = stubborn
+		}
+		custom_tooltip = {
+			text = beauty_and_the_beast_continue_searching
+			random_list = {
+				50 = { narrative_event = { id = novelist.1106 days = 10 random = 10 } } # Fail
+				50 = { narrative_event = { id = novelist.1110 days = 5 random = 15 } } # Found
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_novelist1105
+		tooltip_info = diligent
+		trigger = {
+			trait = diligent
+		}
+		custom_tooltip = {
+			text = beauty_and_the_beast_continue_searching
+			random_list = {
+				50 = { narrative_event = { id = novelist.1106 days = 10 random = 10 } } # Fail
+				50 = { narrative_event = { id = novelist.1110 days = 5 random = 15 } } # Found
+			}
+		}
+	}
+	option = {
+		name = EVTOPTC_novelist1105
+		tooltip_info = zealous
+		trigger = {
+			trait = zealous
+		}
+		custom_tooltip = {
+			text = beauty_and_the_beast_continue_searching
+			random_list = {
+				50 = { narrative_event = { id = novelist.1106 days = 10 random = 10 } } # Fail
+				50 = { narrative_event = { id = novelist.1110 days = 5 random = 15 } } # Found
+			}
+		}
+	}
+	option = {
+		name = EVTOPTD_novelist1105
+		clr_character_flag = do_not_disturb
+		if = {
+			limit = { NOT = { trait = depressed } }
+			random = {
+				chance = 50
+				add_trait_depressed_effect = yes
+			}
+		}
+	}
+}
+narrative_event = {
+	id = novelist.1106
+	is_triggered_only = yes
+	
+	picture = GFX_evt_hunt
+	border = GFX_event_narrative_frame_war
+	desc = novelist1106Desc
+	title = novelist1100Title
+	
+	option = {
+		name = EVTOPTA_novelist1106
+		clr_character_flag = do_not_disturb
+		add_trait_depressed_effect = yes
+	}
+}
+narrative_event = {
+	id = novelist.1110
+	is_triggered_only = yes
+	
+	picture = GFX_evt_hunt
+	border = GFX_event_narrative_frame_war
+	desc = novelist1110Desc
+	title = novelist1100Title
+	
+	option = {
+		name = EVTOPTA_novelist1110
+		narrative_event = { id = novelist.1112 tooltip = EVTOPTA_novelist1110_tooltip }
+	}
+	option = {
+		name = EVTOPTB_novelist1100
+		tooltip_info = intrigue
+		trigger = {
+			intrigue = 18 # It's fairly high, as this will result in instant kill
+		}
+		narrative_event = { id = novelist.1111 tooltip = EVTOPTB_novelist1110_tooltip }
+	}
+	option = {
+		name = EVTOPTC_novelist1110
+		clr_character_flag = do_not_disturb
+		random_list = {
+			50 = {
+				hidden_tooltip = { remove_trait_silently_trusting_effect = yes }
+				add_trait_paranoid_effect = yes
+			}
+			50 = {
+				hidden_tooltip = { remove_trait_silently_brave_effect = yes }
+				add_trait_craven_effect = yes
+			}
+		}
+	}
+}
+narrative_event = {
+	id = novelist.1111
+	is_triggered_only = yes
+	
+	picture = GFX_evt_hunt
+	border = GFX_event_narrative_frame_war
+	desc = novelist1111Desc
+	title = novelist1100Title
+	portrait = event_target:beast
+	immediate = {
+		create_beast_effect = yes
+	}
+	option = {
+		name = EVTOPTA_novelist1111
+		set_character_flag = beast_from_behind
+		narrative_event = { id = novelist.1115 tooltip = beauty_and_the_beast_continue_attack }
+	}
+	option = {
+		name = EVTOPTC_novelist1111
+		clr_character_flag = do_not_disturb
+		beast_vanish_effect = yes
+		random_list = {
+			50 = {
+				hidden_tooltip = { remove_trait_silently_cruel_effect = yes }
+				hidden_tooltip = { remove_trait_envious_effect = yes }
+				add_trait_kind_effect = yes
+			}
+			50 = {
+				if = {
+					limit = {
+						NOT = { trait = just }
+					}
+					add_trait = just
+				}
+			}
+		}
+	}
+}
+narrative_event = {
+	id = novelist.1112
+	is_triggered_only = yes
+	
+	picture = GFX_evt_hunt
+	border = GFX_event_narrative_frame_war
+	desc = novelist1112Desc
+	title = novelist1100Title
+	portrait = event_target:beast
+	immediate = {
+		create_beast_effect = yes
+	}
+	option = {
+		name = EVTOPTA_novelist1112
+		custom_tooltip = {
+			text = beauty_and_the_beast_continue_attack
+			set_character_flag = beast_duel
+			save_event_target_as = combatant_1
+			event_target:beast = {
+				save_event_target_as = combatant_2
+			}
+			duel_someone_effect = yes
+		}
+	}
+	option = {
+		name = EVTOPTB_novelist1112
+		tooltip_info = learning
+		trigger = {
+			learning = 15
+		}
+		narrative_event = { id = novelist.1113 tooltip = EVTOPTB_novelist1112_tooltip }
+	}
+	option = {
+		name = EVTOPTB_novelist1112
+		tooltip_info = kind
+		trigger = {
+			trait = kind
+		}
+		piety = 100
+		beast_vanish_effect = yes
+		clr_character_flag = do_not_disturb
+	}
+}
+narrative_event = {
+	id = novelist.1113
+	is_triggered_only = yes
+	
+	picture = GFX_evt_hunt
+	border = GFX_event_narrative_frame_war
+	desc = novelist1113Desc
+	title = novelist1100Title
+	portrait = event_target:beast
+	
+	option = {
+		name = EVTOPTA_novelist1113
+		prestige = 100
+		spawn_belle_effect = yes
+		beast_vanish_effect = yes
+		if = {
+			limit = { can_apply_cool_nickname_trigger = yes }
+			give_nickname = nick_the_rhetor
+		}
+		clr_character_flag = do_not_disturb
+	}
+}
+narrative_event = {
+	id = novelist.1114
+	is_triggered_only = yes
+	
+	picture = GFX_evt_hunt
+	border = GFX_event_narrative_frame_war
+	desc = novelist1114Desc
+	title = novelist1100Title
+	portrait = event_target:beast
+	immediate = {
+		set_loser_flags_and_save_opponent_effect = yes
+	}
+	
+	option = {
+		name = EVTOPTA_novelist1114
+		death = {
+			killer = event_target:beast
+			death_reason = death_duel
+		}
+		clr_character_flag = is_legendary_duel
+		clean_up_after_duel_effect = yes
+		beast_vanish_effect = yes
+	}
+}
+narrative_event = {
+	id = novelist.1115
+	is_triggered_only = yes
+	
+	picture = GFX_evt_hunt
+	border = GFX_event_narrative_frame_war
+	desc = {
+		trigger = {
+			NOT = { has_character_flag = beast_from_behind }
+		}
+		text = novelist1115Desc_A
+	}
+	desc = {
+		trigger = {
+			has_character_flag = beast_from_behind
+		}
+		text = novelist1115Desc_B
+	}
+	title = novelist1100Title
+	portrait = event_target:beast
+	immediate = {
+		set_winner_flags_and_save_opponent_effect = yes
+        random_list = {
+        	5 = { # You will be injured somehow (flags already set)...
+                bad_soldier_outcome_score = yes #Increases risk, if you are bad at this...
+                bad_soldier_outcome_score = yes #Increases risk, if you are bad at this...
+        	}
+        	10 = { # ONLY gives the Severely Injured trait, but no maiming...        		
+        		set_character_flag = severely_injured
+                bad_soldier_outcome_score = yes #Increases risk, if you are bad at this...
+        	}
+        	20 = { # ONLY gives bruises, etc...
+        		set_character_flag = mildly_injured
+				good_soldier_outcome_score = yes #Increases chance, if you are good at this...
+        	}
+        	20 = { # You are completely safe...
+				good_soldier_outcome_score = yes #Increases chance, if you are good at this...
+				good_soldier_outcome_score = yes #Increases chance, if you are good at this...
+        		set_character_flag = ignore_damage
+        	}
+        }
+	}
+	
+	option = {
+		name = {
+			trigger = {
+				NOT = { has_character_flag = beast_from_behind }
+			}
+			text = EVTOPTA_novelist1115_A
+		}
+		name = {
+			trigger = {
+				has_character_flag = beast_from_behind
+			}
+			text = EVTOPTA_novelist1115_B
+		}
+		if = {
+			limit = {
+				NOT = { has_character_flag = beast_from_behind }
+			}
+			prestige = 250
+		}
+		else = {
+			prestige = 100
+		}
+		event_target:beast = {
+			death = {
+				killer = ROOT
+				death_reason = death_duel
+			}
+		}
+		
+        custom_tooltip = { text = you_win_the_duel_tt }
+        apply_generic_duel_victory_effect = yes
+
+        if = { # Only add injury if you were unlucky enough to get it...
+        	limit = { NOT = { has_character_flag = ignore_damage } }
+        	apply_selected_duel_injury_effect = yes
+        }
+
+        add_blood_splatter_effect = yes
+		
+		spawn_belle_effect = yes
+		add_artifact = head_of_the_beast
+		if = {
+			limit = { has_dlc = "Holy Fury" }
+			if = {
+				limit = { is_female = no }
+				create_bloodline = {
+					type = beast_slayer_bloodline
+					inheritance = patrilineal
+				}
+			}
+			else = {
+				create_bloodline = {
+					type = beast_slayer_bloodline
+					inheritance = matrilineal
+				}
+			}
+		}
+		
+		clr_character_flag = do_not_disturb
+		clr_character_flag = beast_duel
+		clr_character_flag = is_legendary_duel
+		clean_up_after_duel_effect = yes
+	}
 }

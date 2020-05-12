@@ -1,25 +1,30 @@
 isnt_forced_to_theocracy = {
-	OR = {
-		controls_religion = no
-		AND = {
-			religion_group = muslim
-			NOT = { religion = bahai }
-		}
-		religion = jacobinist
-		religion = prussianist
-		religion = zarist
-		religion = stalinist
-		religion = katerinist
-		religion = trotskyite
-		religion = titoist
-		religion = khanist
-		religion = transatlantic
-		religion = anglican
-		religion = dynamitist
-		has_religion_feature = religion_temporal_head
-		AND = {
-			religion = novelist_reformed
-			has_religion_features = no # Old saves, and campaigns without HF, need the Fylkirate to continue working
+	trigger_if = {
+		limit = { controls_religion = yes }
+		OR = {
+			AND = {
+				religion_group = muslim
+				NOR = {
+					religion = bahai
+					religion = ibadi
+				}
+			}
+			religion = jacobinist
+			religion = prussianist
+			religion = zarist
+			religion = stalinist
+			religion = katerinist
+			religion = trotskyite
+			religion = titoist
+			religion = khanist
+			religion = transatlantic
+			religion = anglican
+			religion = dynamitist
+			has_religion_feature = religion_temporal_head
+			AND = {
+				religion = novelist_reformed
+				has_religion_features = no # Old saves, and campaigns without HF, need the Fylkirate to continue working
+			}
 		}
 	}
 }
@@ -166,6 +171,12 @@ is_jacobinist_religion_trigger = {
 }
 is_jadidist_religion_trigger = {
 	religion = jadidist
+}
+is_yarsani_religion_trigger = {
+	OR = {
+		religion = yersenism
+		religion = yazidi
+	}
 }
 has_zarist_emulate_ambition = {
 	OR = {
@@ -449,5 +460,57 @@ seafaring_doctrine_trigger = {
 		has_religion_feature = religion_feature_celtic
 		has_religion_feature = religion_feature_finnish
 		has_religion_feature = religion_feature_americanist
+	}
+}
+pirate_raider_trait_gain_trigger = {
+	OR = {
+		religion_group = pirate
+		any_owned_bloodline = {
+			has_bloodline_flag = bloodline_viking
+		}
+		AND = {
+			has_religion_feature = religion_adventuring
+			has_religion_feature = religion_seafaring
+		}
+	}
+}
+can_use_muslim_stuff_trigger = {
+	OR = {
+		religion_group = muslim
+		religion_group = syncratic_group
+	}
+}
+can_use_christian_stuff_trigger = {
+	OR = {
+		religion_group = christian
+		religion_group = syncratic_group
+	}
+}
+abrahamic_religion_trigger = {
+	OR = {
+		religion_group = christian
+		religion_group = muslim
+		religion_group = syncratic_group
+		religion_group = jewish_group
+	}
+}
+novelist_switch_trigger = {
+	OR = {
+		should_switch_to_novelist_trigger = yes
+		should_switch_to_non_novelist_trigger = yes
+	}
+}
+should_switch_to_novelist_trigger = {
+	persistent_event_target:novelist_title = { always = yes }
+	NOT = { has_title_flag = novelist_title }
+	PREV = {
+		religion_openly_novelist_or_reformed_trigger = yes
+	}
+}
+should_switch_to_non_novelist_trigger = {
+	persistent_event_target:non_novelist_title = { always = yes }
+	has_title_flag = novelist_title
+	PREV = {
+		religion_openly_novelist_or_reformed_trigger = no
 	}
 }
