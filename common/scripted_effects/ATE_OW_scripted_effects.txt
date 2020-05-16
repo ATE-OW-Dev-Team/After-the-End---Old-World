@@ -3512,7 +3512,37 @@ set_feudal_government_effect = {
 	}
 	else_if = {
 		limit = {
-			religion_group = muslim
+			OR = {
+				culture = dhivehi
+				culture = malayalam
+				culture = peninsular
+				culture = sinhala
+				culture = konkani
+				culture = kannada
+				culture = angrezi
+				culture = telugu
+				culture = marathi
+				culture = parsi
+				culture = gujurati
+				culture = hindustani
+				culture = rajput
+				culture = sindhi
+				culture = panjabi
+				culture = oriya
+				culture = bengali
+				culture = assamese
+				culture = yoonaanee
+				culture = tamil
+			}
+		}
+		set_government_type = indian_feudal
+	}
+	else_if = {
+		limit = {
+			OR = {
+				religion_group = muslim
+				religion = jadidist
+			}
 		}
 		set_government_type = muslim_government
 	}
@@ -4556,5 +4586,72 @@ novelist_switch_effect = {
 		reset_coa = THIS
 		copy_title_history = persistent_event_target:non_novelist_title
 		clr_title_flag = novelist_title
+	}
+}
+spawn_robot_army = {
+	spawn_unit = {
+		province = PREV
+		troops =
+		{
+			heavy_infantry = { 10000 10000 }
+			gunmen = { 10000 10000 }
+			knights = { 10000 10000 }
+		}
+	}
+}
+spawn_sleeping_beauty_effect = {
+	create_character = {
+		random_traits = yes
+		dynasty = actually_culture
+		culture = event_target:sleeping_beauty_province
+		female = yes
+		age = 117
+	}
+	new_character = {
+		add_age = -100
+		remove_disease_trait_effect = yes
+		clear_disease_level_effect = yes
+		remove_disease_flags_effect = yes
+		remove_all_negative_congenital_traits_effect = yes
+		add_trait = fair
+		add_trait = slothful
+		give_nickname = nick_the_sleeping_beauty
+		save_event_target_as = sleeping_beauty
+		if = {
+			limit = {
+				ROOT = {
+					is_female = yes
+				}
+			}
+			add_trait = homosexual
+		}
+		random_playable_ruler = {
+			limit = {
+				is_within_diplo_range = ROOT
+				any_demesne_title = {
+					OR = {
+						tier = DUKE
+						tier = KING
+					}
+					is_landless_type_title = no
+					is_primary_type_title = no
+					temporary = no
+				}
+				NOT = { character = ROOT }
+			}
+			random_demesne_title = {
+				limit = {
+					OR = {
+						tier = DUKE
+						tier = KING
+					}
+					is_landless_type_title = no
+					is_primary_type_title = no
+					temporary = no
+				}
+				add_weak_claim = PREVPREV
+				save_event_target_as = princess_title
+			}
+		}
 	}
 }

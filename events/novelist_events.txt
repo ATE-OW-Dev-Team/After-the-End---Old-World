@@ -553,16 +553,16 @@ character_event = {
 	}
 	immediate = {
 		player_heir = {
-			narrative_event = { id = novelist.1001 days = 5 }
+			character_event = { id = novelist.1001 days = 5 }
 		}
 	}
 }
-narrative_event = {
+character_event = {
 	id = novelist.1001
 	is_triggered_only = yes
 	
 	picture = GFX_evt_died_battle
-	border = GFX_event_narrative_frame_war
+	border = GFX_event_normal_frame_war
 	desc = novelist1001Desc
 	title = novelist1001Title
 	
@@ -596,6 +596,220 @@ narrative_event = {
 }
 
 #########################################
+#	Sleeping Beauty
+#########################################
+
+narrative_event = {
+	id = novelist.1010
+	
+	picture = GFX_evt_castle_construction
+	desc = novelist1010Desc
+	title = novelist1010Title
+	
+	only_playable = yes
+	only_capable = yes
+	min_age = 16
+	max_age = 25
+	religion_group = pagan_group
+	is_triggered_only = yes
+	trigger = {
+		religion_openly_novelist_or_reformed_trigger = yes
+		# Not doing anything else
+		is_inaccessible_trigger = no
+		NOT = { has_character_flag = do_not_disturb }
+		NOT = { has_character_flag = had_sleeping_beauty_event }
+		prefers_men_trigger = no
+	}
+	
+	immediate = {
+		set_character_flag = had_sleeping_beauty_event
+		random_demesne_province = {
+			save_event_target_as = sleeping_beauty_province
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_novelist1010
+		custom_tooltip = {
+			text = EVTOPTA_novelist1010_tooltip
+			random_list = {
+				34 = { narrative_event = { id = novelist.1011 } }
+				33 = { narrative_event = { id = novelist.1012 } }
+				33 = { narrative_event = { id = novelist.1013 } }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_novelist1010
+		tooltip_info = lunatic
+		trigger = {
+			trait = lunatic
+		}
+		add_artifact = head_of_the_princess
+		piety = -50
+	}
+	option = {
+		name = EVTOPTC_novelist1010
+		tooltip_info = greedy
+		trigger = {
+			trait = greedy
+		}
+		add_artifact = necklar_of_the_princess
+	}
+	option = {
+		name = EVTOPTD_novelist1010
+		if = {
+			limit = {
+				trait = lustful
+			}
+			random = {
+				chance = 50
+				remove_trait = lustful
+			}
+		}
+		if = {
+			limit = {
+				NOT = { trait = paranoid }
+			}
+			random = {
+				chance = 50
+				hidden_tooltip = { remove_trait_silently_trusting_effect = yes }
+				add_trait_paranoid_effect = yes
+			}
+		}
+	}
+}
+narrative_event = {
+	id = novelist.1011
+	
+	picture = GFX_evt_princess_byzantine
+	desc = novelist1011Desc
+	title = novelist1010Title
+	portrait = event_target:sleeping_beauty
+	is_triggered_only = yes
+	immediate = {
+		spawn_sleeping_beauty_effect = yes
+	}
+	
+	option = {
+		name = EVTOPTA_novelist1011
+		add_lover = event_target:sleeping_beauty
+	}
+	option = {
+		name = EVTOPTB_novelist1011
+		if = {
+			limit = { NOT = { trait = chaste } }
+			add_trait = chaste
+		}
+		piety = 50
+		prestige = 50
+	}
+	option = {
+		name = EVTOPTC_novelist1011
+		add_artifact = necklar_of_the_princess
+		if = {
+			limit = { NOT = { trait = greedy } }
+			add_trait = greedy
+		}
+		event_target:sleeping_beauty = {
+			banish = yes
+		}
+	}
+}
+narrative_event = {
+	id = novelist.1012
+	
+	picture = GFX_evt_moonlit_mountains_hf
+	desc = novelist1012Desc
+	title = novelist1010Title
+	is_triggered_only = yes
+	option = {
+		name = EVTOPTA_novelist1012
+		if = {
+			limit = {
+				NOT = { trait = possessed }
+			}
+			random = {
+				chance = 25
+				add_trait = possessed
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_novelist1012
+		if = {
+			limit = { NOT = { trait = cynical } }
+			add_trait = cynical
+		}
+	}
+}
+narrative_event = {
+	id = novelist.1013
+	
+	picture = GFX_evt_lovers
+	desc = novelist1013Desc
+	title = novelist1010Title
+	is_triggered_only = yes
+	option = {
+		name = EVTOPTA_novelist1013
+		if = {
+			limit = { NOT = { trait = lustful } }
+			add_trait = lustful
+		}
+		hidden_tooltip = {
+			random = {
+				chance = 50
+				modifier = {
+					factor = 0
+					is_infertile_trigger = yes
+				}
+				modifier = {
+					factor = 0
+					is_female = yes
+				}
+				character_event = { id = novelist.1014 days = 820 random = 30 }
+			}
+		}
+	}
+	option = {
+		name = EVTOPTB_novelist1013
+		if = {
+			limit = { NOT = { trait = chaste } }
+			add_trait = chaste
+		}
+	}
+}
+character_event = {
+	id = novelist.1014
+	
+	picture = GFX_evt_birth
+	desc = novelist1014Desc
+	title = novelist1010Title
+	portrait = event_target:new_kid
+	is_triggered_only = yes
+	immediate = {
+		create_character = {
+			age = 2
+			trait = fair
+			trait = bastard
+			random_traits = no
+			genetic_father = ROOT
+			dynasty = ROOT
+			culture = event_target:sleeping_beauty_province
+		}
+		new_character = {
+			set_father = ROOT
+			set_real_father = ROOT
+			save_event_target_as = new_kid
+		}
+	}
+	option = {
+		name = EVTOPTA_novelist1014
+	}
+}
+
+
+#########################################
 #	Beauty and the Beast
 #########################################
 
@@ -607,7 +821,7 @@ narrative_event = {
 	desc = novelist1100Desc
 	title = novelist1100Title
 	
-	only_rulers = yes
+	only_playable = yes
 	only_capable = yes
 	min_age = 16
 	religion_group = pagan_group
@@ -655,8 +869,8 @@ narrative_event = {
 		custom_tooltip = {
 			text = EVTOPTA_novelist1100_tooltip
 			random_list = {
-				35 = { narrative_event = { id = novelist.1101 days = 10 random = 10 } } # Old greedy man knows the way
-				15 = { narrative_event = { id = novelist.1105 days = 10 random = 10 } } # Pretty much failed
+				35 = { character_event = { id = novelist.1101 days = 10 random = 10 } } # Old greedy man knows the way
+				15 = { character_event = { id = novelist.1105 days = 10 random = 10 } } # Pretty much failed
 				50 = { narrative_event = { id = novelist.1110 days = 10 random = 20 } } # Found eventlessly
 			}
 		}
@@ -685,8 +899,8 @@ narrative_event = {
 		custom_tooltip = {
 			text = EVTOPTA_novelist1100_tooltip
 			random_list = {
-				25 = { narrative_event = { id = novelist.1101 days = 10 random = 10 } } # Old greedy man knows the way
-				70 = { narrative_event = { id = novelist.1105 days = 10 random = 10 } } # Pretty much failed
+				25 = { character_event = { id = novelist.1101 days = 10 random = 10 } } # Old greedy man knows the way
+				70 = { character_event = { id = novelist.1105 days = 10 random = 10 } } # Pretty much failed
 				5  = { narrative_event = { id = novelist.1110 days = 10 random = 20 } } # Found eventlessly
 			}
 		}
@@ -719,12 +933,12 @@ narrative_event = {
 		}
 	}
 }
-narrative_event = {
+character_event = {
 	id = novelist.1101
 	is_triggered_only = yes
 	
-	picture = GFX_evt_hunt
-	border = GFX_event_narrative_frame_war
+	picture = GFX_evt_wise_woman
+	border = GFX_event_normal_frame_war
 	desc = novelist1101Desc
 	title = novelist1100Title
 	
@@ -755,12 +969,12 @@ narrative_event = {
 		prestige = -50
 	}
 }
-narrative_event = {
+character_event = {
 	id = novelist.1105
 	is_triggered_only = yes
 	
 	picture = GFX_evt_hunt
-	border = GFX_event_narrative_frame_war
+	border = GFX_event_normal_frame_war
 	desc = novelist1105Desc
 	title = novelist1100Title
 	
@@ -773,7 +987,7 @@ narrative_event = {
 		custom_tooltip = {
 			text = beauty_and_the_beast_continue_searching
 			random_list = {
-				50 = { narrative_event = { id = novelist.1106 days = 10 random = 10 } } # Fail
+				50 = { character_event = { id = novelist.1106 days = 10 random = 10 } } # Fail
 				50 = { narrative_event = { id = novelist.1110 days = 5 random = 15 } } # Found
 			}
 		}
@@ -787,7 +1001,7 @@ narrative_event = {
 		custom_tooltip = {
 			text = beauty_and_the_beast_continue_searching
 			random_list = {
-				50 = { narrative_event = { id = novelist.1106 days = 10 random = 10 } } # Fail
+				50 = { character_event = { id = novelist.1106 days = 10 random = 10 } } # Fail
 				50 = { narrative_event = { id = novelist.1110 days = 5 random = 15 } } # Found
 			}
 		}
@@ -801,7 +1015,7 @@ narrative_event = {
 		custom_tooltip = {
 			text = beauty_and_the_beast_continue_searching
 			random_list = {
-				50 = { narrative_event = { id = novelist.1106 days = 10 random = 10 } } # Fail
+				50 = { character_event = { id = novelist.1106 days = 10 random = 10 } } # Fail
 				50 = { narrative_event = { id = novelist.1110 days = 5 random = 15 } } # Found
 			}
 		}
@@ -818,12 +1032,12 @@ narrative_event = {
 		}
 	}
 }
-narrative_event = {
+character_event = {
 	id = novelist.1106
 	is_triggered_only = yes
 	
 	picture = GFX_evt_hunt
-	border = GFX_event_narrative_frame_war
+	border = GFX_event_normal_frame_war
 	desc = novelist1106Desc
 	title = novelist1100Title
 	
@@ -837,7 +1051,7 @@ narrative_event = {
 	id = novelist.1110
 	is_triggered_only = yes
 	
-	picture = GFX_evt_hunt
+	picture = GFX_evt_mountaintop_castle_hf
 	border = GFX_event_narrative_frame_war
 	desc = novelist1110Desc
 	title = novelist1100Title
@@ -873,7 +1087,7 @@ narrative_event = {
 	id = novelist.1111
 	is_triggered_only = yes
 	
-	picture = GFX_evt_hunt
+	picture = GFX_evt_shadow
 	border = GFX_event_narrative_frame_war
 	desc = novelist1111Desc
 	title = novelist1100Title
@@ -911,7 +1125,7 @@ narrative_event = {
 	id = novelist.1112
 	is_triggered_only = yes
 	
-	picture = GFX_evt_hunt
+	picture = GFX_evt_mountaintop_castle_hf
 	border = GFX_event_narrative_frame_war
 	desc = novelist1112Desc
 	title = novelist1100Title
@@ -954,7 +1168,7 @@ narrative_event = {
 	id = novelist.1113
 	is_triggered_only = yes
 	
-	picture = GFX_evt_hunt
+	picture = GFX_evt_accused
 	border = GFX_event_narrative_frame_war
 	desc = novelist1113Desc
 	title = novelist1100Title
@@ -976,7 +1190,7 @@ narrative_event = {
 	id = novelist.1114
 	is_triggered_only = yes
 	
-	picture = GFX_evt_hunt
+	picture = GFX_evt_dueling_knights_hf
 	border = GFX_event_narrative_frame_war
 	desc = novelist1114Desc
 	title = novelist1100Title
@@ -1000,7 +1214,7 @@ narrative_event = {
 	id = novelist.1115
 	is_triggered_only = yes
 	
-	picture = GFX_evt_hunt
+	picture = GFX_evt_dueling_knights_hf
 	border = GFX_event_narrative_frame_war
 	desc = {
 		trigger = {
