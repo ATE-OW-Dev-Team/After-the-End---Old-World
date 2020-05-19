@@ -2289,7 +2289,6 @@ targeted_decisions = {
 	
 	stalinist_fabricate_evidence = {
 		only_playable = yes
-		only_independent = yes
 		filter = vassals
 		ai_target_filter  = vassals
 		ai_check_interval = 6
@@ -2299,89 +2298,88 @@ targeted_decisions = {
 		}
 		potential = {
 			vassal_of = FROM
+			NOT = { character = FROM }
+			is_ruler = yes
 		}
 		allow = {#This is meant to allow a stalinist independent ruler to spend a scaling amount of piety to gain a reason to imprison a vassal (FROM in this context is the player character)
-			OR = {
-				AND = {
-					FROM = {#If FROM has enough prestige and piety
-						prestige = 100
-						piety = 100
-					}
-					ROOT = {
-						primary_title = {#and the target's title is of an appropriate tier for the amount spent
-							tier = COUNT
-						}
-					}
+			trigger_if = {
+				limit = { tier = BARON }
+				FROM = {
+					show_scope_change = no
+					prestige = 50
+					piety = 50
 				}
-				AND = {
-					FROM = {
-						prestige = 250
-						piety = 250
-					}
-					ROOT = {
-					primary_title = {
-						tier = DUKE
-					}	
-					}
+			}
+			trigger_else_if = {
+				limit = { tier = COUNT }
+				FROM = {
+					show_scope_change = no
+					prestige = 100
+					piety = 100
 				}
-				AND = {
-					FROM = {
-						prestige = 500
-						piety = 500
-					}
-					ROOT = {
-					primary_title = {
-						tier = KING
-					}
-				    }
-				}				
+			}
+			trigger_else_if = {
+				limit = { tier = DUKE }
+				FROM = {
+					show_scope_change = no
+					prestige = 250
+					piety = 250
+				}
+			}
+			trigger_else_if = {
+				limit = { tier = KING }
+				FROM = {
+					show_scope_change = no
+					prestige = 500
+					piety = 500
+				}
+			}
+			trigger_else = {
+				is_ruler = yes
 			}
 		}
 		effect = {
 			if = {
 				limit = {
-					ROOT = {
-							primary_title = {
-							tier = KING
-						}						
-					}
+					tier = BARON
 				}
 				FROM = {
-					prestige = -500
-					piety = -500
-				}
-				ROOT = {
-					character_event = { id = stalin.1 }				
+					show_scope_change = no
+					prestige = -50
+					piety = -50
 				}
 			}
 			else_if = {
 				limit = {
-					ROOT = {
-							primary_title = {
-							tier = DUKE
-						}						
-					}
+					tier = COUNT
 				}
 				FROM = {
-					prestige = -250
-					piety = -250
-				}
-				ROOT = {
-					character_event = { id = stalin.1 }				
-				}
-			}
-			else_if = {
-				limit = {
-					ROOT = {
-							primary_title = {
-							tier = COUNT
-						}						
-					}
-				}
-				FROM = {
+					show_scope_change = no
 					prestige = -100
 					piety = -100
 				}
+			}
+			else_if = {
+				limit = {
+					tier = DUKE
+				}
+				FROM = {
+					show_scope_change = no
+					prestige = -250
+					piety = -250
+				}
+			}
+			else_if = {
+				limit = {
+					tier = KING
+				}
+				FROM = {
+					show_scope_change = no
+					prestige = -500
+					piety = -500
+				}
+			}
+			hidden_tooltip = {
 				ROOT = {
 					character_event = { id = stalin.1 }				
 				}
