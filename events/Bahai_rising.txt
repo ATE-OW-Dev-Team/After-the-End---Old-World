@@ -1,0 +1,360 @@
+namespace = BAHAI
+
+province_event = {
+	id = BAHAI.1
+	desc = EVTDESC_BAHAI_revival
+	picture = GFX_evt_bishop_muslim
+
+	trigger = {
+		OR = { 
+			644 = { province = ROOT }	# Shiraz
+			906 = { province = ROOT }	# Birjand
+		}
+		NOT = { has_province_modifier = BAHAI_revival }
+
+		holder_scope = {
+			NOT = { religion = bahai }
+			NOT = { religion_authority = 0.8 }
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 100
+		modifier = { factor = 0.3 NOT = { year = 2600 } }
+		modifier = { factor = 1.5 NOT = { religion = bahai } }
+		modifier = { factor = 0.5 holder_scope = { NOT = { religion_authority = 0.6 } } }
+		modifier = { factor = 0.5 holder_scope = { NOT = { religion_authority = 0.4 } } }
+	}
+   
+	immediate = {
+		add_province_modifier = { name = BAHAI_revival duration = 720 }
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_assist
+		trigger = { holder_scope = { religion = bahai } }
+		holder_scope = { piety = 15 }
+		religion = bahai
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_personal
+		trigger = {
+			holder_scope = { NOT = { religion = bahai } }
+		}
+		holder_scope = { narrative_event = { id = BAHAI.10 days = 3 } }
+		ai_chance = { factor = 10 }
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_advisor
+		trigger = {
+			holder_scope = { NOT = { religion = bahai } }
+		}
+		holder_scope = { job_spiritual = { narrative_event = { id = BAHAI.10 days = 3 } } }
+		ai_chance = { factor = 10 }
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_allow
+		trigger = {
+			holder_scope = { NOT = { religion = bahai } }
+			holder_scope = { NOT = { religion_authority = 0.5 } }
+			holder_scope = { NOT = { trait = zealous } }
+		}
+		holder_scope = { piety = -5 }
+		religion = bahai
+		add_province_modifier = { name = religious_tension duration = 180 }
+		ai_chance = { factor = 5 }
+	}
+}
+
+province_event = {
+	id = BAHAI.2
+	hide_window = yes
+	trigger = {
+		has_province_modifier = BAHAI_revival
+	}
+	mean_time_to_happen = {
+		years = 1
+		modifier = { factor = 2 religion = bahai }
+		modifier = { factor = 0.8 holder_scope = { NOT = { religion_authority = 0.6 } } }
+		modifier = { factor = 0.5 holder_scope = { NOT = { religion_authority = 0.4 } } }
+	}
+	immediate = {
+		if = {
+			limit = { NOT = { religion = bahai } }
+			ROOT = { province_event = { id = BAHAI.3 } }
+		}
+		if = {
+			limit = { religion = bahai }
+			random_neighbor_province = { province_event = { id = BAHAI.3 } }
+		}
+	}
+	option = { }
+}
+
+province_event = {
+	id = BAHAI.3
+	desc = EVTDESC_BAHAI_revival_spread
+	picture = GFX_evt_bishop_muslim
+
+	is_triggered_only = yes
+	trigger = {
+		NOT = { religion = bahai }
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_assist
+		trigger = { holder_scope = { religion = bahai } }
+		holder_scope = { piety = 15 }
+		religion = bahai
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_spread_heresy
+		trigger = {
+			holder_scope = { NOT = { religion = bahai } }
+			holder_scope = { realm_learning = 20 }
+		}
+		tooltip_info = learning
+		holder_scope = { piety = 10 }
+		add_province_modifier = { name = religious_tension duration = 180 }
+		ai_chance = { factor = 20 }
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_spread_crush
+		trigger = {
+			holder_scope = { NOT = { religion = bahai } }
+			holder_scope = { realm_martial = 20 }
+			holder_scope = { NOT = { trait = kind } }
+		}
+		tooltip_info = martial
+		holder_scope = { piety = 5 }
+		add_province_modifier = { name = religious_tension duration = 720 }
+		ai_chance = { factor = 20 }
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_allow
+		trigger = { holder_scope = { NOT = { religion = bahai } } }
+		holder_scope = { piety = -5 }
+		religion = bahai
+		add_province_modifier = { name = religious_tension duration = 180 }
+		ai_chance = { factor = 10 }
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_spread_convert
+		trigger = {
+			holder_scope = { NOT = { religion = bahai } }
+			holder_scope = { NOT = { trait = zealous } }
+			holder_scope = { NOT = { religion_authority = 0.5 } }
+		}
+		religion = bahai
+		holder_scope = { religion = bahai }
+		ai_chance = { factor = 5 }
+	}
+}
+
+narrative_event = {
+	id = BAHAI.10
+	title = EVTNAME_BAHAI_revival_witness
+	desc = EVTDESC_BAHAI_revival_witness
+	picture = GFX_evt_bishop_muslim
+
+	is_triggered_only = yes
+	trigger = {
+		NOT = { religion = bahai }
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_witness_convert
+		religion = bahai
+		FROM = { religion = bahai }
+		custom_tooltip = { text = TXT_BAHAI_revival_convert }
+		hidden_tooltip = { narrative_event = { id = BAHAI.12 days = 2 } }
+		hidden_tooltip = { liege = { character_event = { id = BAHAI.11 days = 5 } } }
+		ai_chance = {
+			factor = 10
+			modifier = { factor = 0 trait = zealous }
+			modifier = { factor = 0.5 religion_authority = 0.5 }
+			modifier = { factor = 0 religion_authority = 0.8 }
+		}
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_witness_resist
+		random = { chance = 50 FROM = { religion = bahai } }
+		FROM = { add_province_modifier = { name = religious_tension duration = 720 } }
+		hidden_tooltip = { FROM = { holder_scope = { character_event = { id = BAHAI.16 } } } }
+		ai_chance = {
+			factor = 10
+			modifier = { factor = 2 religion_authority = 0.7 }
+			modifier = { factor = 2 religion_authority = 0.6 }
+			modifier = { factor = 2 religion_authority = 0.4 }
+		}
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_witness_heresy
+		trigger = { learning = 12 }
+		tooltip_info = learning
+		piety = 10
+		FROM = { add_province_modifier = { name = religious_tension duration = 720 } }
+		random_list = {
+			50 = {
+				FROM = { remove_province_modifier = BAHAI_revival }
+				FROM = { holder_scope = { character_event = { id = BAHAI.15 } } }
+			}
+			50 = { FROM = { holder_scope = { character_event = { id = BAHAI.16 } } } }
+		}
+		ai_chance = {
+			factor = 5
+			modifier = { factor = 5 trait = zealous }
+			modifier = { factor = 2 religion_authority = 0.6 }
+			modifier = { factor = 2 religion_authority = 0.4 } 
+		}
+	}
+}
+
+character_event = {
+	id = BAHAI.11
+	desc = EVTDESC_BAHAI_revival_convertup
+	picture = GFX_evt_bishop_muslim
+	
+	is_triggered_only = yes
+	trigger = {
+		NOT = { character = FROM }
+	}
+
+	option = {
+		name = EVTOPT_BAHAI_revival_convertup_agree
+		trigger = {
+			NOT = { trait = zealous }
+			NOT = { religion_authority = 0.8 }
+		}
+		religion = bahai
+		custom_tooltip = { text = TXT_BAHAI_revival_convert }
+		hidden_tooltip = { liege = { character_event = { id = BAHAI.11 days = 5 } } }
+		hidden_tooltip = { narrative_event = { id = BAHAI.12 days = 2 } }
+		hidden_tooltip = { FROM = { character_event = { id = BAHAI.13 } } }
+		ai_chance = {
+			factor = 10
+			modifier = { factor = 0 trait = zealous }
+			modifier = { factor = 2 NOT = { religion_authority = 0.7 } }
+			modifier = { factor = 2 NOT = { religion_authority = 0.5 } }
+		}
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_convertup_refuse
+		opinion = {
+			who = FROM
+			modifier = opinion_infidel
+			months = 120
+			multiplier = 1
+		}
+		hidden_tooltip = { FROM = { character_event = { id = BAHAI.14 } } }
+		ai_chance = {
+			factor = 20
+		}
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_convertup_diplomacy
+		trigger = {
+			diplomacy = 8
+		}
+		piety = 5
+		hidden_tooltip = { FROM = { character_event = { id = BAHAI.14 } } }
+		hidden_tooltip = { FROM = { character_event = { id = 39023 days = 4 } }	}
+		ai_chance = {
+			factor = 50
+		}
+	}
+	
+	option = {
+		name = EVTOPT_BAHAI_revival_convertup_imprison
+		trigger = {
+			is_liege_of = FROM
+			OR = {
+				trait = wroth
+				trait = zealous
+				trait = lunatic
+			}
+			OR = {
+				NOT = { is_close_relative = FROM }
+				trait = lunatic
+			}
+		}
+		hidden_tooltip = { FROM = { character_event = { id = BAHAI.14 } } }
+		hidden_tooltip = { FROM = { character_event = { id = 39024 days = 4 } }	}
+		ai_chance = {
+			factor = 10
+			modifier = { factor = 10 trait = zealous }
+		}
+	}
+}
+
+narrative_event = {
+	id = BAHAI.12
+	title = EVTNAME_BAHAI_revival_converted
+	desc = EVTDESC_BAHAI_revival_converted
+	picture = GFX_evt_bishop_muslim
+
+	is_triggered_only = yes
+	trigger = {
+		religion = bahai
+		primary_title = { higher_tier_than = BARON }
+	}
+	
+	immediate = {
+		religion_authority = { modifier = ruler_converted_to }
+	}
+
+	option = {
+		name = EVTOPT_BAHAI_revival_converted
+	}
+}
+
+
+character_event = {
+	id = BAHAI.13
+	desc = EVTDESC_BAHAI_revival_liegeconverted
+	picture = GFX_evt_bishop_muslim
+	is_triggered_only = yes
+	trigger = { NOT = { character = FROM } }
+	option = { name = EVTOPT_BAHAI_revival_liegeconverted }
+}
+
+character_event = {
+	id = BAHAI.14
+	desc = EVTDESC_BAHAI_revival_liegerefused
+	picture = GFX_evt_bishop_muslim
+	is_triggered_only = yes
+	trigger = { NOT = { character = FROM } }
+	option = { name = EVTOPT_BAHAI_revival_liegerefused }
+}
+
+character_event = {
+	id = BAHAI.15
+	desc = EVTDESC_BAHAI_revival_advisorsuccess
+	picture = GFX_evt_bishop_muslim
+	is_triggered_only = yes
+	trigger = { NOT = { character = FROM } }
+	option = {
+		name = EVTOPT_BAHAI_revival_advisorsuccess
+		# maybe add an opinion bonus?
+	}
+}
+
+character_event = {
+	id = BAHAI.16
+	desc = EVTDESC_BAHAI_revival_advisorneutral
+	picture = GFX_evt_bishop_pagan_group
+	is_triggered_only = yes
+	trigger = { NOT = { character = FROM } }
+	option = { name = EVTOPT_BAHAI_revival_advisorneutral }
+}
