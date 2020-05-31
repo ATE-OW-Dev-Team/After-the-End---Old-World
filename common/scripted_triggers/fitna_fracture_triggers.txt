@@ -1,0 +1,74 @@
+ff_is_fracturing_cb_trigger = {
+    # Scope: war
+
+    custom_tooltip = {
+        text = ff_is_fracturing_cb_tooltip
+        OR = {
+            using_cb = claim_on_liege                # Faction: Install claimant (self)   ... OR directly declared single claim war by vassal?
+            using_cb = other_claim_on_liege          # Faction: Install claimant (other)
+            using_cb = powerful_vassal_takeover_war  # Faction: Oust ruler in favor of most_popular_vassal & elective succession
+
+            # The CBs below are disabled for now, for various reasons. They are much less common (except for overthrow ruler).
+
+            # Some are "open to abuse": a player could rebel against liege A while pressing a war against realm B,
+            # and mistakenly be considered as a revolter against B.
+
+            # using_cb = cb_install_antiking        # Barely used. May be broken.
+            # using_cb = cb_decadence_usurption     # Not used in revolts by AI. Open to abuse.
+            # using_cb = depose_liege               # No clear outcome for non-fracturing case.
+            # using_cb = overthrow_ruler            # No clear outcome for non-fracturing case.
+            # using_cb = overthrow_ruler_no_calls   # No clear outcome for non-fracturing case.
+            # using_cb = claim                      # Open to abuse.
+            # using_cb = other_claim                # Open to abuse.
+            # using_cb = claim_all                  # Open to abuse.
+            # using_cb = claim_on_liege_plot        # No longer used?
+
+            # NB: factions for elective/seniority succession are fine.
+            # So are independence and crown authority / council power factions.
+            # Reasoning is that liege would surrender to these if the entire realm were under threat.
+
+        }
+     }
+}
+
+
+ff_war_score_stalemate_trigger = {
+    # Scope: war
+
+    war_score = -50
+    NOT = { war_score = 50 }
+}
+
+
+ff_is_fracturing_attacker_trigger = {
+    # Scope: character (possible attacker)
+
+    any_war = {
+        ff_is_fracturing_cb_trigger = yes
+        attacker = {
+            character = PREV
+
+            # This shouldn't be necessary, given the CBs listed above, but somehow a
+            # "claim" war can trip the "using_cb = other_claim_on_liege" condition???
+            in_revolt = yes
+        }
+        defender = {
+            ff_is_fracturing_defender_trigger = yes
+        }
+    }
+}
+
+
+ff_is_fracturing_defender_trigger = {
+    # Scope: character (possible defender)
+
+    higher_tier_than = DUKE
+    independent = yes
+    custom_tooltip = {
+        text = ff_gov_group_tribal_or_feudal_tooltip
+        OR = {
+            is_tribal = yes
+            is_feudal = yes
+        }
+    }
+}

@@ -1,0 +1,586 @@
+namespace = FitnaFracture
+
+# Forwarding event
+character_event = {
+    id = FitnaFracture.1
+    hide_window = yes
+    is_triggered_only = yes  # on_war_started, etc
+
+    immediate = {
+        FROM = {
+            character_event = { id = FitnaFracture.2 }
+        }
+    }
+}
+
+
+# It is possible that ROOT is now an attacker in a civil war, and wasn't before
+character_event = {
+    id = FitnaFracture.2
+    hide_window = yes
+    is_triggered_only = yes
+
+    trigger = {
+        NOT = { has_character_modifier = in_civil_war_modifier }
+        ff_is_fracturing_attacker_trigger = yes
+    }
+
+    immediate = {
+        add_character_modifier = { modifier = in_civil_war_modifier  duration = -1 }
+
+        # Start counting the months
+        set_variable = { which = "civil_war_years"  value = 0 }
+        set_variable = { which = "civil_war_months"  value = 0 }
+        character_event = { id = FitnaFracture.10  days = 30 }
+    }
+}
+
+
+# Forwarding event
+character_event = {
+    id = FitnaFracture.6
+    hide_window = yes
+    is_triggered_only = yes  # on_war_ended, etc
+
+    immediate = {
+        FROM = {
+            character_event = { id = FitnaFracture.7 }
+        }
+    }
+}
+
+
+# It is possible that ROOT is no longer an attacker in a civil war
+character_event = {
+    id = FitnaFracture.7
+    hide_window = yes
+    is_triggered_only = yes  # on_war_ended*, etc
+
+    trigger = {
+        has_character_modifier = in_civil_war_modifier
+        NOT = { ff_is_fracturing_attacker_trigger = yes }
+    }
+
+    immediate = {
+        ff_clear_civil_war_effect = yes
+        clear_delayed_event = { id = FitnaFracture.10 }
+    }
+}
+
+
+# If still in civil war, count +1 month.
+# Otherwise, clear everything related to civil war.
+character_event = {
+    id = FitnaFracture.10
+    hide_window = yes
+    is_triggered_only = yes
+
+    immediate = {
+        # Civil war already ended, and FitnaFracture.7 has fired, but somehow we're here anyway
+        if = {
+            limit = { NOT = { has_character_modifier = in_civil_war_modifier } }
+            break = yes
+        }
+
+        # Civil war already ended, but FitnaFracture.7 did NOT fire
+        if = {
+            limit = { NOT = { ff_is_fracturing_attacker_trigger = yes } }
+            ff_clear_civil_war_effect = yes
+            break = yes
+        }
+
+        # Chalk one month
+        change_variable = { which = "civil_war_months"  value = 1 }
+
+        # Rollover months -> years
+        if = {
+            limit = { is_variable_equal = { which = "civil_war_months"  value = 12 } }
+            set_variable = { which = "civil_war_months"  value = 0 }
+            change_variable = { which = "civil_war_years"  value = 1 }
+        }
+
+        # THE FOLLOWING SECTIONS ARE CAREFULLY CODED TO AVOID DOING THINGS
+        # WITHIN ANY_WAR SECTIONS IN WHICH THE WAR MAY BE INVALIDATED,
+        # BECAUSE I SUSPECT THE GAME ENGINE HAS USE-AFTER-FREE BUGS.
+
+        # Save the defender as an event target (regardless of war duration and war score)
+        any_war = {
+            limit = {
+                attacker = { character = PREV }
+                defender = { ff_is_fracturing_defender_trigger = yes }
+                ff_is_fracturing_cb_trigger = yes
+            }
+            defender = {
+                save_event_target_as = defender
+            }
+        }
+
+        # Time for the revolt to ossify into a separate realm?
+        if = {
+            limit = {
+                check_variable = { which = "civil_war_years"  value = 4 }
+                any_war = {
+                    attacker = { character = PREV }
+                    defender = { ff_is_fracturing_defender_trigger = yes }
+                    ff_is_fracturing_cb_trigger = yes
+                    ff_war_score_stalemate_trigger = yes
+                }
+            }
+
+            # End war with event_target:defender in stalemate, splitting the realm in two indefinitely
+            character_event = { id = FitnaFracture.90 }
+        }
+
+        # Time for the defending realm to dissolve completely?
+        event_target:defender = {
+            if = {
+                limit = {
+                    any_war = {
+                        count = 2
+                        attacker = { check_variable = { which = "civil_war_years"  value = 3 } }
+                        defender = { character = PREV }
+                        ff_is_fracturing_cb_trigger = yes
+                        ff_war_score_stalemate_trigger = yes
+                    }
+                }
+                narrative_event = { id = FitnaFracture.100 }  # End all such wars; disslove realm into many independent duchies
+            }
+        }
+
+        # Check again in a "month"
+        if = {
+            limit = { is_variable_equal = { which = "civil_war_months"  value = 11 } }
+            character_event = { id = FitnaFracture.10  days = 35 }
+            break = yes
+        }
+        character_event = { id = FitnaFracture.10  days = 30 }
+    }
+}
+
+
+# ROOT (attacker) causes a split of the realm of event_target:defender
+
+character_event = {
+    id = FitnaFracture.90
+    is_triggered_only = yes
+    hide_window = yes
+
+    immediate = {
+        # Clear from previous events
+        set_variable = { which = "cb_is_powerful_vassal_takeover_war"  value = 0 }
+
+        # Clear from previous war invalidations
+        any_opinion_modifier_target = {
+            limit = {
+                reverse_has_opinion_modifier = {
+                    who = PREV
+                    modifier = opinion_ff_intended_claimant
+                }
+            }
+            reverse_remove_opinion = {
+                who = PREV
+                modifier = opinion_ff_intended_claimant
+            }
+        }
+
+        # Save list of vassals. Any of these characters who do not remain our vassals were co-rebels and belong under the new ruler.
+        any_vassal = {
+            reverse_opinion = { who = PREV  modifier = opinion_ff_fellow_rebel }
+        }
+
+        # Randomly pick a county in case it's needed for a landless claimant
+        random_realm_province = {
+            limit = {
+                owner = {
+                    NAND = {
+                        ai = no
+                        capital_scope = { province = PREVPREV }
+                    }
+                }
+            }
+            county = {
+                save_event_target_as = sacrificial_county
+            }
+        }
+
+        # Branching on the casus belli -- invalidate the war, determine event_target:new_ruler, etc.
+
+        # For claim_on_liege, this is correct
+        # For other_claim_on_liege, this is a reasonable fallback in case another mod prevents us from finding the claimant
+        # For powerful_vassal_takeover_war, this is needed as a fallback in case no vassal is eligible
+        ROOT = {
+            save_event_target_as = new_ruler
+        }
+
+        # claim_on_liege ---> ROOT. done. easy.
+        any_war = {
+            limit = {
+                attacker = { character = PREV }
+                defender = { ff_is_fracturing_defender_trigger = yes }
+                using_cb = claim_on_liege
+            }
+            end_war = invalid
+        }
+
+        # other_claim_on_liege ---> the claimant, whom we find in a convoluted way
+        any_war = {
+            limit = {
+                attacker = { character = PREV }
+                defender = { ff_is_fracturing_defender_trigger = yes }
+                using_cb = other_claim_on_liege
+            }
+            end_war = invalid
+        }
+
+        # Find the claimant by following an opinion modifier set during war invalidation.
+        # This is outside the any_war block to avoid use-after-free bugs in the engine.
+        any_opinion_modifier_target = {
+            limit = {
+                reverse_has_opinion_modifier = {
+                    who = PREV
+                    modifier = opinion_ff_intended_claimant
+                }
+            }
+            save_event_target_as = new_ruler
+            reverse_remove_opinion = {
+                who = PREV
+                modifier = opinion_ff_intended_claimant
+            }
+        }
+
+        # powerful_vassal_takeover_war ---> we need to find the most_popular_vassal
+        any_war = {
+            limit = {
+                attacker = { character = PREV }
+                defender = { ff_is_fracturing_defender_trigger = yes }
+                using_cb = powerful_vassal_takeover_war
+            }
+            PREV = { set_variable = { which = "cb_is_powerful_vassal_takeover_war"  value = 1 } }
+            end_war = invalid
+        }
+
+        # Find the most popular vassal who is eligible (to rule the new realm).
+        # This is outside the any_war block to avoid use-after-free bugs in the engine.
+        if = {
+            limit = { is_variable_equal = { which = "cb_is_powerful_vassal_takeover_war"  value = 1 } }
+            event_target:defender = {
+                most_popular_vassal = {
+                    limit = {
+                        # Conditions copied from 00_cb_types.txt (also in plot_events.txt)
+                        higher_tier_than = BARON
+                        is_feudal = yes
+                        prisoner = no
+                        NOR = {
+                            trait = in_hiding
+                            trait = incapable
+                            trait = eunuch
+                        }
+                        age = 16
+                        OR = {
+                            is_female = no
+                            AND = {
+                                is_female = yes
+                                event_target:defender = { has_law = true_cognatic_succession }
+                            }
+                        }
+
+                        # Conditions added by this mod -- don't let the Varangian Guard take over.
+                        holy_order = no
+                        mercenary = no
+                        is_landed = yes
+                        in_revolt = no
+                    }
+                    save_event_target_as = new_ruler
+                }
+            }
+        }
+
+        # Give the new ruler a county if needed, and an equal title if needed.
+        event_target:new_ruler = {
+            if = {
+                limit = {
+                    is_landed = no
+                }
+                event_target:sacrificial_county = {
+                    grant_title = { target = PREV  type = faction_demand }
+                }
+            }
+
+            if = {
+                limit = {
+                    event_target:defender = { tier = KING }
+                }
+                primary_title = {
+                    save_event_target_as = coa_base
+                }
+                event_target:defender = {
+                    primary_title = {
+                        save_event_target_as = old_title
+                        create_title = {
+                            tier = KING
+                            landless = no
+                            temporary = no
+                            custom_created = yes
+                            culture = PREVPREV
+                            holder = PREVPREV
+                            base_title = THIS  # ?
+                            copy_title_laws = yes  # e.g. copy England's laws
+                            name = FF_SPLIT_TITLE  # e.g. "Yorkist England"
+                        }
+                        new_title = {
+                            # TODO: do something better about coa in the rare case that coa_base is a mere barony
+                            set_coa = event_target:coa_base
+                            set_title_flag = fitna_fracture_can_be_merged
+                            save_event_target_as = created_title
+                            if = {
+                                limit = { is_variable_equal = { which = "cb_is_powerful_vassal_takeover_war"  value = 1 } }
+                                add_law_w_cooldown = law_voting_power_1
+                                add_law_w_cooldown = war_voting_power_1
+                                add_law_w_cooldown = succession_voting_power_1
+                                add_law_w_cooldown = succ_feudal_elective
+                            }
+                        }
+                    }
+                }
+            }
+
+           if = {
+                limit = {
+                    event_target:defender = { tier = EMPEROR }
+                }
+                primary_title = {
+                    save_event_target_as = coa_base
+                }
+                event_target:defender = {
+                    primary_title = {
+                        save_event_target_as = old_title
+                        create_title = {
+                            tier = EMPEROR
+                            landless = no
+                            temporary = no
+                            custom_created = yes
+                            culture = PREVPREV
+                            holder = PREVPREV
+                            base_title = THIS
+                            copy_title_laws = yes
+                            name = FF_SPLIT_TITLE
+                        }
+                        new_title = {
+                            set_coa = event_target:coa_base
+                            set_title_flag = fitna_fracture_can_be_merged
+                            save_event_target_as = created_title
+                            if = {
+                                limit = { is_variable_equal = { which = "cb_is_powerful_vassal_takeover_war"  value = 1 } }
+                                add_law_w_cooldown = law_voting_power_1
+                                add_law_w_cooldown = war_voting_power_1
+                                add_law_w_cooldown = succession_voting_power_1
+                                add_law_w_cooldown = succ_feudal_elective
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        # Rebel leader (ROOT) becomes a vassal of the new ruler
+        set_defacto_liege = event_target:new_ruler
+        reverse_opinion = { who = event_target:new_ruler  modifier = opinion_ff_partially_instated  years = 10 }
+
+        # All other rebels also become vassals of the new ruler
+        any_opinion_modifier_target = {
+            limit = {
+                reverse_has_opinion_modifier = {
+                    who = PREV
+                    modifier = opinion_ff_fellow_rebel
+                }
+            }
+
+            if = {
+                limit = { liege = { NOT = { character = ROOT } } }
+                set_defacto_liege = event_target:new_ruler
+                reverse_opinion = { who = event_target:new_ruler  modifier = opinion_ff_helped_partially_instate  years = 10 }
+            }
+
+            reverse_remove_opinion = {
+                who = PREV
+                modifier = opinion_ff_fellow_rebel
+            }
+        }
+
+        # The two rulers get claims against each other
+        event_target:defender = {
+            event_target:created_title = {
+                add_pressed_claim = PREV
+            }
+        }
+        event_target:new_ruler = {
+            event_target:old_title = {   #  Or should this be "all top titles"?
+                add_pressed_claim = PREV
+            }
+        }
+
+        event_target:defender = {
+            prestige = -500
+        }
+
+        # The two rulers HATE each other (hopefully this will make them press claims against each other)
+        # But they also have a 5-year non-aggression pact (similar to a truce)
+        event_target:new_ruler = {
+            event_target:defender = {
+                opinion =         { modifier = opinion_ff_split_realm  years = 50  who = PREV  }
+                reverse_opinion = { modifier = opinion_ff_split_realm  years = 50  who = PREV  }
+                opinion =         { modifier = in_non_aggression_pact  years = 5   who = PREV  origin_description = NAP_SPLIT_REALM }
+                reverse_opinion = { modifier = in_non_aggression_pact  years = 5   who = PREV  origin_description = NAP_SPLIT_REALM }
+            }
+        }
+
+        ff_clear_civil_war_effect = yes
+
+        # Notify players -- including ROOT, event_target:new_ruler, and event_target:defender
+        # any_playable_ruler seems to skip PREV or ROOT, so give them a special ping (TODO: make sure it's not just totally broken for everyone)
+        narrative_event = { id = FitnaFracture.91 }
+        any_playable_ruler = {
+            limit = {
+                ai = no
+                NOT = { character = ROOT }
+            }
+            narrative_event = { id = FitnaFracture.91 }
+        }
+    }
+}
+
+
+# ROOT is notified about a realm splitting in two
+
+narrative_event = {
+    id = FitnaFracture.91
+    is_triggered_only = yes
+
+    title = FitnaFracture.91.title
+    desc = FitnaFracture.91.desc
+    picture = GFX_evt_burning_house
+    border = GFX_event_narrative_frame_war
+
+    option = {
+        name = FitnaFracture.91.opt1
+        event_target:new_ruler = { break = yes }
+        event_target:defender = { break = yes }
+    }
+}
+
+
+# ROOT (defender) sees their realm dissolve into independent duchies
+
+narrative_event = {
+    id = FitnaFracture.100
+    is_triggered_only = yes
+
+    title = FitnaFracture.100.title
+    desc = FitnaFracture.100.desc
+    picture = GFX_evt_burning_house
+    border = GFX_event_narrative_frame_war
+
+    option = {
+        name = FitnaFracture.100.opt1
+
+        # Save for localization
+        primary_title = {
+            save_event_target_as = prior_primary_title
+        }
+
+        # Ongoing civil wars end inconclusively, regardless of duration or warscore
+        any_war = {
+            limit = {
+                defender = { character = PREV }
+                ff_is_fracturing_cb_trigger = yes
+            }
+            attacker = {
+                reverse_opinion = { who = ROOT  modifier = opinion_fitna_fracture_destructive_civil_war  years = 10 }
+                ff_clear_civil_war_effect = yes
+            }
+            end_war = invalid
+        }
+
+        # Ongoing independence wars end in success, regardless of warscore
+        any_war = {
+            limit = {
+                defender = {
+                    character = ROOT
+                }
+                OR = {
+                    using_cb = bid_for_independence
+                    using_cb = cb_faction_independence
+                }
+            }
+            attacker = {
+                reverse_opinion = { who = ROOT  modifier = opinion_fitna_fracture_got_your_independence  years = 10 }
+            }
+            end_war = success
+        }
+
+        # (Most other revolts, such as succession changes, are expected to end as invalid on their own.)
+
+        # Lose all empire and kingdom titles
+        any_demesne_title = {
+            limit = {
+                higher_tier_than = DUKE
+                temporary = no
+            }
+            destroy_landed_title = THIS
+            add_pressed_claim = PREV
+        }
+
+        # Lose vassals who are not de jure vassals of remaining titles
+        any_vassal = {
+            limit = {
+                is_landed = yes
+                lower_tier_than = DUKE  # Handled by losing kingdom/empire titles
+                capital_scope = {  # Province
+                    NOR = {
+                        county = { holder_scope = { character = ROOT } }
+                        duchy = { holder_scope = { character = ROOT } }
+                    }
+                }
+            }
+            set_defacto_liege = THIS
+        }
+
+        # Will be known as "the Derelict"
+        if = {
+            limit = { has_nickname = yes }
+            remove_nickname = yes
+        }
+        give_nickname = nick_fitna_fracture_the_derelict
+
+        prestige = -1000
+
+        # Notify players
+        hidden_tooltip = {
+            any_playable_ruler = {
+                limit = {
+                    ai = no
+                    NOT = { character = ROOT }
+                }
+                narrative_event = { id = FitnaFracture.101 }
+            }
+        }
+    }
+}
+
+
+# ROOT is notified that FROM's realm has dissolved
+
+narrative_event = {
+    id = FitnaFracture.101
+    is_triggered_only = yes
+
+    title = FitnaFracture.101.title
+    desc = FitnaFracture.101.desc
+    picture = GFX_evt_burning_house
+    border = GFX_event_narrative_frame_war
+
+    option = {
+        name = FitnaFracture.101.opt1
+    }
+}
