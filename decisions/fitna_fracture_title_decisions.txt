@@ -1,0 +1,65 @@
+title_decisions = {
+
+    fitna_fracture_merge_title = {
+        ai_target_filter = owned
+
+        is_high_prio = yes
+
+        potential = {
+            # Title was created as a result of civil-war split.
+            has_title_flag = fitna_fracture_can_be_merged
+        }
+
+        allow = {
+            # Ours
+            holder_scope = {
+                character = FROM
+            }
+
+            # Title is still titular (no land has de jure drifted into it)
+            is_titular = yes
+
+            # Title is not sole top real title
+            custom_tooltip = {
+                text = ff_not_sole_top_title_tooltip
+                holder_scope = {
+                    any_demesne_title = {
+                        temporary = no
+                        NOT = { title = PREVPREV }
+                        OR = {
+                            tier = PREVPREV
+                            higher_tier_than = PREVPREV
+                        }
+                    }
+                }
+            }
+
+            # Title is not contested in a war
+            is_contested = no
+        }
+
+        effect = {
+            # TODO: do we need to use make_primary_title and/or copy_title_laws to make things work correctly?
+
+            # Destroy the title
+            destroy_landed_title = THIS
+
+            # Deactivate the title, so it cannot be re-created by holding its de jure capital
+            activate_title = { title = THIS  status = no }
+
+            FROM = {
+                prestige = 200
+                wealth = 200
+                hidden_tooltip = {
+                    # Leave hints of what happened, in the form of a character modifier and a strong non-inheritable "trophy" claim
+                    add_character_modifier = { name = fitna_fracture_merged_title_modifier  duration = -1 }
+                    ROOT = { add_claim = PREV }
+                }
+            }
+        }
+
+        ai_will_do = {
+            factor = 1
+        }
+    }
+}
