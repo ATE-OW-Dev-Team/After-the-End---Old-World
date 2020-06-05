@@ -1,0 +1,1321 @@
+namespace = thelema
+
+
+character_event = {
+	id = thelema.1000
+	is_triggered_only = yes
+	trigger = {
+		allowed_to_use_stele_trigger = yes
+	}
+	fail_trigger_effect = {
+		character_event = { id = thelema.1003 }
+	}
+	picture = GFX_evt_runestone_raising_oldgods
+	border = GFX_event_normal_frame_religion
+	desc = EVTDESCTHELEMA1000
+	option = {
+		name = EVTOPTTHELEMA1000A
+		scaled_wealth = {
+			value = -0.5
+			min = -25
+			max = -501
+		}
+		character_event = { id = thelema.1001 tooltip = EVTOPTTHELEMA1000A_tooltip }
+		set_character_flag = stele_cost_0
+		ai_chance = {
+			factor = 10
+		}
+	}
+	option = {
+		name = EVTOPTTHELEMA1000B
+		scaled_wealth = {
+			value = -1
+			min = -50
+			max = -1002
+		}
+		character_event = { id = thelema.1001 tooltip = EVTOPTTHELEMA1000B_tooltip }
+		set_character_flag = stele_cost_1
+		ai_chance = {
+			factor = 30
+			modifier = {
+				factor = 0
+				NOT = {
+					scaled_wealth = {
+						value = 1
+						min = 50
+						max = 1002
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTTHELEMA1000C
+		trigger = {
+			NOT = { religion = thelemic }
+		}
+		scaled_wealth = {
+			value = -1.5
+			min = -75
+			max = -1503
+		}
+		character_event = { id = thelema.1001 tooltip = EVTOPTTHELEMA1000C_tooltip }
+		set_character_flag = stele_cost_2
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				NOT = {
+					scaled_wealth = {
+						value = 1.5
+						min = 75
+						max = 1503
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTTHELEMA1000D
+		remove_character_modifier = erecting_stele
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+character_event = {
+	id = thelema.1001
+	is_triggered_only = yes
+	trigger = {
+		allowed_to_use_stele_trigger = yes
+	}
+	fail_trigger_effect = {
+		character_event = { id = thelema.1003 }
+	}
+	picture = GFX_evt_runestone_raising_oldgods
+	border = GFX_event_normal_frame_religion
+	desc = EVTDESCTHELEMA1001
+	immediate = {
+		set_variable = {
+			which = needed_stele_targets
+			value = 4
+		}
+		while = {
+			limit = {
+				check_variable = {
+					which = needed_stele_targets
+					value >= 1
+				}
+			}
+			subtract_variable = {
+				which = needed_stele_targets
+				value = 1
+			}
+			random_list = {
+				200 = {
+					trigger = {
+						NOT = { event_target:stele_self = { always = yes } }
+					}
+					modifier = {
+						factor = 0.2
+						trait = humble
+					}
+					modifier = {
+						factor = 2
+						trait = proud
+					}
+					save_event_target_as = stele_self
+				}
+				100 = {
+					trigger = {
+						NOT = { event_target:stele_father = { always = yes } }
+						father_even_if_dead = { NOT = { is_rival = ROOT } }
+					}
+					modifier = {
+						factor = 0.2
+						is_equalist_religion = no
+						is_feminist_religion = yes
+					}
+					modifier = {
+						factor = 0.5
+						OR = {
+							is_feminist_culture = yes
+							is_feminist_religion = yes
+						}
+					}
+					father_even_if_dead = { save_event_target_as = stele_father }
+				}
+				10 = {
+					trigger = {
+						NOT = { event_target:stele_mother = { always = yes } }
+						mother_even_if_dead = { NOT = { is_rival = ROOT } }
+					}
+					modifier = {
+						factor = 2
+						is_feminist_religion = yes
+						is_equalist_religion = no
+					}
+					modifier = {
+						factor = 5
+						OR = {
+							is_feminist_culture = yes
+							is_feminist_religion = yes
+						}
+					}
+					mother_even_if_dead = { save_event_target_as = stele_mother }
+				}
+				70 = {
+					trigger = {
+						NOT = { event_target:stele_grand_father = { always = yes } }
+						OR = {
+							father_even_if_dead = { father_even_if_dead = { NOT = { is_rival = ROOT } } }
+							mother_even_if_dead = { father_even_if_dead = { NOT = { is_rival = ROOT } } }
+						}
+					}
+					modifier = {
+						factor = 0.2
+						is_equalist_religion = no
+						is_feminist_religion = yes
+					}
+					modifier = {
+						factor = 0.5
+						OR = {
+							is_feminist_culture = yes
+							is_feminist_religion = yes
+						}
+					}
+					random_list = {
+						10 = {
+							limit = { father_even_if_dead = { father_even_if_dead = { NOT = { is_rival = ROOT } } } }
+							father_even_if_dead = { father_even_if_dead = { save_event_target_as = stele_grand_father } }
+						}
+						10 = {
+							limit = { mother_even_if_dead = { father_even_if_dead = { NOT = { is_rival = ROOT } } } }
+							mother_even_if_dead = { father_even_if_dead = { save_event_target_as = stele_grand_father } }
+						}
+					}
+				}
+				7 = {
+					trigger = {
+						NOT = { event_target:stele_grand_mother = { always = yes } }
+						OR = {
+							father_even_if_dead = { mother_even_if_dead = { NOT = { is_rival = ROOT } } }
+							mother_even_if_dead = { mother_even_if_dead = { NOT = { is_rival = ROOT } } }
+						}
+					}
+					modifier = {
+						factor = 2
+						is_feminist_religion = yes
+						is_equalist_religion = no
+					}
+					modifier = {
+						factor = 5
+						OR = {
+							is_feminist_culture = yes
+							is_feminist_religion = yes
+						}
+					}
+					random_list = {
+						10 = {
+							trigger = { father_even_if_dead = { mother_even_if_dead = { NOT = { is_rival = ROOT } } } }
+							father_even_if_dead = { mother_even_if_dead = { save_event_target_as = stele_grand_mother } }
+						}
+						10 = {
+							trigger = { mother_even_if_dead = { mother_even_if_dead = { NOT = { is_rival = ROOT } } } }
+							mother_even_if_dead = { mother_even_if_dead = { save_event_target_as = stele_grand_mother } }
+						}
+					}
+				}
+				50 = {
+					trigger = {
+						NOT = { event_target:stele_sibling = { always = yes } }
+						any_sibling_even_if_dead = { NOT = { is_rival = ROOT } }
+					}
+					modifier = {
+						factor = 2
+						any_sibling_even_if_dead = {
+							count >= 3
+							always = yes
+						}
+					}
+					random_sibling_even_if_dead = { save_event_target_as = stele_sibling }
+				}
+				50 = {
+					trigger = {
+						NOT = { event_target:stele_friend = { always = yes } }
+						any_friend = { always = yes }
+					}
+					modifier = {
+						factor = 2
+						any_friend = {
+							count >= 2
+							always = yes
+						}
+					}
+					random_friend = { save_event_target_as = stele_friend }
+				}
+				50 = {
+					trigger = {
+						NOT = { event_target:stele_lover = { always = yes } }
+						any_lover = {
+							NOR = {
+								any_spouse = {
+									character = ROOT
+								}
+								any_consort = {
+									character = ROOT
+								}
+							}
+						}
+					}
+					modifier = {
+						factor = 2
+						any_lover = {
+							count >= 2
+							NOR = {
+								any_spouse = {
+									character = ROOT
+								}
+								any_consort = {
+									character = ROOT
+								}
+							}
+						}
+					}
+					random_lover = {
+						limit = {
+							NOR = {
+								any_spouse = {
+									character = ROOT
+								}
+								any_consort = {
+									character = ROOT
+								}
+							}
+						}
+						save_event_target_as = stele_lover
+					}
+				}
+				30 = {
+					trigger = {
+						NOT = { event_target:stele_spouse = { always = yes } }
+						OR = {
+							any_spouse = {
+								NOT = { is_rival = ROOT }
+							}
+							any_consort = {
+								NOT = { is_rival = ROOT }
+							}
+						}
+					}
+					modifier = {
+						factor = 3
+						OR = {
+							any_spouse = {
+								is_lover = ROOT
+							}
+							any_consort = {
+								is_lover = ROOT
+							}
+						}
+					}
+					if = {
+						limit = {
+							any_consort = {
+								is_lover = ROOT
+							}
+							NOT = {
+								any_spouse = {
+									is_lover = ROOT
+								}
+							}
+						}
+						random_consort = {
+							limit = {
+								is_lover = ROOT
+							}
+							save_event_target_as = stele_spouse
+						}
+					}
+					else_if = {
+						limit = {
+							any_spouse = {
+								NOT = { is_rival = ROOT }
+							}
+						}
+						random_spouse = {
+							limit = {
+								NOT = { is_rival = ROOT }
+							}
+							preferred_limit = {
+								is_lover = ROOT
+							}
+							save_event_target_as = stele_spouse
+						}
+					}
+					else = {
+						random_consort = {
+							limit = {
+								NOT = { is_rival = ROOT }
+							}
+							save_event_target_as = stele_spouse
+						}
+					}
+				}
+				30 = {
+					trigger = {
+						NOT = { event_target:stele_rival = { always = yes } }
+						any_rival = { always = yes }
+					}
+					modifier = {
+						factor = 2
+						any_rival = {
+							count >= 2
+							always = yes
+						}
+					}
+					modifier = {
+						factor = 3
+						trait = wroth
+					}
+					modifier = {
+						factor = 0.2
+						trait = patient
+					}
+					random_rival = { save_event_target_as = stele_rival }
+				}
+				fallback = {
+					set_variable = {
+						which = needed_stele_targets
+						value = 0
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = EVTOPTTHELEMA1001A
+		trigger = {
+			event_target:stele_self = { always = yes }
+		}
+		save_persistent_event_target = { name = stele_target scope = event_target:stele_self }
+	}
+	option = {
+		name = EVTOPTTHELEMA1001B
+		trigger = {
+			event_target:stele_father = { always = yes }
+		}
+		save_persistent_event_target = { name = stele_target scope = event_target:stele_father }
+	}
+	option = {
+		name = EVTOPTTHELEMA1001C
+		trigger = {
+			event_target:stele_mother = { always = yes }
+		}
+		save_persistent_event_target = { name = stele_target scope = event_target:stele_mother }
+	}
+	option = {
+		name = EVTOPTTHELEMA1001D
+		trigger = {
+			event_target:stele_grand_father = { always = yes }
+		}
+		save_persistent_event_target = { name = stele_target scope = event_target:stele_grand_father }
+	}
+	option = {
+		name = EVTOPTTHELEMA1001E
+		trigger = {
+			event_target:stele_grand_mother = { always = yes }
+		}
+		save_persistent_event_target = { name = stele_target scope = event_target:stele_grand_mother }
+	}
+	option = {
+		name = EVTOPTTHELEMA1001F
+		trigger = {
+			event_target:stele_sibling = { always = yes }
+		}
+		save_persistent_event_target = { name = stele_target scope = event_target:stele_sibling }
+	}
+	option = {
+		name = EVTOPTTHELEMA1001G
+		trigger = {
+			event_target:stele_friend = { always = yes }
+		}
+		save_persistent_event_target = { name = stele_target scope = event_target:stele_friend }
+	}
+	option = {
+		name = EVTOPTTHELEMA1001H
+		trigger = {
+			event_target:stele_lover = { always = yes }
+		}
+		save_persistent_event_target = { name = stele_target scope = event_target:stele_lover }
+	}
+	option = {
+		name = EVTOPTTHELEMA1001I
+		trigger = {
+			event_target:stele_spouse = { always = yes }
+		}
+		save_persistent_event_target = { name = stele_target scope = event_target:stele_spouse }
+	}
+	option = {
+		name = EVTOPTTHELEMA1001J
+		trigger = {
+			event_target:stele_rival = { always = yes }
+		}
+		save_persistent_event_target = { name = stele_target scope = event_target:stele_rival }
+	}
+	after = {
+		hidden_effect = {
+			clear_event_target = stele_self
+			clear_event_target = stele_father
+			clear_event_target = stele_mother
+			clear_event_target = stele_grand_father
+			clear_event_target = stele_grand_mother
+			clear_event_target = stele_sibling
+			clear_event_target = stele_friend
+			clear_event_target = stele_lover
+			clear_event_target = stele_spouse
+			clear_event_target = stele_rival
+			set_variable = {
+				which = stele_progress
+				value = 0
+			}
+			set_variable = {
+				which = stele_extra_quality
+				value = 0
+			}
+			character_event = { id = thelema.1002 days = 182 }
+		}
+	}
+}
+
+character_event = {
+	id = thelema.1002
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		allowed_to_use_stele_trigger = yes
+	}
+	fail_trigger_effect = {
+		character_event = { id = thelema.1003 }
+	}
+	immediate = {
+		change_variable = {
+			which = stele_progress
+			value = 1
+		}
+		if = {
+			limit = {
+				trigger_if = {
+					limit = { has_character_flag = stele_cost_0 }
+					check_variable = {
+						which = stele_progress
+						value = 5
+					}
+				}
+				trigger_else_if = {
+					limit = { has_character_flag = stele_cost_1 }
+					check_variable = {
+						which = stele_progress
+						value = 7
+					}
+				}
+				trigger_else = {
+					has_character_flag = stele_cost_2
+					check_variable = {
+						which = stele_progress
+						value = 10
+					}
+				}
+			}
+			character_event = { id = thelema.1004 days = 1 random = 363 }
+		}
+		else = {
+			random_list = {
+				10 = {
+					trigger = {
+						NOT = { has_character_flag = had_thelema_1010 }
+					}
+					character_event = { id = thelema.1010 days = 1 random = 250 }
+				}
+				10 = {
+					trigger = {
+						NOT = { has_character_flag = had_thelema_1011 }
+					}
+					character_event = { id = thelema.1011 days = 1 random = 250 }
+				}
+				10 = {
+					trigger = {
+						NOT = { has_character_flag = had_thelema_1012 }
+					}
+					character_event = { id = thelema.1012 days = 1 random = 250 }
+				}
+				70 = {
+				}
+			}
+			character_event = { id = thelema.1002 days = 365 }
+		}
+	}
+}
+character_event = {
+	id = thelema.1003
+	is_triggered_only = yes
+	picture = GFX_evt_runestone_raising_oldgods
+	border = GFX_event_normal_frame_religion
+	desc = EVTDESCTHELEMA1003
+    option = {
+        name = EVTOPTTHELEMA1003A
+    }
+    after = { #Clear and set all relevant flags...
+		clr_character_flag = stele_cost_0
+		clr_character_flag = stele_cost_1
+		clr_character_flag = stele_cost_2
+		clr_character_flag = had_thelema_1010
+		clr_character_flag = had_thelema_1011
+		clr_character_flag = had_thelema_1012
+		
+		remove_character_modifier = erecting_stele
+		clear_persistent_event_target = stele_target
+		clear_delayed_event = { id = thelema.1002 }
+		hidden_tooltip = {
+			set_variable = {
+				which = stele_progress
+				value = 0
+			}
+			set_variable = {
+				which = stele_extra_quality
+				value = 0
+			}
+		}
+    }
+}
+character_event = {
+	id = thelema.1004
+	is_triggered_only = yes
+	trigger = {
+		allowed_to_use_stele_trigger = yes
+	}
+	fail_trigger_effect = {
+		character_event = { id = thelema.1003 }
+	}
+	picture = GFX_evt_runestone_raising_oldgods
+	border = GFX_event_normal_frame_religion
+	desc = EVTDESCTHELEMA1004
+	immediate = {
+		random_list = {
+			10 = { # Low quality
+				trigger = {
+					NOT = { has_character_flag = stele_cost_2 }
+				}
+				modifier = {
+					factor = 1.5
+					check_variable = {
+						which = stele_extra_quality
+						value <= -1
+					}
+				}
+				modifier = {
+					factor = 0.75
+					check_variable = {
+						which = stele_extra_quality
+						value >= 1
+					}
+				}
+				modifier = {
+					factor = 0.75
+					check_variable = {
+						which = stele_extra_quality
+						value >= 2
+					}
+				}
+				add_artifact = stele_low_quality
+			}
+			10 = { # Medium quality
+				set_character_flag = stele_medium_quality
+			}
+			5 = { # High quality
+				trigger = {
+					NOT = { has_character_flag = stele_cost_1 }
+				}
+				modifier = {
+					factor = 0.66
+					check_variable = {
+						which = stele_extra_quality
+						value <= -1
+					}
+				}
+				modifier = {
+					factor = 1.3
+					check_variable = {
+						which = stele_extra_quality
+						value >= 1
+					}
+				}
+				modifier = {
+					factor = 1.3
+					check_variable = {
+						which = stele_extra_quality
+						value >= 2
+					}
+				}
+				set_character_flag = stele_high_quality
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_character_flag = stele_medium_quality
+					has_character_flag = stele_high_quality
+				}
+			}
+			random_list = {
+				10 = {
+					trigger = {
+						persistent_event_target:stele_target = {
+							NOT = { trait = shy }
+						}
+					}
+					modifier = {
+						factor = 4
+						persistent_event_target:stele_target = {
+							trait = generous
+						}
+					}
+					modifier = {
+						factor = 2
+						persistent_event_target:stele_target = {
+							has_education_diplomacy_trigger = yes
+						}
+					}
+					modifier = {
+						factor = 3
+						persistent_event_target:stele_target = {
+							has_lifestyle_diplomacy_trigger = yes
+						}
+					}
+					if = {
+						limit = {
+							has_character_flag = stele_medium_quality
+						}
+						add_artifact = stele_tongues_1
+					}
+					else = {
+						add_artifact = stele_tongues_2
+					}
+				}
+				10 = {
+					trigger = {
+						persistent_event_target:stele_target = {
+							NOT = { trait = humble }
+						}
+					}
+					modifier = {
+						factor = 4
+						persistent_event_target:stele_target = {
+							trait = proud
+						}
+					}
+					modifier = {
+						factor = 2
+						persistent_event_target:stele_target = {
+							has_education_diplomacy_trigger = yes
+						}
+					}
+					modifier = {
+						factor = 3
+						persistent_event_target:stele_target = {
+							has_lifestyle_diplomacy_trigger = yes
+						}
+					}
+					if = {
+						limit = {
+							has_character_flag = stele_medium_quality
+						}
+						add_artifact = stele_authority_1
+					}
+					else = {
+						add_artifact = stele_authority_2
+					}
+				}
+				10 = {
+					trigger = {
+						persistent_event_target:stele_target = {
+							NOT = { trait = patient }
+						}
+					}
+					modifier = {
+						factor = 4
+						persistent_event_target:stele_target = {
+							trait = wroth
+						}
+					}
+					modifier = {
+						factor = 2
+						persistent_event_target:stele_target = {
+							has_education_martial_trigger = yes
+						}
+					}
+					modifier = {
+						factor = 3
+						persistent_event_target:stele_target = {
+							has_lifestyle_martial_trigger = yes
+						}
+					}
+					if = {
+						limit = {
+							has_character_flag = stele_medium_quality
+						}
+						add_artifact = stele_wrath_1
+					}
+					else = {
+						add_artifact = stele_wrath_2
+					}
+				}
+				10 = {
+					trigger = {
+						persistent_event_target:stele_target = {
+							NOT = { trait = wroth }
+						}
+					}
+					modifier = {
+						factor = 4
+						persistent_event_target:stele_target = {
+							trait = patient
+						}
+					}
+					modifier = {
+						factor = 2
+						persistent_event_target:stele_target = {
+							has_education_martial_trigger = yes
+						}
+					}
+					modifier = {
+						factor = 3
+						persistent_event_target:stele_target = {
+							has_lifestyle_martial_trigger = yes
+						}
+					}
+					if = {
+						limit = {
+							has_character_flag = stele_medium_quality
+						}
+						add_artifact = stele_defense_1
+					}
+					else = {
+						add_artifact = stele_defense_2
+					}
+				}
+				10 = {
+					trigger = {
+						persistent_event_target:stele_target = {
+							NOT = { trait = arbitrary }
+						}
+					}
+					modifier = {
+						factor = 4
+						persistent_event_target:stele_target = {
+							trait = just
+						}
+					}
+					modifier = {
+						factor = 2
+						persistent_event_target:stele_target = {
+							has_education_stewardship_trigger = yes
+						}
+					}
+					modifier = {
+						factor = 3
+						persistent_event_target:stele_target = {
+							has_lifestyle_stewardship_trigger = yes
+						}
+					}
+					if = {
+						limit = {
+							has_character_flag = stele_medium_quality
+						}
+						add_artifact = stele_righteousness_1
+					}
+					else = {
+						add_artifact = stele_righteousness_2
+					}
+				}
+				10 = {
+					trigger = {
+						persistent_event_target:stele_target = {
+							NOT = { trait = charitable }
+						}
+					}
+					modifier = {
+						factor = 4
+						persistent_event_target:stele_target = {
+							trait = greedy
+						}
+					}
+					modifier = {
+						factor = 2
+						persistent_event_target:stele_target = {
+							has_education_stewardship_trigger = yes
+						}
+					}
+					modifier = {
+						factor = 3
+						persistent_event_target:stele_target = {
+							has_lifestyle_stewardship_trigger = yes
+						}
+					}
+					if = {
+						limit = {
+							has_character_flag = stele_medium_quality
+						}
+						add_artifact = stele_greed_1
+					}
+					else = {
+						add_artifact = stele_greed_2
+					}
+				}
+				10 = {
+					trigger = {
+						persistent_event_target:stele_target = {
+							NOT = { trait = honest }
+						}
+					}
+					modifier = {
+						factor = 4
+						persistent_event_target:stele_target = {
+							trait = deceitful
+						}
+					}
+					modifier = {
+						factor = 2
+						persistent_event_target:stele_target = {
+							has_education_intrigue_trigger = yes
+						}
+					}
+					modifier = {
+						factor = 3
+						persistent_event_target:stele_target = {
+							has_lifestyle_intrigue_trigger = yes
+						}
+					}
+					if = {
+						limit = {
+							has_character_flag = stele_medium_quality
+						}
+						add_artifact = stele_shadows_1
+					}
+					else = {
+						add_artifact = stele_shadows_2
+					}
+				}
+				10 = {
+					trigger = {
+						persistent_event_target:stele_target = {
+							NOT = { trait = chaste }
+						}
+					}
+					modifier = {
+						factor = 4
+						persistent_event_target:stele_target = {
+							trait = lustful
+						}
+					}
+					modifier = {
+						factor = 2
+						persistent_event_target:stele_target = {
+							has_education_intrigue_trigger = yes
+						}
+					}
+					modifier = {
+						factor = 3
+						persistent_event_target:stele_target = {
+							has_lifestyle_intrigue_trigger = yes
+						}
+					}
+					if = {
+						limit = {
+							has_character_flag = stele_medium_quality
+						}
+						add_artifact = stele_love_1
+					}
+					else = {
+						add_artifact = stele_love_2
+					}
+				}
+				10 = {
+					trigger = {
+						persistent_event_target:stele_target = {
+							is_dumb_trigger = no
+						}
+					}
+					modifier = {
+						factor = 4
+						persistent_event_target:stele_target = {
+							is_smart_trigger = yes
+						}
+					}
+					modifier = {
+						factor = 2
+						persistent_event_target:stele_target = {
+							has_education_learning_trigger = yes
+						}
+					}
+					modifier = {
+						factor = 3
+						persistent_event_target:stele_target = {
+							has_lifestyle_learning_trigger = yes
+						}
+					}
+					if = {
+						limit = {
+							has_character_flag = stele_medium_quality
+						}
+						add_artifact = stele_knowledge_1
+					}
+					else = {
+						add_artifact = stele_knowledge_2
+					}
+				}
+				10 = {
+					trigger = {
+						persistent_event_target:stele_target = {
+							NOT = { trait = cynical }
+						}
+					}
+					modifier = {
+						factor = 4
+						persistent_event_target:stele_target = {
+							trait = zealous
+						}
+					}
+					modifier = {
+						factor = 2
+						persistent_event_target:stele_target = {
+							has_education_stewardship_trigger = yes
+						}
+					}
+					modifier = {
+						factor = 3
+						persistent_event_target:stele_target = {
+							has_lifestyle_stewardship_trigger = yes
+						}
+					}
+					if = {
+						limit = {
+							has_character_flag = stele_medium_quality
+						}
+						add_artifact = stele_zeal_1
+					}
+					else = {
+						add_artifact = stele_zeal_2
+					}
+				}
+				fallback = {
+					if = {
+						limit = {
+							has_character_flag = stele_medium_quality
+						}
+						add_artifact = stele_medium_quality
+					}
+					else = {
+						add_artifact = stele_high_quality
+					}
+				}
+			}
+		}
+		new_artifact = {
+			save_event_target_as = new_book #for effects and localization purposes!
+		}
+	}
+    option = {
+        name = EVTOPTTHELEMA1001A
+
+        custom_tooltip = {
+        	text = new_book_added_tt
+        }
+
+    	if = { #Add some prestige...
+    		limit = {
+    			event_target:new_book = {
+    				quality = 1
+    				NOT = { quality = 2 }
+    			}
+    		}
+    		prestige = 20
+			piety = 20
+    	}
+    	if = {
+    		limit = {
+    			event_target:new_book = {
+    				quality = 2
+    				NOT = { quality = 3 }
+    			}
+    		}
+    		prestige = 50
+			piety = 50
+    	}
+    	if = {
+    		limit = {
+    			event_target:new_book = {
+    				OR = {
+    					quality = 3
+    					quality = 4
+    				}
+    			}
+    		}
+    		prestige = 100
+			piety = 100
+    	}
+
+    	if = { #add opinion bonus with the correct targets...
+    		limit = {
+				persistent_event_target:stele_target = {
+					is_alive = yes
+					NOT = { character = ROOT }
+				}
+			}
+
+    		if = {
+    			limit = {
+    				persistent_event_target:stele_target = {
+    					NOT = { is_rival = ROOT }
+    				}
+				}
+				reverse_opinion = {
+					who = persistent_event_target:stele_target
+					modifier = opinion_flattered
+					years = 20
+				}
+    		}
+    		else = {
+    			reverse_opinion = {
+					who = persistent_event_target:stele_target
+					modifier = opinion_strangely_flattered
+					years = 20
+				}
+    		}
+
+		}
+    }
+    after = { #Clear and set all relevant flags...
+		clr_character_flag = stele_cost_0
+		clr_character_flag = stele_cost_1
+		clr_character_flag = stele_cost_2
+		clr_character_flag = had_thelema_1010
+		clr_character_flag = had_thelema_1011
+		clr_character_flag = had_thelema_1012
+		
+		add_character_modifier = { name = erected_stele days = 7300 }
+		remove_character_modifier = erecting_stele
+		clear_persistent_event_target = stele_target
+		hidden_tooltip = {
+			set_variable = {
+				which = stele_progress
+				value = 0
+			}
+			set_variable = {
+				which = stele_extra_quality
+				value = 0
+			}
+		}
+    }
+}
+
+character_event = {
+	id = thelema.1010
+	is_triggered_only = yes
+	trigger = {
+		allowed_to_use_stele_trigger = yes
+	}
+	fail_trigger_effect = {
+		character_event = { id = thelema.1003 }
+	}
+	picture = GFX_evt_runestone_raising_oldgods
+	border = GFX_event_normal_frame_religion
+	desc = EVTDESCTHELEMA1010
+	immediate = {
+		set_character_flag = had_thelema_1010
+	}
+	option = {
+		name = EVTOPTTHELEMA1010A
+		custom_tooltip = {
+			text = EVTOPTTHELEMA1010A_tooltip
+			subtract_variable = {
+				which = stele_progress
+				value = 4
+			}
+			change_variable = {
+				which = stele_extra_quality
+				value = 1
+			}
+		}
+	}
+	option = {
+		name = EVTOPTTHELEMA1010B
+		custom_tooltip = {
+			text = EVTOPTTHELEMA1010B_tooltip
+		}
+	}
+	option = {
+		name = EVTOPTTHELEMA1010C
+		custom_tooltip = {
+			text = EVTOPTTHELEMA1010C_tooltip
+			change_variable = {
+				which = stele_progress
+				value = 3
+			}
+			subtract_variable = {
+				which = stele_extra_quality
+				value = 1
+			}
+		}
+	}
+}
+
+character_event = {
+	id = thelema.1011
+	is_triggered_only = yes
+	trigger = {
+		allowed_to_use_stele_trigger = yes
+	}
+	fail_trigger_effect = {
+		character_event = { id = thelema.1003 }
+	}
+	picture = GFX_evt_runestone_raising_oldgods
+	border = GFX_event_normal_frame_religion
+	desc = EVTDESCTHELEMA1011
+	immediate = {
+		set_character_flag = had_thelema_1011
+	}
+	option = {
+		name = EVTOPTTHELEMA1011A
+		piety = 50
+		custom_tooltip = {
+			text = EVTOPTTHELEMA1011A_tooltip
+			subtract_variable = {
+				which = stele_progress
+				value = 2
+			}
+		}
+	}
+	option = {
+		name = EVTOPTTHELEMA1011B
+		piety = 100
+		custom_tooltip = {
+			text = EVTOPTTHELEMA1011B_tooltip
+			subtract_variable = {
+				which = stele_progress
+				value = 6
+			}
+			change_variable = {
+				which = stele_extra_quality
+				value = 1
+			}
+		}
+	}
+	option = {
+		name = EVTOPTTHELEMA1011C
+		piety = -50
+		custom_tooltip = {
+			text = EVTOPTTHELEMA1010B_tooltip
+		}
+	}
+}
+
+character_event = {
+	id = thelema.1012
+	is_triggered_only = yes
+	trigger = {
+		allowed_to_use_stele_trigger = yes
+	}
+	fail_trigger_effect = {
+		character_event = { id = thelema.1003 }
+	}
+	picture = GFX_evt_runestone_raising_oldgods
+	border = GFX_event_normal_frame_religion
+	desc = EVTDESCTHELEMA1012
+	immediate = {
+		set_character_flag = had_thelema_1012
+	}
+	option = {
+		name = EVTOPTTHELEMA1012A
+		if = {
+			limit = {
+				prefers_men_trigger = yes
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = actually_culture
+				female = no
+				age = 17
+			}
+		}
+		else = {
+			create_character = {
+				random_traits = yes
+				dynasty = actually_culture
+				female = no
+				age = 17
+			}
+		}
+		custom_tooltip = {
+			text = EVTOPTTHELEMA1011A_tooltip
+			new_character = {
+				remove_disease_trait_effect = yes
+				clear_disease_level_effect = yes
+				remove_disease_flags_effect = yes
+				
+				add_trait = fair
+				add_lover = ROOT
+			}
+			subtract_variable = {
+				which = stele_progress
+				value = 2
+			}
+		}
+	}
+	option = {
+		name = EVTOPTTHELEMA1012B
+		if = {
+			limit = {
+				prefers_men_trigger = yes
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = actually_culture
+				female = no
+				age = 17
+			}
+		}
+		else = {
+			create_character = {
+				random_traits = yes
+				dynasty = actually_culture
+				female = no
+				age = 17
+			}
+		}
+		scaled_wealth = {
+			value = -0.1
+			min = -5
+			max = -101
+		}
+		custom_tooltip = {
+			text = EVTOPTTHELEMA1010B_tooltip
+			new_character = {
+				remove_disease_trait_effect = yes
+				clear_disease_level_effect = yes
+				remove_disease_flags_effect = yes
+				
+				add_trait = fair
+				add_lover = ROOT
+			}
+		}
+	}
+	option = {
+		name = EVTOPTTHELEMA1012C
+		prestige = -25
+		custom_tooltip = {
+			text = EVTOPTTHELEMA1010B_tooltip
+		}
+	}
+}
