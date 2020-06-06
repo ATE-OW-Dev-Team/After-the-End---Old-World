@@ -262,3 +262,51 @@ character_event = {
 		}
 	}
 }
+character_event = {
+	id = ATV.7
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		NOT = { has_character_flag = diversity }
+		culture = greenlander
+	}
+	
+	immediate = {
+		set_character_flag = diversity
+		if = {
+			limit = {
+				NOR = {
+					father_even_if_dead = { always = yes }
+					mother_even_if_dead = { always = yes }
+				}
+			}
+			random_list = {
+				80 = {
+					set_graphical_culture = greenlander
+				}
+				20 = {
+					set_graphical_culture = icelander
+				}
+			}
+		}
+		any_child_even_if_dead = {
+			character_event = { id = ATV.8 }
+		}
+	}
+}
+character_event = {
+	id = ATV.8
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		culture = greenlander
+	}
+	
+	immediate = {
+		set_character_flag = diversity
+		set_graphical_culture = FROM
+		any_child_even_if_dead = {
+			character_event = { id = ATV.8 }
+		}
+	}
+}
