@@ -1,6 +1,195 @@
 namespace=pir
 
-#On_looted_settlement: Spots a great place for a den.
+# Tribute to liege
+character_event = {
+	id = pir.100
+	desc = EVTDESCAPIR100
+	picture = GFX_evt_busy_trading_dock_republic
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	religion_group = pirate
+	
+	trigger = {
+		independent = no
+		liege = {
+			NOT = { religion_group = ROOT }
+		}
+		trigger_if = {
+			limit = { has_character_flag = pirate_liege_asked_for_share }
+			had_character_flag = { flag = pirate_liege_asked_for_share months >= 12 }
+		}
+	}
+	immediate = {
+		set_character_flag = pirate_liege_asked_for_share
+	}
+	
+	option = { # Pay a lot
+		name = EVTOPTAPIR100
+		tooltip = {
+			reverse_opinion = {
+				modifier = opinion_pirate_payed_a_lot
+				who = liege
+				years = 10
+			}
+			transfer_scaled_wealth = {
+				to = liege
+				value = 0.3
+				min = 30
+				max = 602
+			}
+		}
+		hidden_tooltip = { liege = { character_event = { id = pir.101 } } }
+		ai_chance = {
+			factor = 10
+		}
+	}
+	option = { # Pay some
+		name = EVTOPTBPIR100
+		tooltip = {
+			transfer_scaled_wealth = {
+				to = liege
+				value = 0.15
+				min = 15
+				max = 301
+			}
+		}
+		hidden_tooltip = { liege = { character_event = { id = pir.102 } } }
+		ai_chance = {
+			factor = 30
+		}
+	}
+	option = { # Don't pay
+		name = EVTOPTCPIR100
+		tooltip = {
+			reverse_opinion = {
+				modifier = opinion_pirate_didnt_pay
+				who = liege
+				years = 10
+			}
+		}
+		hidden_tooltip = { liege = { character_event = { id = pir.101 } } }
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+			modifier = {
+				factor = 0.2
+				trait = charitable
+			}
+			modifier = {
+				factor = 3
+				trait = ambitious
+			}
+			modifier = {
+				factor = 0.2
+				trait = content
+			}
+		}
+	}
+}
+character_event = {
+	id = pir.101
+	desc = EVTDESCAPIR101
+	picture = GFX_evt_busy_trading_dock_republic
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTAPIR101
+		opinion = {
+			modifier = opinion_pirate_payed_a_lot
+			who = FROM
+			years = 10
+		}
+		transfer_scaled_wealth = {
+			from = FROM
+			value = 0.3
+			min = 30
+			max = 602
+		}
+	}
+}
+character_event = {
+	id = pir.102
+	desc = EVTDESCAPIR102
+	picture = GFX_evt_busy_trading_dock_republic
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTAPIR102
+		transfer_scaled_wealth = {
+			from = FROM
+			value = 0.15
+			min = 15
+			max = 301
+		}
+	}
+}
+character_event = {
+	id = pir.103
+	desc = EVTDESCAPIR103
+	picture = GFX_evt_busy_trading_dock_republic
+	border = GFX_event_normal_frame_war
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTAPIR103
+		opinion = {
+			modifier = opinion_pirate_didnt_pay
+			who = liege
+			years = 10
+		}
+	}
+}
+
+# Pirate den maintenance
+
+character_event = {
+	id = pir.200
+	
+	is_triggered_only = yes
+	hide_window = yes
+	only_independent = yes
+	
+	trigger = {
+		any_realm_province = {
+			has_fort = yes
+			OR = {
+				fort_has_building = fort_pirate_den_1
+				fort_has_building = fort_pirate_den_2
+				fort_has_building = fort_pirate_den_3
+			}
+		}
+	}
+	
+	immediate = {
+		any_realm_province = {
+			limit = {
+				has_fort = yes
+			}
+			remove_province_modifier = fort_pirate_den_3
+			remove_province_modifier = fort_pirate_den_2
+			remove_province_modifier = fort_pirate_den_1
+			trigger_switch = {
+				on_trigger = fort_has_building
+				fort_pirate_den_3 = { add_province_modifier = { name = fort_pirate_den_3 days = 365 } }
+				fort_pirate_den_2 = { add_province_modifier = { name = fort_pirate_den_2 days = 365 } }
+				fort_pirate_den_1 = { add_province_modifier = { name = fort_pirate_den_1 days = 365 } }
+			}
+		}
+	}
+}
+
+# On_looted_settlement events
+
+# Spots a great place for a den.
 character_event = {
 	id = pir.500
 	desc = EVTDESCAPIR500
@@ -88,7 +277,7 @@ character_event = {
 	}
 }
 
-#On_looted_settlement: Person joins.
+# Person wants to join.
 character_event = {
 	id = pir.501
 	desc = EVTDESCAPIR501
