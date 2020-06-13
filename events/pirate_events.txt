@@ -8,16 +8,13 @@ character_event = {
 	border = GFX_event_normal_frame_war
 	
 	is_triggered_only = yes
-	religion_group = pirate
 	
 	trigger = {
-		independent = no
-		liege = {
-			NOT = { religion_group = ROOT }
-		}
+		is_tributary = yes
+		is_tributary = { type = corsair }
 		trigger_if = {
 			limit = { has_character_flag = pirate_liege_asked_for_share }
-			had_character_flag = { flag = pirate_liege_asked_for_share months >= 12 }
+			had_character_flag = { flag = pirate_liege_asked_for_share months >= 6 }
 		}
 	}
 	immediate = {
@@ -29,17 +26,15 @@ character_event = {
 		tooltip = {
 			reverse_opinion = {
 				modifier = opinion_pirate_payed_a_lot
-				who = liege
+				who = suzerain
 				years = 10
 			}
 			transfer_scaled_wealth = {
-				to = liege
+				to = suzerain
 				value = 0.3
-				min = 30
-				max = 602
 			}
 		}
-		hidden_tooltip = { liege = { character_event = { id = pir.101 } } }
+		hidden_tooltip = { suzerain = { character_event = { id = pir.101 } } }
 		ai_chance = {
 			factor = 10
 		}
@@ -48,19 +43,28 @@ character_event = {
 		name = EVTOPTBPIR100
 		tooltip = {
 			transfer_scaled_wealth = {
-				to = liege
-				value = 0.15
-				min = 15
-				max = 301
+				to = suzerain
+				value = 0.2
 			}
 		}
-		hidden_tooltip = { liege = { character_event = { id = pir.102 } } }
+		hidden_tooltip = { suzerain = { character_event = { id = pir.102 } } }
 		ai_chance = {
-			factor = 30
+			factor = 40
+			modifier = {
+				factor = 5
+				trait = greedy
+			}
+			modifier = {
+				factor = 0.2
+				trait = charitable
+			}
 		}
 	}
 	option = { # Don't pay
 		name = EVTOPTCPIR100
+		trigger = {
+			always = no # basically cheating
+		}
 		tooltip = {
 			reverse_opinion = {
 				modifier = opinion_pirate_didnt_pay
@@ -108,8 +112,6 @@ character_event = {
 		transfer_scaled_wealth = {
 			from = FROM
 			value = 0.3
-			min = 30
-			max = 602
 		}
 	}
 }
@@ -125,9 +127,7 @@ character_event = {
 		name = EVTOPTAPIR102
 		transfer_scaled_wealth = {
 			from = FROM
-			value = 0.15
-			min = 15
-			max = 301
+			value = 0.20
 		}
 	}
 }
