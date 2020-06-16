@@ -8,6 +8,74 @@
 
 decisions = {
 
+	neovedic_artifact_search = {
+		only_playable = yes
+		is_high_prio = yes
+		ai_check_interval = 60 #check only once every 60 months.
+		potential = {
+			religion = neovedic
+			NOT = {
+				any_artifact = {
+					has_artifact_flag = very_rare
+				}
+			}
+			is_landed = yes
+			mercenary = no
+			holy_order = no
+			OR = {
+				higher_tier_than = COUNT
+				ai = no
+			}
+			any_courtier_or_vassal = {
+				NOT = { trait = incapable }
+				prisoner = no
+				opinion = { who = ROOT value = 20 }
+				is_councillor = yes
+				ai = yes
+			}
+			NOR = {
+				has_character_modifier = relic_rumor_major
+				has_character_modifier = relic_rumor_medium
+				has_character_modifier = relic_rumor_minor
+			}
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		allow = {
+			piety = 250
+		}
+		effect = {
+			piety = -250
+			custom_tooltip = {
+				text = neovedic_artifact_search_tt
+				random_courtier_or_vassal = {
+					limit = {
+						NOT = { trait = incapable }
+						prisoner = no
+						opinion = { who = ROOT value = 20 }
+						is_councillor = yes
+						ai = yes
+					}
+					save_event_target_as = rumor_councillor
+				}
+				save_event_target_as = relic_ruler
+				event_target:rumor_councillor = { character_event = { id = MNM.9001 } }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				wealth < 0
+			}
+			modifier = {
+				factor = 0.2
+				war = yes
+			}
+		}
+	}
+
 	chaldean_catholic_reunion = {
 		only_playable = yes
 		is_high_prio = yes
