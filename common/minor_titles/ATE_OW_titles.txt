@@ -479,6 +479,57 @@ title_hero_of_labor = {
 
 	message = yes
 }
+
+title_chief_of_gendarmes = {
+	dignity = 0.6
+	realm_in_name = yes
+	grant_limit = 1
+	opinion_effect = 5
+	
+	monthly_salary = 0.04
+	monthly_prestige = 0.80
+	
+	is_unique = yes
+	
+	allowed_to_hold = {
+		NOT = { 
+			primary_title = { temporary = yes } 
+		}
+		is_adult = yes
+		OR = { 
+			is_communist_religion_trigger = yes
+			is_zarist_religion_trigger = yes
+		}
+		OR = { 
+			male_can_hold_minor_title_trigger = yes
+			female_can_hold_minor_title_trigger = yes
+		}
+		is_incapable = no
+		OR = {
+			trait = just
+			martial = 12
+		}
+	}
+
+	allowed_to_grant = {
+		OR = {
+			is_feudal = yes
+			is_tribal = yes
+		}
+		OR = { 
+			is_communist_religion_trigger = yes
+			is_zarist_religion_trigger = yes
+		}
+	}
+	
+	gain_effect = {
+	}
+	lose_effect = {
+	}
+
+	message = yes
+}
+
 #Bhutan Titles
 title_red_druk = {
 	dignity = 5
@@ -817,7 +868,7 @@ title_member_parliament = {
 title_chechnik = {
 	dignity = 3
 	realm_in_name = yes
-	grant_limit = 15
+	grant_limit = 18
 	opinion_effect = 5
 	is_voter = yes
 	is_high_prio = yes
@@ -858,6 +909,81 @@ title_chechnik = {
 	}
 	lose_effect = {
 		character_event = { id = DRUK.4 }
+		if = {
+			limit = {
+				FROM = {
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+			}
+			opinion = { who = FROM modifier = opinion_fired_from_council }
+			opinion = { who = FROM modifier = opinion_recently_fired }
+		}
+	}
+
+	message = yes
+}
+#British titles
+title_member_parliament_britannia = {
+	dignity = 3
+	realm_in_name = yes
+	grant_limit = 20
+	opinion_effect = 5
+	is_voter = yes
+	is_high_prio = yes
+	
+	monthly_salary = 0.075
+	monthly_prestige = 0.5
+	
+	
+	is_unique = yes
+	
+	allowed_to_hold = {
+		OR = {
+			male_can_hold_minor_title_trigger = yes
+			female_can_hold_minor_title_trigger = yes
+			has_law = true_cognatic_succession
+		}
+		is_adult = yes
+		prisoner = no
+		is_incapable = no
+		has_regent = no
+		NOT = { trait = monk }
+		NOT = { trait = nun }
+		is_theocracy = no
+	}
+	
+	allowed_to_grant = {
+		is_feudal = yes
+		has_landed_title = e_britannia
+		OR = {
+			culture = british
+			culture = frencig
+			culture = old_welsh
+			culture = cornish
+			culture = breton
+			culture = gallian
+			culture = manx
+			culture = oglallan
+			culture = brytwysher
+			culture = prinsesser
+			culture = westlander
+			culture = old_norman
+			culture = farlander
+			culture = ulsterite
+			culture = llanito
+			culture = angrezi
+			culture = omani
+		}
+		primary_title = { has_law = law_voting_power_1 }
+	}
+	
+	gain_effect = {
+		character_event = { id = DRUK.5 }
+	}
+	lose_effect = {
+		character_event = { id = DRUK.6 }
 		if = {
 			limit = {
 				FROM = {
