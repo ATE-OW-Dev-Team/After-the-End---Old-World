@@ -997,3 +997,58 @@ title_member_parliament_britannia = {
 
 	message = yes
 }
+#Roman Republic titles
+title_senator = {
+	dignity = 3
+	realm_in_name = yes
+	grant_limit = 24
+	opinion_effect = 5
+	is_voter = yes
+	is_high_prio = yes
+	
+	monthly_salary = 0.075
+	monthly_prestige = 0.5
+	
+	
+	is_unique = yes
+	
+	allowed_to_hold = {
+		OR = {
+			male_can_hold_minor_title_trigger = yes
+			female_can_hold_minor_title_trigger = yes
+			has_law = true_cognatic_succession
+		}
+		is_adult = yes
+		prisoner = no
+		is_incapable = no
+		has_regent = no
+		NOT = { trait = monk }
+		NOT = { trait = nun }
+	}
+	
+	allowed_to_grant = {
+		is_feudal = yes
+		has_landed_title = e_roman_republic
+		primary_title = { has_law = law_voting_power_1 }
+	}
+	
+	gain_effect = {
+		character_event = { id = DRUK.7 }
+	}
+	lose_effect = {
+		character_event = { id = DRUK.8 }
+		if = {
+			limit = {
+				FROM = {
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+			}
+			opinion = { who = FROM modifier = opinion_fired_from_council }
+			opinion = { who = FROM modifier = opinion_recently_fired }
+		}
+	}
+
+	message = yes
+}
