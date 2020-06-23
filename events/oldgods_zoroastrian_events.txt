@@ -8,6 +8,7 @@
 # Written by Henrik Eklund
 
 namespace = TOG
+namespace = ZOR
 
 # The Saoshyant
 narrative_event = {
@@ -166,6 +167,1066 @@ narrative_event = {
 		trigger = {
 			religion_group = muslim
 		}
+	}
+}
+
+character_event = {
+	id = ZOR.1000
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		searching_god_cleanup_effect = yes
+		add_character_modifier = { name = searching_for_the_reincarnation_of_god days = -1 }
+		character_event = { id = ZOR.1002 days = 100 random = 100 }
+		character_event = { id = ZOR.1003 days = 1825 random = 5475 }
+	}
+}
+
+character_event = {
+	id = ZOR.1001
+    desc = EVTDESC_ZOR_1001
+    picture = GFX_evt_monk
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			can_search_god_trigger = no
+			has_character_flag = search_god_forced_end
+		}
+	}
+
+	option = {
+		name = EVTOPTA_ZOR_1001
+		searching_god_cleanup_effect = yes
+	}
+}
+
+character_event = {
+	id = ZOR.1002
+	hide_window = yes
+
+	is_triggered_only = yes
+	
+	trigger = {
+		can_search_god_trigger = yes
+	}
+	fail_trigger_effect = {
+		character_event = { id = ZOR.1001 }
+	}
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					prisoner = yes
+					is_incapable = yes
+				}
+			}
+			if = {
+				limit = {
+					check_variable = { which = searching_god_delay value >= 3 }
+				}
+				set_character_flag = search_god_forced_end
+				character_event = { id = ZOR.1001 }
+				break = yes
+			}
+			character_event = { id = ZOR.1002 days = 120 random = 60 }
+			change_variable = { which = searching_god_delay value = 1 }
+			break = yes
+		}
+		else_if = {
+			limit = {
+				check_variable = { which = searching_god_delay value > 0 }
+			}
+			subtract_variable = { which = searching_god_delay value = 1 }
+		}
+		random_list = {
+			20 = { #Search through diplomacy
+				modifier = { factor = 3 diplomacy = 10 }
+				random_list = {
+					15 = { #Passive points gain
+						modifier = { factor = 1.2 diplomacy = 8 }
+						modifier = { factor = 1.2 diplomacy = 10 }
+						modifier = { factor = 1.4 diplomacy = 12 }
+						modifier = { factor = 1.4 diplomacy = 15 }	
+						modifier = { factor = 1.4 diplomacy = 18 }
+						modifier = { factor = 1.5 has_pleasant_personality_trigger = yes }
+						change_variable = { which = searching_god_score value = 1 } 
+						character_event = { id = ZOR.1004 }
+					}
+					10 = {
+						trigger = {
+							NOT = { has_character_modifier = searching_god_diplomacy }
+						}
+						modifier = { factor = 1.4 diplomacy = 12 }
+						character_event = { id = ZOR.1010 }
+					}
+					3 = { #Setback
+						modifier = { factor = 1.5 is_dumb_trigger = yes }
+						modifier = { factor = 1.5 NOT = { diplomacy = 8 } } 
+						modifier = { factor = 1.5 NOT = { diplomacy = 6 } } 
+						modifier = { factor = 1.5 NOT = { diplomacy = 4 } } 
+						change_variable = { which = searching_god_score value = -1 } 
+						character_event = { id = ZOR.1005 } #small setback event
+					}
+				}
+			}
+			20 = { #Search through martial
+				modifier = { factor = 3 martial = 10 }
+				random_list = {
+					15 = { #Passive points gain
+						modifier = { factor = 1.2 martial = 8 }
+						modifier = { factor = 1.2 martial = 10 }
+						modifier = { factor = 1.4 martial = 12 }	
+						modifier = { factor = 1.4 martial = 15 }	
+						modifier = { factor = 1.4 martial = 18 }	
+						modifier = { factor = 1.4 trait = brave }
+						modifier = { factor = 1.4 combat_rating = 20 }
+						change_variable = { which = searching_god_score value = 1 } 
+						character_event = { id = ZOR.1004 }
+					} 
+					10 = {
+						trigger = {
+							NOT = { has_character_modifier = searching_god_martial }
+						}
+						modifier = { factor = 1.4 martial = 12 }
+						character_event = { id = ZOR.1011 }
+					}
+					3 = { #Setback
+						modifier = { factor = 1.5 is_dumb_trigger = yes }
+						modifier = { factor = 1.5 NOT = { martial = 8 } } 
+						modifier = { factor = 1.5 NOT = { martial = 6 } } 
+						modifier = { factor = 1.5 NOT = { martial = 4 } } 
+						change_variable = { which = searching_god_score value = -1 } 
+						character_event = { id = ZOR.1005 } #small setback event
+					}
+				}
+			}
+			20 = { #Search through stewardship
+				modifier = { factor = 3 stewardship = 10 }
+				random_list = {
+					15 = { #Passive points gain
+						modifier = { factor = 1.2 stewardship = 8 }
+						modifier = { factor = 1.2 stewardship = 10 }
+						modifier = { factor = 1.4 stewardship = 12 }
+						modifier = { factor = 1.4 stewardship = 15 }	
+						modifier = { factor = 1.4 stewardship = 18 }	
+						modifier = { factor = 1.4 monthly_income = 3 }
+						change_variable = { which = searching_god_score value = 1 } 
+						character_event = { id = ZOR.1004 }
+					} 
+					10 = {
+						trigger = {
+							NOT = { has_character_modifier = searching_god_stewardship }
+						}
+						modifier = { factor = 1.4 stewardship = 12 }
+						character_event = { id = ZOR.1012 }
+					}
+					3 = { #Setback
+						modifier = { factor = 1.5 is_dumb_trigger = yes }
+						modifier = { factor = 1.5 NOT = { stewardship = 8 } } 
+						modifier = { factor = 1.5 NOT = { stewardship = 6 } } 
+						modifier = { factor = 1.5 NOT = { stewardship = 4 } } 
+						change_variable = { which = searching_god_score value = -1 } 
+						character_event = { id = ZOR.1005 } #small setback event
+					}
+				}
+			}
+			20 = { #Search through intrigue
+				modifier = { factor = 3 intrigue = 10 }
+				random_list = {
+					15 = { #Passive points gain
+						modifier = { factor = 1.2 intrigue = 8 }
+						modifier = { factor = 1.2 intrigue = 10 }
+						modifier = { factor = 1.4 intrigue = 12 }
+						modifier = { factor = 1.4 intrigue = 15 }	
+						modifier = { factor = 1.4 intrigue = 18 }	
+						modifier = { factor = 1.4 has_unpleasant_personality_trigger = yes }
+						change_variable = { which = searching_god_score value = 1 } 
+						character_event = { id = ZOR.1004 }
+					} 
+					10 = {
+						trigger = {
+							NOT = { has_character_modifier = searching_god_intrigue }
+						}
+						modifier = { factor = 1.4 intrigue = 12 }
+						character_event = { id = ZOR.1013 }
+					}
+					3 = { #Setback
+						modifier = { factor = 1.5 is_dumb_trigger = yes }
+						modifier = { factor = 1.5 NOT = { intrigue = 8 } } 
+						modifier = { factor = 1.5 NOT = { intrigue = 6 } } 
+						modifier = { factor = 1.5 NOT = { intrigue = 4 } } 
+						change_variable = { which = searching_god_score value = -1 } 
+						character_event = { id = ZOR.1005 } #small setback event
+					}
+				}
+			}	
+			20 = { #Search through learning
+				modifier = { factor = 3 learning = 10 }
+				random_list = {
+					15 = { #Passive points gain
+						modifier = { factor = 1.2 learning = 8 }	
+						modifier = { factor = 1.2 learning = 10 }
+						modifier = { factor = 1.4 learning = 12 }
+						modifier = { factor = 1.4 learning = 15 }	
+						modifier = { factor = 1.4 learning = 18 }	
+						modifier = { factor = 1.4 is_learned_trigger = yes }
+						change_variable = { which = searching_god_score value = 1 } 
+						character_event = { id = ZOR.1004 }
+					} 
+					10 = {
+						trigger = {
+							NOT = { has_character_modifier = searching_god_learning }
+						}
+						modifier = { factor = 1.4 learning = 12 }
+						character_event = { id = ZOR.1014 }
+					}
+					3 = { #Setback
+						modifier = { factor = 1.5 is_dumb_trigger = yes }
+						modifier = { factor = 1.5 NOT = { learning = 8 } } 
+						modifier = { factor = 1.5 NOT = { learning = 6 } } 
+						modifier = { factor = 1.5 NOT = { learning = 4 } } 
+						change_variable = { which = searching_god_score value = -1 } 
+						character_event = { id = ZOR.1005 } #small setback event
+					}
+				}
+			}
+			15 = { #Mess up badly
+				modifier = { factor = 0.5 is_smart_trigger = yes }
+				modifier = { factor = 1.5 is_dumb_trigger = yes }
+				trigger = {
+					check_variable = { which = searching_god_score value = 0 }
+					NOT = { has_character_flag = searching_god_messed_up }
+				}
+				subtract_variable = { which = searching_god_score value = 3 }
+				set_character_flag = searching_god_messed_up
+				character_event = { id = ZOR.1006 }
+			}
+			10 = {
+				trigger = {
+					NAND = {
+						trait = stressed
+						trait = possessed
+					}
+				}
+				character_event = { id = ZOR.1015 }
+			}
+			10 = {
+				#Nothing happens
+			}
+		}
+		character_event = { id = ZOR.1002 days = 300 random = 80 }
+	}
+}
+
+character_event = {
+	id = ZOR.1003
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		can_search_god_trigger = yes
+	}
+	fail_trigger_effect = {
+		character_event = { id = ZOR.1001 }
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					prisoner = yes
+					is_incapable = yes
+				}
+			}
+			character_event = { id = ZOR.1003 days = 120 random = 60 }
+			break = yes
+		}
+		random_list = {
+			10 = { # Failure
+				trigger = {
+					check_variable = { which = searching_god_score value < 10 }
+				}
+				random_list = {
+					2 = { # Death by accident
+						modifier = {
+							factor = 2
+							check_variable = { which = searching_god_score value < 0 }
+						}
+						character_event = { id = ZOR.1050 }
+					}
+					10 = { # Gain bad trait
+						trigger = {
+							NAND = {
+								trait = stressed
+								trait = depressed
+								trait = cynical
+							}
+						}
+						modifier = {
+							factor = 0.5
+							calc_true_if = {
+								amount >= 2
+								trait = stressed
+								trait = depressed
+								trait = cynical
+							}
+						}
+						modifier = {
+							factor = 1.5
+							calc_true_if = {
+								amount < 2
+								trait = stressed
+								trait = depressed
+								trait = cynical
+							}
+						}
+						character_event = { id = ZOR.1051 }
+					}
+					10 = { # Just failure
+						character_event = { id = ZOR.1052 }
+					}
+				}
+			}
+			10 = { # Small success
+				random_list = {
+					10 = { # Found artifact
+						trigger = {
+							NAND = {
+								has_artifact = famous_head
+								has_artifact = famous_tongue
+								has_artifact = infamous_tongue
+								has_artifact = famous_hand
+								has_artifact = famous_arm
+								has_artifact = famous_foot
+								has_artifact = famous_ancient_weapon
+							}
+						}
+						modifier = {
+							factor = 1.5
+							NOR = {
+								has_artifact = famous_head
+								has_artifact = famous_tongue
+								has_artifact = infamous_tongue
+								has_artifact = famous_hand
+								has_artifact = famous_arm
+								has_artifact = famous_foot
+								has_artifact = famous_ancient_weapon
+							}
+						}
+						character_event = { id = ZOR.1060 }
+					}
+					10 = { # Gain good trait
+						trigger = {
+							NAND = {
+								trait = zealous
+								trait = diligent
+								trait = humble
+							}
+						}
+						modifier = {
+							factor = 0.5
+							calc_true_if = {
+								amount >= 2
+								trait = zealous
+								trait = diligent
+								trait = humble
+							}
+						}
+						modifier = {
+							factor = 1.5
+							calc_true_if = {
+								amount < 2
+								trait = zealous
+								trait = diligent
+								trait = humble
+							}
+						}
+						character_event = { id = ZOR.1061 }
+					}
+					5 = { # Write book
+						trigger = {
+							NOT = {
+								has_artifact = searching_god_book
+							}
+						}
+						character_event = { id = ZOR.1062 }
+					}
+					fallback = { character_event = { id = ZOR.1052 } }
+				}
+			}
+			10 = { # Success
+				trigger = {
+					check_variable = { which = searching_god_score value >= 10 }
+				}
+				random_list = { # choose who
+					10 = { # Random boy
+						random_realm_province = {
+							preferred_limit = {
+								religion = ROOT
+							}
+							create_character = {
+								culture = THIS
+								religion = ROOT
+								age = 12
+								random_traits = yes
+								female = no
+							}
+							new_character = {
+								remove_all_negative_congenital_traits_effect = yes
+								remove_disease_trait_effect = yes
+								clear_disease_level_effect = yes
+								remove_disease_flags_effect = yes
+								move_character = ROOT
+								random_list = { # random age
+									5 = { add_age = 3 }
+									5 = { add_age = 2 }
+									5 = { add_age = 1 }
+									5 = { }
+									5 = { add_age = -1 }
+									5 = { add_age = -2 }
+									5 = { add_age = -3 }
+								}
+								save_event_target_as = possible_reincarnation_of_god
+								set_character_flag = was_peasant_boy
+							}
+						}
+					}
+					2 = { # Courtier
+						trigger = {
+							any_courtier = {
+								is_landed = no
+								is_incapable = no
+								prisoner = no
+								is_female = no
+								religion = ROOT
+								has_negative_congenital_trigger = no
+								age >= 6
+								age < 16
+							}
+						}
+						random_courtier = {
+							limit = {
+								is_landed = no
+								is_incapable = no
+								prisoner = no
+								is_female = no
+								religion = ROOT
+								has_negative_congenital_trigger = no
+								age >= 6
+								age < 16
+							}
+							save_event_target_as = possible_reincarnation_of_god
+						}
+					}
+				}
+				random_list = {
+					90 = {
+						event_target:possible_reincarnation_of_god = {
+							set_character_flag = fake_reincarnation_of_god
+						}
+					}
+					10 = {
+						trigger = {
+							NOT = { has_global_flag = real_reincarnation_of_god_found }
+						}
+						modifier = {
+							factor = 1.2
+							check_variable = { which = searching_god_score value >= 15 }
+						}
+						modifier = {
+							factor = 1.2
+							check_variable = { which = searching_god_score value >= 20 }
+						}
+						modifier = {
+							factor = 1.2
+							check_variable = { which = searching_god_score value >= 25 }
+						}
+						modifier = {
+							factor = 1.2
+							check_variable = { which = searching_god_score value >= 30 }
+						}
+						event_target:possible_reincarnation_of_god = {
+							health = 10 # should live long
+							set_character_flag = real_reincarnation_of_god
+							set_global_flag = real_reincarnation_of_god_found
+							character_event = { id = ZOR.1071 days = 20 random = 100 }
+						}
+					}
+				}
+				event_target:possible_reincarnation_of_god = {
+					save_persistent_event_target = { name = reincarnation_searcher scope = ROOT }
+					add_trait = possible_reincarnation_of_god
+					set_character_flag = ai_flag_refuse_conversion
+				}
+				character_event = { id = ZOR.1070 }
+			}
+		}
+	}
+}
+
+#Artifact search update event - progress
+character_event = {
+    id = ZOR.1004
+    desc = EVTDESC_ZOR_1004
+    picture = GFX_evt_monk
+    border = GFX_event_normal_frame_religion
+    notification = yes
+
+    is_triggered_only = yes
+
+    option = { #Excellent
+        name = EXCELLENT
+    }
+}
+
+#Artifact search update event - setback
+character_event = {
+    id = ZOR.1005
+    desc = EVTDESC_ZOR_1005
+    picture = GFX_evt_monk
+    border = GFX_event_normal_frame_religion
+    notification = yes
+
+    is_triggered_only = yes
+
+    option = { #Unfortunate
+        name = UNFORTUNATE
+    }
+}
+#Artifact search update event - setback
+character_event = {
+    id = ZOR.1006
+    desc = EVTDESC_ZOR_1006
+    picture = GFX_evt_monk
+    border = GFX_event_normal_frame_religion
+    notification = yes
+
+    is_triggered_only = yes
+
+    option = { #Unfortunate
+        name = UNFORTUNATE
+    }
+}
+
+
+character_event = {
+	id = ZOR.1010
+    desc = EVTDESC_ZOR_1010
+    picture = GFX_evt_emissary
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZOR_1010
+		custom_tooltip = { text = EVTOPTA_ZOR_1010_TT }
+		add_character_modifier = {
+			name = searching_god_diplomacy
+			years = 5
+		}
+		hidden_tooltip = { change_variable = { which = searching_god_score value = 5 } }
+	}
+	option = {
+		name = EVTOPTB_ZOR_1010
+		custom_tooltip = { text = EVTOPTB_ZOR_1010_TT }
+		hidden_tooltip = { subtract_variable = { which = searching_god_score value = 1 } }
+	}
+}
+character_event = {
+	id = ZOR.1011
+    desc = EVTDESC_ZOR_1011
+    picture = GFX_evt_large_army
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZOR_1011
+		custom_tooltip = { text = EVTOPTA_ZOR_1010_TT }
+		add_character_modifier = {
+			name = searching_god_martial
+			years = 5
+		}
+		hidden_tooltip = { change_variable = { which = searching_god_score value = 5 } }
+	}
+	option = {
+		name = EVTOPTB_ZOR_1011
+		custom_tooltip = { text = EVTOPTB_ZOR_1010_TT }
+		hidden_tooltip = { subtract_variable = { which = searching_god_score value = 1 } }
+	}
+}
+character_event = {
+	id = ZOR.1012
+    desc = EVTDESC_ZOR_1012
+    picture = GFX_evt_construction_site
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZOR_1012
+		custom_tooltip = { text = EVTOPTA_ZOR_1010_TT }
+		add_character_modifier = {
+			name = searching_god_stewardship
+			years = 5
+		}
+		hidden_tooltip = { change_variable = { which = searching_god_score value = 5 } }
+	}
+	option = {
+		name = EVTOPTB_ZOR_1012
+		custom_tooltip = { text = EVTOPTB_ZOR_1010_TT }
+		hidden_tooltip = { subtract_variable = { which = searching_god_score value = 1 } }
+	}
+}
+character_event = {
+	id = ZOR.1013
+    desc = EVTDESC_ZOR_1013
+    picture = GFX_evt_peasants
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZOR_1013
+		custom_tooltip = { text = EVTOPTA_ZOR_1010_TT }
+		add_character_modifier = {
+			name = searching_god_intrigue
+			years = 5
+		}
+		hidden_tooltip = { change_variable = { which = searching_god_score value = 5 } }
+	}
+	option = {
+		name = EVTOPTB_ZOR_1013
+		custom_tooltip = { text = EVTOPTB_ZOR_1010_TT }
+		hidden_tooltip = { subtract_variable = { which = searching_god_score value = 1 } }
+	}
+}
+character_event = {
+	id = ZOR.1014
+    desc = EVTDESC_ZOR_1014
+    picture = GFX_evt_bishop
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZOR_1014
+		custom_tooltip = { text = EVTOPTA_ZOR_1010_TT }
+		add_character_modifier = {
+			name = searching_god_learning
+			years = 5
+		}
+		hidden_tooltip = { change_variable = { which = searching_god_score value = 5 } }
+	}
+	option = {
+		name = EVTOPTB_ZOR_1014
+		custom_tooltip = { text = EVTOPTB_ZOR_1010_TT }
+		hidden_tooltip = { subtract_variable = { which = searching_god_score value = 1 } }
+	}
+}
+character_event = {
+	id = ZOR.1015
+    desc = EVTDESC_ZOR_1015
+    picture = GFX_evt_stressed_ruler
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+
+	option = {
+		trigger = {
+			NOT = { trait = stressed }
+		}
+		name = EVTOPTA_ZOR_1015
+		custom_tooltip = { text = EVTOPTA_ZOR_1010_TT }
+		add_trait = stressed
+		hidden_tooltip = { change_variable = { which = searching_god_score value = 5 } }
+	}
+	option = {
+		trigger = {
+			NOT = { trait = possessed }
+		}
+		name = EVTOPTB_ZOR_1015
+		custom_tooltip = { text = EVTOPTA_ZOR_1010_TT }
+		add_trait = possessed
+		hidden_tooltip = { change_variable = { which = searching_god_score value = 5 } }
+	}
+	option = {
+		name = EVTOPTC_ZOR_1015
+		custom_tooltip = { text = EVTOPTB_ZOR_1010_TT }
+		hidden_tooltip = { subtract_variable = { which = searching_god_score value = 1 } }
+	}
+}
+character_event = {
+	id = ZOR.1050
+    desc = EVTDESC_ZOR_1050
+    picture = GFX_evt_castle_construction
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_ZOR_1050
+		death = { death_reason = death_accident_fall }
+	}
+	after = {
+		set_character_flag = searched_for_god
+		searching_god_cleanup_effect = yes
+	}
+}
+character_event = {
+	id = ZOR.1051
+    desc = EVTDESC_ZOR_1051
+    picture = GFX_evt_bad_news
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+		
+	option = {
+		trigger = {
+			NOT = { trait = stressed }
+		}
+		name = EVTOPTA_ZOR_1051
+		add_trait = stressed
+	}
+	option = {
+		trigger = {
+			NOT = { trait = depressed }
+		}
+		name = EVTOPTA_ZOR_1051
+		add_trait = depressed
+	}
+	option = {
+		trigger = {
+			NOT = { trait = cynical }
+		}
+		name = EVTOPTA_ZOR_1051
+		add_trait = cynical
+	}
+	after = {
+		piety = -50
+		set_character_flag = searched_for_god
+		searching_god_cleanup_effect = yes
+	}
+}
+character_event = {
+	id = ZOR.1052
+    desc = EVTDESC_ZOR_1052
+    picture = GFX_evt_bad_news
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+		
+	option = {
+		name = EVTOPTA_ZOR_1052
+		piety = -50
+		prestige = -100
+	}
+	after = {
+		set_character_flag = searched_for_god
+		searching_god_cleanup_effect = yes
+	}
+}
+character_event = {
+	id = ZOR.1060
+    desc = EVTDESC_ZOR_1060
+    picture = GFX_evt_relic_box
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+	immediate = {
+		random_list = {
+			10 = {
+				trigger = {
+					NOT = { has_artifact = famous_head }
+				}
+				add_artifact = famous_head
+			}
+			10 = {
+				trigger = {
+					NOT = { has_artifact = famous_tongue }
+				}
+				add_artifact = famous_tongue
+			}
+			10 = {
+				trigger = {
+					NOT = { has_artifact = infamous_tongue }
+				}
+				add_artifact = infamous_tongue
+			}
+			10 = {
+				trigger = {
+					NOT = { has_artifact = famous_hand }
+				}
+				add_artifact = famous_hand
+			}
+			10 = {
+				trigger = {
+					NOT = { has_artifact = famous_arm }
+				}
+				add_artifact = famous_arm
+			}
+			10 = {
+				trigger = {
+					NOT = { has_artifact = famous_foot }
+				}
+				add_artifact = famous_foot
+			}
+			10 = {
+				trigger = {
+					NOT = { has_artifact = famous_ancient_weapon }
+				}
+				add_artifact = famous_ancient_weapon
+			}
+		}
+		new_artifact = {
+			save_event_target_as = new_book #for effects and localization purposes!
+		}
+	}
+	option = {
+		name = EVTOPTA_ZOR_1060
+		custom_tooltip = {
+        	text = new_book_added_tt
+        }
+	}
+	after = {
+		set_character_flag = searched_for_god
+		searching_god_cleanup_effect = yes
+	}
+}
+character_event = {
+	id = ZOR.1061
+    desc = EVTDESC_ZOR_1061
+    picture = GFX_evt_stone_church
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+		
+	option = {
+		trigger = {
+			NOT = { trait = zealous }
+		}
+		name = EVTOPTA_ZOR_1061
+		add_trait = zealous
+	}
+	option = {
+		trigger = {
+			NOT = { trait = diligent }
+		}
+		name = EVTOPTB_ZOR_1061
+		add_trait = diligent
+	}
+	option = {
+		trigger = {
+			NOT = { trait = humble }
+		}
+		name = EVTOPTC_ZOR_1061
+		add_trait = humble
+	}
+	after = {
+		set_character_flag = searched_for_god
+		searching_god_cleanup_effect = yes
+	}
+}
+character_event = {
+	id = ZOR.1062
+    desc = EVTDESC_ZOR_1062
+    picture = GFX_evt_library
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+		
+	option = {
+		name = EVTOPTA_ZOR_1062
+		add_artifact = searching_god_book
+	}
+}
+character_event = {
+	id = ZOR.1070
+	title = EVTNAME_ZOR_1072
+    desc = EVTDESC_ZOR_1070
+    picture = GFX_evt_guardian
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+	portrait = event_target:possible_reincarnation_of_god
+	
+	option = {
+		name = EVTOPTA_ZOR_1070
+		piety = 150
+		prestige = 150
+	}
+	after = {
+		set_character_flag = searched_for_god
+		searching_god_cleanup_effect = yes
+	}
+}
+character_event = {
+	id = ZOR.1071
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { religion = yersenism }
+			}
+			religion = yersenism
+		}
+		random_list = {
+			10 = { add_trait = zealous }
+			10 = { add_trait = honest }
+			10 = { add_trait = humble }
+			10 = { add_trait = diligent }
+			10 = { add_trait = chaste }
+			10 = { add_trait = kind }
+			10 = { add_trait = temperate }
+			10 = { add_trait = charitable }
+			10 = { add_trait = patient }
+		}
+		character_event = { id = ZOR.1071 days = 200 random = 200 }
+	}
+}
+narrative_event = {
+	id = ZOR.1072
+    desc = EVTDESC_ZOR_1072
+	title = EVTNAME_ZOR_1072
+    picture = GFX_evt_bishop
+    border = GFX_event_narrative_frame_religion
+	is_triggered_only = yes
+	major = yes
+	has_character_flag = real_reincarnation_of_god
+	show_root = yes
+	immediate = {
+		abdicate = yes # For safety
+		religion = yersenism # For safety
+		remove_trait = possible_reincarnation_of_god
+		add_trait = real_reincarnation_of_god
+		d_yersenism = {
+			activate_title = {
+				title = THIS
+				status = yes
+			}
+			grant_title = ROOT
+		}
+		set_defacto_liege = THIS
+	}
+	option = {
+		name = EVTOPTA_ZOR_1072
+		trigger = {
+			NOT = { religion = ROOT }
+		}
+	}
+	option = {
+		name = EVTOPTB_ZOR_1072
+		trigger = {
+			ROOT = {
+				religion = PREV
+				dynasty = ROOT
+				NOT = { dynasty = none }
+				persistent_event_target:reincarnation_searcher = {
+					character = PREVPREV
+				}
+			}
+		}
+		piety = 500
+		prestige = 500
+		searching_god_cleanup_effect = yes
+	}
+	option = {
+		name = EVTOPTC_ZOR_1072
+		trigger = {
+			ROOT = {
+				religion = PREV
+				dynasty = ROOT
+				NOT = { dynasty = none }
+				NOT = {
+					persistent_event_target:reincarnation_searcher = {
+						character = PREVPREV
+					}
+				}
+			}
+		}
+		piety = 250
+		prestige = 250
+		searching_god_cleanup_effect = yes
+	}
+	option = {
+		name = EVTOPTD_ZOR_1072
+		trigger = {
+			ROOT = {
+				religion = PREV
+				NAND = {
+					dynasty = ROOT
+					NOT = { dynasty = none }
+				}
+				persistent_event_target:reincarnation_searcher = {
+					character = PREVPREV
+				}
+			}
+		}
+		piety = 250
+		prestige = 250
+		searching_god_cleanup_effect = yes
+	}
+	option = {
+		name = EVTOPTE_ZOR_1072
+		trigger = {
+			ROOT = {
+				religion = PREV
+				NOR = {
+					AND = {
+						dynasty = ROOT
+						NOT = { dynasty = none }
+					}
+					persistent_event_target:reincarnation_searcher = {
+						character = PREVPREV
+					}
+				}
+			}
+		}
+		searching_god_cleanup_effect = yes
+	}
+}
+character_event = {
+	id = ZOR.1073
+	hide_window = yes
+	is_triggered_only = yes
+	has_character_flag = fake_reincarnation_of_god
+	immediate = {
+		remove_trait = possible_reincarnation_of_god
+		clr_character_flag = ai_flag_refuse_conversion
+		persistent_event_target:reincarnation_searcher = {
+			limit = {
+				religion = yersenism
+			}
+			character_event = { id = ZOR.1074 }
+		}
+		liege = {
+			limit = {
+				religion = yersenism
+				NOT = {
+					ROOT = {
+						persistent_event_target:reincarnation_searcher = {
+							character = PREVPREV
+						}
+					}
+				}
+			}
+			character_event = { id = ZOR.1074 }
+		}
+	}
+}
+character_event = {
+	id = ZOR.1074
+    desc = EVTDESC_ZOR_1074
+    picture = GFX_evt_scandal
+    border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_ZOR_1074
+	}
+}
+character_event = {
+	id = ZOR.1075
+	hide_window = yes
+	is_triggered_only = yes
+	has_character_flag = real_reincarnation_of_god
+	immediate = {
+		clr_character_flag = real_reincarnation_of_god_found
 	}
 }
 
