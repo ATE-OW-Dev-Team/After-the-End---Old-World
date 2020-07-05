@@ -305,20 +305,8 @@ character_event = {
 			trait = zealous
 		}
 		OR = {
-			AND = {
-				NOT = { has_character_modifier = expelled_one_holy_order }
-				NOT = {
-					any_liege = {
-						has_character_modifier = expelled_one_holy_order
-					}
-				}
-				religion_scope = {
-					is_title_active = persistent_event_target:one_holy_order
-					persistent_event_target:one_holy_order = {
-						always = yes
-					}
-				}
-			}
+			one_holy_order_avalaible_trigger = yes
+			two_holy_order_avalaible_trigger = yes
 			AND = {
 				NOT = { has_character_modifier = expelled_d_legion_of_mary }
 				NOT = {
@@ -373,32 +361,6 @@ character_event = {
 					religion = catholic
 					religion = cadaverist
 					religion = fraticelli
-				}
-			}
-			AND = {
-				NOT = { has_character_modifier = expelled_d_columbus_knights }
-				NOT = {
-					any_liege = {
-						has_character_modifier = expelled_d_columbus_knights
-					}
-				}
-				is_title_active = d_columbus_knights
-				OR = {
-					religion = palmarian
-					religion = transatlantic
-				}
-			}
-			AND = {
-				NOT = { has_character_modifier = expelled_d_carmelites }
-				NOT = {
-					any_liege = {
-						has_character_modifier = expelled_d_carmelites
-					}
-				}
-				is_title_active = d_carmelites
-				OR = {
-					religion = palmarian
-					religion = transatlantic
 				}
 			}
 		}
@@ -510,14 +472,12 @@ character_event = {
 			}
 		}
 		modifier = {
-			factor = 0.5
-			OR = {
-				religion = palmarian
-				religion = transatlantic
-			}
+			factor = 0.66
+			one_holy_order_avalaible_trigger = yes
+			two_holy_order_avalaible_trigger = yes
 		}
 		modifier = {
-			factor = 0.33
+			factor = 0.5
 			OR = {
 				religion = catholic
 				religion = cadaverist
@@ -530,15 +490,23 @@ character_event = {
 		random_list = {
 			10 = {
 				trigger = {
-					NOR = {
-						religion = catholic
-						religion = cadaverist
-						religion = fraticelli
-						religion = palmarian
-						religion = transatlantic
-					}
+					one_holy_order_avalaible_trigger = yes
+				}
+				modifier = {
+					factor = 3
+					preferred_by_one_holy_order_trigger = yes
 				}
 				religion_scope = { persistent_event_target:one_holy_order = { save_event_target_as = holy_order_to_join } }
+			}
+			10 = {
+				trigger = {
+					two_holy_order_avalaible_trigger = yes
+				}
+				modifier = {
+					factor = 3
+					preferred_by_two_holy_order_trigger = yes
+				}
+				religion_scope = { persistent_event_target:two_holy_order = { save_event_target_as = holy_order_to_join } }
 			}
 			10 = {
 				trigger = {
@@ -615,46 +583,6 @@ character_event = {
 					}
 				}
 				d_knights_lazarus = { save_event_target_as = holy_order_to_join }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_character_modifier = expelled_d_columbus_knights }
-					NOT = {
-						any_liege = {
-							has_character_modifier = expelled_d_columbus_knights
-						}
-					}
-					is_title_active = d_columbus_knights
-					OR = {
-						religion = palmarian
-						religion = transatlantic
-					}
-				}
-				modifier = {
-					factor = 3
-					culture = castilian
-				}
-				d_columbus_knights = { save_event_target_as = holy_order_to_join }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_character_modifier = expelled_d_carmelites }
-					NOT = {
-						any_liege = {
-							has_character_modifier = expelled_d_carmelites
-						}
-					}
-					is_title_active = d_carmelites
-					OR = {
-						religion = palmarian
-						religion = transatlantic
-					}
-				}
-				modifier = {
-					factor = 3
-					culture = andalusian
-				}
-				d_carmelites = { save_event_target_as = holy_order_to_join }
 			}
 		}
 		liege = {
@@ -800,6 +728,7 @@ character_event = {
 		}
 	}
 }
+
 character_event = {
 	id = holyorder.9
 	hide_window = yes
@@ -812,12 +741,14 @@ character_event = {
 		controls_religion = yes
 	}
 	immediate = {
+		# First ones
 		zarist = { save_persistent_event_target = { name = one_holy_order scope = d_white_army } }
 		katerinist = { save_persistent_event_target = { name = one_holy_order scope = d_white_army } }
 		petrist = { save_persistent_event_target = { name = one_holy_order scope = d_white_army } }
 		folklorist_reformed = { save_persistent_event_target = { name = one_holy_order scope = d_blue_stripes } }
 		naxalite_reformed = { save_persistent_event_target = { name = one_holy_order scope = d_strugglers } }
 		bharatva = { save_persistent_event_target = { name = one_holy_order scope = d_shiv_sena } }
+		neovedic = { save_persistent_event_target = { name = one_holy_order scope = d_shiv_sena } }
 		sikh = { save_persistent_event_target = { name = one_holy_order scope = d_khalsa_army } }
 		jugoslavist = { save_persistent_event_target = { name = one_holy_order scope = d_jugo_order } }
 		jacobinist = { save_persistent_event_target = { name = one_holy_order scope = d_sans_culottes } }
@@ -833,7 +764,7 @@ character_event = {
 		trotskyite = { save_persistent_event_target = { name = one_holy_order scope = d_hashshashin } }
 		titoist = { save_persistent_event_target = { name = one_holy_order scope = d_hashshashin } }
 		sunni = { save_persistent_event_target = { name = one_holy_order scope = d_bektashi } }
-		wahhabi = { save_persistent_event_target = { name = one_holy_order scope = d_ikhwan } }
+		wahhabi = { save_persistent_event_target = { name = one_holy_order scope = d_bektashi } }
 		sufi = { save_persistent_event_target = { name = one_holy_order scope = d_tijani_order } }
 		mesopotamian = { save_persistent_event_target = { name = one_holy_order scope = d_naqshbandi } }
 		ibadi = { save_persistent_event_target = { name = one_holy_order scope = d_haruriyyah } }
@@ -858,6 +789,17 @@ character_event = {
 		ahlehaqq = { save_persistent_event_target = { name = one_holy_order scope = d_seekers } }
 		koptic = { save_persistent_event_target = { name = one_holy_order scope = d_saint_anthony } }
 		druze = { save_persistent_event_target = { name = one_holy_order scope = d_warriors_al_atrash } }
+		palmarian = { save_persistent_event_target = { name = one_holy_order scope = d_columbus_knights } }
+		transatlantic = { save_persistent_event_target = { name = one_holy_order scope = d_columbus_knights } }
+		
+		# Second ones
+		palmarian = { save_persistent_event_target = { name = two_holy_order scope = d_carmelites } }
+		transatlantic = { save_persistent_event_target = { name = two_holy_order scope = d_carmelites } }
+		sunni = { save_persistent_event_target = { name = two_holy_order scope = d_egyptian_brotherhood } }
+		wahhabi = { save_persistent_event_target = { name = two_holy_order scope = d_ikhwan } }
+		anglican = { save_persistent_event_target = { name = two_holy_order scope = d_knights_hospitaler_1 } }
+		quaker = { save_persistent_event_target = { name = two_holy_order scope = d_knights_hospitaler_1 } }
+		calvinist = { save_persistent_event_target = { name = two_holy_order scope = d_knights_hospitaler_2 } }
 	}
 }
 
@@ -872,14 +814,22 @@ character_event = {
 	trigger = {
 		OR = {
 			AND = {
-				NOT = { has_character_modifier = expelled_one_holy_order }
-				NOT = {
-					any_liege = {
-						has_character_modifier = expelled_one_holy_order
-					}
-				}
+				one_holy_order_avalaible_trigger = yes
 				religion_scope = {
 					persistent_event_target:one_holy_order = {
+						holder_scope = { ai = yes
+							wealth = 300
+							NOT = {
+								realm_size = 10
+							}
+						}
+					}
+				}
+			}
+			AND = {
+				two_holy_order_avalaible_trigger = yes
+				religion_scope = {
+					persistent_event_target:two_holy_order = {
 						holder_scope = { ai = yes
 							wealth = 300
 							NOT = {
@@ -974,46 +924,6 @@ character_event = {
 					religion = fraticelli
 				}
 			}
-			AND = {
-				NOT = { has_character_modifier = expelled_d_columbus_knights }
-				NOT = {
-					any_liege = {
-						has_character_modifier = expelled_d_columbus_knights
-					}
-				}
-				d_columbus_knights = {
-					holder_scope = { ai = yes
-						wealth = 300
-						NOT = {
-							realm_size = 10
-						}
-					}
-				}
-				OR = {
-					religion = palmarian
-					religion = transatlantic
-				}
-			}
-			AND = {
-				NOT = { has_character_modifier = expelled_d_carmelites }
-				NOT = {
-					any_liege = {
-						has_character_modifier = expelled_d_carmelites
-					}
-				}
-				d_carmelites = {
-					holder_scope = { ai = yes
-						wealth = 300
-						NOT = {
-							realm_size = 10
-						}
-					}
-				}
-				OR = {
-					religion = palmarian
-					religion = transatlantic
-				}
-			}
 		}
 		NOT = { government = order_government }
 		holy_order = no
@@ -1042,6 +952,7 @@ character_event = {
 			factor = 0.5
 			OR = {
 				AND = {
+					one_holy_order_avalaible_trigger = yes
 					religion_scope = {
 						persistent_event_target:one_holy_order = {
 							holder_scope = { ai = yes
@@ -1049,12 +960,15 @@ character_event = {
 							}
 						}
 					}
-					NOR = {
-						religion = catholic
-						religion = cadaverist
-						religion = fraticelli
-						religion = palmarian
-						religion = transatlantic
+				}
+				AND = {
+					two_holy_order_avalaible_trigger = yes
+					religion_scope = {
+						persistent_event_target:two_holy_order = {
+							holder_scope = { ai = yes
+								NOT = { demesne_size = 1 } wealth = 300
+							}
+						}
 					}
 				}
 				AND = {
@@ -1127,40 +1041,6 @@ character_event = {
 						religion = catholic
 						religion = cadaverist
 						religion = fraticelli
-					}
-				}
-				AND = {
-					NOT = { has_character_modifier = expelled_d_columbus_knights }
-					NOT = {
-						any_liege = {
-							has_character_modifier = expelled_d_columbus_knights
-						}
-					}
-					d_columbus_knights = {
-						holder_scope = { ai = yes
-							NOT = { demesne_size = 1 } wealth = 300
-						}
-					}
-					OR = {
-						religion = palmarian
-						religion = transatlantic
-					}
-				}
-				AND = {
-					NOT = { has_character_modifier = expelled_d_carmelites }
-					NOT = {
-						any_liege = {
-							has_character_modifier = expelled_d_carmelites
-						}
-					}
-					d_carmelites = {
-						holder_scope = { ai = yes
-							NOT = { demesne_size = 1 } wealth = 300
-						}
-					}
-					OR = {
-						religion = palmarian
-						religion = transatlantic
 					}
 				}
 			}
@@ -1169,6 +1049,7 @@ character_event = {
 			factor = 0.5
 			OR = {
 				AND = {
+					one_holy_order_avalaible_trigger = yes
 					religion_scope = {
 						persistent_event_target:one_holy_order = {
 							holder_scope = { ai = yes
@@ -1176,12 +1057,15 @@ character_event = {
 							}
 						}
 					}
-					NOR = {
-						religion = catholic
-						religion = cadaverist
-						religion = fraticelli
-						religion = palmarian
-						religion = transatlantic
+				}
+				AND = {
+					two_holy_order_avalaible_trigger = yes
+					religion_scope = {
+						persistent_event_target:two_holy_order = {
+							holder_scope = { ai = yes
+								NOT = { demesne_size = 2 } wealth = 300
+							}
+						}
 					}
 				}
 				AND = {
@@ -1254,40 +1138,6 @@ character_event = {
 						religion = catholic
 						religion = cadaverist
 						religion = fraticelli
-					}
-				}
-				AND = {
-					NOT = { has_character_modifier = expelled_d_columbus_knights }
-					NOT = {
-						any_liege = {
-							has_character_modifier = expelled_d_columbus_knights
-						}
-					}
-					d_columbus_knights = {
-						holder_scope = { ai = yes
-							NOT = { demesne_size = 2 } wealth = 300
-						}
-					}
-					OR = {
-						religion = palmarian
-						religion = transatlantic
-					}
-				}
-				AND = {
-					NOT = { has_character_modifier = expelled_d_carmelites }
-					NOT = {
-						any_liege = {
-							has_character_modifier = expelled_d_carmelites
-						}
-					}
-					d_carmelites = {
-						holder_scope = { ai = yes
-							NOT = { demesne_size = 2 } wealth = 300
-						}
-					}
-					OR = {
-						religion = palmarian
-						religion = transatlantic
 					}
 				}
 			}
@@ -1297,6 +1147,7 @@ character_event = {
 			factor = 0.5
 			OR = {
 				AND = {
+					one_holy_order_avalaible_trigger = yes
 					religion_scope = {
 						persistent_event_target:one_holy_order = {
 							holder_scope = { ai = yes
@@ -1304,12 +1155,15 @@ character_event = {
 							}
 						}
 					}
-					NOR = {
-						religion = catholic
-						religion = cadaverist
-						religion = fraticelli
-						religion = palmarian
-						religion = transatlantic
+				}
+				AND = {
+					two_holy_order_avalaible_trigger = yes
+					religion_scope = {
+						persistent_event_target:two_holy_order = {
+							holder_scope = { ai = yes
+								NOT = { num_of_count_titles = 1 } wealth = 300
+							}
+						}
 					}
 				}
 				AND = {
@@ -1382,40 +1236,6 @@ character_event = {
 						religion = catholic
 						religion = cadaverist
 						religion = fraticelli
-					}
-				}
-				AND = {
-					NOT = { has_character_modifier = expelled_d_columbus_knights }
-					NOT = {
-						any_liege = {
-							has_character_modifier = expelled_d_columbus_knights
-						}
-					}
-					d_columbus_knights = {
-						holder_scope = { ai = yes
-							NOT = { num_of_count_titles = 1 } wealth = 300
-						}
-					}
-					OR = {
-						religion = palmarian
-						religion = transatlantic
-					}
-				}
-				AND = {
-					NOT = { has_character_modifier = expelled_d_carmelites }
-					NOT = {
-						any_liege = {
-							has_character_modifier = expelled_d_carmelites
-						}
-					}
-					d_carmelites = {
-						holder_scope = { ai = yes
-							NOT = { num_of_count_titles = 1 } wealth = 300
-						}
-					}
-					OR = {
-						religion = palmarian
-						religion = transatlantic
 					}
 				}
 			}
@@ -1424,6 +1244,7 @@ character_event = {
 			factor = 0.5
 			OR = {
 				AND = {
+					one_holy_order_avalaible_trigger = yes
 					religion_scope = {
 						persistent_event_target:one_holy_order = {
 							holder_scope = { ai = yes
@@ -1431,12 +1252,15 @@ character_event = {
 							}
 						}
 					}
-					NOR = {
-						religion = catholic
-						religion = cadaverist
-						religion = fraticelli
-						religion = palmarian
-						religion = transatlantic
+				}
+				AND = {
+					two_holy_order_avalaible_trigger = yes
+					religion_scope = {
+						persistent_event_target:two_holy_order = {
+							holder_scope = { ai = yes
+								NOT = { realm_size = 5 } wealth = 300
+							}
+						}
 					}
 				}
 				AND = {
@@ -1511,48 +1335,12 @@ character_event = {
 						religion = fraticelli
 					}
 				}
-				AND = {
-					NOT = { has_character_modifier = expelled_d_columbus_knights }
-					NOT = {
-						any_liege = {
-							has_character_modifier = expelled_d_columbus_knights
-						}
-					}
-					d_columbus_knights = {
-						holder_scope = { ai = yes
-							NOT = { realm_size = 5 } wealth = 300
-						}
-					}
-					OR = {
-						religion = palmarian
-						religion = transatlantic
-					}
-				}
-				AND = {
-					NOT = { has_character_modifier = expelled_d_carmelites }
-					NOT = {
-						any_liege = {
-							has_character_modifier = expelled_d_carmelites
-						}
-					}
-					d_carmelites = {
-						holder_scope = { ai = yes
-							NOT = { realm_size = 5 } wealth = 300
-						}
-					}
-					OR = {
-						religion = palmarian
-						religion = transatlantic
-					}
-				}
 			}
 		}
 		modifier = {
 			factor = 0.66
-			OR = {
-				religion = palmarian
-				religion = transatlantic
-			}
+			one_holy_order_avalaible_trigger = yes
+			two_holy_order_avalaible_trigger = yes
 		}
 		modifier = {
 			factor = 0.5
@@ -1568,15 +1356,83 @@ character_event = {
 		random_list = {
 			10 = {
 				trigger = {
-					NOR = {
-						religion = catholic
-						religion = cadaverist
-						religion = fraticelli
-						religion = palmarian
-						religion = transatlantic
+					one_holy_order_avalaible_trigger = yes
+					religion_scope = {
+						persistent_event_target:one_holy_order = {
+							holder_scope = { ai = yes
+								wealth = 300
+								NOT = {
+									realm_size = 10
+								}
+							}
+						}
 					}
 				}
+				modifier = {
+					factor = 5
+					religion_scope = { persistent_event_target:one_holy_order = { holder_scope = { NOT = { demesne_size = 1 } } } }
+				}
+				modifier = {
+					factor = 3
+					religion_scope = { persistent_event_target:one_holy_order = { holder_scope = { NOT = { demesne_size = 1 } } } }
+				}
+				modifier = {
+					factor = 3
+					religion_scope = { persistent_event_target:one_holy_order = { holder_scope = { NOT = { demesne_size = 2 } } } }
+				}
+				modifier = {
+					factor = 3
+					religion_scope = { persistent_event_target:one_holy_order = { holder_scope = { NOT = { num_of_count_titles = 1 } } } }
+				}
+				modifier = {
+					factor = 3
+					religion_scope = { persistent_event_target:one_holy_order = { holder_scope = { NOT = { demesne_size = 5 } } } }
+				}
+				modifier = {
+					factor = 3
+					preferred_by_one_holy_order_trigger = yes
+				}
 				religion_scope = { persistent_event_target:one_holy_order = { save_event_target_as = holy_order_to_build } }
+			}
+			10 = {
+				trigger = {
+					two_holy_order_avalaible_trigger = yes
+					religion_scope = {
+						persistent_event_target:two_holy_order = {
+							holder_scope = { ai = yes
+								wealth = 300
+								NOT = {
+									realm_size = 10
+								}
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 5
+					religion_scope = { persistent_event_target:two_holy_order = { holder_scope = { NOT = { demesne_size = 1 } } } }
+				}
+				modifier = {
+					factor = 3
+					religion_scope = { persistent_event_target:two_holy_order = { holder_scope = { NOT = { demesne_size = 1 } } } }
+				}
+				modifier = {
+					factor = 3
+					religion_scope = { persistent_event_target:two_holy_order = { holder_scope = { NOT = { demesne_size = 2 } } } }
+				}
+				modifier = {
+					factor = 3
+					religion_scope = { persistent_event_target:two_holy_order = { holder_scope = { NOT = { num_of_count_titles = 1 } } } }
+				}
+				modifier = {
+					factor = 3
+					religion_scope = { persistent_event_target:two_holy_order = { holder_scope = { NOT = { demesne_size = 5 } } } }
+				}
+				modifier = {
+					factor = 3
+					preferred_by_two_holy_order_trigger = yes
+				}
+				religion_scope = { persistent_event_target:two_holy_order = { save_event_target_as = holy_order_to_build } }
 			}
 			10 = {
 				trigger = {
@@ -1755,92 +1611,6 @@ character_event = {
 					d_knights_lazarus = { holder_scope = { NOT = { demesne_size = 5 } } }
 				}
 				d_knights_lazarus = { save_event_target_as = holy_order_to_build }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_character_modifier = expelled_d_columbus_knights }
-					NOT = {
-						any_liege = {
-							has_character_modifier = expelled_d_columbus_knights
-						}
-					}
-					d_columbus_knights = {
-						holder_scope = { ai = yes
-							wealth = 300
-							NOT = {
-								realm_size = 10
-							}
-						}
-					}
-					OR = {
-						religion = palmarian
-						religion = transatlantic
-					}
-				}
-				modifier = {
-					factor = 3
-					culture = castilian
-				}
-				modifier = {
-					factor = 3
-					d_columbus_knights = { holder_scope = { NOT = { demesne_size = 1 } } }
-				}
-				modifier = {
-					factor = 3
-					d_columbus_knights = { holder_scope = { NOT = { demesne_size = 2 } } }
-				}
-				modifier = {
-					factor = 3
-					d_columbus_knights = { holder_scope = { NOT = { num_of_count_titles = 1 } } }
-				}
-				modifier = {
-					factor = 3
-					d_columbus_knights = { holder_scope = { NOT = { demesne_size = 5 } } }
-				}
-				d_columbus_knights = { save_event_target_as = holy_order_to_build }
-			}
-			10 = {
-				trigger = {
-					NOT = { has_character_modifier = expelled_d_carmelites }
-					NOT = {
-						any_liege = {
-							has_character_modifier = expelled_d_carmelites
-						}
-					}
-					d_carmelites = {
-						holder_scope = { ai = yes
-							wealth = 300
-							NOT = {
-								realm_size = 10
-							}
-						}
-					}
-					OR = {
-						religion = palmarian
-						religion = transatlantic
-					}
-				}
-				modifier = {
-					factor = 3
-					culture = andalusian
-				}
-				modifier = {
-					factor = 3
-					d_carmelites = { holder_scope = { NOT = { demesne_size = 1 } } }
-				}
-				modifier = {
-					factor = 3
-					d_carmelites = { holder_scope = { NOT = { demesne_size = 2 } } }
-				}
-				modifier = {
-					factor = 3
-					d_carmelites = { holder_scope = { NOT = { num_of_count_titles = 1 } } }
-				}
-				modifier = {
-					factor = 3
-					d_carmelites = { holder_scope = { NOT = { demesne_size = 5 } } }
-				}
-				d_carmelites = { save_event_target_as = holy_order_to_build }
 			}
 		}
 		random_demesne_province = {
@@ -2078,12 +1848,11 @@ character_event = {
 				has_character_modifier = borrowed_from_bektashi
 				has_character_modifier = borrowed_from_haruriyyah
 				has_character_modifier = expelled_one_holy_order
+				has_character_modifier = expelled_two_holy_order
 				has_character_modifier = expelled_d_legion_of_mary
 				has_character_modifier = expelled_d_knights_templar
 				has_character_modifier = expelled_d_knights_hospitaler
 				has_character_modifier = expelled_d_knights_lazarus
-				has_character_modifier = expelled_d_columbus_knights
-				has_character_modifier = expelled_d_carmelites
 			}
 			primary_title = { title = ROOT_FROM  }
 		}
@@ -2105,12 +1874,11 @@ character_event = {
 	trigger = {
 		OR = {
 			has_character_modifier = expelled_one_holy_order
+			has_character_modifier = expelled_two_holy_order
 			has_character_modifier = expelled_d_legion_of_mary
 			has_character_modifier = expelled_d_knights_templar
 			has_character_modifier = expelled_d_knights_hospitaler
 			has_character_modifier = expelled_d_knights_lazarus
-			has_character_modifier = expelled_d_columbus_knights
-			has_character_modifier = expelled_d_carmelites
 		}
 		OR = {
 			is_ruler = no

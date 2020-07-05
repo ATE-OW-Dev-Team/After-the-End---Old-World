@@ -547,50 +547,35 @@ decisions = {
 		}
 	}
 
-	donate_money_to_one_holy_order = {
+	donate_money_to_holy_order_ai = {
 		only_playable = yes
 		ai_check_interval = 80
+		ai = yes
 		potential = {
 			is_playable = yes
 			OR = {
+				NOR = {
+					trait = cynical
+					piety = 50
+				}
 				AND = {
 					OR = {
-						NOR = {
-							trait = cynical
-							piety = 50
-						}
-						AND = {
-							OR = {
-								trait = zealous
-								trait = charitable
-							}
-							NOT = { piety = 300 }
-						}
-						AND = {
-							trait = zealous
-							trait = charitable
-						}
+						trait = zealous
+						trait = charitable
 					}
-					wealth = 600
+					NOT = { piety = 300 }
 				}
-				ai = no
+				AND = {
+					trait = zealous
+					trait = charitable
+				}
 			}
+			wealth = 600
 			is_heretic = no
 			NOT = { government = order_government }
 			OR = {
-				AND = {
-					NOT = { has_character_modifier = expelled_one_holy_order }
-					religion_scope = {
-						is_title_active = persistent_event_target:one_holy_order
-						persistent_event_target:one_holy_order = {
-							holder_scope = {
-								liege = {
-									NOT = { character = ROOT }
-								}
-							}
-						}
-					}
-				}
+				one_holy_order_avalaible_trigger = yes
+				two_holy_order_avalaible_trigger = yes
 				AND = {
 					NOT = { has_character_modifier = expelled_d_legion_of_mary }
 					is_title_active = d_legion_of_mary
@@ -606,7 +591,6 @@ decisions = {
 						religion = cadaverist
 						religion = fraticelli
 					}
-					ai = yes
 				}
 				AND = {
 					NOT = { has_character_modifier = expelled_d_knights_templar }
@@ -623,7 +607,6 @@ decisions = {
 						religion = cadaverist
 						religion = fraticelli
 					}
-					ai = yes
 				}
 				AND = {
 					NOT = { has_character_modifier = expelled_d_knights_hospitaler }
@@ -640,7 +623,6 @@ decisions = {
 						religion = cadaverist
 						religion = fraticelli
 					}
-					ai = yes
 				}
 				AND = {
 					NOT = { has_character_modifier = expelled_d_knights_lazarus }
@@ -656,38 +638,6 @@ decisions = {
 						religion = catholic
 						religion = cadaverist
 						religion = fraticelli
-					}
-					ai = yes
-				}
-				AND = {
-					NOT = { has_character_modifier = expelled_d_columbus_knights }
-					is_title_active = d_columbus_knights
-					d_columbus_knights = {
-						holder_scope = {
-							liege = {
-								NOT = { character = ROOT }
-							}
-						}
-					}
-					OR = {
-						religion = palmarian
-						religion = transatlantic
-					}
-					ai = yes
-				}
-				AND = {
-					NOT = { has_character_modifier = expelled_d_carmelites }
-					is_title_active = d_carmelites
-					d_carmelites = {
-						holder_scope = {
-							liege = {
-								NOT = { character = ROOT }
-							}
-						}
-					}
-					OR = {
-						religion = palmarian
-						religion = transatlantic
 					}
 					ai = yes
 				}
@@ -725,15 +675,23 @@ decisions = {
 				random_list = {
 					10 = {
 						trigger = {
-							NOR = {
-								religion = catholic
-								religion = cadaverist
-								religion = fraticelli
-								religion = palmarian
-								religion = transatlantic
-							}
+							one_holy_order_avalaible_trigger = yes
+						}
+						modifier = {
+							factor = 3
+							preferred_by_one_holy_order_trigger = yes
 						}
 						religion_scope = { persistent_event_target:one_holy_order = { save_event_target_as = holy_order_to_donate } }
+					}
+					10 = {
+						trigger = {
+							two_holy_order_avalaible_trigger = yes
+						}
+						modifier = {
+							factor = 3
+							preferred_by_two_holy_order_trigger = yes
+						}
+						religion_scope = { persistent_event_target:two_holy_order = { save_event_target_as = holy_order_to_donate } }
 					}
 					10 = {
 						trigger = {
@@ -811,46 +769,6 @@ decisions = {
 						}
 						d_knights_lazarus = { save_event_target_as = holy_order_to_donate }
 					}
-					10 = {
-						trigger = {
-							NOT = { has_character_modifier = expelled_d_columbus_knights }
-							NOT = {
-								any_liege = {
-									has_character_modifier = expelled_d_columbus_knights
-								}
-							}
-							is_title_active = d_columbus_knights
-							OR = {
-								religion = palmarian
-								religion = transatlantic
-							}
-						}
-						modifier = {
-							factor = 3
-							culture = castilian
-						}
-						d_columbus_knights = { save_event_target_as = holy_order_to_donate }
-					}
-					10 = {
-						trigger = {
-							NOT = { has_character_modifier = expelled_d_carmelites }
-							NOT = {
-								any_liege = {
-									has_character_modifier = expelled_d_carmelites
-								}
-							}
-							is_title_active = d_carmelites
-							OR = {
-								religion = palmarian
-								religion = transatlantic
-							}
-						}
-						modifier = {
-							factor = 3
-							culture = andalusian
-						}
-						d_carmelites = { save_event_target_as = holy_order_to_donate }
-					}
 				}
 				event_target:holy_order_to_donate = {
 					holder_scope = {
@@ -874,6 +792,128 @@ decisions = {
 			modifier = {
 				factor = 0.5 # Slow it down
 			}
+		}
+	}
+	donate_money_to_one_holy_order = {
+		only_playable = yes
+		ai = no
+		potential = {
+			is_playable = yes
+			is_heretic = no
+			one_holy_order_avalaible_trigger = yes
+			NOT = { government = order_government }
+			
+			has_dlc = "Sons of Abraham"
+		}
+		
+		allow = {
+			wealth = 300
+			custom_tooltip = {
+				text = holy_order_donate_cooldown_tt
+				NOT = { has_character_modifier = donate_to_holy_order_cooldown }
+			}
+		}
+		
+		effect = {
+			hidden_effect = {
+				add_character_modifier = {
+					modifier = donate_to_holy_order_cooldown
+					hidden = yes
+					years = 1
+				}
+			}
+			if = {
+				limit = { 
+					NOT = { has_character_modifier = donated_to_holy_order }
+				}
+				add_character_modifier = {
+					name = donated_to_holy_order
+					duration = -1
+				}
+			}
+			
+			hidden_tooltip = {
+				religion_scope = { persistent_event_target:one_holy_order = { save_event_target_as = holy_order_to_donate } }
+				event_target:holy_order_to_donate = {
+					holder_scope = {
+						character_event = {
+							id = holyorder.15
+						}
+					}
+				}
+			}
+			
+			wealth = -300
+			piety = 100
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	donate_money_to_two_holy_order = {
+		only_playable = yes
+		ai = no
+		potential = {
+			is_playable = yes
+			is_heretic = no
+			two_holy_order_avalaible_trigger = yes
+			NOT = { government = order_government }
+			
+			has_dlc = "Sons of Abraham"
+		}
+		
+		allow = {
+			wealth = 300
+			custom_tooltip = {
+				text = holy_order_donate_cooldown_tt
+				NOT = { has_character_modifier = donate_to_holy_order_cooldown }
+			}
+		}
+		
+		effect = {
+			hidden_effect = {
+				add_character_modifier = {
+					modifier = donate_to_holy_order_cooldown
+					hidden = yes
+					years = 1
+				}
+			}
+			if = {
+				limit = { 
+					NOT = { has_character_modifier = donated_to_holy_order }
+				}
+				add_character_modifier = {
+					name = donated_to_holy_order
+					duration = -1
+				}
+			}
+			
+			hidden_tooltip = {
+				religion_scope = { persistent_event_target:two_holy_order = { save_event_target_as = holy_order_to_donate } }
+				event_target:holy_order_to_donate = {
+					holder_scope = {
+						character_event = {
+							id = holyorder.15
+						}
+					}
+				}
+			}
+			
+			wealth = -300
+			piety = 100
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 0
 		}
 	}
 	donate_money_to_legion_of_mary = {
@@ -1172,163 +1212,12 @@ decisions = {
 			factor = 0
 		}
 	}
-	donate_money_to_columbus_knights = {
-		only_playable = yes
-		ai = no
-		potential = {
-			is_playable = yes
-			is_title_active = d_columbus_knights
-			NOT = { government = order_government }
-			d_columbus_knights = {
-				holder_scope = { 
-					religion = ROOT
-				}
-			}
-			NOT = { has_character_modifier = expelled_d_columbus_knights }
-			
-			has_dlc = "Sons of Abraham"
-			
-			d_columbus_knights = {
-				holder_scope = {
-					liege = {
-						NOT = { character = ROOT }
-					}
-				}
-			}
-		}
-		
-		allow = {
-			wealth = 300
-			custom_tooltip = {
-				text = holy_order_donate_cooldown_tt
-				NOT = { has_character_modifier = donate_to_holy_order_cooldown }
-			}
-		}
-		
-		effect = {
-			hidden_effect = {
-				add_character_modifier = {
-					modifier = donate_to_holy_order_cooldown
-					hidden = yes
-					years = 1
-				}
-			}
-			if = {
-				limit = { 
-					NOT = { has_character_modifier = donated_to_holy_order }
-				}
-				add_character_modifier = {
-					name = donated_to_holy_order
-					duration = -1
-				}
-			}
-			
-			hidden_tooltip = {
-				d_columbus_knights = { save_event_target_as = holy_order_to_donate }
-				event_target:holy_order_to_donate = {
-					holder_scope = {
-						character_event = {
-							id = holyorder.15
-						}
-					}
-				}
-			}
-			
-			wealth = -300
-			piety = 100
-		}
-		
-		revoke_allowed = {
-			always = no
-		}
-		
-		ai_will_do = {
-			factor = 0
-		}
-	}
-	donate_money_to_carmelites = {
-		only_playable = yes
-		ai = no
-		potential = {
-			is_playable = yes
-			is_title_active = d_carmelites
-			NOT = { government = order_government }
-			d_carmelites = {
-				holder_scope = { 
-					religion = ROOT
-				}
-			}
-			NOT = { has_character_modifier = expelled_d_carmelites }
-			
-			has_dlc = "Sons of Abraham"
-			
-			d_carmelites = {
-				holder_scope = {
-					liege = {
-						NOT = { character = ROOT }
-					}
-				}
-			}
-		}
-		
-		allow = {
-			wealth = 300
-			custom_tooltip = {
-				text = holy_order_donate_cooldown_tt
-				NOT = { has_character_modifier = donate_to_holy_order_cooldown }
-			}
-		}
-		
-		effect = {
-			hidden_effect = {
-				add_character_modifier = {
-					modifier = donate_to_holy_order_cooldown
-					hidden = yes
-					years = 1
-				}
-			}
-			if = {
-				limit = { 
-					NOT = { has_character_modifier = donated_to_holy_order }
-				}
-				add_character_modifier = {
-					name = donated_to_holy_order
-					duration = -1
-				}
-			}
-			
-			hidden_tooltip = {
-				d_carmelites = { save_event_target_as = holy_order_to_donate }
-				event_target:holy_order_to_donate = {
-					holder_scope = {
-						character_event = {
-							id = holyorder.15
-						}
-					}
-				}
-			}
-			
-			wealth = -300
-			piety = 100
-		}
-		
-		revoke_allowed = {
-			always = no
-		}
-		
-		ai_will_do = {
-			factor = 0
-		}
-	}
 	expel_one_holy_order = {
 		only_independent = yes
 		ai_check_interval = 24
 
 		potential = {
-			NOT = { has_character_modifier = expelled_one_holy_order }
-			religion_scope = {
-				is_title_active = persistent_event_target:one_holy_order
-			}
+			one_holy_order_avalaible_trigger = yes
 			is_heretic = no
 			higher_tier_than = DUKE
 			independent = yes
@@ -1366,6 +1255,81 @@ decisions = {
 			custom_tooltip = {
 				text = expelling_holy_order_decision_tooltip_b
 				religion_scope = { persistent_event_target:one_holy_order = { save_event_target_as = holy_order_to_expel } }
+				hidden_tooltip = {
+					character_event = { id = SoA.2990 }
+				}
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.2
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					wealth = 0
+					NOR = {
+						trait = cynical
+						trait = greedy
+					}
+					AND = {
+						has_secret_religion = no
+						trait = zealous
+					}
+					trait = content
+				}
+			}
+		}
+	}
+	expel_two_holy_order = {
+		only_independent = yes
+		ai_check_interval = 24
+
+		potential = {
+			two_holy_order_avalaible_trigger = yes
+			is_heretic = no
+			higher_tier_than = DUKE
+			independent = yes
+			
+			any_realm_province = {
+				any_province_lord = {
+					religion_scope = {
+						persistent_event_target:two_holy_order = {
+							holder_scope = {
+								OR = {
+									character = PREVPREVPREV
+									is_vassal_or_below = PREVPREVPREV
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			has_dlc = "Sons of Abraham"
+		}
+		
+		allow = {
+			piety = 1000
+			custom_tooltip = {
+				text = expelling_holy_order_decision_tooltip
+				hidden_tooltip = {
+					NOT = { has_character_flag = expel_order_check }
+				}
+			}
+		}
+		
+		effect = {
+			set_character_flag = expel_order_check
+			custom_tooltip = {
+				text = expelling_holy_order_decision_tooltip_b
+				religion_scope = { persistent_event_target:two_holy_order = { save_event_target_as = holy_order_to_expel } }
 				hidden_tooltip = {
 					character_event = { id = SoA.2990 }
 				}
@@ -1710,160 +1674,5 @@ decisions = {
 			}
 		}
 	}
-	expel_the_columbus_knights = {
-		only_independent = yes
-		ai_check_interval = 24
-
-		potential = {
-			NOT = { has_character_modifier = expelled_d_columbus_knights }
-			is_heretic = no
-			higher_tier_than = DUKE
-			independent = yes
-			OR = {
-				religion = palmarian
-				religion = transatlantic
-			}
-			is_title_active = d_columbus_knights
-			any_realm_province = {
-				any_province_lord = {
-					d_columbus_knights = {
-						holder_scope = {
-							OR = {
-								character = PREVPREV
-								is_vassal_or_below = PREVPREV
-							}
-						}
-					}
-				}
-			}
-			
-			has_dlc = "Sons of Abraham"
-		}
-		
-		allow = {
-			piety = 1000
-			custom_tooltip = {
-				text = expelling_holy_order_decision_tooltip
-				hidden_tooltip = {
-					NOT = { has_character_flag = expel_order_check }
-				}
-			}
-		}
-		
-		effect = {
-			set_character_flag = expel_order_check
-			custom_tooltip = {
-				text = expelling_holy_order_decision_tooltip_b
-				d_columbus_knights = { save_event_target_as = holy_order_to_expel }
-				hidden_tooltip = {
-					character_event = { id = SoA.2990 }
-				}
-			}
-		}
-		
-		revoke_allowed = {
-			always = no
-		}
-		
-		ai_will_do = {
-			factor = 1
-			modifier = {
-				factor = 0.2
-			}
-			modifier = {
-				factor = 0
-				OR = {
-					wealth = 0
-					NOR = {
-						trait = cynical
-						trait = greedy
-					}
-					AND = {
-						has_secret_religion = no
-						trait = zealous
-					}
-					trait = content
-				}
-			}
-		}
-	}
-	expel_the_carmelites = {
-		only_independent = yes
-		ai_check_interval = 24
-
-		potential = {
-			NOT = { has_character_modifier = expelled_d_carmelites }
-			is_heretic = no
-			higher_tier_than = DUKE
-			independent = yes
-			OR = {
-				religion = palmarian
-				religion = transatlantic
-			}
-			is_title_active = d_carmelites
-			any_realm_province = {
-				any_province_lord = {
-					d_carmelites = {
-						holder_scope = {
-							OR = {
-								character = PREVPREV
-								is_vassal_or_below = PREVPREV
-							}
-						}
-					}
-				}
-			}
-			
-			has_dlc = "Sons of Abraham"
-		}
-		
-		allow = {
-			piety = 1000
-			custom_tooltip = {
-				text = expelling_holy_order_decision_tooltip
-				hidden_tooltip = {
-					NOT = { has_character_flag = expel_order_check }
-				}
-			}
-		}
-		
-		effect = {
-			set_character_flag = expel_order_check
-			custom_tooltip = {
-				text = expelling_holy_order_decision_tooltip_b
-				d_carmelites = { save_event_target_as = holy_order_to_expel }
-				hidden_tooltip = {
-					character_event = { id = SoA.2990 }
-				}
-			}
-		}
-		
-		revoke_allowed = {
-			always = no
-		}
-		
-		ai_will_do = {
-			factor = 1
-			modifier = {
-				factor = 0.2
-			}
-			modifier = {
-				factor = 0
-				OR = {
-					wealth = 0
-					NOR = {
-						trait = cynical
-						trait = greedy
-					}
-					AND = {
-						has_secret_religion = no
-						trait = zealous
-					}
-					trait = content
-				}
-			}
-		}
-	}
-	
 }
 
