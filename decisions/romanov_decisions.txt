@@ -9,14 +9,21 @@ targeted_decisions = {
 				religion = orthodox
 				religion = zarist
 				religion = petrist
-				religion = katerinist
-				
+				religion = katerinist				
 			}
 		}
 		potential = {
 			OR = {
 				is_priest = yes
 				is_landed = no
+				NOR = {
+					religion = stalinist
+					religion = trotskyite
+					religion = orthodox
+					religion = zarist
+					religion = petrist
+					religion = katerinist
+				}
 			}
 			OR = {
 				has_artifact = romanov_head
@@ -32,10 +39,63 @@ targeted_decisions = {
 				NOT = {
 					trait = cynical
 				}
+				scaled_wealth = 2
 			}
+			ROOT = 
+			{
+				is_within_diplo_range = FROM
+				opinion = {
+					who = FROM
+					value >= 25
+				}
+			}
+			
 		}
 		effect = {
-			
+			if = {
+				limit = {
+					ROOT = {
+						NOT = {
+							has_artifact = romanov_blood							
+						}						
+					}
+				}
+				random_artifact = {
+					limit = {
+						quality == 2
+					}
+					transfer_artifact = {
+						from = ROOT
+						to = FROM
+					}
+				}
+				transfer_scaled_wealth = {
+					to = ROOT
+					from = FROM
+					value = 2
+				}
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+						has_artifact = romanov_blood
+					}
+				}
+				random_artifact = {
+					limit = {
+						quality == 4
+					}
+					transfer_artifact = {
+						from = ROOT
+						to = FROM
+					}
+				}
+				transfer_scaled_wealth = {
+					to = ROOT
+					from = FROM
+					value = 4
+				}
+			}
 		}
 		ai_will_do = {
 			value = ai_zeal
