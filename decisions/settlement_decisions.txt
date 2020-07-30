@@ -707,31 +707,7 @@ settlement_decisions = {
 			
 			OR = {
 				ai = yes
-				AND = {
-					OR = {
-						has_dlc = "The Sword of Islam"
-						NOT = { religion_group = muslim }
-					}
-					OR = {
-						has_dlc = "The Old Gods"
-						NOR = {
-							religion_group = pagan_group
-							religion_group = zoroastrian_group
-						}
-					}
-					OR = {
-						has_dlc = "Sons of Abraham"
-						NOT = { religion_group = jewish_group }
-					}
-					OR = {
-						has_dlc = "Rajas of India"
-						NOT = { has_dharmic_religion_trigger = yes }
-					}
-					OR = {
-						has_dlc = "Jade Dragon"
-						NOT = { religion = taoist }
-					}
-				}
+				dlc_religion_check_trigger_without_nomad_check = yes
 			}
 		}
 		potential = {
@@ -1153,24 +1129,32 @@ settlement_decisions = {
 				if = {
 					limit = {
 						FROM = {
-							culture = hungarian
+							culture = soitoskan
 						}
 						location = {
-							kingdom = { title = k_hungary }
+							kingdom = { title = k_khorasan }
 						}
-						k_hungary = {
-							OR = {
+						OR = {
+							k_khorasan = {
 								has_holder = no
-								holder = FROM
+							}
+							FROM = {
+								has_landed_title = k_khorasan
 							}
 						}
+						has_dynasty_flag = soitoskan_migration_dynasty
 					}
-					set_global_flag = avar_khaganate_renamed
-					k_hungary = {
-						reset_coa = THIS
-						set_name=""
-						adjective=""
-						grant_title = FROM
+					FROM = {
+						k_khorasan = {
+							any_direct_de_jure_vassal_title = {
+								limit = {
+									tier = DUKE
+								}
+								add_claim = PREVPREV
+							}
+						}
+						grant_title = k_khorasan
+						narrative_event = { id = railroad.1002 }
 					}
 				}
 			}
@@ -1374,31 +1358,7 @@ settlement_decisions = {
 			
 			OR = {
 				ai = yes
-				AND = {
-					OR = {
-						has_dlc = "The Sword of Islam"
-						NOT = { religion_group = muslim }
-					}
-					OR = {
-						has_dlc = "The Old Gods"
-						NOR = {
-							religion_group = pagan_group
-							religion_group = zoroastrian_group
-						}
-					}
-					OR = {
-						has_dlc = "Sons of Abraham"
-						NOT = { religion_group = jewish_group }
-					}
-					OR = {
-						has_dlc = "Rajas of India"
-						NOT = { has_dharmic_religion_trigger = yes }
-					}
-					OR = {
-						has_dlc = "Jade Dragon"
-						NOT = { religion = taoist }
-					}
-				}
+				dlc_religion_check_trigger_without_nomad_check = yes
 			}
 		}
 		potential = {
@@ -1799,60 +1759,6 @@ settlement_decisions = {
 					}
 				}
 			}
-			hidden_effect = {
-				# Change name of Avaria to Hungary if relevant.
-				if = {
-					limit = {
-						FROM = {
-							culture = hungarian
-						}
-						location = {
-							kingdom = { title = k_hungary }
-						}
-						k_hungary = {
-							OR = {
-								has_holder = no
-								holder = FROM
-							}
-						}
-					}
-					set_global_flag = avar_khaganate_renamed
-					k_hungary = {
-						reset_coa = THIS
-						set_name=""
-						adjective=""
-						grant_title = FROM
-					}
-				}
-			}
-			
-			if = {
-				limit = {
-					FROM = {
-						dynasty = 708 #Árpád
-						has_landed_title = k_hungary
-					}
-				}
-				hidden_tooltip = {
-					FROM = {
-						any_realm_province = {
-							limit = {
-								culture = avar
-							}
-							culture = PREV
-							religion = PREV
-						}
-						k_hungary = {
-							any_direct_de_jure_vassal_title = {
-								limit = {
-									tier = DUKE
-								}
-								add_claim = PREVPREV
-							}
-						}
-					}
-				}
-			}
 			
 			# Spawn event troops based on amount of empty holdings abandoned.
 			custom_tooltip = {
@@ -1916,71 +1822,7 @@ settlement_decisions = {
 					}
 				}
 			
-				if = {
-					limit = {
-						NOT = { religion_group = muslim }
-						NAND = {
-							culture_group = tibetan_group
-							OR = {
-								religion = bon
-								religion = bon_reformed
-								religion = buddhist
-							}
-							higher_tier_than = BARON
-						}
-					}
-					
-					if = {
-						limit = {
-							ai = no
-						}
-						chronicle = {
-							entry = CHRONICLE_NOMAD_ADOPTED_FEUDALISM
-							picture = GFX_evt_castle_construction
-						}
-					}
-					set_government_type = feudal_government
-				}
-				
-				if = {
-					limit = {
-						religion_group = muslim
-					}
-					
-					if = {
-						limit = {
-							ai = no
-						}
-						chronicle = {
-							entry = CHRONICLE_NOMAD_ADOPTED_IQTA
-							picture = GFX_evt_castle_construction
-						}
-					}
-					set_government_type = muslim_government
-				}
-			
-				if = {
-					limit = {
-						culture_group = tibetan_group
-						OR = {
-							religion = bon
-							religion = bon_reformed
-							religion = buddhist
-						}
-						higher_tier_than = BARON
-					}
-					
-					if = {
-						limit = {
-							ai = no
-						}
-						chronicle = {
-							entry = CHRONICLE_ADOPTED_FEUDALISM
-							picture = GFX_evt_castle_construction
-						}
-					}
-					set_government_type = theocratic_feudal_government
-				}
+				set_feudal_government_effect = yes
 				
 				hidden_tooltip = {
 					if = {
@@ -2021,7 +1863,7 @@ settlement_decisions = {
 			modifier = {
 				factor = 100
 				FROM = {
-					dynasty = 708 # Árpád
+					has_dynasty_flag = soitoskan_migration_dynasty # Árpád
 				}
 			}
 			
@@ -2030,7 +1872,7 @@ settlement_decisions = {
 				FROM = {
 					NOT = { num_of_subrealm_castles = 20 }
 					population_and_manpower = 5000
-					NOT = { dynasty = 708 } # Árpád
+					NOT = { has_dynasty_flag = soitoskan_migration_dynasty } # Árpád
 				}
 			}
 			
@@ -2038,7 +1880,7 @@ settlement_decisions = {
 				factor = 0
 				FROM = {
 					NOT = { num_of_subrealm_castles = 10 }
-					NOT = { dynasty = 708 } # Árpád
+					NOT = { has_dynasty_flag = soitoskan_migration_dynasty } # Árpád
 				}
 			}
 			
@@ -2050,7 +1892,7 @@ settlement_decisions = {
 						trait = stubborn
 						trait = proud
 					}
-					NOT = { dynasty = 708 } # Árpád
+					NOT = { has_dynasty_flag = soitoskan_migration_dynasty } # Árpád
 				}
 			}
 			
@@ -2065,7 +1907,7 @@ settlement_decisions = {
 							value = 1.5
 						}
 					}
-					NOT = { dynasty = 708 } # Árpád
+					NOT = { has_dynasty_flag = soitoskan_migration_dynasty } # Árpád
 				}
 			}
 			
@@ -2103,31 +1945,7 @@ settlement_decisions = {
 			
 			OR = {
 				ai = yes
-				AND = {
-					OR = {
-						has_dlc = "The Sword of Islam"
-						NOT = { religion_group = muslim }
-					}
-					OR = {
-						has_dlc = "The Old Gods"
-						NOR = {
-							religion_group = pagan_group
-							religion_group = zoroastrian_group
-						}
-					}
-					OR = {
-						has_dlc = "Sons of Abraham"
-						NOT = { religion_group = jewish_group }
-					}
-					OR = {
-						has_dlc = "Rajas of India"
-						NOT = { has_dharmic_religion_trigger = yes }
-					}
-					OR = {
-						has_dlc = "Jade Dragon"
-						NOT = { religion = taoist }
-					}
-				}
+				dlc_religion_check_trigger_without_nomad_check = yes
 			}
 		}
 		
@@ -2893,63 +2711,4 @@ settlement_decisions = {
 		}
 	}
 	
-	settle_iceland_manually = {
-		only_playable = yes
-		filter = sub_realm_owned
-		ai_target_filter = sub_realm_owned
-		is_high_prio = yes
-		ai_check_interval = 60
-		
-		from_potential = {
-			is_alternate_start = no
-			is_playable = yes
-			higher_tier_than = BARON
-		}
-		
-		potential = {
-			location = {
-				has_province_modifier = incredibly_poor
-			}
-		}
-		
-		allow = {
-			FROM = {
-				prestige = 200
-				wealth = 25
-			}
-		}
-		
-		effect = {
-			location = {
-				religion = FROM
-				culture = FROM
-				capital_holding = {
-					if = {
-						limit = {
-							holding_type = temple
-						}
-						convert_to = tribal
-						refill_holding_levy = yes
-					}
-					holder_scope = {
-						if = {
-							limit = {
-								controls_religion = no
-								holy_order = no
-								government = theocracy_government
-							}
-							set_government_type = tribal_government
-						}
-					}
-				}
-				remove_province_modifier = incredibly_poor
-			}
-		}
-		revoke_allowed = {
-			always = no
-		}
-		ai_will_do = {
-			factor = 1
-		}
-	}
 }
