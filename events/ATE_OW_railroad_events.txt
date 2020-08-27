@@ -1,0 +1,330 @@
+namespace = railroad
+
+narrative_event = {
+	id = railroad.1000
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {	
+		k_soitoskan = {
+			any_direct_de_jure_vassal_title = {
+				de_jure_liege = k_khorasan
+			}
+		}
+		k_khorasan = {
+			grant_title = ROOT
+			copy_title_laws = k_soitoskan
+			copy_title_history = k_soitoskan
+			set_name=""
+			adjective=""
+		}
+		k_soitoskan = {
+			destroy_landed_title = THIS
+		}
+		activate_title = { title = k_soitoskan status = no }
+		
+		k_khorasan = {
+			if = {
+				limit = {
+					NOT = {
+						has_dlc = "Zeus"
+						OR = {
+							has_law = crown_authority_0
+							has_law = crown_authority_1
+							has_law = crown_authority_2
+							has_law = crown_authority_3
+							has_law = crown_authority_4
+						}
+					}
+				}
+				add_law = crown_authority_0
+			}
+		}
+		any_playable_ruler = {
+			limit = {
+				NOT = { has_landed_title = k_khorasan }
+				ai = no
+			}
+			narrative_event = { id = railroad.1001 }
+		}
+		
+		any_realm_province = {
+			limit = {
+				kingdom = {
+					title = k_khorasan
+				}
+			}
+			score_value = {
+				value = 1
+			}
+			count = 5
+			culture = soitoskan
+			religion = ROOT
+		}
+		
+		# The Hungarian culture in the Ukraine is lost
+		while = {
+			limit = {
+				check_variable = {
+					which = soitoskan_province_leave
+					value >= 1
+				}
+			}
+			subtract_variable = {
+				which = soitoskan_province_leave
+				value = 1
+			}
+			random_realm_province = {
+				limit = {
+					culture = soitoskan
+					empire = {
+						title = e_steppes
+					}
+					any_neighbor_province = {
+						NOT = { culture = soitoskan }
+					}
+				}
+				random_neighbor_province = {
+					limit = {
+						NOT = { culture = soitoskan }
+					}
+					reverse_culture = PREV
+					reverse_religion = PREV
+				}
+			}
+		}
+		# Lose control of the Ukraininan lands
+		any_realm_province = {
+			limit = {
+				kingdom = {
+					title = e_steppes
+				}
+				owner = {
+					# Human vassals get to keep their stuff
+					OR = {
+						ai = yes
+						character = ROOT
+					}
+				}
+			}
+			if = {
+				limit = { 
+					duchy = {
+						holder_scope = {
+							OR = {
+								ai = yes
+								character = ROOT
+							}
+							OR = {
+								same_realm = ROOT
+								character = ROOT
+							}
+						}
+					}
+				}
+				duchy = { destroy_landed_title = THIS }
+			}
+			county = {
+				create_character = {
+					random_traits = yes
+					dynasty = none
+					religion = PREV
+					culture = PREV
+					female = no
+					age = 25
+					trait = peasant_leader
+				}
+				new_character = {
+					usurp_title_plus_barony_if_unlanded = PREV
+					set_defacto_liege = THIS
+				}
+			}
+		}
+		
+		any_claim = {
+			remove_claim = ROOT
+		}
+		
+		narrative_event = { id = railroad.1002 }
+	}
+}
+
+# Informed about the Creation of Hungary
+narrative_event = {
+	id = railroad.1001
+	title = EVTNAMERAILROAD1001
+	desc = EVTDESCRAILROAD1001
+	
+	picture = GFX_evt_council
+	border = GFX_event_narrative_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTARAILROAD1001
+	}
+}
+
+narrative_event = {
+	id = railroad.1002
+	title = EVTNAMERAILROAD1001
+	desc = EVTDESCRAILROAD1002
+	
+	picture = GFX_evt_council
+	border = GFX_event_narrative_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		religion_scope = {
+			save_event_target_as = old_religion
+		}
+	}
+	
+	option = {
+		name = EVTOPTARAILROAD1002
+		character_event = { id = railroad.1005 tooltip = EVTRAILROAD1005_tooltip }
+		ai_chance = {
+			factor = 10
+		}
+	}
+	option = {
+		trigger = {
+			NOT = { religion = shiite }
+			NOT = { trait = zealous }
+		}
+		religion = shiite
+		event_target:old_religion = {
+			show_scope_change = no
+			add_sympathy_for_religion_effect = yes
+		}
+		character_event = { id = railroad.1004 tooltip = EVTRAILROAD1004_tooltip }
+		name = EVTOPTBRAILROAD1002
+		ai_chance = {
+			factor = 10
+		}
+	}
+	option = {
+		trigger = {
+			NOT = { religion = bahai }
+			NOT = { trait = zealous }
+		}
+		religion = bahai
+		event_target:old_religion = {
+			show_scope_change = no
+			add_sympathy_for_religion_effect = yes
+		}
+		character_event = { id = railroad.1004 tooltip = EVTRAILROAD1004_tooltip }
+		name = EVTOPTCRAILROAD1002
+		ai_chance = {
+			factor = 10
+		}
+	}
+	option = {
+		name = EVTOPTDRAILROAD1002
+		trigger = {
+			NOT = { trait = zealous }
+		}
+		hidden_tooltip = { narrative_event = { id = railroad.1003 } }
+		ai_chance = {
+			factor = 20
+		}
+	}
+}
+narrative_event = {
+	id = railroad.1003
+	title = EVTNAMERAILROAD1001
+	desc = EVTDESCRAILROAD1002
+	
+	picture = GFX_evt_council
+	border = GFX_event_narrative_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		religion_scope = {
+			save_event_target_as = old_religion
+		}
+	}
+	
+	option = {
+		trigger = {
+			NOT = { religion = zoroastrian }
+			NOT = { trait = zealous }
+		}
+		religion = zoroastrian
+		event_target:old_religion = {
+			show_scope_change = no
+			add_sympathy_for_religion_effect = yes
+		}
+		character_event = { id = railroad.1004 tooltip = EVTRAILROAD1004_tooltip }
+		name = EVTOPTARAILROAD1003
+	}
+	option = {
+		trigger = {
+			NOT = { religion = yersenism }
+			NOT = { trait = zealous }
+		}
+		religion = yersenism
+		event_target:old_religion = {
+			show_scope_change = no
+			add_sympathy_for_religion_effect = yes
+		}
+		character_event = { id = railroad.1004 tooltip = EVTRAILROAD1004_tooltip }
+		name = EVTOPTBRAILROAD1003
+	}
+	option = {
+		name = EVTOPTCRAILROAD1003
+		hidden_tooltip = { narrative_event = { id = railroad.1002 } }
+		trigger = {
+			ai = no
+		}
+	}
+}
+character_event = {
+	id = railroad.1004
+	hide_window = yes	
+	is_triggered_only = yes
+	immediate = {
+		any_realm_province = {
+			limit = {
+				religion = event_target:old_religion
+				culture = ROOT
+			}
+			random = {
+				chance = 75
+				religion = ROOT
+			}
+		}
+	}
+}
+character_event = {
+	id = railroad.1005
+	hide_window = yes	
+	is_triggered_only = yes
+	immediate = {
+		any_realm_province = {
+			limit = {
+				religion = event_target:old_religion
+				culture = ROOT
+			}
+			random_list = {
+				80 = { } # 67%
+				10 = {
+					religion = shiite
+				}
+				10 = {
+					religion = bahai
+				}
+				10 = {
+					religion = zoroastrian
+				}
+				10 = {
+					religion = yersenism
+				}
+			}
+		}
+	}
+}
