@@ -698,3 +698,56 @@ preferred_by_two_holy_order_trigger = {
 		always = no
 	}
 }
+jacobinist_revolution_trigger = {
+	has_game_rule = {
+		name = jacobinist_revolution
+		value = on
+	}
+	controls_religion = no
+	is_landed = yes
+	is_tribal = no
+	realm_size = 15
+	capital_scope = { 
+		OR = {#For now they can only spawn in France, Germany, Russia, and Eastern Europe
+			region = world_europe_west_germania
+			region = world_europe_west_francia
+			region = world_europe_east
+			region = world_europe_west_low_countries
+		}
+	}	
+	NOT = {
+		has_alternate_start_parameter = { key = religion_names value = random }
+	}
+	is_landed = yes
+	NOT = { religion = jacobinist }
+	higher_tier_than = COUNT
+	d_jacobinist = {
+		has_holder = no
+	}
+	custom_tooltip = {
+		text = launch_jacobinist_revolution_tt
+		any_realm_province = {
+
+			kingdom = {
+				OR = {
+					has_holder = no
+					holder_scope = {
+						character = ROOT
+					}
+				}
+				num_title_realm_provs = {
+					who = ROOT
+					value = 4
+				}
+			}
+		}
+	}
+	hidden_tooltip = {
+		OR = {
+			NOT = { has_global_flag = jacobinist_revolution_ended }
+			had_global_flag = { flag = jacobinist_revolution_ended days = 9125 } # 25 years
+		}
+
+		NOT = { has_global_flag = jacobin_revolt_ongoing }
+	}
+}
