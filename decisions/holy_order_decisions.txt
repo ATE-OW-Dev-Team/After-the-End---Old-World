@@ -1213,6 +1213,82 @@ decisions = {
 			factor = 0
 		}
 	}
+	
+	donate_money_to_montesa = {
+		only_playable = yes
+		ai = no
+		potential = {
+			is_playable = yes
+			is_title_active = d_montesa
+			NOT = { government = order_government }
+			d_montesa = {
+				holder_scope = { 
+					religion = ROOT
+				}
+			}
+			NOT = { has_character_modifier = expelled_d_montesa }
+			
+			has_dlc = "Sons of Abraham"
+			
+			d_montesa = {
+				holder_scope = {
+					liege = {
+						NOT = { character = ROOT }
+					}
+				}
+			}
+		}
+		
+		allow = {
+			wealth = 300
+			custom_tooltip = {
+				text = holy_order_donate_cooldown_tt
+				NOT = { has_character_modifier = donate_to_holy_order_cooldown }
+			}
+		}
+		
+		effect = {
+			hidden_effect = {
+				add_character_modifier = {
+					modifier = donate_to_holy_order_cooldown
+					hidden = yes
+					years = 1
+				}
+			}
+			if = {
+				limit = { 
+					NOT = { has_character_modifier = donated_to_holy_order }
+				}
+				add_character_modifier = {
+					name = donated_to_holy_order
+					duration = -1
+				}
+			}
+			
+			hidden_tooltip = {
+				d_montesa = { save_event_target_as = holy_order_to_donate }
+				event_target:holy_order_to_donate = {
+					holder_scope = {
+						character_event = {
+							id = holyorder.15
+						}
+					}
+				}
+			}
+			
+			wealth = -300
+			piety = 100
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
 	expel_one_holy_order = {
 		only_independent = yes
 		ai_check_interval = 24
@@ -1643,6 +1719,84 @@ decisions = {
 			custom_tooltip = {
 				text = expelling_holy_order_decision_tooltip_b
 				d_knights_lazarus = { save_event_target_as = holy_order_to_expel }
+				hidden_tooltip = {
+					character_event = { id = SoA.2990 }
+				}
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.2
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					wealth = 0
+					NOR = {
+						trait = cynical
+						trait = greedy
+					}
+					AND = {
+						has_secret_religion = no
+						trait = zealous
+					}
+					trait = content
+				}
+			}
+		}
+	}
+	
+	expel_montesa = {
+		only_independent = yes
+		ai_check_interval = 24
+
+		potential = {
+			NOT = { has_character_modifier = expelled_d_montesa }
+			is_heretic = no
+			higher_tier_than = DUKE
+			independent = yes
+			OR = {
+				religion = palmarian
+				religion = transatlantic				
+			}
+			is_title_active = d_montesa
+			any_realm_province = {
+				any_province_lord = {
+					d_montesa = {
+						holder_scope = {
+							OR = {
+								character = PREVPREV
+								is_vassal_or_below = PREVPREV
+							}
+						}
+					}
+				}
+			}
+			
+			has_dlc = "Sons of Abraham"
+		}
+		
+		allow = {
+			piety = 1000
+			custom_tooltip = {
+				text = expelling_holy_order_decision_tooltip
+				hidden_tooltip = {
+					NOT = { has_character_flag = expel_order_check }
+				}
+			}
+		}
+		
+		effect = {
+			set_character_flag = expel_order_check
+			custom_tooltip = {
+				text = expelling_holy_order_decision_tooltip_b
+				d_montesa = { save_event_target_as = holy_order_to_expel }
 				hidden_tooltip = {
 					character_event = { id = SoA.2990 }
 				}
