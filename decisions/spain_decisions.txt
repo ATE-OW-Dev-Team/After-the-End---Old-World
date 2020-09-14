@@ -1,11 +1,13 @@
 decisions = {
 	embrace_spanish_culture = {
 		ai_check_interval = 120 #check only once every 120 months.
-		
+		is_high_prio = yes
+		only_independent = yes
 		potential = {
 			is_playable = yes
+			independent = yes
+			higher_real_tier_than = DUKE
 			NOT = { culture = spanish }
-			has_dlc = "Holy Fury"
 			NOT = { has_global_flag = spanish_culture }
 			NOT = {
 				has_alternate_start_parameter = { key = culture_names value = random }
@@ -28,6 +30,95 @@ decisions = {
 		}
 		ai_will_do = {
 			factor = 1
+		}
+	}
+	vassalize_palmarian_papacy = {
+		ai_check_interval = 60 #check only once every 60 months.
+		is_high_prio = yes
+		only_independent = yes
+		potential = {
+			is_playable = yes
+			independent = yes
+			controls_religion = no
+			religion = palmarian
+			higher_real_tier_than = DUKE
+			religion_head = {
+				independent = yes
+			}
+		}
+		allow = {
+			has_landed_title = e_spain
+			NOT = { excommunicated_for = religion_head }
+			piety = 2000
+			OR = {
+				wealth = 500
+				c_sevilla = {
+					holder_scope = {
+						OR = {
+							character = ROOT
+							is_liege_or_above = ROOT
+						}
+						trigger_if = {
+							limit = { ROOT = { ai = yes } }
+							NOR = {
+								ai = no
+								any_liege = { ai = no }  # AI will never take Rome province away from a player
+							}
+						}
+					}
+				}
+			}
+			religion_head = {
+				war = no
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					c_sevilla = {
+						holder_scope = {
+							OR = {
+								character = ROOT
+								is_liege_or_above = ROOT
+							}
+							trigger_if = {
+								limit = { ROOT = { ai = yes } }
+								NOR = {
+									ai = no
+									any_liege = { ai = no }  # AI will never take Rome province away from a player
+								}
+							}
+						}
+					}
+				}
+				religion_head = {
+					show_scope_change = no
+					c_sevilla = {
+						show_scope_change = no
+						grant_title = PREV
+					}
+				}
+			}
+			else = {
+				wealth = -500
+				religion_head = {
+					wealth = 500
+				}
+			}
+			religion_head = {
+				show_scope_change = no
+				set_defacto_liege = ROOT
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				war = yes
+			}
 		}
 	}
 }
