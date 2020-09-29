@@ -656,7 +656,10 @@ decisions = {
 		ai_check_interval = 24
 		potential = {
 			form_empire_potential = yes
-			religion = parabrahmanist
+			OR = {
+				culture_group = indo_aryan_group
+				culture_group = dravidian_group
+			}
 			e_india = {
 				has_holder = no
 			}
@@ -671,19 +674,20 @@ decisions = {
 		allow = {
 			form_empire_allow = yes
 			completely_controls_region = world_india
+			wealth = 2000
 		}
 
 		effect = {
-			wealth = -500
-			prestige = 500
-			#activate_title = { title = e_india status = yes }
+			wealth = -2000
+			prestige = 2000
+			activate_title = { title = e_india status = yes }
 			e_india = {
 				gain_empire_effect = yes
 			}
 			hidden_tooltip = { e_india = { make_primary_title = yes }
-				ROOT = {
-					narrative_event = { id = parabrahmanist.3 }
-				}
+				#ROOT = {
+				#	narrative_event = { id = parabrahmanist.3 }
+				#}
 			}
 			if = {
 				limit = {
@@ -944,6 +948,54 @@ decisions = {
 				factor = 1
 				wealth = 400
 			}		
+		}
+	}
+	emulate_bhagavanist_ruler = {
+		only_playable = yes
+		is_high_prio = yes
+		ai_check_interval = 12
+		potential = {
+			is_playable = yes
+			is_adult = yes
+			prisoner = no
+			religion = parabrahmanist
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		allow = {
+			piety = 25
+			custom_tooltip = {
+				text = emulate_bhagavanist_ruler_timer_tooltip
+				NOT = { has_character_modifier = picked_main_deity_timer }
+			}
+			prisoner = no
+		}
+		effect = {
+			piety = -25
+
+			custom_tooltip = {
+				text = emulate_bhagavanist_ruler_tooltip
+
+				#Event
+				character_event = { id = parabrahmanist.5 }
+
+				add_character_modifier = {
+					name = picked_main_deity_timer
+					duration = 3650
+					hidden = yes
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_minor_deity_trigger = yes
+			}
 		}
 	}
 } # decisions bracket. Do not mess with this.
