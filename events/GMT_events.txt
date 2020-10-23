@@ -1,0 +1,1505 @@
+namespace = GMT
+####choose accomplice 
+character_event = {
+	id = GMT.001
+	desc = EVTDESAGMT.001
+	picture = GFX_evt_hooded_figure_hf
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		OR = {
+			has_character_flag = active_heist 
+			has_character_modifier = active_heist
+		}
+	}
+	
+	#ask marshal
+	option = { 
+		name = EVTOPTAGMT.001
+		trigger = { job_marshal = { can_be_accomplice_trigger = yes } }
+		job_marshal = {
+			custom_tooltip = { text = EVTTOOLTIPAGMT.001 save_event_target_as = accomplice }
+			opinion = { modifier = trusting_pos who = ROOT years = 3 }
+		}
+		character_event = { id = GMT.005 days = 30 }
+	}
+	#ask spymaster
+	option = { 
+		name = EVTOPTBGMT.001
+		trigger = { job_spymaster = { can_be_accomplice_trigger = yes } }
+		job_spymaster = {
+			custom_tooltip = { text = EVTTOOLTIPAGMT.001 save_event_target_as = accomplice }
+			opinion = { modifier = trusting_pos who = ROOT years = 3 }
+		}
+		character_event = { id = GMT.005 days = 30 }
+	}
+	
+	#next page
+	option = {
+		name = EVTOPTCGMT.001
+		trigger = {
+			OR = {
+				any_friend = { can_be_accomplice_trigger = yes }
+				any_lover = { can_be_accomplice_trigger = yes }
+				current_heir = {
+					dynasty = ROOT
+					can_be_accomplice_trigger = yes
+				}
+			}
+		}
+		hidden_tooltip = { character_event = { id = GMT.002 } }
+	}
+	
+	#Nevermind
+	option = {
+		name = EVTOPTDGMT.001
+		hidden_tooltip = {
+			event_target:target_artifact = { clr_artifact_flag = targeted }
+			clr_character_flag = active_heist
+		}
+	}
+}
+
+
+####choose accomplice pg2
+character_event = {
+	id = GMT.002
+	desc = EVTDESAGMT.002
+	picture = GFX_evt_hooded_figure_hf
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		OR = {
+			has_character_flag = active_heist 
+			has_character_modifier = active_heist
+		}
+	}
+
+	#ask friend
+	option = {
+		name = EVTOPTAGMT.002
+		trigger = { any_friend = { can_be_accomplice_trigger = yes } }
+		random_friend = {
+			limit = { can_be_accomplice_trigger = yes }
+			custom_tooltip = { text = EVTTOOLTIPAGMT.001 save_event_target_as = accomplice }
+			opinion = { modifier = trusting_pos who = ROOT years = 3 }
+		}
+		character_event = { id = GMT.005 days = 30 }
+	}
+
+	#ask lover
+	option = {
+		name = EVTOPTBGMT.002
+		trigger = { any_lover = { can_be_accomplice_trigger = yes } }
+		random_lover = {
+			limit = { can_be_accomplice_trigger = yes }
+			custom_tooltip = { text = EVTTOOLTIPAGMT.001 save_event_target_as = accomplice }
+			opinion = { modifier = trusting_pos who = ROOT years = 3 }
+		}
+		character_event = { id = GMT.005 days = 30 }
+	}
+	
+	#heir
+	option = {
+		name = EVTOPTCGMT.001
+		trigger = {
+			current_heir = {
+				dynasty = ROOT
+				can_be_accomplice_trigger = yes
+			}
+		}
+		current_heir = {
+			save_event_target_as = accomplice
+			opinion = { modifier = trusting_pos who = ROOT years = 3 }
+		}
+		character_event = {id = GMT.005 days = 30}
+	}
+	
+	#next/back
+	option = {
+		name = EVTOPTDGMT.002
+		character_event = { id = GMT.001 }
+	}
+}
+
+###3/4 reserved for any additional accomplices
+
+
+###setting out 
+character_event = {
+	id = GMT.005
+	#desc = EVTDESAGMT.005
+	#picture = GFX_evt_riders_night_hf
+	
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = { 
+		OR = {
+			has_character_flag = active_heist 
+			has_character_modifier = active_heist
+		}
+	}
+
+	immediate = { character_event = { id = GMT.006 } }
+
+	#option = {
+	#	name = EVTOPTAGMT.005
+	#	character_event = { id = GMT.006 }
+	#}
+}
+
+
+###first phase (outside) tombola
+character_event = {
+	id = GMT.006
+	
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			has_character_flag = active_heist 
+			has_character_modifier = active_heist
+		}
+	}
+
+	immediate = {
+		random_list = {
+			##sneak in at night (original event)
+			20 = {
+				character_event = { id = GMT.007 }
+			}
+			
+			
+			##
+			#20 = {}
+			
+			
+			
+			#20 = {}
+		
+		
+		}
+	
+	}
+
+
+}
+
+
+###sneak in at night (original event)
+character_event = {
+	id = GMT.007
+	desc = EVTDESAGMT.007
+	picture = GFX_evt_sleeping_town_hf
+
+	is_triggered_only = yes
+	
+	trigger = { 
+		OR = {
+			has_character_flag = active_heist 
+			has_character_modifier = active_heist
+		}
+	}
+	
+	#Convince someone to distract
+	option = {
+		name = EVTOPTAGMT.007
+		custom_tooltip = { text = GMT_success_diplomacy }
+		random_list = {
+			#Success
+			60 = {
+				heist_generic_positive_score = yes
+				heist_diplomacy_score = yes
+				character_event = { id = GMT.050 days = 10 tooltip = GMT_success }
+			}
+			#Failure
+			40 = {
+				heist_generic_negative_score = yes
+				heist_guard_score = yes
+				character_event = { id = GMT.008 days = 10 tooltip = GMT_failure }
+			}
+		}
+	}
+	#frontal assault
+	option = {
+		name = EVTOPTBGMT.007
+		custom_tooltip = { text = GMT_success_martial }
+		random_list = {
+			#Success
+			60 = {
+				heist_generic_positive_score = yes
+				heist_martial_score = yes
+				character_event = { id = GMT.050 days = 10 tooltip = GMT_success }
+			}
+			
+			#Failure
+			40 = {
+				heist_generic_negative_score = yes
+				heist_guard_score = yes
+				character_event = { id = GMT.008 days = 10 tooltip = GMT_failure }
+			}
+		}
+	}
+	#Stealth infiltration
+	option = {
+		name = EVTOPTCGMT.007
+		custom_tooltip = { text = GMT_success_intrigue }
+		random_list = {
+			#Success
+			60 = {
+				heist_generic_positive_score = yes
+				heist_intrigue_score = yes
+				character_event = { id = GMT.050 days = 10 tooltip = GMT_success }
+			}
+			#Failure
+			40 = {
+				heist_generic_negative_score = yes
+				heist_guard_score = yes
+				
+				character_event = { id = GMT.008 days = 10 tooltip = GMT_failure }
+			}
+		}
+	}
+}
+
+###sneak in at night failure (original event)
+character_event = {
+	id = GMT.008
+	desc = EVTDESAGMT.008
+	picture = GFX_evt_bad_news
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		OR = {
+			has_character_flag = active_heist 
+			has_character_modifier = active_heist
+		}
+	}
+	
+	#beg for fogiveness
+	option = {
+		name = EVTOPTAGMT.008
+		custom_tooltip = { text = GMT_success_diplomacy }
+		custom_tooltip = { text = GMT_sharedfate }
+		random_list = {
+			20 = {
+				imprison = event_target:target_character
+				hidden_tooltip = { event_target:accomplice = { imprison = event_target:target_character } }
+			}
+			30 = {
+				custom_tooltip = { text = GMT_escape }
+				prestige = -500
+				hidden_tooltip = { event_target:accomplice = { prestige = -250 } }
+			}
+			50 = {
+				modifier = {
+					factor = 1.2
+					diplomacy = 8
+				}
+				modifier = {
+					factor = 1.2
+					diplomacy = 12
+				}
+				modifier = {
+					factor = 1.2
+					diplomacy = 16
+				}
+				custom_tooltip = { text = GMT_escape }
+			}
+		}
+	}
+	#fight your way out
+	option = {
+		name = EVTOPTBGMT.008
+		custom_tooltip = { text = GMT_success_martial }
+		custom_tooltip = { text = GMT_sharedfate }
+		random_list = {
+			20 = {
+				imprison = event_target:target_character
+				hidden_tooltip = { event_target:accomplice = {imprison = event_target:target_character } }	
+			}
+			30 = {
+				custom_tooltip = { text = GMT_escape }
+				add_trait = wounded
+				hidden_tooltip = { event_target:accomplice = { add_trait = wounded} }
+			}
+			50 = {
+				modifier = {
+					factor = 1.2
+					martial = 8
+				}
+				modifier = {
+					factor = 1.2
+					martial = 12
+				}
+				modifier = {
+					factor = 1.2
+					martial = 16
+				}
+				modifier = {
+					factor = 1.1
+					combat_rating = 30
+				}
+				custom_tooltip = { text = GMT_escape }
+			}
+		}
+	}
+	#run away
+	option = {
+		name = EVTOPTCGMT.008
+		custom_tooltip = { text = GMT_success_intrigue }
+		custom_tooltip = { text = GMT_sharedfate }
+		random_list = {
+			20 = {
+				imprison = event_target:target_character
+				hidden_tooltip = { event_target:accomplice = { imprison = event_target:target_character } }
+			}
+			30 = {
+				custom_tooltip = { text = GMT_escape }
+				add_trait = wounded
+				hidden_tooltip = { event_target:accomplice = { add_trait = wounded } }
+			}
+			50 = {
+				modifier = {
+					factor = 0.8
+					trait = is_fat
+				}
+				modifier = {
+					factor = 1.2
+					intrigue = 8
+				}
+				modifier = {
+					factor = 1.2
+					intrigue = 12
+				}
+				modifier = {
+					factor = 1.2
+					intrigue = 16
+				}
+				custom_tooltip = { text = GMT_escape }
+			}
+		}
+	}
+	
+	after = { hidden_tooltip = { character_event = { id = GMT.200 days = 10 } } }
+}
+
+
+
+###second phase (inside) tombola
+character_event = {
+	id = GMT.050
+	
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = { 
+		OR = {
+			has_character_flag = active_heist 
+			has_character_modifier = active_heist
+		}
+	}
+
+	immediate = {
+		random_list = {
+			##inside guards (original event)
+			20 = {
+				character_event = { id = GMT.051 }
+			}
+			
+			
+			##
+			#20 = {}
+			
+			
+			
+			#20 = {}
+		
+		
+		}
+	
+	}
+
+}
+
+
+
+####inside guards (original event)
+character_event = {
+	id = GMT.051
+	desc = EVTDESAGMT.051
+	picture = GFX_evt_eavesdropping
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		OR = {
+			has_character_flag = active_heist 
+			has_character_modifier = active_heist
+		}
+	}
+	
+	#kill them
+	option = {
+		name = EVTOPTAGMT.051
+		custom_tooltip = { text = GMT_success_martial }
+		random_list	= {
+			#success
+			50 = {
+				heist_generic_positive_score = yes
+				heist_martial_score = yes
+				character_event = { id = GMT.100 days = 10 tooltip = GMT_success }
+			}
+			#failure	
+			50 = {
+				heist_generic_negative_score = yes
+				heist_guard_score = yes
+				character_event = { id = GMT.052 days = 10 tooltip = GMT_failure }
+			}
+		}
+	}
+	#poison them with drinks
+	option = {
+		name = EVTOPTBGMT.051
+		custom_tooltip = { text = GMT_success_diplomacy_intrigue }
+		random_list	= {
+			30 = {
+				heist_generic_positive_score = yes
+				heist_diplomacy_score = yes
+				heist_intrigue_score = yes
+				character_event = { id = GMT.100 days = 10 tooltip = GMT_success }
+			}
+			#failure
+			70 = {
+				heist_generic_negative_score = yes
+				heist_guard_score = yes
+				
+				character_event = { id = GMT.052 days = 10 tooltip = GMT_failure }
+			}
+		}
+	}
+	#hermatic gas
+	option = {
+		name = EVTOPTCGMT.051
+		trigger = {
+			society_member_of = hermetics
+			any_artifact = { has_artifact_flag = ingredient }
+		}
+		custom_tooltip = { text = GMT_success_alchemy }
+		random_list = {
+			55 = {	
+				heist_generic_positive_score = yes
+				heist_learning_score = yes
+				modifier = {
+					factor = 1.1
+					has_artifact = magnum_opus_alchemy_panacea_1
+				}
+				modifier = {
+					factor = 1.2
+					has_artifact = magnum_opus_alchemy_panacea_2
+				}
+				modifier = {
+					factor = 1.4
+					has_artifact = magnum_opus_alchemy_panacea_3
+				}
+				modifier = {
+					factor = 1.6
+					has_artifact = magnum_opus_alchemy_panacea_4
+				}
+				modifier = {
+					factor = 1.1
+					has_artifact = magnum_opus_alchemy_transmutation_1
+				}
+				modifier = {
+					factor = 1.2
+					has_artifact = magnum_opus_alchemy_transmutation_2
+				}
+				modifier = {
+					factor = 1.4
+					has_artifact = magnum_opus_alchemy_transmutation_3
+				}
+				modifier = {
+					factor = 1.6
+					has_artifact = magnum_opus_alchemy_transmutation_4
+				}
+				random_artifact = {
+					limit = { has_artifact_flag = ingredient }
+					destroy_artifact = yes
+				}
+				character_event = { id = GMT.100 days = 10 tooltip = GMT_success }
+			}
+			#failure
+			45 = {
+				heist_generic_negative_score = yes
+				heist_guard_score = yes
+				
+				character_event = { id = GMT.052 days = 10 tooltip = GMT_failure }
+			}
+		}
+	}
+	
+	#seduce them
+	option = {
+		name = EVTOPTDGMT.051
+		custom_tooltip = { text = GMT_success_seduction }
+		trigger = {
+			OR = {
+				is_female = yes
+				event_target:accomplice = { is_female = yes }
+			}
+		}
+		random_list = {
+			50 = {
+				trigger = {
+					NAND = { 
+						is_female = yes
+						event_target:accomplice = { is_female = yes }
+					}
+				}
+				heist_generic_positive_score = yes
+				heist_seduction_score = yes
+			
+				character_event = { id = GMT.100 days = 10 tooltip = GMT_success }
+			}
+			80 = {
+				trigger = {
+					is_female = yes
+					event_target:accomplice = { is_female = yes }
+				}
+				heist_generic_positive_score = yes
+				heist_seduction_score = yes
+				
+				character_event = { id = GMT.100 days = 10 tooltip = GMT_success }
+			}
+			#failure
+			50 = {
+				heist_generic_negative_score = yes
+				heist_guard_score = yes
+				
+				character_event = { id = GMT.052 days = 10 tooltip = GMT_failure }
+			}
+		}
+	}
+}
+
+
+
+
+####inside guards failure (original event)
+character_event = {
+	id = GMT.052
+	desc = EVTDESAGMT.052
+	picture = GFX_evt_melee
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		OR = {
+			has_character_flag = active_heist 
+			has_character_modifier = active_heist
+		}
+	}
+	
+	#bribe the guards
+	option = {
+		name = EVTOPTAGMT.052
+		custom_tooltip = { text = GMT_success_diplomacy }
+		custom_tooltip = { text = GMT_sharedfate }
+		random_list = {
+			30 = {
+				imprison = event_target:target_character
+				hidden_tooltip = { event_target:accomplice = { imprison = event_target:target_character } }	
+			}
+			20 = {
+				custom_tooltip = { text = GMT_escape }
+				add_character_modifier = { modifier = pathetic_bribe years = 5 }
+				scaled_wealth = { value = -0.10 min = 30 }
+				hidden_tooltip = {
+					event_target:accomplice = {
+						add_character_modifier = { modifier = pathetic_bribe years = 5 }
+						scaled_wealth = { value = -0.05 min = 10 }
+					}
+				}
+			}
+			50 = {
+				modifier = {
+					factor = 1.2
+					diplomacy = 10
+				}
+				modifier = {
+					factor = 1.2
+					diplomacy = 12
+				}
+				modifier = {
+					factor = 1.2
+					diplomacy = 14
+				}
+				modifier = {
+					factor = 1.2
+					diplomacy = 16
+				}
+				custom_tooltip = { text = GMT_escape }
+				scaled_wealth = { value = -0.20 min = 100 }		
+				hidden_tooltip = { event_target:accomplice = { scaled_wealth =  { value = -0.10 min = 20 } } }
+			}
+		}
+	}
+	
+	#fight 
+	option = {
+		name = EVTOPTBGMT.052
+		custom_tooltip = { text = GMT_success_martial }
+		custom_tooltip = { text = GMT_sharedfate }
+		random_list = {
+			40 = {
+				imprison = event_target:target_character
+				hidden_tooltip = { event_target:accomplice = { imprison = event_target:target_character } }	
+			}
+			30 = {
+				custom_tooltip = { text = GMT_escape }
+				add_maimed_trait_effect = yes
+				hidden_tooltip = { event_target:accomplice = { add_trait_severely_injured_effect = yes } }
+			}
+			30 = {
+				modifier = {
+					factor = 1.2
+					martial = 8
+				}
+				modifier = {
+					factor = 1.2
+					martial = 12
+				}
+				modifier = {
+					factor = 1.2
+					martial = 16
+				}
+				modifier = {
+					factor = 1.1
+					combat_rating = 30
+				}
+				modifier = {
+					factor = 1.1
+					event_target:accomplice = { combat_rating = 20 }
+				}
+				custom_tooltip = { text = GMT_escape }
+			}
+		}
+	}
+	
+	#jump out the window
+	option = {
+		name = EVTOPTCGMT.052
+		custom_tooltip = { text = GMT_success_intrigue }
+		custom_tooltip = { text = GMT_sharedfate }
+		random_list = {
+			10 = {
+				if = {
+					limit = { NOT = { trait = severely_injured } }
+					add_trait_severely_injured_effect = yes
+				}
+				else = { add_trait = wounded }
+				imprison = event_target:target_character
+				hidden_tooltip = { 
+					event_target:accomplice = { 
+						add_trait_severely_injured_effect = yes 
+						imprison = event_target:target_character
+					}
+				}
+			}
+			50 = {
+				imprison = event_target:target_character 
+				hidden_tooltip = { event_target:accomplice = { imprison = event_target:target_character } }
+			}
+			40 = {
+				modifier = {
+					factor = 0.8
+					trait = feeble
+				}
+				modifier = {
+					factor = 0.8
+					trait = weak
+				}
+				modifier = {
+					factor = 1.2
+					intrigue = 10
+				}
+				modifier = {
+					factor = 1.2
+					intrigue = 12
+				}
+				modifier = {
+					factor = 1.2
+					intrigue = 14
+				}
+				modifier = {
+					factor = 1.3
+					trait = strong
+				}
+				modifier = {
+					factor = 1.4
+					trait = robust
+				}
+				modifier = {
+					factor = 1.3
+					trait = brave
+				}
+				custom_tooltip = { text = GMT_escape }
+			}
+		}
+	}
+
+	after = { hidden_tooltip = { character_event = { id = GMT.200 days = 10 } } }
+}
+
+
+
+
+
+
+
+###third phase (vault) tombola
+character_event = {
+	id = GMT.100
+	
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = { 
+		OR = {
+			has_character_flag = active_heist 
+			has_character_modifier = active_heist
+		}
+	}
+
+	immediate = {
+		random_list = {
+			##searching the vault (original event)
+			20 = {
+				character_event = { id = GMT.101 }
+			}
+			
+			
+			
+			#20 = {}
+			
+			
+			
+			#20 = {}
+		
+		
+		}
+	
+	}
+
+
+}
+
+
+####searching the vault (original event)
+character_event = {
+	id = GMT.101
+	desc = EVTDESAGMT.101
+	picture = GFX_evt_treasure_chamber
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		OR = {
+			has_character_flag = active_heist 
+			has_character_modifier = active_heist
+		}
+	}
+	
+	#frantically search
+	option = {
+		name = EVTOPTAGMT.101
+		custom_tooltip = { text = GMT_success_everything }
+		random_list = {
+			45 = {
+				heist_generic_positive_score = yes
+				modifier = {
+					factor = 0.5
+					trait = one_handed
+				}
+				modifier = {
+					factor = 0.8
+					trait = arbitrary
+				}
+				modifier = {
+					factor = 0.9
+					trait = slothful
+				}
+				modifier = {
+					factor = 1.1
+					stewardship = 12
+				}
+				modifier = {
+					factor = 1.1
+					learning = 12
+				}
+				modifier = {
+					factor = 1.1
+					martial = 12
+				}
+				modifier = {
+					factor = 1.1
+					diplomacy = 12
+				}
+				modifier = {
+					factor = 1.1
+					intrigue = 12
+				}
+				modifier = {
+					factor = 1.1
+					stewardship = 18
+				}
+				modifier = {
+					factor = 1.1
+					learning = 18
+				}
+				modifier = {
+					factor = 1.1
+					martial = 18
+				}
+				modifier = {
+					factor = 1.1
+					diplomacy = 18
+				}
+				modifier = {
+					factor = 1.1
+					intrigue = 18
+				}
+				character_event = { id = GMT.150 days = 10 tooltip = GMT_success }
+			}
+			#failure
+			55 = {
+				heist_generic_negative_score = yes
+				
+				character_event = { id = GMT.102 days = 10 tooltip = GMT_failure }
+			}
+		}
+	}
+	
+	
+	#split up to search
+	option = {
+		name = EVTOPTBGMT.101
+		custom_tooltip = { text = GMT_success_split_up }
+		random_list = {
+			35 = {
+				heist_generic_positive_score = yes
+				heist_stewardship_score = yes
+				modifier = {
+					factor = 1.4
+					event_target:accomplice = { trait = fortune_builder }	
+				}
+				modifier = {
+					factor = 1.6
+					event_target:accomplice = { trait = midas_touched }	
+				}
+				modifier = {
+					factor = 1.5
+					event_target:accomplice = { stewardship = 10 }
+				}
+				modifier = {
+					factor = 1.5
+					event_target:accomplice = { stewardship = 14 }
+				}
+				modifier = {
+					factor = 1.5
+					event_target:accomplice = { stewardship = 20 }
+				}
+				character_event = { id = GMT.150 days = 10 tooltip = GMT_success }
+			}
+			#failure
+			65 = {
+				heist_generic_negative_score = yes
+				
+				character_event = { id = GMT.102 days = 10 tooltip = GMT_failure }
+			}
+		}
+	}
+	#search carefully
+	option = {
+		name = EVTOPTCGMT.101
+		custom_tooltip = { text = GMT_success_stewardship_learning }
+		random_list = {
+			40 = {
+				heist_generic_positive_score = yes
+				heist_stewardship_score = yes
+				heist_learning_score = yes
+				
+				character_event = { id = GMT.150 days = 10 tooltip = GMT_success }
+			}
+			#failure
+			60 = {
+				heist_generic_negative_score = yes
+				
+				character_event = { id = GMT.102 days = 10 tooltip = GMT_failure }
+			}
+		}
+	}
+	#use magic
+	option = {
+		name = EVTOPTDGMT.101
+		custom_tooltip = { text = GMT_success_magic }
+		trigger = {
+			OR = {
+				trait = mystic
+				AND = {
+					is_in_society = yes
+					society_is_devil_worshiper = yes
+				}
+			}
+		}
+		random_list = {
+			40 = {
+				heist_generic_positive_score = yes
+				heist_learning_score = yes
+				
+				modifier = {
+					factor = 1.1
+					society_is_devil_worshiper = yes
+					society_rank = 1
+				}
+				modifier = {
+					factor = 1.2
+					society_is_devil_worshiper = yes
+					society_rank = 2
+				}
+				modifier = {
+					factor = 1.4
+					society_is_devil_worshiper = yes
+					society_rank = 3
+				}
+				modifier = {
+					factor = 1.8
+					society_is_devil_worshiper = yes
+					society_rank = 4
+				}
+				modifier = {
+					factor = 1.5
+					has_artifact = necronomicon
+				}
+				character_event = {id = GMT.150 days = 10 tooltip = GMT_success}
+			}
+			#failure
+			60 = {
+				heist_generic_negative_score = yes
+				
+				character_event = { id = GMT.102 days = 10 tooltip = GMT_failure }
+			}
+		}
+	}
+}
+
+
+
+####searching the vault (original event) failure
+character_event = {
+	id = GMT.102
+	desc = EVTDESAGMT.102
+	picture = GFX_evt_catching_heretic
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		OR = {
+			has_character_flag = active_heist 
+			has_character_modifier = active_heist
+		}
+	}
+	
+	#surrender
+	option = {
+		name = EVTOPTAGMT.102
+		custom_tooltip = { text = GMT_sharedfate }
+		imprison = event_target:target_character
+		hidden_tooltip = {
+			event_target:accomplice = {
+				imprison = event_target:target_character
+				opinion = { modifier = opinion_coward who = ROOT years = 5 }
+			}
+		}
+	}
+	#fight your way out
+	option = {
+		name = EVTOPTBGMT.102
+		custom_tooltip = { text = GMT_success_martial }
+		custom_tooltip = { text = GMT_sharedfate }
+		random_list = {
+			#capture
+			25 = {
+				imprison = event_target:target_character
+				hidden_tooltip = { event_target:accomplice = { imprison = event_target:target_character } }
+			}
+			#wounded capture
+			50 = {
+				add_trait = wounded
+				imprison = event_target:target_character
+				hidden_tooltip = {
+					event_target:accomplice = {
+						add_trait = wounded
+						imprison = event_target:target_character
+					}
+				}
+			}
+			#wounded escape
+			25 = {
+				modifier = {
+					factor = 0.7
+					trait = feeble	
+				}				
+				modifier = {
+					factor = 0.7
+					trait = weak	
+				}					
+				modifier = {
+					factor = 0.8
+					NOT = { martial = 8 }
+				}
+				modifier = {
+					factor = 1.3
+					trait = strong	
+				}
+				modifier = {
+					factor = 1.3
+					trait = robust	
+				}
+				modifier = {
+					factor = 1.3
+					trait = duelist	
+				}
+				modifier = {
+					factor = 0.7
+					NOT = { combat_rating = 5 }	
+				}
+				modifier = {
+					factor = 1.2
+					combat_rating = 15	
+				}
+				modifier = {
+					factor = 1.2
+					combat_rating = 30	
+				}
+				modifier = {
+					factor = 1.2
+					combat_rating = 50	
+				}
+				modifier = {
+					factor = 1.4
+					combat_rating = 75	
+				}
+				modifier = {
+					factor = 1.7
+					combat_rating = 100	
+				}
+				
+				modifier = {
+					factor = 1.1
+					event_target:accomplice = { combat_rating = 15 }
+				}
+				modifier = {
+					factor = 1.2
+					event_target:accomplice = { combat_rating = 30 }
+				}
+				modifier = {
+					factor = 1.3
+					event_target:accomplice = { combat_rating = 50 }
+				}
+				custom_tooltip = { text = GMT_escape }
+				add_trait = wounded
+				hidden_tooltip = { event_target:accomplice = { add_trait = wounded } }
+			}
+		}
+	}
+	#demand audience
+	option = {
+		name = EVTOPTCGMT.102
+		custom_tooltip = { text = GMT_success_audience }
+		custom_tooltip = { text = GMT_sharedfate }
+		random_list = {
+			#levy
+			40 = {
+				modifier = {
+					factor = 0.8
+					event_target:target_character = { trait = content }
+				}
+				modifier = {
+					factor = 1.5
+					event_target:target_character = { trait = ambitious }
+				}
+				modifier = {
+					factor = 1.2
+					event_target:target_character = {
+						OR = {
+							trait = misguided_warrior
+							trait = tough_soldier
+							trait = skilled_tactician
+							trait = brilliant_strategist
+						}
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:target_character = { trait = envious }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:target_character = { martial = 8 }
+				}
+				modifier = {
+					factor = 1.2
+					event_target:target_character = { martial = 16 }
+				}
+				modifier = {
+					factor = 1.2
+					event_target:target_character = { in_faction = yes }
+				}
+				add_character_modifier = { modifier = levy_agreement_neg years = 5 }
+				event_target:target_character = { add_character_modifier = { modifier = levy_agreement_pos years = 5 } }
+			}
+			#tax
+			40 = {
+				modifier = {
+					factor = 0.8
+					event_target:target_character = { trait = charitable }
+				}
+				modifier = {
+					factor = 1.2
+					event_target:target_character = {
+						OR = { 
+							trait = indulgent_wastrel
+							trait = thrifty_clerk
+							trait = fortune_builder
+							trait = midas_touched
+						}
+					}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:target_character = { trait = envious }
+				}
+				modifier = {
+					factor = 1.2
+					event_target:target_character = { trait = greedy }
+				}
+				modifier = {
+					factor = 1.2
+					event_target:target_character = { trait = gluttonous }
+				}
+				modifier = {
+					factor = 1.2
+					event_target:target_character = { trait = deceitful }
+				}
+				modifier = {
+					factor = 1.2
+					event_target:target_character = { trait = shrewd }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:target_character = { stewardship = 8}
+				}
+				modifier = {
+					factor = 1.2
+					event_target:target_character = { stewardship = 16 }
+				}
+				add_character_modifier = { modifier = tax_agreement_neg years = 5 }
+				event_target:target_character = { add_character_modifier = { modifier = tax_agreement_pos years = 5 } }
+			}
+			#death
+			20 = {
+				modifier = {
+					factor = 1.2
+					trait = stressed	
+				}
+				modifier = {
+					factor = 1.2
+					trait = drunkard
+				}
+				modifier = {
+					factor = 1.2
+					trait = stutter
+				}
+				modifier = {
+					factor = 1.2
+					trait = shy
+				}
+				
+				modifier = {
+					factor = 0.5
+					event_target:target_character = { trait = kind }
+				}
+				modifier = {
+					factor = 0.75
+					event_target:target_character = { trait = charitable }
+				}
+				modifier = {
+					factor = 0.8
+					event_target:target_character = { learning = 14 }
+				}
+				modifier = {
+					factor = 1.2
+					event_target:target_character = { trait = possessed }
+				}
+				modifier = {
+					factor = 1.3
+					event_target:target_character = { trait = lunatic }
+				}
+				modifier = {
+					factor = 1.3
+					event_target:target_character = { trait = impaler }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:target_character = { trait = dynastic_kinslayer }
+				}
+				modifier = {
+					factor = 1.2
+					event_target:target_character = { trait = familial_kinslayer }
+				}
+				modifier = {
+					factor = 1.4
+					event_target:target_character = { trait = kinslayer }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:target_character = { trait = paranoid }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:target_character = { trait = wroth }
+				}
+				modifier = {
+					factor = 1.1
+					event_target:target_character = { trait = cruel }
+				}
+				death = { death_reason = death_execution killer = event_target:target_character }
+				event_target:accomplice = { imprison = event_target:target_character }
+				hidden_tooltip = { event_target:target_artifact = { clr_artifact_flag = targeted } }
+			}
+		}
+	}
+	after = { 
+		if = {
+			limit = { is_alive = yes }
+			hidden_tooltip = { character_event = { id = GMT.200 days = 10 } }
+		}
+	}
+}
+
+
+
+####Heist success
+character_event = {
+	id = GMT.150
+	desc = EVTDESAGMT.150
+	picture = GFX_evt_relic_box
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		OR = {
+			has_character_flag = active_heist 
+			has_character_modifier = active_heist
+		}
+	}
+	
+	option = {
+		name = EVTOPTAGMT.150
+		event_target:target_artifact = {
+			transfer_artifact = {
+				from = event_target:target_character
+				to = ROOT
+			}
+			clr_artifact_flag = targeted
+		}
+		ROOT = {
+			prestige = 250
+		}
+		hidden_tooltip = {
+			remove_character_modifier = active_heist
+			clr_character_flag = active_heist
+			event_target:target_character = { character_event = { id = GMT.151 days = 10 } }
+			add_character_modifier = { modifier = steal_artifact_timer years = 5 hidden = yes }
+		}
+		event_target:accomplice = { opinion = { modifier = opinion_happy who = ROOT years = 5 } }
+	}
+}
+
+
+
+#inform target of success
+character_event = {
+	id = GMT.151
+	desc = EVTDESAGMT.151
+	picture = GFX_evt_judged_by_ruler
+	
+	is_triggered_only = yes
+	
+	#vassal
+	option = {
+		name = EVTOPTAGMT.151
+		trigger = { FROM = { is_liege_or_above = ROOT } }
+		opinion = { modifier = opinion_stole_artifact_my_vassal who = FROM }
+		prestige = -150
+		if = {
+			limit = { event_target:target_guard = { always = yes } }
+			opinion = { modifier = opinion_angry who = event_target:target_guard years = 5 }
+		}
+	}
+	#different realm
+	option = {
+		name = EVTOPTBGMT.151
+		trigger = { 
+			NOR = { 
+				FROM = { is_liege_or_above = ROOT }
+				same_realm = FROM
+			} 
+		}
+		opinion = { modifier = opinion_stole_artifact who = FROM }
+		prestige = -150
+		add_rival = FROM
+		if = {
+			limit = { event_target:target_guard = { always = yes } }
+			opinion = {modifier = opinion_angry who = event_target:target_guard years = 5 }
+		}
+	}
+	#vassal of another vassal, while u are also a vassal
+	option = {
+		name = EVTOPTCGMT.151
+		trigger = {
+			NOT = { FROM = { is_liege_or_above = ROOT } }
+			FROM = {
+				same_realm = ROOT
+				liege = { 
+					ROOT = {
+						liege = { 
+							NOT = { character = PREVPREV }
+						}
+					}
+				}
+			}
+		}
+		opinion = { modifier = opinion_stole_artifact who = FROM }
+		prestige = -150
+		FROM = {
+			liege = { reverse_opinion = { modifier = opinion_stole_artifact_other_vassal who = ROOT } }
+		}	
+		if = {
+			limit = { event_target:target_guard = { always = yes } }
+			opinion = {modifier = opinion_angry who = event_target:target_guard years = 5 }
+		}
+	}
+	#another same rank vassal as you
+	option = {
+		name = EVTOPTDGMT.151
+		trigger = {
+			NOT = { FROM = { is_liege_or_above = ROOT } }
+			FROM = {
+				same_realm = ROOT
+				liege = { 
+					ROOT = {
+						liege = { character = PREVPREV }
+					}
+				}
+			}
+		}
+		prestige = -150
+		opinion = { modifier = opinion_stole_artifact who = FROM }
+		if = {
+			limit = { event_target:target_guard = { always = yes } }
+			opinion =  {modifier = opinion_angry who = event_target:target_guard years = 5 }
+		}
+	}
+	#your leige
+	option = {
+		name = EVTOPTEGMT.151
+		trigger = { is_liege_or_above = FROM }
+		opinion = { modifier = opinion_stole_artifact who = FROM }
+		if = {
+			limit = { event_target:target_guard = { always = yes } }
+			opinion = { modifier = opinion_angry who = event_target:target_guard years = 5 }
+		}
+		prestige = -150
+		any_realm_character = {
+			limit = { liege = { character = FROM } }
+			opinion = { modifier = opinion_dishonorable who = FROM years = 5 }
+		}
+	}
+	
+	after = {
+		clear_event_target = target_artifact
+		clear_event_target = target_character
+		clear_event_target = target_guard
+		clear_event_target = accomplice
+	}
+}
+####Heist failure
+character_event = {
+	id = GMT.200
+	desc = EVTDESAGMT.200
+	picture = GFX_evt_stressed_ruler
+	
+	is_triggered_only = yes
+	
+	trigger = { 
+		OR = {
+			has_character_flag = active_heist 
+			has_character_modifier = active_heist
+		}
+	}
+	
+	option = {
+		name = EVTOPTAGMT.200
+		prestige = -250
+		
+		hidden_tooltip = {
+			add_character_modifier = { modifier = steal_artifact_timer years = 5 hidden = yes }
+			clr_character_flag = active_heist
+			remove_character_modifier = active_heist
+			event_target:target_artifact = { clr_artifact_flag = targeted }
+			event_target:target_character = { character_event = { id = GMT.201 days = 10 } }
+		}
+		event_target:accomplice = { show_scope_change = no opinion = { modifier = opinion_extremely_disappointed who = ROOT years = 5 } }
+	}
+}
+
+####inform target of failure 
+character_event = {
+	id = GMT.201
+	desc = EVTDESAGMT.201
+	picture = GFX_evt_judged_by_ruler
+	
+	is_triggered_only = yes
+	
+	#vassal
+	option = {
+		name = EVTOPTAGMT.201
+		trigger = { is_liege_or_above = FROM }
+		opinion = { modifier = opinion_traitor who = FROM }
+		event_target:target_guard = { prestige = 100 }
+	}
+	#someone else
+	option = {
+		name = EVTOPTBGMT.201
+		trigger = { NOT = { is_liege_or_above = FROM } }
+		opinion = { modifier = opinion_dishonorable_scum who = FROM }
+		event_target:target_guard = { prestige = 100 }
+	}
+	after = {
+		clear_event_target = target_artifact
+		clear_event_target = target_character
+		clear_event_target = target_guard
+		clear_event_target = accomplice
+	}
+}
+
+
+
+
