@@ -1086,6 +1086,51 @@ religion_doctrine = {
 			}
 		}
 	}
+	religion_feature_inuit_pagan = {
+		picture = GFX_religion_feature_inuit_pagan
+		potential = {
+			has_game_started = yes
+			religion = inuit_pagan_reformed
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+			NOR = {
+				has_selected_religion_feature = religion_animistic  #Redundant
+				has_selected_religion_feature = religion_seafaring 	#Redundant
+			}
+		}
+		trigger = {
+			religion = inuit_pagan_reformed
+			NOR = { 
+				has_selected_religion_feature = religion_animistic #redundant
+				has_selected_religion_feature = religion_seafaring #redundant
+			}
+		}
+		effect = {
+			custom_tooltip = { text = tooltip_religion_feature_land_morale }
+			custom_tooltip = { text = tooltip_religion_feature_adulthood_rite }
+			custom_tooltip = { text = tooltip_religion_feature_ship_maintenance }
+			custom_tooltip = { text = tooltip_religion_feature_seafaring }
+			hidden_tooltip = { 
+				set_unit_modifier = { 
+					land_morale = 0.05
+					key = "ANIMISTIC_RELIGION"
+				}
+				set_seafaring = yes
+				if = {
+					limit = { #Unlock looting for religions which do not have it already.
+						FROM = { 
+							character = yes 
+						}
+					}
+					set_allow_looting = yes
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 50
+		}
+	}
 	religion_beatification = {
 		picture = GFX_religion_feature_beatification
 		trigger = {
