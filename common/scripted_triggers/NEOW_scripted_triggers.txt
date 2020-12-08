@@ -1,0 +1,1216 @@
+######################################
+# Scripted Triggers for determine exile
+######################################
+
+bhutan_major_cb = {
+	top_liege = {
+		OR = {
+			NOR = {
+				government = bhutanese_restored_government
+				government = bhutanese_decayed_government
+			}
+			AND = {
+				trait = bhutan_expansionist
+				government = bhutanese_restored_government
+			}
+		}
+	}
+}
+
+bhutan_medium_cb = {
+	top_liege = {
+		OR = {
+			NOR = {
+				government = bhutanese_restored_government
+				government = bhutanese_decayed_government
+			}
+			AND = {
+				trait = bhutan_open
+				government = bhutanese_restored_government
+			}
+			trait = bhutan_expansionist
+		}
+	}
+}
+
+bhutan_minor_cb = {
+	top_liege = {
+		OR = {
+			NOR = {
+				government = bhutanese_restored_government
+				government = bhutanese_decayed_government
+			}
+			trait = bhutan_open
+			trait = bhutan_expansionist
+			government = bhutanese_restored_government
+		}
+	}
+}
+
+is_real_offmap_governor = {
+	is_offmap_governor = yes
+	NOT = { has_landed_title = d_soldiers_of_horthy }
+}
+
+is_anti_caliph = {
+	has_claim = d_sunni
+}
+
+doesnt_holds_special_empire = {
+	custom_tooltip = {
+		text = does_not_hold_special_empire
+		NOT = {
+			any_demesne_title = {
+				OR = {
+					title = e_british_india
+					title = e_zapadoslavia
+					title = e_great_russia
+					title = e_cccp
+					title = e_european_union
+					title = e_austria_hungary
+					title = e_bhutan
+					title = e_numenor
+					title = e_india
+					title = e_sikh_empire
+					title = e_khanist
+					title = e_west_korea
+					title = e_mann
+					title = e_byzantium
+					title = e_bactria
+					title = e_macedonia
+					title = e_austria_romaia
+					title = e_roman_empire
+					title = e_shangri_la
+					title = e_britannia
+					title = e_transnistria
+					title = e_ruthenia
+					title = e_karnataka
+					title = e_german_confederation
+					title = e_al-andalus
+					title = e_droid
+					title = e_druze
+					title = e_prussia
+					title = e_latin_empire
+					title = e_ottoman
+					title = e_atlantis
+					title = e_zion
+					title = e_maoist
+					title = e_roman_republic
+					title = e_russian_republic
+					title = e_ruthenia
+					title = e_centcom
+					title = e_kuhjungs
+					title = e_gnostic
+					title = e_assyria
+					title = e_babylon
+					title = e_lusitania
+					title = e_hui
+					title = e_heavenly
+					title = e_aragon
+					title = e_caucasia
+					title = e_konkani
+					title = e_swedish
+					title = e_bulgaria
+					title = e_yuan
+					title = e_baltic
+					title = e_spain_t
+					title = e_norway
+					title = e_spain
+				}
+			}
+		}
+	}
+}
+form_kingdom_potential = {
+	form_kingdom_without_order_potential = yes
+	NOT = {
+		government = order_government
+	}
+}
+form_kingdom_without_order_potential = {
+	is_alternate_start = no
+	rebel = no	
+	primary_title = {
+		temporary = no
+	}
+	NOT = {
+		government = confederation_government
+	}
+}
+form_empire_potential = {
+	form_kingdom_potential = yes
+	doesnt_holds_special_empire = yes
+}
+form_title_allow = {
+	is_adult = yes
+	has_regent = no
+	war = no
+}
+form_kingdom_allow = {
+	form_title_allow = yes
+	trigger_if = {
+		limit = { independent = yes }
+		independent = yes
+	}
+	trigger_else = {
+		OR = {
+			independent = yes
+			liege = { tier = EMPEROR }
+		}
+	}
+	prestige = 500
+}
+form_empire_allow = {
+	form_title_allow = yes
+	independent = yes
+	prestige = 5000
+}
+form_order_kingdom_allow = {	
+	form_kingdom_allow = yes
+	piety = 500
+	realm_size = 30
+}
+
+can_hold_council_trigger = {
+	OR = {
+		AND = { #Patriarchal religions can only hire males. Matriarchal religions can only hire females.
+			is_female = no 
+			NOT = { liege = { has_religion_feature = religion_matriarchal } } 
+		}
+		AND = {
+			is_female = yes 
+			liege = { has_religion_feature = religion_matriarchal }
+		}
+		AND = {
+			is_female = yes 
+			is_feminist_religion = yes
+			liege = { is_feminist_religion = yes }
+		}
+		trait = horse # So we can have female glitterhoofs! :D
+		OR = {
+			AND = { 
+				is_female = yes
+				liege = { primary_title = { has_law = status_of_women_4 } } 
+			}
+			has_game_rule = {
+				name = gender
+				value = all
+			}
+		}
+	}
+}
+
+into_learning_trigger = {
+	OR = {
+		has_education_learning_trigger = yes
+		has_lifestyle_learning_trigger = yes
+		child_personality_learning_trigger = yes
+	}
+}
+into_intrigue_trigger = {
+	OR = {
+		has_education_intrigue_trigger = yes
+		has_lifestyle_intrigue_trigger = yes
+		child_personality_intrigue_trigger = yes
+	}
+}
+into_martial_trigger = {
+	OR = {
+		has_education_martial_trigger = yes
+		has_lifestyle_martial_trigger = yes
+		child_personality_martial_trigger = yes
+	}
+}
+into_stewardship_trigger = {
+	OR = {
+		has_education_stewardship_trigger = yes
+		has_lifestyle_stewardship_trigger = yes
+		child_personality_stewardship_trigger = yes
+	}
+}
+into_diplomacy_trigger = {
+	OR = {
+		has_education_diplomacy_trigger = yes
+		has_lifestyle_diplomacy_trigger = yes
+		child_personality_diplomacy_trigger = yes
+	}
+}
+
+can_choose_invader_trigger = {
+	has_game_rule = {
+		name = invader_nations
+		value = chosen
+	}
+	ai = no
+}
+can_plays_as_invader_trigger = {
+	has_game_rule = {
+		name = playing_as_invaders
+		value = on
+	}
+	ai = no
+}
+should_handle_american_invasion = {
+	OR = {
+		has_landed_title = e_britannia
+		AND = { 
+			has_landed_title = k_papacy
+			e_britannia = {
+				has_holder = no
+			}
+		}
+	}
+}
+should_have_byz_elective_trigger = {
+	OR = { 
+		title = e_byzantium
+		title = e_roman_empire
+		title = e_britannia
+		title = e_transnistria
+		title = e_ruthenia
+		AND = {
+			title = k_britannia
+			holder_scope = {
+				has_landed_title = e_britannia
+			}
+		}
+	}
+}
+#Madame desire triggers, used by the AI
+
+desired_by_madame_1 = {
+	OR = {
+		AND = {
+			FROM = { has_character_modifier = madame_wants_strong }
+			is_strong_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_weak }
+			is_weak_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_smart }
+			is_smart_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_dumb }
+			is_dumb_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_virtue }
+			has_virtue_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_vice }
+			has_vice_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_attractive }
+			is_attractive_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_unattractive }
+			is_unattractive_trigger = yes
+		}
+		# Education and lifestyle based preferencesAND
+		AND = {
+			FROM = { has_character_modifier = madame_wants_diplomacy }
+			into_diplomacy_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_martial }
+			into_martial_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_learning }
+			into_martial_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_intrigue }
+			into_learning_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_stewardship }
+			into_intrigue_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_young }
+			NOT = { age = 17 }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_old }
+			age = 50
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_christian }
+			religion_group = christian
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_esoteric }
+			religion_group = esoteric
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_pagan_group }
+			religion_group = pagan_group
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_jewish_group }
+			religion_group = jewish_group
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_pirate }
+			religion_group = pirate
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_muslim }
+			religion_group = muslim
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_indian_group }
+			religion_group = indian_group
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_buddhist_group }
+			religion_group = buddhist_group
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_zoroastrian_group }
+			religion_group = zoroastrian_group
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_communist }
+			is_communist_religion_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_zarist }
+			is_zarist_religion_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_nobelian }
+			is_nobelian_religion_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_ironist }
+			is_ironist_religion_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_khanist }
+			is_khanist_religion_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_jacobinist }
+			is_jacobinist_religion_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_female }
+			is_female = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_male }
+			is_female = no
+		}
+	}
+}
+
+hated_by_madame_1 = {
+	OR = {
+		AND = {
+			FROM = { has_character_modifier = madame_wants_strong }
+			is_weak_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_weak }
+			is_strong_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_smart }
+			is_dumb_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_dumb }
+			is_smart_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_virtue }
+			has_vice_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_vice }
+			has_virtue_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_attractive }
+			is_unattractive_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_unattractive }
+			is_attractive_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_martial }
+			into_diplomacy_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_learning }
+			into_learning_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_intrigue }
+			into_intrigue_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_stewardship }
+			into_stewardship_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_diplomacy }
+			into_stewardship_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_young }
+			age = 50
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_old }
+			NOT = { age = 17 }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_christian }
+			NOT = { religion_group = christian }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_esoteric }
+			NOT = { religion_group = esoteric }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_pagan_group }
+			NOT = { religion_group = pagan_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_jewish_group }
+			NOT = { religion_group = jewish_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_pirate }
+			NOT = { religion_group = pirate }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_muslim }
+			NOT = { religion_group = muslim }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_indian_group }
+			NOT = { religion_group = indian_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_buddhist_group }
+			NOT = { religion_group = buddhist_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_zoroastrian_group }
+			NOT = { religion_group = zoroastrian_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_communist }
+			NOT = { religion_group = old_world_cultist_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_zarist }
+			NOT = { religion_group = old_world_cultist_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_nobelian }
+			NOT = { religion_group = old_world_cultist_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_ironist }
+			NOT = { religion_group = old_world_cultist_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_khanist }
+			NOT = { religion_group = old_world_cultist_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_jacobinist }
+			NOT = { religion_group = old_world_cultist_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_female }
+			is_female = no
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_male }
+			is_female = yes
+		}
+	}
+}
+
+desired_by_madame_2 = {
+	calc_true_if = {
+		amount = 2
+		AND = {
+			FROM = { has_character_modifier = madame_wants_strong }
+			is_strong_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_weak }
+			is_weak_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_smart }
+			is_smart_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_dumb }
+			is_dumb_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_virtue }
+			has_virtue_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_vice }
+			has_vice_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_attractive }
+			is_attractive_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_unattractive }
+			is_unattractive_trigger = yes
+		}
+		# Education and lifestyle based preferencesAND
+		AND = {
+			FROM = { has_character_modifier = madame_wants_diplomacy }
+			into_diplomacy_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_martial }
+			into_martial_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_learning }
+			into_martial_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_intrigue }
+			into_learning_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_stewardship }
+			into_intrigue_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_young }
+			NOT = { age = 17 }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_old }
+			age = 50
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_christian }
+			religion_group = christian
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_esoteric }
+			religion_group = esoteric
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_pagan_group }
+			religion_group = pagan_group
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_jewish_group }
+			religion_group = jewish_group
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_pirate }
+			religion_group = pirate
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_muslim }
+			religion_group = muslim
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_indian_group }
+			religion_group = indian_group
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_buddhist_group }
+			religion_group = buddhist_group
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_zoroastrian_group }
+			religion_group = zoroastrian_group
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_communist }
+			is_communist_religion_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_zarist }
+			is_zarist_religion_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_nobelian }
+			is_nobelian_religion_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_ironist }
+			is_ironist_religion_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_khanist }
+			is_khanist_religion_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_jacobinist }
+			is_jacobinist_religion_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_female }
+			is_female = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_male }
+			is_female = no
+		}
+	}
+}
+
+hated_by_madame_2 = {
+	calc_true_if = {
+		amount = 2
+		AND = {
+			FROM = { has_character_modifier = madame_wants_strong }
+			is_weak_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_weak }
+			is_strong_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_smart }
+			is_dumb_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_dumb }
+			is_smart_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_virtue }
+			has_vice_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_vice }
+			has_virtue_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_attractive }
+			is_unattractive_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_unattractive }
+			is_attractive_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_martial }
+			into_diplomacy_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_learning }
+			into_learning_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_intrigue }
+			into_intrigue_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_stewardship }
+			into_stewardship_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_diplomacy }
+			into_stewardship_trigger = yes
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_young }
+			age = 50
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_old }
+			NOT = { age = 17 }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_christian }
+			NOT = { religion_group = christian }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_esoteric }
+			NOT = { religion_group = esoteric }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_pagan_group }
+			NOT = { religion_group = pagan_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_jewish_group }
+			NOT = { religion_group = jewish_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_pirate }
+			NOT = { religion_group = pirate }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_muslim }
+			NOT = { religion_group = muslim }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_indian_group }
+			NOT = { religion_group = indian_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_buddhist_group }
+			NOT = { religion_group = buddhist_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_zoroastrian_group }
+			NOT = { religion_group = zoroastrian_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_communist }
+			NOT = { religion_group = old_world_cultist_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_zarist }
+			NOT = { religion_group = old_world_cultist_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_nobelian }
+			NOT = { religion_group = old_world_cultist_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_ironist }
+			NOT = { religion_group = old_world_cultist_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_khanist }
+			NOT = { religion_group = old_world_cultist_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_jacobinist }
+			NOT = { religion_group = old_world_cultist_group }
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_female }
+			is_female = no
+		}
+		AND = {
+			FROM = { has_character_modifier = madame_wants_male }
+			is_female = yes
+		}
+	}
+}
+ROOT_can_press_dejure_claim_trigger = {
+	trigger_if = {
+		limit = {
+			has_dlc = "Sons of Abraham"
+			holy_order = yes
+			religion = ROOT
+		}
+		trigger_if = {
+			limit = { primary_title = { religion_scope = { persistent_event_target:one_holy_order = { title = PREVPREV } } } }
+			ROOT = {
+				OR = {
+					has_character_modifier = expelled_one_holy_order
+					any_liege = {
+						has_character_modifier = expelled_one_holy_order
+						religion = PREV
+					}
+				}
+			}
+		}
+		trigger_else_if = {
+			limit = { primary_title = { religion_scope = { persistent_event_target:two_holy_order = { title = PREVPREV } } } }
+			ROOT = {
+				OR = {
+					has_character_modifier = expelled_two_holy_order
+					any_liege = {
+						has_character_modifier = expelled_two_holy_order
+						religion = PREV
+					}
+				}
+			}
+		}
+		trigger_else_if = {
+			limit = { primary_title = { title = d_legion_of_mary } }
+			ROOT = {
+				OR = {
+					has_character_modifier = expelled_d_legion_of_mary
+					any_liege = {
+						has_character_modifier = expelled_d_legion_of_mary
+					}
+				}
+			}
+		}
+		trigger_else_if = {
+			limit = { primary_title = { title = d_knights_templar } }
+			ROOT = {
+				OR = {
+					has_character_modifier = expelled_d_knights_templar
+					any_liege = {
+						has_character_modifier = expelled_d_knights_templar
+					}
+				}
+			}
+		}
+		trigger_else_if = {
+			limit = { primary_title = { title = d_knights_hospitaler } }
+			ROOT = {
+				OR = {
+					has_character_modifier = expelled_d_knights_hospitaler
+					any_liege = {
+						has_character_modifier = expelled_d_knights_hospitaler
+					}
+				}
+			}
+		}
+		trigger_else_if = {
+			limit = { primary_title = { title = d_knights_lazarus } }
+			ROOT = {
+				OR = {
+					has_character_modifier = expelled_d_knights_lazarus
+					any_liege = {
+						has_character_modifier = expelled_d_knights_lazarus
+					}
+				}
+			}
+		}
+	}
+}
+
+centralise_confederation_trigger = {
+	primary_title = {
+		has_law = centralization_2
+		conditional_tooltip = {
+			trigger = {
+				NOT = {
+					has_dlc = "Zeus"
+				}
+			}
+			has_law = crown_authority_4
+		}
+		conditional_tooltip = {
+			trigger = {
+				has_dlc = "Zeus"
+			}
+			has_law = law_voting_power_0
+		}
+	}
+	prestige = 500
+	ruled_years = 10
+	war = no
+}
+
+jacobinist_wigs_portrait_trigger ={
+	OR = {
+		AND = {
+			is_ruler = yes
+			government = theocracy_government
+		}
+		AND = {
+			is_ruler = yes
+			higher_tier_than = BARON
+		}
+		has_minor_title = title_prince
+		has_job_title = job_spiritual
+		spouse = {
+			is_ruler = yes
+			higher_tier_than = BARON
+		}
+	}
+}
+
+holder_not_confederation_trigger = {
+	conditional_tooltip = {
+		trigger = {
+			holder_scope = { government = confederation_government }
+		}
+		holder_scope = {
+			show_scope_change = no
+			NOT = { government = confederation_government }
+		}
+	}
+}
+
+confederation_title_trigger = {
+	OR = {
+		title = e_german_confederation
+		title = e_karnataka
+		title = k_cyprus_league
+		has_title_flag = is_a_confederacy
+	}
+}
+
+is_feminist_culture = {
+	OR = {
+		culture_group = anglo_frisian
+		culture_group = celtic
+		culture_group = francophone
+		culture_group = lusophone
+		culture_group = hispanophone
+		culture_group = west_german
+		culture_group = alpinian
+		culture_group = low_american
+		culture_group = high_american
+		culture_group = brittannic
+		culture = bhutanese
+		culture = low_bhutanese
+		culture = german
+		culture = low_german
+		culture = hessian
+		culture = saxon
+		culture = lichtensteiner
+		culture = austrian
+		culture = swiss
+		culture = bavarian
+		culture = rheinlander
+		culture = brandenburger
+		culture = swabian
+		culture = danzigian
+		culture = kuhjungs
+		culture = moldavian
+		culture = czech
+		culture = skanian
+		culture = swedish
+		culture = norwegian
+		culture = gothic
+		culture = faroyingar
+		culture = danish
+		culture = icelander
+		culture = doggerlander
+		culture = piemontese
+		culture = corsu
+		culture = tuscanian
+		culture = emilian
+		culture = lombard
+		culture = venetian
+		culture = lazian
+		culture = sanmarinese
+		culture = sard
+		culture = klynian
+		culture = basque
+		culture = tuareg
+		culture = atlantian
+		NOT = { culture = traveller }
+	}
+}
+
+death_duel_trigger = {
+	OR = {
+		death_reason = death_duel
+		death_reason = death_mission_duel
+		death_reason = death_battle_duel
+		death_reason = death_legendary_fail_duel
+		death_reason = death_legendary_win_duel
+		death_reason = death_claim_duel_attacker
+		death_reason = death_claim_duel_defender
+	}
+}
+province_completely_controls_trigger = {
+	custom_tooltip = {
+		text = province_completely_controls_tt
+		NOT = {
+			any_de_jure_vassal_title = {
+				tier = COUNT
+				holder_scope = {
+					NOR = {
+						is_vassal_or_below_of = PREVPREVPREV
+						character = PREVPREVPREV
+					}
+				}
+			}
+		}
+	}
+}
+ROOT_province_completely_controls_trigger = {
+	custom_tooltip = {
+		text = province_completely_controls_tt
+		NOT = {
+			any_de_jure_vassal_title = {
+				tier = COUNT
+				holder_scope = {
+					NOR = {
+						is_vassal_or_below_of = ROOT
+						character = ROOT
+					}
+				}
+			}
+		}
+	}
+}
+same_dynasty_previous_holder_trigger = {	
+	ROOT_FROMFROM = {
+		has_title_flag = holder_was_@PREV
+		NOT = {
+			had_title_flag = { flag = holder_was_@PREV days = 36500 } # after 100 years the whole thing is forgotten
+		}
+	}
+	dynasty = ROOT_FROM
+	NOT = { dynasty = ROOT } # Don't judge your own dynasty
+}
+can_be_converted_via_babel = {
+	NOR = {
+		culture = PREVPREV
+		has_province_modifier = confusion_of_babel
+	}
+	trigger_if = {
+		limit = {
+			NOT = {
+				any_province_lord = {
+					OR = {
+						character = PREVPREVPREV
+						is_liege_or_above = PREVPREVPREV
+					}
+				}
+			}
+		}
+		any_neighbor_province = {
+			trigger_if = {
+				limit = { NOT = { culture = PREVPREVPREV } }
+				any_neighbor_province = {
+					culture = PREVPREVPREVPREV
+				}
+			}
+		}
+	}
+}
+spread_revolution_can_use_title_trigger = {
+	ROOT = {
+		NOT = { persistent_event_target:jacobinist_revolution_target = { title = PREVPREV } }
+		NOT = { has_landed_title = PREV }
+		NOT = {
+			any_demesne_title = {
+				persistent_event_target:jacobinist_base_kingdom = {
+					title = PREVPREVPREV
+				}
+			}
+		}
+		NOT = {
+			any_vassal = {
+				OR = {
+					has_landed_title = PREVPREV
+					any_demesne_title = {
+						persistent_event_target:jacobinist_base_kingdom = {
+							title = PREVPREVPREVPREV
+						}
+					}
+				}
+			}
+		}
+	}
+	# The attacker needs at least one county in the target kingdom, or a border, or be only two sea zones away from one of your counties
+	FROM = {
+		OR = {
+			num_of_realm_counties = { value = 4 title = PREV }
+			has_landed_title = PREV
+			PREV = {
+				NOT = {
+					any_de_jure_vassal_title = {
+						tier = COUNT
+						owner = {
+							NOT = {
+								same_realm = ROOT_FROM
+							}
+						}
+					}
+				}
+			}
+		}
+		any_realm_title = {
+			tier = COUNT
+			de_jure_liege_or_above = PREVPREV
+			location = {
+				any_neighbor_province = {
+					OR = {
+						AND = {
+							has_owner = yes
+							owner = {
+								OR = {
+									character = ROOT
+									is_liege_or_above = ROOT
+								}
+							}
+						}
+						AND = {
+							is_land = no
+							any_neighbor_province = {
+								OR = {
+									AND = {
+										has_owner = yes
+										owner = {
+											OR = {
+												character = ROOT
+												is_liege_or_above = ROOT
+											}
+										}
+									}
+									AND = {
+										is_land = no
+										any_neighbor_province = {
+											owner = {
+												OR = {
+													character = ROOT
+													is_liege_or_above = ROOT
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+is_not_titular_tooltip_trigger = {
+	conditional_tooltip = {
+		trigger = {
+			is_titular = yes
+		}
+		THIS = {
+			is_titular = no
+		}
+	}
+}
+is_in_tributary_war_trigger = {
+	OR = {
+		any_war = {
+			using_cb = tributary_cb
+		}
+		any_war = {
+			using_cb = tributary_permanent_cb
+		}
+		any_war = {
+			using_cb = tributary_nomad_cb
+		}
+		any_war = {
+			using_cb = tributary_corsair_cb
+		}
+	}
+}
+has_oligarchy_title_trigger = {
+	primary_title = {
+		oligarchy_title_trigger = yes
+	}
+}
+oligarchy_title_trigger = {
+	OR = {
+		title = e_roman_republic
+		title = e_russian_republic
+	}
+}

@@ -1,0 +1,4846 @@
+#################################################################################################
+# Name of the effect							Used scopes										#
+#################################################################################################
+# end_anti_caliphate_effect						Uses just one scope								#
+# caliphate_gain_effect							Uses just one scope								#
+# gain_title_effect								Scope should be title, PREV should be gainer	#
+# gain_empire_effect							Scope should be title, PREV should be gainer	#
+# jacobinist_sacrifice_tiered_traits_effect		Uses just one scope								#
+# calculate_madame_preference_effect			Scope should be victim, ROOT should be killer	#
+# jacobinist_gain_tiered_traits_effect			Scope should be killer							#
+#################################################################################################
+# To add a new preference option for Madame Guillotin you need to edit the followings:			#
+# calculate_madame_preference_effect			This file										#
+# ATE_OW_REL.6									ATE_OW_religious_events.txt						#
+# GetNewPreference								ATE_OW_custom_loc.txt							#
+# Add new ones									ATE_OW_CL_texts.csv								#
+# desired/hated_by_madame_1/2					ATE_OW_scripted_triggers.txt					#
+#################################################################################################
+end_anti_caliphate_effect = {
+	if = {
+		limit = { religion = sunni }
+		remove_claim = d_sunni
+	}
+	any_demesne_title = {
+		clr_title_flag = pretender_caliphate_title
+	}
+	if = {
+		limit = {
+			NOT = {
+				any_dynasty_member = {
+					is_anti_caliph = yes
+					religion = PREV
+				}
+			}
+		}
+		any_dynasty_member = {
+			limit = {
+				religion = PREV
+			}
+			remove_character_modifier = PC_family_member
+		}
+	}
+}
+caliphate_gain_effect = {
+	hidden_tooltip = {
+		if = {
+			limit = {
+				NOT = {
+					any_dynasty_member = {
+						controls_religion = yes
+						religion = PREV
+					}
+				}
+			}
+			any_dynasty_member = {
+				limit = {
+					religion = PREV
+					is_playable = yes
+				}
+				add_character_modifier = { name = PC_family_member years = 1  }
+			}
+		}
+		any_realm_title = {
+			clr_title_flag = pretender_caliphate_title
+		}
+		primary_title = {
+			set_title_flag = pretender_caliphate_title #It's just sunni for now.
+		}
+	}
+}
+
+create_nobelian_mentor_effect = {
+			create_random_priest = {
+				random_traits = yes
+				dynasty = random
+				female = no
+				attributes = {
+					diplomacy = 2
+					learning = 10
+					stewardship = 2
+					intrigue = 2
+					martial = 2
+				}
+			}	
+			new_character = {
+				add_trait = mystic
+				remove_trait = slow
+				remove_trait = imbecile
+				remove_trait = dull
+				
+				remove_lifestyle_trait_effect = yes
+				
+				random_list = { # Flavor Randomization
+					20 = {  } # Nothing
+					20 = { change_learning = 2 }
+					15 = { change_learning = 4 }
+					10 = { change_learning = 6 }
+					20 = { add_trait = theologian }
+					15 = { add_trait = scholar }
+					15 = { add_trait = shrewd }
+				}
+
+				#If we have a wonder upgrade with "inpires_learning" flag, the priest will be better
+				if = {
+					limit = { ROOT = { realm_wonder_or_upgrade_has_flag_inspires_learning_trigger = yes } }
+					random_list = { 
+						15 = { add_trait = scholar change_learning = 1 }
+						10 = { add_trait = scholar change_learning = 2 }
+						 5 = { add_trait = scholar change_learning = 3 }
+						10 = { add_trait = erudite }
+						10 = { add_trait = physician }
+						10 = { remove_education_effect = yes add_trait = scholarly_theologian }
+						10 = { remove_education_effect = yes add_trait = mastermind_theologian }
+					}
+					random_list = {
+						50 = {  } # Nothing
+						10 = { add_trait = genius }
+						10 = { add_trait = chaste }
+						10 = { add_trait = poet }
+						10 = { add_trait = proud }
+						10 = { add_trait = humble }
+					}
+				}
+				save_event_target_as = invited_character
+				set_character_flag = is_nobelian_mentor
+				##All this creates the Mystic Mentor
+			}		
+}
+
+spawn_priest_effect = {
+	create_random_priest = {
+		random_traits = yes
+		dynasty = random
+		female = no
+		attributes = {
+			diplomacy = 2
+			learning = 8
+			stewardship = 2
+			intrigue = 2
+			martial = 2
+		}
+	}
+	new_character = {
+		remove_trait = slow
+		remove_trait = imbecile
+		remove_trait = dull
+		
+		remove_lifestyle_trait_effect = yes
+		
+		random_list = { # Flavor Randomization
+			35 = {  } # Nothing
+			15 = { change_learning = 2 }
+			10 = { change_learning = 4 }
+			 5 = { change_learning = 6 }
+			20 = { add_trait = theologian }
+			 5 = { add_trait = scholar }
+			 5 = { add_trait = mystic }
+			 5 = { add_trait = shrewd }
+		}
+
+		#If we have a wonder upgrade with "inpires_learning" flag, the priest will be better
+		if = {
+			limit = { ROOT = { realm_wonder_or_upgrade_has_flag_inspires_learning_trigger = yes } }
+			random_list = { 
+				15 = { add_trait = scholar change_learning = 1 }
+				10 = { add_trait = scholar change_learning = 2 }
+				 5 = { add_trait = scholar change_learning = 3 }
+				10 = { add_trait = erudite }
+				10 = { add_trait = physician }
+				10 = { upgrade_education_effect = yes }
+				10 = { upgrade_education_effect = yes upgrade_education_effect = yes }
+			}
+			random_list = {
+				50 = {  } # Nothing
+				10 = { add_trait = genius }
+				10 = { add_trait = chaste }
+				10 = { add_trait = poet }
+				10 = { add_trait = proud }
+				10 = { add_trait = humble }
+			}
+		}
+
+		hidden_tooltip = {
+			if = {
+				limit = {
+					has_dharmic_religion_trigger = yes
+				}
+				add_trait = brahmin
+				character_event = { id = RoI.30121 }
+			}
+			if = {
+				limit = {
+					has_religion_feature = religion_no_leader
+					religion_group = pagan_group
+				}
+				random_list = {  
+					5 = {
+						add_trait = pagan_branch_1
+					}
+					25 = {
+						add_trait = pagan_branch_2
+					}
+					25 = {
+						add_trait = pagan_branch_3
+					}
+					25 = {
+						add_trait = pagan_branch_4
+					}
+				}
+			}
+		}
+		save_event_target_as = invited_character
+	}
+}
+
+spawn_american_invader_troops = {
+
+			spawn_unit = {
+				province = 37 # Caithness
+				troops =
+				{
+					light_cavalry = { 6000 6000 }
+					light_infantry = { 30000 30000 }
+					heavy_infantry = { 16000 16000 }
+					archers = { 10000 10000 }
+					gunmen = { 8000 8000 }
+					knights = { 5000 5000 }
+				}
+			}
+}
+
+spawn_yankee_horde_effect = {
+			activate_title = { title = e_yankee_invaders status = yes }
+				
+				create_character = {
+					dynasty = "Mahonic"
+					religion = occultist
+					culture = yankee
+					female = no
+					age = 37
+					health = 6.5
+					fertility = 0.6
+					random_traits = yes
+					attributes = {
+						learning = 7
+						diplomacy = 7
+						martial = 9
+						stewardship = 7
+						intrigue = 7
+					}
+				}
+				#give him a random boost
+				new_character = {
+					
+					wealth = 12000
+					prestige = 10000
+					set_character_flag = horde_invader
+					save_global_event_target_as = invasion_leader
+						
+					remove_trait = slow
+					remove_trait = imbecile
+					remove_trait = dull
+					remove_lifestyle_trait_effect = yes
+					remove_trait = craven
+					remove_trait = ugly
+					remove_trait = uncouth
+					remove_trait = feeble
+					remove_trait = dwarf
+					remove_trait = giant
+					remove_trait = clubfooted
+					remove_trait = harelip
+					remove_trait = hunchback
+					remove_trait = lisp
+					remove_trait = weak
+					remove_trait = lunatic
+					remove_trait = shrewd
+					remove_trait = quick
+					remove_trait = genius
+					remove_trait = strong
+					remove_trait = cynical
+					remove_trait = content
+					remove_trait = fair
+					random_list = {
+						1 = { change_learning = 2 }
+						1 = { change_diplomacy = 2 }
+						1 = { change_stewardship = 2 }
+						1 = { change_intrigue = 2 }
+						1 = { change_martial = 2 }
+					}
+					random_list = {
+						1 = { change_learning = 3 }
+						1 = { change_diplomacy = 3 }
+						1 = { change_stewardship = 3 }
+						1 = { change_intrigue = 3 }
+						1 = { change_martial = 3 }
+					}
+					random_list = {
+						5 = { }
+						15 = { add_trait = strong }
+						30 = { add_trait = fair }
+						3 = { add_trait = strong add_trait = fair }
+					}
+					random_list = {
+						5 = { }
+						15 = { add_trait = shrewd }
+						30 = { add_trait = quick }
+						3 = { add_trait = genius }
+					}
+					remove_education_effect = yes
+					random_list = {
+						10 = { add_trait = skilled_tactician }
+						20 = { add_trait = brilliant_strategist }
+					}
+					random_list = {
+						10 = { change_martial = 2 }
+						10 = { add_trait = hunter }
+						10 = { add_trait = duelist }
+						20 = { add_trait = strategist }
+					}				
+				e_yankee_invaders = {
+					grant_title = PREV
+				}
+				11 = { # Start by invading Ireland
+					kingdom = {
+						e_yankee_invaders = {
+							holder_scope = {
+								war = {
+									casus_belli = tribal_invasion
+									target = PREVPREVPREV # The top liege of the owner of the province
+									thirdparty_title = PREVPREV # The de jure kingdom
+								}
+								
+							}
+						}
+					}
+				}
+
+			}
+e_yankee_invaders = {
+	holder_scope = {
+				spawn_fleet = {
+				province = 975
+				owner = event_target:invasion_leader
+				disband_on_peace = yes
+				#earmark = conscripted_merchant_ships
+				troops = {
+					galleys = { 1500 1500 }
+					}
+				}	
+	#####SPAWN COURTIERS####
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = no
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = no
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = no
+			age = 25
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = no
+			age = 26
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = no
+			age = 28
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = yes
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = no
+			age = 27
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = no
+			age = 51
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = no
+			age = 44
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = occultist
+			culture = yankee
+			female = no
+			age = 24
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}												
+	}
+}
+			
+}
+
+spawn_americanist_horde_effect = {
+			activate_title = { title = e_americanist_invaders status = yes }
+				
+				create_character = {
+					dynasty = "Armstrong"
+					religion = americanist
+					culture = beltway
+					female = no
+					age = 35
+					health = 6.5
+					fertility = 0.6
+					random_traits = yes
+					attributes = {
+						learning = 7
+						diplomacy = 7
+						martial = 9
+						stewardship = 7
+						intrigue = 7
+					}
+				}
+				#give him a random boost
+				new_character = {
+					
+					wealth = 12000
+					prestige = 10000
+					set_character_flag = horde_invader
+					save_global_event_target_as = invasion_leader
+						
+					remove_trait = slow
+					remove_trait = imbecile
+					remove_trait = dull
+					remove_lifestyle_trait_effect = yes
+					remove_trait = craven
+					remove_trait = ugly
+					remove_trait = uncouth
+					remove_trait = feeble
+					remove_trait = dwarf
+					remove_trait = giant
+					remove_trait = clubfooted
+					remove_trait = harelip
+					remove_trait = hunchback
+					remove_trait = lisp
+					remove_trait = weak
+					remove_trait = lunatic
+					remove_trait = shrewd
+					remove_trait = quick
+					remove_trait = genius
+					remove_trait = strong
+					remove_trait = cynical
+					remove_trait = content
+					remove_trait = fair
+					random_list = {
+						1 = { change_learning = 2 }
+						1 = { change_diplomacy = 2 }
+						1 = { change_stewardship = 2 }
+						1 = { change_intrigue = 2 }
+						1 = { change_martial = 2 }
+					}
+					random_list = {
+						1 = { change_learning = 3 }
+						1 = { change_diplomacy = 3 }
+						1 = { change_stewardship = 3 }
+						1 = { change_intrigue = 3 }
+						1 = { change_martial = 3 }
+					}
+					random_list = {
+						5 = { }
+						15 = { add_trait = strong }
+						30 = { add_trait = fair }
+						3 = { add_trait = strong add_trait = fair }
+					}
+					random_list = {
+						5 = { }
+						15 = { add_trait = shrewd }
+						30 = { add_trait = quick }
+						3 = { add_trait = genius }
+					}
+					remove_education_effect = yes
+					random_list = {
+						10 = { add_trait = skilled_tactician }
+						20 = { add_trait = brilliant_strategist }
+					}
+					random_list = {
+						10 = { change_martial = 2 }
+						10 = { add_trait = hunter }
+						10 = { add_trait = duelist }
+						20 = { add_trait = strategist }
+					}				
+				e_americanist_invaders = {
+					grant_title = PREV
+				}
+				11 = { # Start by invading Ireland
+					kingdom = {
+						e_americanist_invaders = {
+							holder_scope = {
+								war = {
+									casus_belli = tribal_invasion
+									target = PREVPREVPREV # The top liege of the owner of the province
+									thirdparty_title = PREVPREV # The de jure kingdom
+								}
+								
+							}
+						}
+					}
+				}
+			}
+e_americanist_invaders = {
+	holder_scope = {
+				spawn_fleet = {
+				province = 975
+				owner = event_target:invasion_leader
+				disband_on_peace = yes
+				#earmark = conscripted_merchant_ships
+				troops = {
+					galleys = { 1500 1500 }
+					}
+				}		
+	#####SPAWN COURTIERS####
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = no
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = no
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = no
+			age = 25
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = no
+			age = 26
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = no
+			age = 28
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = yes
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = no
+			age = 27
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = no
+			age = 51
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = no
+			age = 44
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = americanist
+			culture = beltway
+			female = no
+			age = 24
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}											
+	}
+}
+			
+}
+
+spawn_appalachian_horde_effect = {
+			activate_title = { title = e_appalachian_invaders status = yes }
+				
+				create_character = {
+					dynasty = random
+					religion = evangelical
+					culture = appalachian
+					female = no
+					age = 45
+					health = 6.5
+					fertility = 0.6
+					random_traits = yes
+					attributes = {
+						learning = 7
+						diplomacy = 7
+						martial = 9
+						stewardship = 7
+						intrigue = 7
+					}
+				}
+				#give him a random boost
+				new_character = {
+					
+					wealth = 12000
+					prestige = 10000
+					set_character_flag = horde_invader
+					save_global_event_target_as = invasion_leader
+						
+					remove_trait = slow
+					remove_trait = imbecile
+					remove_trait = dull
+					remove_lifestyle_trait_effect = yes
+					remove_trait = craven
+					remove_trait = ugly
+					remove_trait = uncouth
+					remove_trait = feeble
+					remove_trait = dwarf
+					remove_trait = giant
+					remove_trait = clubfooted
+					remove_trait = harelip
+					remove_trait = hunchback
+					remove_trait = lisp
+					remove_trait = weak
+					remove_trait = lunatic
+					remove_trait = shrewd
+					remove_trait = quick
+					remove_trait = genius
+					remove_trait = strong
+					remove_trait = cynical
+					remove_trait = content
+					remove_trait = fair
+					random_list = {
+						1 = { change_learning = 2 }
+						1 = { change_diplomacy = 2 }
+						1 = { change_stewardship = 2 }
+						1 = { change_intrigue = 2 }
+						1 = { change_martial = 2 }
+					}
+					random_list = {
+						1 = { change_learning = 3 }
+						1 = { change_diplomacy = 3 }
+						1 = { change_stewardship = 3 }
+						1 = { change_intrigue = 3 }
+						1 = { change_martial = 3 }
+					}
+					random_list = {
+						5 = { }
+						15 = { add_trait = strong }
+						30 = { add_trait = fair }
+						3 = { add_trait = strong add_trait = fair }
+					}
+					random_list = {
+						5 = { }
+						15 = { add_trait = shrewd }
+						30 = { add_trait = quick }
+						3 = { add_trait = genius }
+					}
+					remove_education_effect = yes
+					random_list = {
+						10 = { add_trait = skilled_tactician }
+						20 = { add_trait = brilliant_strategist }
+					}
+					random_list = {
+						10 = { change_martial = 2 }
+						10 = { add_trait = hunter }
+						10 = { add_trait = duelist }
+						20 = { add_trait = strategist }
+					}				
+				e_appalachian_invaders = {
+					grant_title = PREV
+				}
+				11 = { # Start by invading Ireland
+					kingdom = {
+						e_appalachian_invaders = {
+							holder_scope = {
+								war = {
+									casus_belli = tribal_invasion
+									target = PREVPREVPREV # The top liege of the owner of the province
+									thirdparty_title = PREVPREV # The de jure kingdom
+								}
+								
+							}
+						}
+					}
+				}
+			}
+e_appalachian_invaders = {
+	holder_scope = {
+				spawn_fleet = {
+				province = 975
+				owner = event_target:invasion_leader
+				disband_on_peace = yes
+				#earmark = conscripted_merchant_ships
+				troops = {
+					galleys = { 1500 1500 }
+					}
+				}		
+	#####SPAWN COURTIERS####
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = no
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = no
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = no
+			age = 25
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = no
+			age = 26
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = no
+			age = 28
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = yes
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = no
+			age = 27
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = no
+			age = 51
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = no
+			age = 44
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = evangelical
+			culture = appalachian
+			female = no
+			age = 24
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}											
+	}
+}
+			
+}
+
+spawn_dixie_horde_effect = {
+			activate_title = { title = e_american_colony status = yes }
+				
+				create_character = {
+					dynasty = random
+					religion = constitutional
+					culture = federalist
+					female = no
+					age = 25
+					health = 6.5
+					fertility = 0.6
+					random_traits = yes
+					attributes = {
+						learning = 7
+						diplomacy = 7
+						martial = 9
+						stewardship = 7
+						intrigue = 7
+					}
+				}
+				#give him a random boost
+				new_character = {
+					
+					wealth = 12000
+					prestige = 10000
+					set_character_flag = horde_invader
+					save_global_event_target_as = invasion_leader
+						
+					remove_trait = slow
+					remove_trait = imbecile
+					remove_trait = dull
+					remove_lifestyle_trait_effect = yes
+					remove_trait = craven
+					remove_trait = ugly
+					remove_trait = uncouth
+					remove_trait = feeble
+					remove_trait = dwarf
+					remove_trait = giant
+					remove_trait = clubfooted
+					remove_trait = harelip
+					remove_trait = hunchback
+					remove_trait = lisp
+					remove_trait = weak
+					remove_trait = lunatic
+					remove_trait = shrewd
+					remove_trait = quick
+					remove_trait = genius
+					remove_trait = strong
+					remove_trait = cynical
+					remove_trait = content
+					remove_trait = fair
+					random_list = {
+						1 = { change_learning = 2 }
+						1 = { change_diplomacy = 2 }
+						1 = { change_stewardship = 2 }
+						1 = { change_intrigue = 2 }
+						1 = { change_martial = 2 }
+					}
+					random_list = {
+						1 = { change_learning = 3 }
+						1 = { change_diplomacy = 3 }
+						1 = { change_stewardship = 3 }
+						1 = { change_intrigue = 3 }
+						1 = { change_martial = 3 }
+					}
+					random_list = {
+						5 = { }
+						15 = { add_trait = strong }
+						30 = { add_trait = fair }
+						3 = { add_trait = strong add_trait = fair }
+					}
+					random_list = {
+						5 = { }
+						15 = { add_trait = shrewd }
+						30 = { add_trait = quick }
+						3 = { add_trait = genius }
+					}
+					remove_education_effect = yes
+					random_list = {
+						10 = { add_trait = skilled_tactician }
+						20 = { add_trait = brilliant_strategist }
+					}
+					random_list = {
+						10 = { change_martial = 2 }
+						10 = { add_trait = hunter }
+						10 = { add_trait = duelist }
+						20 = { add_trait = strategist }
+					}				
+				e_american_colony = {
+					grant_title = PREV
+				}
+				37 = { # Start by invading Scotland
+					kingdom = {
+						e_american_colony = {
+							holder_scope = {
+								war = {
+									casus_belli = tribal_invasion
+									target = PREVPREVPREV # The top liege of the owner of the province
+									thirdparty_title = PREVPREV # The de jure kingdom
+								}
+								
+							}
+						}
+					}
+				}
+			}
+e_american_colony = {
+	holder_scope = {
+				spawn_fleet = {
+				province = 993
+				owner = event_target:invasion_leader
+				disband_on_peace = yes
+				#earmark = conscripted_merchant_ships
+				troops = {
+					galleys = { 1500 1500 }
+					}
+				}		
+	#####SPAWN COURTIERS####
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = no
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = no
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = no
+			age = 25
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = no
+			age = 26
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = maaravi
+			culture = arhavi
+			female = no
+			age = 28
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = yes
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = mainline
+			culture = southron
+			female = no
+			age = 27
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = mainline
+			culture = southron
+			female = no
+			age = 51
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = mainline
+			culture = southron
+			female = no
+			age = 44
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = mainline
+			culture = southron
+			female = no
+			age = 24
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}											
+	}
+}
+			
+}
+
+spawn_hudsonian_horde_effect = {
+			activate_title = { title = e_hudsonian_invaders status = yes }
+				
+				create_character = {
+					dynasty = random
+					religion = batenburger
+					culture = hudsonian
+					female = no
+					age = 29
+					health = 6.5
+					fertility = 0.6
+					random_traits = yes
+					attributes = {
+						learning = 7
+						diplomacy = 7
+						martial = 15
+						stewardship = 7
+						intrigue = 7
+					}
+				}
+				#give him a random boost
+				new_character = {
+					
+					wealth = 12000
+					prestige = 10000
+					set_character_flag = horde_invader
+					save_global_event_target_as = invasion_leader
+						
+					remove_trait = slow
+					remove_trait = imbecile
+					remove_trait = dull
+					remove_lifestyle_trait_effect = yes
+					remove_trait = craven
+					remove_trait = ugly
+					remove_trait = uncouth
+					remove_trait = feeble
+					remove_trait = dwarf
+					remove_trait = giant
+					remove_trait = clubfooted
+					remove_trait = harelip
+					remove_trait = hunchback
+					remove_trait = lisp
+					remove_trait = weak
+					remove_trait = lunatic
+					remove_trait = shrewd
+					remove_trait = quick
+					remove_trait = genius
+					remove_trait = strong
+					remove_trait = cynical
+					remove_trait = content
+					remove_trait = fair
+					random_list = {
+						1 = { change_learning = 2 }
+						1 = { change_diplomacy = 2 }
+						1 = { change_stewardship = 2 }
+						1 = { change_intrigue = 2 }
+						1 = { change_martial = 2 }
+					}
+					random_list = {
+						1 = { change_learning = 3 }
+						1 = { change_diplomacy = 3 }
+						1 = { change_stewardship = 3 }
+						1 = { change_intrigue = 3 }
+						1 = { change_martial = 3 }
+					}
+					random_list = {
+						5 = { }
+						15 = { add_trait = strong }
+						30 = { add_trait = fair }
+						3 = { add_trait = strong add_trait = fair }
+					}
+					random_list = {
+						5 = { }
+						15 = { add_trait = shrewd }
+						30 = { add_trait = quick }
+						3 = { add_trait = genius }
+					}
+					remove_education_effect = yes
+					random_list = {
+						10 = { add_trait = skilled_tactician }
+						20 = { add_trait = brilliant_strategist }
+					}
+					random_list = {
+						10 = { change_martial = 2 }
+						10 = { add_trait = hunter }
+						10 = { add_trait = duelist }
+						20 = { add_trait = strategist }
+					}				
+				e_hudsonian_invaders = {
+					grant_title = PREV
+				}
+				11 = { # Start by invading Ireland
+					kingdom = {
+						e_hudsonian_invaders = {
+							holder_scope = {
+								war = {
+									casus_belli = tribal_invasion
+									target = PREVPREVPREV # The top liege of the owner of the province
+									thirdparty_title = PREVPREV # The de jure kingdom
+								}
+								
+							}
+						}
+					}
+				}
+			}
+e_hudsonian_invaders = {
+	holder_scope = {
+				spawn_fleet = {
+				province = 975
+				owner = event_target:invasion_leader
+				disband_on_peace = yes
+				#earmark = conscripted_merchant_ships
+				troops = {
+					galleys = { 1500 1500 }
+					}
+				}		
+	#####SPAWN COURTIERS####
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = no
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = no
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = no
+			age = 25
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = no
+			age = 26
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = no
+			age = 28
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = yes
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = no
+			age = 27
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = no
+			age = 51
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = no
+			age = 44
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = batenburger
+			culture = hudsonian
+			female = no
+			age = 24
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}											
+	}
+}
+			
+}
+
+spawn_canadian_horde_effect = {
+			activate_title = { title = e_canadian_invaders status = yes }
+				
+				create_character = {
+					dynasty = random
+					religion = high_church
+					culture = ontarian
+					female = no
+					age = 56
+					health = 6.5
+					fertility = 0.6
+					random_traits = yes
+					attributes = {
+						learning = 7
+						diplomacy = 7
+						martial = 11
+						stewardship = 11
+						intrigue = 7
+					}
+				}
+				#give him a random boost
+				new_character = {
+					
+					wealth = 12000
+					prestige = 10000
+					set_character_flag = horde_invader
+					save_global_event_target_as = invasion_leader
+						
+					remove_trait = slow
+					remove_trait = imbecile
+					remove_trait = dull
+					remove_lifestyle_trait_effect = yes
+					remove_trait = craven
+					remove_trait = ugly
+					remove_trait = uncouth
+					remove_trait = feeble
+					remove_trait = dwarf
+					remove_trait = giant
+					remove_trait = clubfooted
+					remove_trait = harelip
+					remove_trait = hunchback
+					remove_trait = lisp
+					remove_trait = weak
+					remove_trait = lunatic
+					remove_trait = shrewd
+					remove_trait = quick
+					remove_trait = genius
+					remove_trait = strong
+					remove_trait = cynical
+					remove_trait = content
+					remove_trait = fair
+					random_list = {
+						1 = { change_learning = 2 }
+						1 = { change_diplomacy = 2 }
+						1 = { change_stewardship = 2 }
+						1 = { change_intrigue = 2 }
+						1 = { change_martial = 2 }
+					}
+					random_list = {
+						1 = { change_learning = 3 }
+						1 = { change_diplomacy = 3 }
+						1 = { change_stewardship = 3 }
+						1 = { change_intrigue = 3 }
+						1 = { change_martial = 3 }
+					}
+					random_list = {
+						5 = { }
+						15 = { add_trait = strong }
+						30 = { add_trait = fair }
+						3 = { add_trait = strong add_trait = fair }
+					}
+					random_list = {
+						5 = { }
+						15 = { add_trait = shrewd }
+						30 = { add_trait = quick }
+						3 = { add_trait = genius }
+					}
+					remove_education_effect = yes
+					random_list = {
+						10 = { add_trait = skilled_tactician }
+						20 = { add_trait = brilliant_strategist }
+					}
+					random_list = {
+						10 = { change_martial = 2 }
+						10 = { add_trait = hunter }
+						10 = { add_trait = duelist }
+						20 = { add_trait = strategist }
+					}				
+				e_canadian_invaders = {
+					grant_title = PREV
+				}
+				11 = { # Start by invading Ireland
+					kingdom = {
+						e_canadian_invaders = {
+							holder_scope = {
+								war = {
+									casus_belli = tribal_invasion
+									target = PREVPREVPREV # The top liege of the owner of the province
+									thirdparty_title = PREVPREV # The de jure kingdom
+								}
+								
+							}
+						}
+					}
+				}
+			}
+e_canadian_invaders = {
+	holder_scope = {
+				spawn_fleet = {
+				province = 975
+				owner = event_target:invasion_leader
+				disband_on_peace = yes
+				#earmark = conscripted_merchant_ships
+				troops = {
+					galleys = { 1500 1500 }
+					}
+				}		
+	#####SPAWN COURTIERS####
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = no
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = no
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = no
+			age = 25
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = no
+			age = 26
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = no
+			age = 28
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = yes
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = no
+			age = 27
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = no
+			age = 51
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = no
+			age = 44
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = high_church
+			culture = ontarian
+			female = no
+			age = 24
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}											
+	}
+}
+			
+}
+
+spawn_ursuline_horde_effect = {
+	activate_title = { title = e_american_colony status = yes }
+				
+				create_character = {
+					dynasty = random
+					religion = constitutional
+					culture = federalist
+					female = no
+					age = 25
+					health = 6.5
+					fertility = 0.6
+					random_traits = yes
+					attributes = {
+						learning = 7
+						diplomacy = 7
+						martial = 9
+						stewardship = 7
+						intrigue = 7
+					}
+				}
+				#give him a random boost
+				new_character = {
+					
+					wealth = 12000
+					prestige = 10000
+					set_character_flag = horde_invader
+					save_global_event_target_as = invasion_leader
+						
+					remove_trait = slow
+					remove_trait = imbecile
+					remove_trait = dull
+					remove_lifestyle_trait_effect = yes
+					remove_trait = craven
+					remove_trait = ugly
+					remove_trait = uncouth
+					remove_trait = feeble
+					remove_trait = dwarf
+					remove_trait = giant
+					remove_trait = clubfooted
+					remove_trait = harelip
+					remove_trait = hunchback
+					remove_trait = lisp
+					remove_trait = weak
+					remove_trait = lunatic
+					remove_trait = shrewd
+					remove_trait = quick
+					remove_trait = genius
+					remove_trait = strong
+					remove_trait = cynical
+					remove_trait = content
+					remove_trait = fair
+					random_list = {
+						1 = { change_learning = 2 }
+						1 = { change_diplomacy = 2 }
+						1 = { change_stewardship = 2 }
+						1 = { change_intrigue = 2 }
+						1 = { change_martial = 2 }
+					}
+					random_list = {
+						1 = { change_learning = 3 }
+						1 = { change_diplomacy = 3 }
+						1 = { change_stewardship = 3 }
+						1 = { change_intrigue = 3 }
+						1 = { change_martial = 3 }
+					}
+					random_list = {
+						5 = { }
+						15 = { add_trait = strong }
+						30 = { add_trait = fair }
+						3 = { add_trait = strong add_trait = fair }
+					}
+					random_list = {
+						5 = { }
+						15 = { add_trait = shrewd }
+						30 = { add_trait = quick }
+						3 = { add_trait = genius }
+					}
+					remove_education_effect = yes
+					random_list = {
+						10 = { add_trait = skilled_tactician }
+						20 = { add_trait = brilliant_strategist }
+					}
+					random_list = {
+						10 = { change_martial = 2 }
+						10 = { add_trait = hunter }
+						10 = { add_trait = duelist }
+						20 = { add_trait = strategist }
+					}				
+				e_american_colony = {
+					grant_title = PREV
+				}
+				37 = { # Start by invading Scotland
+					kingdom = {
+						e_american_colony = {
+							holder_scope = {
+								war = {
+									casus_belli = tribal_invasion
+									target = PREVPREVPREV # The top liege of the owner of the province
+									thirdparty_title = PREVPREV # The de jure kingdom
+								}
+								
+							}
+						}
+					}
+				}
+			}
+e_american_colony = {
+	holder_scope = {
+				spawn_fleet = {
+				province = 993
+				owner = event_target:invasion_leader
+				disband_on_peace = yes
+				#earmark = conscripted_merchant_ships
+				troops = {
+					galleys = { 1500 1500 }
+					}
+				}		
+	#####SPAWN COURTIERS####
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = no
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = no
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = no
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = no
+			age = 25
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = no
+			age = 26
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = maaravi
+			culture = arhavi
+			female = no
+			age = 28
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = yes
+			age = 16
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = yes
+			age = 17
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = yes
+			age = 18
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = constitutional
+			culture = federalist
+			female = yes
+			age = 20
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = mainline
+			culture = southron
+			female = no
+			age = 27
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = mainline
+			culture = southron
+			female = no
+			age = 51
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = mainline
+			culture = southron
+			female = no
+			age = 44
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = mainline
+			culture = southron
+			female = no
+			age = 24
+			attributes = {
+				martial = 12
+			}
+			trait = brilliant_strategist
+		}											
+	}
+}
+			
+}
+
+gain_title_effect = {
+	PREV = {
+		primary_title = {
+			save_event_target_as = former_primary_title
+		}
+	}
+	save_event_target_as = gained_title
+	grant_title_no_opinion = PREV
+	copy_title_laws = event_target:former_primary_title
+	if = {
+		limit = {
+			PREV = {
+				NOT = {
+					any_demesne_title = {
+						higher_tier_than = event_target:gained_title
+					}
+				}
+			}
+		}
+		make_primary_title = yes
+		PREV = {
+			if = {
+				limit = { is_anti_caliph = yes }
+				caliphate_gain_effect = yes
+			}
+		}
+	}
+}
+gain_empire_effect = {
+	gain_title_effect = yes
+	PREV = {
+		any_demesne_title = {
+			limit = {
+				tier = EMPEROR
+				NOT = { title = event_target:gained_title }
+			}
+			destroy_landed_title = THIS
+		}
+	}
+}
+play_as_invasion_leader_effect = {
+	if = {
+		limit = {
+			event_target:invasion_leader = {
+				ai = yes
+				is_playable = yes
+			}
+		}
+		custom_tooltip = {
+			text = player_character_invasion_leader_TT
+			set_player_character = event_target:invasion_leader
+		}
+	}
+}
+jacobinist_sacrifice_tiered_traits_effect = {
+	hidden_effect = {
+		change_variable = { which = guillotine_points value = 1 }
+		if = { #Tier 1
+			limit = {
+				check_variable = { which = guillotine_points value = 10 }
+				NOR = { 
+					trait = guillotine_master_1
+					trait = guillotine_master_2
+					trait = guillotine_master_3
+				}
+			}
+			set_character_flag = becoming_guillotine_master_1
+		}
+		if = { #Tier 2
+			limit = {
+				check_variable = { which = guillotine_points value = 30 }
+				trait = guillotine_master_1
+				NOR = { 
+					trait = guillotine_master_2
+					trait = guillotine_master_3
+				}
+			}
+			set_character_flag = becoming_guillotine_master_2
+		}
+		if = { #Tier 3
+			limit = {
+				check_variable = { which = guillotine_points value = 100 }
+				trait = guillotine_master_2
+				NOT = { 
+					trait = guillotine_master_3
+				}
+			}
+			set_character_flag = becoming_guillotine_master_3
+		}
+	}
+}
+jacobinist_gain_tiered_traits_effect = {
+	if = {
+		limit = {
+			has_character_flag = becoming_guillotine_master_1
+		}
+		clr_character_flag = becoming_guillotine_master_1
+		add_trait = guillotine_master_1
+	}
+	if = {
+		limit = {
+			has_character_flag = becoming_guillotine_master_2
+		}
+		clr_character_flag = becoming_guillotine_master_2
+		add_trait = guillotine_master_2
+	}
+	if = {
+		limit = {
+			has_character_flag = becoming_guillotine_master_3
+		}
+		clr_character_flag = becoming_guillotine_master_3
+		add_trait = guillotine_master_3
+	}
+}
+jacobinist_sacrifice_after_death_effect = {
+	if = {
+		limit = {
+			death_reason = death_jacobinist_sacrifice
+			killer = { 
+				is_playable = yes
+				#is_landed = yes
+				NOT = { trait = incapable }
+				religion = jacobinist
+			}
+		}
+		killer = { 
+			#Bonus points first.
+			if = { #A religious head is also quite good.
+				limit = {
+					PREV = { controls_religion = yes }
+				}
+				change_variable = { which = guillotine_points value = 2 }
+				achievement_holy_smoke_done_effect = yes
+			}
+			if = { #A emperor is also well accepted.
+				limit = {
+					PREV = { higher_tier_than = KING }
+				}
+				change_variable = { which = guillotine_points value = 1 }
+			}
+			jacobinist_madame_timer_effect = yes
+			#Finally, a third point is added regardless in the following scripted effect, which will also trigger the events below, when the proper score is reached.
+			jacobinist_sacrifice_tiered_traits_effect = yes 
+		}
+	}
+}
+jacobinist_madame_timer_effect = {
+	add_character_modifier = { modifier = madame_sacrifice_timer_1 years = 5 }
+	hidden_tooltip = {
+		add_character_modifier = { modifier = madame_sacrifice_timer_2 years = 4 } # for AI
+		add_character_modifier = { modifier = madame_sacrifice_timer_3 years = 3 } # for AI
+	}
+}
+calculate_madame_preference_effect = {
+	# Ugly but there is no other methode sadly
+	set_variable = { which = local_madame_preference value = 1.0 }
+	# Personality and birth trait preferences
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_strong }
+			is_strong_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_weak }
+			is_weak_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_strong }
+			is_weak_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_weak }
+			is_strong_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_smart }
+			is_smart_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_dumb }
+			is_dumb_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_smart }
+			is_dumb_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_dumb }
+			is_smart_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_virtue }
+			has_virtue_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_vice }
+			has_vice_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_virtue }
+			has_vice_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_vice }
+			has_virtue_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_attractive }
+			is_attractive_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_unattractive }
+			is_unattractive_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_attractive }
+			is_unattractive_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_unattractive }
+			is_attractive_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	# Education and lifestyle based preferences
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_diplomacy }
+			into_diplomacy_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_martial }
+			into_diplomacy_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_martial }
+			into_martial_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_learning }
+			into_martial_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_learning }
+			into_learning_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_intrigue }
+			into_learning_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_intrigue }
+			into_intrigue_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_stewardship }
+			into_intrigue_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_stewardship }
+			into_stewardship_trigger = yes
+		}
+		change_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = {
+			ROOT = { has_character_modifier = madame_wants_diplomacy }
+			into_stewardship_trigger = yes
+		}
+		subtract_variable = { which = local_madame_preference value = 0.2 }
+	}
+	if = {
+		limit = { ROOT = { has_character_modifier = madame_wants_young } }
+		if = { limit = { NOT = { age = 17 } } change_variable = { which = local_madame_preference value = 0.2 } }
+		if = { limit = { age = 50 } subtract_variable = { which = local_madame_preference value = 0.2 } }
+	}
+	if = {
+		limit = { ROOT = { has_character_modifier = madame_wants_old } }
+		if = { limit = { age = 50 } change_variable = { which = local_madame_preference value = 0.2 } }
+		if = { limit = { NOT = { age = 17 } } subtract_variable = { which = local_madame_preference value = 0.2 } }
+	}
+	if = {
+		limit = {
+			ROOT = {
+				OR = {
+					has_character_modifier = madame_wants_christian
+					has_character_modifier = madame_wants_esoteric
+					has_character_modifier = madame_wants_pagan_group
+					has_character_modifier = madame_wants_jewish_group
+					has_character_modifier = madame_wants_pirate
+					has_character_modifier = madame_wants_muslim
+					has_character_modifier = madame_wants_indian_group
+					has_character_modifier = madame_wants_buddhist_group
+					has_character_modifier = madame_wants_zoroastrian_group
+					has_character_modifier = madame_wants_communist
+					has_character_modifier = madame_wants_zarist
+					has_character_modifier = madame_wants_nobelian
+					has_character_modifier = madame_wants_ironist
+					has_character_modifier = madame_wants_khanist
+					has_character_modifier = madame_wants_jacobinist
+				}
+			}
+		}
+		trigger_switch = { #Note: Lower for not right religion because it's harder
+			on_trigger = religion_group
+			christian				= { if = { limit = { ROOT = { has_character_modifier = madame_wants_christian } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.1 } } }
+			esoteric				= { if = { limit = { ROOT = { has_character_modifier = madame_wants_esoteric } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.1 } } }
+			pagan_group				= { if = { limit = { ROOT = { has_character_modifier = madame_wants_pagan_group } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.1 } } }
+			jewish_group			= { if = { limit = { ROOT = { has_character_modifier = madame_wants_jewish_group } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.1 } } }
+			pirate					= { if = { limit = { ROOT = { has_character_modifier = madame_wants_pirate } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.1 } } }
+			muslim					= { if = { limit = { ROOT = { has_character_modifier = madame_wants_muslim } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.1 } } }
+			indian_group			= { if = { limit = { ROOT = { has_character_modifier = madame_wants_indian_group } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.1 } } }
+			buddhist_group			= { if = { limit = { ROOT = { has_character_modifier = madame_wants_buddhist_group } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.1 } } }
+			zoroastrian_group		= { if = { limit = { ROOT = { has_character_modifier = madame_wants_zoroastrian_group } } change_variable = { which = local_madame_preference value = 0.2 } } else = { subtract_variable = { which = local_madame_preference value = 0.1 } } }
+			old_world_cultist_group	= {
+				if = {
+					limit = {
+						NOR = {
+							ROOT = { has_character_modifier = madame_wants_communist }
+							ROOT = { has_character_modifier = madame_wants_zarist }
+							ROOT = { has_character_modifier = madame_wants_nobelian }
+							ROOT = { has_character_modifier = madame_wants_ironist }
+							ROOT = { has_character_modifier = madame_wants_khanist }
+							ROOT = { has_character_modifier = madame_wants_jacobinist }
+						}
+					}
+					subtract_variable = { which = local_madame_preference value = 0.1 }
+				}
+				else = {
+					if = { limit = { is_communist_religion_trigger = yes ROOT = { has_character_modifier = madame_wants_communist } } change_variable = { which = local_madame_preference value = 0.2 } }
+					if = { limit = { is_zarist_religion_trigger = yes ROOT = { has_character_modifier = madame_wants_zarist } } change_variable = { which = local_madame_preference value = 0.2 } }
+					if = { limit = { is_nobelian_religion_trigger = yes ROOT = { has_character_modifier = madame_wants_nobelian } } change_variable = { which = local_madame_preference value = 0.2 } }
+					if = { limit = { is_ironist_religion_trigger = yes ROOT = { has_character_modifier = madame_wants_ironist } } change_variable = { which = local_madame_preference value = 0.2 } }
+					if = { limit = { is_khanist_religion_trigger = yes ROOT = { has_character_modifier = madame_wants_khanist } } change_variable = { which = local_madame_preference value = 0.2 } }
+					if = { limit = { is_jacobinist_religion_trigger = yes ROOT = { has_character_modifier = madame_wants_jacobinist } } change_variable = { which = local_madame_preference value = 0.2 } }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { ROOT = { has_character_modifier = madame_wants_female } }
+		if = { limit = { is_female = yes } change_variable = { which = local_madame_preference value = 0.2 } }
+		if = { limit = { is_female = no } subtract_variable = { which = local_madame_preference value = 0.2 } }
+	}
+	if = {
+		limit = { ROOT = { has_character_modifier = madame_wants_male } }
+		if = { limit = { is_female = no } change_variable = { which = local_madame_preference value = 0.2 } }
+		if = { limit = { is_female = yes } subtract_variable = { which = local_madame_preference value = 0.2 } }
+	}
+	# Should be at least 0.1
+	if = {
+		limit = {
+			NOT = {
+				check_variable = { which = local_madame_preference value = 0.1 }
+			}
+			set_variable = { which = local_madame_preference value = 0.1 }
+		}
+	}
+}
+spawn_good_drukian_effect = {
+	if = { 
+		limit = { has_religion_feature = religion_matriarchal }
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = random
+			female = yes
+			attributes = {
+				diplomacy = 2
+				learning = 2
+				stewardship = 2
+				intrigue = 5
+				martial = 8
+			}
+		}
+	}
+	if = { 
+		limit = { NOT = { has_religion_feature = religion_matriarchal } }
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = random
+			female = no
+			attributes = {
+				diplomacy = 2
+				learning = 2
+				stewardship = 2
+				intrigue = 5
+				martial = 8
+			}
+		}
+	}
+	new_character = {
+		remove_trait = weak
+		remove_trait = slow
+		remove_trait = imbecile
+		remove_trait = dull
+		
+		remove_trait = mystic
+		remove_trait = socializer
+		remove_trait = gamer
+		remove_trait = hedonist
+		remove_trait = duelist
+		remove_trait = hunter
+		remove_trait = strategist
+		remove_trait = administrator
+		remove_trait = architect
+		remove_trait = gardener
+		remove_trait = theologian
+		remove_trait = scholar
+		
+		remove_trait = misguided_warrior
+		remove_trait = tough_soldier
+		remove_trait = skilled_tactician
+		remove_trait = brilliant_strategist
+
+		random_list = {
+			10 = { add_trait = misguided_warrior }
+			15 = { add_trait = tough_soldier }
+			20 = { add_trait = skilled_tactician }
+		}
+		add_trait = drukian
+		
+		random_list = { # Flavor Randomization
+			35 = { 
+				# Nothing
+			}
+			15 = {
+				change_martial = 2
+			}
+			10 = {
+				add_trait = robust
+			}
+			10 = {
+				add_trait = duelist
+			}
+			10 = {
+				add_trait = hunter
+			}
+			5 = {
+				add_trait = strategist
+			}
+			5 = {
+				change_martial = 4
+			}
+			5 = {
+				if = {
+					limit = {
+						has_dlc = "Reapers"
+					}
+					add_trait = one_eyed
+				}
+			}
+			5 = { 
+				add_trait = shrewd
+			}
+			3 = { 
+				add_trait = giant
+			}
+		}
+		set_character_flag = invited_drukian
+		save_event_target_as = invited_character
+	}
+}
+
+spawn_great_drukian_effect = {
+	if = { 
+		limit = { has_religion_feature = religion_matriarchal }
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = random
+			female = yes
+			attributes = {
+				diplomacy = 3
+				learning = 3
+				stewardship = 3
+				intrigue = 6
+				martial = 9
+			}
+		}
+	}
+	if = { 
+		limit = { NOT = { has_religion_feature = religion_matriarchal } }
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = random
+			female = no
+			attributes = {
+				diplomacy = 3
+				learning = 3
+				stewardship = 3
+				intrigue = 6
+				martial = 9
+			}
+		}
+	}
+	new_character = {
+		remove_trait = weak
+		remove_trait = slow
+		remove_trait = imbecile
+		remove_trait = dull
+		remove_trait = dwarf
+		remove_trait = giant
+		remove_trait = hunchback
+		remove_trait = clubfooted
+		remove_trait = craven
+		
+		remove_trait = mystic
+		remove_trait = socializer
+		remove_trait = gamer
+		remove_trait = hedonist
+		remove_trait = duelist
+		remove_trait = hunter
+		remove_trait = strategist
+		remove_trait = administrator
+		remove_trait = architect
+		remove_trait = gardener
+		remove_trait = theologian
+		remove_trait = scholar
+		
+		remove_trait = misguided_warrior
+		remove_trait = tough_soldier
+		remove_trait = skilled_tactician
+		remove_trait = brilliant_strategist
+
+		random_list = {
+			5 = { add_trait = misguided_warrior }
+			10 = { add_trait = tough_soldier }
+			20 = { add_trait = skilled_tactician }
+			30 = { add_trait = brilliant_strategist }
+		}
+		add_trait = drukian
+	
+		random_list = { # Flavor Randomization
+			35 = { 
+				# Nothing
+			}
+			15 = {
+				change_martial = 2
+			}
+			10 = {
+				add_trait = robust
+			}
+			10 = {
+				add_trait = duelist
+			}
+			10 = {
+				add_trait = hunter
+			}
+			5 = {
+				add_trait = strategist
+			}
+			5 = {
+				change_martial = 4
+			}
+			5 = {
+				if = {
+					limit = {
+						has_dlc = "Reapers"
+					}
+					add_trait = one_eyed
+				}
+			}
+			5 = { 
+				add_trait = shrewd
+			}
+			1 = { 
+				add_trait = giant
+			}
+		}
+		random_list = {
+			50 = {
+				#Nothing
+			}
+			10 = {
+				add_trait = narrow_flank_leader
+			}
+			10 = {
+				add_trait = defensive_leader
+			}
+			10 = {
+				add_trait = experimenter
+			}
+			10 = {
+				add_trait = flanker
+			}
+			10 = {
+				add_trait = heavy_infantry_leader
+			}
+			10 = {
+				add_trait = inspiring_leader
+			}
+			10 = {
+				add_trait = organizer
+			}
+			10 = {
+				add_trait = siege_leader
+			}
+			10 = {
+				add_trait = trickster
+			}
+			10 = {
+				add_trait = aggressive_leader
+			}
+		}
+		set_character_flag = invited_drukian
+		save_event_target_as = invited_character
+	}
+}
+
+spawn_fantastic_drukian_effect = {
+	if = { 
+		limit = { has_religion_feature = religion_matriarchal }
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = actually_culture
+			female = yes
+			attributes = {
+				diplomacy = 4
+				learning = 4
+				stewardship = 4
+				intrigue = 8
+				martial = 12
+			}
+		}
+	}
+	if = { 
+		limit = { NOT = { has_religion_feature = religion_matriarchal } }
+		create_random_soldier = {
+			random_traits = yes
+			dynasty = actually_culture
+			female = no
+			attributes = {
+				diplomacy = 4
+				learning = 4
+				stewardship = 4
+				intrigue = 8
+				martial = 12
+			}
+		}
+	}
+	new_character = {
+		remove_trait = weak
+		remove_trait = slow
+		remove_trait = imbecile
+		remove_trait = dull
+		remove_trait = dwarf
+		remove_trait = giant
+		remove_trait = hunchback
+		remove_trait = clubfooted
+		remove_trait = craven
+		remove_trait = paranoid
+		
+		remove_trait = mystic
+		remove_trait = socializer
+		remove_trait = gamer
+		remove_trait = hedonist
+		remove_trait = duelist
+		remove_trait = hunter
+		remove_trait = strategist
+		remove_trait = administrator
+		remove_trait = architect
+		remove_trait = gardener
+		remove_trait = theologian
+		remove_trait = scholar
+		
+		remove_trait = misguided_warrior
+		remove_trait = tough_soldier
+		remove_trait = skilled_tactician
+		
+		add_trait = brilliant_strategist
+		add_trait = drukian
+		
+		random_list = {
+			20 = {
+				add_trait = robust
+			}
+			10 = {
+				add_trait = strong
+			}
+			5 = {
+				health = 1
+			}
+		}
+		
+		random_list = {
+			10 = {
+				add_trait = narrow_flank_leader
+			}
+			10 = {
+				add_trait = defensive_leader
+			}
+			10 = {
+				add_trait = experimenter
+			}
+			10 = {
+				add_trait = flanker
+			}
+			10 = {
+				add_trait = heavy_infantry_leader
+			}
+			10 = {
+				add_trait = inspiring_leader
+			}
+			10 = {
+				add_trait = organizer
+			}
+			10 = {
+				add_trait = siege_leader
+			}
+			10 = {
+				add_trait = trickster
+			}
+			10 = {
+				add_trait = aggressive_leader
+			}
+		}
+		
+		random_list = { # Flavor Randomization
+			20 = {
+				add_trait = giant
+				add_trait = robust
+				add_trait = hunter
+				change_martial = 2
+				give_nickname = nick_the_giant
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						has_dlc = "Reapers"
+					}
+				}
+				add_trait = giant
+				add_trait = robust
+				add_trait = strategist
+				add_trait = one_eyed
+				change_martial = 1
+				give_nickname = nick_the_cyclops
+			}
+			20 = {
+				add_trait = holy_warrior
+				add_trait = scarred
+				change_martial = 3
+				give_nickname = nick_the_hammer
+			}
+			20 = {
+				add_trait = brave
+				add_trait = poet
+				change_martial = 2
+				give_nickname = nick_the_fearless
+			}
+			20 = {
+				add_trait = robust
+				remove_trait = temperate
+				add_trait = wroth
+				add_trait = falconer
+				change_martial = 1
+				give_nickname = nick_the_ill_tempered
+			}
+			20 = {
+				add_trait = unyielding_leader
+				remove_trait = wroth
+				add_trait = patient
+				change_martial = 2
+				give_nickname = nick_the_defender
+			}
+			20 = {
+				add_trait = aggressive_leader
+				remove_trait = patient
+				add_trait = wroth
+				change_martial = 3
+				give_nickname = nick_the_destroyer
+			}
+			20 = {
+				add_trait = shrewd
+				add_trait = brave
+				change_martial = 2
+				give_nickname = nick_the_brave
+			}
+			20 = {
+				add_trait = robust
+				add_trait = strategist
+				change_martial = 1
+				give_nickname = nick_the_strong
+			}
+			20 = {
+				add_trait = genius
+				add_trait = socializer
+				add_trait = poet
+				change_martial = 4
+				give_nickname = nick_the_noble
+			}
+			20 = {
+				add_trait = blinded
+				add_trait = strategist
+				add_trait = genius
+				change_martial = 4
+				give_nickname = nick_the_blind
+			}
+			20 = {
+				remove_trait = humble
+				add_trait = proud
+				add_trait = duelist
+				change_martial = 2
+				give_nickname = nick_the_proud
+			}
+			20 = {
+				add_trait = hunter
+				add_trait = shrewd
+				change_martial = 3
+				give_nickname = nick_the_hunter
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					NOT = {
+						has_dlc = "Reapers"
+					}
+				}
+				add_trait = disfigured
+				add_trait = scarred
+				add_trait = genius
+				change_martial = 2
+				change_intrigue = 12
+				give_nickname = nick_of_a_thousand_faces
+			}
+			20 = {
+				add_trait = genius
+				add_trait = clubfooted
+				change_martial = 1
+				give_nickname = nick_the_bear
+			}
+			20 = {
+				add_trait = trusting
+				add_trait = quick
+				change_martial = 4
+				give_nickname = nick_the_loyal
+			}
+			20 = {
+				add_trait = ugly
+				add_trait = strong
+				add_trait = duelist
+				change_martial = 1
+				give_nickname = nick_the_boar
+			}
+			20 = {
+				add_trait = fair
+				add_trait = strategist
+				change_martial = 4
+				give_nickname = nick_the_lion
+			}
+			20 = {
+				add_trait = brave
+				add_trait = duelist
+				change_martial = 3
+				give_nickname = nick_the_bold
+			}
+			20 = {
+				add_trait = shrewd
+				add_trait = hedonist
+				change_martial = 4
+				give_nickname = nick_the_quarreller
+			}
+			20 = {
+				add_trait = shrewd
+				add_trait = cavalry_leader
+				change_martial = 2
+				give_nickname = nick_the_wolf
+			}
+		}
+		set_character_flag = invited_drukian
+		save_event_target_as = invited_character
+	}
+}
+emulation_ambition_clear_effect = {
+	hidden_tooltip = {
+		remove_character_modifier = emulation_studies_a_lot
+		remove_character_modifier = wears_cilice
+		remove_character_modifier = emulation_is_destinity
+		clr_character_flag = zarist_emulate_becoming
+		set_variable = { which = emulation_years value = 0 }
+		set_variable = { which = emulation_progress value = 0 }
+	}
+}
+adopt_faith_special_title_effect = {
+	if = { # Caliphates and Fylkirates are forfeit
+		limit = {
+			isnt_forced_to_theocracy = yes
+			any_demesne_title = {
+				controls_religion = yes
+			}
+		}
+		any_demesne_title = {
+			limit = {
+				controls_religion = yes
+			}
+			destroy_landed_title = THIS
+		}
+	}
+	if = { # Papacies are given to a random new character
+		limit = {
+			isnt_forced_to_theocracy = no
+			any_demesne_title = {
+				controls_religion = yes
+			}
+		}
+		hidden_tooltip = {
+			liege = {
+				save_event_target_as = liege_target
+			}
+			create_character = {
+				age = 38
+				dynasty = random
+				religion = ROOT
+				culture = ROOT
+				random_traits = yes
+			}
+			new_character = {
+				save_event_target_as = new_holder
+			}
+		}
+		any_demesne_title = {
+			limit = {
+				controls_religion = yes
+			}
+			grant_title = event_target:new_holder
+			holder_scope = {
+				any_vassal = {
+					set_defacto_liege = event_target:liege_target
+				}
+			}
+		}
+		hidden_tooltip = {
+			set_defacto_liege = event_target:liege_target
+		}
+	}
+	if = { # Holy Orders/Static Mercs are given to a random new character
+		limit = {
+			any_demesne_title = {
+				OR = {
+					holy_order = yes
+					mercenary = yes
+				}
+			}
+		}
+		hidden_tooltip = {
+			liege = {
+				save_event_target_as = liege_target
+			}
+			create_character = {
+				age = 38
+				dynasty = random
+				religion = ROOT
+				culture = ROOT
+				random_traits = yes
+			}
+			new_character = {
+				save_event_target_as = new_holder
+			}
+		}
+		any_demesne_title = {
+			limit = {
+				OR = {
+					holy_order = yes
+					mercenary = yes
+				}
+			}
+			grant_title = event_target:new_holder
+			holder_scope = {
+				any_vassal = {
+					set_defacto_liege = event_target:liege_target
+				}
+			}
+		}
+		hidden_tooltip = {
+			set_defacto_liege = event_target:liege_target
+		}
+	}
+}
+select_random_character_to_fatima_effect = {
+	any_realm_character = {
+		limit = {
+			NOR = { trait = cynical trait = pilgrim }
+			is_inaccessible_or_incapable_trigger = no
+			religion = event_target:fatima_religion
+			is_adult = yes
+			ai = yes
+			location = {
+				at_fatima_region_trigger = yes
+			}
+		}
+		score_value = {
+			value = 10
+			interesting_courtier_selection_score = yes
+		}
+		add_trait = on_pilgrimage
+		set_character_flag = on_fatima_pilgrimage
+	}
+}
+select_random_ruler_to_fatima_effect = {
+	random_independent_ruler = {
+		limit = {
+			religion = event_target:fatima_religion
+			any_realm_province = {
+				at_fatima_region_trigger = yes
+			}
+		}
+		preferred_limit = {
+			capital_scope = {
+				at_fatima_region_trigger = yes
+			}
+		}
+		random = {
+			chance = 20
+			modifier = {
+				factor = 1.5
+				trait = zealous
+			}
+			modifier = {
+				factor = 0
+				NAND = {
+					NOR = { trait = cynical trait = pilgrim }
+					is_inaccessible_or_incapable_trigger = no
+					ai = yes
+					is_adult = yes
+				}
+			}
+			modifier = {
+				factor = 0
+				controls_religion = yes
+			}
+			add_trait = on_pilgrimage
+			set_character_flag = on_fatima_pilgrimage
+		}
+		select_random_character_to_fatima_effect = yes
+		select_random_character_to_fatima_effect = yes
+		if = {
+			limit = { higher_tier_than = DUKE }
+			select_random_character_to_fatima_effect = yes
+		}
+		if = {
+			limit = { higher_tier_than = KING }
+			select_random_character_to_fatima_effect = yes
+		}
+	}
+}
+select_fatima_province_effect = {
+	random_independent_ruler = {
+		limit = {
+			any_realm_province = {
+				at_fatima_region_trigger = yes
+				OR = {
+					port = yes
+					NOT = { has_global_flag = fatima_at_italy }
+				}
+				is_island = no
+			}
+			religion = event_target:fatima_religion
+		}
+		preferred_limit = {
+			capital_scope = {
+				at_fatima_region_trigger = yes
+			}
+			higher_tier_than = KING
+		}
+		preferred_limit = {
+			capital_scope = {
+				at_fatima_region_trigger = yes
+			}
+			higher_tier_than = DUKE
+		}
+		preferred_limit = {
+			higher_tier_than = KING
+		}
+		preferred_limit = {
+			capital_scope = {
+				at_fatima_region_trigger = yes
+			}
+			higher_tier_than = COUNT
+		}
+		preferred_limit = {
+			higher_tier_than = DUKE
+		}
+		preferred_limit = {
+			capital_scope = {
+				at_fatima_region_trigger = yes
+			}
+		}
+		preferred_limit = {
+			higher_tier_than = COUNT
+		}
+		random_realm_province = {
+			limit = {
+				at_fatima_region_trigger = yes
+				OR = {
+					port = yes
+					NOT = { has_global_flag = fatima_at_italy }
+				}
+				is_island = no
+			}
+			preferred_limit = {
+				holder_scope = {
+					higher_tier_than = KING
+					religion = event_target:fatima_religion
+					capital_scope = {
+						province = PREVPREV
+					}
+				}
+			}
+			preferred_limit = {
+				holder_scope = {
+					higher_tier_than = DUKE
+					religion = event_target:fatima_religion
+					capital_scope = {
+						province = PREVPREV
+					}
+				}
+			}
+			preferred_limit = {
+				holder_scope = {
+					higher_tier_than = COUNT
+					religion = event_target:fatima_religion
+					capital_scope = {
+						province = PREVPREV
+					}
+				}
+			}
+			preferred_limit = {
+				holder_scope = {
+					religion = event_target:fatima_religion
+					capital_scope = {
+						province = PREVPREV
+					}
+				}
+			}
+			save_global_event_target_as = fatima_current_province
+		}
+		select_random_character_to_fatima_effect = yes
+		select_random_character_to_fatima_effect = yes
+		if = {
+			limit = { higher_tier_than = DUKE }
+			select_random_character_to_fatima_effect = yes
+		}
+		if = {
+			limit = { higher_tier_than = KING }
+			select_random_character_to_fatima_effect = yes
+		}
+	}
+}
+make_saint_if_dead_effect = {
+	if = {
+		limit = {
+			is_alive = no
+		}
+		set_special_character_title = SAINT_TITLE
+		add_trait = saint
+	}
+}
+conversion_check_holy_order_modifiers_effect = {
+	if = {
+		limit ={
+			NOT = {
+				has_character_flag = coversion_keep_holy_order_modifiers
+				had_character_flag = { flag = coversion_keep_holy_order_modifiers days = 2 }
+			}
+		}
+		remove_character_modifier = expelled_one_holy_order
+		remove_character_modifier = expelled_two_holy_order
+		remove_character_modifier = expelled_d_legion_of_mary
+		remove_character_modifier = expelled_d_knights_templar
+		remove_character_modifier = expelled_d_knights_hospitaler
+		remove_character_modifier = expelled_d_knights_lazarus
+	}
+	if = {
+		limit = {
+			NOR = {
+				AND = {
+					has_character_flag = coversion_keep_debt
+					had_character_flag = { flag = coversion_keep_debt days = 2 }
+				}
+				AND = {
+					has_character_flag = coversion_keep_holy_order_modifiers
+					had_character_flag = { flag = coversion_keep_holy_order_modifiers days = 2 }
+				}
+			}
+		}
+		remove_character_modifier = borrowed_from_knights_templar
+		remove_character_modifier = borrowed_from_bektashi
+		remove_character_modifier = borrowed_from_haruriyyah
+	}
+	clr_character_flag = coversion_keep_holy_order_modifiers
+	clr_character_flag = coversion_keep_debt
+}
+
+new_order_effect = {
+	set_government_type = order_government
+	wealth = 500
+	create_character = {
+		random_traits = yes
+		dynasty = random
+		religion = THIS
+		culture = THIS
+		female = no
+		age = 16
+	}
+	create_character = {
+		random_traits = yes
+		dynasty = random
+		religion = THIS
+		culture = THIS
+		female = no
+		age = 18
+	}
+	create_character = {
+		random_traits = yes
+		dynasty = random
+		religion = THIS
+		culture = THIS
+		female = no
+		age = 18
+	}
+	create_character = {
+		random_traits = yes
+		dynasty = random
+		religion = THIS
+		culture = THIS
+		female = no
+		age = 20
+	}
+	create_character = {
+		random_traits = yes
+		dynasty = random
+		religion = THIS
+		culture = THIS
+		female = no
+		age = 25
+	}
+	create_character = {
+		random_traits = yes
+		dynasty = random
+		religion = THIS
+		culture = THIS
+		female = no
+		age = 26
+	}
+	create_character = {
+		random_traits = yes
+		dynasty = random
+		religion = THIS
+		culture = THIS
+		female = no
+		age = 28
+	}
+	create_character = {
+		random_traits = yes
+		dynasty = random
+		religion = THIS
+		culture = THIS
+		female = yes
+		age = 16
+	}
+	create_character = {
+		random_traits = yes
+		dynasty = random
+		religion = THIS
+		culture = THIS
+		female = yes
+		age = 17
+	}
+}
+
+set_feudal_government_effect = {
+	if = {
+		limit = {
+			is_government_potential = bhutanese_decayed_government
+		}
+		set_government_type = bhutanese_decayed_government
+	}
+	else_if = {
+		limit = {
+			is_government_potential = bhutanese_restored_government
+		}
+		set_government_type = bhutanese_restored_government
+	}
+	else_if = {
+		limit = {
+			is_government_potential = colonial_government
+		}
+		set_government_type = colonial_government
+	}
+	else_if = {
+		limit = {
+			is_government_potential = calvinist_government
+		}
+		set_government_type = calvinist_government
+	}
+	else_if = {
+		limit = {
+			is_government_potential = theocratic_feudal_government
+		}
+		set_government_type = theocratic_feudal_government
+	}
+	else_if = {
+		limit = {
+			is_government_potential = eastern_feudal
+		}
+		set_government_type = eastern_feudal
+	}
+	else_if = {
+		limit = {
+			is_government_potential = indian_feudal
+		}
+		set_government_type = indian_feudal
+	}
+	else_if = {
+		limit = {
+			is_government_potential = muslim_government
+		}
+		set_government_type = muslim_government
+	}
+	else = {
+		set_government_type = feudal_government
+	}
+}
+clear_american_invader_flag_effect = {
+	clr_global_flag = americans_are_yankees
+	clr_global_flag = americans_are_americanists
+	clr_global_flag = americans_are_appalachian
+	clr_global_flag = americans_are_dixies
+	clr_global_flag = americans_are_hudsonian
+	clr_global_flag = americans_are_ontarian
+	clr_global_flag = americans_are_ursuline
+}
+get_prevs_religious_branch = {
+	if = {
+		limit = {
+			PREV = { trait = shaivist_hindu }
+		}
+		add_trait = shaivist_hindu
+	}
+	if = {
+		limit = {
+			PREV = { trait = vaishnavist_hindu }
+		}
+		add_trait = vaishnavist_hindu
+	}
+	if = {
+		limit = {
+			PREV = { trait = shaktist_hindu }
+		}
+		add_trait = shaktist_hindu
+	}
+	if = {
+		limit = {
+			PREV = { trait = smartist_hindu }
+		}
+		add_trait = smartist_hindu
+	}
+	if = {
+		limit = {
+			PREV = { trait = barata_ganda_hindu }
+		}
+		add_trait = barata_ganda_hindu
+	}
+	if = {
+		limit = {
+			PREV = { trait = savarkari_hindu }
+		}
+		add_trait = savarkari_hindu
+	}
+	if = {
+		limit = {
+			PREV = { trait = aryasamajist_hindu }
+		}
+		add_trait = aryasamajist_hindu
+	}
+	if = {
+		limit = {
+			PREV = { trait = vaishna_ganda_hindu }
+		}
+		add_trait = vaishna_ganda_hindu
+	}
+	if = {
+		limit = {
+			PREV = { trait = brahamo_hindu }
+		}
+		add_trait = brahamo_hindu
+	}
+	if = {
+		limit = {
+			PREV = { trait = ramakrishna_hindu }
+		}
+		add_trait = ramakrishna_hindu
+	}
+	if = {
+		limit = {
+			PREV = { trait = mahayana_buddhist }
+		}
+		add_trait = mahayana_buddhist
+	}
+	if = {
+		limit = {
+			PREV = { trait = vajrayana_buddhist }
+		}
+		add_trait = vajrayana_buddhist
+	}
+	if = {
+		limit = {
+			PREV = { trait = theravada_buddhist }
+		}
+		add_trait = theravada_buddhist
+	}
+	if = {
+		limit = {
+			PREV = { trait = digambara_jain }
+		}
+		add_trait = digambara_jain
+	}
+	if = {
+		limit = {
+			PREV = { trait = svetambara_jain }
+		}
+		add_trait = svetambara_jain
+	}
+	if = {
+		limit = { PREV = { trait = pagan_branch_1 } }
+		add_trait = pagan_branch_1
+	}
+	if = {
+		limit = { PREV = { trait = pagan_branch_2 } }
+		add_trait = pagan_branch_2
+	}
+	if = {
+		limit = { PREV = { trait = pagan_branch_3 } }
+		add_trait = pagan_branch_3
+	}
+	if = {
+		limit = { PREV = { trait = pagan_branch_4 } }
+		add_trait = pagan_branch_4
+	}
+	if = {
+		limit = {
+			PREV = { trait = orthodox_athos }
+		}
+		add_trait = orthodox_athos
+	}
+	if = {
+		limit = {
+			PREV = { trait = orthodox_andrian }
+		}
+		add_trait = orthodox_andrian
+	}
+	if = {
+		limit = {
+			PREV = { trait = orthodox_giorgi }
+		}
+		add_trait = orthodox_giorgi
+	}
+	if = {
+		limit = {
+			PREV = { trait = orthodox_mykola }
+		}
+		add_trait = orthodox_mykola
+	}
+	if = {
+		limit = {
+			PREV = { trait = orthodox_vasiliy }
+		}
+		add_trait = orthodox_vasiliy
+	}
+}
+holy_war_start_effect = {
+	if = {
+		limit = {
+			NOT = { has_character_flag = the_prophet }
+			has_game_rule = { name = holy_war_cooldown_rule value = on }
+		}
+		custom_tooltip = {
+			text = holy_war_cooldown_ctt
+			hidden_tooltip = {
+				remove_character_modifier = holy_war_cooldown
+				add_character_modifier = {
+					name = holy_war_cooldown
+					duration = 1825
+				}
+			}
+		}
+	}
+}
+eating_achievements_effect = {
+	hidden_tooltip = {
+		if = {
+			limit = {
+				NOT = {
+					event_target:achievement_eater = {
+						always = yes
+					}
+				}
+			}
+			killer = {
+				save_event_target_as = achievement_eater
+			}
+		}
+		if = {
+			limit = {
+				culture = british
+				event_target:achievement_eater = {
+					culture_group = germanic
+				}
+			}
+			event_target:achievement_eater = {
+				achievement_on_british_neck_done_effect = yes
+			}
+		}
+	}
+}
+abandon_jugo_effect = {
+	if = {#if you have a secret religion, out yourself
+		limit = {
+			has_secret_religion = yes
+		}
+		convert_to_secret_religion = yes
+	}
+	else_if = {
+		limit = {
+			liege = {
+				OR = {
+					culture = PREV
+					dynasty = PREV
+				}
+			}
+		}
+		religion = liege
+	}
+	else_if = {
+		limit = {
+			OR = {
+				culture = croatian
+				culture = slovenian
+			}
+		}
+		religion = catholic
+	}
+	else_if = {
+		limit = {
+			culture = bosnian
+		}
+		religion = sunni
+	}
+	else_if = {
+		limit = {
+			OR = {
+				culture = serbian
+				culture = bulgarian
+			}
+		}
+		religion = orthodox
+	}
+	else = {
+		random_list = {
+			40 = {
+				religion = catholic
+			}
+			40 = {
+				religion = orthodox
+			}
+			20 = {
+				religion = sunni
+			}
+		}
+	}
+}
+calc_yugo_crisis_effect = {
+	if = {
+		limit = {
+			check_variable = { which = global_yugo_crisis value = 60 }
+		}
+		if = {
+			limit = {
+				NOT = { has_character_modifier = yugo_crisis_4 }
+			}
+			yugo_crisis_remove_modifiers_effect = yes
+			add_character_modifier = { name = yugo_crisis_4 days = -1 }
+			character_event = { id = yugoslav.74 }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { which = global_yugo_crisis value = 40 }
+		}
+		if = {
+			limit = {
+				NOT = { has_character_modifier = yugo_crisis_3 }
+			}
+			yugo_crisis_remove_modifiers_effect = yes
+			add_character_modifier = { name = yugo_crisis_3 days = -1 }
+			character_event = { id = yugoslav.73 }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { which = global_yugo_crisis value = 20 }
+		}
+		if = {
+			limit = {
+				NOT = { has_character_modifier = yugo_crisis_2 }
+			}
+			yugo_crisis_remove_modifiers_effect = yes
+			add_character_modifier = { name = yugo_crisis_2 days = -1 }
+			character_event = { id = yugoslav.72 }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { which = global_yugo_crisis value = 0 }
+		}
+		if = {
+			limit = {
+				NOT = { has_character_modifier = yugo_crisis_1 }
+			}
+			yugo_crisis_remove_modifiers_effect = yes
+			add_character_modifier = { name = yugo_crisis_1 days = -1 }
+			character_event = { id = yugoslav.71 }
+		}
+	}
+	else = {
+		if = {
+			limit = {
+				NOT = { has_character_modifier = yugo_crisis_0 }
+			}
+			yugo_crisis_remove_modifiers_effect = yes
+			add_character_modifier = { name = yugo_crisis_0 days = -1 }
+			character_event = { id = yugoslav.70 }
+		}
+	}
+}
+yugo_crisis_tobla_effect = {
+	if = {
+		limit = { has_regent = yes }
+		regent = {
+			save_event_target_as = governing
+		}
+	}
+	else = {
+		ROOT = {
+			save_event_target_as = governing
+		}
+	}
+	random_list = {
+		15 = {
+			event_target:governing = {
+				random = {
+					chance = 40
+					job_event_mtth_modifier_inverted_diplomacy_score = yes
+					PREV = { set_character_flag = yugo_success }
+				}
+			}
+		}
+		15 = {
+			event_target:governing = {
+				random = {
+					chance = 40
+					job_event_mtth_modifier_inverted_martial_score = yes
+					PREV = { set_character_flag = yugo_success }
+				}
+			}
+		}
+		15 = {
+			event_target:governing = {
+				random = {
+					chance = 40
+					job_event_mtth_modifier_inverted_stewardship_score = yes
+					PREV = { set_character_flag = yugo_success }
+				}
+			}
+		}
+		15 = {
+			event_target:governing = {
+				random = {
+					chance = 40
+					job_event_mtth_modifier_inverted_intrigue_score = yes
+					PREV = { set_character_flag = yugo_success }
+				}
+			}
+		}
+		15 = {
+			event_target:governing = {
+				random = {
+					chance = 40
+					job_event_mtth_modifier_inverted_learning_score = yes
+					PREV = { set_character_flag = yugo_success }
+				}
+			}
+		}
+		5 = {
+			modifier = {
+				factor = 0
+				NOT = { job_chancellor = { always = yes } }
+			}
+			job_chancellor = {
+				random = {
+					chance = 35
+					job_event_mtth_modifier_inverted_diplomacy_score = yes
+					PREV = { set_character_flag = yugo_success }
+				}
+			}
+		}
+		5 = {
+			modifier = {
+				factor = 0
+				NOT = { job_marshal = { always = yes } }
+			}
+			job_marshal = {
+				random = {
+					chance = 35
+					job_event_mtth_modifier_inverted_martial_score = yes
+					PREV = { set_character_flag = yugo_success }
+				}
+			}
+		}
+		5 = {
+			modifier = {
+				factor = 0
+				NOT = { job_treasurer = { always = yes } }
+			}
+			job_treasurer = {
+				random = {
+					chance = 35
+					job_event_mtth_modifier_inverted_stewardship_score = yes
+					PREV = { set_character_flag = yugo_success }
+				}
+			}
+		}
+		5 = {
+			modifier = {
+				factor = 0
+				NOT = { job_spymaster = { always = yes } }
+			}
+			job_spymaster = {
+				random = {
+					chance = 35
+					job_event_mtth_modifier_inverted_diplomacy_score = yes
+					PREV = { set_character_flag = yugo_success }
+				}
+			}
+		}
+		5 = {
+			modifier = {
+				factor = 0
+				NOT = { job_spiritual = { always = yes } }
+			}
+			job_spiritual = {
+				random = {
+					chance = 35
+					job_event_mtth_modifier_inverted_learning_score = yes
+					PREV = { set_character_flag = yugo_success }
+				}
+			}
+		}
+		20 = {
+			modifier = {
+				factor = 0
+				NOT = { religion = jugoslavist }
+			}
+			religion_head = {
+				random = {
+					chance = 35
+					job_event_mtth_modifier_inverted_learning_score = yes
+					modifier = {
+						factor = 0.8
+						NOT = { piety = 0 }
+					}
+					modifier = {
+						factor = 1.15
+						piety = 100
+					}
+					modifier = {
+						factor = 1.15
+						piety = 250
+					}
+					modifier = {
+						factor = 1.15
+						piety = 500
+					}
+					PREV = { set_character_flag = yugo_success }
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_character_flag = yugo_success
+		}
+		yugo_crisis_good_effect = yes
+	}
+	else = {
+		yugo_crisis_bad_effect = yes
+	}
+}
+yugo_crisis_good_effect = {
+	hidden_tooltip = {
+		change_variable = { which = global_yugo_crisis value = -2 }
+		random = {
+			chance = 50
+			change_variable = { which = global_yugo_crisis value = -1 }
+		}
+		if = {
+			limit = {
+				religion = jugoslavist
+			}
+			random = {
+				chance = 50
+				religion_authority = { modifier = yugo_crisis_good_event }
+			}
+		}
+	}
+}
+yugo_crisis_bad_effect = {
+	hidden_tooltip = {
+		change_variable = { which = global_yugo_crisis value = 2 }
+		random = {
+			chance = 50
+			change_variable = { which = global_yugo_crisis value = 1 }
+		}
+		if = {
+			limit = {
+				religion = jugoslavist
+			}
+			random = {
+				chance = 50
+				religion_authority = { modifier = yugo_crisis_bad_event }
+			}
+		}
+	}
+}
+yugo_crisis_remove_modifiers_effect = {
+	if = {
+		limit = { has_character_modifier = yugo_crisis_4 }
+		remove_character_modifier = yugo_crisis_4
+	}
+	if = {
+		limit = { has_character_modifier = yugo_crisis_3 }
+		remove_character_modifier = yugo_crisis_3
+	}
+	if = {
+		limit = { has_character_modifier = yugo_crisis_2 }
+		remove_character_modifier = yugo_crisis_2
+	}
+	if = {
+		limit = { has_character_modifier = yugo_crisis_1 }
+		remove_character_modifier = yugo_crisis_1
+	}
+	if = {
+		limit = { has_character_modifier = yugo_crisis_0 }
+		remove_character_modifier = yugo_crisis_0
+	}
+}
+set_de_jure_if_controls_effect = {
+	PREVPREV = { save_event_target_as = creator }
+	if = {
+		limit = {
+			event_target:creator = {
+				PREV = {
+					province_completely_controls_trigger = yes
+				}
+			}
+		}
+		de_jure_liege = PREV
+	}
+}
+general_on_add_effect = {
+	hidden_tooltip = { fire_haruspicy_event_effect = yes }
+	if = {
+		limit = { defender = { is_offmap_governor = offmap_china } }
+		attacker = {  
+			sound_effect = china_angered_emperor
+			detract_grace_super_huge_effect = yes 
+		}
+	}
+	attacker = {
+		show_scope_change = no
+		if = {
+			limit = { government = confederation_government }
+			if = {
+				limit = { has_character_flag = confederation_ignore_declare_malus }
+				clr_character_flag = confederation_ignore_declare_malus
+			}
+			else = {
+				add_character_modifier = {
+					name = confederation_declared_war
+					stacking = yes
+					years = 10
+				}
+			}
+		}
+	}
+}
+spread_revolution_on_success_title_effect = {
+	custom_tooltip = {
+		text = religious_new_republic_cb_succ_tip
+		hidden_tooltip = {
+			FROM = {
+				random_realm_title = {
+					limit = {
+						tier = COUNT
+						kingdom = { title = PREVPREVPREV }
+					}
+					preferred_limit = {
+						location = {
+							religion = ROOT
+						}
+					}
+					location = {
+						create_character = {
+							religion = ROOT
+							culture = THIS
+							dynasty = random
+							random_traits = yes
+							female = no
+							age = 20
+							health = 7
+							fertility = 0.7
+						}
+						new_character = {
+							random_list = {
+								1 = { change_learning = 2 }
+								1 = { change_diplomacy = 2 }
+								1 = { change_stewardship = 2 }
+								1 = { change_intrigue = 2 }
+								1 = { change_martial = 2 }
+							}
+							random_list = {
+								1 = { change_learning = 2 }
+								1 = { change_diplomacy = 2 }
+								1 = { change_stewardship = 2 }
+								1 = { change_intrigue = 2 }
+								1 = { change_martial = 2 }
+							}
+							random_list = {
+								1 = { change_learning = 3 }
+								1 = { change_diplomacy = 3 }
+								1 = { change_stewardship = 3 }
+								1 = { change_intrigue = 3 }
+								1 = { change_martial = 3 }
+							}
+							remove_trait = cynical
+							add_trait = zealous
+							wealth = 500
+							prestige = 500
+							piety = 500
+							save_event_target_as = new_ruler
+							usurp_title = { target = PREVPREV type = invasion }
+							opinion = { modifier = jacobinist_liberated_me who = ROOT }
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_holder = no
+				}
+				usurp_title = { target = event_target:new_ruler type = invasion }
+			}
+			else = {
+				event_target:new_ruler = {
+					create_title = {
+						tier = KING
+						landless = no
+						temporary = no
+						custom_created = yes
+						culture = event_target:new_ruler
+						holder = event_target:new_ruler
+						name = "REVOLUTIONARY_KINGDOM"
+						base_title = PREV
+					}
+					new_title = {
+						save_persistent_event_target = { name = jacobinist_base_kingdom scope = PREVPREV }
+					}
+				}
+			}
+			
+			event_target:new_ruler = {
+				vassalize_or_take_under_title = {
+					title = PREV
+					enemy = FROM
+					same_religion = yes # Only vassalize rulers of my religion
+					is_religious = yes
+					type = holy_war
+					as_if_allied_to = ROOT
+				}
+				set_defacto_liege = THIS
+				if = {
+					limit = { religion = jacobinist }
+					save_persistent_event_target = { name = jacobinist_revolution_target scope = PREV }
+					add_character_modifier = { name = jacobinist_revolution_leader duration = -1 }
+				}
+				#set_truce = { who = FROM years = 5 }
+				#set_truce = { who = ROOT years = 5 }
+				#ROOT = { set_truce = { who = PREV years = 5 } }
+			}
+			
+			if = {
+				limit = {
+					has_holder = yes
+					holder_scope = {
+						OR = {
+							character = FROM
+							is_liege_or_above = FROM
+						}
+					}
+				}
+				destroy_landed_title = THIS
+				usurp_title_only = { target = event_target:new_ruler type = invasion }
+				make_primary_title = yes
+				event_target:new_ruler = {
+					any_demesne_title = {
+						limit = {
+							tier = KING
+							is_primary_holder_title = no
+						}
+						destroy_landed_title = THIS
+					}
+				}
+			}
+			event_target:new_ruler = {
+				if = {
+					limit = {
+						primary_title = {
+							capital_scope = {
+								county = {
+									holder_scope = {
+										character = event_target:new_ruler
+									}
+								}
+							}
+						}
+					}
+					primary_title = {
+						capital_scope = {
+							event_target:new_ruler = {
+								capital = PREV
+							}
+						}
+					}
+				}
+				capital_scope = {
+					duchy = {
+						save_event_target_as = capital_duchy
+					}
+				}
+				any_realm_province = {
+					limit = {
+						OR = {
+							religion = event_target:new_ruler
+							duchy = {
+								title = event_target:capital_duchy
+							}
+						}
+					}
+					any_province_holding = {
+						limit = {
+							owner = {
+								same_realm = event_target:new_ruler
+							}
+						}
+						refill_holding_levy = yes
+					}
+				}
+			}
+			
+			ROOT = {
+				hidden_tooltip = {
+					if = {
+						limit = {
+							has_ambition = obj_strengthen_religion
+						}
+						change_variable = { which = strengthen_religion value = 1 }
+					}
+				}
+			}
+		}
+	}
+
+	hidden_tooltip = {
+		check_if_reconquista_finished_effect = yes
+		FROM = {
+			landless_pope_effect = yes
+		}
+	}
+}
+spread_revolution_on_success_effect = {
+	hidden_tooltip = { 
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			
+			participation_scaled_piety = 100
+			participation_scaled_prestige = 50
+			if = {
+				limit = {
+					has_ambition = obj_strengthen_religion
+				}
+				change_variable = { which = strengthen_religion value = 1 }
+			}
+		}
+	}
+	
+	ROOT = {
+		show_scope_change = no
+		participation_scaled_piety = 500
+		participation_scaled_prestige = 250
+		religion_authority = {
+			modifier = successful_revolution
+			years = 20
+		}
+	}
+	FROM = { show_scope_change = no piety = -100 }
+	FROM = { show_scope_change = no prestige = -50 }
+}
+spread_revolution_on_fail_effect = {	
+	ROOT = { 
+		show_scope_change = no
+		piety = -125 
+		prestige = -250
+	}
+}
+spread_revolution_on_reverse_demand_effect = {
+	ROOT = {
+		show_scope_change = no
+		transfer_scaled_wealth = {
+			to = FROM
+			value = 4.0
+		}
+		piety = -250
+		prestige = -500
+	}
+	FROM = {
+		show_scope_change = no
+		participation_scaled_piety = 200
+		participation_scaled_prestige = 100
+		if = {
+			limit = {
+				uses_decadence = yes
+			}
+			participation_scaled_decadence = -10
+		}
+	}
+	any_defender = {
+		limit = { NOT = { character = FROM } }
+		hidden_tooltip = { 
+			participation_scaled_piety = 200
+			participation_scaled_prestige = 100
+			if = {
+				limit = {
+					uses_decadence = yes
+				}
+				participation_scaled_decadence = -10
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						has_ambition = obj_strengthen_religion
+					}
+					change_variable = { which = strengthen_religion value = 1 }
+				}
+			}
+		}
+	}
+	ROOT = { 
+		religion_authority = {
+			modifier = failed_revolution
+			years = 20
+		}
+	}
+	FROM = { 
+		religion_authority = {
+			modifier = won_holy_war
+			years = 20
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					has_ambition = obj_strengthen_religion
+				}
+				change_variable = { which = strengthen_religion value = 1 }
+			}
+		}
+	}
+}
+create_beast_effect = {
+	create_random_soldier = {
+		random_traits = yes
+		name = "Beast"
+		culture = bear
+		dynasty = none
+		female = no
+		attributes = {
+			diplomacy = 8
+			learning = 8
+			stewardship = 8
+			intrigue = 8
+			martial = 8
+		}
+	}
+	new_character = {
+		remove_disease_trait_effect = yes
+		clear_disease_level_effect = yes
+		remove_disease_flags_effect = yes
+		remove_education_effect = yes
+		remove_lifestyle_trait_effect = yes
+		remove_all_negative_congenital_traits_effect = yes
+		
+		add_trait = robust
+		add_trait = strong
+		add_trait = giant
+		add_trait = ugly
+		
+		add_trait = erudite
+		add_trait = scholar
+		add_trait = mastermind_theologian
+		add_trait = depressed
+		add_trait = kind
+		save_event_target_as = beast
+	}
+}
+beast_vanish_effect = {
+	hidden_tooltip = {
+		event_target:beast = { 
+			any_artifact = { destroy_artifact = yes }
+			death = {
+				death_reason = death_missing
+			}
+		}
+	}
+}
+spawn_belle_effect = {
+	create_character = {
+		random_traits = yes
+		name = "Belle"
+		dynasty = actually_culture
+		female = yes
+		age = 17
+	}
+	hidden_tooltip = {
+		new_character = {
+			remove_disease_trait_effect = yes
+			clear_disease_level_effect = yes
+			remove_disease_flags_effect = yes
+			remove_all_negative_congenital_traits_effect = yes
+			
+			add_trait = erudite
+			add_trait = fair
+			add_trait = quick
+			save_event_target_as = belle
+			hidden_tooltip = {
+				if = {
+					limit = {
+						has_dharmic_religion_trigger = yes
+					}
+					add_trait = kshatriya
+					character_event = { id = RoI.30121 }
+				}
+				if = {
+					limit = {
+						OR = {
+							religion = hellenic_pagan
+							religion = hellenic_pagan_reformed
+							has_religion_feature = religion_astrology
+						}
+					}
+					hidden_tooltip = { add_western_zodiac_trait_effect = yes }
+				}
+				if = {
+					limit = {
+						has_religion_feature = religion_no_leader
+						religion_group = pagan_group
+					}
+					random_list = {  
+						5 = {
+							add_trait = pagan_branch_1
+						}
+						25 = {
+							add_trait = pagan_branch_2
+						}
+						25 = {
+							add_trait = pagan_branch_3
+						}
+						25 = {
+							add_trait = pagan_branch_4
+						}
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			is_female = no
+			NOT = { trait = homosexual }
+		}
+		add_lover = event_target:belle
+		hidden_tooltip = {
+			event_target:belle = { remove_trait = homosexual }
+		}
+	}
+	else_if = { # Is lesbian Belle some kind of fetish?
+		limit = {
+			is_female = yes
+			trait = homosexual
+		}
+		add_lover = event_target:belle
+		hidden_tooltip = {
+			event_target:belle = { add_trait = homosexual }
+		}
+	}
+	else = {
+		add_friend = event_target:belle
+	}
+}
+novelist_switch_effect = {
+	if = {
+		limit = { should_switch_to_novelist_trigger = yes }
+		persistent_event_target:novelist_title = {
+			grant_title = PREVPREV
+			save_event_target_as = event_target:title_to_destroy
+		}
+		persistent_event_target:non_novelist_title = {
+			copy_title_history = PREV
+			destroy_landed_title = yes
+		}
+		if = {
+			limit = { has_title_flag = novelist_shortname }
+			set_short_name = yes
+		}
+		else = {
+			set_short_name = no
+		}
+		set_name = persistent_event_target:novelist_title
+		adjective = "novelist_title_adjective"
+		set_coa = persistent_event_target:novelist_title
+		copy_title_history = persistent_event_target:novelist_title
+		set_title_flag = novelist_title
+		holder_scope = { character_event = { id = novelist.103 } }
+	}
+	else_if = {
+		limit = { should_switch_to_non_novelist_trigger = yes }
+		persistent_event_target:non_novelist_title = {
+			grant_title = PREVPREV
+			save_event_target_as = event_target:title_to_destroy
+		}
+		persistent_event_target:novelist_title = {
+			copy_title_history = PREV
+			destroy_landed_title = yes
+		}
+		if = {
+			limit = { has_title_flag = non_novelist_shortname }
+			set_short_name = yes
+		}
+		else = {
+			set_short_name = no
+		}
+		set_name = ""
+		adjective = ""
+		reset_coa = THIS
+		copy_title_history = persistent_event_target:non_novelist_title
+		clr_title_flag = novelist_title
+		holder_scope = { character_event = { id = novelist.103 } }
+	}
+}
+muslim_switch_effect = {
+	if = {
+		limit = { should_switch_to_muslim_trigger = yes }
+		persistent_event_target:muslim_title = { grant_title = PREVPREV }
+		persistent_event_target:non_muslim_title = {
+			copy_title_history = PREV
+			destroy_landed_title = yes
+		}
+		if = {
+			limit = { has_title_flag = muslim_shortname }
+			set_short_name = yes
+		}
+		else = {
+			set_short_name = no
+		}
+		set_name = persistent_event_target:muslim_title
+		adjective = "muslim_title_adjective"
+		set_coa = persistent_event_target:muslim_title
+		copy_title_history = persistent_event_target:muslim_title
+		set_title_flag = muslim_title
+		destroy_landed_title = persistent_event_target:muslim_title
+	}
+	else_if = {
+		limit = { should_switch_to_non_muslim_trigger = yes }
+		persistent_event_target:non_muslim_title = { grant_title = PREVPREV }
+		persistent_event_target:muslim_title = {
+			copy_title_history = PREV
+			destroy_landed_title = yes
+		}
+		if = {
+			limit = { has_title_flag = non_muslim_shortname }
+			set_short_name = yes
+		}
+		else = {
+			set_short_name = no
+		}
+		set_name = ""
+		adjective = ""
+		reset_coa = THIS
+		copy_title_history = persistent_event_target:non_muslim_title
+		clr_title_flag = muslim_title
+		destroy_landed_title = persistent_event_target:non_muslim_title
+	}
+}
+jewish_switch_effect = {
+	if = {
+		limit = { should_switch_to_jewish_trigger = yes }
+		persistent_event_target:jewish_title = { grant_title = PREVPREV }
+		persistent_event_target:non_jewish_title = {
+			copy_title_history = PREV
+			destroy_landed_title = yes
+		}
+		if = {
+			limit = { has_title_flag = jewish_shortname }
+			set_short_name = yes
+		}
+		else = {
+			set_short_name = no
+		}
+		set_name = persistent_event_target:jewish_title
+		adjective = "jewish_title_adjective"
+		set_coa = persistent_event_target:jewish_title
+		copy_title_history = persistent_event_target:jewish_title
+		set_title_flag = jewish_title
+		destroy_landed_title = persistent_event_target:jewish_title
+	}
+	else_if = {
+		limit = { should_switch_to_non_jewish_trigger = yes }
+		persistent_event_target:non_jewish_title = { grant_title = PREVPREV }
+		persistent_event_target:jewish_title = {
+			copy_title_history = PREV
+			destroy_landed_title = yes
+		}
+		if = {
+			limit = { has_title_flag = non_jewish_shortname }
+			set_short_name = yes
+		}
+		else = {
+			set_short_name = no
+		}
+		set_name = ""
+		adjective = ""
+		reset_coa = THIS
+		copy_title_history = persistent_event_target:non_jewish_title
+		clr_title_flag = jewish_title
+		destroy_landed_title = persistent_event_target:non_jewish_title
+	}
+}
+christian_switch_effect = {
+	if = {
+		limit = { should_switch_to_christian_trigger = yes }
+		persistent_event_target:christian_title = { grant_title = PREVPREV }
+		persistent_event_target:non_christian_title = {
+			copy_title_history = PREV
+			destroy_landed_title = yes
+		}
+		if = {
+			limit = { has_title_flag = christian_shortname }
+			set_short_name = yes
+		}
+		else = {
+			set_short_name = no
+		}
+		set_name = persistent_event_target:christian_title
+		adjective = "christian_title_adjective"
+		set_coa = persistent_event_target:christian_title
+		copy_title_history = persistent_event_target:christian_title
+		set_title_flag = christian_title
+		destroy_landed_title = persistent_event_target:christian_title
+	}
+	else_if = {
+		limit = { should_switch_to_non_christian_trigger = yes }
+		persistent_event_target:non_christian_title = { grant_title = PREVPREV }
+		persistent_event_target:christian_title = {
+			copy_title_history = PREV
+			destroy_landed_title = yes
+		}
+		if = {
+			limit = { has_title_flag = non_christian_shortname }
+			set_short_name = yes
+		}
+		else = {
+			set_short_name = no
+		}
+		set_name = ""
+		adjective = ""
+		reset_coa = THIS
+		copy_title_history = persistent_event_target:non_christian_title
+		clr_title_flag = christian_title
+		destroy_landed_title = persistent_event_target:non_christian_title
+	}
+}
+spawn_robot_army = {
+	spawn_unit = {
+		province = PREV
+		troops =
+		{
+			heavy_infantry = { 10000 10000 }
+			gunmen = { 10000 10000 }
+			knights = { 10000 10000 }
+		}
+	}
+}
+spawn_sleeping_beauty_effect = {
+	create_character = {
+		random_traits = yes
+		dynasty = actually_culture
+		culture = event_target:sleeping_beauty_province
+		female = yes
+		age = 117
+	}
+	new_character = {
+		add_age = -100
+		remove_disease_trait_effect = yes
+		clear_disease_level_effect = yes
+		remove_disease_flags_effect = yes
+		remove_all_negative_congenital_traits_effect = yes
+		add_trait = fair
+		add_trait = slothful
+		give_nickname = nick_the_sleeping_beauty
+		save_event_target_as = sleeping_beauty
+		if = {
+			limit = {
+				ROOT = {
+					is_female = yes
+				}
+			}
+			add_trait = homosexual
+		}
+		random_playable_ruler = {
+			limit = {
+				is_within_diplo_range = ROOT
+				any_demesne_title = {
+					OR = {
+						tier = DUKE
+						tier = KING
+					}
+					is_landless_type_title = no
+					is_primary_type_title = no
+					temporary = no
+				}
+				NOT = { character = ROOT }
+			}
+			random_demesne_title = {
+				limit = {
+					OR = {
+						tier = DUKE
+						tier = KING
+					}
+					is_landless_type_title = no
+					is_primary_type_title = no
+					temporary = no
+				}
+				add_weak_claim = PREVPREV
+				save_event_target_as = princess_title
+			}
+		}
+	}
+}
+searching_god_cleanup_effect = {
+	hidden_tooltip = {
+		clr_character_flag = searching_god_messed_up
+		set_variable = { which = searching_god_score value = 0 }
+		set_variable = { which = searching_god_delay value = 0 }
+		clear_delayed_event = { id = ZOR.1002 }
+		clear_delayed_event = { id = ZOR.1003 }
+	}
+	if = {
+		limit = {
+			has_character_modifier = searching_for_the_reincarnation_of_god
+		}
+		remove_character_modifier = searching_for_the_reincarnation_of_god
+	}
+	if = {
+		limit = {
+			has_character_modifier = searching_god_diplomacy
+		}
+		remove_character_modifier = searching_god_diplomacy
+	}
+	if = {
+		limit = {
+			has_character_modifier = searching_god_martial
+		}
+		remove_character_modifier = searching_god_martial
+	}
+	if = {
+		limit = {
+			has_character_modifier = searching_god_stewardship
+		}
+		remove_character_modifier = searching_god_stewardship
+	}
+	if = {
+		limit = {
+			has_character_modifier = searching_god_intrigue
+		}
+		remove_character_modifier = searching_god_intrigue
+	}
+	if = {
+		limit = {
+			has_character_modifier = searching_god_learning
+		}
+		remove_character_modifier = searching_god_learning
+	}
+}
+
+soitoskan_settlement_effect = {
+	hidden_tooltip = {
+		# Change name of Avaria to Hungary if relevant.
+		if = {
+			limit = {
+				FROM = {
+					culture = soitoskan
+					has_dynasty_flag = soitoskan_migration_dynasty
+				}
+				location = {
+					kingdom = { title = k_khorasan }
+				}
+				OR = {
+					k_khorasan = {
+						has_holder = no
+					}
+					FROM = {
+						has_landed_title = k_khorasan
+					}
+				}
+			}
+			FROM = {
+				k_khorasan = {
+					any_direct_de_jure_vassal_title = {
+						limit = {
+							tier = DUKE
+						}
+						add_claim = PREVPREV
+					}
+				}
+				# plus two
+				random_realm_province = {
+					limit = {
+						NOT = { culture = ROOT_FROM }
+						kingdom = { title = k_khorasan }
+						num_of_settlements = 1
+						any_neighbor_province = {
+							culture = ROOT_FROM
+							religion = ROOT_FROM
+						}
+					}
+					culture = ROOT_FROM
+					religion = ROOT_FROM
+				}
+				random_realm_province = {
+					limit = {
+						NOT = { culture = ROOT_FROM }
+						kingdom = { title = k_khorasan }
+						num_of_settlements = 1
+						any_neighbor_province = {
+							culture = ROOT_FROM
+							religion = ROOT_FROM
+						}
+					}
+					culture = ROOT_FROM
+					religion = ROOT_FROM
+				}
+
+				grant_title = k_khorasan
+				narrative_event = { id = railroad.1002 }
+			}
+		}
+	}
+}
