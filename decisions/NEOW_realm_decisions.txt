@@ -916,9 +916,19 @@ decisions = {
 		allow = {
 			form_empire_allow = yes
 			#Control Czech, Poland & Slovakia
-				k_bohemia = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_poland = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_slovakia = { show_scope_change = no province_completely_controls_trigger = yes }
+				conditional_tooltip = {
+					trigger = { k_slovakia = { is_titular = no } }
+					k_slovakia = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
+				conditional_tooltip = {
+					trigger = { k_bohemia = { is_titular = no } }
+					k_bohemia = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
+				conditional_tooltip = {
+					trigger = { k_czechoslovakia = { is_titular = no } }
+					k_czechoslovakia = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
 		}
 
 		effect = {
@@ -956,10 +966,12 @@ decisions = {
 
 			hidden_tooltip = {
 				###Poland, Bohemia and Slovaki unite!
-				k_bohemia = { de_jure_liege = e_zapadoslavia }
 				k_poland = { de_jure_liege = e_zapadoslavia }
-				k_slovakia = { de_jure_liege = e_zapadoslavia }
-
+				e_zapadoslavia = {
+					k_slovakia 			= { set_de_jure_if_controls_effect = yes }
+					k_bohemia 			= { set_de_jure_if_controls_effect = yes }
+					k_czechoslovakia 	= { set_de_jure_if_controls_effect = yes }
+				}
 				ROOT = {
 					narrative_event = { id = ATEOW_realm_event.99999 }
 				}
