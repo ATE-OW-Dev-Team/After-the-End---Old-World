@@ -1595,6 +1595,95 @@ character_event = {
 		}
 	}
 }
+province_event = {
+	id = ATV.35
+	hide_window = yes
+	trigger = {
+		OR = {
+			religion_group = jewish_group
+			religion = mandaeanism
+			religion = zoroastrian
+		}
+		NOT = {
+			has_province_modifier = clean_religious_practices
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	immediate = {
+		add_province_modifier = { name = clean_religious_practices duration = -1 }
+	}
+}
+province_event = {
+	id = ATV.36
+	hide_window = yes
+	trigger = {
+		NOR = {
+			religion_group = jewish_group
+			religion = mandaeanism
+			religion = zoroastrian
+		}
+		has_province_modifier = clean_religious_practices
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	immediate = {
+		remove_province_modifier = clean_religious_practices 
+	}
+}
+##Armyan Diversity
+character_event = {
+	id = ATV.37
+	hide_window = yes
+	trigger = {
+		NOT = { has_character_flag = diversity }
+		culture = armyan
+	}
+	
+	immediate = {
+		set_character_flag = diversity
+		if = {
+			limit = {
+				NOR = {
+					father_even_if_dead = { always = yes }
+					mother_even_if_dead = { always = yes }
+				}
+			}
+			random_list = {
+				30 = {
+					set_graphical_culture = kazakh
+				}
+				10 = {
+					set_graphical_culture = koryo_saram
+				}
+				60 = {
+					set_graphical_culture = armyan
+				}
+			}
+		}
+		any_child_even_if_dead = {
+			character_event = { id = ATV.38 }
+		}
+	}
+}
+character_event = {
+	id = ATV.38
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		culture = armyan
+	}
+	
+	immediate = {
+		set_character_flag = diversity
+		set_graphical_culture = FROM
+		any_child_even_if_dead = {
+			character_event = { id = ATV.38 }
+		}
+	}
+}
 letter_event = {
     id = ATV.60
     desc = EVTDESC_catholic_aid_request
@@ -1605,7 +1694,6 @@ letter_event = {
         name = EVTOPT_catholic_aid_accept
         join_defender_wars = FROM
         piety = 50
-        add_character_modifier = { name = imperial_favor duration = 1500 }
         hidden_tooltip = {
             FROM = { letter_event = { id = 238 } }
         }
