@@ -75,6 +75,9 @@ narrative_event = {
 	
 	immediate = {
 		set_global_flag = shattered_star
+		k_israel = {
+			destroy_landed_title = THIS
+		}
 		if = {
 			limit = {
 				c_jerusalem = {
@@ -119,6 +122,7 @@ character_event = {
 		is_ruler = yes
 		religion = jewish
 		has_global_flag = shattered_star
+		NOT = {has_character_flag = messianic_loyalist}
 	}
 	mean_time_to_happen = {
 		days = 7
@@ -170,10 +174,11 @@ character_event = {
 	option = { ###Stay Jewish
 		name = israelstuff_3D
 		add_trait = zealous
+		set_character_flag = messianic_loyalist
 		ai_chance = {
 			factor = 10
 			}
-		}		
+		}	
 	}
 
 character_event = {
@@ -634,6 +639,63 @@ letter_event = {
 		clr_character_flag = picking_jewish_school
 	}
 }
+
+character_event = {
+	id = israelstuff.9
+	title = EVTNAME_israelstuff_9
+	desc = EVTDESC_israelstuff_9
+	picture = GFX_evt_jerusalem_captured_jews_soa
+	border = GFX_evt_good_news
+	trigger = {
+			k_israel  = { 
+				holder_scope = {
+					religion = jewish
+				}
+			}
+			NOT = {
+				trait = israeli_messiah
+			}			
+			has_global_flag = shattered_star
+		}
+	
+	immediate = {
+		set_global_flag = superglued_star
+	}
+	option = {
+		name = israelstuff_9A
+		if = {
+			any_child_even_if_dead = {
+				add_trait = israeli_messiah
+			}
+		}
+		add_trait = israeli_messiah
+		remove_global_flag = shattered_star
+	}
+}
+
+character_event = {
+	id = israelstuff.10
+	title = EVTNAME_israelstuff_10
+	desc = EVTDESC_israelstuff_10
+	picture = GFX_evt_bad_news
+	border = GFX_evt_good_news
+	trigger = {
+			trait = israeli_messiah
+			has_global_flag = shattered_star
+			NOT = {
+			has_global_flag = superglued_star
+			}
+		}
+
+	option = {
+		name = israelstuff_10A
+			any_child_even_if_dead = {
+				remove_trait = israeli_messiah
+			}
+			remove_trait = israeli_messiah
+		}
+	}
+
 
 character_event = {
 	id = maaravi.1
