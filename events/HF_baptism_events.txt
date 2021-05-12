@@ -192,7 +192,7 @@ narrative_event = {
 		}
 		text = EVTDESCHFP20003
 	}
-
+}
 
 	picture = GFX_evt_mass_baptism
 	border = GFX_event_narrative_frame_religion
@@ -274,8 +274,8 @@ narrative_event = {
 			}
 			ROOT = { give_nickname = nick_the_exalted }
 		}
-		if = { 
-			limit = { 
+		if = {
+			limit = {
 				NOT = { has_nickname = yes }
 				higher_real_tier_than = DUKE
 				event_target:sponsoring_king = { OR = { religion = islamity religion = bushism religion = voodun } }
@@ -323,7 +323,7 @@ narrative_event = {
 						opinion_effect = no
 					}
 				}
-			} 
+			}
 		}
 		if = { #Increase tribal organization.
 			limit = { 
@@ -398,9 +398,9 @@ narrative_event = {
 							religion_group =  event_target:sponsoring_king
 							religion_group =  event_target:converting_king
 						}
-					 }
+					}
 					narrative_event = { id = HF.20090 } #Notify all other rulers if Converter is King or above
-				} 
+				}
 			}
 		}
 		hidden_tooltip = { 
@@ -568,15 +568,15 @@ narrative_event = {
 		set_character_flag = flag_converted_baptism
 		hidden_tooltip = { # Notify Sponsor of the event
 			event_target:sponsoring_king = {
-				narrative_event = { id = HF.20004 }  
+				narrative_event = { id = HF.20004 }
 			}
 			any_realm_character = { limit = { NOT = { character = ROOT } }
 				narrative_event = { id = HF.20008 }  #Convert vassals and their courtiers
 			}
-		character_event = { id = HF.20036 days = 3 random = 3 } #A new priest arrives. (also starts the post-ceremony events) 
+		character_event = { id = HF.20036 days = 3 random = 3 } #A new priest arrives. (also starts the post-ceremony events)
 		}
 		hidden_tooltip = { #Chance of true_religion vassals revolting.
-			if = { 
+			if = {
 				limit = { 
 					event_target:converting_king = { 
 						OR = {
@@ -585,7 +585,7 @@ narrative_event = {
 								higher_real_tier_than = BARON
 								count = 4
 							}
-							any_vassal = { 
+							any_vassal = {
 								has_character_flag = ai_flag_refuse_conversion
 								higher_real_tier_than = COUNT
 								count = 2
@@ -647,7 +647,7 @@ narrative_event = {
 			}
 		}
 	}
-}
+
 
 #The Baptism itself happens (Sponsor version)
 narrative_event = {
@@ -703,7 +703,7 @@ narrative_event = {
 	}
 	desc = {
 		trigger = {
-			religion = west_african_pagan_reformed
+			OR = { religion = islamity religion = bushism religion = voodun }
 		}
 		text = EVTDESCHFI20004
 	}
@@ -774,7 +774,10 @@ narrative_event = {
 		if = { 
 			limit = { 
 				NOT = { has_nickname = yes }
-				religion_group = christian
+				OR = {
+				    religion_group = christian
+					religion = jugoslavist
+				}	
 			}
 			ROOT = { give_nickname = nick_the_missionary }
 		}
@@ -810,10 +813,6 @@ narrative_event = {
 			limit = { 
 				NOT = { has_nickname = yes }
 				religion_group = pagan_group
-				NOT = { OR = { religion = islamity religion = bushism religion = voodun } }
-				NOT = { religion = khanist }
-				NOT = { religion = zun_pagan_reformed }
-				NOT = { religion = jacobinist }
 				NOT = { religion = hellenic_pagan_reformed }
 			}
 			ROOT = { give_nickname = nick_the_legendary }
@@ -821,7 +820,7 @@ narrative_event = {
 		if = { 
 			limit = { 
 				NOT = { has_nickname = yes }
-				religion = west_african_pagan_reformed
+				OR = { religion = islamity religion = bushism religion = voodun }
 			}
 			ROOT = { give_nickname = nick_the_waking_teacher }
 		}
@@ -854,8 +853,8 @@ narrative_event = {
 		}
 		if = { 
 			limit = { 
-				event_target:converting_king = { 
-					OR = { 
+				event_target:converting_king = {
+					OR = {
 						tier = COUNT
 						tier = DUKE 
 					}
@@ -887,7 +886,6 @@ narrative_event = {
 				years = 20
 			}
 		}
-
 	}
 }
 #Pope notified of your actions.
@@ -1623,7 +1621,7 @@ narrative_event = {
 	desc = {
 		trigger = {
 			NOT  = { has_character_flag = ai_flag_refuse_conversion }
-			event_target:sponsoring_king = { OR = { religion_group = zoroastrian_group religion_group = esoteric }
+			event_target:sponsoring_king = { OR = { religion_group = zoroastrian_group religion_group = esoteric } }
 		}
 		text = EVTDESCHFN20008
 	}
@@ -1644,7 +1642,7 @@ narrative_event = {
 	desc = {
 		trigger = {
 			has_character_flag = ai_flag_refuse_conversion
-			event_target:sponsoring_king = { OR = { religion_group = christian religion = jugoslavist }
+			event_target:sponsoring_king = { OR = { religion_group = christian religion = jugoslavist } }
 		}
 		text = EVTDESCHFQ20008
 	}
@@ -3349,12 +3347,12 @@ character_event = {
 			}
 		}
 		if = { 
-			limit = { secret_religion = zun_pagan }
+			limit = { secret_religion = novelist }
 			any_demesne_province = {
 				random = {
 					chance = 80
 					add_province_modifier = { 
-						name = secret_zun_pagan_community
+						name = secret_novelist_community
 						duration = -1
 					} 
 				}
