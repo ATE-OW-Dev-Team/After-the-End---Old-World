@@ -507,3 +507,50 @@ title_decisions = {
 		}
 	}
 }
+
+decisions = {
+	# Become a Jewish sage
+	monastic_order_become_chacham = {
+		only_playable = yes
+		ai_check_interval = 3
+		
+		from_potential = {
+			has_dlc = "Mystics"
+			is_ruler = yes
+			is_monastic_member_trigger = yes
+			NOT = { society_member_of = monastic_order_stoics } 
+			society_rank == 4
+		}
+		
+		potential = {
+			tier = COUNT
+			location = { NOT = { religion = FROM } }
+			holder_scope = {
+				OR = {
+					is_liege_or_above = FROM
+					character = FROM
+				}
+			}
+		}
+		
+		allow = {
+			FROM = {
+				society_currency >= 1000
+				piety >= 1000
+				learning >= 12
+			}
+		}
+		
+		effect = {
+			FROM = {
+				change_society_currency = -1000
+				piety = -1000
+				hidden_tooltip = { character_event = { id = israelstuff.12 } }
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}
