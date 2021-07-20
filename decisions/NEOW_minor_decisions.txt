@@ -645,15 +645,14 @@ decisions = {
 		potential = {
 			is_playable = yes
 			religion = orthodox
-			has_landed_title = c_ribnita
-			has_landed_title = c_peresechen
-			has_landed_title = c_belgorod
-			has_landed_title = c_tiraspol
 			independent = yes
 			k_orthodox = {
 				NOT = {
 					holder_scope = {
-						religion = orthodox
+						has_landed_title = b_plopi
+						has_landed_title = b_slobozia
+						has_landed_title = b_capriana
+						has_landed_title = b_butuceni
 					}
 				}
 			}
@@ -689,7 +688,8 @@ decisions = {
 			}
 		}
 		effect = {
-			piety = -1000
+			piety = 1000
+			prestige = 500
 			hidden_tooltip = {
 				if = {
 					limit = {
@@ -720,6 +720,57 @@ decisions = {
 						grant_title = PREV
 					}
 					wealth = 500
+				}
+			}
+		}
+	}
+	restore_coptic_papacy = {
+		only_independent = yes
+		is_high_prio = yes
+		ai_check_interval = 36
+		
+		potential = {
+			is_playable = yes
+			religion = koptic
+			independent = yes
+			k_koptic = {
+				NOT = {
+					holder_scope = {
+						has_landed_title = c_alexandria
+					}
+				}
+			}
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		allow = {
+			piety = 1000
+			has_landed_title = e_egypt
+			OR = {
+				owns = 802 # alexandria
+				any_realm_lord = {
+					owns = 802
+				}
+			}
+		}
+		effect = {
+			piety = 1000
+			prestige = 500
+			hidden_tooltip = {
+				if = {
+					limit = {
+						NOT = { is_title_active = k_koptic }
+					}
+					activate_title = { title = k_koptic status = yes }
+				}
+				k_koptic = {
+					holder_scope = {
+						grant_title = c_alexandria
+						wealth = 500
+					}
+					set_preferred_capital = c_alexandria
+					set_defacto_liege = e_egypt
 				}
 			}
 		}
