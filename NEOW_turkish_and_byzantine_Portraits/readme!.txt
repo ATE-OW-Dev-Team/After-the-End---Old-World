@@ -1,1 +1,0 @@
-Use this submod if you have both the Turkish and Byzantine Portrait packs.

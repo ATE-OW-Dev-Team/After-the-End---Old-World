@@ -1,1 +1,0 @@
-Use this submod if you have both Holy Fury and the Celtic portrait pack.
