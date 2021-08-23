@@ -1953,6 +1953,34 @@ decisions = {
 		}
 	}
 	
+	choose_koranist_sect = {
+		only_playable = yes
+		ai_check_interval = 3
+		is_high_prio = yes
+		
+		potential = {
+			OR = {
+				religion = koranist
+			}
+			NOT = {
+				has_character_flag = picking_koranist
+			}
+		}
+		allow = {
+			piety = 500
+		}
+		effect = {
+			set_character_flag = picking_koranist
+			if = {
+				hidden_tooltip = { character_event = { id = koranist.1 } }
+			}
+			piety = -500		
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
 	study_american_philosophy = {
 		only_playable = yes
 		ai_check_interval = 3
@@ -2689,7 +2717,7 @@ targeted_decisions = {
 				trait = zealous
 			}
 		}
-	}	
+	}
 
 	take_morphine = {
 		filter = self
@@ -2749,6 +2777,76 @@ targeted_decisions = {
 		}
 		ai_will_do = {
 			factor = 1
+		}
+	}
+	
+	convert_child_koranist = {
+		ai_check_interval = 60
+		
+		from_potential = {
+			is_playable = yes
+			religion = koranist
+		}
+		potential = {
+			religion = koranist
+			OR = {
+				is_child_of = FROM
+				is_liege_or_above = FROM
+			}
+			NOT = {
+				age = 16
+			}
+		}
+		effect = {
+			hidden_tooltip = {
+				remove_trait = koranist_conservative
+				remove_trait = koranist_moderate
+				remove_trait = koranist_progressive
+			}
+			if = {
+				limit = {
+					FROM = { trait = koranist_conservative }	
+				}
+				add_trait = koranist_conservative
+			}
+			if = {
+				limit = {
+					FROM = { trait = koranist_moderate }	
+				}
+				add_trait = koranist_moderate
+			}
+			if = {
+				limit = {
+					FROM = { trait = koranist_progressive }	
+				}
+				add_trait = koranist_progressive
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 0.15
+			modifier = {
+				factor = 0.7
+				trait = zealous
+			}
+			modifier = {
+				factor = 5
+				FROM = {
+					trait = koranist_conservative
+				}
+			}
+
+			modifier = {
+				factor = 20
+				NOR = {
+					trait = koranist_conservative
+					trait = koranist_moderate
+					trait = koranist_progressive
+				}
+			}
+
 		}
 	}
 	
