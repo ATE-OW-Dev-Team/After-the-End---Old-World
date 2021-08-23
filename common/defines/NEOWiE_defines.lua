@@ -7,7 +7,7 @@ NDefines.NEndGame.DYN1_SCORE = 100000
 NDefines.NEndGame.DYN1_ID = 26560140
 
 NDefines.NEndGame.DYN2_SCORE = 90000
-NDefines.NEndGame.DYN2_ID = 255511121
+NDefines.NEndGame.DYN2_ID = 85511121
 
 NDefines.NEndGame.DYN3_SCORE = 80000
 NDefines.NEndGame.DYN3_ID = 25559129
