@@ -2507,8 +2507,7 @@
 		modifier = { #French Counts also wear the golden band.
 			factor = 0 
 			has_dlc = "Holy Fury"
-			NOT = { culture = frankish }
-			NOT = { culture = occitan }
+			NOT = { culture_group = francophone }
 			lower_real_tier_than = DUKE
 			spouse = { lower_real_tier_than = DUKE }
 		}
@@ -2639,10 +2638,7 @@
 			factor = 0
 			has_dlc = "Holy Fury"
 			is_female = yes
-			OR = {
-				culture = frankish
-				culture = occitan
-			}
+			culture_group = francophone
 			OR = {
 				is_ruler = yes
 				spouse = { is_ruler = yes }
@@ -2700,10 +2696,7 @@
 			factor = 0
 			has_dlc = "Holy Fury"
 			is_female = yes
-			OR = {
-				culture = frankish
-				culture = occitan
-			}
+			culture_group = francophone
 			OR = {
 				is_ruler = yes
 				spouse = { is_ruler = yes }
@@ -3393,6 +3386,8 @@
 				has_character_modifier = attending_masquerade
 				has_character_modifier = forced_mask
 				culture = venetian
+				has_landed_title = d_druk_guard 
+				liege = { has_landed_title = d_druk_guard }
 			}
 		}
 	}
@@ -3473,6 +3468,21 @@
 				}
 			}
 		}
+		modifier = {
+			factor = 0
+			culture = venetian
+			OR = {
+				AND = {
+					is_landed = yes
+					higher_real_tier_than = COUNT
+				}
+				AND = {
+					is_landed = no
+					is_married = yes
+					spouse = { higher_real_tier_than = COUNT  }
+				}
+			}
+		}
 	}
 
 	3 = { # mask 3 iron
@@ -3504,9 +3514,35 @@
 			}
 		}
 		modifier = {
-			factor = 200
+			factor = 100
 			culture = venetian
-			is_landed = no
+			OR = {
+				AND = {
+					is_landed = yes
+					NOT = { higher_real_tier_than = BARON }
+				}
+				AND = {
+					is_landed = no
+					is_married = yes
+					spouse = { NOT = { higher_real_tier_than = BARON } }
+				}
+				is_landed = no
+			}
+		}
+		modifier = {
+			factor = 0
+			culture = venetian
+			OR = {
+				AND = {
+					is_landed = yes
+					higher_real_tier_than = BARON
+				}
+				AND = {
+					is_landed = no
+					is_married = yes
+					spouse = { higher_real_tier_than = BARON }
+				}
+			}
 		}
 	}
 	
@@ -3533,7 +3569,7 @@
 		}
 	}
 	
-	5 = { # mask 5 bone - orange stripes
+	5 = { # mask 5 Gold - Gem Encrusted
 		factor = 1
 		modifier = {
 			factor = 0
@@ -3544,14 +3580,51 @@
 					has_character_modifier = forced_mask
 				}
 				AND = {
-					trait = disfigured
-					NOR = {
-						is_tribal = yes
-						is_nomadic = yes
-						religion_group = pagan_group
-					}
+					is_landed = no
+					is_married = no
 				}
-				has_character_modifier = golden_mask
+				is_tribal = yes
+				is_nomadic = yes
+				religion_group = pagan_group
+			}
+			NOT = {
+				culture = venetian
+			}
+			NOT = { has_character_modifier = golden_mask }
+		}
+		modifier = {
+			factor = 0
+			NOR = {
+				trait = greedy
+				trait = proud
+				trait = ambitious
+				trait = envious
+				culture_group = berber
+				culture_group = maghreb_arabic
+				culture_group = mande
+				culture_group = nilotic
+				culture_group = saharan
+				culture_group = eastern_sudanic
+			}
+			NOT = { has_character_modifier = golden_mask }
+			NOT = {
+				culture = venetian
+			}
+		}
+		
+		modifier = {
+			factor = 250
+			culture = venetian
+			OR = {
+				AND = {
+					is_landed = yes
+					higher_real_tier_than = KING
+				}
+				AND = {
+					is_landed = no
+					is_married = yes
+					spouse = { higher_real_tier_than = KING }
+				}
 			}
 		}
 	}
@@ -3717,7 +3790,7 @@
 		}
 		
 		modifier = {
-			factor = 200
+			factor = 220
 			culture = venetian
 			OR = {
 				AND = {
@@ -3728,6 +3801,21 @@
 					is_landed = no
 					is_married = yes
 					spouse = { NOT = { higher_real_tier_than = DUKE } }
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			culture = venetian
+			OR = {
+				AND = {
+					is_landed = yes
+					higher_real_tier_than = DUKE
+				}
+				AND = {
+					is_landed = no
+					is_married = yes
+					spouse = { higher_real_tier_than = DUKE  }
 				}
 			}
 		}
@@ -3755,6 +3843,10 @@
 				culture = venetian
 			}
 			NOT = { has_character_modifier = golden_mask }
+			NOR = {	
+				has_landed_title = d_druk_guard 
+				liege = { has_landed_title = d_druk_guard }
+			}
 		}
 		modifier = {
 			factor = 0
@@ -3774,27 +3866,54 @@
 			NOT = {
 				culture = venetian
 			}
+			NOR = {	
+				has_landed_title = d_druk_guard 
+				liege = { has_landed_title = d_druk_guard }
+			}
 		}
 		modifier = {
 			factor = 5
 			has_landed_title = k_papacy
 		}
 		modifier = {
+			factor = 300
+			OR = {
+				has_landed_title = d_druk_guard 
+				liege = { has_landed_title = d_druk_guard }
+				trait = drukian
+			}
+		}
+		modifier = {
 			factor = 1000
 			has_character_modifier = golden_mask
 		}
 		modifier = {
-			factor = 200
+			factor = 230
 			culture = venetian
 			OR = {
 				AND = {
 					is_landed = yes
-					higher_real_tier_than = DUKE
+					NOT = { higher_real_tier_than = KING }
 				}
 				AND = {
 					is_landed = no
 					is_married = yes
-					spouse = { higher_real_tier_than = DUKE }
+					spouse = { NOT = { higher_real_tier_than = KING } }
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			culture = venetian
+			OR = {
+				AND = {
+					is_landed = yes
+					higher_real_tier_than = KING
+				}
+				AND = {
+					is_landed = no
+					is_married = yes
+					spouse = { higher_real_tier_than = KING  }
 				}
 			}
 		}
