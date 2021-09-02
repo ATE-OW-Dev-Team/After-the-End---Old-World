@@ -60,7 +60,10 @@ targetted_decisions = {
 					OR = {
 						is_female = no
 						AND = {
-							trait = homosexual
+							OR = {
+								trait = homosexual
+								trait = bisexual
+							}
 							OR = {
 								is_married = yes
 								is_consort = yes
@@ -68,10 +71,16 @@ targetted_decisions = {
 						}
 						trait = lustful
 						any_spouse = {
-							trait = homosexual
+							OR = {
+								trait = homosexual
+								trait = bisexual
+							}
 						}
 						any_consort = {
-							trait = homosexual
+							OR = {
+								trait = homosexual
+								trait = bisexual
+							}
 						}
 					}
 					is_ill = no
@@ -107,14 +116,6 @@ targetted_decisions = {
 						NOT = { father_even_if_dead = { is_child_of = ROOT } }
 					}
 				}
-				AND = {
-					religion_group = zoroastrian_group
-					FROM = { religion_group = zoroastrian_group }
-				}
-				AND = {
-					religion = messalian
-					FROM = { religion = messalian }
-				}
 			}
 			
 			OR = {
@@ -126,6 +127,16 @@ targetted_decisions = {
 				AND = {
 					FROM = { trait = homosexual }
 					trait = homosexual
+					same_sex = FROM
+				}
+				AND = {
+					FROM = { NOT = { trait = bisexual } }
+					NOT = { trait = bisexual }
+					NOT = { same_sex = FROM }
+				}
+				AND = {
+					FROM = { trait = bisexual }
+					trait = bisexual
 					same_sex = FROM
 				}
 			}
@@ -157,8 +168,6 @@ targetted_decisions = {
 					if = {
 						limit = {
 							is_close_relative = ROOT
-							NOT = { religion = messalian }
-							NOT = { religion = zoroastrian }
 						}
 						character_event = { id = WoL.102 days = 1 } # Warning - Incest scandal risk
 						break = yes
