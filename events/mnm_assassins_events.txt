@@ -6351,16 +6351,16 @@ character_event = {
 								OR = {
 									AND = {
 										same_sex = ROOT
-										trait = homosexual
+										OR = {trait = homosexual trait = bisexual}
 										ROOT = {
-											trait = homosexual
+											OR = {trait = homosexual trait = bisexual}
 										}
 									}
 									AND = {
 										is_opposite_sex = ROOT
 										NOT = { 
-											trait = homosexual
-											ROOT = { trait = homosexual }
+											OR = {trait = homosexual trait = bisexual}
+											ROOT = { OR = {trait = homosexual trait = bisexual} }
 										}
 									}
 								}
@@ -6377,16 +6377,16 @@ character_event = {
 							OR = {
 								AND = {
 									same_sex = ROOT
-									trait = homosexual
+									OR = {trait = homosexual trait = bisexual}
 									ROOT = {
-										trait = homosexual
+										OR = {trait = homosexual trait = bisexual}
 									}
 								}
 								AND = {
 									is_opposite_sex = ROOT
 									NOT = { 
-										trait = homosexual
-										ROOT = { trait = homosexual }
+										OR = {trait = homosexual trait = bisexual}
+										ROOT = { OR = {trait = homosexual trait = bisexual} }
 									}
 								}
 							}
@@ -6405,7 +6405,7 @@ character_event = {
 								is_female = yes
 								AND = {
 									is_female = no
-									trait = homosexual
+									OR = {trait = homosexual trait = bisexual}
 								}
 							}
 						}
@@ -6422,7 +6422,7 @@ character_event = {
 								is_female = no
 								AND = {
 									is_female = yes
-									trait = homosexual
+									OR = {trait = homosexual trait = bisexual}
 								}
 							}
 						}
@@ -8494,12 +8494,12 @@ character_event = {
     			modifier = { NOT = { opinion = { who = FROM value = 20 } } factor = 2 }
     			modifier = { 
 					root_attraction_trigger = no 
-					NOT = { trait = homosexual }
+					NOT = { OR = {trait = homosexual trait = bisexual} }
 					factor = 0.5 
     			}
     			modifier = { 
 					root_attraction_trigger = no 
-					trait = homosexual
+					OR = {trait = homosexual trait = bisexual}
 					factor = 0
     			}
     			set_character_flag = not_interested
@@ -8514,7 +8514,14 @@ character_event = {
 
     			if = {
     				limit = { same_sex = FROM }
-    				add_trait = homosexual 
+					random_list = {
+						50 = { 
+							add_trait = homosexual 
+						}
+						50 = { 
+							add_trait = bisexual 
+						}
+					}
     			}
     		}
     	}
@@ -9008,8 +9015,13 @@ character_event = {
 		    				}
 		    			}
 		    			if = {
-		    				limit = { trait = homosexual }
-		    				event_target:lover_of_target = { add_trait = homosexual }
+		    				limit = { OR = {trait = homosexual trait = bisexual} }
+		    				event_target:lover_of_target = { 
+								random_list = {
+									50 = { add_trait = homosexual }
+									50 = { add_trait = bisexual }
+								}
+							}
 		    			}
 		    		}
 		    	}
