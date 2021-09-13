@@ -1,0 +1,584 @@
+namespace=SCE
+
+character_event = {
+	id = SCE.1
+	desc = "EVTDESC_SCE_1"
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+    is_triggered_only = yes
+	immediate = {
+        if = { #to prevent spam...
+            limit = { NOT = { has_character_modifier = recent_song_duel_timer } }
+            add_character_modifier = {
+                modifier = recent_song_duel_timer
+                hidden = yes
+                months = 3
+            }
+        }
+        event_target:poet_1 = { 
+            if = {
+                limit = { NOT = { has_character_modifier = recent_song_duel_timer } }
+                #special circumstances, like initiation duel, etc
+                add_character_modifier = { 
+                    modifier = recent_song_duel_timer
+                    hidden = yes
+                    months = 3
+                }
+            }
+        }
+	}
+	option = { #Challenge accepted
+        name = EVTOPTA_SCE_1
+        ai_chance = {
+            factor = 20
+            modifier = {
+                factor = 2
+                trait = proud
+            }
+            modifier = {
+                factor = 0.5
+                trait = craven
+            }
+        }
+        if = {
+            limit = { trait = craven }
+            random = {
+                chance = 20
+                remove_trait = craven
+            }
+        }
+        event_target:poet_1 = {
+            character_event = { id = SCE.2 days = 2 }
+        }
+    }
+	option = { #Challenge declined
+        name = text = EVTOPTB_SCE_1
+        
+        ai_chance = {
+            factor = 10
+            modifier = {
+                trait = craven
+                factor = 1.5
+            }
+        }
+        prestige = -50
+		event_target:poet_1 = { #the poet_1
+            hidden_tooltip = {
+                remove_character_modifier = recent_song_duel_timer
+				character_event = { id = SCE.3 days = 3 } #Duel rejected...
+            }
+        }
+    }
+}
+
+character_event = {
+	id = SCE.2
+	desc = "EVTDESC_SCE_2"
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+    is_triggered_only = yes
+	option = {
+        name = {
+            text = EVTOPTA_SCE_2 #Let's SING song from Kalevala
+        }
+        if = { #If event_target:poet_2 is no longer alive, clear relevant flags, etc...
+            limit = { event_target:poet_2 = { NOT = { is_alive = yes } } }
+            hidden_effect = {
+                remove_character_modifier = recent_song_duel_timer
+            }
+        }
+		else_if = { #checking diplo only
+            limit = { 
+				diplomacy = 20
+				event_target:poet_2 = { diplomacy < 20 }
+			}
+            hidden_effect = {
+                random_list = {
+					25 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					25 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					50 = {
+						character_event = { id = SCE.6 }#win
+					}
+				}
+            }
+        }
+		else_if = { 
+            limit = { 
+				diplomacy = 15
+				event_target:poet_2 = { diplomacy < 15 }
+			}
+            hidden_effect = {
+                random_list = {
+					30 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					30 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					40 = {
+						character_event = { id = SCE.6 }#win
+					}
+				}
+            }
+        }
+		else_if = { 
+            limit = { 
+				diplomacy = 10
+				event_target:poet_2 = { diplomacy < 10 }
+			}
+            hidden_effect = {
+                random_list = {
+					30 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					33 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					36 = {
+						character_event = { id = SCE.6 }#win
+					}
+				}
+            }
+        }
+		else_if = { 
+            limit = { 
+				diplomacy < 20
+				event_target:poet_2 = { diplomacy = 20 }
+			}
+            hidden_effect = {
+                random_list = {
+					50 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					25 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					25 = {
+						character_event = { id = SCE.6 }#win
+					}
+				}
+            }
+        }
+		else_if = { 
+            limit = { 
+				diplomacy < 15
+				event_target:poet_2 = { diplomacy = 15 }
+			}
+            hidden_effect = {
+                random_list = {
+					40 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					30 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					30 = {
+						character_event = { id = SCE.6 }#win
+					}
+				}
+            }
+        }
+		else_if = { 
+            limit = { 
+				diplomacy < 10
+				event_target:poet_2 = { diplomacy = 10 }
+			}
+            hidden_effect = {
+                random_list = {
+					36 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					33 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					30 = {
+						character_event = { id = SCE.6 }#win
+					}
+				}
+            }
+        }
+        else = {
+            hidden_effect = {
+				random_list = {
+					33 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					33 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					33 = {
+						character_event = { id = SCE.6 }#win
+					}
+					1 = {
+						character_event = { id = SCE.6 }#both awful
+					}
+				}
+            }
+        }
+        ai_chance = {
+            factor = 1
+			modifier = {
+				factor = 2
+				diplomacy = 15
+			}
+			modifier = {
+				factor = 2
+				diplomacy = 20
+			}
+        }
+    }
+	option = {
+        name = {
+            text = EVTOPTB_SCE_2 #Let's SING Sakkijarven Polkka
+        }
+        if = { #If event_target:poet_2 is no longer alive, clear relevant flags, etc...
+            limit = { event_target:poet_2 = { NOT = { is_alive = yes } } }
+            hidden_effect = {
+                remove_character_modifier = recent_song_duel_timer
+            }
+        }
+		else_if = { #checking diplo and martial
+            limit = { 
+				diplomacy = 15
+				martial = 10
+				event_target:poet_2 = { 
+					diplomacy < 15 
+					martial < 10
+				}
+			}
+            hidden_effect = {
+                random_list = {
+					25 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					25 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					50 = {
+						character_event = { id = SCE.6 }#win
+					}
+				}
+            }
+        }
+		else_if = { 
+            limit = { 
+				diplomacy = 10
+				martial = 7
+				event_target:poet_2 = { 
+					diplomacy < 10 
+					martial < 7
+				}
+			}
+            hidden_effect = {
+                random_list = {
+					30 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					30 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					40 = {
+						character_event = { id = SCE.6 }#win
+					}
+				}
+            }
+        }
+		else_if = { 
+            limit = { 
+				diplomacy = 7
+				martial = 5
+				event_target:poet_2 = { 
+					diplomacy < 7 
+					martial < 5
+				}
+			}
+            hidden_effect = {
+                random_list = {
+					30 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					33 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					36 = {
+						character_event = { id = SCE.6 }#win
+					}
+				}
+            }
+        }
+		else_if = { 
+            limit = { 
+				diplomacy < 15
+				martial < 10
+				event_target:poet_2 = { 
+					diplomacy = 15 
+					martial = 10
+				}
+			}
+            hidden_effect = {
+                random_list = {
+					50 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					25 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					25 = {
+						character_event = { id = SCE.6 }#win
+					}
+				}
+            }
+        }
+		else_if = { 
+            limit = {  
+				diplomacy < 10
+				martial < 7
+				event_target:poet_2 = { 
+					diplomacy = 10 
+					martial = 7
+				}
+			}
+            hidden_effect = {
+                random_list = {
+					40 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					30 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					30 = {
+						character_event = { id = SCE.6 }#win
+					}
+				}
+            }
+        }
+		else_if = { 
+            limit = {  
+				diplomacy < 7
+				martial < 5
+				event_target:poet_2 = { 
+					diplomacy = 7 
+					martial = 5
+				}
+			}
+            hidden_effect = {
+                random_list = {
+					36 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					33 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					30 = {
+						character_event = { id = SCE.6 }#win
+					}
+				}
+            }
+        }
+        else = {
+            hidden_effect = {
+				random_list = {
+					33 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					33 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					33 = {
+						character_event = { id = SCE.6 }#win
+					}
+					1 = {
+						character_event = { id = SCE.7 }#both awful
+					}
+				}
+            }
+        }
+
+        
+        ai_chance = {
+            factor = 1
+			modifier = {
+				factor = 2
+				martial = 15
+			}
+			modifier = {
+				factor = 2
+				martial = 20
+			}
+        }
+    }
+	option = {
+        name = {
+            text = EVTOPTC_SCE_2 #Let's SING Maamme
+        }
+		trigger = {
+			trait = zealous
+		}
+        if = { #If event_target:poet_2 is no longer alive, clear relevant flags, etc...
+            limit = { event_target:poet_2 = { NOT = { is_alive = yes } } }
+            hidden_effect = {
+                remove_character_modifier = recent_song_duel_timer
+            }
+        }
+		else = { #zealous gets simple code
+            hidden_effect = {
+                random_list = {
+					25 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					25 = {
+						character_event = { id = SCE.5 }#equally good
+					}
+					50 = {
+						character_event = { id = SCE.6 }#win
+					}
+				}
+            }
+        }
+        
+        ai_chance = {
+            factor = 1
+			modifier = {
+				factor = 6
+				trait = zealous
+			}
+        }
+    }
+	option = {
+        name = {
+            text = EVTOPTD_SCE_2 #Let's SING A SONG OF MY OWN DESIGN
+        }
+		trigger = {
+			trait = lunatic
+		}
+        if = { #If event_target:poet_2 is no longer alive, clear relevant flags, etc...
+            limit = { event_target:poet_2 = { NOT = { is_alive = yes } } }
+            hidden_effect = {
+                remove_character_modifier = recent_song_duel_timer
+            }
+        }
+		else = { #simple code for lunatics is simple
+            hidden_effect = {
+                random_list = {
+					25 = {
+						character_event = { id = SCE.4 }#lose
+					}
+					25 = {
+						character_event = { id = SCE.6 }#win
+					}
+					50 = {
+						character_event = { id = SCE.7  }#both awful
+					}
+				}
+            }
+        }
+        
+        ai_chance = {
+            factor = 1
+			modifier = {
+				factor = 6
+				trait = lunatic
+			}
+        }
+    }
+}
+
+character_event = {
+	id = SCE.3#duel rejected
+	desc = "EVTDESC_SCE_3"
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+    is_triggered_only = yes
+	
+	
+	option = {
+        name = {
+            text = EVTOPTA_SCE_3 
+        }
+		prestige = 50
+	}
+}
+character_event = {
+	id = SCE.4#Challenger loses
+	desc = "EVTDESC_SCE_4"
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+    is_triggered_only = yes
+	immediate = {
+        event_target:poet_1 = { 
+            prestige = -300
+        }
+        event_target:poet_2 = { 
+            prestige = 300
+        }
+	}
+	option = {
+        name = {
+            text = EVTOPTA_SCE_4 
+        }
+	}
+}
+character_event = {
+	id = SCE.5#both good
+	desc = "EVTDESC_SCE_5"
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+    is_triggered_only = yes
+	immediate = {
+        event_target:poet_1 = { 
+            prestige = 100
+        }
+        event_target:poet_2 = { 
+            prestige = 100
+        }
+	}
+	option = {
+        name = {
+            text = EVTOPTA_SCE_5 
+        }
+	}
+}
+character_event = {
+	id = SCE.6#Challenger wins
+	desc = "EVTDESC_SCE_6"
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+    is_triggered_only = yes
+	immediate = {
+        event_target:poet_1 = { 
+            prestige = 300
+        }
+        event_target:poet_2 = { 
+            prestige = -300
+        }
+	}
+	option = {
+        name = {
+            text = EVTOPTA_SCE_6
+        }
+	}
+}
+character_event = {
+	id = SCE.7#both shit
+	desc = "EVTDESC_SCE_7"
+	picture = GFX_evt_feast
+	border = GFX_event_normal_frame_diplomacy
+    is_triggered_only = yes
+	immediate = {
+        event_target:poet_1 = { 
+            prestige = -200
+        }
+        event_target:poet_2 = { 
+            prestige = -200
+        }
+	}
+	option = {
+        name = {
+            text = EVTOPTA_SCE_7
+        }
+	}
+}
