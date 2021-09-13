@@ -800,6 +800,7 @@ decisions = {
 			add_character_modifier = {
 				name = recently_searched_nobelian
 				duration = 365
+				hidden = yes
 			}				
 			character_event = { id = nobelian.9 }
 		}		
@@ -832,6 +833,7 @@ decisions = {
 				add_character_modifier = {
 					name = recently_dove_into_occult_nobelian
 					duration = 365
+					hidden = yes
 				}				
 				character_event = { id = nobelian.1 }
 		}
@@ -3221,6 +3223,7 @@ targeted_decisions = {
 			add_character_modifier = {
 				name = used_great_book_timer
 				duration = 5475
+	            hidden = yes
 			}
 			if = {
 				limit = {
@@ -3301,6 +3304,7 @@ targeted_decisions = {
 			add_character_modifier = {
 				name = used_great_book_timer
 				duration = 5475
+	            hidden = yes
 			}
 			random_list = {
 				10 = {
@@ -3618,6 +3622,80 @@ targeted_decisions = {
 		}
 	}
 
+	suomi_singing_contest_decision = {
+		only_playable = yes
+		ai_check_interval = 10
+	    is_high_prio = yes
+	
+		from_potential = {
+			is_playable = yes
+			OR = {
+				religion = finnish_pagan
+				religion = finnish_pagan_reformed
+			}
+			OR = {
+				trait = poet
+				trait = lunatic
+				trait = zealous
+			}
+			prisoner = no
+			has_regent = no
+		}
+	
+		potential = {
+			is_within_diplo_range = FROM
+			OR = {
+				religion = finnish_pagan
+				religion = finnish_pagan_reformed
+			}
+			OR = {
+				is_rival = FROM
+				trait = poet
+				trait = lunatic
+				trait = zealous
+			}
+			prisoner = no
+			has_regent = no
+		}
+		
+		allow = {
+			prestige = 200
+			wealth = 100
+		}
+		
+		effect = {
+			FROM = { save_event_target_as = poet_1 } 
+	    	save_event_target_as = poet_2 
+	        
+	        FROM = {
+	            add_character_modifier = {
+	                modifier = recent_song_duel_timer
+	                duration = 90
+	                hidden = yes
+	            }
+	        }
+	        hidden_tooltip = {
+	            character_event = { id = SCE.1 } #Duel evaluation (hidden) + result event as follow-up.
+	        }
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.2 # Slow down a bit
+			}
+			modifier = {
+				factor = 0
+				FROM = { trait = cynical }
+			}
+			modifier = {
+				factor = 1.5
+				FROM = { trait = zealous }
+			}
+		}
+	}
 	
 	jacobinist_sacrifice_decision = {
 		only_playable = yes
