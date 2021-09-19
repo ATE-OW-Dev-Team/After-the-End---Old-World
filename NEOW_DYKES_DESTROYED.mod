@@ -1,5 +1,5 @@
-name="NEOW Dykes Destroyed"
-path="mod/NEOW_DYKES_DESTROYED"
+name="NEOW Dikes Destroyed"
+path="mod/NEOW_DIKES_DESTROYED"
 picture="ATEOWICON.png"
 tags=
 {
