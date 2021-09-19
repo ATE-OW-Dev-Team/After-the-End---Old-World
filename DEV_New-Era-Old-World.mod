@@ -1,5 +1,5 @@
 name="DEV New Era Old World"
-path="mod/After-the-End---Old-World/NEOW"
+path="mod/After-the-End---Old-World-master/NEOW"
 replace_path="history/characters"
 replace_path="history/provinces"
 replace_path="history/titles"

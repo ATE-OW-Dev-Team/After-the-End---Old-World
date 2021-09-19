@@ -1,5 +1,5 @@
 name="DEV NEOW Music"
-path="mod/After-the-End---Old-World/NEOW_music"
+path="mod/After-the-End---Old-World-master/NEOW_music"
 picture="ATEOWICON.png"
 replace_path="music"
 dependencies = { 
