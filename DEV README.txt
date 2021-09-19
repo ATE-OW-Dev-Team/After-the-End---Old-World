@@ -1,2 +1,2 @@
-You no longer have to take the mods out of the After-the-ENd---Old-World folder if you use the DEV_ .mod files  e.g. DEV_NEOW_DIKES_DESTROYED.mod
+You no longer have to take the mods out of the After-the-End---Old-World folder if you use the DEV_ .mod files  e.g. DEV_NEOW_DIKES_DESTROYED.mod
 All you have to do is drag those files into your ck2 mod folder
