@@ -1353,6 +1353,259 @@ letter_event = {
 	}
 }
 
+# Ultimatum - byzantine elective
+letter_event = {
+	id = BYZ.8015
+	desc = "EVTDESCBYZ.8015"
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		FROM = { in_faction = faction_succ_byzantine_elective }
+	}
+	
+	immediate = {
+		FROM = {
+			diplomatic_immunity = yes 
+			any_faction_backer = {
+				faction = faction_succ_byzantine_elective
+				diplomatic_immunity = yes
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTA8000"
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 0			
+				NOT = {
+					FROM = {
+						faction_power = 
+						{
+							faction = faction_succ_byzantine_elective
+							power = 0.5
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 1.25
+				is_weak_trigger = yes
+			}
+			modifier = {
+				factor = 1.25
+				trait = craven
+			}
+			modifier = {
+				factor = 1.25
+				trait = humble
+			}
+			modifier = {
+				factor = 1.25
+				trait = kind
+			}
+			modifier = {
+				factor = 1.25
+				trait = charitable
+			}
+			modifier = {
+				factor = 1.25
+				trait = patient
+			}
+			modifier = {
+				factor = 1.25
+				trait = content
+			}
+		}
+		
+		hidden_tooltip = {
+			any_vassal = {
+				limit = {
+					ai = no
+					NOT = { in_faction = faction_succ_byzantine_elective }
+				}
+				character_event = { id = BYZ.8086 }
+			}
+			FROM = {
+				letter_event = { id = 8065 }
+				any_faction_backer = {
+					faction = faction_succ_byzantine_elective
+					letter_event = { id = BYZ.8085 }
+					diplomatic_immunity = no
+				}
+				diplomatic_immunity = no
+			}
+		}
+		FROM = {
+			faction_succ_byzantine_elective = { # The target (title) of the faction
+				if = {
+					limit = {
+						NOR = {
+							has_title_flag = alternate_hre
+						}
+					}
+					add_law_w_cooldown = succ_byzantine_elective
+					#succession = {
+					#	base_type = byzantine_elective
+					#	voting_rules = byzantine_elective
+					#}
+				}
+				if = {
+					limit = {
+						OR = {  
+							has_title_flag = alternate_hre
+						}
+					}
+					add_law_w_cooldown = succ_hre_elective
+					#succession = {
+					#	base_type = feudal_elective
+					#	voting_rules = hre_feudal_elective
+					#}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTB8000"
+		ai_chance = {
+			factor = 80
+			modifier = {
+				factor = 1.25
+				is_strong_trigger = yes
+			}
+			modifier = {
+				factor = 1.25
+				trait = brave
+			}
+			modifier = {
+				factor = 1.25
+				trait = proud
+			}
+			modifier = {
+				factor = 1.25
+				trait = envious
+			}
+			modifier = {
+				factor = 1.25
+				trait = greedy
+			}
+			modifier = {
+				factor = 1.25
+				trait = wroth
+			}
+			modifier = {
+				factor = 1.25
+				trait = ambitious
+			}		
+			modifier = {
+				factor = 0.75
+				FROM = {
+					faction_power = 
+					{
+						faction = faction_succ_byzantine_elective
+						power = 1.5
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {
+					faction_power = 
+					{
+						faction = faction_succ_byzantine_elective
+						power = 1.0
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {
+					faction_power = 
+					{
+						faction = faction_succ_byzantine_elective
+						power = 2.0
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {
+					faction_power = 
+					{
+						faction = faction_succ_byzantine_elective
+						power = 3.0
+					}
+				}
+			}	
+			modifier = {
+				factor = 0.5
+				FROM = {
+					faction_power = 
+					{
+						faction = faction_succ_byzantine_elective
+						power = 4.0
+					}
+				}
+			}	
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					FROM = { faction_power = { faction = faction_succ_byzantine_elective power = 1.0 } }
+				}
+				random = {
+					chance = 25
+					character_event = { id = 45002 days = 120 } # Loyalists flock to the liege's banner
+				}
+			}
+		}
+		
+		FROM = {
+			letter_event = { id = 8115 days = 3 tooltip = "EVTTOOLTIP8100" }
+			tooltip = {
+				any_faction_backer = {
+					faction = faction_succ_byzantine_elective
+				}
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						NOT = { faction_power = { faction = faction_succ_byzantine_elective power = 0.75 } }
+					}
+					random_list = {
+						50 = {
+						}
+						30 = {
+							character_event = { id = 45000 days = 17 } # A great number of rebels flock to the revolter's banner
+						}
+						20 = {
+							character_event = { id = 45004 days = 17 } # Rebels flock to the revolter's banner
+						}
+					}
+				}
+				if = {
+					limit = {
+						faction_power = { faction = faction_succ_byzantine_elective power = 0.75 }
+						NOT = { faction_power = { faction = faction_succ_byzantine_elective power = 1.5 } }
+					}
+					random_list = {
+						75 = {
+						}
+						5 = {
+							character_event = { id = 45000 days = 17 } # A great number of rebels flock to the revolter's banner
+						}
+						20 = {
+							character_event = { id = 45004 days = 17 } # Rebels flock to the revolter's banner
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 # Ultimatum - gavelkind
 letter_event = {
 	id = 8020
@@ -2983,6 +3236,24 @@ letter_event = {
 	}
 }
 
+# Demand accepted - byzantine elective
+letter_event = {
+	id = 8065
+	desc = "EVTDESC8065"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EXCELLENT"
+		clr_character_flag = faction_succ_byzantine_elective_ultimatum_taken
+		add_character_modifier = {
+			name = faction_succ_feudal_byzantine_ultimatum_timer
+			hidden = yes
+			duration = 3650
+		}
+	}
+}
+
 # Demand accepted - gavelkind
 letter_event = {
 	id = 8066
@@ -3211,6 +3482,50 @@ letter_event = {
 character_event = {
 	id = 8086
 	desc = EVTDESC8086
+	
+	notification = yes
+	
+	picture = GFX_evt_council
+	border = GFX_event_normal_frame_intrigue
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "I_SEE"
+	}
+}
+
+# Inform faction backer - byzantine elective
+letter_event = {
+	id = BYZ.8085
+	desc = "EVTDESCBYZ.8085"
+	
+	show_from_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "GOOD"
+		reverse_opinion = {
+			modifier = opinion_grateful
+			who = FROMFROM
+			years = 5
+		}
+		
+		add_character_modifier = {
+			name = faction_succ_byzantine_elective_ultimatum_timer
+			hidden = yes
+			duration = 3650
+		}
+	}
+}
+
+# Inform other vassals - byzantine elective
+character_event = {
+	id = BYZ.8086
+	desc = EVTDESCBYZ.8086
 	
 	notification = yes
 	
@@ -3619,6 +3934,28 @@ letter_event = {
 				target = ROOT
 				casus_belli = change_feudal_elective_succession_law
 				faction = faction_succ_feudal_elective
+			}
+		}
+	}
+}
+
+# Demand rejected - byzantine elective
+letter_event = {
+	id = 8115
+	desc = "EVTDESC8100"
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "EVTOPTA8100"
+		
+		clr_character_flag = faction_succ_byzantine_elective_ultimatum_taken
+		
+		faction_succ_byzantine_elective = { # The target (title) of the faction
+			reverse_war = {
+				target = ROOT
+				casus_belli = change_byzantine_elective_succession_law
+				faction = faction_succ_byzantine_elective
 			}
 		}
 	}
