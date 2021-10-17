@@ -8,11 +8,11 @@
 #Daniel Moore
 #Alexander Oltner
 
-namespace = JD
+namespace = BLORG_CO
 
 ###Chinese guests (the Governor's councilor comes to visit)
 character_event = {
-    id = JD.20000
+    id = BLORG_CO.20000
     hide_window = yes
 
     is_triggered_only = yes
@@ -104,7 +104,7 @@ character_event = {
                             #Picks a reason for visiting
                             set_character_flag = cg_diplomatic_visit
                             
-                            character_event = { id = JD.20001 }
+                            character_event = { id = BLORG_CO.20001 }
                         }
                     }
                     20 = {
@@ -130,7 +130,7 @@ character_event = {
                                     set_character_flag = cg_study_military
                                 }
                             }
-                            character_event = { id = JD.20001 }
+                            character_event = { id = BLORG_CO.20001 }
                         }
                     }
                     20 = {
@@ -156,7 +156,7 @@ character_event = {
                                     set_character_flag = cg_trade
                                 }
                             }
-                            character_event = { id = JD.20001 }
+                            character_event = { id = BLORG_CO.20001 }
                         }
                     }
                     20 = {
@@ -182,7 +182,7 @@ character_event = {
                                     set_character_flag = cg_study_theology
                                 }
                             }
-                            character_event = { id = JD.20001 }
+                            character_event = { id = BLORG_CO.20001 }
                         }
                     }
                 }
@@ -193,7 +193,7 @@ character_event = {
 
 #Ping event
 character_event = {
-    id = JD.20001
+    id = BLORG_CO.20001
 	has_dlc = "Jade Dragon"
     hide_window = yes
     is_triggered_only = yes
@@ -203,13 +203,13 @@ character_event = {
             name = host_of_chinese_diplomat
             scope = FROM
         } 
-    	FROM = { letter_event = { id = JD.20002 } } 
+    	FROM = { letter_event = { id = BLORG_CO.20002 } } 
     }
 }
 
 
 character_event = { #Fired from on_death to the character receiving the chinese diplomat
-    id = JD.10022
+    id = BLORG_CO.10022
     hide_window = yes
     is_triggered_only = yes
 
@@ -219,31 +219,31 @@ character_event = { #Fired from on_death to the character receiving the chinese 
 
     immediate = {
         persistent_event_target:host_of_chinese_diplomat = {
-            character_event = { id = JD.10023 } #visible event for player
+            character_event = { id = BLORG_CO.10023 } #visible event for player
         }
     }
 }
 
 character_event = { # Fallback (in case the visitor died/imprisoned)
-    id = JD.10023
+    id = BLORG_CO.10023
     has_dlc = "Jade Dragon"
     picture = GFX_evt_chinese_bureaucrat
     border = GFX_event_normal_frame_diplomacy
     is_triggered_only = yes
 
     desc = {
-        text = EVTDESC_JD_10023_death
+        text = EVTDESC_BLORG_CO_10023_death
         trigger = {
             NOT = { FROM = { is_alive = yes } }
             death_no_trace_trigger = no
         }
     }
     desc = {
-        text = EVTDESC_JD_10023_prison
+        text = EVTDESC_BLORG_CO_10023_prison
         trigger = { FROM = { prisoner = yes } }
     }
     desc = {
-        text = EVTDESC_JD_10023_missing
+        text = EVTDESC_BLORG_CO_10023_missing
         trigger = {
             FROM = { death_no_trace_trigger = yes }
         }
@@ -254,7 +254,7 @@ character_event = { # Fallback (in case the visitor died/imprisoned)
     }
 
     option = {      
-        name = EVTOPTA_JD_10023
+        name = EVTOPTA_BLORG_CO_10023
         prestige = -50
         wealth = -15
         add_offmap_currency = {
@@ -269,28 +269,28 @@ character_event = { # Fallback (in case the visitor died/imprisoned)
         }
     }
     option = {      
-        name = EVTOPTB_JD_10023
+        name = EVTOPTB_BLORG_CO_10023
     }
 
     after = {
         #Clean-up event
-        character_event = { id = JD.20020 days = 1 }
+        character_event = { id = BLORG_CO.20020 days = 1 }
         FROM = { clear_persistent_event_target = host_of_chinese_diplomat }
     }
 }
 
 #Chinese guests announces their intention to visit
 letter_event = {
-    id = JD.20002
+    id = BLORG_CO.20002
 	has_dlc = "Jade Dragon"
     border = GFX_event_letter_frame_diplomacy
 
     desc = {
-    	text = EVTDESC_JD_20002_A
+    	text = EVTDESC_BLORG_CO_20002_A
     	trigger = { is_tributary = { type = offmap suzerain = event_target:target_governor } }
     }
     desc = {
-    	text = EVTDESC_JD_20002_B
+    	text = EVTDESC_BLORG_CO_20002_B
     	trigger = { is_tributary = { type = offmap suzerain = event_target:target_governor } }
     }
     
@@ -298,22 +298,22 @@ letter_event = {
 
     #Welcome!
     option = { 
-        name = EVTOPTA_JD_20002
+        name = EVTOPTA_BLORG_CO_20002
 		sound_effect = blorg_grace_gain
-        custom_tooltip = { text = EVTOPTA_JD_20002_TT }
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_20002_TT }
 
         add_grace_trivial_effect = yes
 
         hidden_effect = {
-        	event_target:chinese_guest = { character_event = { id = JD.20003 days = 50 random = 20 } } 
+        	event_target:chinese_guest = { character_event = { id = BLORG_CO.20003 days = 50 random = 20 } } 
             set_character_flag = chinese_governor_councilor_guest
         }
     }
 
     #Go away
     option = {
-        name = EVTOPTB_JD_20002
-        custom_tooltip = { text = EVTOPTB_JD_20002_TT }
+        name = EVTOPTB_BLORG_CO_20002
+        custom_tooltip = { text = EVTOPTB_BLORG_CO_20002_TT }
     	detract_grace_major_effect = yes
 
     	event_target:chinese_guest = {
@@ -340,7 +340,7 @@ letter_event = {
 
 #Tombola for outcomes
 character_event = {
-    id = JD.20003
+    id = BLORG_CO.20003
 	has_dlc = "Jade Dragon"
     hide_window = yes
     is_triggered_only = yes
@@ -394,49 +394,49 @@ character_event = {
                         factor = 0.5
                     }
                     trigger = { event_target:corresponding_councilor = { always = yes } }
-                    character_event = { id = JD.20004 } 
+                    character_event = { id = BLORG_CO.20004 } 
                 } 
                 10 = { #Falling stars
-                    character_event = { id = JD.20005 } 
+                    character_event = { id = BLORG_CO.20005 } 
                 }
                 10 = { #Greet in chinese? 
                     modifier = { is_learned_trigger = yes factor = 1.3 }
                     trigger = { event_target:chinese_guest = { NOT = { culture = FROMFROM } } }
-                    character_event = { id = JD.20006 } 
+                    character_event = { id = BLORG_CO.20006 } 
                 }
                 10 = { #Wearing the clothes wrong
                     modifier = { is_dumb_trigger = yes factor = 1.3 }
                     modifier = { trait = greedy factor = 1.3 }
                     trigger = { event_target:chinese_guest = { NOT = { culture = FROMFROM } } }
-                    character_event = { id = JD.20011 }
+                    character_event = { id = BLORG_CO.20011 }
                 }
                 10 = { #What you said (apparently) had a deep hidden meaning
                     modifier = { is_smart_trigger = yes factor = 1.3 }
                     modifier = { trait = gregarious factor = 1.3 }
                     modifier = { trait = poet factor = 1.5 }
                     modifier = { trait = socializer factor = 1.3 }
-                    character_event = { id = JD.20012 }
+                    character_event = { id = BLORG_CO.20012 }
                 }
     		}
  
             #Clear-up event
-            character_event = { id = JD.20020 days = 90 }
+            character_event = { id = BLORG_CO.20020 days = 90 }
     	}
     }
 }
 
 #The visit went well
 character_event = {
-    id = JD.20004
+    id = BLORG_CO.20004
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_20004
+    desc = EVTDESC_BLORG_CO_20004
     picture = GFX_evt_blorg_diplomatic_success
     border = GFX_event_normal_frame_diplomacy
 
     is_triggered_only = yes
     
     option = { 
-        name = EVTOPTA_JD_20004
+        name = EVTOPTA_BLORG_CO_20004
         add_grace_minor_effect = yes
 		sound_effect = blorg_grace_gain
         
@@ -452,7 +452,7 @@ character_event = {
                     factor = 0.1
                     any_artifact = { has_artifact_flag = chinese }
                 }
-                character_event = { id = JD.60004 days = 1 }
+                character_event = { id = BLORG_CO.60004 days = 1 }
             }
         }
     }
@@ -460,19 +460,19 @@ character_event = {
 
 #Falling stars
 character_event = {
-    id = JD.20005
+    id = BLORG_CO.20005
 	has_dlc = "Jade Dragon"
     desc = { 
         trigger = { 
             offmap_blorg = { offmap_ruler = { NOT = { culture = ROOT } } }
         } 
-        text =EVTDESC_JD_20005 
+        text =EVTDESC_BLORG_CO_20005 
     }
     desc = { 
         trigger = { 
             offmap_blorg = { offmap_ruler = { culture = ROOT } }
         } 
-        text =EVTDESC_JD_20005_B
+        text =EVTDESC_BLORG_CO_20005_B
     }
     picture = GFX_evt_comet
     border = GFX_event_normal_frame_religion
@@ -480,8 +480,8 @@ character_event = {
     is_triggered_only = yes
     
     option = { 
-        name = EVTOPTA_JD_20005
-        custom_tooltip = { text = EVTOPTA_JD_20005_tt }
+        name = EVTOPTA_BLORG_CO_20005
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_20005_tt }
         detract_grace_minor_effect = yes
         event_target:chinese_guest = {
             show_portrait = yes
@@ -492,9 +492,9 @@ character_event = {
 
 #Greeting guest in Chinese
 character_event = {
-    id = JD.20006
+    id = BLORG_CO.20006
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_20006
+    desc = EVTDESC_BLORG_CO_20006
     picture = GFX_evt_daughter_asking_father
     border = GFX_event_normal_frame_diplomacy
 
@@ -503,7 +503,7 @@ character_event = {
     #Study hard
     option = {
         trigger = { NOT = { has_character_modifier = multilingual } }
-        name = EVTOPTA_JD_20006
+        name = EVTOPTA_BLORG_CO_20006
 
         random_list = {
             35 = { #Succeed
@@ -517,7 +517,7 @@ character_event = {
                 modifier = { has_character_modifier = student_of_language factor = 1.5 }
 
 
-                custom_tooltip = { text = EVTOPTA_JD_20006_SUCCESS_TT }
+                custom_tooltip = { text = EVTOPTA_BLORG_CO_20006_SUCCESS_TT }
 
                 #Showing tooltip for language modifiers
                 if = {
@@ -538,14 +538,14 @@ character_event = {
                     tooltip = { add_grace_major_effect = yes }
                 }
                 
-                hidden_effect = { character_event = { id = JD.20007 days = 3 } }
+                hidden_effect = { character_event = { id = BLORG_CO.20007 days = 3 } }
             }
             65 = { #Fail and fall asleep
                 modifier = { is_dumb_trigger = yes factor = 2 }
                 modifier = { NOT = { learning = 6 } factor = 1.5 }
-                custom_tooltip = { text = EVTOPTA_JD_20006_FAILURE_TT }
+                custom_tooltip = { text = EVTOPTA_BLORG_CO_20006_FAILURE_TT }
                 tooltip = { detract_grace_major_effect = yes }
-                hidden_effect = { character_event = { id = JD.20008 days = 3 } }
+                hidden_effect = { character_event = { id = BLORG_CO.20008 days = 3 } }
             }
         }   
     }
@@ -553,7 +553,7 @@ character_event = {
     #Wing it
     option = {
         trigger = { NOT = { has_character_modifier = multilingual } }
-        name = EVTOPTB_JD_20006
+        name = EVTOPTB_BLORG_CO_20006
 
         random_list = {
             65 = { #You do okay
@@ -566,16 +566,16 @@ character_event = {
                 modifier = { is_learned_trigger = yes factor = 1.5 }
                 modifier = { has_character_modifier = student_of_language factor = 1.5 }
 
-                custom_tooltip = { text = EVTOPTB_JD_20006_SUCCESS_TT }
+                custom_tooltip = { text = EVTOPTB_BLORG_CO_20006_SUCCESS_TT }
                 tooltip = { add_grace_medium_effect = yes }
-                hidden_effect = { character_event = { id = JD.20009 days = 3 } }
+                hidden_effect = { character_event = { id = BLORG_CO.20009 days = 3 } }
             }
             35 = { #You mess up the words
                 modifier = { is_dumb_trigger = yes factor = 2 }
                 modifier = { NOT = { learning = 6 } factor = 1.5 }
-                custom_tooltip = { text = EVTOPTB_JD_20006_FAILURE_TT }
+                custom_tooltip = { text = EVTOPTB_BLORG_CO_20006_FAILURE_TT }
                 tooltip = { detract_grace_minor_effect = yes }
-                hidden_effect = { character_event = { id = JD.20010 days = 3 } }
+                hidden_effect = { character_event = { id = BLORG_CO.20010 days = 3 } }
             }
         }
     }
@@ -587,8 +587,8 @@ character_event = {
         tooltip_info = yes
         custom_tooltip = { text = multilingual_option_available_tt }
 
-        name = EVTOPTC_JD_20006
-        custom_tooltip = { text = EVTOPTC_JD_20006_TT }
+        name = EVTOPTC_BLORG_CO_20006
+        custom_tooltip = { text = EVTOPTC_BLORG_CO_20006_TT }
         add_grace_medium_effect = yes
         hidden_effect = {
             event_target:chinese_guest = {
@@ -599,9 +599,9 @@ character_event = {
     
     #Let your translator do the hard work. - END
     option = {
-        name = EVTOPTD_JD_20006
+        name = EVTOPTD_BLORG_CO_20006
 		sound_effect = blorg_grace_gain
-        custom_tooltip = { text = EVTOPTD_JD_20006_TT }
+        custom_tooltip = { text = EVTOPTD_BLORG_CO_20006_TT }
 
         add_grace_minor_effect = yes
 
@@ -615,9 +615,9 @@ character_event = {
 
 #You learn about languages!
 character_event = {
-    id = JD.20007
+    id = BLORG_CO.20007
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_20007
+    desc = EVTDESC_BLORG_CO_20007
     picture = GFX_evt_chinese_bureaucrat
     border = GFX_event_normal_frame_religion
 
@@ -631,9 +631,9 @@ character_event = {
     }
     
     option = { 
-        name = EVTOPTA_JD_20007
+        name = EVTOPTA_BLORG_CO_20007
 		sound_effect = blorg_grace_gain
-        custom_tooltip = { text = EVTOPTA_JD_20007_TT }
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_20007_TT }
 
         if = {
             limit = {
@@ -670,7 +670,7 @@ character_event = {
                     factor = 0.1
                     any_artifact = { has_artifact_flag = chinese }
                 }
-                character_event = { id = JD.60004 days = 1 }
+                character_event = { id = BLORG_CO.60004 days = 1 }
             }
             event_target:chinese_guest = {
                 clear_persistent_event_target = host_of_chinese_diplomat
@@ -681,9 +681,9 @@ character_event = {
 
 #You fell asleep!
 character_event = {
-    id = JD.20008
+    id = BLORG_CO.20008
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_20008
+    desc = EVTDESC_BLORG_CO_20008
     picture = GFX_evt_bad_news
     border = GFX_event_normal_frame_religion
 
@@ -699,8 +699,8 @@ character_event = {
     hide_from = yes
     
     option = { 
-        name = EVTOPTA_JD_20008
-        custom_tooltip = { text = EVTOPTA_JD_20008_TT }
+        name = EVTOPTA_BLORG_CO_20008
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_20008_TT }
         
         detract_grace_major_effect = yes
 
@@ -714,9 +714,9 @@ character_event = {
 
 #You great them nicely
 character_event = {
-    id = JD.20009
+    id = BLORG_CO.20009
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_20009
+    desc = EVTDESC_BLORG_CO_20009
     picture = GFX_evt_chinese_bureaucrat
     border = GFX_event_normal_frame_religion
 
@@ -730,8 +730,8 @@ character_event = {
     }
     
     option = { 
-        name = EVTOPTA_JD_20009
-        custom_tooltip = { text = EVTOPTA_JD_20009_TT }
+        name = EVTOPTA_BLORG_CO_20009
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_20009_TT }
 		sound_effect = blorg_grace_gain
         
         add_grace_medium_effect = yes
@@ -743,7 +743,7 @@ character_event = {
                     factor = 0.1
                     any_artifact = { has_artifact_flag = chinese }
                 }
-                character_event = { id = JD.60004 days = 1 }
+                character_event = { id = BLORG_CO.60004 days = 1 }
             }
             event_target:chinese_guest = {
                 clear_persistent_event_target = host_of_chinese_diplomat
@@ -754,9 +754,9 @@ character_event = {
 
 #You great them awkwardly
 character_event = {
-    id = JD.20010
+    id = BLORG_CO.20010
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_20010
+    desc = EVTDESC_BLORG_CO_20010
     picture = GFX_evt_blorg_diplomatic_incident
     border = GFX_event_normal_frame_religion
 
@@ -770,8 +770,8 @@ character_event = {
     }
     
     option = { 
-        name = EVTOPTA_JD_20010
-        custom_tooltip = { text = EVTOPTA_JD_20010_TT }
+        name = EVTOPTA_BLORG_CO_20010
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_20010_TT }
         
         detract_grace_minor_effect = yes
         hidden_effect = {
@@ -786,9 +786,9 @@ character_event = {
 
 #Closet malfunction
 character_event = {
-    id = JD.20011
+    id = BLORG_CO.20011
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_20011
+    desc = EVTDESC_BLORG_CO_20011
     picture = GFX_evt_blorg_diplomatic_incident
     border = GFX_event_normal_frame_diplomacy
 
@@ -802,8 +802,8 @@ character_event = {
     }
     
     option = { 
-        name = EVTOPTA_JD_20011
-        custom_tooltip = { text = EVTOPTA_JD_20011_tt }
+        name = EVTOPTA_BLORG_CO_20011
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_20011_tt }
         detract_grace_minor_effect = yes
         hidden_effect = {
             event_target:chinese_guest = {
@@ -815,19 +815,19 @@ character_event = {
 
 #Deep meaningful insight
 character_event = {
-    id = JD.20012
+    id = BLORG_CO.20012
 	has_dlc = "Jade Dragon"
     desc = { 
         trigger = { 
             offmap_blorg = { offmap_ruler = { NOT = { culture = ROOT } } }
         } 
-        text = EVTDESC_JD_20012 
+        text = EVTDESC_BLORG_CO_20012 
     }
     desc = { 
         trigger = { 
             offmap_blorg = { offmap_ruler = { culture = ROOT } }
         } 
-        text = EVTDESC_JD_20012_B
+        text = EVTDESC_BLORG_CO_20012_B
     }
     picture = GFX_evt_garden
     border = GFX_event_normal_frame_diplomacy
@@ -842,9 +842,9 @@ character_event = {
     }
     
     option = { 
-        name = EVTOPTA_JD_20012
+        name = EVTOPTA_BLORG_CO_20012
 		sound_effect = blorg_grace_gain
-        custom_tooltip = { text = EVTOPTA_JD_20012_tt }
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_20012_tt }
         add_grace_medium_effect = yes
 
         hidden_effect = {
@@ -854,7 +854,7 @@ character_event = {
                     factor = 0.1
                     any_artifact = { has_artifact_flag = chinese }
                 }
-                character_event = { id = JD.60004 days = 1 }
+                character_event = { id = BLORG_CO.60004 days = 1 }
             }
             event_target:chinese_guest = {
                 clear_persistent_event_target = host_of_chinese_diplomat
@@ -865,7 +865,7 @@ character_event = {
 
 #Cleanup
 character_event = {
-    id = JD.20020
+    id = BLORG_CO.20020
 	has_dlc = "Jade Dragon"
     hide_window = yes
     is_triggered_only = yes
@@ -907,7 +907,7 @@ character_event = {
 
 ### Hidden start for Mini-Expedition to blorg #### (random event, fired from yearly pulse)
 character_event = {
-    id = JD.10009
+    id = BLORG_CO.10009
     hide_window = yes
     is_triggered_only = yes
     only_playable = yes
@@ -1013,24 +1013,24 @@ character_event = {
             set_character_flag = wants_to_travel_0
         }
     
-        event_target:adventurous_spirit = { character_event = { id = JD.10010 } }
+        event_target:adventurous_spirit = { character_event = { id = BLORG_CO.10010 } }
     }
 }
 
 
 character_event = { #ping event
-    id = JD.10010
+    id = BLORG_CO.10010
 	has_dlc = "Jade Dragon"
     hide_window = yes
     is_triggered_only = yes
-    immediate = { FROM = { character_event = { id = JD.10011 } } }
+    immediate = { FROM = { character_event = { id = BLORG_CO.10011 } } }
 }
 
 #Your courtier wants to travel to blorg!
 character_event = {
-    id = JD.10011
+    id = BLORG_CO.10011
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_10011
+    desc = EVTDESC_BLORG_CO_10011
     picture = GFX_evt_blorg_open
     border = GFX_event_normal_frame_diplomacy
     is_triggered_only = yes
@@ -1221,8 +1221,8 @@ character_event = {
     }
 
     option = {
-        name = EVTOPTA_JD_10011
-        custom_tooltip = { text = EVTOPTA_JD_10011_TT }
+        name = EVTOPTA_BLORG_CO_10011
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_10011_TT }
 
 
         event_target:adventurous_spirit = {
@@ -1232,13 +1232,13 @@ character_event = {
                 name = out_traveling
                 duration = 365
             }
-            hidden_effect = { character_event = { id = JD.10012 days = 200 random = 160 } }
+            hidden_effect = { character_event = { id = BLORG_CO.10012 days = 200 random = 160 } }
         }
     }
 
     option = {
-        name = EVTOPTB_JD_10011
-        custom_tooltip = { text = EVTOPTB_JD_10011_TT }
+        name = EVTOPTB_BLORG_CO_10011
+        custom_tooltip = { text = EVTOPTB_BLORG_CO_10011_TT }
 
 
         event_target:back_up_target_1 = {
@@ -1249,7 +1249,7 @@ character_event = {
                 duration = 365
             }
             save_event_target_as = adventurous_spirit
-            hidden_effect = { character_event = { id = JD.10012 days = 200 random = 160 } }
+            hidden_effect = { character_event = { id = BLORG_CO.10012 days = 200 random = 160 } }
         }
         trigger = {
             event_target:back_up_target_1 = { always = yes }
@@ -1257,8 +1257,8 @@ character_event = {
     }
 
     option = {
-        name = EVTOPTC_JD_10011
-        custom_tooltip = { text = EVTOPTC_JD_10011_TT }
+        name = EVTOPTC_BLORG_CO_10011
+        custom_tooltip = { text = EVTOPTC_BLORG_CO_10011_TT }
 
 
         event_target:back_up_target_2 = {
@@ -1269,7 +1269,7 @@ character_event = {
                 duration = 365
             }
             save_event_target_as = adventurous_spirit
-            hidden_effect = { character_event = { id = JD.10012 days = 200 random = 160 } }
+            hidden_effect = { character_event = { id = BLORG_CO.10012 days = 200 random = 160 } }
         }
         
         trigger = {
@@ -1278,8 +1278,8 @@ character_event = {
     }
 
     option = {      
-        name = EVTOPTD_JD_10011
-        custom_tooltip = { text = EVTOPTD_JD_10011_TT }
+        name = EVTOPTD_BLORG_CO_10011
+        custom_tooltip = { text = EVTOPTD_BLORG_CO_10011_TT }
         clr_character_flag = is_sending_someone_to_blorg
     }
 
@@ -1295,7 +1295,7 @@ character_event = {
                 event_target:adventurous_spirit = {
                     force_host = event_target:the_protector_general
                 }
-                character_event = { id = JD.10020 days = 370 } #Fallback event (in case the traveler has died)
+                character_event = { id = BLORG_CO.10020 days = 370 } #Fallback event (in case the traveler has died)
             }
         }
     }
@@ -1303,7 +1303,7 @@ character_event = {
 
 #Delayed ping event and tombola for figuring out how the journey went... (fires for the traveler)
 character_event = {
-    id = JD.10012
+    id = BLORG_CO.10012
 	has_dlc = "Jade Dragon"
     hide_window = yes
     is_triggered_only = yes
@@ -1394,11 +1394,11 @@ character_event = {
                 
                 if = {
                     limit = { NOT = { FROM = { is_alive = yes } } }
-                    event_target:new_story_owner = { character_event = { id = JD.10013 } } #great
+                    event_target:new_story_owner = { character_event = { id = BLORG_CO.10013 } } #great
                 }
                 if = {
                     limit = { FROM = { is_alive = yes } }
-                    FROM = { character_event = { id = JD.10013 } } #great
+                    FROM = { character_event = { id = BLORG_CO.10013 } } #great
                 }
 
                 trigger = {
@@ -1456,11 +1456,11 @@ character_event = {
 
                 if = {
                     limit = { NOT = { FROM = { is_alive = yes } } }
-                    event_target:new_story_owner = { character_event = { id = JD.10014 } } #good
+                    event_target:new_story_owner = { character_event = { id = BLORG_CO.10014 } } #good
                 }
                 if = {
                     limit = { FROM = { is_alive = yes } }
-                    FROM = { character_event = { id = JD.10014 } } #good
+                    FROM = { character_event = { id = BLORG_CO.10014 } } #good
                 }
 
             }
@@ -1470,11 +1470,11 @@ character_event = {
                 }
                 if = {
                     limit = { NOT = { FROM = { is_alive = yes } } }
-                    event_target:new_story_owner = { character_event = { id = JD.10015 } } #decent
+                    event_target:new_story_owner = { character_event = { id = BLORG_CO.10015 } } #decent
                 }
                 if = {
                     limit = { FROM = { is_alive = yes } }
-                    FROM = { character_event = { id = JD.10015 } } #decent
+                    FROM = { character_event = { id = BLORG_CO.10015 } } #decent
                 }
 
             }
@@ -1505,11 +1505,11 @@ character_event = {
 
                 if = {
                     limit = { NOT = { FROM = { is_alive = yes } } }
-                    event_target:new_story_owner = { character_event = { id = JD.10016 } } #bad
+                    event_target:new_story_owner = { character_event = { id = BLORG_CO.10016 } } #bad
                 }
                 if = {
                     limit = { FROM = { is_alive = yes } }
-                    FROM = { character_event = { id = JD.10016 } } #bad
+                    FROM = { character_event = { id = BLORG_CO.10016 } } #bad
                 }
             }
             5 = {
@@ -1566,15 +1566,15 @@ character_event = {
                 }
                 if = {
                     limit = { NOT = { FROM = { is_alive = yes } } }
-                    event_target:new_story_owner = { character_event = { id = JD.10017 } } #terrible
+                    event_target:new_story_owner = { character_event = { id = BLORG_CO.10017 } } #terrible
                 }
                 if = {
                     limit = { FROM = { is_alive = yes } }
-                    FROM = { character_event = { id = JD.10017 } } #terrible
+                    FROM = { character_event = { id = BLORG_CO.10017 } } #terrible
                 }
             }
             10 = { # They return with a new lover/spouse
-                character_event = { id = JD.10021 } #Special case 1: ping event for creating new char
+                character_event = { id = BLORG_CO.10021 } #Special case 1: ping event for creating new char
 
                 modifier = {
                     factor = 1.1
@@ -1634,11 +1634,11 @@ character_event = {
 
                 if = {
                     limit = { NOT = { FROM = { is_alive = yes } } }
-                    event_target:new_story_owner = { character_event = { id = JD.10019 } } #Special case 2
+                    event_target:new_story_owner = { character_event = { id = BLORG_CO.10019 } } #Special case 2
                 }
                 if = {
                     limit = { FROM = { is_alive = yes } }
-                    FROM = { character_event = { id = JD.10019 } }  #Special case 2
+                    FROM = { character_event = { id = BLORG_CO.10019 } }  #Special case 2
                 }
             }
         }
@@ -1646,9 +1646,9 @@ character_event = {
 }
 
 character_event = { # Things went great
-    id = JD.10013
+    id = BLORG_CO.10013
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_10013
+    desc = EVTDESC_BLORG_CO_10013
     picture = GFX_evt_whispers
     border = GFX_event_normal_frame_diplomacy
     is_triggered_only = yes
@@ -1804,9 +1804,9 @@ character_event = { # Things went great
     }
 
     option = {
-        name = EVTOPTA_JD_10013
+        name = EVTOPTA_BLORG_CO_10013
 		sound_effect = blorg_grace_gain
-        custom_tooltip = { text = EVTOPTA_JD_10013_TT }
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_10013_TT }
         FROM = {
             add_trait_silently_proud_effect = yes
             remove_trait_silently_humble_effect = yes
@@ -1832,15 +1832,15 @@ character_event = { # Things went great
     }
 }
 character_event = { # Things went good
-    id = JD.10014
+    id = BLORG_CO.10014
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_10014
+    desc = EVTDESC_BLORG_CO_10014
     picture = GFX_evt_feast
     border = GFX_event_normal_frame_diplomacy
     is_triggered_only = yes
 
     option = {      
-        name = EVTOPTA_JD_10014
+        name = EVTOPTA_BLORG_CO_10014
 		sound_effect = blorg_grace_gain
         add_grace_minor_effect = yes
         FROM = {
@@ -1851,15 +1851,15 @@ character_event = { # Things went good
     }
 }
 character_event = { # Things went decently
-    id = JD.10015
+    id = BLORG_CO.10015
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_10015
+    desc = EVTDESC_BLORG_CO_10015
     picture = GFX_evt_recieve_letter
     border = GFX_event_normal_frame_diplomacy
     is_triggered_only = yes
 
     option = {      
-        name = EVTOPTA_JD_10015
+        name = EVTOPTA_BLORG_CO_10015
 		sound_effect = blorg_grace_gain
         add_grace_trivial_effect = yes
         hidden_effect = { FROM = { remove_character_modifier = out_traveling } }
@@ -1867,15 +1867,15 @@ character_event = { # Things went decently
     }
 }
 character_event = { # Things went bad
-    id = JD.10016
+    id = BLORG_CO.10016
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_10016
+    desc = EVTDESC_BLORG_CO_10016
     picture = GFX_evt_quarrel
     border = GFX_event_normal_frame_diplomacy
     is_triggered_only = yes
     
     option = {      
-        name = EVTOPTA_JD_10016
+        name = EVTOPTA_BLORG_CO_10016
         detract_grace_trivial_effect = yes
         FROM = {
             random = { chance = 50 add_trait = stressed }
@@ -1885,16 +1885,16 @@ character_event = { # Things went bad
     }
 }
 character_event = { # Things went terribly
-    id = JD.10017
+    id = BLORG_CO.10017
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_10017
+    desc = EVTDESC_BLORG_CO_10017
     picture = GFX_evt_quarrel
     border = GFX_event_normal_frame_diplomacy
     is_triggered_only = yes
     
     option = {      
-        name = EVTOPTA_JD_10017
-        custom_tooltip = { text = EVTOPTA_JD_10017_TT }
+        name = EVTOPTA_BLORG_CO_10017
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_10017_TT }
         detract_grace_minor_effect = yes
         FROM = {
             add_trait_silently_shy_effect = yes
@@ -1908,7 +1908,7 @@ character_event = { # Things went terribly
 
 #Ping event for Special case 1
 character_event = {
-    id = JD.10021
+    id = BLORG_CO.10021
 	has_dlc = "Jade Dragon"
     hide_window = yes
     is_triggered_only = yes
@@ -1947,28 +1947,28 @@ character_event = {
 
         if = {
             limit = { NOT = { FROMFROM = { is_alive = yes } } }
-            event_target:new_story_owner = { character_event = { id = JD.10018 } } #Special case 2
+            event_target:new_story_owner = { character_event = { id = BLORG_CO.10018 } } #Special case 2
         }
         if = {
             limit = { FROMFROM = { is_alive = yes } }
-            FROMFROM = { character_event = { id = JD.10018 } }  #Special case 2
+            FROMFROM = { character_event = { id = BLORG_CO.10018 } }  #Special case 2
         }
     }
 }
 
 character_event = { # Special case 1 - The courtier you sent away to blorg has returned with a lover/spouse
-    id = JD.10018
+    id = BLORG_CO.10018
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_10018
+    desc = EVTDESC_BLORG_CO_10018
     picture = GFX_evt_scandal
     border = GFX_event_normal_frame_diplomacy
     is_triggered_only = yes
     hide_new = yes
 
     option = { #They bring someone home
-        name = EVTOPTA_JD_10018
+        name = EVTOPTA_BLORG_CO_10018
 		sound_effect = blorg_grace_gain
-        custom_tooltip = { text = EVTOPTA_JD_10018_TT }
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_10018_TT }
         
         #moves the lover to your court (and leaves a flag for later marriage hook-in)...
         event_target:new_found_lover = {
@@ -1980,7 +1980,7 @@ character_event = { # Special case 1 - The courtier you sent away to blorg has r
         add_grace_medium_effect = yes
     }
     option = { #We don't have room for strangers
-        name = EVTOPTB_JD_10018
+        name = EVTOPTB_BLORG_CO_10018
 		sound_effect = blorg_grace_gain
         hidden_effect = { FROM = { remove_character_modifier = out_traveling } }
         
@@ -2004,16 +2004,16 @@ character_event = { # Special case 1 - The courtier you sent away to blorg has r
     }
 }
 character_event = { # Special case 2 - The courtier you sent away to blorg has returned but wants to go back
-    id = JD.10019
+    id = BLORG_CO.10019
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_10019
+    desc = EVTDESC_BLORG_CO_10019
     picture = GFX_evt_son_asking_father
     border = GFX_event_normal_frame_diplomacy
     is_triggered_only = yes
 
     option = { #They go back to blorg, forever
         name = {
-            text = EVTOPTA_JD_10019
+            text = EVTOPTA_BLORG_CO_10019
             trigger = {
                 NOR = {
                     trait = lunatic
@@ -2024,15 +2024,15 @@ character_event = { # Special case 2 - The courtier you sent away to blorg has r
             }
         }
         name = {
-            text = EVTOPTA_JD_10019_lunatic
+            text = EVTOPTA_BLORG_CO_10019_lunatic
             trigger = { trait = lunatic }
         }
         name = {
-            text = EVTOPTA_JD_10019_imbecile
+            text = EVTOPTA_BLORG_CO_10019_imbecile
             trigger = { is_dumb_trigger = yes }
         }
         name = {
-            text = EVTOPTA_JD_10019_poet
+            text = EVTOPTA_BLORG_CO_10019_poet
             trigger = { OR = { trait = poet trait = kind } }
         }
 		sound_effect = blorg_grace_gain
@@ -2050,7 +2050,7 @@ character_event = { # Special case 2 - The courtier you sent away to blorg has r
                     }
                 }
             }
-            custom_tooltip = { text = EVTOPTA_JD_10019_TT_family } #Explains that they will take their family with them
+            custom_tooltip = { text = EVTOPTA_BLORG_CO_10019_TT_family } #Explains that they will take their family with them
         }
         if = { #Are they single and without children?
             limit = {
@@ -2064,7 +2064,7 @@ character_event = { # Special case 2 - The courtier you sent away to blorg has r
                     }
                 }
             }
-            custom_tooltip = { text = EVTOPTA_JD_10019_TT_solo } # Explains that they'll just go on their own
+            custom_tooltip = { text = EVTOPTA_BLORG_CO_10019_TT_solo } # Explains that they'll just go on their own
         }
 
         
@@ -2108,7 +2108,7 @@ character_event = { # Special case 2 - The courtier you sent away to blorg has r
     }
 
     option = { #They are angry
-        name = EVTOPTB_JD_10019
+        name = EVTOPTB_BLORG_CO_10019
 		sound_effect = blorg_grace_gain
         add_grace_medium_effect = yes
         hidden_effect = {  FROM = { remove_character_modifier = out_traveling } }
@@ -2120,7 +2120,7 @@ character_event = { # Special case 2 - The courtier you sent away to blorg has r
     }
 
     option = { #They will get over it
-        name = EVTOPTC_JD_10019
+        name = EVTOPTC_BLORG_CO_10019
         add_grace_medium_effect = yes
         hidden_effect = { FROM = { remove_character_modifier = out_traveling } }
 
@@ -2135,8 +2135,8 @@ character_event = { # Special case 2 - The courtier you sent away to blorg has r
     }
 
     option = { #Plead to them from the bottom of your heart
-        name = EVTOPTD_JD_10019
-        custom_tooltip = { text = EVTOPTD_JD_10019_TT }
+        name = EVTOPTD_BLORG_CO_10019
+        custom_tooltip = { text = EVTOPTD_BLORG_CO_10019_TT }
 		sound_effect = blorg_grace_gain
 		
         add_grace_medium_effect = yes
@@ -2162,9 +2162,9 @@ character_event = { # Special case 2 - The courtier you sent away to blorg has r
 }
 
 character_event = { # Fallback (in case the traveler died)
-    id = JD.10020
+    id = BLORG_CO.10020
 	has_dlc = "Jade Dragon"
-    desc = EVTDESC_JD_10020
+    desc = EVTDESC_BLORG_CO_10020
     picture = GFX_evt_recieve_letter
     border = GFX_event_normal_frame_diplomacy
     is_triggered_only = yes
@@ -2181,8 +2181,8 @@ character_event = { # Fallback (in case the traveler died)
     }
 
     option = {      
-        name = EVTOPTA_JD_10020
-        custom_tooltip = { text = EVTOPTA_JD_10020_TT }
+        name = EVTOPTA_BLORG_CO_10020
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_10020_TT }
         clr_character_flag = is_sending_someone_to_blorg
     }
 }
@@ -2192,7 +2192,7 @@ character_event = { # Fallback (in case the traveler died)
 # Dishonest traders event
 ###
 character_event = { # Hidden event
-    id = JD.30000
+    id = BLORG_CO.30000
     
     hide_window = yes
 
@@ -2222,14 +2222,14 @@ character_event = { # Hidden event
     immediate = {
         offmap_blorg = {
             governor = {
-                character_event = { id = JD.30001 }
+                character_event = { id = BLORG_CO.30001 }
             }
         }
     }
 }
 
 character_event = {
-	id = JD.30001
+	id = BLORG_CO.30001
 	has_dlc = "Jade Dragon"
 	
 	hide_window = yes
@@ -2238,17 +2238,17 @@ character_event = {
 	
 	immediate = {
 		FROM = {
-			letter_event = { id = JD.30002 }
+			letter_event = { id = BLORG_CO.30002 }
 		}
 	}
 }
 
 # A letter arrives from the governor stating that the Emperor is upset about dishonest traders
 letter_event = {
-	id = JD.30002
+	id = BLORG_CO.30002
 	has_dlc = "Jade Dragon"
 	
-	desc = EVTDESC_JD_30002
+	desc = EVTDESC_BLORG_CO_30002
 	border = GFX_event_letter_frame_diplomacy
 	
 	is_triggered_only = yes
@@ -2300,7 +2300,7 @@ letter_event = {
 	
 	# Punish all traders in realm
 	option = {
-		name = EVTOPTA_JD_30002
+		name = EVTOPTA_BLORG_CO_30002
 		
 		trigger = {
 			event_target:target_vassal_1 = { always = yes }
@@ -2332,7 +2332,7 @@ letter_event = {
 					duration = 3650
 				}
 			}
-			character_event = { id = JD.30003 days = 14 random = 30 }
+			character_event = { id = BLORG_CO.30003 days = 14 random = 30 }
 		}
 		event_target:target_vassal_2 = {
 			random_realm_province = {
@@ -2347,7 +2347,7 @@ letter_event = {
 					duration = 3650
 				}
 			}
-			character_event = { id = JD.30003 days = 14 random = 30 }
+			character_event = { id = BLORG_CO.30003 days = 14 random = 30 }
 		}
 		if = {
 			limit = {
@@ -2367,13 +2367,13 @@ letter_event = {
 					duration = 3650
 				}
 			}
-			character_event = { id = JD.30003 days = 14 random = 30 }
+			character_event = { id = BLORG_CO.30003 days = 14 random = 30 }
 		}
 	}
 	
 	# Task your marshal to find the worst troublemakers
 	option = {
-		name = EVTOPTB_JD_30002
+		name = EVTOPTB_BLORG_CO_30002
 		add_offmap_currency = {
 			offmap = offmap_blorg
 			value = 50
@@ -2406,7 +2406,7 @@ letter_event = {
 	
 	# Don't do anything
 	option = {
-		name = EVTOPTC_JD_30002
+		name = EVTOPTC_BLORG_CO_30002
 		add_offmap_currency = {
 			offmap = offmap_blorg
 			value = -150
@@ -2416,10 +2416,10 @@ letter_event = {
 
 # Your liege has limited your merchants privileges 
 character_event = {
-	id = JD.30003
+	id = BLORG_CO.30003
 	has_dlc = "Jade Dragon"
 	
-	desc = EVTDESC_JD_30003
+	desc = EVTDESC_BLORG_CO_30003
 	picture = GFX_evt_monk
 	border = GFX_event_normal_frame_diplomacy
 	
@@ -2427,7 +2427,7 @@ character_event = {
 	
 	# Publicly condemn the action
 	option = {
-		name = EVTOPTA_JD_30003
+		name = EVTOPTA_BLORG_CO_30003
 		
 		ai_chance = {
 			factor = 10
@@ -2456,13 +2456,13 @@ character_event = {
 			years = 5
 		}
 		FROM = {
-			character_event = { id = JD.30004 days = 14 }
+			character_event = { id = BLORG_CO.30004 days = 14 }
 		}
 	}
 	
 	# Don't bother
 	option = {
-		name = EVTOPTB_JD_30003
+		name = EVTOPTB_BLORG_CO_30003
 		
 		ai_chance = {
 			factor = 40
@@ -2492,10 +2492,10 @@ character_event = {
 
 # Your vassals are upset about legislating rules on their subjects
 character_event = {
-	id = JD.30004
+	id = BLORG_CO.30004
 	has_dlc = "Jade Dragon"
 	
-	desc = EVTDESC_JD_30004
+	desc = EVTDESC_BLORG_CO_30004
 	picture = GFX_evt_emissary
 	border = GFX_event_normal_frame_diplomacy
 	
@@ -2503,7 +2503,7 @@ character_event = {
 
 	# Too bad
 	option = {
-		name = EVTOPTA_JD_30004
+		name = EVTOPTA_BLORG_CO_30004
 		reverse_opinion = {
 			who = FROM
 			multiplier = 2
@@ -2519,7 +2519,7 @@ character_event = {
 ###
 
 character_event = {
-	id = JD.30010
+	id = BLORG_CO.30010
 	
 	hide_window = yes
 
@@ -2703,14 +2703,14 @@ character_event = {
 					}
 					
 					liege = {
-						character_event = { id = JD.30011 }
+						character_event = { id = BLORG_CO.30011 }
 					}
 				}
 				5 = { # Berate
 				
 				
 					liege = {
-						character_event = { id = JD.30012 }
+						character_event = { id = BLORG_CO.30012 }
 					}
 				}
 				1 = { # Don't comment on stay
@@ -2722,17 +2722,17 @@ character_event = {
 }
 
 character_event = {
-	id = JD.30011
+	id = BLORG_CO.30011
 	has_dlc = "Jade Dragon"
 	
-	desc = EVTDESC_JD_30011
+	desc = EVTDESC_BLORG_CO_30011
 	picture = GFX_evt_chinese_bureaucrat
 	border = GFX_event_normal_frame_diplomacy
 	
 	is_triggered_only = yes
 	
 	option = {
-		name = EVTOPTA_JD_30011
+		name = EVTOPTA_BLORG_CO_30011
 		sound_effect = blorg_grace_gain
 		
 		add_offmap_currency = {
@@ -2742,7 +2742,7 @@ character_event = {
 	}
 	
 	option = {
-		name = EVTOPTB_JD_30011
+		name = EVTOPTB_BLORG_CO_30011
 		prestige = 50
 		random = {
 			chance = 35
@@ -2756,10 +2756,10 @@ character_event = {
 }
 
 character_event = {
-	id = JD.30012
+	id = BLORG_CO.30012
 	has_dlc = "Jade Dragon"
 	
-	desc = EVTDESC_JD_30012
+	desc = EVTDESC_BLORG_CO_30012
 	picture = GFX_evt_blorg_diplomatic_incident
 	border = GFX_event_normal_frame_diplomacy
 	
@@ -2776,7 +2776,7 @@ character_event = {
 	}
 	
 	option = {
-		name = EVTOPTA_JD_30012
+		name = EVTOPTA_BLORG_CO_30012
 		add_offmap_currency = {
 			offmap = offmap_blorg
 			value = -100
@@ -2784,7 +2784,7 @@ character_event = {
 	}
 	
 	option = {
-		name = EVTOPTB_JD_30012
+		name = EVTOPTB_BLORG_CO_30012
 		event_target:chinese_courtier = {
 			hidden_tooltip = {
 				imprison = ROOT
@@ -2818,7 +2818,7 @@ character_event = {
 
 # Hidden Governor set-up event
 character_event = {
-    id = JD.40000
+    id = BLORG_CO.40000
     
     hide_window = yes
 
@@ -3275,56 +3275,56 @@ character_event = {
 						}
 						event_target:trade_competitor_1 = {
 							set_character_flag = trade_competition_build_city
-							letter_event = { id = JD.40001 }
+							letter_event = { id = BLORG_CO.40001 }
 						}
 						event_target:trade_competitor_2 = {
 							set_character_flag = trade_competition_build_city
-							letter_event = { id = JD.40001 }
+							letter_event = { id = BLORG_CO.40001 }
 						}
 						event_target:trade_competitor_3 = {
 							set_character_flag = trade_competition_build_city
-							letter_event = { id = JD.40001 }
+							letter_event = { id = BLORG_CO.40001 }
 						}
 						event_target:trade_competitor_4 = {
 							set_character_flag = trade_competition_build_city
-							letter_event = { id = JD.40001 }
+							letter_event = { id = BLORG_CO.40001 }
 						}
 						event_target:trade_competitor_5 = {
 							set_character_flag = trade_competition_build_city
-							letter_event = { id = JD.40001 }
+							letter_event = { id = BLORG_CO.40001 }
 						}
 						clr_character_flag = trade_competition_count
 						offmap_blorg = {
 							governor = {
-								character_event = { id = JD.40006 days = 1825 } # Failure event in case nobody built a city
+								character_event = { id = BLORG_CO.40006 days = 1825 } # Failure event in case nobody built a city
 							}
 						}
 					}
 					10 = { # Accumulate Prestige
 						event_target:trade_competitor_1 = {
 							set_character_flag = trade_competition_accumulate_prestige
-							letter_event = { id = JD.40001 }
+							letter_event = { id = BLORG_CO.40001 }
 						}
 						event_target:trade_competitor_2 = {
 							set_character_flag = trade_competition_accumulate_prestige
-							letter_event = { id = JD.40001 }
+							letter_event = { id = BLORG_CO.40001 }
 						}
 						event_target:trade_competitor_3 = {
 							set_character_flag = trade_competition_accumulate_prestige
-							letter_event = { id = JD.40001 }
+							letter_event = { id = BLORG_CO.40001 }
 						}
 						event_target:trade_competitor_4 = {
 							set_character_flag = trade_competition_accumulate_prestige
-							letter_event = { id = JD.40001 }
+							letter_event = { id = BLORG_CO.40001 }
 						}
 						event_target:trade_competitor_5 = {
 							set_character_flag = trade_competition_accumulate_prestige
-							letter_event = { id = JD.40001 }
+							letter_event = { id = BLORG_CO.40001 }
 						}
 						clr_character_flag = trade_competition_count
 						offmap_blorg = {
 							governor = {
-								character_event = { id = JD.40008 days = 913 }
+								character_event = { id = BLORG_CO.40008 days = 913 }
 							}
 						}
 					}
@@ -3336,15 +3336,15 @@ character_event = {
 
 # A letter arrives from the governor stating that the Emperor is looking for 'the best trade partner'
 letter_event = {
-    id = JD.40001
+    id = BLORG_CO.40001
 	has_dlc = "Jade Dragon"
     
     desc = {
-        text = EVTDESC_JD_40001_A
+        text = EVTDESC_BLORG_CO_40001_A
         trigger = { has_character_flag = trade_competition_build_city }
     }
     desc = {
-        text = EVTDESC_JD_40001_C
+        text = EVTDESC_BLORG_CO_40001_C
         trigger = { has_character_flag = trade_competition_accumulate_prestige } 
     }
     border = GFX_event_letter_frame_diplomacy
@@ -3353,7 +3353,7 @@ letter_event = {
     
     # Accept the challenge - City
     option = {
-        name = EVTOPTA_JD_40001
+        name = EVTOPTA_BLORG_CO_40001
         if = {
             limit = {
                 has_character_flag = trade_competition_build_city
@@ -3377,7 +3377,7 @@ letter_event = {
 
 # On-action start event for city construction
 character_event = {
-    id = JD.40002
+    id = BLORG_CO.40002
 	has_dlc = "Jade Dragon"
     
     hide_window = yes
@@ -3395,7 +3395,7 @@ character_event = {
 
 # On-action completion event for city construction
 character_event = {
-    id = JD.40003
+    id = BLORG_CO.40003
 	has_dlc = "Jade Dragon"
     
     hide_window = yes
@@ -3418,7 +3418,7 @@ character_event = {
         clr_character_flag = started_building_holding
         offmap_blorg = {
             governor = {
-                character_event = { id = JD.40004 } # Result ping event
+                character_event = { id = BLORG_CO.40004 } # Result ping event
             }
         }
     }
@@ -3426,7 +3426,7 @@ character_event = {
 
 # Governor Ping event for City Construction
 character_event = {
-    id = JD.40004
+    id = BLORG_CO.40004
 	has_dlc = "Jade Dragon"
     
     hide_window = yes
@@ -3437,22 +3437,22 @@ character_event = {
             limit = {
                 has_character_flag = trade_competition_build_city
             }
-            letter_event = { id = JD.40005 } # Result event
+            letter_event = { id = BLORG_CO.40005 } # Result event
         }
     }
 }
 
 # A letter arrives from the governor naming the winner
 letter_event = {
-    id = JD.40005
+    id = BLORG_CO.40005
 	has_dlc = "Jade Dragon"
     
     desc = {
-        text = EVTDESC_JD_40005_A # winner
+        text = EVTDESC_BLORG_CO_40005_A # winner
         trigger = { has_character_flag = trade_competition_city_winner }
     }
     desc = {
-        text = EVTDESC_JD_40005_B # loser
+        text = EVTDESC_BLORG_CO_40005_B # loser
         trigger = { NOT = { has_character_flag = trade_competition_city_winner } }
     }
     border = GFX_event_letter_frame_diplomacy
@@ -3461,7 +3461,7 @@ letter_event = {
 
     # Hurray I won!
     option = {
-        name = EVTOPTA_JD_40005
+        name = EVTOPTA_BLORG_CO_40005
         trigger = {
             has_character_flag = trade_competition_city_winner
         }
@@ -3489,7 +3489,7 @@ letter_event = {
 
     # Boo I lost :(
     option = {
-        name = EVTOPTB_JD_40005
+        name = EVTOPTB_BLORG_CO_40005
         trigger = {
             NOT = { has_character_flag = trade_competition_city_winner }
         }
@@ -3507,7 +3507,7 @@ letter_event = {
 
 # Governor Ping failure event for City Construction
 character_event = {
-    id = JD.40006
+    id = BLORG_CO.40006
 	has_dlc = "Jade Dragon"
     
     hide_window = yes
@@ -3535,36 +3535,36 @@ character_event = {
     
     immediate = {
         event_target:trade_competitor_1 = { 
-            letter_event = { id = JD.40007 }
+            letter_event = { id = BLORG_CO.40007 }
         }
         event_target:trade_competitor_2 = { 
-            letter_event = { id = JD.40007 }
+            letter_event = { id = BLORG_CO.40007 }
         }
         event_target:trade_competitor_3 = { 
-            letter_event = { id = JD.40007 }
+            letter_event = { id = BLORG_CO.40007 }
         }
         event_target:trade_competitor_4 = { 
-            letter_event = { id = JD.40007 }
+            letter_event = { id = BLORG_CO.40007 }
         }
         event_target:trade_competitor_5 = { 
-            letter_event = { id = JD.40007 }
+            letter_event = { id = BLORG_CO.40007 }
         }
     }
 }
 
 # Nobody built a city failure event
 letter_event = {
-    id = JD.40007
+    id = BLORG_CO.40007
 	has_dlc = "Jade Dragon"
     
-    desc = EVTDESC_JD_40007
+    desc = EVTDESC_BLORG_CO_40007
     border = GFX_event_letter_frame_diplomacy
     
     is_triggered_only = yes
 
     # Damnit
     option = {
-        name = EVTOPTA_JD_40007
+        name = EVTOPTA_BLORG_CO_40007
         add_offmap_currency = {
             offmap = offmap_blorg
             value = -250
@@ -3583,7 +3583,7 @@ letter_event = {
 
 # Governor Ping event for half-time status update
 character_event = {
-    id = JD.40008
+    id = BLORG_CO.40008
 	has_dlc = "Jade Dragon"
     
     hide_window = yes
@@ -3783,35 +3783,35 @@ character_event = {
     }
     after = {
         event_target:trade_competitor_1 = { 
-            letter_event = { id = JD.40009 }
+            letter_event = { id = BLORG_CO.40009 }
         }
         event_target:trade_competitor_2 = { 
-            letter_event = { id = JD.40009 }
+            letter_event = { id = BLORG_CO.40009 }
         }
         event_target:trade_competitor_3 = { 
-            letter_event = { id = JD.40009 }
+            letter_event = { id = BLORG_CO.40009 }
         }
         event_target:trade_competitor_4 = { 
-            letter_event = { id = JD.40009 }
+            letter_event = { id = BLORG_CO.40009 }
         }
         event_target:trade_competitor_5 = { 
-            letter_event = { id = JD.40009 }
+            letter_event = { id = BLORG_CO.40009 }
         }
-        character_event = { id = JD.40010 days = 912 }
+        character_event = { id = BLORG_CO.40010 days = 912 }
     }
 }
 
 # Half-time status update event
 character_event = {
-    id = JD.40009
+    id = BLORG_CO.40009
 	has_dlc = "Jade Dragon"
     
     desc = {
-        text = EVTDESC_JD_40009_A # ahead
+        text = EVTDESC_BLORG_CO_40009_A # ahead
         trigger = { has_character_flag = trade_competition_halftime_winner }
     }
     desc = {
-        text = EVTDESC_JD_40009_B # not ahead
+        text = EVTDESC_BLORG_CO_40009_B # not ahead
         trigger = { NOT = { has_character_flag = trade_competition_halftime_winner } }
     }
     picture = GFX_evt_blorg_stable
@@ -3821,7 +3821,7 @@ character_event = {
     
     # I'm da bestest!
     option = {
-        name = EVTOPTA_JD_40009
+        name = EVTOPTA_BLORG_CO_40009
         trigger = {
             has_character_flag = trade_competition_halftime_winner
         }
@@ -3837,7 +3837,7 @@ character_event = {
 
     # Got to work harder
     option = {
-        name = EVTOPTB_JD_40009
+        name = EVTOPTB_BLORG_CO_40009
         trigger = {
             NOT = { has_character_flag = trade_competition_halftime_winner }
         }
@@ -3856,7 +3856,7 @@ character_event = {
 
 # Governor Ping event for end result
 character_event = {
-    id = JD.40010
+    id = BLORG_CO.40010
 	has_dlc = "Jade Dragon"
     
     hide_window = yes
@@ -4056,42 +4056,42 @@ character_event = {
     }
     after = {
         event_target:trade_competitor_1 = { 
-            letter_event = { id = JD.40011 }
+            letter_event = { id = BLORG_CO.40011 }
         }
         event_target:trade_competitor_2 = { 
-            letter_event = { id = JD.40011 }
+            letter_event = { id = BLORG_CO.40011 }
         }
         event_target:trade_competitor_3 = { 
-            letter_event = { id = JD.40011 }
+            letter_event = { id = BLORG_CO.40011 }
         }
         event_target:trade_competitor_4 = { 
-            letter_event = { id = JD.40011 }
+            letter_event = { id = BLORG_CO.40011 }
         }
         event_target:trade_competitor_5 = { 
-            letter_event = { id = JD.40011 }
+            letter_event = { id = BLORG_CO.40011 }
         }
     }
 }
 
 # Ending notification event
 letter_event = {
-    id = JD.40011
+    id = BLORG_CO.40011
 	has_dlc = "Jade Dragon"
     
     desc = {
-        text = EVTDESC_JD_40011_A # winner trade modifier
+        text = EVTDESC_BLORG_CO_40011_A # winner trade modifier
         trigger = { has_character_flag = trade_competition_winner_modifier }
     }
     desc = {
-        text = EVTDESC_JD_40011_B # loser
+        text = EVTDESC_BLORG_CO_40011_B # loser
         trigger = { NOT = { has_character_flag = trade_competition_winner } }
     }
     desc = {
-        text = EVTDESC_JD_40011_C # winner artifact
+        text = EVTDESC_BLORG_CO_40011_C # winner artifact
         trigger = { has_character_flag = trade_competition_winner_artifact }
     }
     desc = {
-        text = EVTDESC_JD_40011_D # winner grae
+        text = EVTDESC_BLORG_CO_40011_D # winner grae
         trigger = { has_character_flag = trade_competition_winner_grace }
     }
     border = GFX_event_letter_frame_diplomacy
@@ -4262,7 +4262,7 @@ letter_event = {
     
     # Hurray
     option = {
-        name = EVTOPTA_JD_40005
+        name = EVTOPTA_BLORG_CO_40005
         trigger = {
             has_character_flag = trade_competition_winner
         }
@@ -4313,7 +4313,7 @@ letter_event = {
 
     # Boo
     option = {
-        name = EVTOPTB_JD_40005
+        name = EVTOPTB_BLORG_CO_40005
         trigger = {
             NOT = { has_character_flag = trade_competition_winner }
         }
@@ -4332,7 +4332,7 @@ letter_event = {
 
 ### Chinese Noble escapes to your court ###
 character_event = {
-	id = JD.70000
+	id = BLORG_CO.70000
 	hide_window = yes
 	is_triggered_only = yes
 
@@ -4388,37 +4388,37 @@ character_event = {
 			set_character_flag = ignore_refund
             set_character_flag = is_escaped_chinese_noble
 			save_event_target_as = escaped_chinese_noble
-			character_event = { id = JD.70001 days = 1 }
+			character_event = { id = BLORG_CO.70001 days = 1 }
 		}
 	}
 }
 
 character_event = {
-	id = JD.70001
+	id = BLORG_CO.70001
 	has_dlc = "Jade Dragon"
 	hide_window = yes
 	is_triggered_only = yes
 	
 	immediate = {
 		FROM = {
-			character_event = { id = JD.70002 days = 1 }
+			character_event = { id = BLORG_CO.70002 days = 1 }
 		}
 	}
 }
 
 character_event = {		#Escaped Chinese Noble appears
-	id = JD.70002
+	id = BLORG_CO.70002
 	has_dlc = "Jade Dragon"
-	desc = EVTDESC_JD_70002
+	desc = EVTDESC_BLORG_CO_70002
     picture = GFX_evt_chinese_bureaucrat
     border = GFX_event_normal_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = EVTOPTA_JD_70002
+		name = EVTOPTA_BLORG_CO_70002
 		
-		custom_tooltip = { text = EVTOPTA_JD_70002_TT }
+		custom_tooltip = { text = EVTOPTA_BLORG_CO_70002_TT }
 		
 		event_target:escaped_chinese_noble = {
 			opinion = {
@@ -4432,20 +4432,20 @@ character_event = {		#Escaped Chinese Noble appears
 			random_list = {
 				50 = {
 					offmap_blorg = { 
-						governor = { character_event = { id = JD.70007 days = 30 } } 
+						governor = { character_event = { id = BLORG_CO.70007 days = 30 } } 
 					}
 				}
 				50 = {
-					character_event = { id = JD.70004 days = 100 }
+					character_event = { id = BLORG_CO.70004 days = 100 }
 				}
 			}
 		}
 	}
 		
 	option = {
-		name = EVTOPTC_JD_70002
+		name = EVTOPTC_BLORG_CO_70002
 		
-		custom_tooltip = { text = EVTOPTC_JD_70002_TT }
+		custom_tooltip = { text = EVTOPTC_BLORG_CO_70002_TT }
 		
 		event_target:escaped_chinese_noble = {
 			opinion = {
@@ -4457,14 +4457,14 @@ character_event = {		#Escaped Chinese Noble appears
 			
 		hidden_effect = {
 			random_list = {
-    			50 = { character_event = { id = JD.70005 days = 60 } }
-    			50 = { character_event = { id = JD.70008 days = 60 } }
+    			50 = { character_event = { id = BLORG_CO.70005 days = 60 } }
+    			50 = { character_event = { id = BLORG_CO.70008 days = 60 } }
 			}
 		}	
 	}
 	
 	option = {
-		name = EVTOPTB_JD_70002
+		name = EVTOPTB_BLORG_CO_70002
 		
 		event_target:escaped_chinese_noble = {
 			hidden_effect = {
@@ -4472,7 +4472,7 @@ character_event = {		#Escaped Chinese Noble appears
 			}
 		}
 		
-		custom_tooltip = { text = EVTOPTB_JD_70002_TT }
+		custom_tooltip = { text = EVTOPTB_BLORG_CO_70002_TT }
 		
 		#event_target:escaped_chinese_noble = {
 		#	opinion = {
@@ -4485,7 +4485,7 @@ character_event = {		#Escaped Chinese Noble appears
 }
 	
 character_event = {
-	id = JD.70007
+	id = BLORG_CO.70007
 	has_dlc = "Jade Dragon"
 	hide_window = yes
 	is_triggered_only = yes
@@ -4493,15 +4493,15 @@ character_event = {
 	
 	immediate = {
 		FROM = {
-			letter_event = { id = JD.70003 days = 1 }
+			letter_event = { id = BLORG_CO.70003 days = 1 }
 		}
 	}
 }
 
 letter_event = {			#blorg finds out
-	id = JD.70003
+	id = BLORG_CO.70003
 	has_dlc = "Jade Dragon"
-	desc = EVTDESC_JD_70003
+	desc = EVTDESC_BLORG_CO_70003
     border = GFX_event_letter_frame_diplomacy
 	
 	is_triggered_only = yes
@@ -4514,33 +4514,33 @@ letter_event = {			#blorg finds out
 	}
 	
 	option = {
-		name = EVTOPTA_JD_70003
+		name = EVTOPTA_BLORG_CO_70003
 		
-		custom_tooltip = { text = EVTOPTA_JD_70003_TT }
+		custom_tooltip = { text = EVTOPTA_BLORG_CO_70003_TT }
 		
-		character_event = { id = JD.70005 days = 60 }
+		character_event = { id = BLORG_CO.70005 days = 60 }
 	}
 	
 	option = {
-		name = EVTOPTB_JD_70003
+		name = EVTOPTB_BLORG_CO_70003
 		
-		custom_tooltip = { text = EVTOPTB_JD_70003_TT }
+		custom_tooltip = { text = EVTOPTB_BLORG_CO_70003_TT }
 		
 		detract_grace_major_effect = yes
 		
 		hidden_effect = {
 			random_list = {
-    			50 = { character_event = { id = JD.70009 days = 60 } }
-    			50 = { character_event = { id = JD.70004 days = 100 } }
+    			50 = { character_event = { id = BLORG_CO.70009 days = 60 } }
+    			50 = { character_event = { id = BLORG_CO.70004 days = 100 } }
 			}
 		}
 	}
 }
 
 character_event = {			#blorg does not find out
-	id = JD.70004
+	id = BLORG_CO.70004
 	has_dlc = "Jade Dragon"
-	desc = EVTDESC_JD_70004
+	desc = EVTDESC_BLORG_CO_70004
     picture = GFX_evt_chinese_bureaucrat
     border = GFX_event_normal_frame_diplomacy
 	
@@ -4558,7 +4558,7 @@ character_event = {			#blorg does not find out
 	}
 	
 	option = {
-		name = EVTOPTA_JD_70004
+		name = EVTOPTA_BLORG_CO_70004
 		
 		if = {
 			limit = {
@@ -4588,7 +4588,7 @@ character_event = {			#blorg does not find out
         }
 		
 		custom_tooltip = {
-			text = EVTOPTA_JD_70004_TT
+			text = EVTOPTA_BLORG_CO_70004_TT
 			hidden_effect = {
 				event_target:escaped_chinese_noble = {
 					leave_court_and_die_effect = yes
@@ -4600,9 +4600,9 @@ character_event = {			#blorg does not find out
 
 
 character_event = {			#You let blorg know
-	id = JD.70005
+	id = BLORG_CO.70005
 	has_dlc = "Jade Dragon"
-	desc = EVTDESC_JD_70005
+	desc = EVTDESC_BLORG_CO_70005
     picture = GFX_evt_blorg_diplomatic_success
     border = GFX_event_normal_frame_diplomacy
 
@@ -4616,7 +4616,7 @@ character_event = {			#You let blorg know
 	}
 	
 	option = {
-		name = EVTOPTA_JD_70005
+		name = EVTOPTA_BLORG_CO_70005
 		
 		sound_effect = blorg_grace_gain
 		add_grace_medium_effect = yes
@@ -4630,9 +4630,9 @@ character_event = {			#You let blorg know
 }
 
 character_event = {			#You let blorg know but the noble escapes
-	id =  JD.70008
+	id =  BLORG_CO.70008
 	has_dlc = "Jade Dragon"
-	desc = EVTDESC_JD_70008
+	desc = EVTDESC_BLORG_CO_70008
     picture = GFX_evt_chinese_bureaucrat
     border = GFX_event_normal_frame_diplomacy
  
@@ -4654,7 +4654,7 @@ character_event = {			#You let blorg know but the noble escapes
 	}
 	
 	option = {
-		name = EVTOPTA_JD_70008
+		name = EVTOPTA_BLORG_CO_70008
 		tooltip = {
 			detract_grace_minor_effect = yes
 		}
@@ -4662,9 +4662,9 @@ character_event = {			#You let blorg know but the noble escapes
 }
 
 character_event = {			#blorg Assassinates the noble
-	id = JD.70009
+	id = BLORG_CO.70009
 	has_dlc = "Jade Dragon"
-	desc = EVTDESC_JD_70009
+	desc = EVTDESC_BLORG_CO_70009
     picture = GFX_evt_shadow
     border = GFX_event_normal_frame_diplomacy
 	
@@ -4689,7 +4689,7 @@ character_event = {			#blorg Assassinates the noble
 	}
 	
 	option = {
-		name = EVTOPTA_JD_70009
+		name = EVTOPTA_BLORG_CO_70009
 		tooltip = {
 			event_target:escaped_chinese_noble = {
 				death = {
@@ -4703,28 +4703,28 @@ character_event = {			#blorg Assassinates the noble
 
 #Inform of blorg's response to you breaking free via decision, first ping to get Governor's portrait
 character_event = {
-    id = JD.60010
+    id = BLORG_CO.60010
 	has_dlc = "Jade Dragon"
     hide_window = yes
     is_triggered_only = yes
-    immediate = { FROM = { letter_event = { id = JD.60011 } } }
+    immediate = { FROM = { letter_event = { id = BLORG_CO.60011 } } }
 }
 letter_event = {
-    id = JD.60011
+    id = BLORG_CO.60011
 	has_dlc = "Jade Dragon"
-    desc = EVT_DESC_JD_60011
+    desc = EVT_DESC_BLORG_CO_60011
 
     is_triggered_only = yes
 
     option = {
-        name = EVT_OPTA_JD_60011
+        name = EVT_OPTA_BLORG_CO_60011
     }
 }
 
 
 ### Chinese Refugees appear at your court (Hidden start) ###
 character_event = {
-    id = JD.10030
+    id = BLORG_CO.10030
     hide_window = yes
     is_triggered_only = yes
 
@@ -4872,7 +4872,7 @@ character_event = {
                     save_event_target_as = chinese_refugee
 
                     add_character_modifier = {
-                        name = jd_administrator
+                        name = BLORG_CO_administrator
                         duration = -1
                     }
                     set_character_flag = is_chinese_administrator
@@ -5101,7 +5101,7 @@ character_event = {
                     save_event_target_as = chinese_refugee
 
                     add_character_modifier = {
-                        name = jd_master_engineer
+                        name = BLORG_CO_master_engineer
                         duration = -1
                     }
                     set_character_flag = is_chinese_master_engineer
@@ -5328,7 +5328,7 @@ character_event = {
                     save_event_target_as = chinese_refugee
 
                     add_character_modifier = {
-                        name = jd_strategist
+                        name = BLORG_CO_strategist
                         duration = -1
                     }
                     set_character_flag = is_chinese_strategist
@@ -5842,51 +5842,51 @@ character_event = {
             }
         }
         #### send ping...
-        event_target:chinese_refugee = { character_event = { id = JD.10031 days = 1 } }
+        event_target:chinese_refugee = { character_event = { id = BLORG_CO.10031 days = 1 } }
     }
 }
 
 #Hidden ping event
 character_event = {
-    id = JD.10031
+    id = BLORG_CO.10031
 	has_dlc = "Jade Dragon"
     hide_window = yes
     is_triggered_only = yes
     immediate = {
         set_character_flag = is_chinese_refugee
-        FROM = { character_event = { id = JD.10032 } }
+        FROM = { character_event = { id = BLORG_CO.10032 } }
     }
 }
 
 #Visible event for player - gifted refugee appears... 
 character_event = {
-    id = JD.10032
+    id = BLORG_CO.10032
 	has_dlc = "Jade Dragon"
     picture = GFX_evt_chinese_bureaucrat
     border = GFX_event_normal_frame_diplomacy
     is_triggered_only = yes
     
     desc = {
-        text = EVTDESC_JD_10032_A #chinese_administrator
+        text = EVTDESC_BLORG_CO_10032_A #chinese_administrator
         trigger = { has_character_flag = received_administrator }
     }
     desc = {
-        text = EVTDESC_JD_10032_B #chinese_master_engineer
+        text = EVTDESC_BLORG_CO_10032_B #chinese_master_engineer
         trigger = { has_character_flag = received_engineer }
     }
     desc = {
-        text = EVTDESC_JD_10032_C #chinese_strategist
+        text = EVTDESC_BLORG_CO_10032_C #chinese_strategist
         trigger = { has_character_flag = received_strategist }
     }
     desc = {
-        text = EVTDESC_JD_10032_D #chinese_doctor
+        text = EVTDESC_BLORG_CO_10032_D #chinese_doctor
         trigger = { has_character_flag = received_physician }
     }
 
 
     option = { #Welcome to stay, Administrator
-        name = EVTOPTA_JD_10032
-        custom_tooltip = { text = EVTOPTA_JD_10032_TT }
+        name = EVTOPTA_BLORG_CO_10032
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_10032_TT }
 
         event_target:chinese_administrator = {
             show_scope_change = no
@@ -5896,7 +5896,7 @@ character_event = {
                         has_status = blorg_golden_age
                     }
                 }
-                set_character_flag = jd_administrator_golden_age #so you can't reappoint during golden age to get better modifier
+                set_character_flag = BLORG_CO_administrator_golden_age #so you can't reappoint during golden age to get better modifier
             }
             give_minor_title = title_administrator #effects in minor title definition
         }
@@ -5908,13 +5908,13 @@ character_event = {
                     }
                 }
                 add_character_modifier = {
-                    name = employing_jd_administrator_golden_age
+                    name = employing_BLORG_CO_administrator_golden_age
                     duration = -1
                 }
             }
             else = {
                 add_character_modifier = {
-                    name = employing_jd_administrator
+                    name = employing_BLORG_CO_administrator
                     duration = -1
                 }
             }
@@ -5932,8 +5932,8 @@ character_event = {
     }
 
     option = { #Welcome to stay, Engineer
-        name = EVTOPTB_JD_10032
-        custom_tooltip = { text = EVTOPTA_JD_10032_TT }
+        name = EVTOPTB_BLORG_CO_10032
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_10032_TT }
 
         event_target:chinese_master_engineer = { 
             show_scope_change = no
@@ -5961,8 +5961,8 @@ character_event = {
     }
 
     option = { #Welcome to stay, Strategist    
-        name = EVTOPTC_JD_10032
-        custom_tooltip = { text = EVTOPTA_JD_10032_TT } #(yes, the same as opt A)
+        name = EVTOPTC_BLORG_CO_10032
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_10032_TT } #(yes, the same as opt A)
         
         event_target:chinese_strategist = {
             show_scope_change = no
@@ -5987,8 +5987,8 @@ character_event = {
     }
 
     option = { #Welcome to stay, Doctor
-        name = EVTOPTD_JD_10032
-        custom_tooltip = { text = EVTOPTA_JD_10032_TT }
+        name = EVTOPTD_BLORG_CO_10032
+        custom_tooltip = { text = EVTOPTA_BLORG_CO_10032_TT }
         
         event_target:chinese_doctor = {
             show_scope_change = no
@@ -6008,47 +6008,47 @@ character_event = {
     
     option = { #Opt out (they leave court and die)...
         name = {
-            text = EVTOPTE_JD_10032_1 #"Surely this [chinese_refugee.GetManWoman] can find shelter elsewhere."
+            text = EVTOPTE_BLORG_CO_10032_1 #"Surely this [chinese_refugee.GetManWoman] can find shelter elsewhere."
             trigger = {
                 has_character_flag = received_administrator
             }
         }
         if = {
             limit = { has_character_flag = received_administrator }
-            custom_tooltip = { text = EVTOPTE_JD_10032_1_TT } #"You send the [chinese_refugee.GetManWoman] away.\n"
+            custom_tooltip = { text = EVTOPTE_BLORG_CO_10032_1_TT } #"You send the [chinese_refugee.GetManWoman] away.\n"
         }
 
         name = {
-            text = EVTOPTE_JD_10032_2 #"This is a waste of my time."
+            text = EVTOPTE_BLORG_CO_10032_2 #"This is a waste of my time."
             trigger = {
                 has_character_flag = received_engineer
             }
         }
         if = {
             limit = { has_character_flag = received_engineer }
-            custom_tooltip = { text = EVTOPTE_JD_10032_1_TT }
+            custom_tooltip = { text = EVTOPTE_BLORG_CO_10032_1_TT }
         }
 
         name = {
-            text = EVTOPTE_JD_10032_3 #"I'm sorry, but we can hardly afford to feed our own..."
+            text = EVTOPTE_BLORG_CO_10032_3 #"I'm sorry, but we can hardly afford to feed our own..."
             trigger = {
                 has_character_flag = received_strategist
             }
         }
         if = {
             limit = { has_character_flag = received_strategist }
-            custom_tooltip = { text = EVTOPTE_JD_10032_1_TT }
+            custom_tooltip = { text = EVTOPTE_BLORG_CO_10032_1_TT }
         }
 
         name = {
-            text = EVTOPTE_JD_10032_4 #"I'm sure [chinese_refugee.GetSheHe] wants to be left alone"
+            text = EVTOPTE_BLORG_CO_10032_4 #"I'm sure [chinese_refugee.GetSheHe] wants to be left alone"
             trigger = {
                 has_character_flag = received_physician
             }
         }
         if = {
             limit = { has_character_flag = received_physician }
-            custom_tooltip = { text = EVTOPTE_JD_10032_4_TT } #"You let the refugee be.\n"
+            custom_tooltip = { text = EVTOPTE_BLORG_CO_10032_4_TT } #"You let the refugee be.\n"
         }
         
         hidden_effect = {
@@ -6065,14 +6065,14 @@ character_event = {
         clr_character_flag = received_strategist
         clr_character_flag = received_physician
 
-        character_event = { id = JD.10035 days = 7300 } #clears final flag... (20 years delay)
+        character_event = { id = BLORG_CO.10035 days = 7300 } #clears final flag... (20 years delay)
     }
 }
 
 
 #clean up event
 character_event = {
-    id = JD.10035
+    id = BLORG_CO.10035
 	has_dlc = "Jade Dragon"
     hide_window = yes
     is_triggered_only = yes
@@ -6082,7 +6082,7 @@ character_event = {
 ################
 # Suzerain dies, inform tributary relationship ends
 character_event = {
-    id = JD.60015
+    id = BLORG_CO.60015
     is_triggered_only = yes
     hide_window = yes
     only_rulers = yes
@@ -6100,13 +6100,13 @@ character_event = {
                 ai = no
                 is_tributary = { type = default }
             }
-            character_event = { id = JD.60016 }
+            character_event = { id = BLORG_CO.60016 }
         }
     }
 }
 character_event = {
-    id = JD.60016
-    desc = EVT_DESC_JD_60016
+    id = BLORG_CO.60016
+    desc = EVT_DESC_BLORG_CO_60016
     picture = GFX_evt_bandits
     is_triggered_only = yes
     notification = yes
@@ -6118,8 +6118,8 @@ character_event = {
 ######
 
 character_event = { # Traveling Teacher
-	id = JD.7000
-	desc = EVTDESC_JD_7000
+	id = BLORG_CO.7000
+	desc = EVTDESC_BLORG_CO_7000
     picture = GFX_evt_blorg_stable
 	
 	only_playable = yes
@@ -6254,11 +6254,11 @@ character_event = { # Traveling Teacher
 	}
 	
 	option = { # Bring him to court
-		name = EVTOPTA_JD_7000
+		name = EVTOPTA_BLORG_CO_7000
 		custom_tooltip = {
-			text = EVTOPTA_JD_7000_TT
+			text = EVTOPTA_BLORG_CO_7000_TT
 			hidden_effect = {
-				character_event = { id = JD.7001 }
+				character_event = { id = BLORG_CO.7001 }
 			}
 		}
 		event_target:traveling_teacher = {
@@ -6270,13 +6270,13 @@ character_event = { # Traveling Teacher
 	}
 	
 	option = { # Bring him over for... dinner
-		name = EVTOPTC_JD_7000
+		name = EVTOPTC_BLORG_CO_7000
 		tooltip_info = cannibal_trait
 		trigger = {
 			trait = cannibal_trait
 		}
 		custom_tooltip = {
-			text = EVTOPTC_JD_7000_TT
+			text = EVTOPTC_BLORG_CO_7000_TT
 		}
 		event_target:traveling_teacher = {
 			death = {
@@ -6299,9 +6299,9 @@ character_event = { # Traveling Teacher
 	}
 
 	option = { # Leave it be
-		name = EVTOPTB_JD_7000
+		name = EVTOPTB_BLORG_CO_7000
 		custom_tooltip = {
-			text = EVTOPTB_JD_7000_TT
+			text = EVTOPTB_BLORG_CO_7000_TT
 			hidden_effect = {
 				event_target:traveling_teacher = {
 					leave_court_and_die_effect = yes
@@ -6313,9 +6313,9 @@ character_event = { # Traveling Teacher
 }
 
 character_event = { # Accept Teacher into Court
-	id = JD.7001
+	id = BLORG_CO.7001
 	has_dlc = "Jade Dragon"
-	desc = EVTDESC_JD_7001
+	desc = EVTDESC_BLORG_CO_7001
     picture = GFX_evt_child_reading
 
 	is_triggered_only = yes
@@ -6330,7 +6330,7 @@ character_event = { # Accept Teacher into Court
 	}
 	
 	option = { 
-		name = EVTOPTA_JD_7001 # Basic teaching
+		name = EVTOPTA_BLORG_CO_7001 # Basic teaching
 		transfer_scaled_wealth = {
 			to = event_target:traveling_teacher
 			value = 0.25
@@ -6351,7 +6351,7 @@ character_event = { # Accept Teacher into Court
 	}
 
 	option = {
-		name = EVTOPTB_JD_7001 # Read Confucian and Taoist Classics to the child
+		name = EVTOPTB_BLORG_CO_7001 # Read Confucian and Taoist Classics to the child
 		trigger = {
 			event_target:child_to_be_taught = {
 				NOT = {
@@ -6393,7 +6393,7 @@ character_event = { # Accept Teacher into Court
 	}
 	
 	option = { # Teach child surgery and poetry
-		name = EVTOPTC_JD_7001
+		name = EVTOPTC_BLORG_CO_7001
 		trigger = {
 			event_target:child_to_be_taught = {
 				NOR = {
@@ -6423,7 +6423,7 @@ character_event = { # Accept Teacher into Court
 	}
 	
 	option = { # Read Confucian Classics to the child
-		name = EVTOPTD_JD_7001
+		name = EVTOPTD_BLORG_CO_7001
 		trigger = {
 			event_target:child_to_be_taught = {
 				trait = dull
@@ -6450,9 +6450,9 @@ character_event = { # Accept Teacher into Court
 	}
 	
 	option = { # This is outrageously expensive, send the teacher away!
-		name = EVTOPTE_JD_7001
+		name = EVTOPTE_BLORG_CO_7001
 		custom_tooltip = {
-			text = EVTOPTB_JD_7000_TT
+			text = EVTOPTB_BLORG_CO_7000_TT
 			hidden_effect = {
 				event_target:traveling_teacher = {
 					leave_court_and_die_effect = yes
@@ -6468,8 +6468,8 @@ character_event = { # Accept Teacher into Court
 }
 
 character_event = { # Radhanite Merchant
-	id = JD.7010
-	desc = EVTDESC_JD_7010
+	id = BLORG_CO.7010
+	desc = EVTDESC_BLORG_CO_7010
     picture = GFX_evt_jewish_market
 	
 	only_playable = yes
@@ -6582,9 +6582,9 @@ character_event = { # Radhanite Merchant
 	}
 	
 	option = { # Accept offer
-		name = EVTOPTA_JD_7010
+		name = EVTOPTA_BLORG_CO_7010
 		custom_tooltip = {
-			text = EVTOPTA_JD_7010_TT
+			text = EVTOPTA_BLORG_CO_7010_TT
 		}
 		event_target:radhanite_merchant = {
 			show_portrait = yes
@@ -6612,7 +6612,7 @@ character_event = { # Radhanite Merchant
 	}
 	
 	option = { # Bring him over for... dinner
-		name = EVTOPTB_JD_7010
+		name = EVTOPTB_BLORG_CO_7010
 		tooltip_info = cannibal_trait
 		trigger = {
 			trait = cannibal_trait
@@ -6642,7 +6642,7 @@ character_event = { # Radhanite Merchant
 	}
 
 	option = { # One-up the radhanite
-		name = EVTOPTC_JD_7010
+		name = EVTOPTC_BLORG_CO_7010
 		trigger = {
 			event_target:radhanite_location = {
 				always = yes
@@ -6655,7 +6655,7 @@ character_event = { # Radhanite Merchant
 			}
 		}
 		custom_tooltip = {
-			text = EVTOPTC_JD_7010_TT
+			text = EVTOPTC_BLORG_CO_7010_TT
 		}
 		prestige = -100
 		transfer_scaled_wealth = {
@@ -6696,9 +6696,9 @@ character_event = { # Radhanite Merchant
 	}
 	
 	option = { # Politely decline
-		name = EVTOPTD_JD_7010
+		name = EVTOPTD_BLORG_CO_7010
 		custom_tooltip = {
-			text = EVTOPTD_JD_7010_TT
+			text = EVTOPTD_BLORG_CO_7010_TT
 			hidden_effect = {
 				event_target:radhanite_merchant = {
 					leave_court_and_die_effect = yes
