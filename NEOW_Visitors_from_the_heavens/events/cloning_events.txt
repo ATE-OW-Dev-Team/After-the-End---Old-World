@@ -1,0 +1,1280 @@
+namespace = clone
+
+# Character commissions a clone of themselves
+character_event = {
+	id = clone.0
+	desc = "EVTDESCCLONE0"
+	picture = GFX_evt_laboratory
+	is_triggered_only = yes
+
+	option = { # Male clone
+		name = "EVTOPTACLONE0"
+		trigger = { is_female = no } # Male clones need a Y chromosome
+		wealth = -100
+		custom_tooltip = {
+			text = "MALECLONETOOLTIP"
+			set_character_flag = flag_cloning_in_progress
+			clr_character_flag = flag_cloning_decision_active
+			hidden_tooltip = { character_event = { id = clone.1 days = 270 random = 60 } }
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				any_child = {
+					trait = clone
+					is_female = no
+				}
+			}
+			modifier = {
+				factor = 2
+				any_child = {
+					trait = clone
+					is_female = yes
+				}
+			}
+		}
+	}
+	option = { # Female clone
+		name = "EVTOPTBCLONE0"
+		wealth = -100
+		custom_tooltip = {
+			text = "FEMALECLONETOOLTIP"
+			set_character_flag = flag_cloning_in_progress
+			clr_character_flag = flag_cloning_decision_active
+			hidden_tooltip = { character_event = { id = clone.2 days = 270 random = 60 } }
+		}
+		if = {
+			limit = { is_female = no }
+			custom_tooltip = { text = "FEMALECLONEWARNINGTOOLTIP" }
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				any_child = {
+					trait = clone
+					is_female = yes
+				}
+			}
+			modifier = {
+				factor = 2
+				any_child = {
+					trait = clone
+					is_female = no
+				}
+			}
+			modifier = {
+				factor = 0.1
+				is_female = no
+			}
+		}
+	}
+	option = { # Nevermind
+		name = "EVTOPTCCLONE0"
+		clr_character_flag = flag_cloning_decision_active
+		ai_chance = { factor = 0 }
+	}
+}
+# Male clone is decanted
+character_event = {
+	id = clone.1
+	desc = "EVTDESCCLONE1"
+	picture = GFX_evt_laboratory
+	is_triggered_only = yes
+
+	immediate = { clr_character_flag = flag_cloning_in_progress }
+
+	option = {
+		name = "EVTOPTACLONE1"
+		create_character = {
+			female = no
+			age = 0
+			culture = ROOT
+			religion = ROOT
+			dynasty = ROOT
+			race = ROOT
+		}
+		new_character = {
+			set_father = ROOT
+			dynasty = ROOT
+			add_trait = clone
+			# Chance of gaining cloning defects
+			if = {
+				limit = { ROOT = { trait = cloning_defects } }
+				add_trait = cloning_defects
+			}
+			if = {
+				limit = { ROOT = { trait = clone } }
+				random_list = {
+					90 = { }
+					10 = { add_trait = cloning_defects }
+				}
+			}
+			random_list = {
+				95 = { }
+				5 = { add_trait = cloning_defects }
+			}
+			# Copy genetic traits
+			if = {
+				limit = { ROOT = { trait = genius } }
+				random_list = {
+					70 = { add_trait = genius }
+					20 = { add_trait = quick }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = quick } }
+				random_list = {
+					70 = { add_trait = quick }
+					15 = { add_trait = genius }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = slow } }
+				random_list = {
+					70 = { add_trait = slow }
+					15 = { add_trait = imbecile }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = imbecile } }
+				random_list = {
+					70 = { add_trait = imbecile }
+					20 = { add_trait = slow }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = beautiful } }
+				random_list = {
+					70 = { add_trait = beautiful }
+					20 = { add_trait = fair }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = fair } }
+				random_list = {
+					70 = { add_trait = fair }
+					15 = { add_trait = beautiful }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = homely } }
+				random_list = {
+					70 = { add_trait = homely }
+					15 = { add_trait = ugly }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = ugly } }
+				random_list = {
+					70 = { add_trait = ugly }
+					20 = { add_trait = homely }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = strong } }
+				random = {
+					chance = 90
+					add_trait = strong
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = weak } }
+				random = {
+					chance = 90
+					add_trait = weak
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = agile } }
+				random = {
+					chance = 90
+					add_trait = agile
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = gmo } }
+				random_list = {
+					70 = { add_trait = gmo }
+					10 = { add_trait = cloning_defects }
+					20 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = heavy_worlder } }
+				random_list = {
+					75 = { add_trait = heavy_worlder }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = heavy_worlder
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = spacer_physiology } }
+				random_list = {
+					75 = { add_trait = spacer_physiology }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = spacer_physiology
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = organic_wifi } }
+				random_list = {
+					85 = { add_trait = organic_wifi }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = organic_wifi
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = cat_splice } }
+				random_list = {
+					85 = { add_trait = cat_splice }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = cat_splice
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = clumsy } }
+				random = {
+					chance = 90
+					add_trait = clumsy
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = dwarf } }
+				random = {
+					chance = 90
+					add_trait = dwarf
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = tall } }
+				random = {
+					chance = 90
+					add_trait = tall
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = harelip } }
+				random = {
+					chance = 90
+					add_trait = harelip
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = clubfooted } }
+				random = {
+					chance = 90
+					add_trait = clubfooted
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = hunchback } }
+				random = {
+					chance = 90
+					add_trait = hunchback
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = lisp } }
+				random = {
+					chance = 90
+					add_trait = lisp
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = stutter } }
+				random = {
+					chance = 90
+					add_trait = stutter
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = inbred } }
+				random = {
+					chance = 90
+					add_trait = inbred
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = homosexual } }
+				random = {
+					chance = 90
+					add_trait = homosexual
+				}
+			}
+			# Send to parent's court
+			ROOT = { reverse_banish = PREV }
+		}
+		if = {
+				limit = { is_landed = no }
+				add_character_modifier = { name = clone_cooldown
+							duration = 1826
+							hidden = yes }
+			}
+		recalc_succession = yes
+	}
+}
+# Female clone is decanted
+character_event = {
+	id = clone.2
+	desc = "EVTDESCCLONE2"
+	picture = GFX_evt_laboratory
+	is_triggered_only = yes
+
+	immediate = { clr_character_flag = flag_cloning_in_progress }
+
+	option = {
+		trigger = { is_female = yes }
+		name = "EVTOPTACLONE2"
+		create_character = {
+			female = yes
+			age = 0
+			culture = ROOT
+			religion = ROOT
+			dynasty = ROOT
+			race = ROOT
+		}
+		new_character = {
+			set_mother = ROOT
+			dynasty = ROOT
+			add_trait = clone
+			# Chance of gaining cloning defects
+			if = {
+				limit = { ROOT = { trait = cloning_defects } }
+				add_trait = cloning_defects
+			}
+			if = {
+				limit = { ROOT = { trait = clone } }
+				random_list = {
+					90 = { }
+					10 = { add_trait = cloning_defects }
+				}
+			}
+			random_list = {
+				95 = { }
+				5 = { add_trait = cloning_defects }
+			}
+			# Copy genetic traits
+			if = {
+				limit = { ROOT = { trait = genius } }
+				random_list = {
+					70 = { add_trait = genius }
+					20 = { add_trait = quick }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = quick } }
+				random_list = {
+					70 = { add_trait = quick }
+					15 = { add_trait = genius }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = slow } }
+				random_list = {
+					70 = { add_trait = slow }
+					15 = { add_trait = imbecile }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = imbecile } }
+				random_list = {
+					70 = { add_trait = imbecile }
+					20 = { add_trait = slow }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = beautiful } }
+				random_list = {
+					70 = { add_trait = beautiful }
+					20 = { add_trait = fair }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = fair } }
+				random_list = {
+					70 = { add_trait = fair }
+					15 = { add_trait = beautiful }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = homely } }
+				random_list = {
+					70 = { add_trait = homely }
+					15 = { add_trait = ugly }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = ugly } }
+				random_list = {
+					70 = { add_trait = ugly }
+					20 = { add_trait = homely }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = strong } }
+				random = {
+					chance = 90
+					add_trait = strong
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = weak } }
+				random = {
+					chance = 90
+					add_trait = weak
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = agile } }
+				random = {
+					chance = 90
+					add_trait = agile
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = gmo } }
+				random_list = {
+					70 = { add_trait = gmo }
+					5 = { add_trait = cloning_defects }
+					25 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = heavy_worlder } }
+				random_list = {
+					75 = { add_trait = heavy_worlder }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = heavy_worlder
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = spacer_physiology } }
+				random_list = {
+					75 = { add_trait = spacer_physiology }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = spacer_physiology
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = organic_wifi } }
+				random_list = {
+					85 = { add_trait = organic_wifi }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = organic_wifi
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = cat_splice } }
+				random_list = {
+					85 = { add_trait = cat_splice }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = cat_splice
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = clumsy } }
+				random = {
+					chance = 90
+					add_trait = clumsy
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = dwarf } }
+				random = {
+					chance = 90
+					add_trait = dwarf
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = tall } }
+				random = {
+					chance = 90
+					add_trait = tall
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = harelip } }
+				random = {
+					chance = 90
+					add_trait = harelip
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = clubfooted } }
+				random = {
+					chance = 90
+					add_trait = clubfooted
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = hunchback } }
+				random = {
+					chance = 90
+					add_trait = hunchback
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = lisp } }
+				random = {
+					chance = 90
+					add_trait = lisp
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = stutter } }
+				random = {
+					chance = 90
+					add_trait = stutter
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = inbred } }
+				random = {
+					chance = 90
+					add_trait = inbred
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = homosexual } }
+				random = {
+					chance = 90
+					add_trait = homosexual
+				}
+			}
+			# Send to parent's court
+			ROOT = { reverse_banish = ROOT }
+		}
+		if = {
+				limit = { is_landed = no }
+				add_character_modifier = { name = clone_cooldown
+							duration = 1826
+							hidden = yes }
+			}
+		recalc_succession = yes
+	}
+
+	option = {
+		trigger = { is_female = no }
+		name = "EVTOPTACLONE2"
+		create_character = {
+			female = yes
+			culture = ROOT
+			religion = ROOT
+			dynasty = ROOT
+			race = ROOT
+			age = 0
+			#dna = ROOT
+		}
+		new_character = {
+			set_father = ROOT
+			dynasty = ROOT
+			add_trait = clone
+			# Chance of gaining cloning defects
+			if = {
+				limit = { ROOT = { trait = cloning_defects } }
+				add_trait = cloning_defects
+			}
+			# Increased chance of cloning defects due to doubled chromosomes
+			if = {
+				limit = { ROOT = { trait = clone } }
+				random_list = {
+					80 = { }
+					20 = { add_trait = cloning_defects }
+				}
+			}
+			random_list = {
+				80 = { }
+				20 = { add_trait = cloning_defects }
+			}
+			# Copy genetic traits
+			if = {
+				limit = { ROOT = { trait = genius } }
+				random_list = {
+					70 = { add_trait = genius }
+					20 = { add_trait = quick }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = quick } }
+				random_list = {
+					70 = { add_trait = quick }
+					15 = { add_trait = genius }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = slow } }
+				random_list = {
+					70 = { add_trait = slow }
+					15 = { add_trait = imbecile }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = imbecile } }
+				random_list = {
+					70 = { add_trait = imbecile }
+					20 = { add_trait = slow }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = beautiful } }
+				random_list = {
+					70 = { add_trait = beautiful }
+					20 = { add_trait = fair }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = fair } }
+				random_list = {
+					70 = { add_trait = fair }
+					15 = { add_trait = beautiful }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = homely } }
+				random_list = {
+					70 = { add_trait = homely }
+					15 = { add_trait = ugly }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = ugly } }
+				random_list = {
+					70 = { add_trait = ugly }
+					20 = { add_trait = homely }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = strong } }
+				random = {
+					chance = 90
+					add_trait = strong
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = weak } }
+				random = {
+					chance = 90
+					add_trait = weak
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = agile } }
+				random = {
+					chance = 90
+					add_trait = agile
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = gmo } }
+				random_list = {
+					70 = { add_trait = gmo }
+					5 = { add_trait = cloning_defects }
+					25 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = heavy_worlder } }
+				random_list = {
+					75 = { add_trait = heavy_worlder }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = heavy_worlder
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = spacer_physiology } }
+				random_list = {
+					75 = { add_trait = spacer_physiology }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = spacer_physiology
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = organic_wifi } }
+				random_list = {
+					85 = { add_trait = organic_wifi }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = organic_wifi
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = cat_splice } }
+				random_list = {
+					85 = { add_trait = cat_splice }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = cat_splice
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = clumsy } }
+				random = {
+					chance = 90
+					add_trait = clumsy
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = dwarf } }
+				random = {
+					chance = 90
+					add_trait = dwarf
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = tall } }
+				random = {
+					chance = 90
+					add_trait = tall
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = harelip } }
+				random = {
+					chance = 90
+					add_trait = harelip
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = clubfooted } }
+				random = {
+					chance = 90
+					add_trait = clubfooted
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = hunchback } }
+				random = {
+					chance = 90
+					add_trait = hunchback
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = lisp } }
+				random = {
+					chance = 90
+					add_trait = lisp
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = stutter } }
+				random = {
+					chance = 90
+					add_trait = stutter
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = inbred } }
+				random = {
+					chance = 90
+					add_trait = inbred
+				}
+			}
+			# Send to parent's court
+			ROOT = { reverse_banish = PREV }
+		}
+		if = {
+				limit = { is_landed = no }
+				add_character_modifier = { name = clone_cooldown
+							duration = 1826
+							hidden = yes }
+			}
+		recalc_succession = yes
+	}
+}
+# Dealing with cloning defects
+character_event = {
+	id = clone.10
+	desc = "EVTDESCCLONE10"
+	picture = GFX_evt_birth
+
+	is_triggered_only = yes
+
+	max_age = 1
+
+	trigger = {
+		trait = cloning_defects
+		NOT = { has_character_flag = flag_cloning_defects_dealt_with }
+	}
+
+	option = {
+		name = "EVTOPTACLONE10"
+		set_character_flag = flag_cloning_defects_dealt_with
+		# Chance of losing cloning defects due to local tech level
+		if = {
+			limit = { location = { NOT = { TECH_CONSTRUCTION = 1 } } }
+			father = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+			mother = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+		}
+		if = {
+			limit = {
+				location = {
+					TECH_CONSTRUCTION = 1
+					NOT = { TECH_CONSTRUCTION = 2 }
+				}
+			}
+			random_list = {
+				90 = {
+					father = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+					mother = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+				}
+				10 = {
+					remove_trait = cloning_defects
+					father = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+					mother = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				location = {
+					TECH_CONSTRUCTION = 2
+					NOT = { TECH_CONSTRUCTION = 3 }
+				}
+			}
+			random_list = {
+				80 = {
+					father = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+					mother = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+				}
+				20 = {
+					remove_trait = cloning_defects
+					father = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+					mother = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				location = {
+					TECH_CONSTRUCTION = 3
+					NOT = { TECH_CONSTRUCTION = 4 }
+				}
+			}
+			random_list = {
+				70 = {
+					father = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+					mother = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+				}
+				30 = {
+					remove_trait = cloning_defects
+					father = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+					mother = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				location = {
+					TECH_CONSTRUCTION = 4
+					NOT = { TECH_CONSTRUCTION = 5 }
+				}
+			}
+			random_list = {
+				60 = {
+					father = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+					mother = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+				}
+				40 = {
+					remove_trait = cloning_defects
+					father = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+					mother = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				location = {
+					TECH_CONSTRUCTION = 5
+					NOT = { TECH_CONSTRUCTION = 6 }
+				}
+			}
+			random_list = {
+				50 = {
+					father = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+					mother = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+				}
+				50 = {
+					remove_trait = cloning_defects
+					father = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+					mother = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				location = {
+					TECH_CONSTRUCTION = 6
+					NOT = { TECH_CONSTRUCTION = 7 }
+				}
+			}
+			random_list = {
+				40 = {
+					father = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+					mother = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+				}
+				60 = {
+					remove_trait = cloning_defects
+					father = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+					mother = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+				}
+			}
+		}
+		if = {
+			limit = {
+				location = {
+					TECH_CONSTRUCTION = 7
+					NOT = { TECH_CONSTRUCTION = 8 }
+				}
+			}
+			random_list = {
+				30 = {
+					father = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+					mother = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+				}
+				70 = {
+					remove_trait = cloning_defects
+					father = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+					mother = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+				}
+			}
+		}
+		if = {
+			limit = { location = { TECH_CONSTRUCTION = 8 } }
+			random_list = {
+				20 = {
+					father = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+					mother = { character_event = { id = clone.11 tooltip = "EVTTOOLTIPCLONE11" } }
+				}
+				80 = {
+					remove_trait = cloning_defects
+					father = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+					mother = { character_event = { id = clone.12 tooltip = "EVTTOOLTIPCLONE12" } }
+				}
+			}
+		}
+	}
+}
+
+# Your new clone suffers from cloning defects
+character_event = {
+	id = clone.11
+	desc = "EVTDESCCLONE11"
+	picture = GFX_evt_birth
+	is_triggered_only = yes
+
+	option = { name = "EVTOPTCONFIRM" }
+}
+
+# Your new clone's cloning defects were corrected
+character_event = {
+	id = clone.12
+	desc = "EVTDESCCLONE12"
+	picture = GFX_evt_birth
+	is_triggered_only = yes
+
+	option = { name = "EVTOPTCONFIRM" }
+}
+
+# Placed here for no good reason
+character_event = {
+	id = clone.100
+	picture = GFX_evt_scandal
+	desc = "EVTDESCCLONE100"
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTCONFIRM"
+		any_child = {
+			limit = { has_character_flag = flag_disinheritance_target }
+			add_trait = bastard
+			tooltip = { opinion = { who = ROOT modifier = opinion_disinherited_me } }
+			clr_character_flag = flag_disinheritance_target
+			hidden_tooltip = { character_event = { id = clone.101 } }
+		}
+	}
+}
+# Placed here for no good reason
+character_event = {
+	id = clone.101
+	picture = GFX_evt_scandal
+	desc = "EVTDESCCLONE101"
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTCONFIRM"
+		add_trait = bastard
+	}
+}
+
+# Cloning-related flavor events!
+
+# A very silly flavor event chain, idea courtesy of Andrelse
+character_event = {
+	id = clone.200
+	desc = "EVTDESCCLONE200"
+	picture = GFX_evt_scandal
+
+	min_age = 18
+	only_capable = yes
+	prisoner = no
+
+	trigger = {
+		liege = {
+			NOT = { character = ROOT }
+			OR = {
+				AND = {
+					trait = clone
+					any_lover = {
+						NOT = { character = ROOT }
+						any_child = { character = PREVPREV }
+					}
+				}
+				AND = {
+					trait = clone
+					any_lover = {
+						trait = clone
+						NOT = { character = ROOT }
+						any_sibling = { character = PREVPREV }
+					}
+				}
+				any_child = {
+					trait = clone
+					NOT = { character = ROOT }
+					any_lover = { character = PREVPREV }
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 240
+	}
+
+	option = {
+		name = "EVTOPTACLONE200" # Er...
+		liege = {
+			opinion = { who = ROOT modifier = opinion_annoyed years = 2 }
+			character_event = { id = clone.201 tooltip = "EVTTOOLTIPCLONE201" }
+		}
+		if = {
+			limit = { religion_group = religious_group }
+			piety = 25
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				religion = taoist
+			}
+			modifier = {
+				factor = 4
+				trait = celibate
+			}
+			modifier = {
+				factor = 0.25
+				trait = hedonist
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTBCLONE200"
+		ai_chance = { factor = 50 }
+	}
+}
+
+character_event = {
+	id = clone.201
+	desc = "EVTDESCCLONE201"
+	picture = GFX_evt_scandal
+	is_triggered_only = yes
+
+	option = {
+		trigger = { learning = FROM }
+		name = "EVTOPTACLONE201" # It's not incest, it's MASTURBATION
+		prestige = 50
+		hidden_tooltip = { FROM = { character_event = { id = clone.202 } } }
+	}
+	option = {
+		trigger = { NOT = { learning = FROM } }
+		name = "EVTOPTBCLONE201" # Well okay I guess it is a bit incesty
+		prestige = -50
+		if = {
+			limit = { religion_group = religious_group }
+			piety = -50
+		}
+		hidden_tooltip = { FROM = { character_event = { id = clone.203 } } }
+	}
+}
+
+character_event = {
+	id = clone.202
+	desc = "EVTDESCCLONE202"
+	picture = GFX_evt_scandal
+	is_triggered_only = yes
+
+	option = { name = "EVTOPTACLONE202" }
+}
+
+character_event = {
+	id = clone.203
+	desc = "EVTDESCCLONE203"
+	picture = GFX_evt_scandal
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTACLONE203"
+		prestige = 50
+	}
+}
+
+character_event = {
+	id = clone.300
+	desc = "EVTDESCCLONE302"
+	picture = GFX_evt_laboratory
+	is_triggered_only = yes
+
+	option = {
+		name = "EVTOPTACLONE302"
+		set_character_flag = flag_cloning_decision_active
+		character_event = { id = clone.303 tooltip = "EVTTOOLTIPCLONE303" }
+        FROMFROM = { wealth = -100 }
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				any_child = {
+					trait = clone
+					is_female = no
+				}
+			}
+			modifier = {
+				factor = 2
+				any_child = {
+					trait = clone
+					is_female = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTBCLONE302"
+		prestige = 50
+	}
+}
+
+character_event = {
+	id = clone.303
+	desc = "EVTDESCCLONE0"
+	picture = GFX_evt_laboratory
+	is_triggered_only = yes
+
+	option = { # Male clone
+		name = "EVTOPTACLONE0"
+		trigger = { is_female = no } # Male clones need a Y chromosome
+		custom_tooltip = {
+			text = "MALECLONETOOLTIP"
+			set_character_flag = flag_cloning_in_progress
+			clr_character_flag = flag_cloning_decision_active
+			hidden_tooltip = { character_event = { id = clone.1 days = 270 random = 60 } }
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				any_child = {
+					trait = clone
+					is_female = no
+				}
+			}
+			modifier = {
+				factor = 2
+				any_child = {
+					trait = clone
+					is_female = yes
+				}
+			}
+		}
+	}
+	option = { # Female clone
+		name = "EVTOPTBCLONE0"
+		custom_tooltip = {
+			text = "FEMALECLONETOOLTIP"
+			set_character_flag = flag_cloning_in_progress
+			clr_character_flag = flag_cloning_decision_active
+			hidden_tooltip = { character_event = { id = clone.2 days = 270 random = 60 } }
+		}
+		if = {
+			limit = { is_female = no }
+			custom_tooltip = { text = "FEMALECLONEWARNINGTOOLTIP" }
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				any_child = {
+					trait = clone
+					is_female = yes
+				}
+			}
+			modifier = {
+				factor = 2
+				any_child = {
+					trait = clone
+					is_female = no
+				}
+			}
+			modifier = {
+				factor = 0.1
+				is_female = no
+			}
+		}
+	}
+}

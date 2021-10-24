@@ -1,0 +1,210 @@
+namespace = robobattle_events
+character_event = {
+	id = robobattle_events.1
+	desc = EVTDESCrobobattle_events.9
+	border = GFX_event_normal_frame_war
+	picture = GFX_roy_confront
+
+	is_triggered_only = yes
+	in_command = yes
+
+	trigger = {
+		NOT = { is_at_sea = yes }
+		in_battle = yes
+		NOT = { has_character_modifier = recentmechbattle }
+		trait = mech_pilot
+		OR = {
+		has_artifact = common_mech_suit
+		has_artifact = mech_suit
+		has_artifact = super_mech_suit
+		}
+		any_current_enemy = {
+		ai = yes
+		in_command = yes 
+		trait = mech_pilot
+		OR = {
+		has_artifact = common_mech_suit
+		has_artifact = mech_suit
+		has_artifact = super_mech_suit
+			}
+			at_location = ROOT
+				OR = {
+					war_with = ROOT
+					ROOT = { any_liege = { war_with = PREVPREV } }
+					any_liege = { 
+						OR = {
+							war_with = ROOT 
+							ROOT = { any_liege = { war_with = PREVPREV } }
+						}	
+					}
+				}
+		}
+	}
+
+	immediate = {
+		ROOT = {
+			any_artifact = { 
+				limit = { has_artifact_flag = mecha_suit
+					is_artifact_equipped = yes }
+				save_event_target_as = robo1 }	
+		}
+		any_current_enemy = {
+		limit = {
+		trait = mech_pilot
+		OR = {
+		has_artifact = common_mech_suit
+		has_artifact = mech_suit
+		has_artifact = super_mech_suit
+			}
+			in_command = yes 
+			at_location = ROOT
+				OR = {
+					war_with = ROOT
+					ROOT = { any_liege = { war_with = PREVPREV } }
+					any_liege = { 
+						OR = {
+							war_with = ROOT 
+							ROOT = { any_liege = { war_with = PREVPREV } }
+						}	
+					}
+				}
+			}
+			save_event_target_as = roboduel	
+			any_artifact = { 
+				limit = { has_artifact_flag = mecha_suit
+					is_artifact_equipped = yes }
+				save_event_target_as = robo2 }	
+		}
+	}
+
+	option = {
+		name = EVTOPTArobobattle_events.9
+		add_character_modifier = { modifier = recentmechbattle days = 40 }
+		ROOT = {
+			random_list = {
+				60 = { add_trait = deceitful }
+				40 = { add_trait = craven }
+			}
+		}
+		clear_event_target = roboduel
+		clear_event_target = robo1
+		clear_event_target = robo2
+	}
+	option = {
+		name = EVTOPTBrobobattle_events.9
+		hidden_tooltip = {
+			random_list = {
+				20 = { character_event = { id = robobattle_events.102 days = 1 } }
+				20 = { character_event = { id = robobattle_events.102 days = 1 } }
+				50 = { character_event = { id = robobattle_events.1121 days = 1 } }
+				10 = { character_event = { id = mechfl.oops4 days = 1 } }
+			}
+		}
+	}
+}
+#Stalemate, retreat from battle
+	character_event = {
+		id = robobattle_events.102
+		desc = "EVTDESCrobobattle_events.10"
+		border = GFX_event_normal_frame_war
+		picture = GFX_mech_battle
+	
+		is_triggered_only = yes
+	
+		option = { 
+		name = "EVTOPTArobobattle_events.10" 
+		add_character_modifier = { modifier = recentmechbattle days = 40 hidden = yes }
+			random = {
+				chance = 15
+				add_trait = wounded
+			}
+		clear_event_target = roboduel
+		clear_event_target = robo1
+		clear_event_target = robo2
+		}
+}
+#Win battle and destroy enemy Mech Suit
+	character_event = {
+		id = robobattle_events.1121
+		desc = "EVTDESCrobobattle_events.11"
+		border = GFX_event_normal_frame_war
+		picture = GFX_mech_battle
+	
+		is_triggered_only = yes
+	
+		option = { 
+		name = "EVTOPTArobobattle_events.11" 
+		add_character_modifier = { modifier = recentmechbattle days = 40 hidden = yes}
+		prestige = 50
+		event_target:roboduel = { 
+			prestige = -100
+			add_trait = wounded
+			remove_trait = mech_pilot
+			random = {
+				chance = 15
+				add_trait = one_legged
+			}
+			random = {
+				chance = 35
+				add_trait = maimed
+			}
+ 		}
+		event_target:robo2 = { unsafe_destroy_artifact = yes }
+		clear_event_target = roboduel
+		clear_event_target = robo1
+		clear_event_target = robo2
+		}
+}
+#Win battle, kill enemy, and destroy enemy Mech Suit
+	character_event = {
+		id = robobattle_events.1122
+		desc = "EVTDESCrobobattle_events.1122"
+		border = GFX_event_normal_frame_war
+		picture = GFX_mech_battle
+	
+		is_triggered_only = yes
+	
+		option = { 
+		name = "EVTOPTArobobattle_events.1122" 
+		add_character_modifier = { modifier = recentmechbattle days = 40 hidden = yes}
+		prestige = 100
+		event_target:roboduel = { 
+			death = {
+				death_reason = death_mech_duel
+				killer = ROOT
+			}
+ 		}
+		event_target:robo2 = { unsafe_destroy_artifact = yes }
+		clear_event_target = roboduel
+		clear_event_target = robo1
+		clear_event_target = robo2
+		}
+}
+####DESTROYED MECH SUIT####
+	character_event = {
+		id = mechfl.oops4
+		border = GFX_event_normal_frame_war
+		picture = GFX_roy_aftermath
+		desc = "EVTDESCmechfl.oops4"
+	
+		is_triggered_only = yes
+
+		option = { 
+		name = "mechfl.oops4" 
+		prestige = -100
+		add_trait = wounded
+		remove_trait = mech_pilot
+		event_target:robo1 = { unsafe_destroy_artifact = yes }			
+			random = {
+				chance = 15
+				add_trait = one_legged
+			}
+			random = {
+				chance = 35
+				add_trait = maimed
+			}
+		clear_event_target = roboduel
+		clear_event_target = robo1
+		clear_event_target = robo2
+		}
+}

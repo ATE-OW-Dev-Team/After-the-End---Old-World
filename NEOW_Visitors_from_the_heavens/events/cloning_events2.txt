@@ -1,0 +1,2237 @@
+namespace = clone
+
+character_event = {
+	id = clone.110
+	desc = "EVTDESCCLONE110"
+	picture = GFX_evt_laboratory
+	is_triggered_only = yes
+
+	option = { # Male clone
+		name = "EVTOPTACLONE0"
+		trigger = { is_female = no } # Male clones need a Y chromosome
+		wealth = -100
+		custom_tooltip = {
+			text = "MALECLONETOOLTIP"
+			set_character_flag = flag_cloning_in_progress
+			clr_character_flag = flag_cloning_decision_active
+			hidden_tooltip = { character_event = { id = clone.111 days = 270 random = 60 } }
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				any_child = {
+					trait = clone
+					is_female = no
+				}
+			}
+			modifier = {
+				factor = 2
+				any_child = {
+					trait = clone
+					is_female = yes
+				}
+			}
+		}
+	}
+	option = { # Female clone
+		name = "EVTOPTBCLONE0"
+		wealth = -100
+		custom_tooltip = {
+			text = "FEMALECLONETOOLTIP"
+			set_character_flag = flag_cloning_in_progress
+			clr_character_flag = flag_cloning_decision_active
+			hidden_tooltip = { character_event = { id = clone.112 days = 270 random = 60 } }
+		}
+		if = {
+			limit = { is_female = no }
+			custom_tooltip = { text = "FEMALECLONEWARNINGTOOLTIP" }
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.5
+				any_child = {
+					trait = clone
+					is_female = yes
+				}
+			}
+			modifier = {
+				factor = 2
+				any_child = {
+					trait = clone
+					is_female = no
+				}
+			}
+			modifier = {
+				factor = 0.1
+				is_female = no
+			}
+		}
+	}
+	option = { # Nevermind
+		name = "EVTOPTCCLONE0"
+		clr_character_flag = flag_cloning_decision_active
+		ai_chance = { factor = 0 }
+	}
+}
+
+# Male VAT-grown child is decanted from multiple parents
+character_event = {
+	id = clone.111
+	desc = "EVTDESCCLONE1"
+	picture = GFX_evt_laboratory
+	is_triggered_only = yes
+
+	immediate = { clr_character_flag = flag_cloning_in_progress }
+
+	option = {
+		name = "EVTOPTACLONE1"
+		create_character = {
+			female = no
+			age = 0
+			culture = ROOT
+			religion = ROOT
+			dynasty = ROOT
+			race = ROOT
+		}
+		new_character = {
+			set_father = ROOT
+			ROOT = {
+				spouse = {
+					save_event_target_as = primary_spouse
+				}
+			}
+			set_mother = event_target:primary_spouse
+			ROOT = {
+				consort = { #the most recent consort
+					save_event_target_as = genetic_coop
+				}
+			}
+			#if = { #not working, was trying to make all consorts friends of the new child
+			#	limit = { any_courtier = { is_consort = ROOT } }
+			#	save_event_target_as = genetic_coop2
+			#}
+			add_friend = event_target:genetic_coop
+			#add_friend = event_target:genetic_coop2
+			dynasty = ROOT
+			add_trait = vat_born
+			# Chance of gaining cloning defects
+			if = {
+				limit = { ROOT = { any_consort = { trait = cloning_defects } } }
+				add_trait = cloning_defects
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = clone } } }
+				random_list = {
+					90 = { }
+					10 = { add_trait = cloning_defects }
+				}
+			}
+			random_list = {
+				95 = { }
+				5 = { add_trait = cloning_defects }
+			}
+			# Copy genetic traits
+			if = {
+				limit = { ROOT = { any_consort = { trait = genius } } }
+				random_list = {
+					70 = { add_trait = genius }
+					20 = { add_trait = quick }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = quick } } }
+				random_list = {
+					70 = { add_trait = quick }
+					15 = { add_trait = genius }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = slow } } }
+				random_list = {
+					70 = { add_trait = slow }
+					15 = { add_trait = imbecile }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = imbecile } } }
+				random_list = {
+					70 = { add_trait = imbecile }
+					20 = { add_trait = slow }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = beautiful } } }
+				random_list = {
+					70 = { add_trait = beautiful }
+					20 = { add_trait = fair }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = fair } } }
+				random_list = {
+					70 = { add_trait = fair }
+					15 = { add_trait = beautiful }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = homely } } }
+				random_list = {
+					70 = { add_trait = homely }
+					15 = { add_trait = ugly }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = ugly } } }
+				random_list = {
+					70 = { add_trait = ugly }
+					20 = { add_trait = homely }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = strong } } }
+				random = {
+					chance = 90
+					add_trait = strong
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = weak } } }
+				random = {
+					chance = 90
+					add_trait = weak
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = agile } } }
+				random = {
+					chance = 90
+					add_trait = agile
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = gmo } } }
+				random_list = {
+					70 = { add_trait = gmo }
+					10 = { add_trait = cloning_defects }
+					20 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = heavy_worlder } } }
+				random_list = {
+					75 = { add_trait = heavy_worlder }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = heavy_worlder
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = spacer_physiology } } }
+				random_list = {
+					75 = { add_trait = spacer_physiology }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = spacer_physiology
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = organic_wifi } } }
+				random_list = {
+					85 = { add_trait = organic_wifi }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = organic_wifi
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = cat_splice } } }
+				random_list = {
+					85 = { add_trait = cat_splice }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = cat_splice
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = clumsy } } }
+				random = {
+					chance = 90
+					add_trait = clumsy
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = dwarf } } }
+				random = {
+					chance = 90
+					add_trait = dwarf
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = tall } } }
+				random = {
+					chance = 90
+					add_trait = tall
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = harelip } } }
+				random = {
+					chance = 90
+					add_trait = harelip
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = clubfooted } } }
+				random = {
+					chance = 90
+					add_trait = clubfooted
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = hunchback } } }
+				random = {
+					chance = 90
+					add_trait = hunchback
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = lisp } } }
+				random = {
+					chance = 90
+					add_trait = lisp
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = stutter } } }
+				random = {
+					chance = 90
+					add_trait = stutter
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = inbred } } }
+				random = {
+					chance = 90
+					add_trait = inbred
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = homosexual } } }
+				random = {
+					chance = 90
+					add_trait = homosexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = bisexual } } }
+				random = {
+					chance = 90
+					add_trait = bisexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = heterosexual } } }
+				random = {
+					chance = 90
+					add_trait = heterosexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			# Chance of gaining cloning defects
+			if = {
+				limit = { ROOT = { any_spouse = { trait = cloning_defects } } }
+				add_trait = cloning_defects
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = clone } } }
+				random_list = {
+					90 = { }
+					10 = { add_trait = cloning_defects }
+				}
+			}
+			random_list = {
+				95 = { }
+				5 = { add_trait = cloning_defects }
+			}
+			# Copy genetic traits
+			if = {
+				limit = { ROOT = { any_spouse = { trait = genius } } }
+				random_list = {
+					70 = { add_trait = genius }
+					20 = { add_trait = quick }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = quick } } }
+				random_list = {
+					70 = { add_trait = quick }
+					15 = { add_trait = genius }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = slow } } }
+				random_list = {
+					70 = { add_trait = slow }
+					15 = { add_trait = imbecile }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = imbecile } } }
+				random_list = {
+					70 = { add_trait = imbecile }
+					20 = { add_trait = slow }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = beautiful } } }
+				random_list = {
+					70 = { add_trait = beautiful }
+					20 = { add_trait = fair }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = fair } } }
+				random_list = {
+					70 = { add_trait = fair }
+					15 = { add_trait = beautiful }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = homely } } }
+				random_list = {
+					70 = { add_trait = homely }
+					15 = { add_trait = ugly }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = ugly } } }
+				random_list = {
+					70 = { add_trait = ugly }
+					20 = { add_trait = homely }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = strong } } }
+				random = {
+					chance = 90
+					add_trait = strong
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = weak } } }
+				random = {
+					chance = 90
+					add_trait = weak
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = agile } } }
+				random = {
+					chance = 90
+					add_trait = agile
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = gmo } } }
+				random_list = {
+					70 = { add_trait = gmo }
+					10 = { add_trait = cloning_defects }
+					20 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = heavy_worlder } } }
+				random_list = {
+					75 = { add_trait = heavy_worlder }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = heavy_worlder
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = spacer_physiology } } }
+				random_list = {
+					75 = { add_trait = spacer_physiology }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = spacer_physiology
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = organic_wifi } } }
+				random_list = {
+					85 = { add_trait = organic_wifi }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = organic_wifi
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = cat_splice } } }
+				random_list = {
+					85 = { add_trait = cat_splice }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = cat_splice
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = clumsy } } }
+				random = {
+					chance = 90
+					add_trait = clumsy
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = dwarf } } }
+				random = {
+					chance = 90
+					add_trait = dwarf
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = tall } } }
+				random = {
+					chance = 90
+					add_trait = tall
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = harelip } } }
+				random = {
+					chance = 90
+					add_trait = harelip
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = clubfooted } } }
+				random = {
+					chance = 90
+					add_trait = clubfooted
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = hunchback } } }
+				random = {
+					chance = 90
+					add_trait = hunchback
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = lisp } } }
+				random = {
+					chance = 90
+					add_trait = lisp
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = stutter } } }
+				random = {
+					chance = 90
+					add_trait = stutter
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = inbred } } }
+				random = {
+					chance = 90
+					add_trait = inbred
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = homosexual } } }
+				random = {
+					chance = 90
+					add_trait = homosexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = bisexual } } }
+				random = {
+					chance = 90
+					add_trait = bisexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = heterosexual } } }
+				random = {
+					chance = 90
+					add_trait = heterosexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			# Chance of gaining cloning defects
+			if = {
+				limit = { ROOT = { trait = cloning_defects } }
+				add_trait = cloning_defects
+			}
+			if = {
+				limit = { ROOT = { trait = clone } }
+				random_list = {
+					90 = { }
+					10 = { add_trait = cloning_defects }
+				}
+			}
+			random_list = {
+				95 = { }
+				5 = { add_trait = cloning_defects }
+			}
+			# Copy genetic traits
+			if = {
+				limit = { ROOT = { trait = genius } }
+				random_list = {
+					70 = { add_trait = genius }
+					20 = { add_trait = quick }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = quick } }
+				random_list = {
+					70 = { add_trait = quick }
+					15 = { add_trait = genius }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = slow } }
+				random_list = {
+					70 = { add_trait = slow }
+					15 = { add_trait = imbecile }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = imbecile } }
+				random_list = {
+					70 = { add_trait = imbecile }
+					20 = { add_trait = slow }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = beautiful } }
+				random_list = {
+					70 = { add_trait = beautiful }
+					20 = { add_trait = fair }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = fair } }
+				random_list = {
+					70 = { add_trait = fair }
+					15 = { add_trait = beautiful }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = homely } }
+				random_list = {
+					70 = { add_trait = homely }
+					15 = { add_trait = ugly }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = ugly } }
+				random_list = {
+					70 = { add_trait = ugly }
+					20 = { add_trait = homely }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = strong } }
+				random = {
+					chance = 90
+					add_trait = strong
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = weak } }
+				random = {
+					chance = 90
+					add_trait = weak
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = agile } }
+				random = {
+					chance = 90
+					add_trait = agile
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = gmo } }
+				random_list = {
+					70 = { add_trait = gmo }
+					10 = { add_trait = cloning_defects }
+					20 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = heavy_worlder } }
+				random_list = {
+					75 = { add_trait = heavy_worlder }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = heavy_worlder
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = spacer_physiology } }
+				random_list = {
+					75 = { add_trait = spacer_physiology }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = spacer_physiology
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = organic_wifi } }
+				random_list = {
+					85 = { add_trait = organic_wifi }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = organic_wifi
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = cat_splice } }
+				random_list = {
+					85 = { add_trait = cat_splice }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = cat_splice
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = clumsy } }
+				random = {
+					chance = 90
+					add_trait = clumsy
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = dwarf } }
+				random = {
+					chance = 90
+					add_trait = dwarf
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = tall } }
+				random = {
+					chance = 90
+					add_trait = tall
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = harelip } }
+				random = {
+					chance = 90
+					add_trait = harelip
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = clubfooted } }
+				random = {
+					chance = 90
+					add_trait = clubfooted
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = hunchback } }
+				random = {
+					chance = 90
+					add_trait = hunchback
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = lisp } }
+				random = {
+					chance = 90
+					add_trait = lisp
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = stutter } }
+				random = {
+					chance = 90
+					add_trait = stutter
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = inbred } }
+				random = {
+					chance = 90
+					add_trait = inbred
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = homosexual } }
+				random = {
+					chance = 90
+					add_trait = homosexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = bisexual } }
+				random = {
+					chance = 90
+					add_trait = bisexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = heterosexual } }
+				random = {
+					chance = 90
+					add_trait = heterosexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			# Send to parent's court
+			ROOT = { reverse_banish = PREV }
+		}
+		if = {
+				limit = { is_landed = no }
+				add_character_modifier = { name = clone_cooldown
+							duration = 1826
+							hidden = yes }
+			}
+		recalc_succession = yes
+	}
+}
+# Female VAT-grown child is decanted from multiple parents
+character_event = {
+	id = clone.112
+	desc = "EVTDESCCLONE2"
+	picture = GFX_evt_laboratory
+	is_triggered_only = yes
+
+	immediate = { clr_character_flag = flag_cloning_in_progress }
+
+	option = {
+		trigger = {
+			OR = {
+				is_female = yes
+				any_spouse = { is_female = yes }
+				any_consort = {is_female = yes }
+			}
+		}
+		name = "EVTOPTACLONE2"
+		create_character = {
+			female = yes
+			age = 0
+			culture = ROOT
+			religion = ROOT
+			dynasty = ROOT
+			race = ROOT
+		}
+		new_character = {
+			set_mother = ROOT
+			ROOT = {
+				spouse = {
+					save_event_target_as = primary_spouse
+				}
+			}
+			set_father = event_target:primary_spouse
+			ROOT = {
+				consort = { #the most recent consort
+					save_event_target_as = genetic_coop
+				}
+			}
+			#if = { #not working, was trying to make all consorts friends of the new child
+			#	limit = { any_courtier = { is_consort = ROOT } }
+			#	save_event_target_as = genetic_coop2
+			#}
+			add_friend = event_target:genetic_coop
+			#add_friend = event_target:genetic_coop2
+			dynasty = ROOT
+			add_trait = vat_born
+			# Chance of gaining cloning defects
+			if = {
+				limit = { ROOT = { any_consort = { trait = cloning_defects } } }
+				add_trait = cloning_defects
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = clone } } }
+				random_list = {
+					90 = { }
+					10 = { add_trait = cloning_defects }
+				}
+			}
+			random_list = {
+				95 = { }
+				5 = { add_trait = cloning_defects }
+			}
+			# Copy genetic traits
+			if = {
+				limit = { ROOT = { any_consort = { trait = genius } } }
+				random_list = {
+					70 = { add_trait = genius }
+					20 = { add_trait = quick }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = quick } } }
+				random_list = {
+					70 = { add_trait = quick }
+					15 = { add_trait = genius }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = slow } } }
+				random_list = {
+					70 = { add_trait = slow }
+					15 = { add_trait = imbecile }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = imbecile } } }
+				random_list = {
+					70 = { add_trait = imbecile }
+					20 = { add_trait = slow }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = beautiful } } }
+				random_list = {
+					70 = { add_trait = beautiful }
+					20 = { add_trait = fair }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = fair } } }
+				random_list = {
+					70 = { add_trait = fair }
+					15 = { add_trait = beautiful }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = homely } } }
+				random_list = {
+					70 = { add_trait = homely }
+					15 = { add_trait = ugly }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = ugly } } }
+				random_list = {
+					70 = { add_trait = ugly }
+					20 = { add_trait = homely }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = strong } } }
+				random = {
+					chance = 90
+					add_trait = strong
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = weak } } }
+				random = {
+					chance = 90
+					add_trait = weak
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = agile } } }
+				random = {
+					chance = 90
+					add_trait = agile
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = gmo } } }
+				random_list = {
+					70 = { add_trait = gmo }
+					5 = { add_trait = cloning_defects }
+					25 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = heavy_worlder } } }
+				random_list = {
+					75 = { add_trait = heavy_worlder }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = heavy_worlder
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = clumsy } } }
+				random = {
+					chance = 90
+					add_trait = clumsy
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = dwarf } } }
+				random = {
+					chance = 90
+					add_trait = dwarf
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = tall } } }
+				random = {
+					chance = 90
+					add_trait = tall
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = harelip } } }
+				random = {
+					chance = 90
+					add_trait = harelip
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = clubfooted } } }
+				random = {
+					chance = 90
+					add_trait = clubfooted
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = hunchback } } }
+				random = {
+					chance = 90
+					add_trait = hunchback
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = lisp } } }
+				random = {
+					chance = 90
+					add_trait = lisp
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = stutter } } }
+				random = {
+					chance = 90
+					add_trait = stutter
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = inbred } } }
+				random = {
+					chance = 90
+					add_trait = inbred
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = homosexual } } }
+				random = {
+					chance = 90
+					add_trait = homosexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = bisexual } } }
+				random = {
+					chance = 90
+					add_trait = bisexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = heterosexual } } }
+				random = {
+					chance = 90
+					add_trait = heterosexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			# Chance of gaining cloning defects
+			if = {
+				limit = { ROOT = { any_spouse = { trait = cloning_defects } } }
+				add_trait = cloning_defects
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = clone } } }
+				random_list = {
+					90 = { }
+					10 = { add_trait = cloning_defects }
+				}
+			}
+			random_list = {
+				95 = { }
+				5 = { add_trait = cloning_defects }
+			}
+			# Copy genetic traits
+			if = {
+				limit = { ROOT = { any_spouse = { trait = genius } } }
+				random_list = {
+					70 = { add_trait = genius }
+					20 = { add_trait = quick }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = quick } } }
+				random_list = {
+					70 = { add_trait = quick }
+					15 = { add_trait = genius }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = slow } } }
+				random_list = {
+					70 = { add_trait = slow }
+					15 = { add_trait = imbecile }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = imbecile } } }
+				random_list = {
+					70 = { add_trait = imbecile }
+					20 = { add_trait = slow }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = beautiful } } }
+				random_list = {
+					70 = { add_trait = beautiful }
+					20 = { add_trait = fair }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = fair } } }
+				random_list = {
+					70 = { add_trait = fair }
+					15 = { add_trait = beautiful }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = homely } } }
+				random_list = {
+					70 = { add_trait = homely }
+					15 = { add_trait = ugly }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = ugly } } }
+				random_list = {
+					70 = { add_trait = ugly }
+					20 = { add_trait = homely }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = strong } } }
+				random = {
+					chance = 90
+					add_trait = strong
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = weak } } }
+				random = {
+					chance = 90
+					add_trait = weak
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = agile } } }
+				random = {
+					chance = 90
+					add_trait = agile
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = gmo } } }
+				random_list = {
+					70 = { add_trait = gmo }
+					10 = { add_trait = cloning_defects }
+					20 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = heavy_worlder } } }
+				random_list = {
+					75 = { add_trait = heavy_worlder }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = heavy_worlder
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = clumsy } } }
+				random = {
+					chance = 90
+					add_trait = clumsy
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = dwarf } } }
+				random = {
+					chance = 90
+					add_trait = dwarf
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = tall } } }
+				random = {
+					chance = 90
+					add_trait = tall
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = harelip } } }
+				random = {
+					chance = 90
+					add_trait = harelip
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = clubfooted } } }
+				random = {
+					chance = 90
+					add_trait = clubfooted
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = hunchback } } }
+				random = {
+					chance = 90
+					add_trait = hunchback
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = lisp } } }
+				random = {
+					chance = 90
+					add_trait = lisp
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = stutter } } }
+				random = {
+					chance = 90
+					add_trait = stutter
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = inbred } } }
+				random = {
+					chance = 90
+					add_trait = inbred
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = homosexual } } }
+				random = {
+					chance = 90
+					add_trait = homosexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = bisexual } } }
+				random = {
+					chance = 90
+					add_trait = bisexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = heterosexual } } }
+				random = {
+					chance = 90
+					add_trait = heterosexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			# Chance of gaining cloning defects
+			if = {
+				limit = { ROOT = { trait = cloning_defects } }
+				add_trait = cloning_defects
+			}
+			if = {
+				limit = { ROOT = { trait = clone } }
+				random_list = {
+					90 = { }
+					10 = { add_trait = cloning_defects }
+				}
+			}
+			random_list = {
+				95 = { }
+				5 = { add_trait = cloning_defects }
+			}
+			# Copy genetic traits
+			if = {
+				limit = { ROOT = { trait = genius } }
+				random_list = {
+					70 = { add_trait = genius }
+					20 = { add_trait = quick }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = quick } }
+				random_list = {
+					70 = { add_trait = quick }
+					15 = { add_trait = genius }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = slow } }
+				random_list = {
+					70 = { add_trait = slow }
+					15 = { add_trait = imbecile }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = imbecile } }
+				random_list = {
+					70 = { add_trait = imbecile }
+					20 = { add_trait = slow }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = beautiful } }
+				random_list = {
+					70 = { add_trait = beautiful }
+					20 = { add_trait = fair }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = fair } }
+				random_list = {
+					70 = { add_trait = fair }
+					15 = { add_trait = beautiful }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = homely } }
+				random_list = {
+					70 = { add_trait = homely }
+					15 = { add_trait = ugly }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = ugly } }
+				random_list = {
+					70 = { add_trait = ugly }
+					20 = { add_trait = homely }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = strong } }
+				random = {
+					chance = 90
+					add_trait = strong
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = weak } }
+				random = {
+					chance = 90
+					add_trait = weak
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = agile } }
+				random = {
+					chance = 90
+					add_trait = agile
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = gmo } }
+				random_list = {
+					70 = { add_trait = gmo }
+					5 = { add_trait = cloning_defects }
+					25 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = heavy_worlder } }
+				random_list = {
+					75 = { add_trait = heavy_worlder }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = heavy_worlder
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = clumsy } }
+				random = {
+					chance = 90
+					add_trait = clumsy
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = dwarf } }
+				random = {
+					chance = 90
+					add_trait = dwarf
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = tall } }
+				random = {
+					chance = 90
+					add_trait = tall
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = harelip } }
+				random = {
+					chance = 90
+					add_trait = harelip
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = clubfooted } }
+				random = {
+					chance = 90
+					add_trait = clubfooted
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = hunchback } }
+				random = {
+					chance = 90
+					add_trait = hunchback
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = lisp } }
+				random = {
+					chance = 90
+					add_trait = lisp
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = stutter } }
+				random = {
+					chance = 90
+					add_trait = stutter
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = inbred } }
+				random = {
+					chance = 90
+					add_trait = inbred
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = homosexual } }
+				random = {
+					chance = 90
+					add_trait = homosexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = bisexual } }
+				random = {
+					chance = 90
+					add_trait = bisexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = heterosexual } }
+				random = {
+					chance = 90
+					add_trait = heterosexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			# Send to parent's court
+			ROOT = { reverse_banish = ROOT }
+		}
+		if = {
+				limit = { is_landed = no }
+				add_character_modifier = { name = clone_cooldown
+							duration = 1826
+							hidden = yes }
+			}
+		recalc_succession = yes
+	}
+
+	option = {
+		trigger = {
+			AND = {
+				is_female = no
+				any_spouse = { is_female = no }
+				any_consort = {is_female = no }
+			}
+		}
+		name = "EVTOPTACLONE2"
+		create_character = {
+			female = yes
+			culture = ROOT
+			religion = ROOT
+			dynasty = ROOT
+			race = ROOT
+			age = 0
+			#dna = ROOT
+		}
+		new_character = {
+			set_father = ROOT
+			ROOT = {
+				spouse = {
+					save_event_target_as = primary_spouse
+				}
+			}
+			set_mother = event_target:primary_spouse
+			ROOT = {
+				consort = { #the most recent consort
+					save_event_target_as = genetic_coop
+				}
+			}
+			#if = { #not working, was trying to make all consorts friends of the new child
+			#	limit = { any_courtier = { is_consort = ROOT } }
+			#	save_event_target_as = genetic_coop2
+			#}
+			add_friend = event_target:genetic_coop
+			#add_friend = event_target:genetic_coop2
+			dynasty = ROOT
+			add_trait = vat_born
+			# Chance of gaining cloning defects
+			if = {
+				limit = { ROOT = { any_consort = { trait = cloning_defects } } }
+				add_trait = cloning_defects
+			}
+			# Increased chance of cloning defects due to doubled chromosomes
+			if = {
+				limit = { ROOT = { any_consort = { trait = clone } } }
+				random_list = {
+					80 = { }
+					20 = { add_trait = cloning_defects }
+				}
+			}
+			random_list = {
+				80 = { }
+				20 = { add_trait = cloning_defects }
+			}
+			# Copy genetic traits
+			if = {
+				limit = { ROOT = { any_consort = { trait = genius } } }
+				random_list = {
+					70 = { add_trait = genius }
+					20 = { add_trait = quick }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = quick } } }
+				random_list = {
+					70 = { add_trait = quick }
+					15 = { add_trait = genius }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = slow } } }
+				random_list = {
+					70 = { add_trait = slow }
+					15 = { add_trait = imbecile }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = imbecile } } }
+				random_list = {
+					70 = { add_trait = imbecile }
+					20 = { add_trait = slow }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = beautiful } } }
+				random_list = {
+					70 = { add_trait = beautiful }
+					20 = { add_trait = fair }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = fair } } }
+				random_list = {
+					70 = { add_trait = fair }
+					15 = { add_trait = beautiful }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = homely } } }
+				random_list = {
+					70 = { add_trait = homely }
+					15 = { add_trait = ugly }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = ugly } } }
+				random_list = {
+					70 = { add_trait = ugly }
+					20 = { add_trait = homely }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = strong } } }
+				random = {
+					chance = 90
+					add_trait = strong
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = weak } } }
+				random = {
+					chance = 90
+					add_trait = weak
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = agile } } }
+				random = {
+					chance = 90
+					add_trait = agile
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = gmo } } }
+				random_list = {
+					70 = { add_trait = gmo }
+					5 = { add_trait = cloning_defects }
+					25 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = heavy_worlder } } }
+				random_list = {
+					75 = { add_trait = heavy_worlder }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = heavy_worlder
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = spacer_physiology } } }
+				random_list = {
+					75 = { add_trait = spacer_physiology }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = spacer_physiology
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = organic_wifi } } }
+				random_list = {
+					85 = { add_trait = organic_wifi }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = organic_wifi
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = cat_splice } } }
+				random_list = {
+					85 = { add_trait = cat_splice }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = cat_splice
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = clumsy } } }
+				random = {
+					chance = 90
+					add_trait = clumsy
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = dwarf } } }
+				random = {
+					chance = 90
+					add_trait = dwarf
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = tall } } }
+				random = {
+					chance = 90
+					add_trait = tall
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = harelip } } }
+				random = {
+					chance = 90
+					add_trait = harelip
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = clubfooted } } }
+				random = {
+					chance = 90
+					add_trait = clubfooted
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = hunchback } } }
+				random = {
+					chance = 90
+					add_trait = hunchback
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = lisp } } }
+				random = {
+					chance = 90
+					add_trait = lisp
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = stutter } } }
+				random = {
+					chance = 90
+					add_trait = stutter
+				}
+			}
+			if = {
+				limit = { ROOT = { any_consort = { trait = inbred } } }
+				random = {
+					chance = 90
+					add_trait = inbred
+				}
+			}
+			# Chance of gaining cloning defects
+			if = {
+				limit = { ROOT = { any_spouse = { trait = cloning_defects } } }
+				add_trait = cloning_defects
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = clone } } }
+				random_list = {
+					90 = { }
+					10 = { add_trait = cloning_defects }
+				}
+			}
+			random_list = {
+				95 = { }
+				5 = { add_trait = cloning_defects }
+			}
+			# Copy genetic traits
+			if = {
+				limit = { ROOT = { any_spouse = { trait = genius } } }
+				random_list = {
+					70 = { add_trait = genius }
+					20 = { add_trait = quick }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = quick } } }
+				random_list = {
+					70 = { add_trait = quick }
+					15 = { add_trait = genius }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = slow } } }
+				random_list = {
+					70 = { add_trait = slow }
+					15 = { add_trait = imbecile }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = imbecile } } }
+				random_list = {
+					70 = { add_trait = imbecile }
+					20 = { add_trait = slow }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = beautiful } } }
+				random_list = {
+					70 = { add_trait = beautiful }
+					20 = { add_trait = fair }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = fair } } }
+				random_list = {
+					70 = { add_trait = fair }
+					15 = { add_trait = beautiful }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = homely } } }
+				random_list = {
+					70 = { add_trait = homely }
+					15 = { add_trait = ugly }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = ugly } } }
+				random_list = {
+					70 = { add_trait = ugly }
+					20 = { add_trait = homely }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = strong } } }
+				random = {
+					chance = 90
+					add_trait = strong
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = weak } } }
+				random = {
+					chance = 90
+					add_trait = weak
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = agile } } }
+				random = {
+					chance = 90
+					add_trait = agile
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = gmo } } }
+				random_list = {
+					70 = { add_trait = gmo }
+					10 = { add_trait = cloning_defects }
+					20 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = heavy_worlder } } }
+				random_list = {
+					75 = { add_trait = heavy_worlder }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = heavy_worlder
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = spacer_physiology } } }
+				random_list = {
+					75 = { add_trait = spacer_physiology }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = spacer_physiology
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = organic_wifi } } }
+				random_list = {
+					85 = { add_trait = organic_wifi }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = organic_wifi
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = cat_splice } } }
+				random_list = {
+					85 = { add_trait = cat_splice }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = cat_splice
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = clumsy } } }
+				random = {
+					chance = 90
+					add_trait = clumsy
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = dwarf } } }
+				random = {
+					chance = 90
+					add_trait = dwarf
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = tall } } }
+				random = {
+					chance = 90
+					add_trait = tall
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = harelip } } }
+				random = {
+					chance = 90
+					add_trait = harelip
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = clubfooted } } }
+				random = {
+					chance = 90
+					add_trait = clubfooted
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = hunchback } } }
+				random = {
+					chance = 90
+					add_trait = hunchback
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = lisp } } }
+				random = {
+					chance = 90
+					add_trait = lisp
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = stutter } } }
+				random = {
+					chance = 90
+					add_trait = stutter
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = inbred } } }
+				random = {
+					chance = 90
+					add_trait = inbred
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = homosexual } } }
+				random = {
+					chance = 90
+					add_trait = homosexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = bisexual } } }
+				random = {
+					chance = 90
+					add_trait = bisexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			if = {
+				limit = { ROOT = { any_spouse = { trait = heterosexual } } }
+				random = {
+					chance = 90
+					add_trait = heterosexual
+					set_character_flag = flag_sexual_orientation_set
+				}
+			}
+			# Chance of gaining cloning defects
+			if = {
+				limit = { ROOT = { trait = cloning_defects } }
+				add_trait = cloning_defects
+			}
+			# Increased chance of cloning defects due to doubled chromosomes
+			if = {
+				limit = { ROOT = { trait = clone } }
+				random_list = {
+					80 = { }
+					20 = { add_trait = cloning_defects }
+				}
+			}
+			random_list = {
+				80 = { }
+				20 = { add_trait = cloning_defects }
+			}
+			# Copy genetic traits
+			if = {
+				limit = { ROOT = { trait = genius } }
+				random_list = {
+					70 = { add_trait = genius }
+					20 = { add_trait = quick }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = quick } }
+				random_list = {
+					70 = { add_trait = quick }
+					15 = { add_trait = genius }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = slow } }
+				random_list = {
+					70 = { add_trait = slow }
+					15 = { add_trait = imbecile }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = imbecile } }
+				random_list = {
+					70 = { add_trait = imbecile }
+					20 = { add_trait = slow }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = beautiful } }
+				random_list = {
+					70 = { add_trait = beautiful }
+					20 = { add_trait = fair }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = fair } }
+				random_list = {
+					70 = { add_trait = fair }
+					15 = { add_trait = beautiful }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = homely } }
+				random_list = {
+					70 = { add_trait = homely }
+					15 = { add_trait = ugly }
+					15 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = ugly } }
+				random_list = {
+					70 = { add_trait = ugly }
+					20 = { add_trait = homely }
+					10 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = strong } }
+				random = {
+					chance = 90
+					add_trait = strong
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = weak } }
+				random = {
+					chance = 90
+					add_trait = weak
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = agile } }
+				random = {
+					chance = 90
+					add_trait = agile
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = gmo } }
+				random_list = {
+					70 = { add_trait = gmo }
+					5 = { add_trait = cloning_defects }
+					25 = { }
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = heavy_worlder } }
+				random_list = {
+					75 = { add_trait = heavy_worlder }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = heavy_worlder
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = spacer_physiology } }
+				random_list = {
+					75 = { add_trait = spacer_physiology }
+					25 = {
+						add_trait = cloning_defects
+						add_trait = spacer_physiology
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = organic_wifi } }
+				random_list = {
+					85 = { add_trait = organic_wifi }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = organic_wifi
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = cat_splice } }
+				random_list = {
+					85 = { add_trait = cat_splice }
+					15 = {
+						add_trait = cloning_defects
+						add_trait = cat_splice
+					}
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = clumsy } }
+				random = {
+					chance = 90
+					add_trait = clumsy
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = dwarf } }
+				random = {
+					chance = 90
+					add_trait = dwarf
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = tall } }
+				random = {
+					chance = 90
+					add_trait = tall
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = harelip } }
+				random = {
+					chance = 90
+					add_trait = harelip
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = clubfooted } }
+				random = {
+					chance = 90
+					add_trait = clubfooted
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = hunchback } }
+				random = {
+					chance = 90
+					add_trait = hunchback
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = lisp } }
+				random = {
+					chance = 90
+					add_trait = lisp
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = stutter } }
+				random = {
+					chance = 90
+					add_trait = stutter
+				}
+			}
+			if = {
+				limit = { ROOT = { trait = inbred } }
+				random = {
+					chance = 90
+					add_trait = inbred
+				}
+			}
+			# Send to parent's court
+			ROOT = { reverse_banish = PREV }
+		}
+		if = {
+				limit = { is_landed = no }
+				add_character_modifier = { name = clone_cooldown
+							duration = 1826
+							hidden = yes }
+			}
+		recalc_succession = yes
+	}
+}

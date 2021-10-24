@@ -1,0 +1,965 @@
+namespace = suit_events
+character_event = {
+	id = suit_events.99
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		ai = yes
+		age = 16
+		martial = 10
+		NOR = {
+			has_artifact = mech_suit
+			has_artifact = common_mech_suit
+			has_artifact = super_mech_suit
+		}
+		dynasty_head = {
+		AND = {
+			has_artifact = super_mech_suit
+			OR = {
+			has_artifact = mech_suit
+			has_artifact = common_mech_suit
+				}
+			}
+		}
+	}
+	immediate = {
+		dynasty_head = {
+			any_artifact = { 
+				limit = { has_artifact_flag = mecha_suit
+					is_artifact_equipped = no }
+				save_event_target_as = giverobo1 }	
+		character_event = { id = suit_events.1 days = 5 }
+		}
+	}
+}
+#Relative asks for spare Mech Suit
+character_event = {
+	id = suit_events.1
+	desc = "EVTDESCsuit_events.1"
+	border = GFX_event_normal_frame_war
+	picture = GFX_mech_hangar 
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTAsuit_events.1
+		event_target:giverobo1 = {
+			transfer_artifact = { from = ROOT to = FROMFROM }
+		}	
+		FROMFROM = {
+		prestige = 200
+		opinion = { modifier = bestowed_mech_suit who = ROOT years = 5 }
+		}
+		clear_event_target = giverobo1
+	}
+	option = {
+		name = EVTOPTBsuit_events.1
+		FROMFROM = {
+			prestige = -50
+			opinion = { modifier = opinion_upset who = ROOT years = 2 }
+		}
+		clear_event_target = giverobo1
+	}
+}
+#Piloting Mech Suit harms body
+character_event = {
+	id = suit_events.0
+	title = EVTTITsuit_events.0
+	desc = "EVTDESCsuit_events"
+	picture = GFX_mech_fight
+	border = GFX_event_normal_frame_war
+	only_playable = yes
+		
+
+	is_triggered_only = yes
+		
+	trigger = {
+		in_command = yes
+		in_battle = yes
+		NOT = { has_character_modifier = good_pilot }
+		trait = mech_pilot
+		OR = {
+			has_artifact = mech_suit
+			has_artifact = common_mech_suit
+			has_artifact = super_mech_suit
+		}
+	}
+	option = { 
+	name = "EVTOPTAsuit_events.0" 
+		trigger = { 
+			NOR = {
+				trait = spacer_physiology  
+				trait = heavy_worlder
+				trait = strong
+				trait = genius
+			}
+		} 
+		custom_tooltip = { text = suitevt1 }
+		prestige = 25
+		health = -0.5
+		add_character_modifier = { modifier = good_pilot duration = 720}
+		}
+
+	option = { 
+	name = "EVTOPTBsuit_events.0"
+		trigger = { 
+			OR = {
+				trait = spacer_physiology  
+				trait = heavy_worlder
+			}
+		} 
+		custom_tooltip = { text = suitevt2 }
+		prestige = 25
+		change_martial = 1
+		add_character_modifier = { modifier = good_pilot duration = 720}
+		}
+	option = { 
+	name = "EVTOPTCsuit_events.0" 
+		trigger = { 
+			NOR = {
+				trait = spacer_physiology  
+				trait = heavy_worlder
+			}
+			OR = {
+				trait = strong
+				trait = genius
+			}
+		} 
+		custom_tooltip = { text = suitevt3 }
+		prestige = 25
+		health = 0.5
+		add_character_modifier = { modifier = good_pilot duration = 720}
+		}
+}
+#Spacer Emperor gets free STRIKER after a few years
+character_event = {
+	id = suit_events.2
+	desc = "EVTDESCsuit_events.2"
+	picture = GFX_mech_hangar
+	border = GFX_event_normal_frame_war
+	only_playable = yes
+		
+
+	is_triggered_only = yes
+		
+	war = no
+
+	trigger = {
+		in_command = no
+		tier = EMPEROR
+		religion = taoist
+		martial = 12
+		trait = mech_pilot
+		OR = {
+			has_artifact = mech_suit
+			has_artifact = common_mech_suit
+		}
+		NOT = { has_artifact = super_mech_suit }
+		NOT = {
+			trait = incapable
+			trait = infirm
+			trait = inbred
+			trait = imbecile
+		}
+
+	}
+
+	option = { 
+	name = "EVTOPTAsuit_events.2" 
+		custom_tooltip = { text = suitevt4 }
+		prestige = 105
+		random_artifact = { 
+			limit = { has_artifact_flag = mecha_suit
+				is_artifact_active = yes }
+			unsafe_destroy_artifact = yes 
+				}
+			add_artifact = super_mech_suit 
+			}
+		}
+#
+#
+#
+#
+
+#Encounter Mech suit in battle
+long_character_event = {
+	id = suit_events.3
+	desc = EVTDESCsuit_events.3
+	title = EVTNAMEsuit_events.3
+	border = GFX_event_long_frame_war
+	picture = GFX_roy_manvmachine
+
+	is_triggered_only = yes
+	in_command = yes
+
+	trigger = {
+		NOT = { is_at_sea = yes }
+		in_battle = yes
+		NOT = { culture_group = chinese_group }
+		NOR = {
+			has_artifact = super_mech_suit
+			has_artifact = mech_suit
+			has_artifact = common_mech_suit
+			}
+		any_current_enemy = {
+			ai = yes
+			in_command = yes 
+		OR = {
+			has_artifact = mech_suit
+			has_artifact = common_mech_suit
+		}
+			trait = mech_pilot
+			at_location = ROOT
+				OR = {
+					war_with = ROOT
+					ROOT = { any_liege = { war_with = PREVPREV } }
+					any_liege = { 
+						OR = {
+							war_with = ROOT 
+							ROOT = { any_liege = { war_with = PREVPREV } }
+						}	
+					}
+				}
+		}
+	}
+
+	immediate = {
+		any_current_enemy = {
+		limit = {
+			ai = yes
+			in_command = yes 
+		OR = {
+			has_artifact = mech_suit
+			has_artifact = common_mech_suit
+		}
+			trait = mech_pilot
+			at_location = ROOT
+				OR = {
+					war_with = ROOT
+					ROOT = { any_liege = { war_with = PREVPREV } }
+					any_liege = { 
+						OR = {
+							war_with = ROOT 
+							ROOT = { any_liege = { war_with = PREVPREV } }
+						}	
+					}
+				}
+			}
+			save_event_target_as = roboduel		
+		}
+	}
+
+	option = {
+		name = EVTOPTAsuit_events.3
+		clear_event_target = roboduel
+	}
+	option = {
+		name = EVTOPTBsuit_events.3
+		custom_tooltip = { text = suitevt5 }
+		ROOT = {
+			random_list = {
+				60 = { add_trait = brave }
+				40 = { add_trait = honorable }
+			}
+		}
+		hidden_tooltip = {
+			random_list = {
+				15 = {
+				modifier = {
+					factor = 1.25
+					ROOT = { martial = 15 } 
+				}
+				modifier = {
+					factor = 1.35
+					ROOT = { martial = 20 } 
+				}
+				modifier = {
+					factor = 1.5
+					ROOT = { martial = 12 }
+				}				
+				modifier = {
+					factor = 1.75
+					ROOT = { martial = 9 } 
+				}  
+				modifier = {
+					factor = 1.75
+					ROOT = { trait = brave } 
+				}  
+				character_event = { id = suit_events.4 days = 1 } }
+				60 = {
+				modifier = {
+					factor = 1.25
+					ROOT = { NOT = { martial = 8 } }
+				}
+				modifier = {
+					factor = 1.35
+					ROOT = { NOT = { martial = 6 } }
+				}
+				modifier = {
+					factor = 1.5
+					ROOT = { NOT = { martial = 4 } }
+				}				
+				modifier = {
+					factor = 1.75
+					ROOT = { NOT = { martial = 2 } }
+				}  
+				character_event = { id = suit_events.5 days = 1 } }
+				25 = { 
+				modifier = {
+					factor = 1.25
+					ROOT = { martial = 15 } 
+				}
+				modifier = {
+					factor = 1.35
+					ROOT = { martial = 20 } 
+				}
+				modifier = {
+					factor = 1.5
+					ROOT = { martial = 12 }
+				}				
+				modifier = {
+					factor = 1.75
+					ROOT = { trait = strong } 
+				}  
+				modifier = {
+					factor = 1.75
+					ROOT = { trait = brave } 
+				}  
+				character_event = { id = suit_events.6 days = 1 } }
+			}
+		}
+	}
+}
+#Win and destroy opposing Mech Suit
+	character_event = {
+		id = suit_events.4
+		desc = "EVTDESCsuit_events.4"
+		border = GFX_event_normal_frame_war
+		picture = GFX_roy_aftermath
+	
+		is_triggered_only = yes
+	
+		option = { 
+		name = "EVTOPTAsuit_events.4" 
+		add_character_modifier = { modifier = defeated_robo months = 14 }
+		prestige = 300
+		hidden_tooltip = {
+			if = {
+				limit = {
+					has_nickname = no
+					is_adult = yes
+					NOT = { trait = incapable }
+				}
+				random_list = {
+					33 = {
+						give_nickname = nick_of_the_demon_slay
+					}
+					33 = {
+						give_nickname = nick_of_the_bane_of_machine
+					}
+					33 = {
+						give_nickname = nick_the_reli_champ
+					}
+				}
+			}
+		}
+		event_target:roboduel = { 
+			add_trait = maimed
+			any_artifact = { 
+				limit = { has_artifact_flag = mecha_suit
+					is_artifact_equipped = yes }
+				unsafe_destroy_artifact = yes } }
+		clear_event_target = roboduel
+		}
+}
+#Lose and suffer grevious wounds
+	character_event = {
+		id = suit_events.5
+		border = "GFX_event_normal_frame_war"
+		desc = "EVTDESCsuit_events.5"
+		picture = GFX_roy_aftermath
+	
+		is_triggered_only = yes
+	
+		option = { 
+		name = "EVTOPTAsuit_events.5" 
+			add_trait = severely_injured
+			add_trait = wounded
+			random = {
+				chance = 25
+				add_trait = maimed
+			}
+			random = {
+				chance = 15
+				add_trait = one_legged
+			}
+			random = {
+				chance = 15
+				add_trait = one_eyed
+			}
+		clear_event_target = roboduel
+		}
+}
+#Win and steal opponent's Mech Suit
+	character_event = {
+		id = suit_events.6
+		desc = "EVTDESCsuit_events.6"
+		border = GFX_event_normal_frame_war
+		picture = GFX_roy_mech
+	
+		is_triggered_only = yes
+	
+		option = { 
+		name = "EVTOPTAsuit_events.6" 
+		add_character_modifier = { modifier = defeated_robo months = 14 }
+		prestige = 400
+			random = {
+				chance = 20
+				give_nickname = nick_the_reli_champ
+			}
+		event_target:roboduel = { 
+			any_artifact = { 
+				limit = { has_artifact_flag = mecha_suit
+					is_artifact_equipped = yes }
+				transfer_artifact = {
+					from = PREV
+					to = ROOT
+					} 
+				} 
+			death = {
+				death_reason = death_duel
+				killer = ROOT
+			}
+		}
+		clear_event_target = roboduel
+	}
+}
+#
+#
+#
+#
+
+
+#Task scientists with building Red Fighter
+	character_event = {
+		id = suit_events.7
+		desc = "EVTDESCsuit_events.7"
+		picture = GFX_roy_science
+	
+		is_triggered_only = yes
+	
+		option = { 
+		name = "EVTAsuit_events.7" 
+		wealth = -200
+		hidden_tooltip = {
+		random_list = {
+			7 = { 
+					modifier = {
+						factor = 1.25
+						learning = 9
+					}
+					modifier = {
+						factor = 1.55
+						learning = 12
+					}
+					modifier = {
+						factor = 3.5
+						learning = 16
+					}				
+					modifier = {
+						factor = 4.75
+						learning = 18
+					}
+					modifier = {
+						factor = 1.25
+						trait = erudite
+					}
+					modifier = {
+						factor = 1.5
+						trait = theologian
+					}
+					modifier = {
+						factor = 2
+						trait = genius
+					}	
+					modifier = {
+						factor = 2
+						trait = scholar
+					}
+			character_event = { id = suit_events.8 months = 12 }
+			}
+			3 = { 
+					modifier = {
+						factor = 2
+						NOT = { learning = 8 }
+					}
+					modifier = {
+						factor = 3
+						NOT = { learning = 6 }
+					}
+					modifier = {
+						factor = 2.5
+						NOT = { learning = 4 }
+					}				
+					modifier = {
+						factor = 5
+						NOT = { learning = 2 }
+					}
+					modifier = {
+						factor = 5
+						religion_group = pagan_group
+					}
+			character_event = { id = suit_events.9 months = 14 } 
+				}
+			}
+		}
+	}
+
+		option = { 
+		name = "EVTBsuit_events.7" 
+		hidden_tooltip = {
+		remove_character_modifier = science_researching
+		}
+	}
+}
+#Successfully build mech suit
+	character_event = {
+		id = suit_events.8
+		desc = "EVTDESCsuit_events.8"
+		picture = GFX_roy_mech
+	
+		is_triggered_only = yes
+	
+		option = { 
+		name = "EVTsuit_events.8" 
+			prestige = 250
+			add_artifact = common_mech_suit
+		}
+}
+#Research was unsuccessful
+	character_event = {
+		id = suit_events.9
+		desc = "EVTDESCsuit_events.9"
+		picture = GFX_roy_science
+	
+		is_triggered_only = yes
+	
+		option = { 
+		name = "EVTsuit_events.9" 
+			prestige = -200
+		}
+}
+#
+#
+#
+
+#
+#Task scientists with building Zhao Ranger
+	character_event = {
+		id = suit_events.10
+		desc = "EVTDESCsuit_events.10"
+		picture = GFX_roy_science
+	
+		is_triggered_only = yes
+	
+		option = { 
+		name = "EVTAsuit_events.10" 
+		wealth = -200
+		hidden_tooltip = {
+		random_list = {
+			7 = { 
+					modifier = {
+						factor = 1.25
+						learning = 9
+					}
+					modifier = {
+						factor = 1.55
+						learning = 12
+					}
+					modifier = {
+						factor = 3.5
+						learning = 16
+					}				
+					modifier = {
+						factor = 4.75
+						learning = 18
+					}
+					modifier = {
+						factor = 1.25
+						trait = erudite
+					}
+					modifier = {
+						factor = 1.5
+						trait = theologian
+					}
+					modifier = {
+						factor = 2
+						trait = genius
+					}	
+					modifier = {
+						factor = 2
+						trait = scholar
+					}
+			character_event = { id = suit_events.11 months = 24 }
+			}
+			3 = { 
+					modifier = {
+						factor = 2
+						NOT = { learning = 8 }
+					}
+					modifier = {
+						factor = 3
+						NOT = { learning = 6 }
+					}
+					modifier = {
+						factor = 2.5
+						NOT = { learning = 4 }
+					}				
+					modifier = {
+						factor = 5
+						NOT = { learning = 2 }
+					}
+			character_event = { id = suit_events.12 months = 14 } 
+				}
+			}
+		}
+	}
+
+		option = { 
+		name = "EVTBsuit_events.7" 
+		hidden_tooltip = {
+		remove_character_modifier = science_researching
+		}
+	}
+}
+#Successfully build Zhao Ranger
+	character_event = {
+		id = suit_events.11
+		desc = "EVTDESCsuit_events.11"
+		picture = GFX_roy_mech
+	
+		is_triggered_only = yes
+	
+		option = { 
+		name = "EVTsuit_events.8" 
+			prestige = 250
+			add_artifact = mech_suit
+			add_trait = mech_pilot
+		}
+}
+#Research was unsuccessful
+	character_event = {
+		id = suit_events.12
+		desc = "EVTDESCsuit_events.12"
+		picture = GFX_roy_science
+	
+		is_triggered_only = yes
+	
+		option = { 
+		name = "EVTsuit_events.9" 
+			prestige = -200
+		}
+}
+#
+#
+#
+
+#The Machine... It speaks...
+character_event = {
+	id = suit_events.13
+	desc = "EVTDESCsuit_events13"
+	picture = GFX_mech_fight
+	border = GFX_event_normal_frame_war
+	only_playable = yes
+		
+
+	is_triggered_only = yes
+		
+	trigger = {
+		in_command = yes
+		in_battle = yes
+		has_character_modifier = good_pilot
+		trait = mech_pilot
+		any_artifact = {
+				OR = {
+				artifact_type = mech_suit
+				artifact_type = common_mech_suit
+				artifact_type = super_mech_suit
+				}
+				is_artifact_equipped = yes
+			}
+		any_current_enemy = {
+			in_command = yes 
+			at_location = ROOT
+				OR = {
+					war_with = ROOT
+					ROOT = { any_liege = { war_with = PREVPREV } }
+					any_liege = { 
+						OR = {
+							war_with = ROOT 
+							ROOT = { any_liege = { war_with = PREVPREV } }
+						}	
+					}
+				}
+		}
+	}
+	option = { 
+	name = "EVTOPTAsuit_events.13" 
+		custom_tooltip = { text = suitevt13 }
+		prestige = 200
+		troops = -0.15
+		location = {
+			destroy_random_building = yes
+			add_province_modifier = {
+				name = destroyed_land
+				years = 3
+			}
+		}
+		any_current_enemy = {
+			limit = { in_command = yes at_location = ROOT}
+			troops = -0.50
+			}	
+			random = {
+				chance = 25
+				give_nickname = nick_the_god_machine
+				}
+			}
+		}
+#Find Mech Sword
+character_event = {
+	id = suit_events.14
+	desc = "EVTDESCsuit_events.14"
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		age = 16
+		in_command = yes
+		learning = 10
+		martial = 12
+		religion_group = muslim
+		location = { region = world_hellas  }
+		NOT = { has_artifact = mech_sword_1 }
+	}
+	
+	option = { 
+	name = "EVTAsuit_events.14" 
+		add_artifact = mech_sword_1
+		}
+	option = { 
+	name = "EVTBsuit_events.14" 
+		wealth = 200
+		}
+	}
+#Find Other Mech Sword
+character_event = {
+	id = suit_events.15
+	desc = "EVTDESCsuit_events.14"
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		age = 16
+		in_command = yes
+		learning = 10
+		martial = 15
+		religion_group = muslim
+		location = { region = world_noachis_terra }
+		NOT = { has_artifact = mech_sword_2 }
+	}
+	
+	option = { 
+	name = "EVTAsuit_events.14" 
+		add_artifact = mech_sword_2
+		}
+	option = { 
+	name = "EVTBsuit_events.14" 
+		wealth = 200
+		}
+	}
+#FILTHY PAGANS DON'T BELONG IN MECH SUITS
+character_event = {
+	id = suit_events.16
+	desc = "EVTDESCsuit_events.16"
+	picture = GFX_mech_fight
+	border = GFX_event_normal_frame_war
+	only_playable = yes
+		
+
+	is_triggered_only = yes
+		
+	trigger = {
+		in_command = yes
+		in_battle = yes
+		NOT = { has_character_modifier = good_pilot }
+		trait = mech_pilot
+		religion_group = pagan_group
+		OR = {
+			has_artifact = mech_suit
+			has_artifact = common_mech_suit
+			has_artifact = super_mech_suit
+		}
+	}
+	option = { 
+	name = "EVTOPTAsuit_events.16" 
+		custom_tooltip = { text = suitevt16 }
+		remove_trait = mech_pilot
+		add_trait = wounded
+			random = {
+				chance = 25
+				add_trait = maimed
+				}
+		any_artifact = { 
+				limit = { has_artifact_flag = mecha_suit
+					is_artifact_equipped = yes }
+				unsafe_destroy_artifact = yes }
+		}
+}
+#Mech Suits Randomly Unbonds with weak Non-Spacers
+character_event = {
+	id = suit_events.17
+	desc = "EVTDESCsuit_events.17"
+	picture = GFX_mech_fight
+	border = GFX_event_normal_frame_war
+	only_playable = yes
+		
+
+	is_triggered_only = yes
+		
+	trigger = {
+		in_command = yes
+		in_battle = no
+		trait = mech_pilot
+		NOT = { religion = taoist }
+		NOT = { religion_group = muslim }
+		NOT = { has_character_modifier = good_pilot }
+		NOT = { martial = 20 }
+		NOR = { 
+			trait = strong
+			trait = genius
+			trait = tall
+			trait = spacer_physiology
+			trait = heavy_worlder
+		}
+		OR = {
+			has_artifact = mech_suit
+			has_artifact = common_mech_suit
+			has_artifact = super_mech_suit
+		}
+	}
+	option = { 
+	name = "EVTOPTAsuit_events.17" 
+		custom_tooltip = { text = suitunbond }
+		remove_trait = mech_pilot
+		add_trait = wounded
+			random = {
+				chance = 25
+				add_trait = maimed
+				}
+			random = {
+				chance = 25
+				any_artifact = { 
+				limit = { has_artifact_flag = mecha_suit }
+				unsafe_destroy_artifact = yes }
+				}
+		}
+}
+#Meddling Spacers gift exceptional peasant leader a Mech Suit...
+narrative_event = {
+	id = suit_events.18
+	title = suit_events.18
+	desc = "EVTDESCsuit_events.18"
+	picture = "GFX_mech_battle"
+	border = GFX_event_narrative_frame_religion	
+	major = yes
+	war = yes
+
+	trigger = {
+		ROOT = {
+			ai = yes
+			primary_title = { temporary = yes }
+			martial = 20
+			in_command = yes
+			NOT = { religion_group = pagan_group }
+			NOT = { has_artifact = mech_suit }
+			NOT = { has_artifact = common_mech_suit }
+			NOT = { has_artifact = super_mech_suit }
+			location = { 
+				NOT = { 
+				region = world_australe_planum
+				region = world_hellas 
+				}
+			}
+		}
+	}
+	mean_time_to_happen = {
+		years = 2
+		modifier = {
+			factor = 1.75
+			religion_group = christian
+		}
+		modifier = {
+			factor = 1.25
+			trait = kind
+		}
+		modifier = {
+			factor = 1.25
+			trait = content
+		}
+		modifier = {
+			factor = 1.25
+			trait = weak
+		}
+		modifier = {
+			factor = 1.25
+			trait = humble
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 8 }
+		}
+		modifier = {
+			factor = 3.25
+			trait = slow
+		}
+		modifier = {
+			factor = 0.5
+			trait = cruel
+		}
+		modifier = {
+			factor = 0.5
+			trait = strong
+		}
+		modifier = {
+			factor = 0.5
+			trait = impaler
+		}
+		modifier = {
+			factor = 0.5
+			culture_group = chinese_group
+		}
+		modifier = {
+			factor = 0.5
+			religion_group = muslim
+		}
+	}
+	immediate = {
+		ROOT = {
+			add_artifact = common_mech_suit
+		}
+	}
+	option = {
+		name = "EVTOPTAsuit_events.18"
+		trigger = {
+			NOT = { same_realm = FROM }
+		}
+	
+	}
+	option = {
+		name = "EVTOPTBsuit_events.18"
+		trigger = {
+			same_realm = FROM
+		}
+	}
+}
