@@ -1,0 +1,254 @@
+improve_mood_effect = {
+	if = {
+		limit = { trait = stressed }
+		remove_trait = stressed
+		hidden_tooltip = { character_event = { id = health.52 } }
+	}
+	else = {
+		add_trait = relaxed
+		hidden_tooltip = { character_event = { id = health.53 } }
+	}
+}
+degrade_mood_effect = {
+	if = {
+		limit = { trait = relaxed }
+		remove_trait = relaxed
+		hidden_tooltip = { character_event = { id = health.54 } }
+	}
+	else = {
+		add_trait = stressed
+		hidden_tooltip = { character_event = { id = health.51 } }
+	}
+}
+
+inflict_minor_injury_effect = {
+	if = {
+		limit = {
+			OR = {
+				trait = wounded
+				trait = full_cybernetic_conversion
+			}
+			OR = {
+				trait = damaged_cybernetics
+				NOR = {
+					trait = cybernetic_limb
+					trait = cybernetic_leg
+					trait = cybernetic_skeleton
+					trait = full_cybernetic_conversion
+				}
+			}
+		}
+		inflict_moderate_injury_effect = yes
+	}
+	else = {
+		custom_tooltip = { text = "INFLICTMINORINJURYEFFECT" }
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					add_trait = wounded
+					hidden_tooltip = { character_event = { id = 38280 } }
+					modifier = {
+						factor = 0
+						trait = wounded
+					}
+					modifier = {
+						factor = 0
+						trait = full_cybernetic_conversion
+					}
+				}
+				50 = {
+					add_trait = damaged_cybernetics
+					hidden_tooltip = { character_event = { id = cybernetics.10060 } }
+					modifier = {
+						factor = 0
+						trait = damaged_cybernetics
+					}
+					modifier = {
+						factor = 0
+						NOR = {
+							trait = cybernetic_limb
+							trait = cybernetic_leg
+							trait = cybernetic_skeleton
+							trait = full_cybernetic_conversion
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+inflict_moderate_injury_effect = {
+	if = {
+		limit = {
+			OR = {
+				trait = one_eyed
+				trait = blinded
+				trait = maimed
+				trait = disfigured
+			}
+		}
+		inflict_major_injury_effect = yes
+	}
+	else = {
+		custom_tooltip = { text = "INFLICTMODERATEINJURYEFFECT" }
+		hidden_tooltip = {
+			random_list = {
+				15 = {
+					modifier = {
+						factor = 0
+						OR = {
+							trait = maimed
+							has_dlc = "Reapers"
+						}
+					}
+					add_trait = maimed
+					hidden_tooltip = { character_event = { id = 38281 } }
+				}
+				10 = {
+					modifier = {
+						factor = 0
+						OR = {
+							trait = one_eyed
+							trait = blinded
+							NOT = { has_dlc = "Reapers" }
+						}
+					}
+					add_trait = one_eyed
+					hidden_tooltip = { character_event = { id = RIP.11501 } }
+				}
+				5 = {
+					modifier = {
+						factor = 0
+						OR = {
+							trait = disfigured
+							NOT = { has_dlc = "Reapers" }
+						}
+					}
+					add_trait = disfigured
+					hidden_tooltip = { character_event = { id = RIP.11504 } }
+				}
+			}
+		}
+	}
+}
+
+inflict_major_injury_effect = {
+	custom_tooltip = { text = "INFLICTMAJORINJURYEFFECT" }
+	hidden_tooltip = {
+		if = {
+			limit = { has_dlc = "Reapers" }
+			add_trait = severely_injured
+		}
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 0
+					has_dlc = "Reapers"
+				}
+				# Have to do something at this point, even without Reaper's Due
+				add_trait = maimed
+				add_trait = wounded
+			}
+			15 = {
+				modifier = {
+					factor = 0
+					trait = blinded
+				}
+				modifier = {
+					factor = 0
+					OR = {
+						trait = odin_mk_i
+						trait = odin_mk_ii
+						trait = odin_mk_iii
+						trait = odin_mk_iv
+						trait = odin_mk_v
+					}
+				}
+				add_trait = blinded
+				hidden_tooltip = { character_event = { id = RIP.11501 } }
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					OR = {
+						trait = one_legged
+						NOT = { has_dlc = "Reapers" }
+					}
+				}
+				modifier = {
+					factor = 0
+					trait = cybernetic_leg
+				}
+				add_trait = one_legged
+				hidden_tooltip = { character_event = { id = RIP.11503 } }
+			}
+			10 = {
+				modifier = {
+					factor = 0
+					NOT = { trait = cybernetic_leg }
+				}
+				modifier = {
+					factor = 0
+					NOT = { has_dlc = "Reapers" }
+				}
+				add_trait = one_legged
+				hidden_tooltip = { character_event = { id = cybernetics.10063 } }
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					OR = {
+						trait = one_handed
+						NOT = { has_dlc = "Reapers" }
+					}
+				}
+				modifier = {
+					factor = 0
+					trait = cybernetic_limb
+				}
+				add_trait = one_handed
+				hidden_tooltip = { character_event = { id = RIP.11502 } }
+			}
+			20 = {
+				modifier = {
+					factor = 0
+					NOT = { trait = cybernetic_limb }
+				}
+				modifier = {
+					factor = 0
+					NOT = { has_dlc = "Reapers" }
+				}
+				add_trait = one_handed
+				hidden_tooltip = { character_event = { id = cybernetics.10062 } }
+			}
+			5 = {
+				modifier = {
+					factor = 0
+					OR = {
+						trait = mangled
+						NOT = { has_dlc = "Reapers" }
+					}
+				}
+				modifier = {
+					factor = 0
+					trait = cybernetic_skeleton
+				}
+				add_trait = mangled
+				hidden_tooltip = { character_event = { id = RIP.11505 } }
+			}
+			5 = {
+				modifier = {
+					factor = 0
+					NOT = { trait = cybernetic_skeleton }
+				}
+				modifier = {
+					factor = 0
+					NOT = { has_dlc = "Reapers" }
+				}
+				add_trait = mangled
+				hidden_tooltip = { character_event = { id = cybernetics.10064 } }
+			}
+		}
+	}
+}
