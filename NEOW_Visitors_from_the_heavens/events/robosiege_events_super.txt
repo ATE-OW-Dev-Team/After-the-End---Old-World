@@ -1,0 +1,69 @@
+namespace = mechfl_siege
+
+#####Directory#####
+
+###Use Mech Siege AI version###
+###Use Mech Siege###
+
+#####High Pri Events to do#####
+#None
+#####LOWPRI#####
+
+
+########################Start#########################
+
+
+###Use Mech Siege Combat###
+##		Working		##
+#User triggered via decision menu
+
+character_event = {
+
+	id = mechfl_siege.5
+	desc = "EVTDESCmechfl_siege.2"
+	border = GFX_event_normal_frame_war
+	picture = GFX_mech_battle
+	is_triggered_only = yes
+
+	option = {
+		name = mechflsiegeA.atk1 	
+		}
+	
+	option = {
+		name = mechfl_siege.atk1
+		siege = {
+			enemy = {
+					morale = -0.5
+					troops = -0.5
+				}
+		}
+		if = {
+		
+			limit = {trait = wounded }
+		hidden_tooltip = {			
+			random = {
+				chance = 10
+				character_event = { id = mechfl_siege.oops5 } 
+				}
+			}
+		
+		}
+		hidden_tooltip = {
+				add_character_modifier = { modifier = usedmech duration = 40}
+				}
+			location = {
+				add_province_modifier = {
+					name = destroyed_land
+					years = 1
+				}
+			}
+		if = {
+			limit = { NOT = { trait = maimed } NOT = { trait = wounded } }
+			random = {
+				chance = 10
+				character_event = { id = mechfl_siege.99 }
+			}	
+		}
+	}
+}
+
