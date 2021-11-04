@@ -6396,7 +6396,7 @@ order_st_george = { #society code name
 			}
 		}
 	}
-	
+}
 warrior_lodge_iranian = {
 	primary_attribute = martial
 	opinion_to_other_members = +10
@@ -6405,13 +6405,14 @@ warrior_lodge_iranian = {
 	society_ranks_gfx = warriors_ranks
 	society_influence = no
 	
-	non_interference = {
+	non_interference = { 
 		always = yes
 	}
-    
+	
 	active = {
 		has_dlc = "Holy Fury"
 	}
+	
 	indestructible = yes
 	
 	can_join_society = {
@@ -6437,8 +6438,11 @@ warrior_lodge_iranian = {
 			limit = { prisoner = yes }
 			prisoner = no
 		}
-		OR = {
-			true_religion_group_zoroastrian_group_trigger = yes
+		OR = {	
+			OR = {
+				religion_group = zoroastrian_group
+				culture_group = iranian
+			}
 			AND = {
 				custom_tooltip = {
 					text = society_has_at_least_10_members_tt
@@ -6450,6 +6454,11 @@ warrior_lodge_iranian = {
 					special_join_warrior_lodge_trigger = yes
 				}
 				NOT = { trait = zealous }
+				
+				OR = {
+					religion_group = zoroastrian_group
+					culture_group = iranian
+				}
 			}
 		}
 	}
@@ -6457,43 +6466,70 @@ warrior_lodge_iranian = {
 	show_society = {
 		OR = {
 			#You are this religion: will show only this lodge (the other "show_society"'s will make sure)
-			true_religion_group_zoroastrian_group_trigger = yes	
+			religion_group = zoroastrian_group
 			AND = {
 				#You are of a religion that doesn't match *any* warrior lodge
 				has_religion_matching_available_warrior_lodge_trigger = no
 				
 				OR = {
 					#You have neighbors, etc, of the correct religion...
-					any_vassal = { true_religion_group_zoroastrian_group_trigger = yes }
-					any_liege = { true_religion_group_zoroastrian_group_trigger = yes }
-					any_neighbor_independent_ruler = { true_religion_group_zoroastrian_group_trigger = yes }
+					any_vassal = { 
+						OR = {
+							religion_group = zoroastrian_group
+							culture_group = iranian
+						} 
+					}
+					any_liege = { 
+						OR = {
+							religion_group = zoroastrian_group
+							culture_group = iranian
+						} 
+					}
+					any_neighbor_independent_ruler = { 
+						OR = {
+							religion_group = zoroastrian_group
+							culture_group = iranian
+						} 
+					}
 				}
 			}
 			NOT = { #Hide if: you don't have a religion that corresponds to this lodge, but there is another society available to you already
-				NOT = { true_religion_group_zoroastrian_group_trigger = yes }
+				OR = {
+					religion_group = zoroastrian_group
+					culture_group = iranian
+				}
 				has_religion_matching_available_warrior_lodge_trigger = yes
 			}
 			#Always show if: You are already a member. Duh.
 			society_member_of = warrior_lodge_iranian
 		}
 	}
-
-	potential = { #if you change religion or become zealous while NOT pagan, you are kicked out
+	
+	potential = { #if you change religion or become zealous while NOT Mazdan, you are kicked out
 		OR = {
-			true_religion_group_zoroastrian_group_trigger = yes
+			OR = {
+				religion_group = zoroastrian_group
+				culture_group = iranian
+			}
 			AND = {
-				NOT = { true_religion_group_zoroastrian_group_trigger = yes }
+				NOT = { 
+					OR = {
+						religion_group = zoroastrian_group
+						culture_group = iranian
+					} 
+				}
 				NOT = { trait = zealous }
 			}
 		}
 	}
-
-	society_rank = { #"Fledgling"
+	
+	society_rank = { 
 		level = 1
 		limit = 50 
 		startup_limit = 10
 		modifier = {
 			monthly_character_prestige = 0.25
+			church_opinion = 5
 		}
 		powers = {
 			warrior_lodge_duel #Passive Power: Unlocks Duel
@@ -6503,29 +6539,31 @@ warrior_lodge_iranian = {
 		}
 	}
 	
-	society_rank = { #"Warrior"
+	society_rank = { 
 		level = 2
 		limit = 20
 		startup_limit = 6
 		modifier = {
 			monthly_character_prestige = 0.5
+			church_opinion = 10
 			combat_rating = 5
 			martial = 1
-		}		
+		}
 		powers = {
 			warrior_lodge_reaver #Passive Power: Reaver
 			warrior_lodge_warrior_training #Power: Warrior Training
 			warrior_lodge_summon_commander #Power: Summon Commander
-			warrior_lodge_zun_battle_trance
+			warrior_lodge_zun_battle_trance #Power: Battle Trance
 		}
 	}
 	
-	society_rank = { #"Veteran"
+	society_rank = { 
 		level = 3
 		limit = 10 
 		startup_limit = 4
 		modifier = {
 			monthly_character_prestige = 0.75
+			church_opinion = 15
 			combat_rating = 10
 			martial = 2
 		}
@@ -6535,12 +6573,13 @@ warrior_lodge_iranian = {
 		}
 	}
 
-	society_rank = { #"Hero"
+	society_rank = { 
 		level = 4
 		limit = 4
 		startup_limit = 3
 		modifier = { 
 			monthly_character_prestige = 1
+			church_opinion = 20
 			combat_rating = 15
 			martial = 3
 		}
@@ -6550,41 +6589,76 @@ warrior_lodge_iranian = {
 			warrior_lodge_choose_military_aspect #Power: Choose Military Aspect
 		}
 	}
-
-	plots = {
 	
+	plots = {
 	}
-
+	
 	monthly_currency_gain = {
 		name = currency_name_warrior_lodge_norse
     	
-		per_attribute = {
+    	per_attribute = {
     		name = martial
     		value = 0.25
     	}
     	has_trait = {
-			trait = hunter
+			trait = misguided_warrior 
 			value = 1
 		}
 		has_trait = {
-			trait = strategist
-			value = 1
-		}
-		has_trait = {
-			trait = duelist
-			value = 1
-		}
-		has_trait = {
-			trait = scarred
-			value = 1
-		}
-		has_trait = {
-			trait = scarred_mid
+			trait = tough_soldier 
 			value = 2
 		}
 		has_trait = {
-			trait = scarred_high
+			trait = skilled_tactician
 			value = 3
+		}
+		has_trait = {
+			trait = brilliant_strategist
+			value = 4
+		}
+    	has_trait = { # Zoroastrian
+			trait = saoshyant
+			value = 10
+		}
+		has_trait = {
+			trait = saoshyant_descendant 
+			value = 5
+		}
+		has_trait = {
+			trait = gondi_shahansha 
+			value = 5
+		}
+		has_trait = {
+			trait = adventurer
+			value = 2
+		}
+		has_trait = {
+			trait = shieldmaiden
+			value = 2
+		}
+		has_trait = { # Lifestyle
+			trait = duelist
+			value = 3
+		}
+		has_trait = {
+			trait = strategist
+			value = 3
+		}
+		has_trait = {
+			trait = hunter
+			value = 3
+		}
+		has_trait = {
+			trait = zealous
+			value = 3
+		}
+		has_trait = {
+			trait = celibate
+			value = 1
+		}
+		has_trait = {
+			trait = pilgrim
+			value = 1
 		}
 		has_trait = {
 			trait = genius
@@ -6611,15 +6685,11 @@ warrior_lodge_iranian = {
 			value = 2
 		}
 		has_trait = {
-			trait = impaler
-			value = 1
-		}
-		has_trait = {
 			trait = falconer
 			value = 1
 		}
 		has_trait = {
-			trait = wroth
+			trait = just
 			value = 1
 		}
 		has_trait = {
@@ -6639,58 +6709,42 @@ warrior_lodge_iranian = {
 			value = 1
 		}
 		has_trait = {
+			trait = chaste
+			value = 1
+		}
+		has_trait = {
 			trait = brave
-			value = 2
-		}
-		has_trait = {
-			trait = ambitious
-			value = 1
-		}
-		has_trait = {
-			trait = cruel
-			value = 1
-		}
-		has_trait = {
-			trait = stubborn
-			value = 1
-		}
-		has_trait = {
-			trait = adventurer
-			value = 1
-		}
-		has_trait = {
-			trait = viking
-			value = 1
-		}
-		has_trait = {
-			trait = pirate
-			value = 1
-		}
-		has_trait = {
-			trait = ravager
-			value = 2
-		}
-		has_trait = {
-			trait = seaking
 			value = 3
 		}
-		has_trait = {
-			trait = sea_queen
-			value = 3
-		}
-		has_trait = {
-			trait = shieldmaiden
-			value = 1
-		}
-		has_trait = {
-			trait = berserker
-			value = 1
-		}
-		has_trait = {
-			trait = varangian
-			value = 1
+		society_rank = {
+			rank = 4
+			value = 5
 		}
 		#NEGATIVE modifiers
+		has_trait = {
+			trait = drunkard
+			value = -1
+		}
+		has_trait = {
+			trait = possessed
+			value = -1
+		}
+		has_trait = {
+			trait = deceitful
+			value = -1
+		}
+		has_trait = {
+			trait = arbitrary
+			value = -1
+		}
+		has_trait = {
+			trait = is_malnourished
+			value = -1
+		}
+		has_trait = {
+			trait = is_fat
+			value = -1
+		}
 		has_trait = {
 			trait = craven
 			value = -3
@@ -6708,10 +6762,6 @@ warrior_lodge_iranian = {
 			value = -1
 		}
 		has_trait = {
-			trait = content
-			value = -1
-		}
-		has_trait = {
 			trait = dwarf
 			value = -1
 		}
@@ -6724,24 +6774,164 @@ warrior_lodge_iranian = {
 			value = -1
 		}
 	}
-	
+
 	member_score_per_attribute = 3
 	member_score_per_rank = 100
 
 	member_score = {
 		value = 10
-		warrior_lodges_member_score = yes
-	}	
 
+		modifier = {
+			trait = saoshyant
+			factor = 10.0
+		}
+		modifier = {
+			trait = saoshyant_descendant 
+			factor = 5.0
+		}
+		modifier = {
+			trait = gondi_shahansha 
+			factor = 2.0
+		}
+		modifier = {
+			is_priest = yes
+			factor = 1.1
+		}
+		modifier = { # Lifestyle
+			trait = hunter
+			factor = 1.3
+		}
+		modifier = {
+			trait = duelist
+			factor = 1.5
+		}
+		modifier = {
+			trait = strategist
+			factor = 1.5
+		}
+		modifier = { # Education
+			trait = misguided_warrior
+			factor = 1.1
+		}	
+		modifier = {
+			trait = tough_soldier
+			factor = 1.2
+		}
+    	modifier = {
+			trait = skilled_tactician
+			factor = 1.4
+		}
+    	modifier = {
+			trait = brilliant_strategist
+			factor = 1.6
+		}
+		modifier = {
+			trait = zealous
+			factor = 1.25
+		}
+		modifier = {
+			trait = brave
+			factor = 1.25
+		}
+		modifier = {
+			trait = genius
+			factor = 1.2
+		}
+		modifier = {
+			trait = quick
+			factor = 1.1
+		}
+		modifier = {
+			trait = shrewd
+			factor = 1.1
+		}
+		modifier = {
+			trait = strong
+			factor = 1.2
+		}
+		modifier = {
+			trait = robust
+			factor = 1.1
+		}
+		modifier = {
+			trait = giant
+			factor = 1.1
+		}
+		modifier = {
+			trait = falconer
+			factor = 1.1
+		}
+		modifier = {
+			trait = patient
+			factor = 1.1
+		}
+		modifier = {
+			trait = diligent
+			factor = 1.1
+		}
+		modifier = {
+			trait = humble
+			factor = 1.1
+		}
+		modifier = {
+			trait = adventurer
+			factor = 1.1
+		}
+		modifier = {
+			trait = shieldmaiden
+			factor = 1.1
+		}
+		modifier = {
+			trait = pilgrim
+			factor = 1.1
+		}
+		#NEGATIVE modifiers
+		modifier = {
+			trait = craven
+			factor = 0.8
+		}
+		modifier = {
+			trait = weak
+			factor = 0.8
+		}
+		modifier = {
+			trait = feeble
+			factor = 0.8
+		}
+		modifier = {
+			trait = slothful
+			factor = 0.9
+		}
+		modifier = {
+			trait = dwarf
+			factor = 0.8
+		}
+		modifier = {
+			trait = clubfooted
+			factor = 0.8
+		}
+		modifier = {
+			trait = hunchback
+			factor = 0.8
+		}
+	}
+	
 	startup_populate = {
 	    trigger = {
 			ai = yes
 	    	controls_religion = no
-		   	true_religion_group_zoroastrian_group_trigger = yes
+		   	OR = {
+				religion_group = zoroastrian_group
+				culture_group = iranian
+			}
 			is_adult = yes
 			is_in_society = no
 			OR = {
-				trait = zealous
+				AND = {
+					trait = zealous
+					martial = 10
+					religion_group = zoroastrian_group
+				}
 				martial = 12
 				has_lifestyle_martial_trigger = yes
 				has_education_martial_trigger = yes
@@ -6752,5 +6942,4 @@ warrior_lodge_iranian = {
 			}
 		}
 	}
-}
 }
