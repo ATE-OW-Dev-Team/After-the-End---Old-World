@@ -7,6 +7,99 @@
 
 decisions = {
 
+	adopt_chinese_imperialism = {
+		only_independent = yes
+		is_high_prio = yes
+		ai_check_interval = 60
+		potential = {
+			OR = {
+				culture_group = niger_congolese
+				culture_group = senegambian
+				culture_group = mande
+				culture_group = francacfrique
+				culture_group = afroatlantic
+			}
+			is_nomadic = no
+			is_feudal = yes
+			NOT = { government = chinese_imperial_government }
+			has_dlc = "Jade Dragon"
+			holy_order = no
+			OR = {
+				ai = no
+				AND = {
+					trait = proud
+					prestige = 40000
+				}
+				AND = {
+					trait = ambitious
+					prestige = 40000
+				}
+				prestige = 120000
+			}
+		}
+		allow = {
+			independent = yes
+			is_adult = yes
+			prisoner = no
+			NOT = { trait = incapable }
+			is_tributary = no
+			tier = EMPEROR
+			realm_size = 200
+			conditional_tooltip = {
+				trigger = { religion = islamity }
+				prestige = 8000
+				wealth = 500
+			}
+			conditional_tooltip = {
+				trigger = { NOT = { religion = islamity } }
+				prestige = 16000
+				wealth = 1000
+			}
+
+			offmap_china = {
+				show_scope_change = no
+				offmap_ruler = { NOT = { dynasty = ROOT } }
+			}
+		}
+		effect = {
+			if = {
+			    limit = { religion = islamity }
+			    wealth = -500
+			}
+			else = {
+			    wealth = -1000
+			}
+			if = {
+				limit = {
+					has_dlc = "Holy Fury"
+					NOT = {
+						any_owned_bloodline = { 
+							has_bloodline_flag = created_bloodline
+						}
+					}
+				}
+				character_event = { id = HF.24240 tooltip = tooltip_evt_hf_24240 }
+			}
+			custom_tooltip = {
+				text = adopt_chinese_imperialism_tt
+				any_title = {
+					limit = {
+						tier = EMPEROR
+					}
+					set_title_flag = pretender_chinese_empire 
+					adjective = e_china_west_governor_adj #Use WP adj as it is "Chinese" but also gives the right one in different languages
+					add_law = {
+						law = succ_primogeniture
+						cooldown = no
+						opinion_effect = no
+					}
+				}
+			}
+			set_government_type = chinese_imperial_government
+			custom_tooltip = { text = adopt_chinese_imperialism_gov_tt }
+		}
+	}
+	
 	raise_chinese_honor_guard = {
 		only_playable = yes
 		is_high_prio = yes
