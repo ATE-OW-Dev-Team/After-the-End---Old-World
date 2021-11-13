@@ -585,10 +585,10 @@ decisions = {
 				trait = sympathy_zoroastrianism
 				trait = sympathy_judaism
 				trait = sympathy_indian
-				#trait = sympathy_old_world_cultist
+				trait = sympathy_old_world_cultist
 				trait = sympathy_buddhism
-				#trait = sympathy_esoteric
-				#trait = sympathy_syncratic
+				trait = sympathy_esoteric
+				trait = sympathy_syncratic
 				#trait = sympathy_oceanic
 				has_character_flag = flag_picking_sympathy
 			}
@@ -1565,7 +1565,6 @@ decisions = {
 					completely_controls = c_thessalonike
 					completely_controls = c_atheniai
 					completely_controls = c_siracusa
-					completely_controls = c_roma
 					completely_controls = c_alexandria
 					piety = 1000
 				}
@@ -1718,26 +1717,27 @@ decisions = {
 				is_tribal = yes
 				is_nomadic = yes
 			}
-			OR = { 
-				religion = hellenic_pagan 
+			OR = {
+				religion = hellenic_pagan
 				religion = hellenic_pagan_reformed
 				AND = {
-                    OR = {			
+                    OR = {
 			        culture = roman
 					culture_group = byzantine
 					culture_group = altaic_hellene
 					culture = arvanitika
-				}
-				    OR = { #Somewhat compatible when mixed with -Roman- Greek culture.
-					religion_group = christian 
-					religion_group = jewish_group 
+					}
+				    OR = { #Somewhat compatible when mixed with Greek culture.
+					religion_group = christian
+					religion_group = jewish_group
 					religion = bon
 					religion = bon_reformed
 					religion_group = buddhist_group
 					religion_group = esoteric
 					religion_group = syncratic_group
+					religion = mesopotamian
+					}
 				}
-			}
 			}
 			NOT = { trait = excommunicated }
 			NOT = { 
@@ -2224,10 +2224,6 @@ settlement_decisions = {
 			independent = yes
 			OR = { #Only one Pillar of your own religion per realm. So, the more neighbors you subjugate, the less pillars are going to be built.
 				AND = { 
-					religion = occultist
-					NOT = { any_realm_province = { has_province_flag = flag_great_pillar_occultist } }
-				}
-				AND = { 
 					religion = americanist
 					NOT = { any_realm_province = { has_province_flag = flag_great_pillar_americanist } }
 				}
@@ -2271,6 +2267,10 @@ settlement_decisions = {
 					religion = hellenic_pagan
 					NOT = { any_realm_province = { has_province_flag = flag_great_pillar_hellenic } }
 				}
+				AND = {
+					religion = starist_pagan
+					NOT = { any_realm_province = { has_province_flag = flag_great_pillar_starist } }
+				}
 			}
 		}
 		
@@ -2304,9 +2304,7 @@ settlement_decisions = {
 				text = tooltip_province_already_has_great_pillar
 				hidden_tooltip = { 
 					location = { 
-						NOR = { 
-							has_province_flag = flag_great_pillar_occultist
-							has_province_flag = flag_great_pillar_americanist
+						NOR = {
 							has_province_flag = flag_great_pillar_celtic_pagan
 							has_province_flag = flag_great_pillar_inuit_pagan
 							has_province_flag = flag_great_pillar_lakefolk_pagan
@@ -2317,6 +2315,7 @@ settlement_decisions = {
 							has_province_flag = flag_great_pillar_baltic
 							has_province_flag = flag_great_pillar_finnish
 							has_province_flag = flag_great_pillar_hellenic
+							has_province_flag = flag_great_pillar_starist
 						}
 					}
 				}
@@ -2325,7 +2324,7 @@ settlement_decisions = {
 				text = tooltip_ruler_recently_had_pillar_destroyed
 				hidden_tooltip = { 
 					NOT = { 
-						FROM = { 
+						FROM = {
 							has_character_modifier = recently_destroyed_great_pillar_cooldown
 						}
 					}
@@ -2344,32 +2343,8 @@ settlement_decisions = {
 					character_event = { id = HF.23470 }
 				}
 			}
-			hidden_tooltip = {  
-				if = {  
-					limit = { FROM = { religion = occultist } }
-					hidden_tooltip = {
-						location = {
-							set_province_flag = flag_great_pillar_occultist
-						}
-					}
-					if = { 
-						limit = { NOT = { has_building = tb_great_pillar_occultist } } 
-						add_building = tb_great_pillar_occultist
-					}
-				}
-				if = {  
-					limit = { FROM = { religion = americanist } }
-					hidden_tooltip = {
-						location = {
-							set_province_flag = flag_great_pillar_americanist
-						}
-					}
-					if = { 
-						limit = { NOT = { has_building = tb_great_pillar_americanist } } 
-						add_building = tb_great_pillar_americanist
-					}
-				}
-				if = {  
+			hidden_tooltip = {
+				if = {
 					limit = { FROM = { religion = celtic_pagan } }
 					hidden_tooltip = {
 						location = {
@@ -2477,7 +2452,7 @@ settlement_decisions = {
 						add_building = tb_great_pillar_finnish
 					}
 				}
-				if = {  
+				if = {
 					limit = { FROM = { religion = hellenic_pagan } }
 					hidden_tooltip = {
 						location = {
@@ -2487,6 +2462,18 @@ settlement_decisions = {
 					if = { 
 						limit = { NOT = { has_building = tb_great_pillar_hellenic } } 
 						add_building = tb_great_pillar_hellenic
+					}
+				}
+				if = {
+					limit = { FROM = { religion = starist_pagan } }
+					hidden_tooltip = {
+						location = {
+							set_province_flag = flag_great_pillar_starist
+						}
+					}
+					if = { 
+						limit = { NOT = { has_building = tb_great_pillar_starist } } 
+						add_building = tb_great_pillar_starist
 					}
 				}
 			}
@@ -2546,16 +2533,14 @@ settlement_decisions = {
 				character = FROM
 			}
 			OR = {
-				AND = { 
+				AND = {
 					holding_type = tribal 
 					is_capital = yes
 					capital_scope = { location = { province = ROOT } }
 				}
 			}
-			location = { 
-				OR = { 
-					has_province_flag = flag_great_pillar_occultist
-					has_province_flag = flag_great_pillar_americanist
+			location = {
+				OR = {
 					has_province_flag = flag_great_pillar_celtic_pagan
 					has_province_flag = flag_great_pillar_novelist
 					has_province_flag = flag_great_pillar_folklorist
@@ -2564,7 +2549,8 @@ settlement_decisions = {
 					has_province_flag = flag_great_pillar_baltic
 					has_province_flag = flag_great_pillar_finnish
 					has_province_flag = flag_great_pillar_hellenic
-				}
+					has_province_flag = flag_great_pillar_starist
+				}	
 			}
 		}
 		allow = { 
@@ -2585,42 +2571,6 @@ settlement_decisions = {
 				}
 				hidden_tooltip = {
 					character_event = { id = HF.23476 }
-				}
-			}
-			if = {  
-				limit = { location = { has_province_flag = flag_great_pillar_occultist } }
-				hidden_tooltip = {
-					location = {
-						clr_province_flag = flag_great_pillar_occultist
-					}
-					any_realm_character = {
-						limit = { religion = occultist }
-						character_event = { id = HF.23477 }
-					}
-				}
-				occultist = {
-					religion_authority = {
-						modifier = destroyed_great_pillar
-						years = 10
-					}
-				}
-			}
-			if = {  
-				limit = { location = { has_province_flag = flag_great_pillar_americanist } }
-				hidden_tooltip = {
-					location = {
-						clr_province_flag = flag_great_pillar_americanist
-					}
-					any_realm_character = {
-						limit = { religion = americanist }
-						character_event = { id = HF.23477 }
-					}
-				}
-				americanist = {
-					religion_authority = {
-						modifier = destroyed_great_pillar
-						years = 10
-					}
 				}
 			}
 			if = {  
@@ -2757,6 +2707,24 @@ settlement_decisions = {
 					}
 					any_realm_character = {
 						limit = { religion = hellenic_pagan }
+						character_event = { id = HF.23477 }
+					}
+				}
+				hellenic_pagan = {
+					religion_authority = {
+						modifier = destroyed_great_pillar
+						years = 10
+					}
+				}
+			}
+			if = {  
+				limit = { location = { has_province_flag = flag_great_pillar_starist } }
+				hidden_tooltip = {
+					location = {
+						clr_province_flag = flag_great_pillar_starist
+					}
+					any_realm_character = {
+						limit = { religion = starist_pagan }
 						character_event = { id = HF.23477 }
 					}
 				}
