@@ -121,6 +121,7 @@ harass_tactic = {
 	camel_cavalry_offensive = 3
 	horse_archers_offensive = -1.5
 	archers_offensive = -1.5
+	gunmen_offensive = -2
 	light_cavalry_defensive = -0.4
 	camel_cavalry_defensive = -0.4
 	enemy = {
@@ -200,6 +201,7 @@ disorganised_harass_tactic = {
 	camel_cavalry_offensive = 1.0
 	horse_archers_offensive = -1.5
 	archers_offensive = -1.5
+	gunmen_offensive = -2
 	light_cavalry_defensive = -0.6
 	camel_cavalry_defensive = -0.6
 	enemy = {
@@ -219,8 +221,16 @@ volly_harass_tactic = {
 			light_cavalry = 0.01
 			camel_cavalry = 0.01
 		}
-		archers = 0.01
-		NOT = { archers = 0.3 }
+		OR = {
+			AND = {
+				archers = 0.01
+				NOT = { archers = 0.3 }
+			}
+			AND = {
+				gunmen = 0.01
+				NOT = { gunmen = 0.3 }
+			}
+		}
 		light_infantry = 0.1
 	}
 
@@ -245,10 +255,40 @@ volly_harass_tactic = {
 			factor = 1.5
 			flank_has_leader = yes
 			leader = {
+				martial = 8
+			}
+			light_troops = { 
+				who = gunmen
+				value = 0.2
+			}
+			light_troops = {
+				who = light_infantry
+				value = 0.4
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
 				martial = 12
 			}
 			light_troops = { 
 				who = archers
+				value = 0.2
+			}
+			light_troops = {
+				who = light_infantry
+				value = 0.4
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			light_troops = { 
+				who = gunmen
 				value = 0.2
 			}
 			light_troops = {
@@ -271,11 +311,27 @@ volly_harass_tactic = {
 				value = 0.4
 			}
 		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			light_troops = { 
+				who = gunmen
+				value = 0.2
+			}
+			light_troops = {
+				who = light_infantry
+				value = 0.4
+			}
+		}
 	}
 
 	light_cavalry_offensive = 1.0
 	camel_cavalry_offensive = 1.0
 	archers_offensive = 0.6
+	gunmen_offensive = 0.6
 	light_infantry_offensive = 0.8
 	horse_archers_offensive = -1.8
 	enemy = {
@@ -291,8 +347,16 @@ volley_tactic = {
 
 	trigger = {
 		phase = skirmish  
-		archers = 0.01
-		NOT = { archers = 0.4 }
+		OR = {
+			AND = {
+				archers = 0.01
+				NOT = { archers = 0.4 }
+			}
+			AND = {
+				gunmen = 0.01
+				NOT = { gunmen = 0.4 }
+			}
+		}
 	}
 
 	mean_time_to_happen = {
@@ -312,10 +376,32 @@ volley_tactic = {
 			factor = 1.5
 			flank_has_leader = yes
 			leader = {
+				martial = 8
+			}
+			light_troops = { 
+				who = gunmen
+				value = 0.1
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
 				martial = 12
 			}
 			light_troops = { 
 				who = archers
+				value = 0.2
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			light_troops = { 
+				who = gunmen
 				value = 0.2
 			}
 		}
@@ -330,12 +416,24 @@ volley_tactic = {
 				value = 0.3
 			}
 		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			light_troops = { 
+				who = gunmen
+				value = 0.3
+			}
+		}
 	}
 
 	light_cavalry_offensive = -1.5
 	camel_cavalry_offensive = -1.5
 	horse_archers_offensive = -1.5
 	archers_offensive = 2.0
+	gunmen_offensive = 2
 	enemy = {
 		group = harass
 		factor = 1
@@ -349,7 +447,10 @@ swarm_volley_tactic = {
 
 	trigger = {
 		phase = skirmish 
-		archers = 0.01
+		OR = {
+			archers = 0.01
+			gunmen = 0.01
+		}
 		horse_archers = 0.01
 
 		location = { 
@@ -359,6 +460,8 @@ swarm_volley_tactic = {
 			NOT = { terrain = impassable_mountains }
 			NOT = { terrain = jungle }
 			NOT = { terrain = marsh }
+			NOT = { terrain = tells }
+			NOT = { terrain = karst }
 		}
 	}
 
@@ -372,6 +475,21 @@ swarm_volley_tactic = {
 			}
 			light_troops = { 
 				who = archers
+				value = 0.7
+			}
+			light_troops = { 
+				who = horse_archers
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 8
+			}
+			light_troops = { 
+				who = gunmen
 				value = 0.7
 			}
 			light_troops = { 
@@ -398,10 +516,40 @@ swarm_volley_tactic = {
 			factor = 1.5
 			flank_has_leader = yes
 			leader = {
+				martial = 12
+			}
+			light_troops = { 
+				who = gunmen
+				value = 0.6
+			}
+			light_troops = { 
+				who = horse_archers
+				value = 0.3
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
 				martial = 16
 			}
 			light_troops = { 
 				who = archers
+				value = 0.5
+			}
+			light_troops = { 
+				who = horse_archers
+				value = 0.3
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			light_troops = { 
+				who = gunmen
 				value = 0.5
 			}
 			light_troops = { 
@@ -415,6 +563,7 @@ swarm_volley_tactic = {
 	camel_cavalry_offensive = -1.8
 	horse_archers_offensive =  0.6
 	archers_offensive = 1.2
+	gunmen_offensive = 1.2
 	enemy = {
 		group = harass
 		factor = 1
@@ -444,6 +593,8 @@ swarm_tactic = {
 			NOT = { terrain = impassable_mountains }
 			NOT = { terrain = jungle }
 			NOT = { terrain = marsh }
+			NOT = { terrain = tells }
+			NOT = { terrain = karst }
 		}
 	}
 
@@ -488,6 +639,7 @@ swarm_tactic = {
 	camel_cavalry_offensive = -1.5
 	horse_archers_offensive = 1.0	
 	archers_offensive = -1.5
+	gunmen_offensive = -2
 	enemy = {
 		group = volley
 		factor = 1
@@ -514,6 +666,8 @@ disorganised_swarm_tactic = {
 			NOT = { terrain = impassable_mountains }
 			NOT = { terrain = jungle }
 			NOT = { terrain = marsh }
+			NOT = { terrain = tells }
+			NOT = { terrain = karst }
 		}
 	}
 
@@ -547,6 +701,7 @@ disorganised_swarm_tactic = {
 	horse_archers_offensive = 0.5
 	horse_archers_defensive = -1.0
 	archers_offensive = -1.5
+	gunmen_offensive = -2
 }
 
 harras_swarm_tactic = {
@@ -572,6 +727,8 @@ harras_swarm_tactic = {
 			NOT = { terrain = impassable_mountains }
 			NOT = { terrain = jungle }
 			NOT = { terrain = marsh }
+			NOT = { terrain = tells }
+			NOT = { terrain = karst }
 		}
 	}
 
@@ -646,6 +803,7 @@ harras_swarm_tactic = {
 	camel_cavalry_offensive = 0.6
 	horse_archers_offensive = 1.2
 	archers_offensive = -1.8
+	gunmen_offensive = -2
 	enemy = {
 		group = volley
 		factor = 1
@@ -664,7 +822,10 @@ shieldwall_tactic = {
 			light_infantry = 0.2
 			pikemen = 0.2
 		}
-		archers = 0.01
+		OR = {
+			archers = 0.01
+			gunmen = 0.01
+		}
 	}
 
 	mean_time_to_happen = {
@@ -721,10 +882,12 @@ shieldwall_tactic = {
 	pikemen_defensive = 2.4
 
 	archers_offensive = 0.6
+	gunmen_offensive = 0.6
 
 	light_cavalry_defensive = -0.5
 	camel_cavalry_defensive = -0.5
 	knights_defensive = -0.5
+	chariots_defensive = -0.5
 	horse_archers_defensive = -0.5
 }
 
@@ -736,7 +899,10 @@ fient_tactic = {
 	trigger = {
 		phase = skirmish
 		light_infantry = 0.2
-		archers  = 0.2
+		OR = {
+			archers  = 0.2
+			gunmen  = 0.2
+		}
 	}
 
 	mean_time_to_happen = {
@@ -758,6 +924,17 @@ fient_tactic = {
 			leader = {
 				martial = 12
 			}
+			light_troops = {
+				who = gunmen
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
 			troops = {
 				who = light_infantry
 				value = 0.4
@@ -768,11 +945,14 @@ fient_tactic = {
 	light_infantry_offensive = 1.0
 	light_infantry_defensive = 0.5
 	archers_offensive = 1.5
+	gunmen_offensive = 1.5
 	
 	heavy_infantry_offensive = -0.5
 	heavy_infantry_defensive = -0.5
 	knights_offensive = -0.5
 	knights_defensive = -0.5
+	chariots_offensive = -0.5
+	chariots_defensive = -0.5
 }
 
 
@@ -837,6 +1017,15 @@ charge_on_undefended_tactic = {
 				}
 			}
 		}
+		modifier = {
+			factor = 100
+			enemy = {
+				troops = {
+					who = gunmen
+					value = 0.6
+				}
+			}
+		}
 	}
 	
 	change_phase_to = melee
@@ -860,6 +1049,7 @@ charge_of_opportunity_tactic = {
 	change_phase_to = melee
 	
 	knights_offensive = 3
+	chariots_offensive = 3
 	horse_archers_offensive = 3
 	heavy_infantry_offensive = 1.2
 }
@@ -906,6 +1096,17 @@ charge_tactic = {
 				martial = 12
 			}
 			heavy_troops = {
+				who = chariots
+				value = 0.1
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			heavy_troops = {
 				who = heavy_infantry
 				value = 0.1
 			}
@@ -915,6 +1116,7 @@ charge_tactic = {
 	change_phase_to = melee
 
 	knights_offensive = 3
+	chariots_offensive = 3
 	horse_archers_offensive = 3
 	heavy_infantry_offensive = 1.2
 }
@@ -1002,6 +1204,7 @@ advance_tactic = {
 	}
 
 	knights_offensive = -1.5
+	chariots_offensive = -1.5
 	heavy_infantry_offensive = 3
 	pikemen_offensive = -1.5
 	enemy = {
@@ -1018,7 +1221,10 @@ awesome_advance_tactic = {
 	trigger = {
 		phase = melee
 		heavy_infantry = 0.01
-		knights = 0.01
+		OR = {
+			knights = 0.01
+			chariots = 0.01
+		}
 	}
 
 	mean_time_to_happen = {
@@ -1042,6 +1248,21 @@ awesome_advance_tactic = {
 			factor = 1.5
 			flank_has_leader = yes
 			leader = {
+				martial = 9
+			}
+			heavy_troops = { 
+				who = heavy_infantry
+				value = 0.7
+			}
+			heavy_troops = {
+				who = chariots 
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
 				martial = 13
 			}
 			heavy_troops = { 
@@ -1050,6 +1271,21 @@ awesome_advance_tactic = {
 			}
 			heavy_troops = {
 				who = knights 
+				value = 0.3
+			}
+		}	
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 13
+			}
+			heavy_troops = { 
+				who = heavy_infantry
+				value = 0.6
+			}
+			heavy_troops = {
+				who = chariots 
 				value = 0.3
 			}
 		}	
@@ -1068,9 +1304,25 @@ awesome_advance_tactic = {
 				value = 0.3
 			}
 		}	
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 17
+			}
+			heavy_troops = { 
+				who = heavy_infantry
+				value = 0.5
+			}
+			heavy_troops = {
+				who = chariots 
+				value = 0.3
+			}
+		}	
 	}
 
 	knights_offensive = 0.6
+	chariots_offensive = 0.6
 	heavy_infantry_offensive = 2.4
 	pikemen_offensive = -1.8
 	enemy = {
@@ -1130,6 +1382,7 @@ stand_fast_tactic = {
 	}
 
 	knights_offensive = -1.5
+	chariots_offensive = -2
 	heavy_infantry_offensive = -1.5
 	pikemen_offensive = 3
 	enemy = {
@@ -1199,6 +1452,7 @@ slow_advance_tactic = {
 	}
 
 	knights_offensive = -1.8
+	chariots_offensive = -2
 	heavy_infantry_offensive = 0.6
 	pikemen_offensive = 2.4
 	enemy = {
@@ -1214,7 +1468,10 @@ awesome_charge_tactic = {
 
 	trigger = {
 		phase = melee
-		knights = 0.01
+		OR = {
+			knights = 0.01
+			chariots = 0.01
+		}
 	}
 
 	mean_time_to_happen = {
@@ -1234,10 +1491,32 @@ awesome_charge_tactic = {
 			factor = 1.5
 			flank_has_leader = yes
 			leader = {
+				martial = 8
+			}
+			heavy_troops = { 
+				who = chariots
+				value = 0.7
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
 				martial = 12
 			}
 			heavy_troops = { 
 				who = knights
+				value = 0.6
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 12
+			}
+			heavy_troops = { 
+				who = chariots
 				value = 0.6
 			}
 		}
@@ -1252,9 +1531,21 @@ awesome_charge_tactic = {
 				value = 0.5
 			}
 		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			heavy_troops = { 
+				who = chariots
+				value = 0.5
+			}
+		}
 	}
 
 	knights_offensive = 3
+	chariots_offensive = 3
 	heavy_infantry_offensive = -1.5
 	pikemen_offensive = -1.5
 	enemy = {
@@ -1270,7 +1561,10 @@ awesomer_charge_tactic = {
 
 	trigger = {
 		phase = melee 
-		knights = 0.01
+		OR = {
+			knights = 0.01
+			chariots = 0.01
+		}
 		pikemen = 0.01
 	}
 
@@ -1284,6 +1578,21 @@ awesomer_charge_tactic = {
 			}
 			heavy_troops = { 
 				who = knights
+				value = 0.7
+			}
+			heavy_troops = {
+				who = pikemen
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 9
+			}
+			heavy_troops = { 
+				who = chariots
 				value = 0.7
 			}
 			heavy_troops = {
@@ -1310,6 +1619,21 @@ awesomer_charge_tactic = {
 			factor = 1.5
 			flank_has_leader = yes
 			leader = {
+				martial = 13
+			}
+			heavy_troops = { 
+				who = chariots
+				value = 0.6
+			}
+			heavy_troops = {
+				who = pikemen
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
 				martial = 17
 			}
 			heavy_troops = { 
@@ -1321,9 +1645,25 @@ awesomer_charge_tactic = {
 				value = 0.3
 			}
 		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 17
+			}
+			heavy_troops = { 
+				who = chariots
+				value = 0.5
+			}
+			heavy_troops = {
+				who = pikemen
+				value = 0.3
+			}
+		}
 	}
 
 	knights_offensive = 2.4
+	chariots_offensive = 2.7
 	heavy_infantry_offensive = -1.8
 	pikemen_offensive = 0.6
 	enemy = {
@@ -1494,6 +1834,17 @@ reckless_charge_tactic = {
 				NOT = { martial = 7 }
 			}
 			heavy_troops = {
+				who = chariots
+				value = 0.1
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				NOT = { martial = 7 }
+			}
+			heavy_troops = {
 				who = heavy_infantry
 				value = 0.1
 			}
@@ -1503,10 +1854,12 @@ reckless_charge_tactic = {
 	change_phase_to = melee
 
 	knights_defensive = -0.5
+	chariots_defensive = -0.75
 	horse_archers_defensive = -0.5
 	heavy_infantry_defensive = -0.3
 	
 	knights_offensive = 1.2
+	chariots_offensive = 1.5
 	horse_archers_offensive = 1.2
 	heavy_infantry_offensive = 0.6
 }
@@ -1545,6 +1898,7 @@ timid_advance_tactic = {
 	}
 
 	knights_offensive = -2.1
+	chariots_offensive = -2.5
 	heavy_infantry_offensive = -2.1
 	pikemen_offensive = 1.2
 	
@@ -1561,7 +1915,10 @@ confused_orders_tactic = {
 
 	trigger = {
 		phase = skirmish  
-		archers = 0.01
+		OR = {
+			archers = 0.01
+			gunmen = 0.01
+		}
 		flank_has_leader = yes
 		leader = {
 			OR = {
@@ -1584,9 +1941,21 @@ confused_orders_tactic = {
 				value = 0.5
 			}
 		}
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				NOT = { martial = 7 }
+			}
+			light_troops = { 
+				who = gunmen
+				value = 0.5
+			}
+		}
 	}
 
 	archers_offensive = -1.2
+	gunmen_offensive = -1.5
 	horse_archers_offensive = -1.2
 	
 	enemy = {
@@ -1623,6 +1992,7 @@ hesitant_commander_tactic = {
 	}
 
 	knights_offensive = -1.5
+	chariots_offensive = -2
 	heavy_infantry_offensive = -1.5
 }
 
@@ -1658,6 +2028,17 @@ charging_own_skirmishers_tactic = {
 			leader = {
 				NOT = { martial = 10 }
 			}
+			heavy_troops = {
+				who = chariots
+				value = 0.1
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				NOT = { martial = 10 }
+			}
 			OR = {
 				light_troops = {
 					who = light_cavalry
@@ -1674,11 +2055,14 @@ charging_own_skirmishers_tactic = {
 	change_phase_to = melee
 
 	knights_offensive = 3
+	chariots_offensive = 3.3
 	light_cavalry_offensive = 1.8
 	camel_cavalry_offensive = 1.8
 	
 	archers_offensive = -4.2
 	archers_defensive = -0.5
+	gunmen_offensive = -4.5
+	gunmen_defensive = -1
 	horse_archers_offensive = -1.2
 	horse_archers_defensive = -0.3
 }
@@ -1721,11 +2105,13 @@ inspired_defense_tactic = {
 	}
 
 	knights_defensive = 1.5
+	chariots_defensive = 1.4
 	heavy_infantry_defensive = 1.5
 	light_infantry_defensive = 1.5
 	light_cavalry_defensive = 1.5
 	camel_cavalry_defensive = 1.5
 	archers_defensive = 1.5
+	gunmen_defensive = 1.5
 	horse_archers_defensive = 1.5
 	pikemen_defensive = 1.5
 	war_elephants_defensive = 1.5
@@ -1775,9 +2161,21 @@ heroic_countercharge_tactic = {
 				value = 0.1
 			}
 		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 14
+			}
+			heavy_troops = { 
+				who = chariots
+				value = 0.1
+			}
+		}
 	}
 
 	knights_offensive = 3.6
+	chariots_offensive = 4
 	light_cavalry_offensive = 3.6
 	camel_cavalry_offensive = 3.6
 	heavy_infantry_offensive = 0.6
@@ -1827,6 +2225,7 @@ glorious_countercharge_tactic = { #Call to Glory tactic. - Generic
 	light_cavalry_offensive = 1.75
 	camel_cavalry_offensive = 1.75
 	archers_offensive = 1.75
+	gunmen_offensive = 1.75
 	horse_archers_offensive = 1.75
 	pikemen_offensive = 1.75
 
@@ -1946,6 +2345,8 @@ glorious_tengri_tactic = {
 			NOT = { terrain = impassable_mountains }
 			NOT = { terrain = jungle }
 			NOT = { terrain = marsh }
+			NOT = { terrain = tells }
+			NOT = { terrain = karst }
 		}
 	}
 
@@ -2150,10 +2551,32 @@ glorious_finnish_tactic = {
 			factor = 2
 			flank_has_leader = yes
 			leader = {
+				martial = 10
+			}
+			light_troops = {
+				who = gunmen
+				value = 0.3
+			}
+		}
+		modifier = {
+			factor = 2
+			flank_has_leader = yes
+			leader = {
 				martial = 4
 			}
 			light_troops = {
 				who = archers
+				value = 0.4
+			}
+		}
+		modifier = {
+			factor = 2
+			flank_has_leader = yes
+			leader = {
+				martial = 4
+			}
+			light_troops = {
+				who = gunmen
 				value = 0.4
 			}
 		}
@@ -2162,6 +2585,7 @@ glorious_finnish_tactic = {
 	change_phase_to = skirmish
 	
 	archers_offensive =  2.5
+	gunmen_offensive =  2.5
 	light_infantry_defensive = 1.5
 }
 
@@ -2466,6 +2890,7 @@ clever_ambush_tactic = {
 				terrain = forest
 				terrain = hills
 				terrain = mountain
+				terrain = tells
 			}
 		}
 	}
@@ -2522,6 +2947,101 @@ clever_ambush_tactic = {
 	light_infantry_offensive = 1.2
 	horse_archers_offensive = 1.2
 	archers_offensive = 1.2
+	gunmen_offensive = 1.5
+	enemy = {
+		group = advance
+		factor = 3
+	}
+}
+collapsing_tells_ambush_tactic = {
+	days = 22
+	sprite = 3
+	group = stand_fast
+
+	trigger = {
+		phase = melee
+		light_cavalry = 0.1
+		OR = {
+			light_infantry = 0.1
+			camel_cavalry = 0.1
+		}
+		flank_has_leader = yes
+		leader = {
+			OR = {
+				trait = trickster
+				trait = quick
+				trait = genius
+				trait = shrewd
+			}
+			NOR = {
+				any_current_enemy = { has_opinion_modifier = { who = PREV modifier = opinion_honorable_combat } }
+				AND = { 
+					OR = { 
+						is_ruler = no 
+						is_playable = no
+					}
+					liege = { any_current_enemy = { has_opinion_modifier = { who = PREV modifier = opinion_honorable_combat } } }
+				}
+			}
+		}
+		location = {
+			terrain = tells
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 3
+		modifier = {
+			factor = 1.5
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+			}
+			OR = {
+				troops = {
+					who = light_cavalry
+					value = 0.2
+				}
+				troops = {
+					who = camel_cavalry
+					value = 0.2
+				}
+			}
+			troops = {
+				who = light_infantry
+				value = 0.2
+			}
+		}
+		modifier = {
+			factor = 3
+			flank_has_leader = yes
+			leader = {
+				martial = 16
+				trait = trickster
+			}
+			OR = {
+				troops = {
+					who = light_cavalry
+					value = 0.2
+				}
+				troops = {
+					who = camel_cavalry
+					value = 0.2
+				}
+			}
+			troops = { 
+				who = light_infantry
+				value = 0.2
+			}
+		}
+	}
+
+	light_cavalry_offensive = 2.75
+	camel_cavalry_offensive = 2.75
+	light_infantry_offensive = 1.5
+	horse_archers_offensive = 1.5
+	archers_offensive = 1.5
+	gunmen_offensive = 1.75
 	enemy = {
 		group = advance
 		factor = 3
@@ -2558,11 +3078,13 @@ religious_fervour_tactic = {
 	}
 
 	knights_offensive = 1.5
+	chariots_offensive = 2
 	heavy_infantry_offensive = 1.5
 	light_infantry_offensive = 1.5
 	light_cavalry_offensive = 1.5
 	camel_cavalry_offensive = 1.5
 	archers_offensive = 1.5
+	gunmen_offensive = 1.5
 	horse_archers_offensive = 1.5
 	pikemen_offensive = 1.5
 	war_elephants_offensive = 1.5
@@ -2602,6 +3124,7 @@ retreat_and_ambush_tactic = {
 			NOT = { terrain = impassable_mountains }
 			NOT = { terrain = jungle }
 			NOT = { terrain = marsh }
+			NOT = { terrain = tells }
 		}
 	}
 
@@ -2636,6 +3159,7 @@ retreat_and_ambush_tactic = {
 	horse_archers_offensive =  2.0
 	light_cavalry_offensive = 1.2
 	archers_offensive = 1.0
+	gunmen_offensive = 1.0
 }
 
 # Scandinavian
@@ -2749,6 +3273,7 @@ schiltron_formation_tactic = {
 
 	light_cavalry_defensive = -0.4
 	knights_defensive = -0.4
+	chariots_defensive = -0.75
 	horse_archers_defensive = -0.4
 	
 	enemy = {
@@ -2813,6 +3338,7 @@ pike_column_advance_tactic = {
 	}
 
 	knights_offensive = 0.6
+	chariots_offensive = 0.4
 	heavy_infantry_offensive = 1.2
 	pikemen_offensive = 3
 	enemy = {
@@ -2900,11 +3426,10 @@ couched_lance_charge_tactic = {
 		flank_has_leader = yes
 		leader = {
 			OR = {
-				culture = frankish
-				culture = occitan
-				culture = norman
-				culture = german
-				culture = breton
+				culture_group = francophone
+				culture_group = lusophone
+				culture_group = apeninian
+				culture_group = hispanophone
 			}
 		}
 	}
@@ -3105,6 +3630,7 @@ desert_ambush_tactic = {
 	light_infantry_offensive = 1.2
 	horse_archers_offensive = 1.2
 	archers_offensive = 1.2
+	gunmen_offensive = 1.2
 	enemy = {
 		group = advance
 		factor = 3
