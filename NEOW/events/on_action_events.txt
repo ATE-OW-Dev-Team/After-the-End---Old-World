@@ -4671,21 +4671,9 @@ narrative_event = {
 					NOR = { 
 						religion = hellenic_pagan_reformed #Not that kind of paganism.
 						religion = bon_reformed
-						religion = zun_pagan_reformed
-						religion = aztec_reformed
 					} 
 				}
 				always = no # IDK what this effect suppose to do
-			}
-			if = { 
-				limit = { ROOT = { NOT = { religion = norse_pagan_reformed } } }
-				random_playable_ruler = { 
-					limit = { religion = norse_pagan }	
-					religion_authority = {
-						modifier = pagan_revival
-						years = 20
-					}
-				}
 			}
 			if = { 
 				limit = { ROOT = { NOT = { religion = tengri_pagan_reformed } } }
@@ -4708,29 +4696,9 @@ narrative_event = {
 				}
 			}
 			if = { 
-				limit = { ROOT = { NOT = { religion = baltic_pagan_reformed } } }
-				random_playable_ruler = { 
-					limit = { religion = baltic_pagan }	
-					religion_authority = {
-						modifier = pagan_revival
-						years = 20
-					}
-				}
-			}
-			if = { 
 				limit = { ROOT = { NOT = { religion = finnish_pagan_reformed } } }
 				random_playable_ruler = { 
 					limit = { religion = finnish_pagan }	
-					religion_authority = {
-						modifier = pagan_revival
-						years = 20
-					}
-				}
-			}
-			if = { 
-				limit = { ROOT = { NOT = { religion = west_african_pagan_reformed } } }
-				random_playable_ruler = { 
-					limit = { religion = west_african_pagan }	
 					religion_authority = {
 						modifier = pagan_revival
 						years = 20
@@ -4960,24 +4928,8 @@ narrative_event = {
 		if = {
 			limit = { #Apply default special features if player doesn't have dlc.
 				NOT = { has_dlc = "Holy Fury" } 
-				ROOT = { religion = norse_pagan_reformed } 
-			}
-			ROOT = { 
-				set_allow_rivermovement = yes 
-				enable_prepared_invasion = yes
-				set_seafaring = yes
-				make_reformer_head_of_religion = yes
-				grant_title_no_opinion = d_norse_pagan_reformed
-			} 
-		}
-		if = {
-			limit = { #Apply default special features if player doesn't have dlc.
-				NOT = { has_dlc = "Holy Fury" } 
 				ROOT = { 
-					OR = { 
-						religion = baltic_pagan_reformed 
-						religion = slavic_pagan_reformed 
-					}  
+					religion = baltic_pagan_reformed 
 				} 
 			}
 			ROOT = { 
@@ -5071,24 +5023,6 @@ narrative_event = {
 				}
 			} 
 		}
-		if = {
-			limit = { #Apply default special features if player doesn't have dlc.
-				NOT = { has_dlc = "Holy Fury" } 
-				ROOT = { 
-					religion = zun_pagan_reformed 
-				} 
-			}
-			ROOT = { 
-				set_unit_modifier = {
-					levy_size = 0.3
-					
-					heavy_infantry_offensive = 0.2
-					heavy_infantry_defensive = 0.2
-					
-					key = "OFF_RELIGION"
-				}
-			} 
-		}
 
 
 		if = {
@@ -5102,14 +5036,6 @@ narrative_event = {
 				has_religion_feature = religion_seafaring
 			}
 			achievement_safe_way_to_atlantis_done_effect = yes
-		}
-		if = {
-			limit = {
-				ai = no
-				religion = americanist_reformed
-				has_religion_feature = religion_patriarchal
-			}
-			achievement_founding_fathers_done_effect = yes
 		}
 		any_courtier = {
 			limit = {
@@ -5140,17 +5066,6 @@ narrative_event = {
 		}
 		if = {
 			limit = { 
-				OR = {
-					NOT = { has_dlc = "Holy Fury" } 
-					has_religion_feature = religion_temporal_head 
-				} 
-				religion = norse_pagan_reformed 
-
-			}
-			add_artifact = crown_fylkir
-		}
-		if = {
-			limit = { 
 				has_religion_feature = religion_temporal_head 
 				religion = tengri_pagan_reformed 
 
@@ -5168,41 +5083,9 @@ narrative_event = {
 		if = {
 			limit = { 
 				has_religion_feature = religion_temporal_head 
-				religion = west_african_pagan_reformed 
-
-			}
-			add_artifact = crown_west_african_fylkir
-		}
-		if = {
-			limit = { 
-				has_religion_feature = religion_temporal_head 
-				religion = slavic_pagan_reformed 
-
-			}
-			add_artifact = crown_slavic_fylkir
-		}
-		if = {
-			limit = { 
-				has_religion_feature = religion_temporal_head 
 				religion = baltic_pagan_reformed 
 			}
 			add_artifact = crown_romuva_fylkir
-		}
-		if = {
-			limit = { 
-				has_religion_feature = religion_temporal_head 
-				religion = zun_pagan_reformed 
-
-			}
-			add_artifact = crown_zun_fylkir
-		}
-		if = {
-			limit = { 
-				has_religion_feature = religion_temporal_head 
-				religion = aztec_reformed 
-
-			}
-			add_artifact = crown_aztec_fylkir
 		}
 		if = {
 			limit = { 
@@ -5770,22 +5653,6 @@ character_event = {
 	
 }
 
-# Remove patron deity modifiers for hindu converts
-character_event = {
-	id = 63105
-	hide_window = yes
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		NOT = { religion = hindu }
-	}
-	
-	immediate = {
-		remove_patrons_effect = yes
-	}
-}
-
 # Safety check event for flag clearace - do_not_disturb etc
 character_event = {
 	id = 63106
@@ -6170,119 +6037,6 @@ character_event = {
 					modifier = opinion_replaced_bad_ruler
 					years = 2
 				}
-			}
-		}
-	}
-}
-
-# Crusade/Jihad is invalidated 
-narrative_event = {
-
-	# ROOT is the target title
-	# new_character is the Enemy
-	# FROM is the Pope/Caliph
-	
-	id = 534
-	title = "EVTNAME534"
-	picture = "GFX_evt_battle"
-	border = "GFX_event_narrative_frame_religion"
-	
-	desc = {
-		picture = GFX_evt_battle
-		text = EVTDESC534_converted
-		trigger = { 
-			new_character = { religion_group = FROM }
-		}
-	}
-	desc = {
-		picture = GFX_evt_battle
-		text = EVTDESC534_coup
-		trigger = { 
-			new_character = { NOT = { religion_group = FROM } }
-		}
-	}
-	
-	major = yes
-	
-	only_rulers = yes
-	
-	is_triggered_only = yes
-
-	trigger = {
-		OR = {
-			new_character = {
-				NOT = {
-					has_landed_title = ROOT
-				}
-			}
-			OR = {
-				AND = {
-					has_global_flag = 4th_crusade_official
-					crusade_target_title = {
-						title = k_thrace
-					}
-					new_character = {
-						religion = FROM
-						has_landed_title = e_byzantium
-					}	
-				}
-				AND = {
-					NOR = {
-						has_global_flag = 4th_crusade_official
-						crusade_target_title = {
-							title = k_thrace
-						}
-						new_character = {
-							has_landed_title = e_byzantium
-						}
-					}
-					new_character = {
-						religion_group = FROM
-					}
-				}
-			}
-		}
-	}
-
-	immediate = {
-		if = {
-			limit = {
-				FROM = {
-					religion_group = christian
-				}
-				has_global_flag = 4th_crusade_official
-			}
-			character_event = { id = HFP.41199 }
-		}
-	}
-	
-	option = {
-		name = "EVTOPTA620"
-		trigger = {
-			new_character = {
-				religion_group = FROM
-			}
-			religion_group = FROM
-		}
-	}
-	
-	option = {
-		name = EVTOPTC534
-		trigger = {
-			new_character = {
-				NOT = {
-					religion_group = FROM
-				}
-			}
-			religion_group = FROM
-		}
-	}
-
-	option = {
-		name = "EVTOPTB620"
-		trigger = {
-			NOT = {
-				religion_group = FROM
 			}
 		}
 	}
