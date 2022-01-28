@@ -1058,9 +1058,24 @@ character_event = {#You give up your insights for a Tome
 				count = 3
 			}				
 		}
-		destroy_artifact = mystic_insight
-		destroy_artifact = mystic_insight
-		destroy_artifact = mystic_insight
+		random_artifact = { 
+			limit = {
+				artifact_type = mystic_insight
+			}
+			destroy_artifact = yes
+		}
+		random_artifact = { 
+			limit = {
+				artifact_type = mystic_insight
+			}
+			destroy_artifact = yes
+		}		
+		random_artifact = { 
+			limit = {
+				artifact_type = mystic_insight
+			}
+			destroy_artifact = yes
+		}
 		add_artifact = mystic_tome
 	}
 	option = {#Combine Partial Manuscript with Mystic Tome for Esoteric Literature
@@ -1075,8 +1090,18 @@ character_event = {#You give up your insights for a Tome
 				count = 1
 			}			
 		}
-		destroy_artifact = mystic_tome
-		destroy_artifact = partial_manuscript
+		random_artifact = { 
+			limit = {
+				artifact_type = mystic_tome
+			}
+			destroy_artifact = yes
+		}
+		random_artifact = { 
+			limit = {
+				artifact_type = partial_manuscript
+			}
+			destroy_artifact = yes
+		}		
 		add_artifact = esoteric_literature
 	}
 	option = {#Mystic Tome + Broken Machinery -> Mystical Gewgaw
@@ -1091,8 +1116,18 @@ character_event = {#You give up your insights for a Tome
 				count = 1
 			}			
 		}
-		destroy_artifact = mystic_tome
-		destroy_artifact = broken_machine
+		random_artifact = { 
+			limit = {
+				artifact_type = mystic_tome
+			}
+			destroy_artifact = yes
+		}
+		random_artifact = { 
+			limit = {
+				artifact_type = broken_machine
+			}
+			destroy_artifact = yes
+		}		
 		random_list = {
 			10 = {
 				add_artifact = totem_1
@@ -1120,8 +1155,18 @@ character_event = {#You give up your insights for a Tome
 				count = 1
 			}			
 		}
-		destroy_artifact = mystic_tome
-		destroy_artifact = instructions
+		random_artifact = { 
+			limit = {
+				artifact_type = mystic_tome
+			}
+			destroy_artifact = yes
+		}
+		random_artifact = { 
+			limit = {
+				artifact_type = instructions
+			}
+			destroy_artifact = yes
+		}		
 		add_artifact = theorem
 	}
 }
@@ -1144,9 +1189,21 @@ character_event = {#Combine Manuscript Fragments into Instructions, Partial Manu
 				count = 2
 			}			
 		}
-		destroy_artifact = manuscript_fragment
-		destroy_artifact = manuscript_fragment
-		add_artifact = instructions
+		FROM = {
+			random_artifact = { 
+				limit = {
+					artifact_type = manuscript_fragment
+				}
+					destroy_artifact = yes
+				}
+			random_artifact = { 
+				limit = {
+					artifact_type = manuscript_fragment
+				}
+					destroy_artifact = yes
+			}
+			add_artifact = instructions
+		}
 	}
 	option = {#combine fragments into Partial Manuscript
 		name = EVTOPTB_nobelian19
@@ -1156,9 +1213,21 @@ character_event = {#Combine Manuscript Fragments into Instructions, Partial Manu
 				count = 2
 			}			
 		}
-		destroy_artifact = manuscript_fragment
-		destroy_artifact = manuscript_fragment
-		add_artifact = partial_manuscript
+		FROM = {
+			random_artifact = { 
+				limit = {
+					artifact_type = manuscript_fragment
+				}
+					destroy_artifact = yes
+				}
+			random_artifact = { 
+				limit = {
+					artifact_type = manuscript_fragment
+				}
+					destroy_artifact = yes
+			}
+			add_artifact = partial_manuscript
+		}
 	}
 	option = {#combine Partial Manuscript into Reconstructed Masterpiece
 		name = EVTOPTC_nobelian19
@@ -1170,13 +1239,31 @@ character_event = {#Combine Manuscript Fragments into Instructions, Partial Manu
 		}
 		random_list = {#You're pretty unlikely to just randomly get a manuscript
 			10 = {
-				destroy_artifact = partial_manuscript
-				destroy_artifact = partial_manuscript
-				#add_artifact = reconstructed_masterpiece
+				FROM = {
+					random_artifact = { 
+						limit = {
+							artifact_type = partial_manuscript
+						}
+						destroy_artifact = yes
+					}
+					random_artifact = { 
+						limit = {
+							artifact_type = partial_manuscript
+						}
+						destroy_artifact = yes
+					}
+				}
 				character_event = { id = nobelian.20 }#event that gives them a random manuscript
 			}
-			20 = {#chance of accidentally destroying a partial manuscript while researching, also to discourage you from just constantly spamming the button to try and get it right
-				destroy_artifact = partial_manuscript
+			20 = {#chance of accidentally destroying a partial manuscript while researching, also to discourage you from just constantly spamming the button to try and get it right	
+				FROM = {
+					random_artifact = { 
+						limit = {
+							artifact_type = partial_manuscript
+						}
+						destroy_artifact = yes
+					}
+				}
 			}
 			30 = {#another check to try and stop you from ramming it through
 				add_trait = stressed
@@ -1216,26 +1303,6 @@ character_event = {#You get a random Masterpiece
 			10 = {
 				add_artifact = plato
 			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					has_global_flag = literature_bloodline_founded
-				}
-				is_female = no
-			}
-			create_bloodline = { type = laureate_literature_male }
-			set_global_flag = literature_bloodline_founded
-		}
-		else_if = {
-			limit = {
-				NOT = {
-					has_global_flag = literature_bloodline_founded
-				}
-				is_female = yes
-			}
-			create_bloodline = { type = laureate_literature_female }
-			set_global_flag = literature_bloodline_founded
 		}
 	}
 }
@@ -1292,8 +1359,18 @@ character_event = {#Quest To Make A Great Discovery and become a Laureate
 				count = 1
 			}					
 		}
-		destroy_artifact = theorem
-		destroy_artifact = esoteric_literature
+		random_artifact = { 
+			limit = {
+				artifact_type = theorem
+			}
+			destroy_artifact = yes
+		}
+		random_artifact = { 
+			limit = {
+				artifact_type = esoteric_literature
+			}
+			destroy_artifact = yes
+		}
 
 		narrative_event = { id = nobelian.24 }
 	}	
@@ -1345,27 +1422,7 @@ narrative_event = {#You create an ancient drug
 	option = {#Excellent
 		name = EVTOPTA_nobelian23
 		piety = 1000
-		add_artifact = morphine
-		if = {
-			limit = {
-				NOT = {
-					has_global_flag = chemist_bloodline_founded
-				}
-				is_female = no
-			}
-			create_bloodline = { type = laureate_chemistry_male }
-			set_global_flag = chemist_bloodline_founded
-		}
-		else_if = {
-			limit = {
-				NOT = {
-					has_global_flag = chemist_bloodline_founded
-				}
-				is_female = no
-			}
-			create_bloodline = { type = laureate_chemistry_female }
-			set_global_flag = chemist_bloodline_founded
-		}		
+		add_artifact = morphine	
 	}
 }
 
@@ -1394,26 +1451,6 @@ narrative_event = {#You create a Theory Book
 				add_artifact = electrical_theory
 			}
 		}
-		if = {
-			limit = {
-				NOT = {
-					has_global_flag = physics_bloodline_founded
-				}
-				is_female = no
-			}
-			create_bloodline = { type = laureate_physics_male }
-			set_global_flag = physics_bloodline_founded
-		}
-		else_if = {
-			limit = {
-				NOT = {
-					has_global_flag = physics_bloodline_founded
-				}
-				is_female = no
-			}
-			create_bloodline = { type = laureate_physics_female }
-			set_global_flag = physics_bloodline_founded
-		}	
 	}
 }
 
@@ -1605,9 +1642,24 @@ character_event = {#Sell your Scrap
 				count = 3
 			}			
 		}
-		destroy_artifact = scrap
-		destroy_artifact = scrap
-		destroy_artifact = scrap
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}
 		wealth = 60
 	}
 	option = {#Sell five
@@ -1618,11 +1670,36 @@ character_event = {#Sell your Scrap
 				count = 5
 			}
 		}
-		destroy_artifact = scrap
-		destroy_artifact = scrap
-		destroy_artifact = scrap
-		destroy_artifact = scrap
-		destroy_artifact = scrap		
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}		
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}		
 		wealth = 100
 	}	
 }
@@ -1662,9 +1739,24 @@ character_event = {#Study your scrap for a slim chance at some progress, and mor
 				count = 3
 			}			
 		}
-		destroy_artifact = scrap
-		destroy_artifact = scrap
-		destroy_artifact = scrap
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}		
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}
 			random_list = {
 				70 = {
 					character_event = { id = nobelian.36 } # failure
@@ -1685,11 +1777,36 @@ character_event = {#Study your scrap for a slim chance at some progress, and mor
 				count = 5
 			}
 		}
-		destroy_artifact = scrap
-		destroy_artifact = scrap
-		destroy_artifact = scrap
-		destroy_artifact = scrap
-		destroy_artifact = scrap		
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}		
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}		
+		random_artifact = { 
+			limit = {
+				artifact_type = scrap
+			}
+			destroy_artifact = yes
+		}
 			random_list = {
 				50 = {
 					character_event = { id = nobelian.36 } # failure
