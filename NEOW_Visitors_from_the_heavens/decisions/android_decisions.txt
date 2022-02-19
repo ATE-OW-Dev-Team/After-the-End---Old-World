@@ -1,0 +1,96 @@
+decisions = {
+	assemble_android = {
+		#only_playable = yes
+		is_high_prio = yes
+		potential = {
+			NOT = { num_of_children = 2}
+			age = 16
+			trait = android
+		}
+		allow = {
+			NOT = { num_of_children = 2 }
+			wealth = 25
+			prestige = 25
+		}
+		effect = {
+			wealth = -25
+			prestige = -25
+			if = {
+				limit = {
+					is_female = yes
+				}
+				hidden_tooltip = {
+					character_event = { id = android_assembly.1 }
+				}
+			}
+			if = {
+				limit = {
+					is_female = no
+				}
+				hidden_tooltip = {
+					character_event = { id = android_assembly.2 }
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = .5
+			modifier = { factor = 10 trait = flowered }		 
+		}
+	}
+	repair_android = {
+		#only_playable = yes
+		is_high_prio = yes
+		potential = {
+			trait = android
+			age = 16
+			OR = {
+				trait = one_legged
+				trait = one_handed
+				trait = one_eyed
+				trait = wounded
+				trait = maimed
+				trait = infirm
+			}
+		}
+		allow = {
+			wealth = 100
+			prestige = 25
+		}
+		effect = {
+			wealth = -100
+			prestige = -25
+			if = {
+				limit = {
+					OR = { 
+					trait = one_legged
+					trait = one_handed
+					trait = one_eyed
+					}
+				}
+				wealth = -100
+				prestige = -25
+			}
+			if = {
+				limit = {
+					OR = {
+					trait = wounded
+					trait = maimed
+					trait = infirm
+					}
+				}
+				wealth = -50
+				prestige = -25
+			}
+			remove_trait = one_legged
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}
