@@ -1,20 +1,83 @@
-# CALL_ALLY_INTERACTION_ACCEPT_EVENT =
-diploresponse_event = {
-	id = 238
-	
-	border = GFX_event_letter_frame_war
-	
-	is_triggered_only = yes
-	is_friendly = yes
+namespace = stratocracy
 
-	trigger = {
-		ai = no
-		NOT = { is_liege_of = FROM }
+character_event = {
+	id = stratocracy.2
+	title = "stratocracy_2_title"
+	desc = "stratocracy_2_desc"
+	picture = GFX_evt_vikings_arriving_oldgods
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = {
+			rtp_assign_troops_hiree_se = yes
+		}
 	}
 
-	desc = EVTDESC238
+	option = {
+		name = "stratocracy.2_1"
+
+		prestige = 5
+		wealth = global_rtp_mercenary_pay
+		hidden_tooltip = {
+			rtp_flush_jobs = yes
+			FROM = {
+				multiply_variable = {
+					which = global_rtp_mercenary_pay
+					value = -1
+				}
+				wealth = global_rtp_mercenary_pay
+				if = {
+					limit = {
+						is_primary_war_attacker = yes
+					}
+					ROOT = {
+						join_attacker_wars = FROM
+					}
+				}
+				else = {
+					ROOT = {
+						join_defender_wars = FROM
+					}
+				}
+				rtp_raise_troops_hiree_se = yes
+			}
+			subtract_variable = {
+				which = rtp_troops
+				which = global_rtp_mercenary_men
+			}
+		}
+
+		ai_chance = {
+			factor = 1
+		}
+	}
 
 	option = {
-		name = OK
+		name = "stratocracy.2_2"
+
+		prestige = -10
+	}
+
+	after = {
+		hidden_tooltip = {
+			FROM = {
+				clr_character_flag = rtp_payx8
+				clr_character_flag = rtp_payx7
+				clr_character_flag = rtp_payx6
+				clr_character_flag = rtp_payx5
+				clr_character_flag = rtp_payx4
+				clr_character_flag = rtp_payx3
+				clr_character_flag = rtp_payx2
+				clr_character_flag = rtp_payx1
+				set_variable = {
+					which = global_rtp_mercenary_pay
+					value = 0
+				}
+				set_variable = {
+					which = global_rtp_mercenary_men
+					value = 0
+				}
+			}
+		}
 	}
 }
