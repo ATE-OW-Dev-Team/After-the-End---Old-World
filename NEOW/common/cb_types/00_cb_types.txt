@@ -3646,16 +3646,6 @@ crusade = {
 				}
 			}
 		}
-		
-		NOT = { # Not if the Schism has been mended
-			AND = {
-				OR = {
-					religion = catholic
-					religion = fraticelli
-				}
-				has_global_flag = schism_mended
-			}
-		}
 	}
 
 	can_use_title = {
@@ -4370,37 +4360,40 @@ new_crusade = {
 			hidden_tooltip = {
 				NOT = { has_character_modifier = cancel_crusade_cooldown }
 			}
-		}
-		
-		FROM = {
-			OR = {
-				NOT = { religion_group = ROOT }
-				AND = {
-					has_global_flag = fatima_massacre_crusade
-					OR = {
-						religion = catholic
-						religion = fraticelli
-					}
-					NOT = { religion = ROOT }
+			trigger_if = {
+				limit = {
+					has_global_flag = schism_mended
 				}
-				is_heresy_of = ROOT
-				is_parent_religion = ROOT
-			}
-		}
-		
-		NOT = { # Not if the Schism has been mended
-			AND = {
-				OR = {
+				NOR = {
 					religion = catholic
 					religion = fraticelli
 				}
-				has_global_flag = schism_mended
+			}
+		}
+		
+		FROM = {
+			trigger_if = {
+				limit = {
+					has_global_flag = fatima_massacre_crusade
+				}
+				NOT = { religion = ROOT }
+			}
+			trigger_else = {
+				OR = {
+					NOT = { religion_group = ROOT }
+					is_heresy_of = ROOT
+					is_parent_religion = ROOT
+				}
 			}
 		}
 	}
 
 	can_use_title = {
 		OR = {
+			trigger_if = {
+				limit = { has_global_flag = fatima_massacre_crusade }
+				title = event_target:fatima_massacre_kingdom
+			}
 			FROM = {
 				any_realm_title = {
 					de_jure_liege_or_above = PREVPREV
@@ -4414,12 +4407,6 @@ new_crusade = {
 						value = 6
 						title = PREV
 					}
-					PREV = {
-						title = event_target:fatima_massacre_kingdom
-						FROM = {
-							religion_group = christian
-						}
-					} 
 				}
 			}
 			AND = {
@@ -4441,22 +4428,22 @@ new_crusade = {
 				}
 			}
 		}
-		OR = {
-			NOT = { has_global_flag = fatima_massacre_crusade }
-			NOT = {
-				any_province = {
-					kingdom = {
-						title = event_target:fatima_massacre_kingdom
-					}
-					holder_scope = {
-						top_liege = {
-							NOT = { religion = ROOT }
-							independent = yes
+		trigger_if = {
+			limit = { has_global_flag = fatima_massacre_crusade }
+			OR = {
+				title = event_target:fatima_massacre_kingdom
+				NOT = {
+					any_province = {
+						de_jure_liege_or_above = event_target:fatima_massacre_kingdom
+						holder_scope = {
+							top_liege = {
+								NOT = { religion = ROOT }
+								independent = yes
+							}
 						}
 					}
 				}
 			}
-			title = event_target:fatima_massacre_kingdom
 		}
 	}
 	
@@ -4465,18 +4452,18 @@ new_crusade = {
 			can_call_crusade = yes
 		}
 		FROM = {
-			OR = {
-				NOT = { religion_group = ROOT }
-				AND = {
+			trigger_if = {
+				limit = {
 					has_global_flag = fatima_massacre_crusade
-					OR = {
-						religion = catholic
-						religion = fraticelli
-					}
-					NOT = { religion = ROOT }
 				}
-				is_heresy_of = ROOT
-				is_parent_religion = ROOT
+				NOT = { religion = ROOT }
+			}
+			trigger_else = {
+				OR = {
+					NOT = { religion_group = ROOT }
+					is_heresy_of = ROOT
+					is_parent_religion = ROOT
+				}
 			}
 		}
 	}
