@@ -3885,8 +3885,7 @@ byzantine_reconquest = {
 			independent = yes
 			OR = { 
 				religion_group = christian
-				religion = hellenic_pagan
-				religion = hellenic_pagan_reformed
+				religion = jugoslavist
 			}
 			NOT = { same_realm = FROM }
 			mercenary = no
@@ -3933,8 +3932,7 @@ byzantine_reconquest = {
 			independent = yes
 			OR = { 
 				religion_group = christian
-				religion = hellenic_pagan
-				religion = hellenic_pagan_reformed
+				religion = jugoslavist
 			}
 			NOT = { same_realm = FROM }
 		}
@@ -4061,7 +4059,7 @@ macedonian_reconquest = {
 		ROOT = {
 			has_landed_title = e_macedonia
 			independent = yes
-			OR = { 
+			OR = {
 				religion = hellenic_pagan
 				religion = hellenic_pagan_reformed
 			}
@@ -4393,8 +4391,8 @@ ottoman_reconquest = {
 }
 
 soviet_reconquest = {
-	name = CB_NAME_IMPERIAL
-	war_name = WAR_NAME_IMPERIAL
+	name = CB_NAME_SOVIET
+	war_name = WAR_NAME_SOVIET
 	sprite = 17
 	truce_days = 3650
 	is_permanent = yes
@@ -4583,6 +4581,185 @@ great_russian_reconquest = {
 		ROOT = { bhutan_major_cb = yes	}
 		ROOT = {
 			has_landed_title = e_great_russia
+			independent = yes
+			NOR = {
+				religion = stalinist
+				religion = trotskyite
+				religion = leninist
+			}
+			NOT = { same_realm = FROM }
+			mercenary = no
+		}
+	}
+
+	can_use_title = {
+		OR = {
+			de_jure_liege_or_above = k_vladimir
+			de_jure_liege_or_above = k_pietropolis
+			de_jure_liege_or_above = k_smalensk
+			de_jure_liege_or_above = k_chernigov
+			de_jure_liege_or_above = k_volgaria
+			de_jure_liege_or_above = k_arkhangelsk
+			de_jure_liege_or_above = k_armenia
+			de_jure_liege_or_above = k_donkuban
+			de_jure_liege_or_above = k_alania
+			de_jure_liege_or_above = k_perm
+			de_jure_liege_or_above = k_uralia
+			de_jure_liege_or_above = k_krasnotomsk
+			de_jure_liege_or_above = k_sibir
+			de_jure_liege_or_above = k_north_mongolia
+			de_jure_liege_or_above = k_tannu
+			de_jure_liege_or_above = k_mongolia
+			de_jure_liege_or_above = k_georgia
+			de_jure_liege_or_above = k_karelia
+			de_jure_liege_or_above = k_lativia
+			de_jure_liege_or_above = k_lithuania
+			de_jure_liege_or_above = k_belarus
+			de_jure_liege_or_above = k_ukraine
+			de_jure_liege_or_above = k_moldova
+			de_jure_liege_or_above = k_kazakhstan
+			de_jure_liege_or_above = k_khiva
+			de_jure_liege_or_above = k_daylam
+			de_jure_liege_or_above = k_tajikistan
+			de_jure_liege_or_above = k_tian_shan
+			de_jure_liege_or_above = k_elladistan
+			de_jure_liege_or_above = k_caspia
+			de_jure_liege_or_above = k_azerbaijan
+		}
+	}
+	
+	is_valid = {
+		ROOT = {
+			independent = yes
+			NOR = {
+				religion = stalinist
+				religion = trotskyite
+				religion = leninist
+			}
+			NOT = { same_realm = FROM }
+		}
+	}
+
+	on_add = {
+		general_on_add_effect = yes
+	}
+	
+	on_success = {
+		ROOT = {
+			participation_scaled_prestige = 100
+		}
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			hidden_tooltip = { 
+				participation_scaled_prestige = 100
+			}
+		}
+		
+		FROM = { prestige = -100 }
+	}
+
+	on_success_title = {
+		custom_tooltip = { 
+			text = other_invasion_succ_tip
+			hidden_tooltip = {
+				ROOT = {
+					vassalize_or_take_under_title = {
+						title = PREV
+						enemy = FROM
+						type = invasion
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				holder_scope = { character = FROM }
+			}
+			usurp_title_only = { target = ROOT type = invasion }
+		}
+
+		hidden_tooltip = {
+			check_if_reconquista_finished_effect = yes
+			FROM = {
+				landless_pope_effect = yes
+			}
+		}
+	}
+
+	on_fail = {
+		ROOT = { prestige = -150 }
+	}
+
+	on_reverse_demand = {
+		ROOT = {
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 4.0
+			}
+			ROOT = { prestige = -200 }
+		}
+		FROM = {
+			participation_scaled_piety = 100
+			participation_scaled_prestige = 200
+			if = {
+				limit = {
+					uses_decadence = yes
+				}
+				participation_scaled_decadence = -10
+			}
+		}
+		any_defender = {
+			limit = { NOT = { character = FROM } }
+			hidden_tooltip = { 
+				participation_scaled_piety = 100
+				participation_scaled_prestige = 200
+				if = {
+					limit = {
+						uses_decadence = yes
+					}
+					participation_scaled_decadence = -10
+				}
+			}
+		}
+	}
+
+	attacker_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	attacker_ai_defeat_worth = {
+		factor = 100
+	}
+
+	defender_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	defender_ai_defeat_worth = {
+		factor = 100
+	}
+}
+
+russian_republican_reconquest = {
+	name = CB_NAME_RUSSIAN_REPUBLICAN
+	war_name = WAR_NAME_RUSSIAN_REPUBLICAN
+	sprite = 17
+	truce_days = 3650
+	is_permanent = yes
+	check_de_jure_tier = DUKE # this scans all dejure duchies for the counties which are held by or vassals(or below) of selected character. Only valid if is_permanent = yes
+
+	allowed_to_target_tributaries = no
+	
+	sort_priority = 1900
+
+	can_use_gui = {
+		check_if_crusader_trigger = yes
+	}
+
+	can_use = {
+		ROOT = { bhutan_major_cb = yes	}
+		ROOT = {
+			has_landed_title = e_russian_republic
 			independent = yes
 			NOR = {
 				religion = stalinist
