@@ -1854,6 +1854,7 @@ character_event = {
 			culture = koryo_saram
 			culture = cypriote
 			culture = armyan
+			culture = romani
 		}
 	}
 	
@@ -2309,6 +2310,66 @@ province_event = {
 	}
 	immediate = {
 		remove_province_modifier = stone_highways_modifier 
+	}
+}
+##Romani Diversity
+character_event = {
+	id = ATV.67
+	hide_window = yes
+	trigger = {
+		NOT = { has_character_flag = diversity }
+		culture = romani
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = diversity
+		if = {
+			limit = {
+				NOR = {
+					father_even_if_dead = { always = yes }
+					mother_even_if_dead = { always = yes }
+				}
+			}
+			random_list = {
+				40 = {
+					set_graphical_culture = panjabi
+				}
+				10 = {
+					set_graphical_culture = tamil
+				}
+				20 = {
+					set_graphical_culture = wallachian
+				}
+				10 = {
+					set_graphical_culture = slovenian
+				}
+				20 = {
+					set_graphical_culture = romani
+				}
+			}
+		}
+		any_child_even_if_dead = {
+			character_event = { id = ATV.68 }
+		}
+	}
+}
+character_event = {
+	id = ATV.68
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		culture = romani
+	}
+	
+	immediate = {
+		set_character_flag = diversity
+		set_graphical_culture = FROM
+		any_child_even_if_dead = {
+			character_event = { id = ATV.68 }
+		}
 	}
 }
 character_event = {
