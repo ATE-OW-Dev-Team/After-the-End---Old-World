@@ -1,0 +1,631 @@
+#######################################
+#
+# ANCIENT RELIGIONS
+# - Rebirth of Druidism
+#
+# Event ID celtic.0 - celtic.9 reserved
+#
+#######################################
+
+# Written by Patrick Marchand
+
+namespace = celtic
+
+# Old "Wizard" Appears
+character_event = {
+	id = celtic.0
+	desc = celtic.0.desc
+	picture = GFX_evt_Whispering_in_ear
+	border = GFX_event_normal_frame_religion
+	
+	min_age = 16
+	capable_only = yes
+	prisoner = no
+	has_dlc = "The Old Gods"
+	culture_group = celtic
+	
+	trigger = {
+		is_ruler = yes
+		in_command = no
+		NOR = {
+			is_ancient_religion_trigger = yes
+			has_character_flag = hates_magic
+			any_courtier = {
+				has_minor_title = title_court_wizard
+			}
+			has_global_flag = celtic_reformation
+		}
+		OR = {
+			has_game_rule = {
+				name = acr_ai_revival
+				value = on
+			}
+			ai = no
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+		modifier = {
+			factor = 10
+			has_game_rule = {
+				name = acr_ai_revival
+				value = reduced
+			}
+			ai = yes
+		}
+		modifier = {
+			factor = 2
+			ai = yes
+		}
+	}	
+	
+	option = {
+		name = celtic.0.a
+		
+		create_character = {
+			random_traits = no
+			dynasty = NONE
+			female = no
+			age = 53
+			religion = ROOT
+			culture = ROOT
+			trait = mystic
+			trait = scholarly_theologian
+			trait = gregarious
+			trait = quick
+			trait = feeble
+		}
+		new_character = {
+			give_minor_title = title_court_wizard
+			set_character_flag = ancrel_old_wizard
+			opinion = { modifier = opinion_patron who = ROOT years = 50 }
+		}
+	}
+	option = {
+		name = celtic.0.b
+		custom_tooltip = {
+			text = begone_sorcerer
+			set_character_flag = hates_magic
+		}
+	}
+}
+
+# Adopt celtic rites
+character_event = {
+	id = celtic.1
+	desc = celtic.1.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.1.a
+		custom_tooltip = {
+			text = adopt_celtic_rites
+			piety = -50
+			if = {
+				limit = {
+					NOT = { religion_group = pagan_group }
+				}
+				add_trait = sympathy_pagans
+			}
+			add_character_modifier = {
+				name = celtic_ways
+				duration = -1
+			}
+			hidden_tooltip = {
+				any_vassal = {
+					limit = {
+						NOT = {
+							religion = celtic_pagan
+						}
+						age = 16
+						prisoner = no
+						war = no
+						NOT = { trait = incapable }
+					}
+					character_event = { id = celtic.3 days = 5 }
+				}
+				any_courtier = {
+					limit = {
+						NOT = {
+							religion = celtic_pagan
+						}
+						age = 16
+						prisoner = no
+						war = no
+						NOT = { trait = incapable }
+						is_ruler = no # Councillors can be both courtier and vassals
+					}
+					character_event = { id = celtic.3 days = 5 }
+				}
+			}
+		}
+	}
+}
+
+# Bishop asks character to reform Celtic ways
+character_event = {
+	id = celtic.2
+	desc = celtic.2.desc
+	picture = GFX_evt_scandal
+	
+	prisoner = no
+	capable_only = yes
+	
+	trigger = {
+		NOT = {
+			religion = celtic_pagan
+		}
+		has_character_modifier = celtic_ways
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+	}
+	
+	option = {
+		name = celtic.2.a
+		ai_chance = { factor = 50 }
+		hidden_tooltip = { 
+			remove_character_modifier = celtic_ways
+			any_vassal = {
+				character_event = { id = celtic.300 days = 2 }
+			}
+			any_courtier = {
+				limit = {
+					is_landed = no # don't want to get landed councilors twice!
+					liege = {
+						character = ROOT # or prisoners
+					}
+				}
+				character_event = { id = celtic.300 days = 2 }
+			}
+		}
+		if = {
+			limit = {
+				religion_group = christian
+			}
+			add_trait = sympathy_christendom
+		}
+		religion = celtic_pagan
+		piety = 50
+	}
+
+	option = {
+		name = celtic.2.b
+		piety = 50
+		remove_trait = sympathy_pagans
+		ai_chance = { factor = 50 }
+		remove_character_modifier = celtic_ways
+		religion_head = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+
+	option = {
+		name = celtic.2.c
+		trigger_info = intrigue
+		trigger = { intrigue > 8 }
+		ai_chance = { factor = 20 }
+		religion_head = {
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		remove_character_modifier = celtic_ways
+		set_secret_religion = celtic_pagan
+	}
+}
+
+# Adopt celtic rites (vassal)
+character_event = {
+	id = celtic.3
+	desc = celtic.3.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.3.a
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				trait = zealous
+			}
+			modifier = {
+				factor = 1.2
+				opinion = { who = FROM value = 30 }
+			}
+			modifier = {
+				factor = 1.5
+				opinion = { who = FROM value = 60 }
+			}
+		}
+		custom_tooltip = {
+			text = adopt_celtic_rites
+			piety = -50
+			if = {
+				limit = {
+					NOT = { religion_group = pagan_group }
+				}
+				add_trait = sympathy_pagans
+			}
+			add_character_modifier = {
+				name = celtic_ways
+				duration = -1
+			}
+			hidden_tooltip = {
+				if = {
+					limit = { is_ruler = yes }
+					liege = { character_event = { id = celtic.4 days = 5 } }
+					any_vassal = { character_event = { id = celtic.3 days = 2 } }
+					any_courtier = {
+						limit = {
+							is_landed = no
+							liege = { character = ROOT }
+						}
+						character_event = { id = celtic.3 days = 2 }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = celtic.3.b
+		piety = 50
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			modifier = {
+				factor = 1.2
+				NOT = {
+					opinion = { who = FROM value = -30}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				NOT = {
+					opinion = { who = FROM value = -60}
+				}
+			}
+		}
+		random_vassal = {
+			limit = {
+				is_theocracy = yes
+				religion = ROOT
+			}
+			opinion = {
+				modifier = opinion_happy
+				who = ROOT
+				years = 2
+			}
+		}
+		set_character_flag = refuse_celtic_ways
+		hidden_tooltip = {
+			if = {
+				limit = { is_ruler = yes }
+				top_liege = { character_event = { id = celtic.5 days = 5 } }
+			}
+		}
+	}
+}
+# Vassal adopted celtic rites
+character_event = {
+	id = celtic.4
+	desc = celtic.4.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.4.a
+	}
+}
+# Vassal refuses celtic rites
+character_event = {
+	id = celtic.5
+	desc = celtic.5.desc
+	picture = GFX_evt_Ruler_listening_to_supplicant
+
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.5.a
+	}
+}
+
+# Vassal hears of liege's conversion
+character_event = {
+	id = celtic.300
+	desc = celtic.300.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	prisoner = no
+	capable_only = yes
+	
+	is_triggered_only = yes
+	
+	option = { # convert to paganism as well
+		name = celtic.300.a
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 100
+				is_landed = no # unlanded characters always convert
+			}
+			modifier = { # more likely to follow parent
+				factor = 2
+				OR = {
+					father = {
+						character = FROM
+					}
+					mother = {
+						character = FROM
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				has_character_modifier = celtic_ways
+			}
+			modifier = {
+				factor = 1.2
+				trait = proud
+			}
+			modifier = { # zealous characters wouldn't convert
+				factor = 0
+				trait = zealous
+				NOR = { # Unless, of course...
+					# they've adopted the celtic rite
+					has_character_modifier = celtic_ways
+					AND = {
+						OR = { # or the liege is their parent
+							father = {
+								character = FROM 
+							}
+							mother = {
+								character = FROM
+							}
+						}
+						is_ruler = no # and they are unlanded
+					}
+				}
+			}
+		}
+		hidden_tooltip = { 
+			remove_character_modifier = celtic_ways
+			any_vassal = {
+				character_event = { id = celtic.300 days = 2 }
+			}
+			any_courtier = {
+				limit = {
+					is_landed = no # don't want to get landed councilors twice!
+					liege = {
+						character = ROOT # or prisoners
+					}
+				}
+				character_event = { id = celtic.300 days = 2 }
+			}
+			if = {
+				limit = { is_ruler = yes }
+				liege = { character_event = { id = celtic.301 days = 2 } }
+			}
+		}
+		if = {
+			limit = {
+				religion_group = christian
+			}
+			add_trait = sympathy_christendom
+		}
+		religion = celtic_pagan
+		piety = 50
+		if = {
+			limit = {
+				has_minor_title = title_court_wizard
+			}
+			add_trait = zealous
+			add_trait = druid
+			give_minor_title = title_court_druid
+			clr_character_flag = ancrel_old_wizard
+		}
+	}
+	option = { # reject their heathen ways
+		name = celtic.300.b
+		piety = 50
+		ai_chance = {
+			factor = 66
+			modifier = {
+				factor = 0
+				OR = {
+					AND = { # unlanded courtiers of player courts *always* convert
+						liege = {
+							ai = no
+						}
+						is_landed = no
+					}
+					true_religion = celtic_pagan # people who are already celtic pagan will publicly convert
+				}
+			}
+		}
+		hidden_tooltip = {
+			if = {
+				limit = { is_ruler = yes }
+				liege = { character_event = { id = celtic.302 days = 2 } }
+			}
+		}
+	}
+}
+
+# Vassal converted to Celtic Paganism
+character_event = {
+	id = celtic.301
+	desc = celtic.301.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.301.a
+	}
+}
+
+# Vassal refuses to convert to Celtic Paganism
+character_event = {
+	id = celtic.302
+	desc = celtic.302.desc
+	picture = GFX_evt_Ruler_listening_to_supplicant
+
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.302.a
+	}
+}
+
+### Lunatic or Possessed conversion
+# Hear a tapping at the door
+character_event = {
+	id = celtic.6
+	desc = celtic.6.desc
+	picture = GFX_evt_courier
+	
+	min_age = 16
+	prisoner = no
+	culture_group = celtic
+	
+	trigger = {
+		OR = {
+			trait = lunatic
+			trait = possessed
+		}
+		NOT = { has_character_modifier = voice_of_jesus }
+		NOT = { has_global_flag = celtic_reformation }
+		OR = {
+			has_game_rule = {
+				name = acr_ai_revival
+				value = on
+			}
+			ai = no
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 420
+		modifier = {
+			factor = 10
+			has_game_rule = {
+				name = acr_ai_revival
+				value = reduced
+			}
+			ai = yes
+		}
+	}
+	
+	option = {
+		name = celtic.6.a
+		ai_chance = {
+			factor = 50
+		}
+		tooltip_info = lunatic
+		hidden_tooltip = {
+			character_event = { id = celtic.7 }
+		}
+	}
+	option = {
+		name = celtic.6.b
+		tooltip_info = lunatic
+		ai_chance = {
+			factor = 50
+		}
+	}
+}
+
+# The elves come in
+character_event = {
+	id = celtic.7
+	desc = celtic.7.desc
+	picture = GFX_evt_courier
+	
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.7.a
+		tooltip_info = lunatic
+		ai_chance = {
+			factor = 50
+		}
+		hidden_tooltip = {
+			character_event = { id = celtic.8 }
+		}
+	}
+	option = {
+		name = celtic.7.b
+		tooltip_info = lunatic
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+		}
+	}
+}
+
+# King of the Elves!
+character_event = {
+	id = celtic.8
+	desc = celtic.8.desc
+	picture = GFX_evt_courier
+	
+	min_age = 16
+	prisoner = no
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.8.a
+		tooltip_info = lunatic
+		religion = celtic_pagan
+		hidden_tooltip = { 
+			any_vassal = {
+				character_event = { id = celtic.300 days = 2 }
+			}
+			any_courtier = {
+				limit = {
+					is_landed = no # don't want to get landed councilors twice!
+					liege = {
+						character = ROOT # or prisoners
+					}
+				}
+				character_event = { id = celtic.300 days = 2 }
+			}
+		}
+		if = {
+			limit = {
+				religion_group = christian
+			}
+			add_trait = sympathy_christendom
+		}
+		piety = 50
+	}
+}
