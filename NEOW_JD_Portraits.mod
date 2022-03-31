@@ -1,5 +1,5 @@
-name="NEOW Horse Lords Portraits Remover"
-path="mod/NEOW_HL_Portraits"
+name="NEOW Jade Dragon Portraits Remover"
+path="mod/NEOW_JD_Portraits"
 picture="ATEOWICON.png"
 dependencies = { 
 	"New Era Old World"
