@@ -1,0 +1,606 @@
+#############################################
+#
+#  Ancient Religions Reborn
+#  - Events for the Red Dragon Knights
+#  		Event IDs celtic.1319 - celtic.1332
+#
+############################################
+
+#
+# Patrick 'superskierpat' Marchand 
+# and Adam 'xirsoi/theStormWeaver' Chevalier
+#
+
+namespace = celtic
+
+# The birth of the Red Dragon Knights
+narrative_event = {
+	id = celtic.1319
+	title = celtic.1319.title
+	desc = celtic.1319.desc
+	picture = GFX_evt_celtic_warriors
+	border = GFX_event_narrative_frame_religion
+
+	major = yes
+	hide_from = yes
+	
+	only_rulers = yes
+	has_dlc = "The Old Gods"
+	has_global_flag = celtic_pagan_reformation
+	
+	trigger = {
+		NOT = {
+			is_title_active = d_red_dragons
+		}
+		religion = celtic_pagan_reformed
+		controls_religion = yes # Let it happen for the Arch Druid, they'll always be around
+	}
+	
+	mean_time_to_happen = {
+		months = 36
+	}
+	
+	immediate = {
+		activate_title = { title = d_red_dragons status = yes }
+		create_character = {
+			random_traits = no
+			dynasty = random
+			religion = celtic_pagan_reformed
+			culture = welsh
+			female = no
+			age = 28
+		}
+		new_character = {
+			wealth = 500
+			d_red_dragons = {
+				grant_title = PREV
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = celtic_pagan_reformed
+				culture = welsh
+				female = no
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = celtic_pagan_reformed
+				culture = welsh
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = celtic_pagan_reformed
+				culture = welsh
+				female = no
+				age = 18
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = celtic_pagan_reformed
+				culture = welsh
+				female = no
+				age = 20
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = celtic_pagan_reformed
+				culture = welsh
+				female = no
+				age = 25
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = celtic_pagan_reformed
+				culture = welsh
+				female = no
+				age = 26
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = celtic_pagan_reformed
+				culture = welsh
+				female = no
+				age = 28
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = celtic_pagan_reformed
+				culture = welsh
+				female = yes
+				age = 16
+			}
+			create_character = {
+				random_traits = yes
+				dynasty = random
+				religion = celtic_pagan_reformed
+				culture = welsh
+				female = yes
+				age = 17
+			}
+		}
+	}
+	
+	option = {
+		name = OK
+	}
+}
+
+# request to join red dragons (courtier)
+character_event = {
+	id = celtic.1320
+	desc = celtic.1320.desc
+	picture = GFX_evt_warrior_banners
+	border = GFX_event_normal_frame_religion
+	
+	religion = celtic_pagan_reformed
+	only_men = yes
+	min_age = 16
+	max_age = 45
+	only_capable = yes
+	prisoner = no
+	has_dlc = "Sons of Abraham"
+	
+	trigger = {
+		is_ruler = no
+		is_heretic = no
+		is_councillor = no
+		martial = 5
+		is_title_active = d_red_dragons
+		
+		OR = {
+			father_even_if_dead = {
+				primary_title = { higher_tier_than = BARON }
+			}
+			mother_even_if_dead = {
+				primary_title = { higher_tier_than = BARON }
+			}
+		}
+		
+		liege = {
+			holy_order = no
+			liege = {
+				holy_order = no
+			}
+		}
+		
+		NOT = { has_character_modifier = expelled_d_red_dragons }
+		NOT = {
+			any_liege = {
+				has_character_modifier = expelled_d_red_dragons
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 100
+		modifier = {
+			factor = 0.25
+			trait = zealous
+		}
+		modifier = {
+			factor = 2.0
+			trait = celibate
+		}
+		modifier = {
+			factor = 0.5
+			trait = homosexual
+		}
+		modifier = {
+			factor = 0.7
+			trait = content
+		}
+		modifier = {
+			factor = 1.25
+			trait = chaste
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 25 }
+		}
+		modifier = {
+			factor = 1.5
+			trait = slothful
+		}
+		modifier = {
+			factor = 0.5
+			trait = lustful
+		}
+		modifier = {
+			factor = 2.0
+			trait = cynical
+		}
+		modifier = {
+			factor = 0.5
+			trait = hedonist
+		}
+		modifier = {
+			factor = 2.0
+			trait = ambitious
+		}
+		modifier = {
+			factor = 2.0
+			any_heir_title = {
+				always = yes
+			}
+		}
+		modifier = {
+			factor = 2.0
+			is_primary_heir = yes
+		}
+	}
+	
+	option = {
+		name =  celtic.1320.a # Ask to go
+		liege = {
+			character_event = {
+				id = celtic.1321
+			}
+		}
+	}
+	option = {
+		name =  celtic.1320.b # It's a bad idea
+	}
+}
+
+# Son or brother asks to join the Red Dragons
+character_event = {
+	id = celtic.1321
+	desc = celtic.1321.desc
+	picture = GFX_evt_warrior_banners
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name =  celtic.1321.a # Agree
+		ai_chance = {
+			factor = 100
+		}
+		
+		piety = 100
+		
+		FROM = {
+			character_event = {
+				id = celtic.1322
+				tooltip =  celtic.1322.tt
+			}
+		}
+	}
+	
+	option = {
+		name =  celtic.1321.b # Refuse
+		
+		piety = -100
+		
+		FROM = {
+			character_event = {
+				id = celtic.1323
+				tooltip =  celtic.1323.tt
+			}
+		}
+	}
+}
+
+# Son or brother joins the Red Dragons
+character_event = {
+	id = celtic.1322
+	desc = celtic.1322.desc
+	picture = GFX_evt_warrior_banners
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+		
+		d_red_dragons = {
+			holder_scope = {
+				ROOT = {
+					move_character = PREV
+					hidden_tooltip = {
+						clear_wealth = PREV
+					}
+					add_trait = celtic_knight
+				}
+			}
+		}
+	}
+}
+
+# Liege refuses request to join the Red Dragons
+character_event = {
+	id = celtic.1323
+	desc = celtic.1323.desc
+	picture = GFX_evt_warrior_banners
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name =  celtic.1323.a
+		
+		opinion = {
+			who = FROM
+			modifier = opinion_refused_request_holy_order
+		}
+	}
+}
+
+# The Grand Master humbly requests the right to build a castle in your demesne
+character_event = {
+	id = celtic.1324	
+	hide_window = yes
+	
+	only_playable = yes
+	has_dlc = "Sons of Abraham"
+	
+	trigger = {
+		religion = celtic_pagan_reformed
+		is_heretic = no
+		
+		d_red_dragons = {
+			holder_scope = {
+				wealth = 300
+				NOT = {
+					realm_size = 10
+				}
+				NOT = {
+					num_of_count_titles = 1
+				}
+			}
+		}
+		
+		any_demesne_province = {
+			has_empty_holding = yes
+			empire = {
+				OR = {
+					title = e_france
+					title = e_hre
+					title = e_spain
+					title = e_britannia
+				}
+			}
+		}
+		
+		NOT = { has_character_modifier = expelled_d_red_dragons }
+		NOT = {
+			any_liege = {
+				has_character_modifier = expelled_d_red_dragons
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.5
+			d_red_dragons = {
+				holder_scope = {
+					NOT = { demesne_size = 1 }
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			d_red_dragons = {
+				holder_scope = {
+					NOT = { demesne_size = 2 }
+				}
+			}
+		}
+		modifier = {
+			factor = 2.0
+			d_red_dragons = {
+				holder_scope = {
+					realm_size = 5
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		random_demesne_province = {
+			limit = {
+				has_empty_holding = yes
+				empire = {
+					OR = {
+						title = e_france
+						title = e_hre
+						title = e_spain
+						title = e_britannia
+					}
+				}
+			}
+			province_event = {
+				id = celtic.1325
+			}
+		}
+	}
+}
+
+province_event = {
+	id = celtic.1325
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		d_red_dragons = {
+			holder_scope = {
+				character_event = {
+					id = celtic.1326
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = celtic.1326
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			letter_event = {
+				id = celtic.1327
+			}
+		}
+	}
+}
+
+letter_event = {
+	id = celtic.1327
+	desc = celtic.1327.desc
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name =  celtic.1327.a # Agree
+		ai_chance = {
+			factor = 80
+			modifier = {
+				factor = 0
+				has_character_modifier = expelled_d_red_dragons
+			}
+		}
+		
+		hidden_tooltip = {
+			FROMFROM = {
+				province_event = { id = celtic.1328 }
+			}
+			remove_character_modifier = expelled_d_red_dragons
+		}
+		
+		piety = 200
+		wealth = 100
+	}
+	
+	option = {
+		name =  celtic.1321.b # Refuse
+		ai_chance = {
+			factor = 20
+		}
+		
+		piety = -100
+	}
+}
+
+# Castle has been erected
+province_event = {
+	id = celtic.1328
+	desc = celtic.1328.desc
+	picture = GFX_evt_castle_construction
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			wealth = -300
+		}
+	}
+	
+	option = {
+		name =  OK
+		build_holding = {
+		   type = castle
+		   holder = FROMFROM
+		}
+	}
+}
+
+# Ping event when expelling the Red Dragon
+character_event = {
+	id = celtic.1329
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		any_title_under = {
+			limit = {
+				tier = BARON
+				location = {
+					owner = {
+						OR = {
+							character = FROM
+							is_liege_or_above = FROM
+						}
+					}
+				}
+			}
+			usurp_title = FROM
+		}
+	
+		FROM = {
+			letter_event = {
+				id = celtic.1330
+			}
+		}
+		
+		opinion = {
+			who = FROM
+			modifier = opinion_expelled_from_realm
+		}
+	}
+}
+
+# Notification event when expelling the Red Dragon
+letter_event = {
+	id = celtic.1330
+	desc = celtic.1330.desc
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name =  celtic.1330.a
+	}
+}
+
+# Ping event when donating money to the Red dragon
+character_event = {
+	id = celtic.1331
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		wealth = 300
+		FROM = {
+			letter_event = {
+				id = celtic.1332
+			}
+		}
+		opinion = {
+			who = FROM
+			modifier = opinion_generous_donation
+		}
+	}
+}
+
+# Notification event when donating money to the Red Dragon
+letter_event = {
+	id = celtic.1332
+	desc = celtic.1332.desc
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+	}
+}

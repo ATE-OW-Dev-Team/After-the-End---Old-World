@@ -1,0 +1,209 @@
+#######################################
+#
+# ANCIENT RELIGIONS
+# - Vestales
+#
+# Event ID hellenic.120 - hellenic.129 reserved
+#
+#######################################
+
+# Written by Jon Severinsson
+
+namespace = hellenic
+
+# The Vestalis Maxima should be the guardian of all underage Vestalis
+character_event = {
+	id = hellenic.120
+	hide_window = yes
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	trigger = {
+		has_minor_title = title_vestalis_maxima
+		host = {
+			any_courtier = {
+				has_minor_title = title_vestalis
+				age = 6
+				NOT = { age = 16 }
+				NOT = { guardian = { character = ROOT } }
+			}
+		}
+	}
+
+	immediate = {
+		host = {
+			any_courtier = {
+				limit = {
+					has_minor_title = title_vestalis
+					age = 6
+					NOT = { age = 16 }
+					NOT = { guardian = { character = ROOT } }
+				}
+				set_guardian = ROOT
+			}
+		}
+	}
+}
+
+# A vestalis must retire after 30 years
+character_event = {
+	id = hellenic.121
+	desc = hellenic.121.desc
+	picture = GFX_evt_princess_byzantine
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	trigger = {
+		had_character_flag = {
+			flag = flag_vestalis
+			days = 10958 # 30 years
+		}
+		OR = {
+			has_minor_title = title_vestalis
+			has_minor_title = title_vestalis_maxima
+		}
+	}
+
+	option = {
+		name = OK
+
+		remove_title = title_vestalis
+		remove_title = title_vestalis_maxima
+		remove_trait = celibate
+		remove_trait = vestalis
+		add_trait = retired_vestalis
+		recalc_succession = yes
+		clr_character_flag = flag_vestalis
+		k_hellenic_pagan = { owner = { change_variable = { which = "num_vestales" value = -1 } } }
+	}
+}
+
+# Cleanup when a Vestalis lost her title by some way other than retireing
+character_event = {
+	id = hellenic.122
+	hide_window = yes
+
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	has_character_flag = flag_vestalis
+
+	trigger = {
+		NOT = { has_minor_title = title_vestalis }
+		NOT = { has_minor_title = title_vestalis_maxima }
+	}
+
+	immediate = {
+		remove_trait = celibate
+		remove_trait = vestalis
+		recalc_succession = yes
+		clr_character_flag = flag_vestalis
+		k_hellenic_pagan = { owner = { change_variable = { which = "num_vestales" value = -1 } } }
+	}
+}
+
+#[on_death] Cleanup when a Vestalis dies
+character_event = {
+	id = hellenic.123
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	has_character_flag = flag_vestalis
+
+	immediate = {
+		clr_character_flag = flag_vestalis
+		k_hellenic_pagan = { owner = { change_variable = { which = "num_vestales" value = -1 } } }
+	}
+}
+
+# A vassal has nominated a vestalis
+character_event = {
+	id = hellenic.124
+	desc = hellenic.124.desc
+	picture = GFX_evt_princess_byzantine
+
+	is_triggered_only = yes
+
+	option = {
+		name = hellenic.124.a
+		trigger = {
+			NOT = { check_variable = { which = "num_vestales" value = 5 } }
+		}
+		ai_chance = {
+			factor = 60
+			modifier = {
+				factor = 0
+				OR = {
+					is_primary_heir = ROOT
+					FROM = { is_pretender = yes }
+				}
+			}
+			modifier = {
+				factor = 1.5
+				dynasty = ROOT
+			}
+			modifier = {
+				factor = 0.8
+				NOT = { FROM = { host = { reverse_opinion = { who = ROOT value = -40 } } } }
+			}
+			modifier = {
+				factor = 1.25
+				FROM = { host = { reverse_opinion = { who = ROOT value = 40 } } }
+			}
+			modifier = {
+				factor = 0.5
+				check_variable = { which = "num_vestales" value = 4 }
+			}
+			modifier = {
+				factor = 2
+				NOT = { check_variable = { which = "num_vestales" value = 2 } }
+			}
+		}
+
+		FROM = { clr_character_flag = flag_nominated_as_vestalis }
+		hidden_tooltip = { FROM = { banish = ROOT } } # Move FROM to ROOT's court
+		FROM = {
+			show_scope_change = no
+			host = { prestige = 50 }
+			host = { piety = 50 }
+			host = { opinion = { modifier = opinion_nominated_vestalis who = ROOT } }
+		}
+
+		FROM = {
+			give_minor_title = title_vestalis
+			hidden_tooltip = {
+				remove_trait = hedonist
+				add_trait = celibate
+				add_trait = vestalis
+				recalc_succession = yes
+				set_character_flag = flag_vestalis
+				k_hellenic_pagan = { owner = { change_variable = { which = "num_vestales" value = 1 } } }
+			}
+		}
+	}
+
+	option = {
+		name = hellenic.124.b
+		trigger = {
+			NOT = { check_variable = { which = "num_vestales" value = 5 } }
+		}
+		ai_chance = {
+			factor = 40
+		}
+
+		FROM = { show_scope_change = no host = { prestige = -10 } }
+	}
+
+	option = {
+		name = hellenic.124.c
+		trigger = {
+			check_variable = { which = "num_vestales" value = 5 }
+		}
+	}
+}
