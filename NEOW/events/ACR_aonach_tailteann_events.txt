@@ -1,0 +1,2999 @@
+#######################################
+#
+# ANCIENT RELIGIONS
+# - Aonach Tailteann Events
+#
+# Event ID celtic.1190 - celtic.1251 reserved
+#
+###################################
+
+# Written by Patrick Marchand
+
+namespace = ancrel
+
+# Invitation
+character_event = {
+	id = celtic.1190
+	desc = celtic.1190.desc
+	picture = GFX_evt_courier
+
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1190.a
+		prestige = 25
+		piety = 25
+		set_character_flag = attending_tailteann
+		set_character_flag = tailteann_death_phase
+	}
+	option = {
+		name = celtic.1190.b
+		prestige = -50
+		piety = -50
+	}
+}	
+
+# Start of Aonach
+character_event = {
+	id = celtic.1191
+	desc = celtic.1191.desc
+	picture = GFX_evt_bonfire_celtic
+
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1191.a
+		trigger = {
+			war = no
+		}
+		hidden_tooltip = {
+			set_character_flag = tailteann_death_ruler
+			set_character_flag = tailteann_begins
+			set_character_flag = tailteann_death_phase
+			set_character_flag = attending_tailteann
+			location = {
+				set_province_flag = tailteann_60_days
+			}
+			character_event = { id = celtic.1199 days = 10 }
+		}
+	}
+	option = {
+		name = celtic.1191.b
+		trigger = {
+			war = yes
+		}
+		wealth = 200
+		prestige = -100
+		hidden_tooltip = {
+			any_realm_character = {
+				limit = {
+					has_character_flag = attending_tailteann
+				}
+				character_event = { id = celtic.1192 }
+			}
+		}
+	}
+}
+
+# Aonach has been cancelled
+character_event = {
+	id = celtic.1192
+	desc = celtic.1192.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.1192.a
+		prestige = -50
+		clr_character_flag = attending_tailteann
+	}
+}
+
+# Invitations have gone out
+character_event = {
+	id = celtic.1193
+	desc = celtic.1193.desc
+	picture = GFX_evt_courier
+
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1193.a
+	}
+}
+
+#[on_death] Ruler has died, the Aonach is over
+character_event = {
+	id = celtic.1194
+	desc = celtic.1194.desc
+	picture = GFX_evt_funeral_pyre
+
+	is_triggered_only = yes
+	
+	has_character_flag = tailteann_begins
+	
+	option = {
+		name = celtic.1194.a
+		clr_character_flag = tailteann_begins
+		clr_character_flag = winner_athletic
+		clr_character_flag = winner_fighting
+		clr_character_flag = winner_crafting
+		clr_character_flag = attending_tailteann
+		clr_character_flag = attending_tailteann_event
+		clr_character_flag = tailteann_craftsman
+		clr_character_flag = tailteann_fighter
+		clr_character_flag = tailteann_winner_athlete
+		any_vassal = {
+			limit = {
+				has_character_flag = attending_tailteann
+				NOT = {
+					character = PREV
+					has_character_flag = tailteann_winner_athlete
+					has_character_flag = tailteann_craftsman
+					has_character_flag = tailteann_fighter
+				}
+			}
+			set_character_flag = tailteann_has_ended
+			clr_character_flag = attending_tailteann
+			clr_character_flag = attending_tailteann_event
+			letter_event = {
+				id = celtic.1195
+				days = 2
+				random = 2
+				tooltip = celtic.1195.tt
+			}
+		}
+		any_vassal = {
+			limit = {
+				has_character_flag = attending_tailteann
+				OR = {
+					has_character_flag = tailteann_craftsman
+					has_character_flag = tailteann_fighter
+					has_character_flag = tailteann_winner_athlete
+				}
+			}
+			letter_event = {
+				id = celtic.1195
+				days = 2
+				random = 2
+				tooltip = celtic.1195.tt
+			}
+			set_character_flag = tailteann_has_ended
+			clr_character_flag = tailteann_craftsman
+			clr_character_flag = tailteann_fighter
+			clr_character_flag = tailteann_winner_athlete
+			clr_character_flag = attending_tailteann
+			clr_character_flag = attending_tailteann_event
+		}
+	}
+}
+
+# The Aonach has been cancelled due to Ruler's death
+letter_event = {
+	id = celtic.1195
+	desc = celtic.1195.desc
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.1195.a
+	}
+}
+
+# Choose who to honor at the bonfire
+character_event = {
+	id = celtic.1196
+	desc = celtic.1196.desc
+	picture = GFX_evt_bonfire_celtic
+	border = GFX_event_normal_frame_diplomacy
+	
+	only_rulers = yes
+	has_character_flag = tailteann_death_phase
+	
+	trigger = {
+		is_ruler = yes
+		NOT = {
+			has_character_flag = choose_dead_one_tailteann
+		}
+		OR = {
+			father_even_if_dead = {
+				is_alive = no
+			}
+			mother_even_if_dead = {
+				is_alive = no
+			}
+		}
+	}
+	
+	mean_time_to_happen = { days = 1 }
+	
+	hide_from = yes
+	
+	option = { # In memory of father
+		name = celtic.1196.a
+		trigger = {
+			father_even_if_dead = {
+				is_alive = no
+			}
+		}
+		set_character_flag = choose_dead_one_tailteann
+		custom_tooltip = {
+			text = honor_dead_tailteann
+			hidden_tooltip = { 
+				narrative_event = { id = celtic.1197 days = 2 }
+			}
+		}
+	}
+	
+	option = { # In memory of mother
+		name = celtic.1196.b
+		trigger = {
+			mother_even_if_dead = {
+				is_alive = no
+			}
+		}
+		set_character_flag = choose_dead_one_tailteann
+		custom_tooltip = {
+			text = honor_dead_tailteann
+			hidden_tooltip = { 
+				narrative_event = { id = celtic.1198 days = 2 }
+			}
+		}
+	}	
+}
+
+# In memory of father
+narrative_event = {
+	id = celtic.1197
+	title = celtic.1197.title
+	desc = celtic.1197.desc
+	picture = GFX_evt_bonfire_celtic
+	border = GFX_event_narrative_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = celtic.1197.a
+		piety = 100
+	}
+}
+
+# In memory of mother
+narrative_event = {
+	id = celtic.1198
+	title = celtic.1198.title
+	desc = celtic.1198.desc
+	picture = GFX_evt_bonfire_celtic
+	border = GFX_event_narrative_frame_diplomacy
+	
+	is_triggered_only = yes
+	
+	hide_from = yes
+	
+	option = {
+		name = celtic.1198.a
+		piety = 100
+	}
+}
+
+# Ruler chooses which caste to favor
+character_event = {
+	id = celtic.1199
+	desc = celtic.1199.desc
+	picture = GFX_evt_ollamh_laws
+	
+	is_triggered_only = yes
+	
+	option = { # Favor warrior caste
+		name = celtic.1199.a
+		custom_tooltip = {
+			text = give_laws_ollam
+			change_martial = 1
+			prestige = 150
+			add_character_modifier = {
+				name = favored_warriors
+				duration = 3650
+			}
+			hidden_tooltip = {
+				clr_character_flag = tailteann_death_ruler
+				clr_character_flag = tailteann_death_phase
+				clr_character_flag = chosen_dead_one_tailteann
+				clr_character_flag = tailteann_begins
+				set_character_flag = tailteann_law_phase
+				any_realm_character = {
+					if = {
+						limit = { has_character_flag = tailteann_death_phase }
+						character_event = { id = celtic.1200 }
+					}
+				}
+				character_event = { id = celtic.1207 }
+			}
+		}
+	}
+	
+	option = { # Favor Druidic caste
+		name = celtic.1199.b
+		custom_tooltip = {
+			text = give_laws_ollam
+			change_learning = 1
+			piety = 100
+			add_character_modifier = {
+				name = favored_druids
+				duration = 3650
+			}
+			hidden_tooltip = {
+				clr_character_flag = tailteann_death_ruler
+				clr_character_flag = tailteann_death_phase
+				clr_character_flag = chosen_dead_one_tailteann
+				clr_character_flag = tailteann_begins
+				set_character_flag = tailteann_law_phase
+				any_realm_character = {
+					if = {
+						limit = { has_character_flag = tailteann_death_phase }
+						character_event = { id = celtic.1201 }
+					}
+				}
+				character_event = { id = celtic.1208 }
+			}
+		}
+	}
+	
+	option = { # Favor merchant caste
+		name = celtic.1199.c
+		custom_tooltip = {
+			text = give_laws_ollam
+			change_stewardship = 1
+			wealth = 100
+			add_character_modifier = {
+				name = favored_merchants
+				duration = 3650
+			}
+			hidden_tooltip = {
+				clr_character_flag = tailteann_death_ruler
+				clr_character_flag = tailteann_death_phase
+				clr_character_flag = chosen_dead_one_tailteann
+				clr_character_flag = tailteann_begins
+				set_character_flag = tailteann_law_phase
+				any_realm_character = {
+					if = {
+						limit = { has_character_flag = tailteann_death_phase }
+						character_event = { id = celtic.1202 }
+					}
+				}
+				character_event = { id = celtic.1209 }
+			}
+		}
+	}
+	
+	option = { # Balance
+		name = celtic.1199.d
+		trigger = {
+			diplomacy = 12
+		}
+		custom_tooltip = {
+			text = give_laws_ollam
+			add_character_modifier = {
+				name = favored_balance
+				duration = 3650
+			}
+			hidden_tooltip = {
+				clr_character_flag = tailteann_death_ruler
+				clr_character_flag = tailteann_death_phase
+				clr_character_flag = chosen_dead_one_tailteann
+				clr_character_flag = tailteann_begins
+				set_character_flag = tailteann_law_phase
+				any_realm_character = {
+					if = {
+						limit = { has_character_flag = tailteann_death_phase }
+						character_event = { id = celtic.1203 }
+					}
+				}
+				character_event = { id = celtic.1210 }
+			}
+		}
+	}
+	
+	option = { # Favor the crown
+		name = celtic.1199.e
+		trigger = {
+			trait = ambitious
+			trait = diligent
+		}
+		custom_tooltip = {
+			text = give_laws_ollam
+			add_character_modifier = {
+				name = favored_crown
+				duration = 3650
+			}
+			prestige = 50
+			piety = 50
+			hidden_tooltip = {
+				clr_character_flag = tailteann_death_ruler
+				clr_character_flag = tailteann_death_phase
+				clr_character_flag = chosen_dead_one_tailteann
+				clr_character_flag = tailteann_begins
+				set_character_flag = tailteann_law_phase
+				any_realm_character = {
+					if = {
+						limit = { has_character_flag = tailteann_death_phase }
+						character_event = { id = celtic.1204 }
+					}
+				}
+				character_event = { id = celtic.1211 }
+			}
+		}
+	}
+	
+	option = { # Fianna
+		name = celtic.1199.g
+		trigger = {
+			trait = fian
+		}
+		custom_tooltip = { 
+			text = give_laws_ollam
+			add_character_modifier = {
+				name = favored_fianna
+				duration = 3650
+			}
+			hidden_tooltip = {
+				clr_character_flag = tailteann_death_ruler
+				clr_character_flag = tailteann_death_phase
+				clr_character_flag = chosen_dead_one_tailteann
+				clr_character_flag = tailteann_begins
+				set_character_flag = tailteann_law_phase
+				any_realm_character = {
+					if = {
+						limit = { has_character_flag = tailteann_death_phase }
+						character_event = { id = celtic.1205 }
+					}
+				}
+				character_event = { id = celtic.1212 }
+			}
+		}
+	}
+	
+	option = { # Lunatic
+		name = celtic.1199.g
+		trigger = {
+			trait = lunatic
+		}
+		tooltip_info = lunatic
+		custom_tooltip = {
+			text = give_laws_ollam
+			add_character_modifier = {
+					name = favored_birds
+					duration = 3650
+			}
+			hidden_tooltip = {
+				clr_character_flag = tailteann_death_ruler
+				clr_character_flag = tailteann_death_phase
+				clr_character_flag = chosen_dead_one_tailteann
+				clr_character_flag = tailteann_begins
+				set_character_flag = tailteann_law_phase
+				any_realm_character = {
+					if = {
+						limit = { has_character_flag = tailteann_death_phase }
+						character_event = { id = celtic.1206 }
+					}
+				}
+				character_event = { id = celtic.1213 }
+			}
+		}
+	}
+}
+
+#  Learn of new laws from Ollamh ( Wariors )
+character_event = {
+	id = celtic.1200
+	desc = celtic.1200.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1200.a
+		hidden_tooltip = {
+			clr_character_flag = tailteann_death_phase
+			clr_character_flag = chosen_dead_one_tailteann
+			character_event = { id = celtic.1251 }
+		}
+	}
+}
+
+#  Learn of new laws from Ollamh ( Druids )
+character_event = {
+	id = celtic.1201
+	desc = celtic.1201.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1201.a
+		hidden_tooltip = {
+			clr_character_flag = tailteann_death_phase
+			clr_character_flag = chosen_dead_one_tailteann
+			character_event = { id = celtic.1251 }
+		}
+	}
+}
+
+#  Learn of new laws from Ollamh ( Merchants )
+character_event = {
+	id = celtic.1202
+	desc = celtic.1202.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1202.a
+		hidden_tooltip = {
+			clr_character_flag = tailteann_death_phase
+			clr_character_flag = chosen_dead_one_tailteann
+			character_event = { id = celtic.1251 }
+		}
+	}
+}
+
+#  Learn of new laws from Ollamh ( Balanced )
+character_event = {
+	id = celtic.1203
+	desc = celtic.1203.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1203.a
+		hidden_tooltip = {
+			clr_character_flag = tailteann_death_phase
+			clr_character_flag = chosen_dead_one_tailteann
+			character_event = { id = celtic.1251 }
+		}
+	}
+}
+
+#  Learn of new laws from Ollamh ( Fianna )
+character_event = {
+	id = celtic.1204
+	desc = celtic.1204.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1204.a
+		hidden_tooltip = {
+			clr_character_flag = tailteann_death_phase
+			clr_character_flag = chosen_dead_one_tailteann
+			character_event = { id = celtic.1251 }
+		}
+	}
+}
+
+#  Learn of new laws from Ollamh ( Crown )
+character_event = {
+	id = celtic.1205
+	desc = celtic.1205.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1205.a
+		hidden_tooltip = {
+			clr_character_flag = tailteann_death_phase
+			clr_character_flag = chosen_dead_one_tailteann
+			character_event = { id = celtic.1251 }
+		}
+	}
+}
+
+#  Learn of new laws from Ollamh ( Birds )
+character_event = {
+	id = celtic.1206
+	desc = celtic.1206.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1206.a
+		hidden_tooltip = {
+			clr_character_flag = tailteann_death_phase
+			clr_character_flag = chosen_dead_one_tailteann
+			character_event = { id = celtic.1251 }
+		}
+	}
+}
+
+# Law Phase ( Wariors )
+character_event = {
+	id = celtic.1207
+	desc = celtic.1200.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1207.a
+		hidden_tooltip = {
+			clr_character_flag = tailteann_law_phase
+			set_character_flag = tailteann_game_phase
+			character_event = { id = celtic.1251 }
+		}
+	}
+}
+
+#  Law phase ( Druids )
+character_event = {
+	id = celtic.1208
+	desc = celtic.1201.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1208.a
+		hidden_tooltip = {
+			clr_character_flag = tailteann_law_phase
+			set_character_flag = tailteann_game_phase
+			character_event = { id = celtic.1251 }
+		}
+	}
+}
+
+#  Law phase ( Merchants )
+character_event = {
+	id = celtic.1209
+	desc = celtic.1202.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1209.a
+		hidden_tooltip = {
+			clr_character_flag = tailteann_law_phase
+			set_character_flag = tailteann_game_phase
+			character_event = { id = celtic.1251 }
+		}
+	}
+}
+
+#  Law phase ( Balanced )
+character_event = {
+	id = celtic.1210
+	desc = celtic.1203.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1210.a
+		hidden_tooltip = {
+			clr_character_flag = tailteann_law_phase
+			set_character_flag = tailteann_game_phase
+			character_event = { id = celtic.1251 }
+		}
+	}
+}
+
+#  Law phase ( Fianna )
+character_event = {
+	id = celtic.1211
+	desc = celtic.1204.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1211.a
+		hidden_tooltip = {
+			clr_character_flag = tailteann_law_phase
+			set_character_flag = tailteann_game_phase
+			character_event = { id = celtic.1251 }
+		}
+	}
+}
+
+#  Law phase ( Crown )
+character_event = {
+	id = celtic.1212
+	desc = celtic.1205.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1212.a
+		hidden_tooltip = {
+			clr_character_flag = tailteann_law_phase
+			set_character_flag = tailteann_game_phase
+			character_event = { id = celtic.1251 }
+		}
+	}
+}
+
+#  Law phase ( Birds )
+character_event = {
+	id = celtic.1213
+	desc = celtic.1206.desc
+	picture = GFX_evt_bonfire_celtic
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1213.a
+		hidden_tooltip = {
+			clr_character_flag = tailteann_law_phase
+			set_character_flag = tailteann_game_phase
+			character_event = { id = celtic.1251 }
+		}
+	}
+}
+
+# Character is the best athlete
+character_event = {
+	id = celtic.1214
+	desc = celtic.1214.desc
+	picture = GFX_evt_athlete
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		top_liege = {
+			had_character_flag = { flag = tailteann_game_phase days = 20 }
+			NOT = {
+				has_character_flag = winner_athletic
+			}
+			NOT = {
+				has_character_flag = tailteann_has_ended
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 10
+		modifier = {
+			factor = 0.75
+			martial = 8
+		}
+		modifier = {
+			factor = 0.75
+			martial = 10
+		}
+		modifier = {
+			factor = 0.75
+			martial = 12
+		}
+		modifier = {
+			factor = 0.75
+			trait = brave
+		}
+		modifier = {
+			factor = 0.75
+			is_strong_trigger = yes
+		}
+		modifier = {
+			factor = 0.75
+			trait = diligent
+		}
+		modifier = {
+			factor = 1.25
+			trait = dwarf
+		}
+		modifier = {
+			factor = 1.25
+			is_weak_trigger = yes
+		}
+		modifier = {
+			factor = 1.25
+			trait = ill
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 6 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 3 }
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+		set_character_flag = tailteann_winner_athletic
+		top_liege = {
+			set_character_flag = winner_athletic
+		}
+	}
+	
+	option = {
+		name = celtic.1214.a
+		wealth = 100
+		prestige = 300
+		hidden_tooltip = {
+			if = {
+				limit = {
+					top_liege = {
+						NOT = {
+							character = ROOT
+						}
+					}
+				}
+				top_liege = { character_event = { id = celtic.1215 } }
+			}
+		}
+	}
+}
+
+# Inform about best athlete
+character_event = {
+	id = celtic.1215
+	desc = celtic.1215.desc
+	picture = GFX_evt_athlete
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.1215.a
+		FROM = {
+			opinion = {
+				modifier = opinion_tailteann_athlete
+				who = ROOT
+				years = 20
+			}
+		}
+	}
+}
+
+# Best fighter
+character_event = {
+	id = celtic.1216
+	desc = celtic.1216.desc
+	picture = GFX_evt_melee
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			has_character_flag = tailteann_has_ended
+			has_character_flag = tailteann_fighting
+		}
+		top_liege = {
+			had_character_flag = { flag = tailteann_game_phase days = 20 }
+			had_character_flag = { flag = winner_athletic days = 1 }
+			NOT = { has_character_flag = winner_fighter }
+			NOT = {
+				has_character_flag = tailteann_has_ended
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 10
+		modifier = {
+			factor = 0.75
+			martial = 8
+		}
+		modifier = {
+			factor = 0.75
+			martial = 10
+		}
+		modifier = {
+			factor = 0.75
+			martial = 12
+		}
+		modifier = {
+			factor = 0.75
+			trait = brave
+		}
+		modifier = {
+			factor = 0.75
+			is_strong_trigger = yes
+		}
+		modifier = {
+			factor = 0.75
+			trait = diligent
+		}
+		modifier = {
+			factor = 0.75
+			trait = head1
+		}
+		modifier = {
+			factor = 0.75
+			trait = head2
+		}
+		modifier = {
+			factor = 1.25
+			trait = dwarf
+		}
+		modifier = {
+			factor = 1.25
+			is_weak_trigger = yes
+		}
+		modifier = {
+			factor = 1.25
+			trait = ill
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 6 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 3 }
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+		set_character_flag = tailteann_fighting
+		top_liege = {
+			set_character_flag = winner_fighter
+		}
+	}
+	
+	option = {
+		name = celtic.1216.a
+		wealth = 75
+		prestige = 250
+		hidden_tooltip = {
+			if = {
+				limit = {
+					top_liege = {
+						NOT = {
+							character = ROOT
+						}
+					}
+				}
+				top_liege = { character_event = { id = celtic.1217 } }
+			}
+		}
+	}
+}
+
+# Inform about best fighter
+character_event = {
+	id = celtic.1217
+	desc = celtic.1217.desc
+	picture = GFX_evt_melee
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.1217.a
+		FROM = {
+			opinion = {
+				modifier = opinion_tailteann_fighter
+				who = ROOT
+				years = 15
+			}
+		}
+	}
+}
+
+# Character wins best crafstman
+character_event = {
+	id = celtic.1218
+	desc = celtic.1218.desc
+	picture = GFX_evt_craftsman
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			has_character_flag = tailteann_has_ended
+			has_character_flag = tailteann_winner_athletic
+			has_character_flag = tailteann_fighting
+		}
+		top_liege = {
+			had_character_flag = { flag = tailteann_game_phase days = 20 }
+			had_character_flag = { flag = winner_fighter days = 1 }
+			NOT = { has_character_flag = winner_crafting }
+			NOT = {
+				has_character_flag = tailteann_has_ended
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 10
+		modifier = {
+			factor = 0.75
+			learning = 8
+		}
+		modifier = {
+			factor = 0.75
+			learning = 10
+		}
+		modifier = {
+			factor = 0.75
+			learning = 12
+		}
+		modifier = {
+			factor = 0.75
+			learning = 14
+		}
+		modifier = {
+			factor = 0.75
+			trait = genius
+		}
+		modifier = {
+			factor = 0.75
+			trait = quick
+		}
+		modifier = {
+			factor = 0.75
+			trait = diligent
+		}
+		modifier = {
+			factor = 0.75
+			trait = lunatic
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 7 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 5 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { learning = 1 }
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+		set_character_flag = tailteann_craftsman
+		top_liege = {
+			set_character_flag = winner_crafting
+		}
+	}
+	
+	option = {
+		name = celtic.1218.a
+		wealth = 50
+		prestige = 200
+		hidden_tooltip = {
+			if = {
+				limit = {
+					top_liege = {
+						NOT = {
+							character = ROOT
+						}
+					}
+				}
+				top_liege = { character_event = { id = celtic.1219 } }
+			}
+		}
+	}
+}
+
+# Inform about best crafstman
+character_event = {
+	id = celtic.1219
+	desc = celtic.1219.desc
+	picture = GFX_evt_craftsman
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.1219.a
+		FROM = {
+			opinion = {
+				modifier = opinion_tailteann_craftsman
+				who = ROOT
+				years = 10
+			}
+		}
+	}
+}
+
+# Tailteann is over
+province_event = {
+	id = celtic.1220
+	desc = celtic.1220.desc
+	picture = GFX_evt_bonfire_celtic
+
+	trigger = {
+		had_province_flag = {
+			flag = tailteann_60_days
+			days = 60
+		}
+		owner = {
+			has_character_flag = winner_athletic
+			has_character_flag = winner_fighter
+			has_character_flag = winner_crafting
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = celtic.1220.a
+		clr_province_flag = tailteann_60_days
+		owner = {
+			clr_character_flag = tailteann_game_phase
+			clr_character_flag = winner_athletic
+			clr_character_flag = winner_fighter
+			clr_character_flag = winner_crafting
+			clr_character_flag = attending_tailteann
+			clr_character_flag = attending_tailteann_event
+			clr_character_flag = tailteann_craftsman
+			clr_character_flag = tailteann_fighting
+			clr_character_flag = tailteann_winner_athletic
+			set_character_flag = tailteann_has_ended
+			any_realm_character = {
+				limit = {
+					has_character_flag = attending_tailteann
+					OR = {
+						has_character_flag = tailteann_craftsman
+						has_character_flag = tailteann_fighting
+						has_character_flag = tailteann_winner_athletic
+					}
+				}
+				set_character_flag = tailteann_has_ended
+				clr_character_flag = tailteann_craftsman
+				clr_character_flag = tailteann_fighting
+				clr_character_flag = tailteann_winner_athletic
+				reverse_opinion = {
+					modifier = opinion_tailteann_participant
+					who = PREV
+					years = 2
+				}
+				clr_character_flag = attending_tailteann
+				clr_character_flag = attending_tailteann_event
+			}
+			any_realm_character = {
+				limit = {
+					has_character_flag = attending_tailteann
+					NOR = {
+						character = PREV
+						has_character_flag = tailteann_winner_athletic
+						has_character_flag = tailteann_craftsman
+						has_character_flag = tailteann_fighting
+					}
+				}
+				hidden_tooltip = {
+					random_list = {
+						10 = {
+							character_event = { id = celtic.1224 }
+						}
+						10 = {
+							character_event = { id = celtic.1225 }
+						}
+						10 = {
+							character_event = { id = celtic.1226 }
+						}
+						10 = {
+							character_event = { id = celtic.1227 }
+						}
+						10 = {
+							character_event = { id = celtic.1228 }
+						}
+						10 = {
+							character_event = { id = celtic.1229 }
+						}
+					}
+				}
+				set_character_flag = tailteann_has_ended
+				reverse_opinion = {
+					modifier = opinion_tailteann_participant
+					who = PREV
+					years = 2
+				}
+				clr_character_flag = attending_tailteann
+				clr_character_flag = attending_tailteann_event
+			}
+		}
+	}
+}
+
+# Message about death
+character_event = {
+	id = celtic.1221
+	desc = celtic.1221.desc
+	picture = GFX_evt_funeral_pyre
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_character_flag = no_msg_death }
+		NOT = { has_character_flag = tailteann_has_ended }
+	}
+	
+	option = {
+		name = celtic.1221.a
+	}
+	option = {
+		name = celtic.1221.b
+		set_character_flag = no_msg_death
+	}
+}
+
+# Message about maimed
+character_event = {
+	id = celtic.1222
+	desc = celtic.1222.desc
+	picture = GFX_evt_viking_throneroom_oldgods
+	
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_character_flag = no_msg_maimed }
+		NOT = { has_character_flag = tailteann_has_ended }
+	}
+	
+	option = {
+		name = celtic.1221.a
+	}
+	option = {
+		name = celtic.1221.b
+		set_character_flag = no_msg_maimed
+	}
+}
+
+# Message about wounded
+character_event = {
+	id = celtic.1223
+	desc = celtic.1223.desc
+	picture = GFX_evt_viking_throneroom_oldgods
+
+	trigger = {
+		NOT = { has_character_flag = no_msg_wounded }
+		NOT = { has_character_flag = tailteann_has_ended }
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.1221.a
+	}
+	option = {
+		name = celtic.1221.b
+		set_character_flag = no_msg_wounded
+	}
+}
+
+# End of tailteann event
+character_event = {
+	id = celtic.1224
+	desc = celtic.1224.desc
+	picture = GFX_evt_athlete
+
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1224.a
+		prestige = 50
+	}
+}
+
+# End of tailteann event
+character_event = {
+	id = celtic.1225
+	desc = celtic.1225.desc
+	picture = GFX_evt_athlete
+
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1225.a
+		prestige = 100
+	}
+}
+
+# End of tailteann event
+character_event = {
+	id = celtic.1226
+	desc = celtic.1226.desc
+	picture = GFX_evt_athlete
+
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1226.a
+		prestige = -50
+	}
+}
+
+# End of tailteann event
+character_event = {
+	id = celtic.1227
+	desc = celtic.1227.desc
+	picture = GFX_evt_athlete
+
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1227.a
+		prestige = -100
+	}
+}
+
+# End of tailteann event
+character_event = {
+	id = celtic.1228
+	desc = celtic.1228.desc
+	picture = GFX_evt_athlete
+
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1228.a
+		change_martial = 1
+	}
+}
+
+# End of tailteann event
+character_event = {
+	id = celtic.1229
+	desc = celtic.1229.desc
+	picture = GFX_evt_athlete
+
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1229.a
+		change_martial = -1
+	}
+}	
+
+# Character is killed
+character_event = {
+	id = celtic.1230
+	desc = celtic.1230.desc
+	picture = GFX_evt_death
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		top_liege = {
+			has_character_flag = tailteann_game_phase
+			NOT = {
+				has_character_flag = tailteann_has_ended
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1000
+		modifier = {
+			factor = 1.25
+			martial = 8
+		}
+		modifier = {
+			factor = 1.25
+			martial = 10
+		}
+		modifier = {
+			factor = 1.25
+			martial = 12
+		}
+		modifier = {
+			factor = 1.25
+			martial = 14
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 1 }
+		}
+		modifier = {
+			factor = 2
+			trait = craven
+		}
+		modifier = {
+			factor = 0.5
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+			trait = maimed
+		}
+	}
+
+	immediate = {
+		clr_character_flag = attending_tailteann
+	}
+	
+	option = {
+		name = celtic.1230.a
+		death = {
+			death_reason = death_battle
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					top_liege = {
+						NOT = {
+							character = ROOT
+						}
+					}
+				}
+				top_liege = { character_event = { id = celtic.1221 } }
+			}
+		}
+	}
+}
+
+# Character is maimed
+character_event = {
+	id = celtic.1231
+	desc = celtic.1231.desc
+	picture = GFX_evt_melee
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			trait = maimed
+		}
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		top_liege = {
+			has_character_flag = tailteann_game_phase
+			NOT = {
+				has_character_flag = tailteann_has_ended
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 800
+		modifier = {
+			factor = 1.25
+			martial = 8
+		}
+		modifier = {
+			factor = 1.25
+			martial = 10
+		}
+		modifier = {
+			factor = 1.25
+			martial = 12
+		}
+		modifier = {
+			factor = 1.25
+			martial = 14
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 1 }
+		}
+		modifier = {
+			factor = 2
+			trait = craven
+		}
+		modifier = {
+			factor = 0.5
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+			trait = wounded
+		}
+	}
+	
+	immediate = {
+		clr_character_flag = attending_tailteann
+	}
+
+	option = {
+		name = celtic.1231.a
+		add_trait = maimed
+		hidden_tooltip = {
+			if = {
+				limit = {
+					top_liege = {
+						NOT = {
+							character = ROOT
+						}
+					}
+				}
+				top_liege = { character_event = { id = celtic.1222 } }
+			}
+		}
+	}
+}
+
+# Character is wounded
+character_event = {
+	id = celtic.1232
+	desc = celtic.1232.desc
+	picture = GFX_evt_melee
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = { has_character_flag = attending_tailteann_event }
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		NOT = {
+			trait = wounded
+		}
+		NOT = {
+			trait = maimed
+		}
+		top_liege = {
+			has_character_flag = tailteann_game_phase
+			NOT = {
+				has_character_flag = tailteann_has_ended
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 500
+		modifier = {
+			factor = 1.25
+			martial = 8
+		}
+		modifier = {
+			factor = 1.25
+			martial = 10
+		}
+		modifier = {
+			factor = 1.25
+			martial = 12
+		}
+		modifier = {
+			factor = 1.25
+			martial = 14
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 1 }
+		}
+		modifier = {
+			factor = 2
+			trait = craven
+		}
+		modifier = {
+			factor = 0.5
+			trait = brave
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+	
+	option = {
+		name = celtic.1232.a
+		add_trait = wounded
+		hidden_tooltip = {
+			if = {
+				limit = {
+					top_liege = {
+						NOT = {
+							character = ROOT
+						}
+					}
+				}
+				top_liege = { character_event = { id = celtic.1223 } }
+			}
+		}
+	}
+}	
+
+# Character becomes craven
+character_event = {
+	id = celtic.1233
+	desc = celtic.1233.desc
+	picture = GFX_evt_melee
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = { has_character_flag = attending_tailteann_event }
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		NOT = {
+			trait = craven
+		}
+		top_liege = {
+			has_character_flag = tailteann_game_phase
+			NOT = {
+				has_character_flag = tailteann_has_ended
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 250
+		modifier = {
+			factor = 1.25
+			martial = 8
+		}
+		modifier = {
+			factor = 1.25
+			martial = 10
+		}
+		modifier = {
+			factor = 1.25
+			martial = 12
+		}
+		modifier = {
+			factor = 1.25
+			martial = 14
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 1 }
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+	
+	option = {
+		name = celtic.1233.a
+		add_trait = craven
+	}
+}
+
+# Character becomes brave
+character_event = {
+	id = celtic.1234
+	desc = celtic.1234.desc
+	picture = GFX_evt_melee
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+		
+	trigger = {
+		NOT = { has_character_flag = attending_tailteann_event }
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		NOT = {
+			trait = brave
+		}
+		top_liege = {
+			has_character_flag = tailteann_game_phase
+			NOT = {
+				has_character_flag = tailteann_has_ended
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 250
+		modifier = {
+			factor = 0.75
+			martial = 8
+		}
+		modifier = {
+			factor = 0.75
+			martial = 10
+		}
+		modifier = {
+			factor = 0.75
+			martial = 12
+		}
+		modifier = {
+			factor = 0.75
+			martial = 14
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 1 }
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}	
+
+	option = {
+		name = celtic.1234.a
+		add_trait = brave
+	}
+}
+
+# Character becomes tough soldier
+character_event = {
+	id = celtic.1235
+	desc = celtic.1235.desc
+	picture = GFX_evt_athlete
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = { has_character_flag = attending_tailteann_event }
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		trait = misguided_warrior
+		top_liege = {
+			has_character_flag = tailteann_game_phase
+			NOT = {
+				has_character_flag = tailteann_has_ended
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+		modifier = {
+			factor = 0.75
+			martial = 8
+		}
+		modifier = {
+			factor = 0.75
+			martial = 10
+		}
+		modifier = {
+			factor = 0.75
+			martial = 12
+		}
+		modifier = {
+			factor = 0.75
+			martial = 14
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 1 }
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+
+	option = {
+		name = celtic.1235.a
+		remove_trait = misguided_warrior
+		add_trait = tough_soldier 
+	}
+}
+
+# Character becomes skilled tactician
+character_event = {
+	id = celtic.1236
+	desc = celtic.1236.desc
+	picture = GFX_evt_athlete
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = { has_character_flag = attending_tailteann_event }
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		trait = tough_soldier 
+		top_liege = {
+			has_character_flag = tailteann_game_phase
+			NOT = {
+				has_character_flag = tailteann_has_ended
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 250
+		modifier = {
+			factor = 0.75
+			martial = 8
+		}
+		modifier = {
+			factor = 0.75
+			martial = 10
+		}
+		modifier = {
+			factor = 0.75
+			martial = 12
+		}
+		modifier = {
+			factor = 0.75
+			martial = 14
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 1 }
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+
+	option = {
+		name = celtic.1236.a
+		remove_trait = tough_soldier 
+		add_trait = skilled_tactician 
+	}
+}
+
+# Character becomes brilliant strategist
+character_event = {
+	id = celtic.1237
+	desc = celtic.1237.desc
+	picture = GFX_evt_athlete
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = { has_character_flag = attending_tailteann_event }
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		trait = skilled_tactician 
+		top_liege = {
+			has_character_flag = tailteann_game_phase
+			NOT = {
+				has_character_flag = tailteann_has_ended
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 250
+		modifier = {
+			factor = 0.75
+			martial = 8
+		}
+		modifier = {
+			factor = 0.75
+			martial = 10
+		}
+		modifier = {
+			factor = 0.75
+			martial = 12
+		}
+		modifier = {
+			factor = 0.75
+			martial = 14
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			NOT = { martial = 1 }
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+
+	option = {
+		name = celtic.1237.a
+		remove_trait = skilled_tactician 
+		add_trait = brilliant_strategist 
+	}
+}
+
+# Character becomes skilled tactician
+character_event = {
+	id = celtic.1238
+	desc = celtic.1238.desc
+	picture = GFX_evt_athlete
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = { has_character_flag = attending_tailteann_event }
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		trait = brilliant_strategist 
+		top_liege = {
+			has_character_flag = tailteann_game_phase
+			NOT = {
+				has_character_flag = tailteann_has_ended
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 250
+		modifier = {
+			factor = 1.25
+			martial = 8
+		}
+		modifier = {
+			factor = 1.25
+			martial = 10
+		}
+		modifier = {
+			factor = 1.25
+			martial = 12
+		}
+		modifier = {
+			factor = 1.25
+			martial = 14
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 1 }
+		}
+	}
+	
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+
+	option = {
+		name = celtic.1238.a
+		remove_trait = brilliant_strategist
+		add_trait = skilled_tactician  
+	}
+}
+
+# Character becomes tough soldier
+character_event = {
+	id = celtic.1239
+	desc = celtic.1239.desc
+	picture = GFX_evt_athlete
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = { has_character_flag = attending_tailteann_event }
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		trait = skilled_tactician 
+		top_liege = {
+			has_character_flag = tailteann_game_phase
+			NOT = {
+				has_character_flag = tailteann_has_ended
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 250
+		modifier = {
+			factor = 1.25
+			martial = 8
+		}
+		modifier = {
+			factor = 1.25
+			martial = 10
+		}
+		modifier = {
+			factor = 1.25
+			martial = 12
+		}
+		modifier = {
+			factor = 1.25
+			martial = 14
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 1 }
+		}
+	}
+	
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+
+	option = {
+		name = celtic.1239.a
+		remove_trait = skilled_tactician
+		add_trait = tough_soldier
+	}
+}
+
+# Character becomes misguided warrior
+character_event = {
+	id = celtic.1240
+	desc = celtic.1240.desc
+	picture = GFX_evt_athlete
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = { has_character_flag = attending_tailteann_event }
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		trait = tough_soldier
+		top_liege = {
+			has_character_flag = tailteann_game_phase
+			NOT = {
+				has_character_flag = tailteann_has_ended
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 250
+		modifier = {
+			factor = 1.25
+			martial = 8
+		}
+		modifier = {
+			factor = 1.25
+			martial = 10
+		}
+		modifier = {
+			factor = 1.25
+			martial = 12
+		}
+		modifier = {
+			factor = 1.25
+			martial = 14
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 7 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { martial = 1 }
+		}
+	}
+	
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+
+	option = {
+		name = celtic.1240.a
+		remove_trait = tough_soldier
+		add_trait = misguided_warrior
+	}
+}
+
+# Character becomes homosexual
+character_event = {
+	id = celtic.1241
+	desc = celtic.1241.desc
+	picture = GFX_evt_shadowy_cabal
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		NOT = { has_character_flag = attending_tailteann_event }
+		NOT = {
+			trait = homosexual
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 800
+		modifier = {
+			factor = 0.9
+			trait = drunkard
+		}
+		modifier = {
+			factor = 0.9
+			trait = excommunicated
+		}
+		modifier = {
+			factor = 0.9
+			trait = ugly
+		}
+		modifier = {
+			factor = 1.5
+			trait = fair
+		}
+		modifier = {
+			factor = 0.9
+			trait = celibate
+		}
+		modifier = {
+			factor = 0.9
+			trait = hedonist
+		}
+		modifier = {
+			factor = 0.5
+			trait = impaler
+		}
+		modifier = {
+			factor = 1.5
+			trait = lustful
+		}
+		modifier = {
+			factor = 0.9
+			trait = chaste
+		}
+		modifier = {
+			factor = 3
+			trait = zealous
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+	
+	option = {
+		name = celtic.1241.a
+		add_trait = homosexual
+	}
+}
+
+# Character becomes syphilitic
+character_event = {
+	id = celtic.1242
+	desc = celtic.1242.desc
+	picture = GFX_evt_lovers
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		NOT = { has_character_flag = attending_tailteann_event }
+		NOT = {
+			trait = syphilitic
+			trait = celibate
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 800
+		modifier = {
+			factor = 1.5
+			trait = ugly
+		}
+		modifier = {
+			factor = 0.9
+			trait = fair
+		}
+		modifier = {
+			factor = 0.9
+			trait = hedonist
+		}
+		modifier = {
+			factor = 0.5
+			trait = impaler
+		}
+		modifier = {
+			factor = 0.9
+			trait = lustful
+		}
+		modifier = {
+			factor = 2
+			trait = chaste
+		}
+		modifier = {
+			factor = 3
+			trait = zealous
+		}
+	}
+	
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+
+	option = {
+		name = celtic.1242.a
+		add_trait = syphilitic
+	}
+}
+
+# Character becomes drunkard
+character_event = {
+	id = celtic.1243
+	desc = celtic.1243.desc
+	picture = GFX_evt_drunk
+	
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		NOT = { has_character_flag = attending_tailteann_event }
+		NOT = {
+			trait = drunkard
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 500
+		modifier = {
+			factor = 0.5
+			trait = depressed
+		}
+		modifier = {
+			factor = 1.5
+			is_strong_trigger = yes
+		}
+		modifier = {
+			factor = 0.9
+			trait = dwarf
+		}
+		modifier = {
+			factor = 0.9
+			trait = gluttonous
+		}
+		modifier = {
+			factor = 0.9
+			trait = lustful
+		}
+		modifier = {
+			factor = 3
+			trait = temperate
+		}
+		modifier = {
+			factor = 0.9
+			trait = greedy
+		}
+	}
+	
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+
+	option = {
+		name = celtic.1243.a
+		add_trait = drunkard
+	}
+}
+
+# Character becomes duelist
+character_event = {
+	id = celtic.1244
+	desc = celtic.1244.desc
+	picture = GFX_evt_melee
+	
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		NOT = { has_character_flag = attending_tailteann_event }
+		NOT = {
+			lifestyle_traits = 1
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 500
+		modifier = {
+			factor = 0.9
+			trait = wroth
+		}
+		modifier = {
+			factor = 1.5
+			trait = kind
+		}
+		modifier = {
+			factor = 0.9
+			trait = proud
+		}
+		modifier = {
+			factor = 1.5
+			trait = humble
+		}
+		modifier = {
+			factor = 1.5
+			trait = craven
+		}
+		modifier = {
+			factor = 0.9
+			trait = brave
+		}
+		modifier = {
+			factor = 1.5
+			trait = just
+		}
+		modifier = {
+			factor = 0.9
+			trait = cruel
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+	
+	option = {
+		name = celtic.1244.a
+		add_trait = duelist
+	}
+}
+
+# Character gains diplomacy
+character_event = {
+	id = celtic.1245
+	desc = celtic.1245.desc
+	picture = GFX_evt_whispers
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		NOT = { has_character_flag = attending_tailteann_event }
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+		modifier = {
+			factor = 0.8
+			trait = elusive_shadow
+		}
+		modifier = {
+			factor = 0.9
+			trait = intricate_webweaver
+		}
+		modifier = {
+			factor = 1.1
+			trait = flamboyant_schemer
+		}
+		modifier = {
+			factor = 1.5
+			trait = amateurish_plotter
+		}
+		modifier = {
+			factor = 1.5
+			NOT = {
+				OR = {
+					trait = elusive_shadow
+					trait = intricate_webweaver
+					trait = flamboyant_schemer
+					trait = amateurish_plotter
+				}
+			}
+		}
+		modifier = {
+			factor = 0.9
+			trait = deceitful
+		}
+		modifier = {
+			factor = 1.5
+			trait = honest
+		}
+		modifier = {
+			factor = 4
+			martial = 10
+		}
+		modifier = {
+			factor = 0.8
+			NOT = {
+				martial = 5
+			}
+		}
+	}
+	
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+
+	option = {
+		name = celtic.1245.a
+		change_diplomacy = 1
+	}
+}
+
+# Character loses diplomacy
+character_event = {
+	id = celtic.1246
+	desc = celtic.1246.desc
+	picture = GFX_evt_whispers
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		NOT = { has_character_flag = attending_tailteann_event }
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+		modifier = {
+			factor = 1.5
+			trait = elusive_shadow
+		}
+		modifier = {
+			factor = 1.1
+			trait = intricate_webweaver
+		}
+		modifier = {
+			factor = 0.9
+			trait = flamboyant_schemer
+		}
+		modifier = {
+			factor = 0.8
+			trait = amateurish_plotter
+		}
+		modifier = {
+			factor = 1.5
+			NOT = {
+				OR = {
+					trait = elusive_shadow
+					trait = intricate_webweaver
+					trait = flamboyant_schemer
+					trait = amateurish_plotter
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			trait = deceitful
+		}
+		modifier = {
+			factor = 0.9
+			trait = honest
+		}
+		modifier = {
+			factor = 4
+			martial = 10
+		}
+		modifier = {
+			factor = 0.8
+			NOT = {
+				martial = 5
+			}
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+	
+	option = {
+		name = celtic.1246.a
+		change_diplomacy = -1
+	}
+}
+
+# Character gains stewardship
+character_event = {
+	id = celtic.1247
+	desc = celtic.1247.desc
+	picture = GFX_evt_market
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		NOT = { has_character_flag = attending_tailteann_event }
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+		modifier = {
+			factor = 0.8
+			trait = midas_touched
+		}
+		modifier = {
+			factor = 0.9
+			trait = fortune_builder
+		}
+		modifier = {
+			factor = 1.1
+			trait = thrifty_clerk 
+		}
+		modifier = {
+			factor = 1.5
+			trait = indulgent_wastrel
+		}
+		modifier = {
+			factor = 1.5
+			NOT = {
+				OR = {
+					trait = midas_touched 
+					trait = fortune_builder
+					trait = thrifty_clerk 
+					trait = indulgent_wastrel
+				}
+			}
+		}
+		modifier = {
+			factor = 0.9
+			trait = diligent 
+		}
+		modifier = {
+			factor = 1.5
+			trait = slothful
+		}
+		modifier = {
+			factor = 4
+			martial = 10
+		}
+		modifier = {
+			factor = 0.8
+			NOT = {
+				martial = 5
+			}
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+	
+	option = {
+		name = celtic.1247.a
+		change_stewardship = 1
+	}
+}
+
+# Character loses stewardship
+character_event = {
+	id = celtic.1248
+	desc = celtic.1248.desc
+	picture = GFX_evt_market
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		NOT = { has_character_flag = attending_tailteann_event }
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+		modifier = {
+			factor = 1.5
+			trait = midas_touched 
+		}
+		modifier = {
+			factor = 1.1
+			trait = fortune_builder
+		}
+		modifier = {
+			factor = 0.9
+			trait = thrifty_clerk 
+		}
+		modifier = {
+			factor = 0.8
+			trait = indulgent_wastrel
+		}
+		modifier = {
+			factor = 1.5
+			NOT = {
+				OR = {
+					trait = midas_touched
+					trait = fortune_builder
+					trait = thrifty_clerk 
+					trait = indulgent_wastrel
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			trait = diligent 
+		}
+		modifier = {
+			factor = 0.9
+			trait = slothful
+		}
+		modifier = {
+			factor = 4
+			martial = 10
+		}
+		modifier = {
+			factor = 0.8
+			NOT = {
+				martial = 5
+			}
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+	
+	option = {
+		name = celtic.1248.a
+		change_stewardship = -1
+	}
+}
+
+# Character gains diplomacy
+character_event = {
+	id = celtic.1249
+	desc = celtic.1249.desc
+	picture = GFX_evt_council
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		NOT = { has_character_flag = attending_tailteann_event }
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+		modifier = {
+			factor = 0.8
+			trait = grey_eminence 
+		}
+		modifier = {
+			factor = 0.9
+			trait = charismatic_negotiator
+		}
+		modifier = {
+			factor = 1.1
+			trait = underhanded_rogue
+		}
+		modifier = {
+			factor = 1.5
+			trait = naive_appeaser
+		}
+		modifier = {
+			factor = 1.5
+			NOT = {
+				OR = {
+					trait = grey_eminence 
+					trait = charismatic_negotiator
+					trait = underhanded_rogue
+					trait = naive_appeaser
+				}
+			}
+		}
+		modifier = {
+			factor = 0.9
+			trait = gregarious
+		}
+		modifier = {
+			factor = 1.5
+			trait = shy
+		}
+		modifier = {
+			factor = 4
+			martial = 10
+		}
+		modifier = {
+			factor = 0.8
+			NOT = {
+				martial = 5
+			}
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+	
+	option = {
+		name = celtic.1249.a
+		change_diplomacy = 1
+	}
+}
+
+# Character loses diplomacy
+character_event = {
+	id = celtic.1250
+	desc = celtic.1250.desc
+	picture = GFX_evt_council
+
+	min_age = 16
+	only_men = yes
+	capable_only = yes
+	prisoner = no
+	has_character_flag = attending_tailteann
+	
+	trigger = {
+		NOT = {
+			has_character_flag = tailteann_has_ended
+		}
+		NOT = { has_character_flag = attending_tailteann_event }
+	}
+	
+	mean_time_to_happen = {
+		months = 250
+		modifier = {
+			factor = 1.5
+			trait = grey_eminence 
+		}
+		modifier = {
+			factor = 1.1
+			trait = charismatic_negotiator
+		}
+		modifier = {
+			factor = 0.9
+			trait = underhanded_rogue
+		}
+		modifier = {
+			factor = 0.8
+			trait = naive_appeaser
+		}
+		modifier = {
+			factor = 1.5
+			NOT = {
+				OR = {
+					trait = grey_eminence 
+					trait = charismatic_negotiator
+					trait = underhanded_rogue
+					trait = naive_appeaser
+				}
+			}
+		}
+		modifier = {
+			factor = 1.5
+			trait = gregarious
+		}
+		modifier = {
+			factor = 0.9
+			trait = shy
+		}
+		modifier = {
+			factor = 4
+			martial = 10
+		}
+		modifier = {
+			factor = 0.8
+			NOT = {
+				martial = 5
+			}
+		}
+	}
+
+	immediate = {
+		set_character_flag = attending_tailteann_event
+	}
+	
+	option = {
+		name = celtic.1250.a
+		change_diplomacy = -1
+	}
+}
+
+#  Game Phase
+character_event = {
+	id = celtic.1251
+	desc = celtic.1251.desc
+	picture = GFX_evt_athlete
+	
+	is_triggered_only = yes
+
+	option = {
+		name = celtic.1211.a
+	}
+}
