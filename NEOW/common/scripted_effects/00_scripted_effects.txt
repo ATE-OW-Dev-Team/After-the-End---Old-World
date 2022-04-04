@@ -3977,6 +3977,15 @@ add_crusade_trait_effect = {
 		add_trait = ukkos_shield
 	}
 	else_if = {
+		limit = {
+			OR = {
+				religion = tengri_pagan
+				religion = tengri_pagan_reformed
+			}
+		}
+		add_trait = tengri_warrior
+	}
+	else_if = {
 		limit = { religion_openly_baltic_or_reformed_trigger = yes }
 		add_trait = romuvas_own
 	}
@@ -5061,6 +5070,10 @@ join_prev_warrior_lodge_society_effect = {
 		join_society = warrior_lodge_esoteric
 	}
 	if = {
+		limit = { PREV = { society_member_of = warrior_lodge_tengri } }
+		join_society = warrior_lodge_tengri
+	}
+	if = {
 		limit = { PREV = { society_member_of = warrior_lodge_khanist } }
 		join_society = warrior_lodge_khanist
 	}
@@ -5159,6 +5172,20 @@ give_this_warrior_lodge_religion_effect = { #Mostly for spawned characters.
 			society_member_of = warrior_lodge_ironist
 		}
 		religion = ironist
+	}
+	if = {
+		limit = { 
+			society_member_of = warrior_lodge_tengri 
+			NOT = { has_global_flag = tengri_reformation }
+		}
+		religion = tengri_pagan
+	}
+	if = {
+		limit = { 
+			society_member_of = warrior_lodge_tengri 
+			has_global_flag = tengri_reformation
+		}
+		religion = tengri_pagan_reformed
 	}
 	if = {
 		limit = { 
@@ -19431,6 +19458,9 @@ select_and_save_fellow_society_member_effect = { #[Runs for ROOT]
 add_warrior_lodge_leader_trait_effect = {
 	trigger_switch = {
 		on_trigger = society_member_of
+		warrior_lodge_tengri = {
+			add_trait = tengri_leader
+		}
 		warrior_lodge_baltic = {
 			add_trait = baltic_leader
 		}
