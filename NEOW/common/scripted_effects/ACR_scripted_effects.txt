@@ -1,17 +1,17 @@
-clear_unbinding_effect = {
-	clr_character_flag = unbinding_cheap_open
-	clr_character_flag = unbinding_middle_open
-	clr_character_flag = unbinding_grand_open
-	clr_character_flag = unbinding_cheap_festivities
-	clr_character_flag = unbinding_middle_festivities
-	clr_character_flag = unbinding_grand_festivities
-	clr_character_flag = unbinding_festival_open
-	clr_character_flag = festival_event_happened
-	clr_character_flag = ancrel_remove_firedancers
-	clr_character_flag = unbinding_festival
-	clr_character_flag = do_not_disturb
-	remove_character_modifier = holding_unbinding_festival
-}
+#clear_unbinding_effect = {
+#	clr_character_flag = unbinding_cheap_open
+#	clr_character_flag = unbinding_middle_open
+#	clr_character_flag = unbinding_grand_open
+#	clr_character_flag = unbinding_cheap_festivities
+#	clr_character_flag = unbinding_middle_festivities
+#	clr_character_flag = unbinding_grand_festivities
+#	clr_character_flag = unbinding_festival_open
+#	clr_character_flag = festival_event_happened
+#	clr_character_flag = ancrel_remove_firedancers
+#	clr_character_flag = unbinding_festival
+#	clr_character_flag = do_not_disturb
+#	remove_character_modifier = holding_unbinding_festival
+#}
 
 create_diplomacy_mystic_effect = {
 	random_list = {
@@ -21,8 +21,8 @@ create_diplomacy_mystic_effect = {
 				name = "Idunn"
 				dna = chaehghfacw
 				dynasty = none
-				religion = norse_pagan
-				culture = norse
+				religion = vagarna
+				culture = skanian
 				female = yes
 				age = 17
 				health = 15
@@ -57,7 +57,7 @@ create_diplomacy_mystic_effect = {
 		}
 	}
 	new_character = {
-		set_character_flag = eternal_life_mystic 
+		set_character_flag = eternal_life_mystic
 
 		will_not_marry_effect = yes
 
@@ -111,8 +111,8 @@ create_martial_mystic_effect = {
 			create_character = {
 				random_traits = no
 				dynasty = none
-				religion = west_african_pagan
-				culture = manden
+				religion = novelist
+				culture = french
 				female = yes
 				age = 36
 				health = 15
@@ -131,7 +131,7 @@ create_martial_mystic_effect = {
 				random_traits = no
 				dynasty = none
 				religion = celtic_pagan
-				culture = gaulish
+				culture = high_irish
 				female = no
 				age = 36
 				health = 15
@@ -229,7 +229,7 @@ create_intrigue_mystic_effect = {
 			create_character = {
 				random_traits = no
 				dynasty = none
-				religion = hurufi
+				religion = mesopotamian
 				culture = bedouin_arabic
 				female = yes
 				age = 72
@@ -250,8 +250,8 @@ create_intrigue_mystic_effect = {
 				name = "Cleopatra"
 				random_traits = no
 				dynasty = none
-				religion = egyptian_pagan
-				culture = egyptian_coptic
+				religion = hellenic_pagan
+				culture = coptic
 				female = yes
 				age = 34
 				health = 15
@@ -319,14 +319,13 @@ create_learning_mystic_effect = {
 			create_character = {
 				random_traits = no
 				dynasty = none
-				religion = buddhist
+				religion = theravada
 				culture = sinhala
 				female = yes
 				age = 9
 				health = 15
 				trait = mystic
 				trait = brahmin
-				trait = theravada_buddhist
 				trait = quick
 				trait = fussy
 				trait = conscientious
@@ -337,14 +336,14 @@ create_learning_mystic_effect = {
 				random_traits = no
 				name = "Seneca"
 				dynasty = none
-				religion = promethean_pagan
+				religion = hellenic_pagan
 				culture = roman
 				female = no
 				age = 72
 				health = 15
 				trait = mystic
 				trait = genius
-				trait = stoic
+				#trait = stoic
 				trait = mastermind_theologian
 				trait = chaste
 				trait = diligent
@@ -364,7 +363,7 @@ create_learning_mystic_effect = {
 				trait = genius
 				trait = mastermind_theologian
 				trait = fair
-				trait = stoic
+				#trait = stoic
 				trait = diligent
 				trait = proud
 			}
@@ -377,14 +376,11 @@ create_learning_mystic_effect = {
 
 		remove_trait = kshatriya
 		remove_trait = vaishya
-		remove_trait = vajrayana_buddhist
-		remove_trait = mahayana_buddhist
 
 		trigger_switch = {
 			on_trigger = religion
-			promethean_pagan = { give_nickname = nick_the_younger set_character_flag = immortal_mystic_lucan }
 			hellenic_pagan = { give_nickname = nick_the_elder set_character_flag = immortal_mystic_seneca }
-			buddhist = { give_nickname = nick_the_gentle set_character_flag = immortal_mystic_achala }
+			buddhist_group = { give_nickname = nick_the_gentle set_character_flag = immortal_mystic_achala }
 		}
 		change_diplomacy = 2
 		change_stewardship = 2
@@ -763,10 +759,18 @@ prev_takes_this_head_as_trophy_effect = {
 	}
 	else_if = { # Charlemagne, post-HRE
 		limit = {
-			character = 6392
-			has_landed_title = e_hre
+			any_owned_bloodline = {
+				has_bloodline_flag = bloodline_charlemagne
+				founder = {
+					character = PREVPREV
+				}
+			}
 		}
 		PREV = { add_artifact = karl_skull2 }
+		new_artifact = {
+			set_name = karl_skull2
+			set_description = karl_skull2_desc
+		}
 	}
 	else_if = { # a religious head
 		limit = {
@@ -802,15 +806,14 @@ prev_takes_this_head_as_trophy_effect = {
 			set_description = roman_head_desc
 		}
 	}
-	else_if = { # William the Conqueror, so long as he's a king
+	else_if = { # britannian emperor
 		limit = {
-			character = 140
-			higher_real_tier_than = DUKE
+			has_landed_title = e_britannia
 		}
-		PREV = { add_artifact = williams_skull }
+		PREV = { add_artifact = britannian_skull }
 		new_artifact = {
-			set_name = williams_head_name
-			set_description = williams_head_desc
+			set_name = britannian_head_name
+			set_description = britannian_head_desc
 		}
 	}
 	else_if = { # super famous, Exalted
