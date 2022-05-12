@@ -14256,6 +14256,15 @@ character_event = {
 					} 
 				} 
 			}
+			AND =  { 
+				has_landed_title = e_siam 
+				any_artifact = { artifact_type = crown_siam }
+				e_siam = { 
+					current_heir = { 
+						NOT = { dynasty = ROOT }
+					} 
+				} 
+			}
 		}
 	}
 
@@ -14500,6 +14509,21 @@ character_event = {
 			}
 			current_heir = { character_event = { id = HF.20407 days = 1 } }
 		}
+		if = { 
+			limit = { 
+				has_landed_title = e_siam
+				any_artifact = { artifact_type = crown_siam }
+			}
+			e_siam = { 
+				current_heir = { save_event_target_as = worthy_crown_siam }
+			}
+			player_heir = { save_event_target_as = unworthy_crown_siam }
+			any_artifact = { 
+				limit = { artifact_type = crown_siam }
+				save_event_target_as = inheriting_artifact_crown_siam
+			}
+			current_heir = { character_event = { id = HF.20407 days = 1 } }
+		}
 	}
 }
 #Ping to prevent crown duplication.
@@ -14606,6 +14630,12 @@ character_event = {
 				to = event_target:worthy_crown_britannia
  			} 
  		} 
+		event_target:inheriting_artifact_crown_siam = {
+			transfer_artifact = {
+				from = event_target:unworthy_crown_siam
+				to = event_target:worthy_crown_siam
+ 			} 
+ 		}
 	}
 }
 
@@ -15562,6 +15592,10 @@ character_event = {
 				FROM = { title = e_britannia } 
 				FROMFROM = { any_artifact = { artifact_type = crown_britannia } } 
 			}
+			AND = {
+				FROM = { title = e_siam } 
+				FROMFROM = { any_artifact = { artifact_type = crown_siam } } 
+			}
 		}
 	}
 
@@ -15605,6 +15639,18 @@ character_event = {
 				}
 			}
 		}
+		if = {
+			limit = {
+				FROM = { title = e_siam } 
+				FROMFROM = { any_artifact = { artifact_type = crown_siam } } 
+			} 
+			FROMFROM = { 
+				any_artifact = { 
+					limit = { artifact_type = crown_siam }
+					save_event_target_as = inheriting_artifact_4
+				}
+			}
+		}
 
 		event_target:inheriting_artifact_1 = {
 			transfer_artifact = {
@@ -15619,6 +15665,12 @@ character_event = {
  			} 
  		} 
 		event_target:inheriting_artifact_3 = {
+			transfer_artifact = {
+				from = FROMFROM
+				to = ROOT
+ 			} 
+ 		}
+		event_target:inheriting_artifact_4 = {
 			transfer_artifact = {
 				from = FROMFROM
 				to = ROOT
@@ -15649,6 +15701,10 @@ character_event = {
 				has_landed_title = e_britannia
 				any_artifact = { artifact_type = crown_britannia }
 			}
+			AND =  { 
+				has_landed_title = e_siam
+				any_artifact = { artifact_type = crown_siam }
+			}
 		}
 	}
 	
@@ -15673,6 +15729,13 @@ character_event = {
 				any_artifact = { artifact_type = crown_britannia }
 			}
 			add_trait = dead_crown_britannia
+		}
+		if =  { 
+			limit =  { 
+				has_landed_title = e_siam 
+				any_artifact = { artifact_type = crown_siam }
+			}
+			add_trait = dead_crown_siam
 		}
 	}
 }
