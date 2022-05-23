@@ -752,7 +752,7 @@ NDiplomacy = {
 	LANDED_GREAT_GRAND_PARENT_PRESTIGE_BONUS = 2,				-- For religions with landed win prestige bonus. Is multiplied with the percentage of how many of your realm they own.
 	LANDED_COUSIN_PRESTIGE_BONUS = 3,							-- For religions with landed win prestige bonus. Is multiplied with the percentage of how many of your realm they own.
 
-	BANISH_TAKE_WEALTH_PERCENTAGE_LANDED = 0.5,
+	BANISH_TAKE_WEALTH_PERCENTAGE_LANDED = 0,
 	BANISH_TAKE_WEALTH_PERCENTAGE_COURTIER = 1,
 	BANISH_REALM_SIZE_CHANCE_RATIO_MODIFIER = 2,
 
@@ -876,7 +876,7 @@ NCharacter = {
 	DYNASTY_CONTROLS_HOLY_ORDER_PIETY = 1,			-- Monthly Piety from a dynasty member as head of a Holy Order (only for counts+ and if the same religion)
 	DYNASTY_CONTROLS_RELIGIOUS_HEAD_PRESTIGE = 2,	-- Monthly Prestige from a dynasty member as head of a religion (only for counts+ and if the same religion)
 	DYNASTY_CONTROLS_RELIGIOUS_HEAD_PIETY = 1,		-- Monthly Piety from a dynasty member as head of a religion (only for counts+ and if the same religion)
-	NATURAL_DEATH_CHANCE_AGE_0 = 10,					-- Natural deaths per decade out of 10000 people: Age 0-9
+	NATURAL_DEATH_CHANCE_AGE_0 = 5,					-- Natural deaths per decade out of 10000 people: Age 0-9
 	NATURAL_DEATH_CHANCE_AGE_10 = 1,				-- Natural deaths per decade out of 10000 people: Age 10-19
 	NATURAL_DEATH_CHANCE_AGE_20 = 15,				-- Natural deaths per decade out of 10000 people: Age 20-29
 	NATURAL_DEATH_CHANCE_AGE_30 = 20,				-- Natural deaths per decade out of 10000 people: Age 30-39
@@ -888,10 +888,10 @@ NCharacter = {
 	NATURAL_DEATH_CHANCE_AGE_90 = 7000,				-- Natural deaths per decade out of 10000 people: Age 90-99
 	NATURAL_DEATH_CHANCE_AGE_100 = 9000,			-- Natural deaths per decade out of 10000 people: Age 100+
 	FERTILITY_BASE_MULT = 0.50,						-- Base fertility multiplier to adjust the base chance of impregnation
-	SECONDARY_SPOUSE_FERTILITY_MULT = 0.75,			-- Applied to fertility of secondary spouses and concubines
+	SECONDARY_SPOUSE_FERTILITY_MULT = 0.50,			-- Applied to fertility of secondary spouses and concubines
 	NOT_SPOUSE_FERTILITY_MULT = 0.50,				-- Applied to fertility when two lovers are not married
 	MARRIED_LOVERS_FERTILITY_MULT = 1.5,			-- Applied to fertility when lovers are married
-	INFANT_DEATH_CHANCE = 0.05,						-- Chance of stillbirth / death at birth
+	INFANT_DEATH_CHANCE = 0.0,						-- Chance of stillbirth / death at birth
 	EARLY_PORTRAIT_AND_UNIT_BEFORE_YEAR = 2550,		-- Before this date, early versions of Units and Portraits will be used if available
 	LATE_PORTRAIT_AND_UNIT_AFTER_YEAR = 2555,		-- After this date, late versions of Units and Portraits will be used if available
 	TRIBAL_EMPTY_HOLDING_LEVY_MULTIPLIER = 0.5,
@@ -1029,7 +1029,7 @@ NTitle = {
 	GAME_RULES_DEJURE_SHORTEST = 10,
 	GAME_RULES_DEJURE_SHORTEST_EMPIRE = 10,
 
-	ALLOW_DE_JURE_ASSIMILATION_ANYWHERE = 1,	-- If set to 0, will only assimilate duchy titles which contain the assimilating Kingdom's capital or border existing de jure land of that title
+	ALLOW_DE_JURE_ASSIMILATION_ANYWHERE = 0,	-- If set to 0, will only assimilate duchy titles which contain the assimilating Kingdom's capital or border existing de jure land of that title
 
 	REQ_DUCHIES_FOR_KINGDOM_CREATION = 1, 		-- Number of held duchies required to create a kingdom (for rulers who are not already kings or emperors)
 	REQ_KINGDOMS_FOR_EMPIRE_CREATION = 1, 		-- Number of held kingdoms required to create an Empire (for rulers who are not already emperors)
@@ -1037,8 +1037,8 @@ NTitle = {
 	BECOME_KING_TITLE_GOLD_CREATION_COST_MULT = 0.5,	-- The de-jure kingdom of your capital is cheaper to create with the become king ambition
 	BECOME_KING_TITLE_PIETY_CREATION_COST_MULT = 0.5,	-- The de-jure kingdom of your capital is cheaper to create with the become king ambition
 	ENFORCE_ONE_OF_EACH_HOLDING = 1,			-- Require players to build at least one City, Temple and Castle in each province
-	MAX_REPUBLIC_COUNTIES_IN_REALM = 0.1,		-- 10% of a feudal realm is allowed to be under vassal republics (affects title grants)
-	MAX_THEOCRACY_COUNTIES_IN_REALM = 0.1,		-- 10% of a feudal realm is allowed to be under vassal theocracies/bishoprics (affects title grants)
+	MAX_REPUBLIC_COUNTIES_IN_REALM = 0.15,		-- 15% of a feudal realm is allowed to be under vassal republics (affects title grants)
+	MAX_THEOCRACY_COUNTIES_IN_REALM = 0.15,		-- 15% of a feudal realm is allowed to be under vassal theocracies/bishoprics (affects title grants)
 	THEOCRACY_COUNTIES_CAN_BORDER = 1,			-- Can feudal lords create neighboring theocracy counties?
 	REPUBLIC_COUNTIES_CAN_BORDER = 1,				-- Can feudal lords create neighboring republic counties?
 	MIN_REVOKE_MONTHS_AFTER_GRANT = 12,			-- Months that must pass before you can revoke the title off someone you granted it to
@@ -1063,7 +1063,7 @@ NReligion = {
 	REFORM_RELIGION_PIETY_COST = 750,				-- Piety cost of reforming a pagan faith
 	AUTHORITY_FROM_HOLY_SITE = 0.1,					-- Authority from each holy site held
 	AUTHORITY_FROM_ANTIPOPE = -0.3,					-- Authority from each antipope
-	AUTHORITY_FROM_RELHEAD_PIETY = 0.06,			-- Authority from each 100 piety of religious head
+	AUTHORITY_FROM_RELHEAD_PIETY = 0.05,			-- Authority from each 100 piety of religious head
 	AUTHORITY_FROM_IMMORAL_HEAD = -0.12,				-- Authority from having an immoral religious head
 	AUTHORITY_FROM_RELHEAD_DIPLOMACY = 0.08,		-- Authority from each 10 diplomacy of religious head
 	AUTHORITY_FROM_RELHEAD_HOLY_SITE = 0.05,		-- Authority from religious head controlling a holy site (does not stack)
@@ -1426,7 +1426,7 @@ NMilitary = {
 
 	COMMAND_MODIFIER_MARTIAL_MULTIPLIER = 0.05,	  -- How much positive command modifiers are increased, and negative modifiers decreased (capped to 100% for negative), per point of martial
 
-	MAX_RIVER_MOVEMENT_FORT_LEVEL = 12.0,
+	MAX_RIVER_MOVEMENT_FORT_LEVEL = 10.0,
 	BOTTLENECK_SIZE_MODIFIER = 1.0,
 	BOTTLENECK_DEFENDER_MARTIAL_MODIFIER = 1.0,
 	BOTTLENECK_ATTACKER_MARTIAL_MODIFIER = 1.0,
@@ -1453,7 +1453,7 @@ NMilitary = {
 	DEATH_MORALE_DAMAGE = 2.5,					-- How much morale damage is done by a soldier dying
 
 	SHATTERED_RETREAT_ENABLED_COMBAT = 1,		-- Enables shattered retreat for combat if set to 1
-	SHATTERED_RETREAT_ENABLED_SIEGE = 1,		-- Enables shattered retreat for sieges if set to 1
+	SHATTERED_RETREAT_ENABLED_SIEGE = 0,		-- Enables shattered retreat for sieges if set to 1
 	SIMPLE_RETREAT_ENABLED_SIEGE = 0,			-- Enables simple retreat for sieges if set to 1
 	SHATTERED_RETREAT_HOSTILE_ATTRITION = 10,	-- Attrition taken when traversing hostile territory durring a shattered retreat (as a percentage)
 	SHATTERED_RETREAT_NEUTRAL_ATTRITION = 5,	-- Attrition taken when traversing neutral territory durring a shattered retreat (as a percentage)
@@ -1463,7 +1463,7 @@ NMilitary = {
 	SHATTERED_RETREAT_MORALE_MULTIPLIER = 1.5,	-- Multiplier of morale regain when shattered
 
 	SHATTERED_RETREAT_PREFERRED_PROVINCES = 4,				-- Units will try to move at least this many provinces away in shattered retreat
-	SHATTERED_RETREAT_MAX_PROVINCES = 8,					-- Units can not move longer than this many provinces during a shattered retreat
+	SHATTERED_RETREAT_MAX_PROVINCES = 10,					-- Units can not move longer than this many provinces during a shattered retreat
 	SHATTERED_RETREAT_DISTANCE_MULTIPLIER = -20,			-- Value added for each province away from the prefered distance (whether too close or too far)
 	SHATTERED_RETREAT_OWN_UNIT_MULTIPLIER = 0.1, 			-- Multiplier of own units in province when evaluating retreat provinces
 	SHATTERED_RETREAT_WAR_FRIEND_UNIT_MULTIPLIER = 0.025, 	-- Multiplier of war friend units in province when evaluating retreat provinces
@@ -1503,9 +1503,9 @@ NMilitary = {
 	CRUSADE_MINIMUM_CONTRIBUTION = 1000,					-- Participants who have contributed less than this to the war (via sieges, battles, etc., see the in-game war UI) do not receive anything from the Crusade pot
 	CRUSADE_MAX_POT_SHARE = 0.2,							-- It is not possible to receive more than this from the Crusade pot. If there's too few qualifying participants to distribute the full pot, any remainder goes to the Crusader King
 	CRUSADER_KING_POT_SHARE = 0.1,							-- The Crusader King gets this portion of the pot, plus any remainder
-	CRUSADER_KING_ARTIFACTS = 3,							-- The Crusader King gets this many artifacts
+	CRUSADER_KING_ARTIFACTS = 2,							-- The Crusader King gets this many artifacts
 	CRUSADERS_GET_EXTRA_ARTIFACTS = 2,						-- The top <NUM> participants get one extra artifact each
-	FORT_LEVEL_ASSAULT_THRESHOLD = 7						-- The besieging army cannot assault a Holding with a Fort level above this number (unless the Siege Assault Game Rule is 'unlimited')
+	FORT_LEVEL_ASSAULT_THRESHOLD = 6						-- The besieging army cannot assault a Holding with a Fort level above this number (unless the Siege Assault Game Rule is 'unlimited')
 },
 
 NTechnology = {
@@ -1578,9 +1578,9 @@ NGraphics = {
 
 NEngine = {
 	EVENT_PROCESS_OFFSET = 25, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
-	COURTIER_EVENT_PROCESS_OFFSET = 61, 	 -- Events are checked every X day for courtiers. Max value of 255
+	COURTIER_EVENT_PROCESS_OFFSET = 60, 	 -- Events are checked every X day for courtiers. Max value of 255
 	COURTIERS_MTTTH_EVENTS = 1,  -- Toggles if courtiers are allowed to run MTTH events or not
-	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_YEAR = 2555, -- The missing scripted successor error will not be shown before this date
+	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_YEAR = 1066, -- The missing scripted successor error will not be shown before this date
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_MONTH = 8,
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_DAY = 16,
 	COURT_PRUNE_SIZE = 10, 				-- Courts larger than this will be checked for pruning each month
