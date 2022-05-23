@@ -1453,7 +1453,7 @@ NMilitary = {
 	DEATH_MORALE_DAMAGE = 2.5,					-- How much morale damage is done by a soldier dying
 
 	SHATTERED_RETREAT_ENABLED_COMBAT = 1,		-- Enables shattered retreat for combat if set to 1
-	SHATTERED_RETREAT_ENABLED_SIEGE = 1,		-- Enables shattered retreat for sieges if set to 1
+	SHATTERED_RETREAT_ENABLED_SIEGE = 0,		-- Enables shattered retreat for sieges if set to 1
 	SIMPLE_RETREAT_ENABLED_SIEGE = 0,			-- Enables simple retreat for sieges if set to 1
 	SHATTERED_RETREAT_HOSTILE_ATTRITION = 10,	-- Attrition taken when traversing hostile territory durring a shattered retreat (as a percentage)
 	SHATTERED_RETREAT_NEUTRAL_ATTRITION = 5,	-- Attrition taken when traversing neutral territory durring a shattered retreat (as a percentage)
