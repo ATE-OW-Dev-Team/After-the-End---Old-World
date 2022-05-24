@@ -2326,7 +2326,172 @@ anti_british_rebellion = {
 		}
 	}
 }
+apayas_rebellion = {
+	name = APAYAS_REBELLION
+	war_name = WAR_NAME_REBELLION
+	sprite = 8
+	truce_days = 365
+	hostile_against_others = yes
+	is_permanent = no
+	is_independence = yes	
+	#check_de_jure_tier = KING
+	apply_short_occ_mod = no #No 'recently_conquered', they're taking back their own land
+	can_use = {
+		ROOT = {
+			OR = {
+				primary_title = { title = d_lanka }
+				primary_title = { title = d_sinhala }
+			}
+		}
+		FROM = { has_landed_title = k_lanka }
+		year = 2554
+		NOT = { year = 2557 }
+		is_save_game = no
+	}
+	is_valid = {
+		ROOT = {
+			OR = {
+				primary_title = { title = d_lanka }
+				primary_title = { title = d_sinhala }
+			}
+		}
+		OR = {
+		    FROM = { has_landed_title = k_lanka }
+		}
+	}
+	on_add = {
+		general_on_add_effect = yes
+	}
+	on_invalidation = {
+		ROOT = {
+			show_scope_change = no
+			if = {
+				limit = { FROM = { has_landed_title = k_lanka } }
+				set_defacto_liege = FROM
+			}
+		}
+	}
+	#We're skipping the thing that makes lose lose Grace with China if you declare on them or their Protectorates, since this is a specific CB that can literally never be used against them	
+	on_success = {#this is what happens to the character when he wins
+		ROOT = {
+			show_scope_change = no
+			participation_scaled_prestige = 500
+			participation_scaled_piety = 250
+			primary_title = {
+				show_scope_change = no
+				capital_scope = {
+					show_scope_change = no
+					kingdom = {
+						show_scope_change = no
+						ROOT = {
+							show_scope_change = no
+							usurp_title = { target = PREV type = revolt }
+							vassalize_or_take_under_title = {
+								title = PREV
+								enemy = FROM
+								type = revolt
+							}
+						}
+					}			
+				}
+				unsafe_destroy_landed_title = THIS
+				activate_title = { title = THIS status = no }
+			}
+		}
+		hidden_tooltip = {
+			any_attacker = {
+				limit = { NOT = { character = ROOT } }
+				participation_scaled_prestige = 500
+				participation_scaled_piety = 250
+			}
+		}
+		FROM = {
+			show_scope_change = no
+			participation_scaled_prestige = -500
+			participation_scaled_piety = -250
+		}
+		hidden_tooltip = {
+			any_defender = {
+				limit = { NOT = { character = FROM } }
+				participation_scaled_prestige = -500
+				participation_scaled_piety = -250
+			}
+		}
+	}
+	on_fail = {
+		ROOT = {
+			show_scope_change = no
+			participation_scaled_prestige = -250
+			participation_scaled_piety = -100
+			set_defacto_liege = FROM
+			primary_title = {
+				show_scope_change = no
+				unsafe_destroy_landed_title = THIS
+				activate_title = { title = THIS status = no }
+			}
+		}
+		hidden_tooltip = {
+			any_attacker = {
+				limit = { NOT = { character = ROOT } }
+				participation_scaled_prestige = -250
+				participation_scaled_piety = -100
+			}
+		}
+		FROM = {
+			show_scope_change = no
+			participation_scaled_prestige = 125
+			participation_scaled_piety = 50
+		}
+		hidden_tooltip = {
+			any_defender = {
+				limit = { NOT = { character = FROM } }
+				participation_scaled_prestige = 125
+				participation_scaled_piety = 50
+			}
+		}
 
+	}
+	on_reverse_demand = {#there's no on_fail because this war can't be white peaced out of
+		ROOT = {#Every attacker gets imprisoned if they fail
+			show_scope_change = no
+			participation_scaled_prestige = -500
+			participation_scaled_piety = -250
+			imprison = FROM
+			any_vassal = {
+				limit = {
+					higher_tier_than = BARON
+				}
+				show_scope_change = no
+				imprison = FROM
+			}
+			set_defacto_liege = FROM
+			primary_title = {
+				show_scope_change = no
+				unsafe_destroy_landed_title = THIS
+				activate_title = { title = THIS status = no }
+			}
+		}
+		hidden_tooltip = {
+			any_attacker = {
+				limit = { NOT = { character = ROOT } }
+				participation_scaled_prestige = -500
+				participation_scaled_piety = -250
+			}
+		}
+		FROM = {
+			show_scope_change = no
+			participation_scaled_prestige = 250
+			participation_scaled_piety = 100
+		}
+		hidden_tooltip = {
+			any_defender = {
+				limit = { NOT = { character = FROM } }
+				participation_scaled_prestige = 250
+				participation_scaled_piety = 100
+			}
+		}
+	}
+}
 tributary_corsair_cb = { # New8
 	name = CB_NAME_CORSAIR_TRIBUTARY
 	war_name = WAR_NAME_CORSAIR_TRIBUTARY
