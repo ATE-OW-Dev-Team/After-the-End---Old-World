@@ -1039,8 +1039,8 @@ NTitle = {
 	ENFORCE_ONE_OF_EACH_HOLDING = 1,			-- Require players to build at least one City, Temple and Castle in each province
 	MAX_REPUBLIC_COUNTIES_IN_REALM = 0.15,		-- 15% of a feudal realm is allowed to be under vassal republics (affects title grants)
 	MAX_THEOCRACY_COUNTIES_IN_REALM = 0.15,		-- 15% of a feudal realm is allowed to be under vassal theocracies/bishoprics (affects title grants)
-	THEOCRACY_COUNTIES_CAN_BORDER = 2,			-- Can feudal lords create neighboring theocracy counties?
-	REPUBLIC_COUNTIES_CAN_BORDER = 2,				-- Can feudal lords create neighboring republic counties?
+	THEOCRACY_COUNTIES_CAN_BORDER = 1,			-- Can feudal lords create neighboring theocracy counties?
+	REPUBLIC_COUNTIES_CAN_BORDER = 1,				-- Can feudal lords create neighboring republic counties?
 	MIN_REVOKE_MONTHS_AFTER_GRANT = 12,			-- Months that must pass before you can revoke the title off someone you granted it to
 	MILITARY_GOV_CREATE_KINGDOMS = 0,		-- If Mercenaries and holy orders are allowed to create kingdom titles
 
