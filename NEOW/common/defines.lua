@@ -1029,7 +1029,7 @@ NTitle = {
 	GAME_RULES_DEJURE_SHORTEST = 10,
 	GAME_RULES_DEJURE_SHORTEST_EMPIRE = 10,
 
-	ALLOW_DE_JURE_ASSIMILATION_ANYWHERE = 0,	-- If set to 0, will only assimilate duchy titles which contain the assimilating Kingdom's capital or border existing de jure land of that title
+	ALLOW_DE_JURE_ASSIMILATION_ANYWHERE = 1,	-- If set to 0, will only assimilate duchy titles which contain the assimilating Kingdom's capital or border existing de jure land of that title
 
 	REQ_DUCHIES_FOR_KINGDOM_CREATION = 1, 		-- Number of held duchies required to create a kingdom (for rulers who are not already kings or emperors)
 	REQ_KINGDOMS_FOR_EMPIRE_CREATION = 1, 		-- Number of held kingdoms required to create an Empire (for rulers who are not already emperors)
