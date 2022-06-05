@@ -1119,6 +1119,7 @@ decisions = {
 			form_kingdom_potential = yes
 			OR = {		###Must be Welsh
 				culture = old_welsh
+				has_landed_title = e_tirnanog
 			}
 			k_wales = {
 				is_titular = yes
@@ -1249,6 +1250,7 @@ decisions = {
 			form_kingdom_potential = yes
 			OR = {	
 				culture = cornish
+				has_landed_title = e_tirnanog
 			}
 			k_cornwall = {
 				is_titular = yes
@@ -1282,6 +1284,33 @@ decisions = {
 				d_cornwall = { de_jure_liege = k_cornwall }
 				d_hampshire = { de_jure_liege = k_cornwall }
 				d_somerset = { de_jure_liege = k_cornwall }
+				
+				k_britannia = {
+					destroy_landed_title = THIS
+				}
+				activate_title = {
+					title = k_britannia
+					status = no
+				}
+				d_northumberland = { de_jure_liege = k_england }
+				d_liverpool = { de_jure_liege = k_england }
+				d_york = { de_jure_liege = k_england }
+				d_lincoln = { de_jure_liege = k_england }
+				
+				d_hereford = { de_jure_liege = k_england }
+				d_bedford = { de_jure_liege = k_england }
+				d_norfolk = { de_jure_liege = k_england }
+				d_canterbury = { de_jure_liege = k_england }
+				
+				d_gloucester = { de_jure_liege = k_england }
+				d_channel_islands = { de_jure_liege = k_england }
+				
+				d_gwynedd = { de_jure_liege = k_wales }
+				d_powys = { de_jure_liege = k_wales }
+				d_gwent = { de_jure_liege = k_wales }
+				d_deheubarth = { de_jure_liege = k_wales }
+				
+				d_the_isles = { de_jure_liege = k_mann }
 			}
 		}
 		revoke_allowed = {
@@ -1691,7 +1720,7 @@ decisions = {
 		only_playable = yes
 		ai_check_interval = 24
 		potential = {
-			form_empire_potential = yes
+			form_kingdom_potential = yes
 			e_european_union = {
 				has_holder = no
 			}
@@ -1701,12 +1730,7 @@ decisions = {
 			NOR = {
 				religion = stalinist
 				religion = trotskyite
-				culture_group = brittannic
-				culture = westlander
-				culture = eastlander
-				culture = northlander
-				culture = old_norman
-				culture = ulsterite
+				religion = leninist
 			}
 			prisoner = no
 			has_regent = no
@@ -1724,11 +1748,7 @@ decisions = {
 				e_germany = { show_scope_change = no province_completely_controls_trigger = yes }
 				e_italy = { show_scope_change = no province_completely_controls_trigger = yes }
 				e_alps = { show_scope_change = no province_completely_controls_trigger = yes }
-				NOR = {
-					has_landed_title = e_britannia
-					has_landed_title = k_britannia
-					has_landed_title = k_england
-				}
+				e_britannia = { show_scope_change = no province_completely_controls_trigger = yes }
 		}
 
 		effect = {
@@ -1860,7 +1880,21 @@ decisions = {
 				    e_commonwealth = { destroy_landed_title = THIS }
 				    activate_title = { title = e_commonwealth status = no }
 			    }
-				k_brittany = { de_jure_liege = e_european_union }
+				e_britannia = {
+				    any_direct_de_jure_vassal_title = {
+					    de_jure_liege = e_european_union
+				    }
+			    }
+				if = {
+				    limit = {
+					    OR = {
+					    	has_landed_title = e_britannia
+						    e_britannia = { has_holder = no }
+					    }
+				    }
+				    e_britannia = { destroy_landed_title = THIS }
+				    activate_title = { title = e_britannia status = no }
+			    }
 				k_norway = { de_jure_liege = e_european_union }
 				k_byzantium = { de_jure_liege = e_european_union }
 				k_athos = { de_jure_liege = e_european_union }
@@ -1870,10 +1904,15 @@ decisions = {
 				k_sweden = { de_jure_liege = e_european_union }
 				k_finland = { de_jure_liege = e_european_union }
 				k_denmark = { de_jure_liege = e_european_union }
-				k_ireland = { de_jure_liege = e_european_union }
 				k_belarus = { de_jure_liege = e_european_union }
 				k_karelia = { de_jure_liege = e_european_union }
 				k_norway = { de_jure_liege = e_european_union }
+				
+				e_finland = {
+				    any_direct_de_jure_vassal_title = {
+					    de_jure_liege = e_european_union
+				    }
+			    }
 				if = {
 				    limit = {
 					    OR = {
