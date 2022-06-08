@@ -151,10 +151,10 @@ NDiplomacy = {
 	RETIRE_TO_MONASTERY_INTERACTION_ENABLED = 0,						-- Should this action be used at all?
 
 	DEMAND_RELIGIOUS_CONVERSION_INTERACTION_MONEY = 0,
-	DEMAND_RELIGIOUS_CONVERSION_INTERACTION_PIETY = 250,
+	DEMAND_RELIGIOUS_CONVERSION_INTERACTION_PIETY = 200,
 	DEMAND_RELIGIOUS_CONVERSION_INTERACTION_PRESTIGE = 0,
-	DEMAND_RELIGIOUS_CONVERSION_INTERACTION_THRESHOLD_FOR_NO = 30,
-	DEMAND_RELIGIOUS_CONVERSION_INTERACTION_THRESHOLD_FOR_YES = 35,
+	DEMAND_RELIGIOUS_CONVERSION_INTERACTION_THRESHOLD_FOR_NO = 25,
+	DEMAND_RELIGIOUS_CONVERSION_INTERACTION_THRESHOLD_FOR_YES = 25,
 	DEMAND_RELIGIOUS_CONVERSION_INTERACTION_MUST_HAVE_COST = 1,				-- Is having prestige/piety >= cost required for this action?
 	DEMAND_RELIGIOUS_CONVERSION_INTERACTION_ENABLED = 1,						-- Should this action be used at all?
 
@@ -607,7 +607,7 @@ NDiplomacy = {
 	FORM_ALLIANCE_INTERACTION_PIETY = 0,
 	FORM_ALLIANCE_INTERACTION_PRESTIGE = 250,
 	FORM_ALLIANCE_INTERACTION_THRESHOLD_FOR_NO = 15,
-	FORM_ALLIANCE_INTERACTION_THRESHOLD_FOR_YES = 20,
+	FORM_ALLIANCE_INTERACTION_THRESHOLD_FOR_YES = 15,
 	FORM_ALLIANCE_INTERACTION_MUST_HAVE_COST = 1,					-- Is having prestige/piety >= cost required for this action?
 	FORM_ALLIANCE_INTERACTION_ENABLED = 1,						-- Should this action be used at all?
 
@@ -1591,7 +1591,7 @@ NEngine = {
 NAI =
 {
 	INTERACTION_THRESHOLD_FOR_NO = 15,						-- Interactions with chance below this will always be declined
-	INTERACTION_THRESHOLD_FOR_YES = 35,						-- Interactions with chance above this will always be accepted
+	INTERACTION_THRESHOLD_FOR_YES = 25,						-- Interactions with chance above this will always be accepted
 	INTERACTION_MIN_DAYS_REJECTED = 365,					-- AI will remember a rejection at least this time
 	INTERACTION_DAYS_REJECTED_RANDOM = 730,					-- Max random extra days AI will reject offer
 	INTERACTION_OPINION_CHANGE_TO_DISCARD_REJECTION = 20,	-- AI will re-evaluate offers if opinion has changed by at least this amount, regardless of time left
