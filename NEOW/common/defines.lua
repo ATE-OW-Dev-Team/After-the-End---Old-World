@@ -90,7 +90,7 @@ NDiplomacy = {
 	MIN_PREP_INV_TARGET_HOLDINGS = 9,							-- The target must control at least this many holdings within the target kingdom to be a valid prepared invasion target
 	MAX_PREP_INV_TARGET_HOLDINGS = 50,							-- The target must control at the most this many holdings within the target kingdom to be a valid prepared invasion target
 	MAX_PREP_INV_ATTACKER_HOLDINGS = 50,						-- The attacker must have fewer Holdings than this in the realm (disallow Prepared Invasions for rulers who are already very powerful)
-	PREP_INV_REQ_PRESTIGE = 750,								-- Need to have this much Prestige to prepare an invasion
+	PREP_INV_REQ_PRESTIGE = 1000,								-- Need to have this much Prestige to prepare an invasion
 	BASE_REVOLT_CHANCE_MOD = 250,								-- Pre Old Gods rebel spawn chance modifier (fires on_rebel_revolt) : lower means fewer revolts. MUST NOT BE ZERO.
 	TOG_REVOLT_CHANCE_MOD = 100,								-- Old Gods rebel spawn chance modifier (fires on_rebel_revolt) : lower means fewer revolts. MUST NOT BE ZERO.
 	JAIN_LIEGE_OPINION_BONUS = 15,								-- Jain Lieges Get Vassal Opinion Bonus
@@ -501,7 +501,7 @@ NDiplomacy = {
 
 	PREPARE_INVASION_INTERACTION_MONEY = 0,
 	PREPARE_INVASION_INTERACTION_PIETY = 0,
-	PREPARE_INVASION_INTERACTION_PRESTIGE = 750,
+	PREPARE_INVASION_INTERACTION_PRESTIGE = 1000,
 	PREPARE_INVASION_INTERACTION_THRESHOLD_FOR_NO = 0,
 	PREPARE_INVASION_INTERACTION_THRESHOLD_FOR_YES = 0,
 	PREPARE_INVASION_INTERACTION_MUST_HAVE_COST = 1,				-- Is having prestige/piety >= cost required for this action?
