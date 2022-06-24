@@ -143,7 +143,202 @@ decisions = {
 		}
 		
 		ai_will_do = {
-			factor = 0.75
+			factor = 1
+			modifier = {
+				factor = 0.75
+			}
+			modifier = {
+				factor = 0.01
+				liege = {
+					OR = {
+						NOT = { religion_group = ROOT }
+						AND = {
+							religion_group = pagan_group
+							NOT = { religion = ROOT }
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				liege = {
+					NOT = { culture_group = ROOT }
+				}
+			}
+			
+			modifier = {
+				factor = 0.1
+				liege = {
+					religion_group = ROOT
+					NOT = { religion_group = pagan_group }
+					NOT = { religion = ROOT }
+				}
+			}
+		}
+	}
+	convert_to_oligarchic_republic_vassal = {
+		only_playable = yes
+		is_high_prio = yes
+		ai_check_interval = 12
+		
+		potential = {
+			is_playable = yes
+			is_tribal = yes
+			independent = no
+		}
+		allow = {
+			war = no
+			custom_tooltip = {
+				text = TT_NOT_UNREFORMED_PAGAN
+				hidden_tooltip = {
+					OR = {
+						NOT = {
+							religion_group = pagan_group
+						}
+						is_reformed_religion = yes
+					}
+				}
+			}
+			capital_scope = {
+				port = no
+			}
+			liege = {
+				OR = {
+					is_feudal = yes
+					is_republic = yes
+					AND = {
+						is_theocracy = yes
+						custom_tooltip = {
+							text = TT_NOT_UNREFORMED_PAGAN
+							hidden_tooltip = {
+								OR = {
+									NOT = {
+										religion_group = pagan_group
+									}
+									is_reformed_religion = yes
+								}
+							}
+						}
+					}
+				}
+			}
+			OR = {
+				capital_holding = {
+					OR = {
+						AND = {
+							holding_type = tribal
+							has_building = tb_market_town_4
+						}
+						holding_type = city
+					}
+				}
+				AND = {
+					NOT = { tier = BARON }
+					capital_scope = {
+						any_province_holding = {
+							holding_type = city
+							holder_scope = {
+								OR = {
+									character = ROOT
+									is_liege_or_above = ROOT
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		effect = {
+			
+			hidden_tooltip = {
+				
+				set_government_type = oligarchic_republic
+				
+				if = {
+					limit = {
+						NOT = {
+							num_of_government_vassals = {
+								government = oligarchic_republic
+								value = 1
+							}
+						}
+					}
+					
+				}
+				primary_title = {
+					set_title_flag = new_oligarchic_state
+				}
+				any_demesne_title = {
+					limit = {
+						tier = baron
+						holding_type = tribal
+					}
+					convert_to = CITY
+					refill_holding_levy = yes
+					location = { #Clear Tribal Great Pillars
+						clr_province_flag = flag_great_pillar_occultist
+						clr_province_flag = flag_great_pillar_americanist
+						clr_province_flag = flag_great_pillar_celtic_pagan
+						clr_province_flag = flag_great_pillar_inuit_pagan
+						clr_province_flag = flag_great_pillar_lakefolk_pagan
+						clr_province_flag = flag_great_pillar_novelist
+						clr_province_flag = flag_great_pillar_folklorist
+						clr_province_flag = flag_great_pillar_maunaxite
+						clr_province_flag = flag_great_pillar_nousthreskeia
+						clr_province_flag = flag_great_pillar_baltic
+						clr_province_flag = flag_great_pillar_finnish
+						clr_province_flag = flag_great_pillar_hellenic
+					}
+					
+					if = {
+						limit = {
+							dejure_liege_title = {
+								holder = ROOT
+								location = {
+									num_of_empty_holdings = 2
+								}
+								NOT = {
+									any_direct_de_jure_vassal_title = {
+										holding_type = castle
+									}
+								}
+							}
+						}
+						location = {
+							build_holding = {
+								type = castle
+							}
+						}
+					}
+					if = {
+						limit = {
+							dejure_liege_title = {
+								holder = ROOT
+								location = {
+									num_of_empty_holdings = 2
+								}
+								NOT = {
+									any_direct_de_jure_vassal_title = {
+										holding_type = temple
+									}
+								}
+							}
+						}
+						location = {
+							build_holding  ={
+								type = temple
+							}
+						}
+					}
+				}
+			}
+			
+			set_government_type = oligarchic_republic
+		}
+		
+		ai_will_do = {
+			factor = 1
 			modifier = {
 				factor = 0.01
 				liege = {
