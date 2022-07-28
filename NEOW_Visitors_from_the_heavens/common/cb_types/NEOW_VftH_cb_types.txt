@@ -329,3 +329,510 @@ blorgist_anti_alien_holy_war = {
 		}
 	}
 }
+
+alien_holy_war = {
+	name = CB_NAME_ALIEN_HOLY_WAR
+	war_name = WAR_NAME_ALIEN_HOLY_WAR
+	sprite = 9
+	truce_days = 3650
+	is_permanent = yes
+	is_holy_war = yes
+	check_de_jure_tier = DUKE # this scans all dejure duchies for the counties which are held by or vassals(or below) of selected character. Only valid if is_permanent = yes
+
+	allowed_to_target_tributaries = no
+	
+	sort_priority = 800
+	
+	can_use_gui = {
+		ROOT = {
+			show_scope_change = no
+			holy_war_start_trigger = yes
+			conditional_tooltip = {
+				piety = 100
+			}
+		}
+	}
+	
+	on_add = {
+		ROOT = {
+			show_scope_change = no
+			holy_war_start_effect = yes
+			piety = -100
+		}
+		general_on_add_effect = yes
+	}
+
+	can_use = {
+		ROOT = { bhutan_major_cb = yes	}
+		ROOT = {
+			is_nomadic = no
+			NOT = { government = confederation_government }
+			religion_group = alien_group
+			NOR = {
+				has_character_flag = currently_reconquering_iberia
+				reconquista_check_trigger = yes
+			}
+			NOT = { same_realm = FROM }
+			OR = {
+				is_heresy_of = FROM
+				is_parent_religion = FROM
+				AND = {
+					religion_group = alien_group
+					NOT = {
+						religion = FROM
+					}
+					FROM = {
+						NOT = { 
+							any_current_enemy = {
+								NOT = {
+									religion_group = alien_group
+								}
+							}
+						}
+					}
+				}
+				AND = {
+					religion_group = FROM
+					FROM = {
+						has_character_modifier = known_satanist
+					}
+					NOT = {
+						has_character_modifier = known_satanist
+					}
+				}
+			}
+			top_liege = {
+				religion_group = ROOT
+				OR = {
+					NOT = { religion = FROM }
+					AND = {
+						religion = FROM
+						FROM = {
+							has_character_modifier = known_satanist
+						}
+						NOT = {
+							has_character_modifier = known_satanist
+						}
+						ROOT = {
+							NOT = {
+								has_character_modifier = known_satanist
+							}
+						}
+					}
+				}
+				OR = {
+					religion = ROOT
+					AND = {
+						is_heretic = no
+						ROOT = { is_heretic = no }
+					}
+				}
+			}
+			OR = {
+				mercenary = no
+				holy_order = yes
+			}
+		}
+	}
+	
+	can_use_title = {
+		# The attacker needs at least one county in the target kingdom, or a border, or be only two sea zones away from one of your counties
+		any_direct_de_jure_vassal_title = {
+			OR = {
+				holder_scope = {
+					OR = {
+						character = ROOT
+						is_liege_or_above = ROOT
+					}
+				}
+				location = {
+					any_neighbor_province = {
+						OR = {
+							AND = {
+								has_owner = yes
+								owner = {
+									OR = {
+										character = ROOT
+										is_liege_or_above = ROOT
+									}
+								}
+							}
+							AND = {
+								is_land = no
+								any_neighbor_province = {
+									OR = {
+										AND = {
+											has_owner = yes
+											owner = {
+												OR = {
+													character = ROOT
+													is_liege_or_above = ROOT
+												}
+											}
+										}
+										#AND = {
+										#	is_land = no
+										#	any_neighbor_province = {
+										#		owner = {
+										#			OR = {
+										#				character = ROOT
+										#				is_liege_or_above = ROOT
+										#			}
+										#		}
+										#	}
+										#}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	is_valid = {
+		ROOT = {
+			NOT = { pacifist = yes }
+			NOT = { same_realm = FROM }
+			OR = {
+				is_heresy_of = FROM
+				is_parent_religion = FROM
+				AND = {
+					religion_group = FROM
+					FROM = {
+						has_character_modifier = known_satanist
+					}
+					ROOT = {
+						NOT = {
+							has_character_modifier = known_satanist
+						}
+					}
+				}
+				AND = {
+					OR = {
+						religion_group = alien_group
+						religion_group = synth_group
+					}
+					NOT = { religion = FROM }
+				}
+			}
+			top_liege = {
+				OR = {
+					NOT = { religion = FROM }
+					AND = {
+						religion = FROM
+						FROM = {
+							has_character_modifier = known_satanist
+						}
+						NOT = {
+							has_character_modifier = known_satanist
+						}
+						ROOT = {
+							NOT = {
+								has_character_modifier = known_satanist
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	on_success = {
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			hidden_tooltip = { 
+				participation_scaled_piety = 100
+				participation_scaled_prestige = 50
+				if = {
+					limit = {
+						uses_decadence = yes
+					}
+					participation_scaled_decadence = -10
+				}
+				hidden_tooltip = {
+					if = {
+						limit = {
+							has_ambition = obj_strengthen_religion
+						}
+						change_variable = { which = strengthen_religion value = 1 }
+					}
+				}
+			}
+		}
+		
+		ROOT = { 
+			participation_scaled_piety = 100
+			participation_scaled_prestige = 50
+			if = {
+				limit = {
+					uses_decadence = yes
+				}
+				participation_scaled_decadence = -10
+			}
+			religion_authority = {
+				modifier = won_holy_war
+				years = 20
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						has_ambition = obj_strengthen_religion
+					}
+					change_variable = { which = strengthen_religion value = 1 }
+				}
+			}
+		}
+		FROM = {
+			if = {
+				limit = {
+					NOT = {
+						has_character_modifier = known_satanist
+					}
+				}
+				religion_authority = {
+					modifier = lost_holy_war
+					years = 20
+				}		
+			}
+		}
+		FROM = { show_scope_change = no piety = -100 }
+		FROM = { show_scope_change = no prestige = -50 }
+	}
+
+	on_success_title = {
+		if = { # Standard Holy War behaviour for Non-Muslims and Muslims fighting other Muslims
+			show_scope_change = no
+			limit = {
+				OR = {
+					ROOT = {
+						NOT = {
+							religion_group = alien_group
+						}
+					}
+					AND = {
+						ROOT = {
+							religion_group = alien_group
+						}
+						FROM = {
+							religion_group = alien_group
+						}
+					}
+				}
+			}
+			custom_tooltip = {
+				text = religious_cb_succ_tip
+				hidden_tooltip = {
+					ROOT = {
+						vassalize_or_take_under_title = {
+							title = PREV
+							enemy = FROM
+							same_religion = yes # Only vassalize rulers of my religion
+							is_religious = yes
+							type = holy_war
+						}
+					}
+				}
+			}
+		}
+		if = { # Blorgists fighting Non-Blorgists preserve vassals
+			show_scope_change = no
+			limit = {
+				ROOT = {
+					religion = blorgist
+				}
+				FROM = {
+					NOT = {
+						religion = blorgist
+					}
+				}
+			}
+			custom_tooltip = {
+				text = religious_cb_succ_muslim_tip
+				hidden_tooltip = {
+					ROOT = {
+						vassalize_or_take_under_title = {
+							title = PREV
+							enemy = FROM
+							is_religious = yes
+							type = holy_war
+						}
+					}
+				}
+			}
+		}
+
+		hidden_tooltip = {
+			check_war_effect = yes
+			FROM = {
+				landless_pope_effect = yes
+			}
+		}
+	}
+
+	on_fail = {
+		ROOT = {
+			show_scope_change = no
+			piety = -50 
+			prestige = -100
+		}
+	}
+
+	on_reverse_demand = {
+		ROOT = {
+			show_scope_change = no
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 4.0
+			}
+			piety = -75
+			prestige = -150
+		}
+		FROM = {
+			participation_scaled_piety = 200
+			participation_scaled_prestige = 100
+			if = {
+				limit = {
+					uses_decadence = yes
+				}
+				participation_scaled_decadence = -10
+			}
+		}
+		any_defender = {
+			limit = { NOT = { character = FROM } }
+			hidden_tooltip = { 
+				participation_scaled_piety = 200
+				participation_scaled_prestige = 100
+				if = {
+					limit = {
+						uses_decadence = yes
+					}
+					participation_scaled_decadence = -10
+				}
+				hidden_tooltip = {
+					if = {
+						limit = {
+							has_ambition = obj_strengthen_religion
+						}
+						change_variable = { which = strengthen_religion value = 1 }
+					}
+				}
+			}
+		}
+		any_attacker = {
+			limit = {
+				character = ROOT
+				uses_decadence = yes
+				NOT = {
+					any_liege = {
+						dynasty = PREV
+					}
+				}
+			}
+			participation_scaled_decadence = 20
+		}
+		any_attacker = {
+			limit = {
+				NOT = { character = ROOT }
+				uses_decadence = yes
+				NOT = {
+					any_liege = {
+						dynasty = PREV
+					}
+				}
+			}
+			hidden_tooltip = { 
+				participation_scaled_decadence = 20
+			}
+		}
+		ROOT = { 
+			religion_authority = {
+				modifier = lost_holy_war
+				years = 20
+			}
+		}
+		FROM = { 
+			religion_authority = {
+				modifier = won_holy_war
+				years = 20
+			}
+			hidden_tooltip = {
+				if = {
+					limit = {
+						has_ambition = obj_strengthen_religion
+					}
+					change_variable = { which = strengthen_religion value = 1 }
+				}
+			}
+		}
+	}
+
+	attacker_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	attacker_ai_defeat_worth = {
+		factor = 100
+	}
+
+	defender_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	defender_ai_defeat_worth = {
+		factor = 100
+	}
+	
+	ai_will_do = { 
+		factor = 1
+		
+		modifier = { #Focus on Coronation first.
+			factor = 0.1
+			ROOT = { should_have_coronation = yes }
+		}
+		
+		modifier = {
+			factor = 0
+			FROM = {
+				is_nomadic = yes
+			}
+			ROOT = {
+				is_nomadic = no
+				NOT = {
+					is_tribal = yes
+				}
+			}
+			NOT = {
+				any_direct_de_jure_vassal_title = {
+					any_direct_de_jure_vassal_title = {
+						OR = {
+							holding_type = castle
+							holding_type = city
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			FROM = {
+				is_nomadic = yes
+			}
+			ROOT = {
+				is_tribal = yes
+			}
+			NOT = {
+				any_direct_de_jure_vassal_title = {
+					any_direct_de_jure_vassal_title = {
+						OR = {
+							holding_type = castle
+							holding_type = city
+							holding_type = tribal
+						}
+					}
+				}
+			}
+		}
+	}
+}
