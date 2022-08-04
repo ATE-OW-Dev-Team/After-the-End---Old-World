@@ -1,5 +1,5 @@
-name="NEOW Unit Packs"
-path="mod/New Era - Old World/NEOW_units_packs"
+name="NEOW Dikes Destroyed"
+path="mod/New Era - Old World/NEOW_DIKES_DESTROYED"
 picture="NEOWICON.png"
 dependencies = { 
 	"\"New Era Old World\""
@@ -7,7 +7,7 @@ dependencies = {
 tags=
 {
 	 "NEOW"
-	 "Units"
+	 "Flooded"
 	 "Submod"
 	 "Old World"
 }
