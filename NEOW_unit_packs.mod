@@ -1,8 +1,8 @@
 name="NEOW Unit Packs"
-path="mod/New Era - Old World/NEOW_units_packs"
+path="mod/NEOW_unit_packs"
 picture="NEOWICON.png"
 dependencies = { 
-	"\"New Era Old World\""
+	"New Era Old World"
 }
 tags=
 {
