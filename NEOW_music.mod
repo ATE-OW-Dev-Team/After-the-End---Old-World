@@ -1,6 +1,6 @@
 name="NEOW Music"
 path="mod/NEOW_music"
-picture="ATEOWICON.png"
+picture="NEOWICON.png"
 replace_path="music"
 dependencies = { 
 	"New Era Old World"

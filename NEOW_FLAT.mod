@@ -1,6 +1,6 @@
 name="NEOW Flatmap"
 path="mod/NEOW_FLAT"
-picture="ATEOWICON.png"
+picture="NEOWICON.png"
 dependencies = { 
 	"New Era Old World"
 }

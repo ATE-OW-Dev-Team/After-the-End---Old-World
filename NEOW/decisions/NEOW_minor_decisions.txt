@@ -1602,6 +1602,109 @@ targeted_decisions = {
 			}
 		}
 	}
+	release_vassal_as_march = {
+		only_playable = yes
+		filter = vassals
+		ai_target_filter = vassals
+		ai_check_interval = 36
+
+		from_potential = {
+			is_playable = yes
+			independent = yes
+		}
+	
+		potential = {
+			NOT = { character = FROM }
+			liege = { character = FROM }
+			higher_tier_than = baron
+			OR = {
+				trait = misguided_warrior
+				trait = tough_soldier
+				trait = skilled_tactician
+				trait = brilliant_strategist
+			}
+		}
+		allow = {
+			FROM = {
+				OR = {
+					AND = {
+						ai = no
+						TECH_MAJESTY = 4
+						TECH_RECRUITMENT = 4
+						prestige = 1000
+					}
+					AND = {
+						NOR ={
+							de_jure_vassal_or_below = PREV
+							culture = PREV
+						}
+						TECH_MAJESTY = 5
+						TECH_RECRUITMENT = 5
+						prestige = 1000
+						NOT = { government = confederation_government }
+					}
+				}
+			}
+		}
+		effect = {
+			hidden_tooltip = { set_defacto_liege = THIS }
+			FROM = {
+				make_tributary = { 
+					who = PREV
+					tributary_type = march
+				}
+				prestige = -2000
+			}
+			opinion = { modifier = opinion_released_tributary who = FROM }
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = { 
+				factor = 0.01
+			}
+			modifier = {
+				factor = 0.25
+				FROM = {
+					NOR = {
+						trait = kind
+						trait = charitable
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				de_jure_liege_or_above = FROM
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					trait = greedy
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					trait = envious
+				}
+			}
+			modifier = {
+				factor = 1.25
+				FROM = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 1.25
+				FROM = {
+					trait = humble
+				}
+			}
+		}
+	}
 	release_vassal_as_tributary = {
 		only_playable = yes
 		filter = vassals
@@ -1620,17 +1723,23 @@ targeted_decisions = {
 		}
 		allow = {
 			FROM = {
-				NOR ={
-					de_jure_vassal_or_below = PREV
-					religion_group = PREV
-					culture_group = PREV
+				OR = {
+					AND = {
+						ai = no
+						TECH_MAJESTY = 4
+						prestige = 1000
+					}
+					AND = {
+						NOR ={
+							de_jure_vassal_or_below = PREV
+							religion = PREV
+							culture_group = PREV
+						}
+						TECH_MAJESTY = 5
+						prestige = 1000
+						NOT = { government = confederation_government }
+					}
 				}
-				conditional_tooltip = {
-					prestige = 200
-					TECH_MAJESTY = 2
-				}
-				prestige = 1000
-				NOT = { government = confederation_government }
 			}
 		}
 		effect = {

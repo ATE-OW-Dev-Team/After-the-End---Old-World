@@ -1,6 +1,6 @@
 name="NEOW Exonyms"
 path="mod/NEOW_Exonyms"
-picture="ATEOWICON.png"
+picture="NEOWICON.png"
 dependencies = { 
 	"New Era Old World"
 }
