@@ -115,6 +115,10 @@ faction_succ_seniority = {
 				has_law = succession_voting_power_1
 				has_law = succ_hre_elective
 			}
+			AND = {
+				has_law = succession_voting_power_1
+				has_law = succ_confederation_elective
+			}
 		}
 		
 		holder_scope = {
@@ -160,8 +164,8 @@ faction_succ_seniority = {
 			NOT = { religion_group = muslim }	
 			NOT = { in_faction = faction_succ_primogeniture }
 			NOT = { in_faction = faction_succ_feudal_elective }
-			NOT = { in_faction = faction_succ_gavelkind }			
-			NOT = { in_faction = faction_succ_byzantine_elective }			
+			NOT = { in_faction = faction_succ_gavelkind }
+			NOT = { in_faction = faction_succ_byzantine_elective }
 		}		
 	}
 	
@@ -841,6 +845,10 @@ faction_succ_primogeniture = {
 				has_law = succession_voting_power_1
 				has_law = succ_hre_elective
 			}
+			AND = {
+				has_law = succession_voting_power_1
+				has_law = succ_confederation_elective
+			}
 		}
 		
 		holder_scope = {
@@ -1495,6 +1503,7 @@ faction_succ_gavelkind = {
 		NOT = { in_faction = faction_succ_seniority }
 		NOT = { in_faction = faction_succ_primogeniture }
 		NOT = { in_faction = faction_succ_feudal_elective }
+		NOT = { in_faction = faction_succ_byzantine_elective }
 		
 		OR = {
 			# Is not affected by a Crown Law title
@@ -1592,6 +1601,7 @@ faction_succ_gavelkind = {
 			NOT = { in_faction = faction_succ_seniority }
 			NOT = { in_faction = faction_succ_primogeniture }
 			NOT = { in_faction = faction_succ_feudal_elective }
+			NOT = { in_faction = faction_succ_byzantine_elective }
 		}
 	}
 	
@@ -1920,6 +1930,7 @@ faction_succ_gavelkind = {
 				in_faction = faction_succ_feudal_elective
 				in_faction = faction_succ_seniority
 				in_faction = faction_succ_primogeniture
+				in_faction = faction_succ_byzantine_elective
 			}
 			NOT = {	
 				has_opinion_modifier = {
@@ -5302,7 +5313,7 @@ faction_independence = {
 				}
 			}
 		}
-		modifier = {#The Irish are sick of foreign rule
+		modifier = {#The Irish, Basque and Bedouin are sick of foreign rule
 			factor = 2
 			OR = {
 				culture = basque
@@ -5313,6 +5324,13 @@ faction_independence = {
 				culture = high_irish
 			}
 			NOT = { culture_group = liege }
+		}
+		modifier = {#Jacobinists always want to be free
+			factor = 2
+			religion = jacobinist
+			liege = {
+				NOT = { religion = jacobinist }
+			}
 		}
 		modifier = {
 			factor = 0.5
@@ -5716,7 +5734,7 @@ faction_independence = {
 				}
 			}
 		}
-		modifier = {#The Irish are sick of foreign rule
+		modifier = {#The Irish, Basque and Bedouin are sick of foreign rule
 			factor = 2
 			OR = {
 				culture = basque
@@ -5727,6 +5745,13 @@ faction_independence = {
 				culture = high_irish
 			}
 			NOT = { culture_group = liege }
+		}
+		modifier = {#Jacobinists always want to be free
+			factor = 2
+			religion = jacobinist
+			liege = {
+				NOT = { religion = jacobinist }
+			}
 		}
 		
 		modifier = {
@@ -6779,7 +6804,7 @@ faction_claimant = {
 		modifier = {
 			factor = 0
 			FROM = {
-				opinion = { who = LIEGE value = 50 } 
+				opinion = { who = LIEGE value = 50 }
 				OR = {
 					trait = deceitful
 					trait = ambitious
@@ -6924,6 +6949,41 @@ faction_claimant = {
 			factor = 2.0
 			title = e_transnistria
 			FROM = { culture_group = transnistrian }
+			holder_scope = {
+				NOT = { trait = born_in_the_purple }
+			}
+		}
+		
+		modifier = {
+			factor = 0.5
+			title = e_marblists
+			FROM = { religion = marblists }
+			new_character = {
+				NOT = { trait = born_in_the_purple }
+			}
+		}
+		
+		modifier = {
+			factor = 2.0
+			title = e_marblists
+			FROM = { religion = marblists }
+			new_character = {
+				trait = born_in_the_purple
+			}
+		}
+		modifier = {
+			factor = 0.5
+			title = e_marblists
+			FROM = { religion = marblists }
+			holder_scope = {
+				trait = born_in_the_purple
+			}
+		}
+		
+		modifier = {
+			factor = 2.0
+			title = e_marblists
+			FROM = { religion = marblists }
 			holder_scope = {
 				NOT = { trait = born_in_the_purple }
 			}
@@ -7475,6 +7535,50 @@ faction_claimant = {
 			culture_group = transnistrian
 			FROMFROM = {
 				title = e_transnistria
+			}
+			liege = {
+				NOT = { trait = born_in_the_purple }
+			}
+		}
+		
+		modifier = {
+			factor = 0.5
+			religion = marblists
+			FROMFROM = {
+				title = e_marblists
+			}
+			new_character = {
+				NOT = { trait = born_in_the_purple }
+			}
+		}
+		
+		modifier = {
+			factor = 0.5
+			religion = marblists
+			FROMFROM = {
+				title = e_marblists
+			}
+			liege = {
+				trait = born_in_the_purple
+			}
+		}
+		
+		modifier = {
+			factor = 2.0
+			religion = marblists
+			FROMFROM = {
+				title = e_marblists
+			}
+			new_character = {
+				trait = born_in_the_purple
+			}
+		}
+		
+		modifier = {
+			factor = 2.0
+			religion = marblists
+			FROMFROM = {
+				title = e_marblists
 			}
 			liege = {
 				NOT = { trait = born_in_the_purple }
@@ -10625,6 +10729,8 @@ faction_abrahamic_revolters = {
 			religion_group = christian
 			religion_group = muslim
 			religion_group = jewish_group
+			christian_syncretic_religion = yes
+			muslim_syncretic_religion = yes
 		}
 		liege = { 
 			OR = {
@@ -10655,6 +10761,8 @@ faction_abrahamic_revolters = {
 				religion_group = christian
 				religion_group = muslim
 				religion_group = jewish_group
+				christian_syncretic_religion = yes
+				muslim_syncretic_religion = yes
 			}
 		}
 	}
