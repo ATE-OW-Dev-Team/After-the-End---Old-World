@@ -7357,3 +7357,398 @@ russian_republican_reconquest = {
 		factor = 100
 	}
 }
+kashin_anti_shogun_subjegation_cb = { # New8
+	name = CB_NAME_KASHIN_ANTI_SHOGUN_SUBJEGATION
+	war_name = WAR_NAME_KASHIN_ANTI_SHOGUN_SUBJEGATION
+	sprite = 37
+	truce_days = 365
+	is_permanent = yes
+	hostile_against_others = yes
+	can_ask_to_join_war = yes
+	display_on_map = no
+	allowed_to_target_tributaries = no
+	
+	defender_unoccupied_warscore = yes
+	
+	sort_priority = 810
+	
+	can_use_gui = {
+		ROOT = {
+			has_landed_title = k_pretender_bakufu
+			prestige = 250
+		}
+		FROM = {
+			independent = yes
+			capital_scope = {
+				region = world_japan
+			}
+			NOR = { 
+				has_landed_title = e_tokyo 
+				has_landed_title = k_bakufu 
+			}
+			higher_tier_than = BARON
+		}
+	}
+	
+	can_use = {
+
+		ROOT = {
+			has_landed_title = k_pretender_bakufu
+			independent = yes
+			NOT = { is_vassal_or_below = FROM }
+			NOT = { is_liege_or_above = FROM }
+			NOT = {
+				rightful_religious_head_scope = {
+					character = FROM
+				}
+			}
+			NAND = {
+				holy_order = yes
+				religion = FROM
+			}
+		}
+		FROM = {
+			independent = yes
+			capital_scope = {
+				region = world_japan
+			}
+			NOR = { 
+				has_landed_title = e_tokyo 
+				has_landed_title = k_bakufu 
+			}
+			higher_tier_than = BARON
+			NOT = {
+				suzerain = {
+					OR = {
+						character = ROOT
+						any_liege = {
+							character = ROOT
+						}
+					}
+				}
+			}
+		}
+		
+		# The defender is not in any tributary war
+		FROM = {
+			is_in_tributary_war_trigger = no
+		}
+	}
+
+	is_valid = {
+		NOT = {
+			ROOT = {
+				rightful_religious_head_scope = {
+					character = FROM 
+				}
+			}
+		}
+	}
+
+	on_add = {
+		# Chance to surrender early
+		ROOT = { save_event_target_as = tribute_war_suzerain }
+		FROM = {
+			show_scope_change = no
+			save_event_target_as = tribute_war_target
+		}
+		general_on_add_effect = yes
+	}
+
+	on_success = {
+		FROM = {
+			show_scope_change = no
+			save_event_target_as = target_loser
+			prestige = -100
+			custom_tooltip = {
+				text = "REMOVE_PREVIOUS_SUZERAIN"
+				hidden_tooltip = {
+					any_suzerain = {
+						event_target:target_loser = {
+							remove_tributary = PREV
+						}
+					}
+				}
+			}
+			opinion = {
+				modifier = opinion_forced_tributary 
+				who = ROOT
+				years = 15
+			}
+		}
+
+		ROOT = {
+			show_scope_change = no
+			prestige = 200
+			make_tributary = { who = FROM tributary_type = anti_shogun_kashin }
+		}
+		
+		if  = {
+			limit = {
+				ROOT = {
+					uses_decadence = yes
+				}
+			}
+			ROOT = {
+				decadence = -10
+			}
+		}
+	}
+
+	on_fail = {
+		ROOT = {
+			show_scope_change = no
+			prestige = -100
+		}
+		FROM = {
+			show_scope_change = no
+			prestige = 100
+		}
+	}
+
+	on_reverse_demand = {
+		ROOT = {
+			show_scope_change = no
+			prestige = -200
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 4.0
+			}
+		}
+
+		FROM = {
+			show_scope_change = no
+			prestige = 200
+		}
+	}
+	
+	on_attacker_leader_death = {
+		end_war = invalid
+	}
+
+	attacker_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	attacker_ai_defeat_worth = {
+		factor = 100
+	}
+
+	defender_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	defender_ai_defeat_worth = {
+		factor = 100
+	}
+
+	ai_will_do = {
+		factor = 1
+		
+		modifier = {
+			factor = 0.7
+		}
+		modifier = { #Focus on Coronation first.
+			factor = 0.1
+			ROOT = { should_have_coronation = yes }
+		}
+	}
+}
+kashin_shogun_subjegation_cb = { # New8
+	name = CB_NAME_KASHIN_SHOGUN_SUBJEGATION
+	war_name = WAR_NAME_KASHIN_SHOGUN_SUBJEGATION
+	sprite = 37
+	truce_days = 365
+	is_permanent = yes
+	hostile_against_others = yes
+	can_ask_to_join_war = yes
+	display_on_map = no
+	allowed_to_target_tributaries = no
+	
+	defender_unoccupied_warscore = yes
+	
+	sort_priority = 810
+	
+	can_use_gui = {
+		ROOT = {
+			has_landed_title = k_bakufu
+			prestige = 250
+		}
+		FROM = {
+			independent = yes
+			capital_scope = {
+				region = world_japan
+			}
+			NOR = { 
+				has_landed_title = e_tokyo 
+				has_landed_title = k_pretender_bakufu 
+			}
+			higher_tier_than = BARON
+		}
+	}
+	
+	can_use = {
+
+		ROOT = {
+			has_landed_title = k_bakufu
+			independent = yes
+			NOT = { is_vassal_or_below = FROM }
+			NOT = { is_liege_or_above = FROM }
+			NOT = {
+				rightful_religious_head_scope = {
+					character = FROM
+				}
+			}
+			NAND = {
+				holy_order = yes
+				religion = FROM
+			}
+		}
+		FROM = {
+			independent = yes
+			capital_scope = {
+				region = world_japan
+			}
+			NOR = { 
+				has_landed_title = e_tokyo 
+				has_landed_title = k_pretender_bakufu 
+			}
+			higher_tier_than = BARON
+			NOT = {
+				suzerain = {
+					OR = {
+						character = ROOT
+						any_liege = {
+							character = ROOT
+						}
+					}
+				}
+			}
+		}
+		
+		# The defender is not in any tributary war
+		FROM = {
+			is_in_tributary_war_trigger = no
+		}
+	}
+
+	is_valid = {
+		NOT = {
+			ROOT = {
+				rightful_religious_head_scope = {
+					character = FROM 
+				}
+			}
+		}
+	}
+
+	on_add = {
+		# Chance to surrender early
+		ROOT = { save_event_target_as = tribute_war_suzerain }
+		FROM = {
+			show_scope_change = no
+			save_event_target_as = tribute_war_target
+		}
+		general_on_add_effect = yes
+	}
+
+	on_success = {
+		FROM = {
+			show_scope_change = no
+			save_event_target_as = target_loser
+			prestige = -100
+			custom_tooltip = {
+				text = "REMOVE_PREVIOUS_SUZERAIN"
+				hidden_tooltip = {
+					any_suzerain = {
+						event_target:target_loser = {
+							remove_tributary = PREV
+						}
+					}
+				}
+			}
+			opinion = {
+				modifier = opinion_forced_tributary 
+				who = ROOT
+				years = 15
+			}
+		}
+
+		ROOT = {
+			show_scope_change = no
+			prestige = 200
+			make_tributary = { who = FROM tributary_type = shogun_kashin }
+		}
+		
+		if  = {
+			limit = {
+				ROOT = {
+					uses_decadence = yes
+				}
+			}
+			ROOT = {
+				decadence = -10
+			}
+		}
+	}
+
+	on_fail = {
+		ROOT = {
+			show_scope_change = no
+			prestige = -100
+		}
+		FROM = {
+			show_scope_change = no
+			prestige = 100
+		}
+	}
+
+	on_reverse_demand = {
+		ROOT = {
+			show_scope_change = no
+			prestige = -200
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 4.0
+			}
+		}
+
+		FROM = {
+			show_scope_change = no
+			prestige = 200
+		}
+	}
+	
+	on_attacker_leader_death = {
+		end_war = invalid
+	}
+
+	attacker_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	attacker_ai_defeat_worth = {
+		factor = 100
+	}
+
+	defender_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	defender_ai_defeat_worth = {
+		factor = 100
+	}
+
+	ai_will_do = {
+		factor = 1
+		
+		modifier = {
+			factor = 0.7
+		}
+		modifier = { #Focus on Coronation first.
+			factor = 0.1
+			ROOT = { should_have_coronation = yes }
+		}
+	}
+}
+

@@ -1,3 +1,77 @@
+decisions = {
+	claim_pretender_shogunate = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 24
+		potential = {
+			culture_group = japan_group
+			NOT = { trait = japanese_emperor_killer_trait }
+			k_pretender_bakufu= {
+				has_holder = no
+			}
+			NOR = {
+				has_landed_title = k_bakufu
+				has_landed_title = k_pretender_bakufu
+				has_landed_title = e_tokyo
+			}
+			prisoner = no
+			has_regent = no
+			is_adult = yes
+		}
+
+		allow = {
+			war = no
+			prestige = 2000
+			higher_real_tier_than = DUKE
+		}
+
+		effect = {
+			prestige = -2000
+			grant_title_no_opinion = k_pretender_bakufu
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	claim_shogunate = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 24
+		potential = {
+			culture_group = japan_group
+			NOT = { trait = japanese_emperor_killer_trait }
+			has_landed_title = k_pretender_bakufu
+			prisoner = no
+			has_regent = no
+			is_adult = yes
+		}
+
+		allow = {
+			war = no
+			prestige = 2500
+			k_bakufu= {
+				has_holder = no
+			}
+			has_landed_title = k_pretender_bakufu
+			higher_real_tier_than = DUKE
+		}
+
+		effect = {
+			prestige = -2500
+			grant_title_no_opinion = k_bakufu
+			destroy_landed_title = k_pretender_bakufu
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}
 targeted_decisions = {
 	submit_to_shogun = {
 		filter = self
@@ -10,17 +84,27 @@ targeted_decisions = {
 				culture = weeb
 				culture = ryukyuan
 			}
+			NOR = {
+				has_landed_title = k_bakufu
+				has_landed_title = k_pretender_bakufu
+				has_landed_title = e_tokyo
+			}
 			k_bakufu = {
 				has_holder = yes
 			}
+			k_bakufu = {
+				holder_scope = {
+					NOT = { trait = japanese_emperor_killer_trait }
+				}
+			}
 			higher_tier_than = baron
-			piety = 100
-			prestige = 100
+			piety = 50
+			prestige = 50
 			NOT = { is_tributary = yes }
 		}
 		allow = {
-			piety = 150
-			prestige = 150
+			piety = 100
+			prestige = 100
 		}
 		effect = {
 			k_bakufu = {
@@ -40,7 +124,7 @@ targeted_decisions = {
 			factor = 1
 			
 			modifier = { 
-				factor = 0.25
+				factor = 0.5
 			}
 			modifier = { 
 				factor = 0.25
@@ -171,17 +255,27 @@ targeted_decisions = {
 				culture = weeb
 				culture = ryukyuan
 			}
+			NOR = {
+				has_landed_title = k_bakufu
+				has_landed_title = k_pretender_bakufu
+				has_landed_title = e_tokyo
+			}
+			k_pretender_bakufu = {
+				holder_scope = {
+					NOT = { trait = japanese_emperor_killer_trait }
+				}
+			}
 			k_pretender_bakufu = {
 				has_holder = yes
 			}
 			higher_tier_than = baron
-			piety = 100
-			prestige = 100
+			piety = 50
+			prestige = 50
 			NOT = { is_tributary = yes }
 		}
 		allow = {
-			piety = 150
-			prestige = 150
+			piety = 100
+			prestige = 100
 		}
 		effect = {
 			k_pretender_bakufu = {
@@ -201,7 +295,7 @@ targeted_decisions = {
 			factor = 1
 			
 			modifier = { 
-				factor = 0.25
+				factor = 0.5
 			}
 			modifier = { 
 				factor = 0.25
@@ -319,6 +413,56 @@ targeted_decisions = {
 					prestige = 1500
 				}
 			}
+		}
+	}
+	return_emperor_to_shogunate = {
+		
+		ai_check_interval = 18
+		filter = independent_rulers
+		capable_only = yes
+		
+		from_potential = { 
+			has_landed_title = k_bakufu
+			NOT = {
+				trait = japanese_emperor_killer_trait
+			}
+			NOT = {
+				has_global_flag = imperial_japanese_restoration
+			}
+		}
+		potential = {
+			is_tributary = no 
+			has_landed_title = e_tokyo
+			NOT = {
+				has_global_flag = imperial_japanese_restoration
+			}
+		}
+
+		allow = {
+			FROM = {
+				is_adult = yes
+				is_inaccessible_or_incapable_trigger = no
+				has_regent = no
+				war = no
+				prestige = 500
+			}
+		}
+		effect = {
+			k_bakufu = {
+				holder_scope = {
+					make_tributary = { 
+						who = ROOT
+						tributary_type = emperor_japan
+					}
+					prestige = -500
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
 		}
 	}
 }
