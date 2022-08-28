@@ -1976,3 +1976,270 @@ targeted_decisions = {
 		}
 	}
 }
+decisions = {
+	han_renaissance = {
+		ai_check_interval = 120 #check only once every 120 months.
+		only_playable = yes
+		is_high_prio = yes
+		
+		potential = {
+			is_playable = yes
+			OR = {
+				culture_group = chinese_group
+				culture_group = south_chinese_group
+			}
+			has_dlc = "Holy Fury"
+			OR = {
+				has_landed_title = e_maoist
+				has_landed_title = e_legalist
+				has_landed_title = e_hui
+			}
+			NOT = { government = chinese_imperial_government }
+			NOT = { has_global_flag = flag_started_han_renaissance }
+			NOT = {
+				has_alternate_start_parameter = { key = culture_names value = random }
+			}
+		}
+		allow = {
+			show_only_failed_conditions = yes
+			OR = {
+				religion_group = chinese_traditional_group
+				religion_group = buddhist_group
+				religion = maoist
+				religion = red_cult
+				religion = mo_pagan
+				religion = mo_pagan_reformed
+				religion = neon_cult
+				religion = xinjiao
+				religion = eastern_lighting
+			}
+			capital_scope = { province = 333 }
+			ruled_years = 10
+			war = no
+		}
+		effect = {
+			set_global_flag = flag_started_han_renaissance
+			culture = han
+			hidden_tooltip = {
+				any_courtier_or_vassal = { 
+					limit = { lower_tier_than = COUNT }
+					culture = han
+				}
+			}
+			capital_scope = { culture = han }
+			custom_tooltip = {
+				text = tooltip_han_culture_starts_spreading
+				hidden_tooltip = {
+					any_realm_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							culture = han
+						}
+						if = {
+							limit = {
+								culture_group = beijing
+								NOT = { distance = { where = 333 distance = 100 } } 
+							}
+							random = { 
+								chance = 40 
+								culture = han 
+							}
+						}
+						if = {
+							limit = { 
+								culture_group = chinese_group
+								NOT = { distance = { where = 333 distance = 200 } } 
+							}
+							random = {
+								chance = 20 
+								culture = han 
+							}
+						}
+						if = {
+							limit = { 
+								culture_group = chinese_group
+								NOT = { distance = { where = 333 distance = 400 } } 
+							}
+							random = { 
+								chance = 5
+								culture = han 
+							}
+						}
+					}
+				}
+			}
+			hidden_tooltip = {
+				if = { #Hellenic Emperor gets chance to spread Hellenism a bit alongside the culture.
+					limit = { OR = { religion = maoist religion = red_cult religion_group = chinese_traditional_group } }
+					any_realm_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							religion = ROOT
+						}
+						if = {
+							limit = { 
+								culture = han
+								NOT = { distance = { where = 333 distance = 100 } } 
+							}
+							random = { 
+								chance = 10 
+								religion = ROOT
+							}
+						}
+						if = {
+							limit = { 
+								culture = han
+								NOT = { distance = { where = 333 distance = 200 } } 
+							}
+							random = { 
+								chance = 5 
+								religion = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 3
+				OR = { religion = maoist religion = red_cult religion_group = chinese_traditional_group }
+			}
+			modifier = {
+				factor = 0.01 #Would consider it a step down.
+				culture = taiwanese
+			}
+		}
+	}
+	embrace_han_culture = {
+		ai_check_interval = 120 #check only once every 120 months.
+		only_playable = yes
+		
+		potential = {
+			is_playable = yes
+			NOT = { culture = han }
+			OR = {
+				culture_group = chinese_group
+				culture_group = south_chinese_group
+			}
+			has_dlc = "Holy Fury"
+			NOT = { government = chinese_imperial_government }
+			has_global_flag = flag_started_han_renaissance
+			NOT = {
+				has_alternate_start_parameter = { key = culture_names value = random }
+			}
+			top_liege = { OR = { has_landed_title = e_han_empire has_landed_title = e_han_republic } }
+		}
+		allow = {
+			show_only_failed_conditions = yes
+			OR = {
+				culture_group = chinese_group
+				culture_group = south_chinese_group
+			}
+		}
+		effect = {
+			culture = han
+			hidden_tooltip = {
+				any_courtier_or_vassal = { 
+					limit = { lower_tier_than = COUNT }
+					culture = han
+				}
+			}
+			capital_scope = { culture = han }
+			custom_tooltip = {
+				text = tooltip_han_culture_spreads
+				hidden_tooltip = {
+					any_demesne_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							culture = han
+						}
+						if = {
+							limit = { 
+								culture = beijing
+								capital_scope = { NOT = { distance = { where = PREV distance = 100 } } } 
+							}
+							random = { 
+								chance = 40 
+								culture = han 
+							}
+						}
+						if = {
+							limit = { 
+								culture_group = chinese_group
+								capital_scope = { NOT = { distance = { where = PREV distance = 200 } } } 
+							}
+							random = { 
+								chance = 20 
+								culture = han 
+							}
+						}
+						if = {
+							limit = { 
+								culture_group = chinese_group
+								capital_scope = { NOT = { distance = { where = PREV distance = 400 } } } 
+							}
+							random = { 
+								chance = 5
+								culture = han 
+							}
+						}
+					}
+				}
+			}
+			if = { #Hellenic Emperor gets chance to spread Hellenism a bit alongside the culture.
+				limit = { OR = { religion = maoist religion = red_cult religion_group = chinese_traditional_group } }
+				hidden_tooltip = {
+					any_demesne_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							religion = ROOT
+						}
+						if = {
+							limit = { 
+								culture = han
+								capital_scope = { NOT = { distance = { where = PREV distance = 100 } } } 
+							}
+							random = { 
+								chance = 10 
+								religion = ROOT
+							}
+						}
+						if = {
+							limit = { 
+								culture = han
+								capital_scope = { NOT = { distance = { where = PREV distance = 200 } } } 
+							}
+							random = { 
+								chance = 5 
+								religion = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 3
+				OR = { religion = maoist religion = red_cult religion_group = chinese_traditional_group }
+			}
+			modifier = {
+				factor = 3
+				capital_scope = { culture = han } 
+			}
+			modifier = {
+				factor = 0.01 #Would consider it a step down.
+				culture = taiwanese
+			}
+		}
+	}
+}
