@@ -1,0 +1,64 @@
+targeted_decisions = {
+	seize_artifact = {
+		
+		only_playable = yes
+		ai_target_filter = court
+		third_party_filter = artifacts
+		ai_third_party_filter = artifacts
+		third_party = ROOT
+		show_third_party_potential = yes
+		
+		from_potential = { is_playable = yes }
+		potential = { num_of_artifacts = 1 }
+		allow = {
+			FROM = {
+				is_incapable = no
+				prisoner = no
+			}
+			ROOT = {
+				prisoner = yes
+				host = { character = FROM }
+			}
+		}
+		effect = {
+			FROM = {
+				ROOT = {
+					show_scope_change = no
+					FROMFROM = {
+						transfer_artifact = {
+							from = PREV
+							to = PREVPREV
+						}
+					}
+				}
+				custom_tooltip = {
+					text = seize_artifact_effect2
+					if = {
+						limit = { FROM = { is_liege_or_above_of = ROOT } }
+						any_vassal = { opinion = { who = FROM modifier = opinion_seized_artifact_tyranny } }
+					}
+					else = {
+					}
+				}
+			}
+			custom_tooltip = {
+				text = seize_artifact_effect3
+				ROOT = {
+					opinion = { who = FROM modifier = seized_artifact }
+					current_heir = { opinion = { who = FROM modifier = seized_artifact_inheritance } }
+					any_dynasty_member = {
+						limit = { is_alive = yes }
+						opinion = { who = FROM modifier = seized_artifact_dynastic }
+					}
+				}
+			}
+			imprison = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.6
+			}
+		}
+	}
+}
