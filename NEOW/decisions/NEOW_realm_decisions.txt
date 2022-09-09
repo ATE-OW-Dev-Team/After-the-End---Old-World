@@ -4962,7 +4962,7 @@ decisions = {
 				    d_adessida = { set_de_jure_if_controls_effect = yes }
 				    d_trebizond = { set_de_jure_if_controls_effect = yes }
 				    d_tao = { set_de_jure_if_controls_effect = yes }
-					}
+				}
 			}
 		}
 		revoke_allowed = {
@@ -4971,6 +4971,148 @@ decisions = {
 		ai_will_do = {
 			factor = 1
 
+		}
+	}
+	form_laconia = {
+		is_high_prio = yes
+		only_playable = no
+		ai_check_interval = 24
+		potential = {
+			form_kingdom_potential = yes
+			culture = tsakonian
+			k_laconia = {
+				is_titular = yes
+				has_holder = no
+			}
+			prisoner = no
+			has_regent = no
+		}
+
+		allow = {
+			custom_tooltip = {
+				text = all_relevant_titles_must_be_owned_or_owned_by_vassals_tt
+			}
+			form_kingdom_allow = yes
+				d_peloponnese = { show_scope_change = no province_completely_controls_trigger = yes }
+				d_krete = { show_scope_change = no province_completely_controls_trigger = yes }
+				c_rhodos = { show_scope_change = no province_completely_controls_trigger = yes }
+				c_kythera = { show_scope_change = no province_completely_controls_trigger = yes }
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = form_hellas_minor_tt
+				k_laconia = {
+					gain_title_effect = yes
+
+				}
+			}
+
+
+			hidden_tooltip = {
+				d_peloponnese = { de_jure_liege = k_laconia }
+				d_krete = { de_jure_liege = k_laconia }
+				d_rhodos = { de_jure_liege = k_laconia }
+				d_south_aegean_islands = { de_jure_liege = k_laconia }
+				k_laconia = {
+				    d_north_aegean_islands = { set_de_jure_if_controls_effect = yes }
+				    d_attika = { set_de_jure_if_controls_effect = yes }
+				    d_epirus = { set_de_jure_if_controls_effect = yes }
+				    d_ohrid = { set_de_jure_if_controls_effect = yes }
+				    d_thessalonika = { set_de_jure_if_controls_effect = yes }
+				    d_adrianopolis = { set_de_jure_if_controls_effect = yes }
+				    d_cyprus = { set_de_jure_if_controls_effect = yes }
+				}
+			}
+			if = {
+				limit = {
+					is_female = no 
+					has_dlc = "Holy Fury"
+				}
+				create_bloodline = {
+					type = laconian_bloodline
+				}
+				new_bloodline = {
+					set_description = "laconian_bloodline_desc"
+				}
+			}
+			if = { 
+				limit = { 
+					is_female = yes 
+					has_dlc = "Holy Fury"
+				}
+				create_bloodline = {
+					type = laconian_bloodline
+					inheritance = matrilineal
+				}
+				new_bloodline = {
+					set_description = "laconian_bloodline_desc"
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+
+		}
+	}
+	
+	vassalize_300 = {
+		is_high_prio = yes
+		only_playable = yes
+		potential = {
+			is_heretic = no
+			prisoner = no
+			age = 16
+			is_title_active = d_300
+			
+			OR = {
+				has_landed_title = k_laconia
+				AND = {
+					has_landed_title = e_macedonia
+					OR = {
+						completely_controls = k_laconia
+						any_vassal = {
+							has_landed_title = k_laconia
+						}
+					}
+				}
+			}
+			
+			d_300 = {
+				holder_scope = {
+					independent = yes
+				}
+			}
+		}
+		
+		allow = {
+			prestige = 500
+			wealth = 500
+		}
+		
+		effect = {
+			prestige = -500
+			wealth = -500
+			
+			hidden_tooltip = {
+				d_300 = {
+					holder_scope = {
+						wealth = 500
+						prestige = 500
+						immediate = {
+							set_defacto_liege = FROM
+						}
+					}
+				}
+			}
+		}
+		
+		
+		ai_will_do = {
+			factor = 1
 		}
 	}
 
