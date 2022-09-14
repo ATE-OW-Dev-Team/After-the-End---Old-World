@@ -861,6 +861,92 @@ decisions = {
 			}
 		}
 	}
+	# Create Poseidonian Warrior Lodge - Dead at start.
+	create_warrior_lodge_poseidonian = {
+		only_playable = yes
+		is_high_prio = yes
+		ai_check_interval = 120 #check only once every 120 months.
+		
+		potential = {
+			NOT = {
+				has_global_flag = flag_restored_warrior_lodge_poseidonian
+			}
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+			has_dlc = "Holy Fury"
+			age = 16
+			religion = poseidonian
+			NOT = { 
+				warrior_lodge_poseidonian = {
+					society_has_members = yes								
+				}
+			}
+		}
+		
+		allow = {
+			is_in_society = no
+			NOT = { trait = incapable }
+			has_education_martial_trigger = yes
+			higher_tier_than = DUKE
+			martial = 15
+			is_inaccessible_trigger = no
+			scaled_wealth = 0.75
+			prestige = 1500
+		}
+		
+		effect = {
+			scaled_wealth = -0.75
+			prestige = -1500
+			custom_tooltip = { text = create_warrior_lodge_poseidonian_tooltip }
+			hidden_tooltip = {
+				set_global_flag = flag_restored_warrior_lodge_poseidonian 
+				join_society = warrior_lodge_poseidonian
+				set_society_grandmaster = yes # Set character as Grand Master
+				add_society_currency_massive_effect = yes
+					spawn_good_commander_effect = yes
+					new_character = { join_society = warrior_lodge_poseidonian }
+					spawn_good_commander_effect = yes
+					new_character = { join_society = warrior_lodge_poseidonian }
+					spawn_good_commander_effect = yes
+					new_character = { join_society = warrior_lodge_poseidonian }
+					spawn_good_commander_effect = yes
+					new_character = { join_society = warrior_lodge_poseidonian }
+					spawn_good_commander_effect = yes
+					new_character = { join_society = warrior_lodge_poseidonian }
+					spawn_good_commander_effect = yes
+					new_character = { join_society = warrior_lodge_poseidonian }
+				any_vassal = {
+					limit = {
+						ai = yes
+						can_join_society = warrior_lodge_poseidonian
+					}
+					random = { chance = 75 join_society = warrior_lodge_poseidonian }
+				}
+				any_neighbor_independent_ruler = {
+					limit = {
+						ai = yes
+						can_join_society = warrior_lodge_poseidonian
+					}
+					random = { chance = 35 join_society = warrior_lodge_poseidonian }
+				}
+				any_player = {
+					limit = {
+						religion = poseidonian
+					}
+					narrative_event = { id = ATV.69 }
+				}
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
 }
 targeted_decisions = {
 	sell_gold = {
