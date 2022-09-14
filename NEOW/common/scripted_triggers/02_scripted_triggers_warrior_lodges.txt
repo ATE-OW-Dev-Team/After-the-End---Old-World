@@ -37,6 +37,7 @@ is_member_of_any_warrior_lodge_trigger = {
 			society_member_of = warrior_lodge_bon
 			society_member_of = warrior_lodge_sea_creed
 			society_member_of = warrior_lodge_poseidonian
+			society_member_of = warrior_lodge_wokou
 		}
 	}
 }
@@ -64,6 +65,7 @@ has_any_warrior_lodge_training_trait_trigger = {
 		trait = bon_leader
 		trait = sea_creed_leader
 		trait = poseidonian_leader
+		trait = wokou_leader
 	}
 }
 
@@ -146,9 +148,13 @@ has_current_warrior_lodge_leader_trait_trigger = {
 			limit = { society_member_of = warrior_lodge_sea_creed }
 			trait = sea_creed_leader
 		}
-		trigger_else = {
-			society_member_of = warrior_lodge_poseidonian
+		trigger_else_if = {
+			limit = { society_member_of = warrior_lodge_poseidonian }
 			trait = poseidonian_leader
+		}
+		trigger_else = {
+			society_member_of = warrior_lodge_wokou
+			trait = wokou_leader
 		}
 	}
 }
@@ -236,9 +242,13 @@ has_religion_matching_joined_warrior_lodge_trigger = {
 			limit = { religion = brethren }
 			society_member_of = warrior_lodge_sea_creed
 		}
-		trigger_else = {
+		trigger_else_if = {
 			limit = { religion = poseidonian }
 			society_member_of = warrior_lodge_poseidonian
+		}
+		trigger_else = {
+			limit = { religion = east_brethren }
+			society_member_of = warrior_lodge_wokou
 		}
 	}
 }
@@ -324,9 +334,13 @@ has_religion_matching_available_warrior_lodge_trigger = {
 		limit = { religion = brethren }
 		warrior_lodge_sea_creed = { society_has_members = yes }
 	}
-	trigger_else = {
-		religion = poseidonian
+	trigger_else_if = {
+		limit = { religion = poseidonian }
 		warrior_lodge_poseidonian = { society_has_members = yes }
+	}
+	trigger_else = {
+		religion = east_brethren
+		warrior_lodge_wokou = { society_has_members = yes }
 	}
 }
 
@@ -407,9 +421,13 @@ has_religion_matching_warrior_lodge_in_need_of_members_trigger = {
 			limit = { religion = brethren }
 			warrior_lodge_sea_creed = { num_of_society_members < 30 }
 		}
-		trigger_else = {
-			religion = poseidonian
+		trigger_else_if = {
+			limit = { religion = poseidonian }
 			warrior_lodge_poseidonian = { num_of_society_members < 30 }
+		}
+		trigger_else = {
+			religion = east_brethren
+			warrior_lodge_wokou = { num_of_society_members < 30 }
 		}
 		trigger_if = {
 			limit = { is_nomadic = yes }
@@ -501,9 +519,13 @@ has_religion_matching_empty_warrior_lodge_trigger = {
 		limit = { religion = brethren }
 		NOT = { warrior_lodge_sea_creed = { society_has_members = yes } }
 	}
-	trigger_else = {
-		religion = poseidonian
+	trigger_else_if = {
+		limit = { religion = poseidonian }
 		NOT = { warrior_lodge_poseidonian = { society_has_members = yes } }
+	}
+	trigger_else = {
+		religion = east_brethren
+		NOT = { warrior_lodge_wokou = { society_has_members = yes } }
 	}
 }
 
@@ -530,6 +552,7 @@ this_society_is_a_warrior_lodge_trigger = {
 		is_society = warrior_lodge_iranian
 		is_society = warrior_lodge_sea_creed
 		is_society = warrior_lodge_poseidonian
+		is_society = warrior_lodge_wokou
 	}
 }
 
@@ -640,8 +663,12 @@ has_religion_matching_warrior_lodge_to_revive_trigger = {
 		event_target:warrior_lodge_to_revive = { is_society = warrior_lodge_sea_creed }
 	}
 	trigger_else = {
-		religion = poseidonian
+		limit = { religion = poseidonian }
 		event_target:warrior_lodge_to_revive = { is_society = warrior_lodge_poseidonian }
+	}
+	trigger_else = {
+		religion = east_brethren
+		event_target:warrior_lodge_to_revive = { is_society = warrior_lodge_wokou }
 	}
 }
 
@@ -907,8 +934,8 @@ special_join_warrior_lodge_trigger = {
 				}
 			}
 		}
-		trigger_else = {
-			FROM = { is_society = warrior_lodge_poseidonian }
+		trigger_else_if = {
+			limit = { FROM = { is_society = warrior_lodge_poseidonian } }
 			custom_tooltip = {
 				text = has_liege_vassal_or_neighbor_of_poseidonian_religion_tt
 				hidden_trigger = {
@@ -916,6 +943,19 @@ special_join_warrior_lodge_trigger = {
 						any_vassal = { religion = poseidonian }
 						any_liege = { religion = poseidonian }
 						any_neighbor_independent_ruler = { religion = poseidonian }
+					}
+				}
+			}
+		}
+		trigger_else = {
+			FROM = { is_society = warrior_lodge_wokou }
+			custom_tooltip = {
+				text = has_liege_vassal_or_neighbor_of_wokou_religion_tt
+				hidden_trigger = {
+					OR = {
+						any_vassal = { religion = east_brethren }
+						any_liege = { religion = east_brethren }
+						any_neighbor_independent_ruler = { religion = east_brethren }
 					}
 				}
 			}
