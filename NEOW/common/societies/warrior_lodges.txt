@@ -8975,3 +8975,514 @@ warrior_lodge_wokou = {
 		}
 	}
 }
+
+warrior_lodge_shinto = {
+	primary_attribute = martial
+	opinion_to_other_members = +10
+	opinion_per_rank_above = +5
+	sound = warrior_lodge_ambient_02
+	society_ranks_gfx = warriors_ranks
+	society_influence = no
+	
+	non_interference = { 
+		always = yes
+	}
+	
+	active = {
+		has_dlc = "Holy Fury"
+	}
+	
+	indestructible = yes
+	
+	can_join_society = {
+		hidden_trigger = {
+			NAND = {
+				ai = yes
+				is_society_rank_full = { 
+					society = warrior_lodge_shinto
+					rank = 1
+				}
+			}
+		}
+		is_adult = yes
+		custom_tooltip = {
+			text = has_not_angered_society_tt
+			hidden_trigger = { NOT = { has_character_modifier = warrior_lodge_failed_joining_cd } }
+		}
+		NOT = { has_character_modifier = warrior_lodge_failed_joining_cd }
+		hidden_trigger = {
+			NOT = { has_character_flag = society_join_block }
+		}
+		trigger_if = {
+			limit = { prisoner = yes }
+			prisoner = no
+		}
+		OR = {	
+			OR = {
+				religion_group = shintoist_group
+				culture_group = japan_group
+			}
+			AND = {
+				custom_tooltip = {
+					text = society_has_at_least_10_members_tt
+					FROM = { num_of_society_members >= 10 }
+				}
+				has_tribal_or_nomadic_government_trigger = yes
+				custom_tooltip = {
+					text = special_join_warrior_lodge_trigger_tt
+					special_join_warrior_lodge_trigger = yes
+				}
+				NOT = { trait = zealous }
+			}
+		}
+	}
+
+	show_society = {
+		OR = {
+			#You are this religion: will show only this lodge (the other "show_society"'s will make sure)
+			OR = {
+				religion_group = shintoist_group
+				culture_group = japan_group
+			}
+			AND = {
+				OR = {
+					#You have neighbors, etc, of the correct religion...
+					any_vassal = { 
+						religion_group = shintoist_group
+					}
+					any_liege = { 
+						religion_group = shintoist_group
+					}
+					any_neighbor_independent_ruler = { 
+						religion_group = shintoist_group 
+					}
+				}
+			}
+			#Always show if: You are already a member. Duh.
+			society_member_of = warrior_lodge_shinto
+		}
+	}
+	
+	potential = { #if you change religion or become zealous while NOT Mazdan, you are kicked out
+		OR = {
+			OR = {
+				religion_group = shintoist_group
+				culture_group = japan_group
+			}
+			AND = {
+				NOR = { 
+					religion_group = shintoist_group
+					culture_group = japan_group
+				}
+				NOT = { trait = zealous }
+			}
+		}
+	}
+	
+	society_rank = { 
+		level = 1
+		limit = 50 
+		startup_limit = 10
+		modifier = {
+			monthly_character_prestige = 0.25
+			church_opinion = 5
+		}
+		powers = {
+			warrior_lodge_duel #Passive Power: Unlocks Duel
+			warrior_lodge_shieldmaiden #Passive Power: Unlocks Shieldmaidens
+			warrior_lodge_survivor #Passive Power: Survivor
+			warrior_lodge_lifetime_of_war #Passive Power: A Lifetime of War
+		}
+	}
+	
+	society_rank = { 
+		level = 2
+		limit = 20
+		startup_limit = 6
+		modifier = {
+			monthly_character_prestige = 0.5
+			church_opinion = 10
+			combat_rating = 5
+			martial = 1
+		}
+		powers = {
+			warrior_lodge_reaver #Passive Power: Reaver
+			warrior_lodge_warrior_training #Power: Warrior Training
+			warrior_lodge_summon_commander #Power: Summon Commander
+			warrior_lodge_zun_battle_trance #Power: Battle Trance
+		}
+	}
+	
+	society_rank = { 
+		level = 3
+		limit = 10 
+		startup_limit = 4
+		modifier = {
+			monthly_character_prestige = 0.75
+			church_opinion = 15
+			combat_rating = 10
+			martial = 2
+		}
+		powers = {
+			warrior_lodge_inspire_warriors #Power: Inspire Warriors
+		}
+	}
+
+	society_rank = { 
+		level = 4
+		limit = 4
+		startup_limit = 3
+		modifier = { 
+			monthly_character_prestige = 1
+			church_opinion = 20
+			combat_rating = 15
+			martial = 3
+		}
+		powers = {
+			warrior_lodge_indomitable #Passive Power: Indomitable
+			warrior_lodge_call_to_glory #Power: Call to Glory
+			warrior_lodge_choose_military_aspect #Power: Choose Military Aspect
+		}
+	}
+	
+	plots = {
+	}
+	
+	monthly_currency_gain = {
+		name = currency_name_warrior_lodge_norse
+    	
+    	per_attribute = {
+    		name = martial
+    		value = 0.25
+    	}
+    	has_trait = {
+			trait = misguided_warrior 
+			value = 1
+		}
+		has_trait = {
+			trait = tough_soldier 
+			value = 2
+		}
+		has_trait = {
+			trait = skilled_tactician
+			value = 3
+		}
+		has_trait = {
+			trait = brilliant_strategist
+			value = 4
+		}
+    	has_trait = { # Japanese
+			trait = japanese_emperor_trait
+			value = 10
+		}
+		has_landed_title = {
+			title = k_bakufu
+			value = 5
+		}
+		has_trait = {
+			trait = gondi_shahansha 
+			value = 5
+		}
+		has_trait = {
+			trait = adventurer
+			value = 2
+		}
+		has_trait = {
+			trait = shieldmaiden
+			value = 2
+		}
+		has_trait = { # Lifestyle
+			trait = duelist
+			value = 3
+		}
+		has_trait = {
+			trait = strategist
+			value = 3
+		}
+		has_trait = {
+			trait = hunter
+			value = 3
+		}
+		has_trait = {
+			trait = zealous
+			value = 3
+		}
+		has_trait = {
+			trait = celibate
+			value = 1
+		}
+		has_trait = {
+			trait = pilgrim
+			value = 1
+		}
+		has_trait = {
+			trait = genius
+			value = 1
+		}
+		has_trait = {
+			trait = quick
+			value = 1
+		}
+		has_trait = {
+			trait = shrewd
+			value = 1
+		}
+		has_trait = {
+			trait = strong
+			value = 3
+		}
+		has_trait = {
+			trait = robust
+			value = 2
+		}
+		has_trait = {
+			trait = giant
+			value = 2
+		}
+		has_trait = {
+			trait = falconer
+			value = 1
+		}
+		has_trait = {
+			trait = just
+			value = 1
+		}
+		has_trait = {
+			trait = proud
+			value = 1
+		}
+		has_trait = {
+			trait = patient
+			value = 1
+		}
+		has_trait = {
+			trait = diligent
+			value = 1
+		}
+		has_trait = {
+			trait = humble
+			value = 1
+		}
+		has_trait = {
+			trait = chaste
+			value = 1
+		}
+		has_trait = {
+			trait = brave
+			value = 3
+		}
+		society_rank = {
+			rank = 4
+			value = 5
+		}
+		#NEGATIVE modifiers
+		has_trait = {
+			trait = drunkard
+			value = -1
+		}
+		has_trait = {
+			trait = possessed
+			value = -1
+		}
+		has_trait = {
+			trait = deceitful
+			value = -1
+		}
+		has_trait = {
+			trait = arbitrary
+			value = -1
+		}
+		has_trait = {
+			trait = craven
+			value = -3
+		}
+		has_trait = {
+			trait = weak
+			value = -2
+		}
+		has_trait = {
+			trait = feeble
+			value = -1
+		}
+		has_trait = {
+			trait = slothful
+			value = -1
+		}
+		has_trait = {
+			trait = dwarf
+			value = -1
+		}
+		has_trait = {
+			trait = clubfooted
+			value = -1
+		}
+		has_trait = {
+			trait = hunchback
+			value = -1
+		}
+	}
+
+	member_score_per_attribute = 3
+	member_score_per_rank = 100
+
+	member_score = {
+		value = 10
+
+		modifier = {
+			trait = japanese_emperor_trait
+			factor = 10.0
+		}
+		modifier = {
+			has_landed_title = k_bakufu
+			factor = 5.0
+		}
+		modifier = {
+			trait = gondi_shahansha 
+			factor = 2.0
+		}
+		modifier = { # Lifestyle
+			trait = hunter
+			factor = 1.3
+		}
+		modifier = {
+			trait = duelist
+			factor = 1.5
+		}
+		modifier = {
+			trait = strategist
+			factor = 1.5
+		}
+		modifier = { # Education
+			trait = misguided_warrior
+			factor = 1.1
+		}	
+		modifier = {
+			trait = tough_soldier
+			factor = 1.2
+		}
+    	modifier = {
+			trait = skilled_tactician
+			factor = 1.4
+		}
+    	modifier = {
+			trait = brilliant_strategist
+			factor = 1.6
+		}
+		modifier = {
+			trait = zealous
+			factor = 1.25
+		}
+		modifier = {
+			trait = brave
+			factor = 1.25
+		}
+		modifier = {
+			trait = genius
+			factor = 1.2
+		}
+		modifier = {
+			trait = quick
+			factor = 1.1
+		}
+		modifier = {
+			trait = shrewd
+			factor = 1.1
+		}
+		modifier = {
+			trait = strong
+			factor = 1.2
+		}
+		modifier = {
+			trait = robust
+			factor = 1.1
+		}
+		modifier = {
+			trait = giant
+			factor = 1.1
+		}
+		modifier = {
+			trait = falconer
+			factor = 1.1
+		}
+		modifier = {
+			trait = patient
+			factor = 1.1
+		}
+		modifier = {
+			trait = diligent
+			factor = 1.1
+		}
+		modifier = {
+			trait = humble
+			factor = 1.1
+		}
+		modifier = {
+			trait = adventurer
+			factor = 1.1
+		}
+		modifier = {
+			trait = shieldmaiden
+			factor = 1.1
+		}
+		modifier = {
+			trait = pilgrim
+			factor = 1.1
+		}
+		#NEGATIVE modifiers
+		modifier = {
+			trait = craven
+			factor = 0.8
+		}
+		modifier = {
+			trait = weak
+			factor = 0.8
+		}
+		modifier = {
+			trait = feeble
+			factor = 0.8
+		}
+		modifier = {
+			trait = slothful
+			factor = 0.9
+		}
+		modifier = {
+			trait = dwarf
+			factor = 0.8
+		}
+		modifier = {
+			trait = clubfooted
+			factor = 0.8
+		}
+		modifier = {
+			trait = hunchback
+			factor = 0.8
+		}
+	}
+	
+	startup_populate = {
+	    trigger = {
+			ai = yes
+	    	controls_religion = no
+		   	OR = {
+				religion_group = shintoist_group
+				culture_group = japan_group
+			}
+			is_adult = yes
+			is_in_society = no
+			OR = {
+				AND = {
+					trait = zealous
+					martial = 10
+					religion_group = shintoist_group
+				}
+				martial = 12
+				has_lifestyle_martial_trigger = yes
+				has_education_martial_trigger = yes
+				OR = {
+					duelist_skill_is_medium_group_trigger = yes
+					duelist_skill_is_high_group_trigger = yes
+				}
+			}
+		}
+	}
+}
