@@ -1957,6 +1957,132 @@ decisions = {
 			}
 		}
 	}
+	restore_pope_in_sevilla = {
+		only_independent = yes
+		is_high_prio = yes
+		ai_check_interval = 36
+	
+		potential = {
+			is_playable = yes
+			independent = yes
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+			piety = 250
+			religion = sevillian
+			controls_religion = no
+			c_sevilla = {
+				holder_scope = {
+					OR = {
+						character = ROOT
+						is_liege_or_above = ROOT
+					}
+					AND = {
+						ROOT = { religion = sevillian }
+						k_sevillian_pope = {
+							holder_scope = {
+								NOT = { character = PREVPREV }
+								NOT = { is_vassal_or_below = PREVPREV }
+							}
+						}
+					}
+				}
+			}
+			prisoner = no
+			has_regent = no
+		}
+		allow = {
+			piety = 1000
+			OR = {
+				owns = 182 # sevilla
+				any_realm_lord = {
+					owns = 182
+				}
+			}
+		}
+		effect = {		
+			piety = 1000
+			prestige = 500
+			hidden_tooltip = {
+				if = {
+					limit = {
+						NOT = { is_title_active = k_sevillian_pope }
+					}
+					activate_title = { title = k_sevillian_pope status = yes }
+					create_random_priest = {
+						random_traits = yes
+						religion = ROOT
+						female = no
+						dynasty = none
+					}
+					new_character = {
+						k_sevillian_pope = {
+							grant_title = PREV
+						}
+						c_sevilla = {
+							grant_title = PREV
+						}
+						wealth = 500
+					}
+					k_sevillian_pope = {
+						set_preferred_capital = c_sevilla
+					}
+					k_sevillian_pope = {
+						holder_scope = {
+							opinion = {
+								who = ROOT
+								modifier = opinion_restored_to_sevilla
+							}
+						}
+					}
+				}
+				else = {
+					k_sevillian_pope ={
+						holder_scope = { 
+							grant_title_no_opinion = k_sevillian_pope
+							wealth = 500
+						}
+						set_preferred_capital = c_sevilla
+					}
+					k_sevillian_pope = {
+						holder_scope = {
+							opinion = {
+								who = ROOT
+								modifier = opinion_restored_to_sevilla
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = {
+					any_demesne_province = {
+						NOT = { province_id = 182 }
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				c_sevilla = {
+					holder_scope = {
+						OR = {
+							ai = no
+							any_liege = { ai = no }  # AI will never take Rome province away from a player
+						}
+					}
+				}
+			}
+		}
+	}
 	
 	restore_ecumenical_patriarchate = {
 		only_independent = yes
