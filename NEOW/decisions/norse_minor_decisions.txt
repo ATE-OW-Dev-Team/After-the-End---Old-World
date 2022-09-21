@@ -7,16 +7,22 @@ targetted_decisions = {
 
 		from_potential = {
 			is_playable = yes
-			is_member_of_any_warrior_lodge_trigger = yes
+			OR = {
+				culture = scythian
+				is_member_of_any_warrior_lodge_trigger = yes
+			}
 		}
 
 		potential = {
 			is_female = yes
 			FROM = { is_liege_of = ROOT	}
 			NOT = {	character = FROM }
-			AND = {
-				FROM = { is_member_of_any_warrior_lodge_trigger = yes }
-				is_child_or_sibling_of_from_trigger = yes
+			OR = {
+				culture = scythian
+				AND = {
+					FROM = { is_member_of_any_warrior_lodge_trigger = yes }
+					is_child_or_sibling_of_from_trigger = yes
+				}
 			}
 			NOT = { trait = shieldmaiden }
 			OR = {
@@ -33,9 +39,57 @@ targetted_decisions = {
 		}
 
 		allow = {			
+			conditional_tooltip = { #For regular scythian...
+				trigger = {
+					FROM = { is_member_of_any_warrior_lodge_trigger = no }
+					FROM = { culture = scythian }
+				}
+				martial = 10
+				custom_tooltip = {
+					text = make_shieldmaiden_custom_tooltip_1
+					hidden_tooltip = {
+						OR = {
+							trait = brave
+							trait = proud
+							trait = ambitious
+							trait = diligent
+							trait = just
+							trait = gregarious
+						}
+					}
+				}
+			}
+
+			conditional_tooltip = { #For a scythian who is ALSO a warrior lodge member...
+				trigger = {
+					FROM = { is_member_of_any_warrior_lodge_trigger = yes }
+					FROM = { culture = scythian }
+				}
+				OR = {
+					AND = {
+						martial = 10
+						custom_tooltip = {
+							text = make_shieldmaiden_custom_tooltip_1
+							hidden_tooltip = {
+								OR = {
+									trait = brave
+									trait = proud
+									trait = ambitious
+									trait = diligent
+									trait = just
+									trait = gregarious
+								}
+							}
+						}
+					}
+					is_child_or_sibling_of_from_trigger = yes
+				}
+			}
+
 			conditional_tooltip = { #For regular warrior lodge members...
                 trigger = {
                     FROM = { is_member_of_any_warrior_lodge_trigger = yes }
+                    FROM = { NOT = { culture = scythian } }
                 }
                 is_child_or_sibling_of_from_trigger = yes
             }
@@ -102,7 +156,13 @@ targetted_decisions = {
 
 		from_potential = {
 			is_playable = yes
-			is_member_of_any_warrior_lodge_trigger = yes
+			OR = {
+				culture = scythian
+				AND = {
+					FROM = { is_member_of_any_warrior_lodge_trigger = yes }
+					is_child_or_sibling_of_from_trigger = yes
+				}
+			}
 		}
 
 		potential = {
@@ -110,8 +170,13 @@ targetted_decisions = {
 			trait = shieldmaiden
 			FROM = { is_liege_of = ROOT	}
 			is_female = yes
-			FROM = { is_member_of_any_warrior_lodge_trigger = yes }
-			is_child_or_sibling_of_from_trigger = yes
+			OR = {
+				culture = scythian
+				AND = {
+					FROM = { is_member_of_any_warrior_lodge_trigger = yes }
+					is_child_or_sibling_of_from_trigger = yes
+				}
+			}
 		}
 
 		allow = {
