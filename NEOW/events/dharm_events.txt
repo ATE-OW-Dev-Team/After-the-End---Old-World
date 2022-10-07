@@ -1,0 +1,547 @@
+namespace = dharm
+
+#########################################
+#
+#	Dharmic religious events
+#
+#########################################
+# Gain a bonus
+character_event = {
+	id = dharm.1
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	hide_from = yes
+
+	desc = {
+		text = dharm1Desc
+
+	}
+	immediate = {
+		set_character_flag = picking_dharm_patron
+	}
+	
+	option = {
+		name = EVTOPTA_dharm1
+		if = {
+			limit = { religion = maunaxite }
+			add_trait = trimurti_cult
+		}
+		else = {
+			add_trait = trimurti_cult_reformed
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_dharm1
+		if = {
+			limit = { religion = maunaxite }
+			add_trait = saraswati_cult
+		}
+		else = {
+			add_trait = saraswati_cult_reformed
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_dharm1
+		if = {
+			limit = { religion = maunaxite }
+			add_trait = krishna_cult
+		}
+		else = {
+			add_trait = krishna_cult_reformed
+		}
+	}
+	
+	option = {#A third school that's simultaneously allied with and at war with the other two.
+		name = EVTOPTD_dharm1
+		hidden_tooltip = { character_event = { id = dharm.2 } }
+	}
+	
+	after = {
+		clr_character_flag = picking_dharm_patron
+	}
+}
+
+character_event = {
+	id = dharm.2
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	hide_from = yes
+
+	desc = {
+		text = dharm2Desc
+
+	}
+	immediate = {
+		set_character_flag = picking_dharm_patron
+	}
+
+	
+	option = {
+		name = EVTOPTA_dharm2
+		if = {
+			limit = { religion = maunaxite }
+			add_trait = lakshmi_cult
+		}
+		else = {
+			add_trait = lakshmi_cult_reformed
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_dharm2
+		if = {
+			limit = { religion = maunaxite }
+			add_trait = minor_devi_cult
+		}
+		else = {
+			add_trait = minor_devi_cult_reformed
+		}
+	}
+	
+	option = {#A third school that's simultaneously allied with and at war with the other two.
+		name = EVTOPTC_dharm2
+		piety = 50
+	}
+	
+	option = {#A third school that's simultaneously allied with and at war with the other two.
+		name = EVTOPTD_dharm2
+		hidden_tooltip = { character_event = { id = dharm.1 } }
+	}
+	
+	after = {
+		clr_character_flag = picking_dharm_patron
+	}
+}
+
+#Scary giant letter event determining it for the AI.
+#TODO: Make personality matter.
+letter_event = {
+	id = dharm.5
+	is_triggered_only = yes
+	border = GFX_event_letter_frame_religion
+	desc = dharm5Desc
+	option = {
+		name = EVTOPTA_dharm5
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = krishna_cult
+						}
+						mother_even_if_dead = {
+							trait = krishna_cult
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = krishna_cult
+								}
+								mother_even_if_dead = {
+									trait = krishna_cult
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = krishna_cult
+								}
+								mother_even_if_dead = {
+									trait = krishna_cult
+								}
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = krishna_cult_reformed
+						}
+						mother_even_if_dead = {
+							trait = krishna_cult_reformed
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = krishna_cult_reformed
+								}
+								mother_even_if_dead = {
+									trait = krishna_cult_reformed
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = krishna_cult_reformed
+								}
+								mother_even_if_dead = {
+									trait = krishna_cult_reformed
+								}
+							}
+						}
+					}
+				}
+				job_event_mtth_modifier_inverted_diplomacy_score = yes
+				if = {
+					limit = { religion = maunaxite }
+					add_trait = krishna_cult
+				}
+				else = {
+					add_trait = krishna_cult_reformed
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = trimurti_cult
+						}
+						mother_even_if_dead = {
+							trait = trimurti_cult
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = trimurti_cult
+								}
+								mother_even_if_dead = {
+									trait = trimurti_cult
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = trimurti_cult
+								}
+								mother_even_if_dead = {
+									trait = trimurti_cult
+								}
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = trimurti_cult_reformed
+						}
+						mother_even_if_dead = {
+							trait = trimurti_cult_reformed
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = trimurti_cult_reformed
+								}
+								mother_even_if_dead = {
+									trait = trimurti_cult_reformed
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = trimurti_cult_reformed
+								}
+								mother_even_if_dead = {
+									trait = trimurti_cult_reformed
+								}
+							}
+						}
+					}
+				}
+				job_event_mtth_modifier_inverted_martial_score = yes
+				if = {
+					limit = { religion = maunaxite }
+					add_trait = trimurti_cult
+				}
+				else = {
+					add_trait = trimurti_cult_reformed
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = lakshmi_cult
+						}
+						mother_even_if_dead = {
+							trait = lakshmi_cult
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = lakshmi_cult
+								}
+								mother_even_if_dead = {
+									trait = lakshmi_cult
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = lakshmi_cult
+								}
+								mother_even_if_dead = {
+									trait = lakshmi_cult
+								}
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = lakshmi_cult_reformed
+						}
+						mother_even_if_dead = {
+							trait = lakshmi_cult_reformed
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = lakshmi_cult_reformed
+								}
+								mother_even_if_dead = {
+									trait = lakshmi_cult_reformed
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = lakshmi_cult_reformed
+								}
+								mother_even_if_dead = {
+									trait = lakshmi_cult_reformed
+								}
+							}
+						}
+					}
+				}
+				job_event_mtth_modifier_inverted_stewardship_score = yes
+				if = {
+					limit = { religion = maunaxite }
+					add_trait = lakshmi_cult
+				}
+				else = {
+					add_trait = lakshmi_cult_reformed
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = minor_devi_cult
+						}
+						mother_even_if_dead = {
+							trait = minor_devi_cult
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = minor_devi_cult
+								}
+								mother_even_if_dead = {
+									trait = minor_devi_cult
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = minor_devi_cult
+								}
+								mother_even_if_dead = {
+									trait = minor_devi_cult
+								}
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = minor_devi_cult_reformed
+						}
+						mother_even_if_dead = {
+							trait = minor_devi_cult_reformed
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = minor_devi_cult_reformed
+								}
+								mother_even_if_dead = {
+									trait = minor_devi_cult_reformed
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = minor_devi_cult_reformed
+								}
+								mother_even_if_dead = {
+									trait = minor_devi_cult_reformed
+								}
+							}
+						}
+					}
+				}
+				job_event_mtth_modifier_inverted_intrigue_score = yes
+				if = {
+					limit = { religion = maunaxite }
+					add_trait = minor_devi_cult
+				}
+				else = {
+					add_trait = minor_devi_cult_reformed
+				}
+			}
+			10 = {
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = saraswati_cult
+						}
+						mother_even_if_dead = {
+							trait = saraswati_cult
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = saraswati_cult
+								}
+								mother_even_if_dead = {
+									trait = saraswati_cult
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = saraswati_cult
+								}
+								mother_even_if_dead = {
+									trait = saraswati_cult
+								}
+							}
+						}
+					}
+				}
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = saraswati_cult_reformed
+						}
+						mother_even_if_dead = {
+							trait = saraswati_cult_reformed
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = saraswati_cult_reformed
+								}
+								mother_even_if_dead = {
+									trait = saraswati_cult_reformed
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = saraswati_cult_reformed
+								}
+								mother_even_if_dead = {
+									trait = saraswati_cult_reformed
+								}
+							}
+						}
+					}
+				}
+				job_event_mtth_modifier_inverted_learning_score = yes
+				if = {
+					limit = { religion = maunaxite }
+					add_trait = saraswati_cult
+				}
+				else = {
+					add_trait = saraswati_cult_reformed
+				}
+			}
+		}
+	}
+	after = {
+		clr_character_flag = picking_dharm_patron
+	}
+}
