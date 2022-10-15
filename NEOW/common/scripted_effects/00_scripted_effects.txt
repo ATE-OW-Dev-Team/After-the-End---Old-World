@@ -5524,77 +5524,75 @@ join_prev_monastic_order_society = {
 }
 
 clr_artifact_flagsmodifiers_effect = {
-	event_target:relic_ruler = { 
-		if = {
-			limit = { has_character_modifier = relic_rumor_minor }
-			remove_character_modifier = relic_rumor_minor
+	event_target:relic_ruler = {
+		show_scope_change = no
+
+		trigger_switch = {
+			on_trigger = has_character_modifier
+
+			relic_rumor_minor = { remove_character_modifier = relic_rumor_minor }
+			relic_rumor_medium = { remove_character_modifier = relic_rumor_medium }
+			relic_rumor_major  = { remove_character_modifier = relic_rumor_major }
 		}
-		if = {
-			limit = { has_character_modifier = relic_rumor_medium }
-			remove_character_modifier = relic_rumor_medium
-		}
-		if = {
-			limit = { has_character_modifier = relic_rumor_major }
-			remove_character_modifier = relic_rumor_major
-		}	
 	}
 	clr_artifact_searcher_effect = yes
 }
 
 clr_artifact_searcher_effect = {
-	event_target:relic_ruler = { 
-		if = {
-			limit = { has_character_modifier = pays_for_artifact_hunt_minor }
-			remove_character_modifier = pays_for_artifact_hunt_minor
+	event_target:relic_ruler = {
+		show_scope_change = no
+
+		trigger_switch = {
+			on_trigger = has_character_modifier
+
+			pays_for_artifact_hunt_minor = { remove_character_modifier = pays_for_artifact_hunt_minor }
+			pays_for_artifact_hunt_medium = { remove_character_modifier = pays_for_artifact_hunt_medium }
+			pays_for_artifact_hunt_major = { remove_character_modifier = pays_for_artifact_hunt_major }
 		}
-		if = {
-			limit = { has_character_modifier = pays_for_artifact_hunt_medium }
-			remove_character_modifier = pays_for_artifact_hunt_medium
+
+		# From the progress events....
+		trigger_switch = {
+			on_trigger = has_character_modifier
+
+			treasure_hunting_diplomats = { remove_character_modifier = treasure_hunting_diplomats }
+			treasure_hunting_soldiers = { remove_character_modifier = treasure_hunting_soldiers }
+			treasure_hunting_stewards = { remove_character_modifier = treasure_hunting_stewards }
+			treasure_hunting_spies = { remove_character_modifier = treasure_hunting_spies }
+			treasure_hunting_scholars = { remove_character_modifier = treasure_hunting_scholars }
 		}
-		if = {
-			limit = { has_character_modifier = pays_for_artifact_hunt_major }
-			remove_character_modifier = pays_for_artifact_hunt_major
-		}
-		# from the progress events....
-		if = {
-			limit = { has_character_modifier = treasure_hunting_diplomats }
-			remove_character_modifier = treasure_hunting_diplomats
-		}
-		if = {
-			limit = { has_character_modifier = treasure_hunting_soldiers }
-			remove_character_modifier = treasure_hunting_soldiers
-		}
-		if = {
-			limit = { has_character_modifier = treasure_hunting_stewards }
-			remove_character_modifier = treasure_hunting_stewards
-		}
-		if = {
-			limit = { has_character_modifier = treasure_hunting_spies }
-			remove_character_modifier = treasure_hunting_spies
-		}
-		if = {
-			limit = { has_character_modifier = treasure_hunting_scholars }
-			remove_character_modifier = treasure_hunting_scholars
-		}
+
 		clr_character_flag = they_asked_for_your_help
 	}
-	hidden_effect = {
-		event_target:relic_hunter = { clr_character_flag = relic_hunter }
+
+	event_target:relic_hunter = {
+		clr_character_flag = relic_hunter
 	}
 }
 
 add_artifact_search_payment_effect = {
-	if = {
-		limit = { has_character_modifier = relic_rumor_minor }
-		add_character_modifier =  { name = pays_for_artifact_hunt_minor duration = -1 }
-	}
-	if = {
-		limit = { has_character_modifier = relic_rumor_medium }
-		add_character_modifier =  { name = pays_for_artifact_hunt_medium duration = -1 }
-	}
-	if = {
-		limit = { has_character_modifier = relic_rumor_major }
-		add_character_modifier =  { name = pays_for_artifact_hunt_major duration = -1 }
+	trigger_switch = {
+		on_trigger = has_character_modifier
+
+		relic_rumor_minor = {
+			add_character_modifier = {
+				name = pays_for_artifact_hunt_minor
+				duration = -1
+			}
+		}
+
+		relic_rumor_medium = {
+			add_character_modifier = {
+				name = pays_for_artifact_hunt_medium
+				duration = -1
+			}
+		}
+
+		relic_rumor_major = {
+			add_character_modifier = {
+				name = pays_for_artifact_hunt_major
+				duration = -1
+			}
+		}
 	}
 }
 
@@ -12904,15 +12902,15 @@ set_higher_quality_of_book_flags_effect = {
 		}
 		clr_character_flag = good_book_potential
 	}
-	if = {
+	else_if = {
 		limit = {
 			NOT = { has_character_flag = decent_book_potential }
 			has_character_flag = good_book_potential
 			NOT = { has_character_flag = great_book_potential }
 		}
 		set_character_flag = great_book_potential
-	}			
-	if = {
+	}
+	else_if = {
 		limit = {
 			has_character_flag = decent_book_potential
 			has_character_flag = good_book_potential
@@ -12920,7 +12918,7 @@ set_higher_quality_of_book_flags_effect = {
 		}
 		clr_character_flag = decent_book_potential
 	}
-	if = {
+	else_if = {
 		limit = {
 			has_character_flag = decent_book_potential
 			has_character_flag = good_book_potential
@@ -12928,7 +12926,7 @@ set_higher_quality_of_book_flags_effect = {
 		}
 		set_character_flag = great_book_potential
 	}
-	if = {
+	else_if = {
 		limit = {
 			has_character_flag = decent_book_potential
 			NOT = { has_character_flag = good_book_potential }
@@ -12936,13 +12934,14 @@ set_higher_quality_of_book_flags_effect = {
 		}
 		set_character_flag = good_book_potential
 	}
-	#Fallback in case flags have cleared somehow...
-	if = {
+
+	# Fallback in case flags have cleared somehow...
+	else_if = {
 		limit = {
 			NOR = {
 				has_character_flag = decent_book_potential
-        		has_character_flag = good_book_potential
-        		has_character_flag = great_book_potential
+				has_character_flag = good_book_potential
+				has_character_flag = great_book_potential
 			}
 		}
 		set_character_flag = decent_book_potential
@@ -12958,7 +12957,7 @@ set_lower_quality_of_book_flags_effect = {
 		}
 		clr_character_flag = good_book_potential
 	}
-	if = {
+	else_if = {
 		limit = {
 			NOT = { has_character_flag = decent_book_potential }
 			has_character_flag = good_book_potential
@@ -12966,7 +12965,7 @@ set_lower_quality_of_book_flags_effect = {
 		}
 		set_character_flag = decent_book_potential
 	}
-	if = {
+	else_if = {
 		limit = {
 			has_character_flag = decent_book_potential
 			has_character_flag = good_book_potential
@@ -12974,7 +12973,7 @@ set_lower_quality_of_book_flags_effect = {
 		}
 		clr_character_flag = great_book_potential
 	}
-	if = {
+	else_if = {
 		limit = {
 			NOT = { has_character_flag = decent_book_potential }
 			has_character_flag = good_book_potential
@@ -12982,7 +12981,7 @@ set_lower_quality_of_book_flags_effect = {
 		}
 		set_character_flag = decent_book_potential
 	}
-	if = {
+	else_if = {
 		limit = {
 			NOT = { has_character_flag = decent_book_potential }
 			NOT = { has_character_flag = good_book_potential }
@@ -12991,13 +12990,13 @@ set_lower_quality_of_book_flags_effect = {
 		set_character_flag = good_book_potential
 	}
 
-	#Fallback in case flags have cleared somehow...
-	if = {
+	# Fallback in case flags have cleared somehow...
+	else_if = {
 		limit = {
 			NOR = {
 				has_character_flag = decent_book_potential
-        		has_character_flag = good_book_potential
-        		has_character_flag = great_book_potential
+				has_character_flag = good_book_potential
+				has_character_flag = great_book_potential
 			}
 		}
 		set_character_flag = decent_book_potential
@@ -22149,92 +22148,131 @@ clr_flags_introduce_heir_effect = {
 }
 
 generate_mask_effect = {
-	random_list = { 
-		20 = { 
+	random_list = {
+		20 = {
 			add_artifact = crown_african_mask_1
+
 			new_artifact = {
-				random_list = { 
-					20 = { set_name = crown_african_mask_1_random_a } #Randomize names to avoid too much repetition.
+				random_list = {
+					# Randomize names to avoid too much repetition
+					20 = { set_name = crown_african_mask_1_random_a }
 					20 = { set_name = crown_african_mask_1_random_b }
 					20 = { set_name = crown_african_mask_1_random_c }
-					20 = { set_name = crown_african_mask_1_random_d } 
+					20 = { set_name = crown_african_mask_1_random_d }
 				}
 			}
 		}
-		20 = { 
+
+		20 = {
 			add_artifact = crown_african_mask_2
+
 			new_artifact = {
-				random_list = { 
-					20 = { set_name = crown_african_mask_2_random_a } #Randomize names to avoid too much repetition.
+				random_list = {
+					# Randomize names to avoid too much repetition
+					20 = { set_name = crown_african_mask_2_random_a }
 					20 = { set_name = crown_african_mask_2_random_b }
 					20 = { set_name = crown_african_mask_2_random_c }
-					20 = { set_name = crown_african_mask_2_random_d } 
+					20 = { set_name = crown_african_mask_2_random_d }
 				}
 			}
 		}
-		20 = { 
+
+		20 = {
 			add_artifact = crown_african_mask_3
+
 			new_artifact = {
-				random_list = { 
-					20 = { set_name = crown_african_mask_3_random_a } #Randomize names to avoid too much repetition.
+				random_list = {
+					# Randomize names to avoid too much repetition
+					20 = { set_name = crown_african_mask_3_random_a }
 					20 = { set_name = crown_african_mask_3_random_b }
 					20 = { set_name = crown_african_mask_3_random_c }
-					20 = { set_name = crown_african_mask_3_random_d } 
+					20 = { set_name = crown_african_mask_3_random_d }
 				}
 			}
 		}
-		20 = { 
+
+		20 = {
 			add_artifact = crown_african_mask_4
+
 			new_artifact = {
-				random_list = { 
-					20 = { set_name = crown_african_mask_4_random_a } #Randomize names to avoid too much repetition.
+				random_list = {
+					# Randomize names to avoid too much repetition
+					20 = { set_name = crown_african_mask_4_random_a }
 					20 = { set_name = crown_african_mask_4_random_b }
 					20 = { set_name = crown_african_mask_4_random_c }
-					20 = { set_name = crown_african_mask_4_random_d } 
+					20 = { set_name = crown_african_mask_4_random_d }
 				}
 			}
 		}
-		20 = { 
+
+		20 = {
 			add_artifact = crown_african_mask_5
+
 			new_artifact = {
-				random_list = { 
-					20 = { set_name = crown_african_mask_5_random_a } #Randomize names to avoid too much repetition.
-					20 = { trigger = { ROOT = { NOT = { dynasty = none } } } set_name = crown_african_mask_5_random_b }
+				random_list = {
+					# Randomize names to avoid too much repetition
+					20 = { set_name = crown_african_mask_5_random_a }
+					20 = {
+						trigger = {
+							ROOT = {
+								is_lowborn = no
+							}
+						}
+
+						set_name = crown_african_mask_5_random_b
+					}
 					20 = { set_name = crown_african_mask_5_random_c }
-					20 = { set_name = crown_african_mask_5_random_d } 
+					20 = { set_name = crown_african_mask_5_random_d }
 				}
 			}
 		}
-		20 = { 
+
+		20 = {
 			add_artifact = crown_african_mask_6
+
 			new_artifact = {
-				random_list = { 
-					20 = { set_name = crown_african_mask_6_random_a } #Randomize names to avoid too much repetition.
+				random_list = {
+					# Randomize names to avoid too much repetition
+					20 = { set_name = crown_african_mask_6_random_a }
 					20 = { set_name = crown_african_mask_6_random_b }
-					20 = { trigger = { ROOT = { NOT = { dynasty = none } } } set_name = crown_african_mask_6_random_c }
-					20 = { set_name = crown_african_mask_6_random_d } 
+					20 = {
+						trigger = {
+							ROOT = {
+								is_lowborn = no
+							}
+						}
+
+						set_name = crown_african_mask_6_random_c
+					}
+					20 = { set_name = crown_african_mask_6_random_d }
 				}
 			}
 		}
-		20 = { 
+
+		20 = {
 			add_artifact = crown_african_mask_7
+
 			new_artifact = {
-				random_list = { 
-					20 = { set_name = crown_african_mask_7_random_a } #Randomize names to avoid too much repetition.
+				random_list = {
+					# Randomize names to avoid too much repetition
+					20 = { set_name = crown_african_mask_7_random_a }
 					20 = { set_name = crown_african_mask_7_random_b }
 					20 = { set_name = crown_african_mask_7_random_c }
-					20 = { set_name = crown_african_mask_7_random_d } 
+					20 = { set_name = crown_african_mask_7_random_d }
 				}
 			}
 		}
-		20 = { 
+
+		20 = {
 			add_artifact = crown_african_mask_8
+
 			new_artifact = {
-				random_list = { 
-					20 = { set_name = crown_african_mask_8_random_a } #Randomize names to avoid too much repetition.
+				random_list = {
+					# Randomize names to avoid too much repetition
+					20 = { set_name = crown_african_mask_8_random_a }
 					20 = { set_name = crown_african_mask_8_random_b }
 					20 = { set_name = crown_african_mask_8_random_c }
-					20 = { set_name = crown_african_mask_8_random_d } 
+					20 = { set_name = crown_african_mask_8_random_d }
 				}
 			}
 		}
