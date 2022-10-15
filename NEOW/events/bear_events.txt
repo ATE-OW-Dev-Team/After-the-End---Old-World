@@ -14,26 +14,29 @@ character_event = {
 	id = bear.7
 
 	hide_window = yes
-	is_triggered_only = yes
+	is_triggered_only = yes # on_yearly_pulse
 
 	only_playable = yes
 
 	trigger = {
-		NOT = {
-			has_game_rule = {
-				name = silly_events
-				value = off
-			}
-		}
 		OR = {
 			is_feudal = yes
 			is_patrician = yes
 		}
-		OR = {
-			ai = no
+
+		trigger_if = {
+			limit = { ai = yes }
 			has_game_rule = {
 				name = silly_events
 				value = unrestricted
+			}
+		}
+		trigger_else = {
+			NOT = {
+				has_game_rule = {
+					name = silly_events
+					value = off
+				}
 			}
 		}
 	}
@@ -42,34 +45,33 @@ character_event = {
 		random_list = {
 			9999 = { }
 			1 = {
-				modifier = {
+				mult_modifier = {
 					factor = 10
 					trait = lunatic
 				}
-				modifier = {
+
+				mult_modifier = {
 					factor = 3
 					trait = paranoid
 				}
-				modifier = {
+
+				mult_modifier = {
 					factor = 0.2
 					trait = trusting
 				}
 
 				random_close_relative = {
 					limit = {
-						NOT = { has_character_flag = secret_bear }
-						prisoner = no
+						practical_age < 40
 						host = { character = ROOT }
-						is_adult = yes
-						age < 40
-						is_incapable = no
 						ai = yes
+						block_general_event_trigger = no
+						NOT = { has_character_flag = secret_bear }
 					}
 					set_character_flag = secret_bear
 				}
-				character_event = {
-					id = bear.1
-				}
+
+				character_event = { id = bear.1 }
 			}
 		}
 	}
@@ -83,39 +85,42 @@ character_event = {
 	desc = bear.1.desc
 	picture = GFX_evt_drunk
 
-	is_triggered_only = yes
+	is_triggered_only = yes # on_yearly_pulse; above
 
 	only_playable = yes
-	prisoner = no
 	war = no # Don't want to annoy the player during a war
 	only_capable = yes
+	prisoner = no
 
 	trigger = {
-		NOT = {
-			has_game_rule = {
-				name = silly_events
-				value = off
-			}
-		}
 		OR = {
 			is_feudal = yes
 			is_patrician = yes
 		}
-		any_close_relative = {
-			has_character_flag = secret_bear
-			prisoner = no
-			host = { character = ROOT }
-			is_inaccessible_trigger = no
-			ai = yes
-		}
-		NOT = { has_character_flag = secret_bear_chain }
-		OR = {
-			ai = no
+
+		trigger_if = {
+			limit = { ai = yes }
+
 			has_game_rule = {
 				name = silly_events
 				value = unrestricted
 			}
 		}
+		trigger_else = {
+			NOT = {
+				has_game_rule = {
+					name = silly_events
+					value = off
+				}
+			}
+		}
+		any_close_relative = {
+			has_character_flag = secret_bear
+			ai = yes
+			host = { character = ROOT }
+			block_general_event_trigger = no
+		}
+		NOT = { has_character_flag = secret_bear_chain }
 		is_inaccessible_trigger = no
 	}
 
@@ -123,10 +128,9 @@ character_event = {
 		random_close_relative = {
 			limit = {
 				has_character_flag = secret_bear
-				prisoner = no
-				host = { character = ROOT }
-				is_inaccessible_trigger = no
 				ai = yes
+				host = { character = ROOT }
+				block_general_event_trigger = no
 			}
 			save_event_target_as = bear_character
 		}
@@ -135,18 +139,17 @@ character_event = {
 
 	option = {
 		name = bear.1.a
-		event_target:bear_character = {
-			opinion = {
-				who = ROOT
-				modifier = opinion_annoyed
-				years = 5
-			}
+
+		reverse_opinion = {
+			name = opinion_annoyed
+			who = event_target:bear_character
+			years = 5
 		}
 	}
 	option = {
 		name = bear.1.b
 		add_character_modifier = {
-			modifier = bad_nights_sleep
+			name = bad_nights_sleep
 			months = 6
 		}
 	}
@@ -175,22 +178,31 @@ character_event = {
 
 	trigger = {
 		event_target:bear_character = {
+			ai = yes
 			prisoner = no
 			host = { character = ROOT }
 			is_alive = yes
-			ai = yes
 		}
 	}
 
 	fail_trigger_effect = {
 		if = {
 			limit = {
-				event_target:bear_character = { prisoner = yes }
+				event_target:bear_character = {
+					prisoner = yes
+				}
 			}
-			repeat_event = { id = bear.2 days = 30 }
+
+			repeat_event = {
+				id = bear.2
+				days = 30
+			}
 		}
 		else = {
-			event_target:bear_character = { clr_character_flag = secret_bear }
+			event_target:bear_character = {
+				clr_character_flag = secret_bear
+			}
+
 			clr_character_flag = secret_bear_chain
 		}
 	}
@@ -226,10 +238,10 @@ character_event = {
 
 	trigger = {
 		event_target:bear_character = {
-			prisoner = no
-			host = { character = ROOT }
 			is_alive = yes
 			ai = yes
+			prisoner = no
+			host = { character = ROOT }
 		}
 	}
 
@@ -240,16 +252,18 @@ character_event = {
 	immediate = {
 		random_close_relative = {
 			limit = {
-				NOT = { character = event_target:bear_character }
 				prisoner = no
 				is_adult = yes
 				host = { character = ROOT }
+				NOT = { character = event_target:bear_character }
 			}
 			save_event_target_as = family_member
 		}
 	}
 
 	option = {
+		name = bear.3.a
+
 		trigger = {
 			is_married = yes
 			spouse = {
@@ -259,26 +273,26 @@ character_event = {
 				}
 			}
 		}
-		name = bear.3.a
-		spouse = {
-			opinion = {
-				who = ROOT
-				modifier = opinion_flattered
-				years = 5
-			}
+
+		reverse_opinion = {
+			name = opinion_flattered
+			who = spouse
+			years = 5
 		}
 	}
 	option = {
-		trigger = {
-			event_target:family_member = { always = yes }
-		}
 		name = bear.3.b
-		event_target:family_member = {
-			opinion = {
-				who = ROOT
-				modifier = opinion_flattered
-				years = 5
+
+		trigger = {
+			event_target:family_member = {
+				character = yes
 			}
+		}
+
+		reverse_opinion = {
+			name = opinion_flattered
+			who = event_target:family_member
+			years = 5
 		}
 	}
 	option = {
@@ -312,10 +326,10 @@ character_event = {
 
 	trigger = {
 		event_target:bear_character = {
-			prisoner = no
-			host = { character = ROOT }
 			is_alive = yes
 			ai = yes
+			prisoner = no
+			host = { character = ROOT }
 		}
 	}
 
@@ -324,29 +338,29 @@ character_event = {
 	}
 
 	option = {
+		name = bear.4.a
+
 		trigger = {
 			job_marshal = { always = yes }
 		}
-		name = bear.4.a
-		job_marshal = {
-			opinion = {
-				who = ROOT
-				modifier = opinion_flattered
-				years = 5
-			}
+
+		reverse_opinion = {
+			name = opinion_flattered
+			who = job_marshal
+			years = 5
 		}
 	}
 	option = {
+		name = bear.4.b
+
 		trigger = {
 			job_spymaster = { always = yes }
 		}
-		name = bear.4.b
-		job_spymaster = {
-			opinion = {
-				who = ROOT
-				modifier = opinion_flattered
-				years = 5
-			}
+
+		reverse_opinion = {
+			name = opinion_flattered
+			who = job_spymaster
+			years = 5
 		}
 	}
 	option = {
@@ -378,10 +392,10 @@ character_event = {
 
 	trigger = {
 		event_target:bear_character = {
-			prisoner = no
-			host = { character = ROOT }
 			is_alive = yes
 			ai = yes
+			prisoner = no
+			host = { character = ROOT }
 		}
 	}
 
@@ -420,10 +434,10 @@ long_character_event = {
 
 	trigger = {
 		event_target:bear_character = {
-			prisoner = no
-			host = { character = ROOT }
 			is_alive = yes
 			ai = yes
+			prisoner = no
+			host = { character = ROOT }
 		}
 	}
 
@@ -433,8 +447,14 @@ long_character_event = {
 
 	immediate = {
 		event_target:bear_character = {
-			culture_scope = { save_event_target_as = original_culture }
-			gfx_culture_scope = { save_event_target_as = original_gfx_culture }
+			culture_scope = {
+				save_event_target_as = original_culture
+			}
+
+			gfx_culture_scope = {
+				save_event_target_as = original_gfx_culture
+			}
+
 			set_graphical_culture = bear
 			culture = bear
 			clr_character_flag = secret_bear
@@ -470,12 +490,14 @@ long_character_event = {
 		}
 	}
 	option = {
-		tooltip_info = cannibal_trait
 		name = bear.6.e
-		trigger = {
-			trait = cannibal_trait
-		}
+		tooltip_info = cannibal
+
+		trigger = { trait = cannibal_trait }
+
 		event_target:bear_character = {
+			show_scope_change = no
+
 			death = {
 				death_reason = death_execution_eaten
 				killer = ROOT
@@ -483,13 +505,15 @@ long_character_event = {
 		}
 	}
 	option = {
-		tooltip_info = lunatic
 		name = bear.6.e
+		tooltip_info = lunatic
 		trigger = {
 			NOT = { trait = cannibal_trait }
 			trait = lunatic
 		}
 		event_target:bear_character = {
+			show_scope_change = no
+
 			death = {
 				death_reason = death_execution_eaten
 				killer = ROOT
@@ -497,12 +521,13 @@ long_character_event = {
 		}
 	}
 	option = {
-		tooltip_info = hunter
 		name = bear.6.f
-		trigger = {
-			trait = hunter
-		}
+		tooltip_info = hunter
+
+		trigger = { trait = hunter }
 		event_target:bear_character = {
+			show_scope_change = no
+
 			death = {
 				death_reason = death_execution_hunt
 				killer = ROOT
