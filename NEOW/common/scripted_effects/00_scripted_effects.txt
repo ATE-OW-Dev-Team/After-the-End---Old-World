@@ -4905,84 +4905,52 @@ prisoner_humiliation_effect = {
 
 maim_hand_effect = {
 	if = {
-		limit = {
-			NOT = {
-				has_dlc = "Reapers"
-			}
-		}
-		add_trait = maimed
-	}
-	if = {
-		limit = {
-			has_dlc = "Reapers"
-		}
+		limit = { has_dlc = "Reapers" }
+
 		if = {
 			limit = {
 				trait = one_handed
 				NOT = { trait = mangled }
 			}
+
 			add_trait = mangled
-			hidden_tooltip = { character_event = { id = RIP.11505 } }
+			character_event = { id = RIP.11505 }
 		}
-		if = {
+		else_if = {
 			limit = {
 				NOT = { trait = one_handed }
 			}
+
 			add_trait = one_handed
-			hidden_tooltip = { character_event = { id = RIP.11502 } }
+			character_event = { id = RIP.11502 }
 		}
 	}
-	add_trait = severely_injured
-	hidden_tooltip = {
-		hidden_tooltip = {
-			random_list = {
-				75 = { #Get rid of severely_injured
-					character_event = { id = RIP.11000 days = 90 random = 275}
-				}
-				25 = { #Get rid of severely_injured but develop infection
-					set_character_flag = pending_infection
-					character_event = { id = RIP.11000 days = 90 random = 275}
-				}
-			}
-		}
+	else = {
+		add_trait = maimed
 	}
+
+	add_severely_injured_effect = yes
 }
 
 mangle_effect = {
 	if = {
-		limit = {
-			NOT = {
-				has_dlc = "Reapers"
-			}
-		}
-		add_trait = maimed
-	}
-	if = {
-		limit = {
-			has_dlc = "Reapers"
-		}
+		limit = { has_dlc = "Reapers" }
+
 		if = {
 			limit = {
 				NOT = { trait = mangled }
 			}
+
 			add_trait = mangled
-			hidden_tooltip = { character_event = { id = RIP.11505 } }
+			character_event = { id = RIP.11505 }
 		}
 	}
+	else = {
+		add_trait = maimed
+	}
+
 	add_trait = severely_injured
-	hidden_tooltip = {
-		hidden_tooltip = {
-			random_list = {
-				75 = { #Get rid of severely_injured
-					character_event = { id = RIP.11000 days = 90 random = 275}
-				}
-				25 = { #Get rid of severely_injured but develop infection
-					set_character_flag = pending_infection
-					character_event = { id = RIP.11000 days = 90 random = 275}
-				}
-			}
-		}
-	}
+	resolve_severely_injured_effect = yes
 }
 
 remove_treatment_modifiers_effect = {
@@ -5741,221 +5709,364 @@ give_has_typhoid_fever_effect = {
 
 give_has_bubonic_plague_effect = {
 	if = {
-		limit = { NOT = { trait = has_bubonic_plague } }
+		limit = {
+			NOT = {
+				has_character_flag = immune_bubonic_plague
+				trait = has_bubonic_plague
+			}
+		}
 
 		if = {
-			limit = { 
-				has_dlc = "Reapers"
-				NOT = { has_character_flag = developing_illness }
-				NOT = { has_character_flag = disease_not_serious } 
+			limit = {
+				NOT = { has_dlc = "Reapers" }
 			}
+
+			add_trait = has_bubonic_plague
+		}
+
+		else_if = {
+			limit = {
+				NOR = {
+					has_character_flag = developing_illness
+					has_character_flag = disease_not_serious
+				}
+			}
+
+			tooltip = { add_trait = has_bubonic_plague }
+
 			set_character_flag = got_bubonic_plague
 			set_character_flag = developing_illness
-			hidden_tooltip = { character_event = { id = RIP.5012 days = 3 random = 10 } }
-		}
-		if = {
-			limit = { NOT = { has_dlc = "Reapers" } }
-			add_trait = has_bubonic_plague
+
+			character_event = {
+				id = RIP.5012 # Develop disease
+				days = 3
+				random = 10
+			}
 		}
 	}
 }
 
 give_has_measles_effect = {
 	if = {
-		limit = { NOT = { trait = has_measles } }
+		limit = {
+			NOR = {
+				has_character_flag = immune_measles
+				trait = has_measles
+			}
+		}
 
 		if = {
-			limit = { 
-				has_dlc = "Reapers"
-				NOT = { has_character_flag = developing_illness }
-				NOT = { has_character_flag = disease_not_serious } 
+			limit = {
+				NOT = { has_dlc = "Reapers" }
 			}
+
+			add_trait = has_measles
+		}
+
+		else_if = {
+			limit = {
+				NOR = {
+					has_character_flag = developing_illness
+					has_character_flag = disease_not_serious
+				}
+			}
+
+			tooltip = { add_trait = has_measles }
+
 			set_character_flag = got_measles
 			set_character_flag = developing_illness
-			hidden_tooltip = { character_event = { id = RIP.5018 days = 3 random = 10 } }
-		}
-		if = {
-			limit = { NOT = { has_dlc = "Reapers" } }
-			add_trait = has_measles
+
+			character_event = {
+				id = RIP.5018 # Develop disease
+				days = 3
+				random = 10
+			}
 		}
 	}
 }
 
 give_has_small_pox_effect = {
 	if = {
-		limit = { NOT = { trait = has_small_pox } }
+		limit = {
+			NOR = {
+				has_character_flag = immune_smallpox
+				trait = has_small_pox
+			}
+		}
 
 		if = {
-			limit = { 
-				has_dlc = "Reapers"
-				NOT = { has_character_flag = developing_illness }
-				NOT = { has_character_flag = disease_not_serious } 
+			limit = {
+				NOT = { has_dlc = "Reapers" }
 			}
+
+			add_trait = has_small_pox
+		}
+
+		else_if = {
+			limit = {
+				NOR = {
+					has_character_flag = developing_illness
+					has_character_flag = disease_not_serious
+				}
+			}
+
+			tooltip = { add_trait = has_small_pox }
+
 			set_character_flag = got_smallpox
 			set_character_flag = developing_illness
-			hidden_tooltip = { character_event = { id = RIP.5019 days = 3 random = 10 } }
-		}
-		if = {
-			limit = { NOT = { has_dlc = "Reapers" } }
-			add_trait = has_small_pox
+
+			character_event = {
+				id = RIP.5019 # Develop disease
+				days = 3
+				random = 10
+			}
 		}
 	}
 }
 
 give_has_aztec_disease_effect = {
 	if = {
-		limit = { NOT = { trait = has_aztec_disease } }
+		limit = {
+			NOR = {
+				has_character_flag = immune_aztec_disease
+				trait = has_aztec_disease
+			}
+		}
 
 		if = {
-			limit = { 
-				has_dlc = "Reapers"
-				NOT = { has_character_flag = developing_illness }
-				NOT = { has_character_flag = disease_not_serious } 
+			limit = {
+				NOT = { has_dlc = "Reapers" }
 			}
+
+			add_trait = has_aztec_disease
+		}
+
+		else_if = {
+			limit = {
+				NOR = {
+					has_character_flag = developing_illness
+					has_character_flag = disease_not_serious
+				}
+			}
+
+			tooltip = { add_trait = has_aztec_disease }
+
 			set_character_flag = got_aztec_disease
 			set_character_flag = developing_illness
-			hidden_tooltip = { character_event = { id = RIP.5014 days = 3 random = 40 } }
-		}
-		if = {
-			limit = { NOT = { has_dlc = "Reapers" } }
-			add_trait = has_aztec_disease
+
+			character_event = {
+				id = RIP.5014 # Develop disease
+				days = 3
+				random = 40
+			}
 		}
 	}
 }
 
 give_syphilitic_effect = {
 	if = {
-		limit = { 
-			NOT = { trait = syphilitic } 
+		limit = {
+			NOT = { trait = syphilitic }
 		}
 
 		if = {
-			limit = { 
-				has_dlc = "Reapers"
-				NOT = { has_character_flag = developing_illness }
-				NOT = { has_character_flag = disease_not_serious } 
+			limit = {
+				NOT = { has_dlc = "Reapers" }
 			}
+
+			add_trait = syphilitic
+		}
+
+		else_if = {
+			limit = {
+				NOR = {
+					has_character_flag = developing_illness
+					has_character_flag = disease_not_serious
+				}
+			}
+
+			tooltip = { add_trait = syphilitic }
+
 			set_character_flag = got_syphilis
 			set_character_flag = developing_illness
-			hidden_tooltip = { character_event = { id = RIP.5014 days = 3 random = 40 } }
-		}
-		if = {
-			limit = { NOT = { has_dlc = "Reapers" } }
-			add_trait = syphilitic
+
+			character_event = {
+				id = RIP.5014 # Develop disease
+				days = 3
+				random = 40
+			}
 		}
 	}
 }
 
 give_flu_effect = {
 	if = {
-		limit = { 
-			NOT = { trait = flu } 
+		limit = {
 			has_dlc = "Reapers"
-			NOT = { has_character_flag = developing_illness }
-			NOT = { has_character_flag = disease_not_serious }
+
+			NOR = {
+				trait = flu
+				has_character_flag = developing_illness
+				has_character_flag = disease_not_serious
+			}
 		}
+
+		tooltip = { add_trait = flu }
 
 		set_character_flag = got_flu
 		set_character_flag = developing_illness
-		hidden_tooltip = { character_event = { id = RIP.5020 days = 3 random = 3 } }
+
+		character_event = {
+			id = RIP.5020 # Develop disease
+			days = 3
+			random = 3
+		}
 	}
 }
 
 give_dysentery_effect = {
 	if = {
-		limit = { 
-			NOT = { trait = dysentery } 
+		limit = {
 			has_dlc = "Reapers"
-			NOT = { has_character_flag = developing_illness }
-			NOT = { has_character_flag = disease_not_serious }
+
+			NOR = {
+				trait = dysentery
+				has_character_flag = developing_illness
+				has_character_flag = disease_not_serious
+			}
 		}
+
+		tooltip = { add_trait = dysentery }
 
 		set_character_flag = got_dysentery
 		set_character_flag = developing_illness
-		hidden_tooltip = { character_event = { id = RIP.5021 days = 3 random = 10 } }
+
+		character_event = {
+			id = RIP.5021 # Develop disease
+			days = 3
+			random = 10
+		}
 	}
 }
 
 give_gout_effect = {
 	if = {
-		limit = { 
-			NOT = { trait = gout } 
+		limit = {
 			has_dlc = "Reapers"
-			NOT = { has_character_flag = developing_illness }
-			NOT = { has_character_flag = disease_not_serious }
+
+			NOR = {
+				trait = gout
+				has_character_flag = developing_illness
+				has_character_flag = disease_not_serious
+			}
 		}
+
+		tooltip = { add_trait = gout }
 
 		set_character_flag = got_gout
 		set_character_flag = developing_illness
-		hidden_tooltip = { character_event = { id = RIP.5022 days = 30 random = 60 } }
+
+		character_event = {
+			id = RIP.5022 # Develop disease
+			days = 30
+			random = 60
+		}
 	}
 }
 
 give_food_poisoning_effect = {
 	if = {
-		limit = { 
-			NOT = { trait = food_poisoning } 
+		limit = {
 			has_dlc = "Reapers"
-			NOT = { has_character_flag = developing_illness }
-			NOT = { has_character_flag = disease_not_serious }
+
+			NOR = {
+				trait = food_poisoning
+				has_character_flag = developing_illness
+				has_character_flag = disease_not_serious
+			}
 		}
+
+		tooltip = { add_trait = food_poisoning }
 
 		set_character_flag = got_food_poisoning
 		set_character_flag = developing_illness
-		hidden_tooltip = { character_event = { id = RIP.5023 days = 1 random = 2 } }
+
+		character_event = {
+			id = RIP.5023 # Develop disease
+			days = 1
+			random = 2
+		}
 	}
 }
 
 give_rabies_effect = {
 	if = {
-		limit = { 
-			NOT = { trait = rabies } 
+		limit = {
 			has_dlc = "Reapers"
-			NOT = { has_character_flag = developing_illness }
-			NOT = { has_character_flag = disease_not_serious }
+
+			NOR = {
+				trait = rabies
+				has_character_flag = developing_illness
+				has_character_flag = disease_not_serious
+			}
 		}
+
+		tooltip = { add_trait = rabies }
 
 		set_character_flag = got_rabies
 		set_character_flag = developing_illness
-		hidden_tooltip = { character_event = { id = RIP.5024 days = 30 random = 60 } }
+
+		character_event = {
+			id = RIP.5024 # Develop disease
+			days = 30
+			random = 60
+		}
 	}
 }
 
 give_cancer_effect = {
 	if = {
-		limit = { 
-			NOT = { trait = cancer } 
+		limit = {
 			has_dlc = "Reapers"
-			NOT = { has_character_flag = developing_illness }
-			NOT = { has_character_flag = disease_not_serious }
+
+			NOR = {
+				trait = cancer
+				has_character_flag = developing_illness
+				has_character_flag = disease_not_serious
+			}
 		}
+
+		tooltip = { add_trait = cancer }
 
 		set_character_flag = got_cancer
 		set_character_flag = developing_illness
-		hidden_tooltip = { character_event = { id = RIP.5025 days = 30 random = 60 } }
+
+		character_event = {
+			id = RIP.5025 # Develop disease
+			days = 30
+			random = 60
+		}
 	}
 }
 
 give_ill_effect = {
 	if = {
-		limit = { 
-			NOR = { 
-				has_dlc = "Reapers" 
-				trait = ill
-			} 
-		}
-		add_trait = ill
-		hidden_tooltip = {
-			character_event = {
-				days = 3
-				id = 38290 #Notify Ill
-			}
-		}
-	}
-	if = {
 		limit = { has_dlc = "Reapers" }
-		tooltip = { add_trait = flu }
+
 		give_flu_effect = yes
+	}
+
+	else_if = {
+		limit = {
+			NOT = { trait = ill	}
+		}
+
+		add_trait = ill
+
+		character_event = {
+			id = 38290 # Notify Ill
+			days = 3
+		}
 	}
 }
 
@@ -7310,122 +7421,88 @@ detract_society_currency_major_effect = {
 remove_random_maimed_effect = { #remember to clear flags if using this effect :D
 	random_list = {
 		40 = {
-			modifier = {
-				NOT = { trait = maimed }
-				factor = 0
-			}
+			trigger = { trait = maimed }
 			set_character_flag = removed_maimed
 		}
+
 		40 = {
-			modifier = {
-				NOT = {trait = mangled}
-				factor = 0
-			}
+			trigger = { trait = mangled }
 			set_character_flag = removed_mangled
 		}
+
 		10 = {
-			modifier = {
-				NOT = {trait = one_eyed}
-				factor = 0
-			}
+			trigger = { trait = one_eyed }
 			set_character_flag = removed_one_eyed
 		}
+
 		10 = {
-			modifier = {
-				NOT = {trait = one_handed}
-				factor = 0
-			}
+			trigger = { trait = one_handed }
 			set_character_flag = removed_one_handed
 		}
+
 		10 = {
-			modifier = {
-				NOT = {trait = one_legged}
-				factor = 0
-			}
+			trigger = { trait = one_legged }
 			set_character_flag = removed_one_legged
 		}
+
 		5 = {
-			modifier = {
-				NOT = {trait = disfigured}
-				factor = 0
-			}
+			trigger = { trait = disfigured }
 			set_character_flag = removed_disfigured
 		}
 	}
 }
 
-remove_random_disease_effect = { # Do actual trait removal in event. This is a clunky solution, but communication to player has been prioritised for the sake of event MNM.7119
+# Do actual trait removal in event.
+# This is a clunky solution, but communication to player has been prioritised for the sake of event MNM.7119
+remove_random_disease_effect = {
 	random_list = {
 		40 = {
-			modifier = {
-				NOT = { trait = flu }
-				factor = 0
-			}
+			trigger = { trait = flu }
 			set_character_flag = removing_flu
 		}
+
 		20 = {
-			modifier = {
-				NOT = { trait = has_measles }
-				factor = 0
-			}
+			trigger = { trait = has_measles }
 			set_character_flag = removing_measles
 		}
+
 		40 = {
-			modifier = {
-				NOT = {
-					trait = food_poisoning
-				}
-				factor = 0
-			}
+			trigger = { trait = food_poisoning }
 			set_character_flag = removing_food_poisoning
 		}
+
 		20 = {
-			modifier = {
-				NOT = { trait = gout }
-				factor = 0
-			}
+			trigger = { trait = gout }
 			set_character_flag = removing_gout
 		}
+
 		40 = {
-			modifier = {
-				NOT = { trait = scurvy }
-				factor = 0
-			}
+			trigger = { trait = scurvy }
 			set_character_flag = removing_scurvy
 		}
+
 		20 = {
-			modifier = {
-				NOT = { trait = lovers_pox }
-				factor = 0
-			}
+			trigger = { trait = lovers_pox }
 			set_character_flag = removing_lovers_pox
 		}
+
 		5 = {
-			modifier = {
-				NOT = { trait = cancer }
-				factor = 0
-			}
+			trigger = { trait = cancer }
 			set_character_flag = removing_cancer
 		}
+
 		10 = {
-			modifier = {
-				NOT = { trait = pneumonic }
-				factor = 0
-			}
+			trigger = { trait = pneumonic }
 			set_character_flag = removing_pneumonic
 		}
+
 		10 = {
-			modifier = {
-				NOT = { trait = syphilitic }
-				factor = 0
-			}
+			trigger = { trait = syphilitic }
 			set_character_flag = removing_syphilitic
 		}
+
 		5 = {
-			modifier = {
-				NOT = { trait = leper }
-				factor = 0
-			}
+			trigger = { trait = leper }
 			set_character_flag = removing_leper
 		}
 	}
@@ -7434,103 +7511,54 @@ remove_random_disease_effect = { # Do actual trait removal in event. This is a c
 remove_random_epidemic_disease_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				NOT = { trait = has_tuberculosis}
-				factor = 0
-			}
+			trigger = { trait = has_tuberculosis }
 			set_character_flag = removing_has_tuberculosis
 		}
+
 		10 = {
-			modifier = {
-				NOT = { trait = has_aztec_disease}
-				factor = 0
-			}
+			trigger = { trait = has_aztec_diseasee }
 			set_character_flag = removing_has_aztec_disease
 		}
+
 		10 = {
-			modifier = {
-				NOT = { trait = has_small_pox}
-				factor = 0
-			}
+			trigger = { trait = has_small_pox }
 			set_character_flag = removing_has_small_pox
 		}
+
 		10 = {
-			modifier = {
-				NOT = { trait = has_bubonic_plague}
-				factor = 0
-			}
+			trigger = { trait = has_bubonic_plague }
 			set_character_flag = removing_has_bubonic_plague
 		}
+
 		10 = {
-			modifier = {
-				NOT = { trait = has_typhus}
-				factor = 0
-			}
+			trigger = { trait = has_typhus }
 			set_character_flag = removing_has_typhus
 		}
+
 		10 = {
-			modifier = {
-				NOT = { trait = has_typhoid_fever}
-				factor = 0
-			}
+			trigger = { trait = has_typhoid_fever }
 			set_character_flag = removing_has_typhoid_fever
 		}
+
 		10 = {
-			modifier = {
-				NOT = { trait = has_measles}
-				factor = 0
-			}
+			trigger = { trait = measles }
 			set_character_flag = removing_measles
 		}
-
 	}
 }
 
 remove_symptoms_effect = {
-	if = {
-		limit = { trait = cough}
-		remove_trait = cough
-	}
-	if = {
-		limit = { trait = fever}
-		remove_trait = fever
-	}
-	if = {
-		limit = { trait = diarrhea}
-		remove_trait = diarrhea
-	}
-	if = {
-		limit = { trait = vomiting}
-		remove_trait = vomiting
-	}
-	if = {
-		limit = { trait = chest_pain}
-		remove_trait = chest_pain
-	}
-	if = {
-		limit = { trait = cramps}
-		remove_trait = cramps
-	}
-	if = {
-		limit = { trait = rash}
-		remove_trait = rash
-	}
-	if = {
-		limit = { trait = headache}
-		remove_trait = headache
-	}
-	if = {
-		limit = { trait = abdominal_pain}
-		remove_trait = abdominal_pain
-	}
-	if = {
-		limit = { trait = fatigue}
-		remove_trait = fatigue
-	}
-	if = {
-		limit = { trait = malaise}
-		remove_trait = malaise
-	}
+	remove_trait = cough
+	remove_trait = fever
+	remove_trait = diarrhea
+	remove_trait = vomiting
+	remove_trait = chest_pain
+	remove_trait = cramps
+	remove_trait = rash
+	remove_trait = headache
+	remove_trait = abdominal_pain
+	remove_trait = fatigue
+	remove_trait = malaise
 }
 
 remove_random_negative_congenital_effect = {
@@ -16869,207 +16897,261 @@ random_coronation_events_effect = {
 
 } 
 
-troubled_pregnancy_chance_low_effect = { 
-random_list = { 
-	70 = { custom_tooltip = { text = tooltip_pregnancy_stable } }
-	30 = { custom_tooltip = { text = tooltip_pregnancy_gets_worse }
-		modifier = { 
-			factor = 0.85
-			has_character_modifier = mother_dark_rest
+troubled_pregnancy_chance_low_effect = {
+	random_list = {
+		70 = {
+			custom_tooltip = { text = tooltip_pregnancy_stable }
 		}
-		modifier = { 
-			factor = 0.95
-			has_character_modifier = mother_chatting
-		}
-		modifier = { 
-			factor = 0.85
-			has_character_modifier = mother_fertility_festival_1
-		}
-		modifier = { 
-			factor = 0.75
-			has_character_modifier = mother_fertility_festival_2
-		}
-		modifier = { 
-			factor = 0.75
-			has_character_modifier = mother_festival_blessing
-		}
-		modifier = { 
-			factor = 0.75
-			has_character_modifier = mother_praying_health
-		} 
-		modifier = { 
-			factor = 0.5
-			has_character_modifier = mother_resting_health
-		} 
-		modifier = { 
-			factor = 0.9
-			has_character_modifier = mother_partying_health
-		} 
-		modifier = { 
-			factor = 0.75
-			has_character_modifier = mother_minor_rest
-		} 
-		modifier = { 
-			factor = 0.9
-			has_character_modifier = mother_good_omen
-		} 
-		modifier = { 
-			factor = 1.2
-			has_character_modifier = mother_bad_omen
-		} 
-		modifier = { 
-			factor = 0.9
-			has_character_modifier = mother_vow_chastity
-		} 
-		modifier = { 
-			factor = 0.9
-			has_character_modifier = mother_vow_humility
-		} 
-		modifier = { 
-			factor = 0.9
-			has_character_modifier = mother_vow_charity
-		} 
-		modifier = { 
-			factor = 0.9
-			has_character_modifier = mother_vow_temperance
-		} 
-		modifier = { 
-			factor = 1.75
-			has_character_modifier = mother_exposed_to_elements
-		} 
-		modifier = { 
-			factor = 0.8
-			has_character_modifier = mother_comforted
-		} 
-		modifier = { 
-			factor = 1.5
-			NOT = { age = 19 } #Too young
-		} 
-		modifier = { 
-			factor = 1.25
-			age = 27 #Too old
-		} 
-		modifier = { 
-			factor = 1.25
-			age = 30 #Too old
-		} 
-		modifier = { 
-			factor = 1.25
-			age = 35 #Too old
-		} 
-		modifier = { 
-			factor = 1.5
-			age = 40 #Too old
-		} 	
-		modifier = { 	
-			factor = 1.5
-			age = 45 #Too old
-		} 
-		modifier = { 
-			factor = 1.75
-			age = 50 #Too old
-		} 
-		modifier = { 
-			factor = 1.25
-			num_of_children = 2
-		} 
-		modifier = { 
-			factor = 1.25
-			num_of_children = 3 #Womb is worn out
-		} 
-		modifier = { 
-			factor = 1.5
-			num_of_children = 4 #Womb is worn out
-		} 
-		modifier = { 
-			factor = 2
-			num_of_children = 5 #Womb is worn out
-		} 
-		modifier = { 
-			factor = 4
-			has_character_flag = survivor_mom		#Should have stopped after last time.
-		} 
-		modifier = { 
-			factor = 1.25
-			NOR = {  
+
+		30 = {
+			custom_tooltip = { text = tooltip_pregnancy_gets_worse }
+
+			character_event = {
+				id = HFP.20500 # Critical failure: troubled pregnancy begins
+				days = 35
+				random = 75
+			}
+
+			mult_modifier = {
+				factor = 0.85
+				has_character_modifier = mother_dark_rest
+			}
+
+			mult_modifier = {
+				factor = 0.95
+				has_character_modifier = mother_chatting
+			}
+
+			mult_modifier = {
+				factor = 0.85
+				has_character_modifier = mother_fertility_festival_1
+			}
+
+			mult_modifier = {
+				factor = 0.75
+				has_character_modifier = mother_fertility_festival_2
+			}
+
+			mult_modifier = {
+				factor = 0.75
+				has_character_modifier = mother_festival_blessing
+			}
+
+			mult_modifier = {
+				factor = 0.75
+				has_character_modifier = mother_praying_health
+			}
+
+			mult_modifier = {
+				factor = 0.5
+				has_character_modifier = mother_resting_health
+			}
+
+			mult_modifier = {
+				factor = 0.9
+				has_character_modifier = mother_partying_health
+			}
+
+			mult_modifier = {
+				factor = 0.75
+				has_character_modifier = mother_minor_rest
+			}
+
+			mult_modifier = {
+				factor = 0.9
+				has_character_modifier = mother_good_omen
+			}
+
+			mult_modifier = {
+				factor = 1.2
+				has_character_modifier = mother_bad_omen
+			}
+
+			mult_modifier = {
+				factor = 0.9
+				has_character_modifier = mother_vow_chastity
+			}
+
+			mult_modifier = {
+				factor = 0.9
+				has_character_modifier = mother_vow_humility
+			}
+
+			mult_modifier = {
+				factor = 0.9
+				has_character_modifier = mother_vow_charity
+			}
+
+			mult_modifier = {
+				factor = 0.9
+				has_character_modifier = mother_vow_temperance
+			}
+
+			mult_modifier = {
+				factor = 1.75
+				has_character_modifier = mother_exposed_to_elements
+			}
+
+			mult_modifier = {
+				factor = 0.8
+				has_character_modifier = mother_comforted
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				practical_age < 19 # Too young
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				practical_age >= 27 # Too old
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				practical_age >= 30 # Too old
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				practical_age >= 35 # Too old
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				practical_age >= 40 # Too old
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				practical_age >= 45 # Too old
+			}
+
+			mult_modifier = {
+				factor = 1.75
+				practical_age >= 50 # Too old
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				num_of_children >= 2
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				num_of_children >= 3 # Womb is worn out
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				num_of_children >= 4 # Womb is worn out
+			}
+
+			mult_modifier = {
+				factor = 2
+				num_of_children >= 5 # Womb is worn out
+			}
+
+			mult_modifier = {
+				factor = 4
+				has_character_flag = survivor_mom # Should have stopped after last time
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				has_education_martial_trigger = no
+			}
+
+			mult_modifier = {
+				factor = 0.95
 				trait = misguided_warrior
+			}
+
+			mult_modifier = {
+				factor = 0.85
 				trait = tough_soldier
+			}
+
+			mult_modifier = {
+				factor = 0.75
 				trait = skilled_tactician
+			}
+
+			mult_modifier = {
+				factor = 0.65
 				trait = brilliant_strategist
 			}
-		} 
-		modifier = { 
-			factor = 0.95
-			trait = misguided_warrior
-		} 
-		modifier = { 
-			factor = 0.85
-			trait = tough_soldier
-		} 
-		modifier = { 
-			factor = 0.75
-			trait = skilled_tactician
-		} 
-		modifier = { 
-			factor = 0.65
-			trait = brilliant_strategist
-		} 
-		modifier = { 
-			factor = 1.5
-			trait = stressed
-		} 
-		modifier = { 
-			factor = 1.75
-			trait = depressed
-		} 
-		modifier = { 
-			factor = 1.5
-			trait = lunatic
-		} 
-		modifier = { 
-			factor = 1.5
-			trait = possessed
-		} 
-		modifier = { 
-			factor = 1.35
-			trait = wounded
-		} 
-		modifier = { 
-			factor = 1.75
-			trait = maimed
-		} 
-		modifier = { 
-			factor = 1.5
-			trait = infirm
-		} 
-		modifier = { 
-			factor = 5
-			trait = incapable #Probably going to die.
-		} 
-		modifier = { 
-			factor = 1.25
-			trait = drunkard
-		} 
-		modifier = { 
-			factor = 1.15
-			trait = scarred
-		} 
-		modifier = { 
-			factor = 1.5
-			trait = ill
-		} 
-		modifier = { 
-			factor = 1.65
-			trait = pneumonic
-		} 
-		modifier = { 
-			factor = 1.5
-			trait = syphilitic
-		} 
-		modifier = { 
-			factor = 3
-			trait = leper
-		} 
+
+			mult_modifier = {
+				factor = 1.5
+				trait = stressed
+			}
+
+			mult_modifier = {
+				factor = 1.75
+				trait = depressed
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				trait = lunatic
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				trait = possessed
+			}
+
+			mult_modifier = {
+				factor = 1.35
+				trait = wounded
+			}
+
+			mult_modifier = {
+				factor = 1.75
+				trait = maimed
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				trait = infirm
+			}
+
+			mult_modifier = {
+				factor = 5
+				is_incapable = yes # Probably going to die
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = drunkard
+			}
+
+			mult_modifier = {
+				factor = 1.15
+				trait = scarred
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				trait = ill
+			}
+
+			mult_modifier = {
+				factor = 1.65
+				trait = pneumonic
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				trait = syphilitic
+			}
+
+			mult_modifier = {
+				factor = 3
+				trait = leper
+			}
+
 		modifier = { 
 			factor = 1.85
 			trait = has_tuberculosis
