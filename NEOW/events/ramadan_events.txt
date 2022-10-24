@@ -14,48 +14,146 @@ character_event = {
 	picture = GFX_evt_bishop
 	border = GFX_event_normal_frame_religion
 
-	is_triggered_only = yes
+	is_triggered_only = yes # observe_ramadan, minor_decisions.txt
 
 	option = {
 		name = EVTOPTA88500
-		hidden_tooltip = {
-			character_event = { id = 88510 days = 26 }
-			character_event = { id = 88515 days = 31 }
-			character_event = { id = 88516 days = 31 }
-			character_event = { id = 88522 days = 35 }
-			random_list = {
-				10 = { character_event = { id = 88501 days = 3 } }
-				10 = { character_event = { id = 88502 days = 3 } }
-				10 = { character_event = { id = 88503 days = 3 } }
-				10 = { character_event = { id = 88504 days = 3 } }
-				20 = { character_event = { id = 88505 days = 3 } }
-				4 = { character_event = { id = 88506 days = 3 } }
-				4 = { character_event = { id = 88507 days = 3 } }
+
+		character_event = { id = 88510 days = 26 } # Hold feast
+		character_event = { id = 88515 days = 31 } # Gift for wife
+		character_event = { id = 88516 days = 31 } # Gift for wives
+		character_event = { id = 88522 days = 35 } # Ramadan ends
+
+		# Sins - Not all will necessarily fire before Ramadan ends
+		character_event = { id = 88517 days = 1 random = 44 }
+		character_event = { id = 88518 days = 1 random = 44 }
+		character_event = { id = 88519 days = 1 random = 44 }
+		character_event = { id = 88520 days = 1 random = 44 }
+		character_event = { id = 88521 days = 1 random = 44 }
+
+		hidden_effect = {
+			set_variable = {
+				which = local_random_ramadan_events
+				value = 0
 			}
-			random_list = {
-				10 = { character_event = { id = 88501 days = 10 } }
-				10 = { character_event = { id = 88502 days = 10 } }
-				10 = { character_event = { id = 88503 days = 10 } }
-				10 = { character_event = { id = 88504 days = 10 } }
-				20 = { character_event = { id = 88505 days = 10 } }
-				4 = { character_event = { id = 88506 days = 10 } }
-				4 = { character_event = { id = 88507 days = 10 } }
-			}
-			random_list = {
-				10 = { character_event = { id = 88501 days = 17	} }
-				10 = { character_event = { id = 88502 days = 17 } }
-				10 = { character_event = { id = 88503 days = 17 } }
-				10 = { character_event = { id = 88504 days = 17 } }
-				20 = { character_event = { id = 88505 days = 17 } }
-				4 = { character_event = { id = 88506 days = 17 } }
-				4 = { character_event = { id = 88507 days = 17 } }
-			}
+		}
+
+		character_event = {
+			id = 88600
+			days = 3
 		}
 	}
 }
 
+character_event = {
+	id = 88600
 
+	is_triggered_only = yes
+	hide_window = yes
 
+	trigger = {
+		check_variable = {
+			which = local_random_ramadan_events
+			value < 3
+		}
+	}
+
+	immediate = {
+		random_list = {
+			10 = {
+				trigger = {
+					num_of_prisoners >= 1
+					NOT = { has_character_flag = ramadan_prisoners }
+
+					any_courtier = {
+						prisoner = yes
+
+						NAND = {
+							trait = decadent
+							dynasty = ROOT
+						}
+					}
+				}
+
+				character_event = { id = 88501 } # Release prisoners
+			}
+
+			10 = {
+				trigger = {
+					scaled_wealth = 0.20
+					NOT = { has_character_flag = ramadan_charity }
+				}
+
+				character_event = { id = 88502 } # Charity for the people
+			}
+
+			10 = {
+				trigger = {
+					NOT = { has_character_flag = ramadan_prayers }
+				}
+
+				character_event = { id = 88503 } # Prayers
+			}
+
+			10 = {
+				trigger = {
+					OR = {
+						practical_age >= 50
+						is_weak_trigger = yes
+					}
+
+					NOT = { has_character_flag = ramadan_ill }
+				}
+
+				character_event = { id = 88504 } # Ill due to fast
+			}
+
+			20 = {
+				trigger = {
+					is_ill = yes
+					has_character_flag = ramadan_ill
+					NOT = { has_character_flag = ramadan_infirm }
+				}
+
+				character_event = { id = 88505 } # Infirm due to fast
+			}
+
+			4 = {
+				trigger = {
+					NOR = {
+						trait = gluttonous
+						trait = temperate
+						has_character_flag = ramadan_temperate
+					}
+				}
+
+				character_event = { id = 88506 } # Gain temperate
+			}
+
+			4 = {
+				trigger = {
+					NOR = {
+						trait = greedy
+						trait = charitable
+						has_character_flag = ramadan_charitable
+					}
+				}
+
+				character_event = { id = 88507 } # Gain charitable
+			}
+		}
+
+		change_variable = {
+			which = local_random_ramadan_events
+			value = 1
+		}
+
+		repeat_event = {
+			id = 88600
+			days = 7
+		}
+	}
+}
 
 # Release prisoners
 character_event = {
@@ -68,41 +166,45 @@ character_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		num_of_prisoners = 1
-		has_character_flag = ramadan
-		NOT = { has_character_flag = ramadan_prisoners }
-		any_courtier = {
-			prisoner = yes
-			OR = {
-				NOT = { trait = decadent }
-				NOT = { dynasty = ROOT }
-			}
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
 		}
 	}
 
-#	mean_time_to_happen = {
-#		days = 45
-#	}
+	fail_trigger_effect = {
+		character_event = { id = 88509 }
+	}
+
+	immediate = {
+		set_character_flag = ramadan_prisoners
+	}
 
 	option = {
 		name = EVTOPTA88501
-		set_character_flag = ramadan_prisoners
+
 		any_courtier = {
+			show_scope_change = no
+
 			limit = {
 				prisoner = yes
-				OR = {
-					NOT = { trait = decadent }
-					NOT = { dynasty = ROOT }
+
+				NAND = {
+					trait = decadent
+					dynasty = ROOT
 				}
 			}
+
 			imprison = no
 		}
+
 		decadence = -1
 		piety = 15
 	}
+
 	option = {
 		name = EVTOPTB88501
-		set_character_flag = ramadan_prisoners
+
 		decadence = 1
 		piety = -15
 	}
@@ -119,26 +221,32 @@ character_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_character_flag = ramadan
-		scaled_wealth = 0.20
-		NOT = { has_character_flag = ramadan_charity }
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
+		}
 	}
 
-#	mean_time_to_happen = {
-#		days = 45
-#	}
+	fail_trigger_effect = {
+		character_event = { id = 88509 }
+	}
+
+	immediate = {
+		set_character_flag = ramadan_charity
+	}
 
 	option = {
 		name = EVTOPTA88502
+
 		scaled_wealth = -0.25
 		decadence = -1
-		set_character_flag = ramadan_charity
 		piety = 15
 	}
+
 	option = {
 		name = EVTOPTB88502
+
 		decadence = 1
-		set_character_flag = ramadan_charity
 		piety = -15
 	}
 }
@@ -154,23 +262,30 @@ character_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_character_flag = ramadan
-		NOT = { has_character_flag = ramadan_prayers }
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
+		}
 	}
 
-#	mean_time_to_happen = {
-#		days = 45
-#	}
+	fail_trigger_effect = {
+		character_event = { id = 88509 }
+	}
+
+	immediate = {
+		set_character_flag = ramadan_prayers
+	}
 
 	option = {
 		name = EVTOPTA88503
-		set_character_flag = ramadan_prayers
+
 		decadence = -1
 		piety = 15
 	}
+
 	option = {
 		name = EVTOPTB88503
-		set_character_flag = ramadan_prayers
+
 		decadence = 1
 		piety = -15
 	}
@@ -187,55 +302,51 @@ character_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_character_flag = ramadan
-		OR = {
-			age = 50
-			is_weak_trigger = yes
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
 		}
-		NOT = { has_character_flag = ramadan_ill }
 	}
 
-#	mean_time_to_happen = {
-#		days = 45
-#	}
+	fail_trigger_effect = {
+		character_event = { id = 88509 }
+	}
+
+	immediate = {
+		set_character_flag = ramadan_ill
+	}
 
 	option = {
 		name = EVTOPTA88504
+
 		if = {
-			limit = {
-				NOT = {
-					has_dlc = "Reapers"
-				}
-			}
-			add_trait = ill
-		}
-		if = {
-			limit = {
-				has_dlc = "Reapers"
-			}
+			limit = { has_dlc = "Reapers" }
 			add_symptom_effect = yes
 		}
-		character_event = { id = 88522 days = 1 tooltip = EVTTOOLTIP88522 }
+		else = {
+			add_trait_silently_ill_effect = yes
+		}
+
+		character_event = {
+			id = 88522
+			days = 1
+			tooltip = EVTTOOLTIP88522
+		}
 	}
+
 	option = {
 		name = EVTOPTB88504
+
 		if = {
-			limit = {
-				NOT = {
-					has_dlc = "Reapers"
-				}
-			}
-			add_trait = ill
-		}
-		if = {
-			limit = {
-				has_dlc = "Reapers"
-			}
+			limit = { has_dlc = "Reapers" }
 			add_symptom_effect = yes
 		}
+		else = {
+			add_trait_silently_ill_effect = yes
+		}
+
 		decadence = -1
 		piety = 15
-		set_character_flag = ramadan_ill
 	}
 }
 
@@ -250,19 +361,30 @@ character_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_character_flag = ramadan
-		has_character_flag = ramadan_ill
-		is_ill = yes
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
+		}
 	}
 
-#	mean_time_to_happen = {
-#		days = 8
-#	}
+	fail_trigger_effect = {
+		character_event = { id = 88509 }
+	}
+
+	immediate = {
+		set_character_flag = ramadan_infirm
+	}
 
 	option = {
 		name = EVTOPTA88505
-		add_trait = infirm
-		character_event = { id = 88522 days = 1 tooltip = EVTTOOLTIP88522 }
+
+		add_trait_silently_infirm_effect = yes
+
+		character_event = {
+			id = 88522
+			days = 1
+			tooltip = EVTTOOLTIP88522
+		}
 	}
 }
 
@@ -277,22 +399,24 @@ character_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_character_flag = ramadan
-		NOT = {
-			trait = gluttonous
-			trait = temperate
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
 		}
 	}
 
-#	mean_time_to_happen = {
-#		days = 125
-#	}
+	fail_trigger_effect = {
+		character_event = { id = 88509 }
+	}
+
+	immediate = {
+		set_character_flag = ramadan_temperate
+	}
 
 	option = {
 		name = EVTOPTA88506
+
 		add_trait = temperate
-			lose_weight_small_effect = yes
-			weight_trait_check_effect = yes
 		decadence = -1
 		piety = 15
 	}
@@ -309,19 +433,23 @@ character_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		has_character_flag = ramadan
-		NOT = {
-			trait = greedy
-			trait = charitable
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
 		}
 	}
 
-#	mean_time_to_happen = {
-#		days = 125
-#	}
+	fail_trigger_effect = {
+		character_event = { id = 88509 }
+	}
+
+	immediate = {
+		set_character_flag = ramadan_charitable
+	}
 
 	option = {
 		name = EVTOPTA88507
+
 		add_trait = charitable
 		decadence = -1
 		piety = 15
@@ -336,23 +464,17 @@ character_event = {
 	picture = GFX_evt_moors
 	border = GFX_event_normal_frame_religion
 
-	min_age = 16
-	capable_only = yes
-	prisoner = no
-	religion_group = muslim
+	is_triggered_only = yes # on_war_started
+
 	has_character_flag = ramadan
-	war = yes
-
-	trigger = {
-	}
-
-	mean_time_to_happen = {
-		days = 1
-	}
 
 	option = {
 		name = EVTOPTA88508
-		character_event = { id = 88522 days = 1 }
+
+		character_event = {
+			id = 88522
+			days = 1
+		}
 	}
 }
 
@@ -364,24 +486,19 @@ character_event = {
 	picture = GFX_evt_illness
 	border = GFX_event_normal_frame_religion
 
-	min_age = 16
-	capable_only = yes
-	prisoner = no
-	religion_group = muslim
-	has_character_flag = ramadan
-	is_sick = yes
+	is_triggered_only = yes
 
 	trigger = {
 		NOT = { has_character_flag = ramadan_ill }
 	}
 
-	mean_time_to_happen = {
-		days = 1
-	}
-
 	option = {
 		name = EVTOPTA88509
-		character_event = { id = 88522 days = 1 }
+
+		character_event = {
+			id = 88522
+			days = 1
+		}
 	}
 }
 
@@ -396,25 +513,48 @@ character_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		num_of_vassals = 1
-		has_character_flag = ramadan
+		num_of_vassals >= 1
+
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
+		}
+	}
+
+	fail_trigger_effect = {
+		if = {
+			limit = { num_of_vassals >= 1 }
+			character_event = { id = 88509 }
+		}
 	}
 
 	option = {
 		name = EVTOPTA88510
+
 		scaled_wealth = -0.3
+
 		any_vassal = {
+			show_scope_change = no
+
 			limit = {
 				prisoner = no
 				war = no
+				is_inaccessible_trigger = no
 			}
+
 			letter_event = {
 				id = 88511
 				tooltip = EVTTOOLTIP72011
 			}
 		}
-		character_event = { id = 88513 days = 3 tooltip = EVTTOOLTIP88513 }
+
+		character_event = {
+			id = 88513
+			days = 3
+			tooltip = EVTTOOLTIP88513
+		}
 	}
+
 	option = {
 		name = EVTOPTB88510
 	}
@@ -427,53 +567,89 @@ letter_event = {
 
 	is_triggered_only = yes
 
-	trigger = { NOT = { is_inaccessible_trigger = yes } }
+	immediate = {
+		clr_character_flag = attending_ramadan_feast # In case last year's feast was interrupted
+	}
 
 	option = {
 		name = EVTOPTA88511
+
+		set_character_flag = attending_ramadan_feast
+
+		character_event = {
+			id = 88514
+			days = 4
+			tooltip = EVTTOOLTIP88514
+		}
+
 		ai_chance = {
 			factor = 1
-			modifier = {
-				factor = 0.1
-				ai = yes
-				is_inaccessible_trigger = yes
-			}
-			modifier = {
+
+			mult_modifier = {
 				factor = 2
-				opinion = { who = from value = -40 }
+
+				opinion = {
+					who = FROM
+					value >= -40
+				}
 			}
-			modifier = {
+
+			mult_modifier = {
 				factor = 2
-				opinion = { who = from value = -20 }
+
+				opinion = {
+					who = FROM
+					value >= -20
+				}
 			}
 		}
-		character_event = { id = 88514 days = 4 tooltip = EVTTOOLTIP88514 }
-		set_character_flag = attending_ramadan_feast
 	}
+
 	option = {
 		name = EVTOPTB88511
-		ai_chance = {
-			factor = 1
-			modifier = {
-				factor = 0
-				opinion = { who = from value = 0 }
-				NOT = { is_inaccessible_trigger = yes }
-			}
-			modifier = {
-				factor = 2
-				NOT = { opinion = { who = from value = -60 } }
-			}
-			modifier = {
-				factor = 2
-				NOT = { opinion = { who = from value = -80 } }
-			}
-		}
+
 		FROM = {
-			letter_event = { id = 88512 days = 1 tooltip = EVTTOOLTIP88512 }
+			show_scope_change = no
+
+			letter_event = {
+				id = 88512
+				days = 1
+				tooltip = EVTTOOLTIP88512
+			}
+
 			opinion = {
-				modifier = opinion_disappointed
+				name = opinion_disappointed
 				who = ROOT
 				years = 1
+			}
+		}
+
+		ai_chance = {
+			factor = 1
+
+			trigger = {
+				opinion = {
+					who = FROM
+					value < 0
+				}
+			}
+
+			mult_modifier = {
+				factor = 2
+
+				opinion = {
+					who = FROM
+					value < -60
+				}
+			}
+
+			mult_modifier = {
+				factor = 2
+
+				opinion = {
+					who = FROM
+					value < -80
+				}
 			}
 		}
 	}
@@ -502,10 +678,14 @@ character_event = {
 
 	option = {
 		name = EVTOPTA88513
+
 		any_vassal = {
+			show_scope_change = no
+
 			limit = { has_character_flag = attending_ramadan_feast }
+
 			opinion = {
-				modifier = opinion_impressed
+				name = opinion_impressed
 				who = ROOT
 				years = 1
 			}
@@ -524,6 +704,7 @@ character_event = {
 
 	option = {
 		name = EVTOPTA88514
+
 		clr_character_flag = attending_ramadan_feast
 	}
 }
@@ -536,37 +717,49 @@ character_event = {
 	picture = GFX_evt_marriage
 	border = GFX_event_normal_frame_religion
 
-	is_married = yes
-	only_men = yes
-	has_character_flag = ramadan
-
 	is_triggered_only = yes
 
+	only_men = yes
+
 	trigger = {
-		NOT = {
-			any_spouse = { is_main_spouse = no }
+		num_of_spouses == 1
+
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
+		}
+	}
+
+	fail_trigger_effect = {
+		if = {
+			limit = {
+				is_female = no
+				num_of_spouses == 1
+			}
+
+			character_event = { id = 88509 }
 		}
 	}
 
 	option = {
 		name = EVTOPTA88515
+
 		scaled_wealth = -0.25
-		spouse = {
-			opinion = {
-				modifier = opinion_happy
-				who = ROOT
-				years = 1
-			}
+
+		reverse_opinion = {
+			name = opinion_happy
+			who = spouse
+			years = 1
 		}
 	}
+
 	option = {
 		name = EVTOPTB88515
-		spouse = {
-			opinion = {
-				modifier = spouse_ignores_me
-				who = ROOT
-				years = 1
-			}
+
+		reverse_opinion = {
+			name = spouse_ignores_me
+			who = spouse
+			years = 1
 		}
 	}
 }
@@ -579,52 +772,78 @@ character_event = {
 	picture = GFX_evt_marriage
 	border = GFX_event_normal_frame_religion
 
-	only_men = yes
-	is_married = yes
-	has_character_flag = ramadan
-
 	is_triggered_only = yes
 
+	only_men = yes
+
 	trigger = {
-		any_spouse = { is_main_spouse = no }
+		num_of_spouses >= 2
+
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
+		}
+	}
+
+	fail_trigger_effect = {
+		if = {
+			limit = {
+				is_female = no
+				num_of_spouses >= 2
+			}
+
+			character_event = { id = 88509 }
+		}
 	}
 
 	option = {
 		name = EVTOPTA88516
+
 		scaled_wealth = -0.25
-		any_spouse = {
-			limit = { is_main_spouse = yes }
-			opinion = {
-				modifier = opinion_happy
-				who = ROOT
-				years = 1
-			}
+
+		reverse_opinion = {
+			name = opinion_happy
+			who = spouse # Main spouse
+			years = 1
 		}
-		any_spouse = {
+
+		any_spouse = { # Other spouses
+			show_scope_change = no
+
 			limit = { is_main_spouse = no }
+
 			opinion = {
-				modifier = opinion_unhappy
+				name = opinion_unhappy
 				who = ROOT
 				years = 1
 			}
 		}
 	}
+
 	option = {
 		name = EVTOPTB88516
+
 		scaled_wealth = -0.5
+
 		any_spouse = {
+			show_scope_change = no
+
 			opinion = {
-				modifier = opinion_happy
+				name = opinion_happy
 				who = ROOT
 				years = 1
 			}
 		}
 	}
+
 	option = {
 		name = EVTOPTC88516
+
 		any_spouse = {
+			show_scope_change = no
+
 			opinion = {
-				modifier = spouse_ignores_me
+				name = spouse_ignores_me
 				who = ROOT
 				years = 1
 			}
@@ -640,24 +859,27 @@ character_event = {
 	picture = GFX_evt_lunatic
 	border = GFX_event_normal_frame_religion
 
-	min_age = 16
-	capable_only = yes
-	prisoner = no
-	religion_group = muslim
-	has_character_flag = ramadan
+	is_triggered_only = yes
 
 	trigger = {
 		trait = gluttonous
-		NOT = { has_character_flag = ramadan_gluttonous }
+
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
+		}
 	}
 
-	mean_time_to_happen = {
-		days = 45
+	fail_trigger_effect = {
+		if = {
+			limit = { trait = gluttonous }
+			character_event = { id = 88509 }
+		}
 	}
 
 	option = {
 		name = EVTOPTA88517
-		set_character_flag = ramadan_gluttonous
+
 		decadence = 1
 		piety = -15
 	}
@@ -671,28 +893,36 @@ character_event = {
 	picture = GFX_evt_jugglers
 	border = GFX_event_normal_frame_religion
 
-	min_age = 16
-	only_men = yes
-	capable_only = yes
-	prisoner = no
-	religion_group = muslim
-	has_character_flag = ramadan
+	is_triggered_only = yes
 
 	trigger = {
 		OR = {
 			trait = lustful
 			trait = hedonist
 		}
-		NOT = { has_character_flag = ramadan_lustful_hedonist }
+
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
+		}
 	}
 
-	mean_time_to_happen = {
-		days = 45
+	fail_trigger_effect = {
+		if = {
+			limit = {
+				OR = {
+					trait = lustful
+					trait = hedonist
+				}
+			}
+
+			character_event = { id = 88509 }
+		}
 	}
 
 	option = {
 		name = EVTOPTA88518
-		set_character_flag = ramadan_lustful_hedonist
+
 		decadence = 1
 		piety = -15
 	}
@@ -706,26 +936,29 @@ character_event = {
 	picture = GFX_evt_drunk
 	border = GFX_event_normal_frame_religion
 
-	min_age = 16
-	capable_only = yes
-	prisoner = no
-	religion_group = muslim
-	has_character_flag = ramadan
+	is_triggered_only = yes
 
 	trigger = {
 		trait = drunkard
-		NOT = { has_character_flag = ramadan_drunkard }
+
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
+		}
 	}
 
-	mean_time_to_happen = {
-		days = 45
+	fail_trigger_effect = {
+		if = {
+			limit = { trait = drunkard }
+			character_event = { id = 88509 }
+		}
 	}
 
 	option = {
 		name = EVTOPTA88519
+
 		decadence = 1
 		piety = -15
-		set_character_flag = ramadan_drunkard
 	}
 }
 
@@ -737,29 +970,34 @@ character_event = {
 	picture = GFX_evt_lunatic
 	border = GFX_event_normal_frame_religion
 
-	min_age = 16
-	capable_only = yes
-	prisoner = no
-	religion_group = muslim
-	has_character_flag = ramadan
+	is_triggered_only = yes
 
 	trigger = {
 		trait = greedy
-		NOT = {
-			has_character_flag = ramadan_greedy
-			trait = just
+		NOT = { trait = just }
+
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
 		}
 	}
 
-	mean_time_to_happen = {
-		days = 45
+	fail_trigger_effect = {
+		if = {
+			limit = {
+				trait = greedy
+				NOT = { trait = just }
+			}
+
+			character_event = { id = 88509 }
+		}
 	}
 
 	option = {
 		name = EVTOPTA88520
+
 		decadence = 1
 		piety = -15
-		set_character_flag = ramadan_greedy
 	}
 }
 
@@ -771,26 +1009,29 @@ character_event = {
 	picture = GFX_evt_lunatic
 	border = GFX_event_normal_frame_religion
 
-	min_age = 16
-	capable_only = yes
-	prisoner = no
-	religion_group = muslim
-	has_character_flag = ramadan
+	is_triggered_only = yes
 
 	trigger = {
 		trait = cynical
-		NOT = { has_character_flag = ramadan_cynical }
+
+		trigger_if = {
+			limit = { character_disease_trigger = yes }
+			has_character_flag = ramadan_ill
+		}
 	}
 
-	mean_time_to_happen = {
-		days = 45
+	fail_trigger_effect = {
+		if = {
+			limit = { trait = cynical }
+			character_event = { id = 88509 }
+		}
 	}
 
 	option = {
 		name = EVTOPTA88521
+
 		decadence = 1
 		piety = -15
-		set_character_flag = ramadan_cynical
 	}
 }
 
@@ -804,19 +1045,14 @@ character_event = {
 
 	is_triggered_only = yes
 
-	trigger = { has_character_flag = ramadan }
-
 	option = {
 		name = EVTOPTA88522
-		clr_character_flag = ramadan
-		clr_character_flag = ramadan_ill
-		clr_character_flag = ramadan_cynical
-		clr_character_flag = ramadan_greedy
-		clr_character_flag = ramadan_gluttonous
-		clr_character_flag = ramadan_drunkard
-		clr_character_flag = ramadan_lustful_hedonist
-		clr_character_flag = ramadan_prayers
-		clr_character_flag = ramadan_charity
-		clr_character_flag = ramadan_prisoners
+
+		clear_flags_with_prefix = ramadan
+		clear_delayed_event = { id = 88517 }
+		clear_delayed_event = { id = 88518 }
+		clear_delayed_event = { id = 88519 }
+		clear_delayed_event = { id = 88520 }
+		clear_delayed_event = { id = 88521 }
 	}
 }
