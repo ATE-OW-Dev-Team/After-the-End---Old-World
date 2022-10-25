@@ -414,70 +414,75 @@ is_allowed_sparring_duels_trigger = {
 }
 
 this_can_duel_with_from_trigger = {
-	NOR = {
-		is_incapable = yes
-		has_character_modifier = bedridden_illness
-		has_character_modifier = severe_illness
-	}
+	trigger_if = {
+		limit = { is_female = yes }
 
-	OR = {
-		is_female = no
-	 	is_member_of_roots_warrior_lodge_trigger = yes
+		OR = {
+			is_member_of_roots_warrior_lodge_trigger = yes
 
-		# Both FROM and ROOT have gender equality
-		AND = {
-			OR = {
-				trait = brave
-				gender_equality_trigger = yes
-				has_religion_feature = religion_matriarchal
-				religion_group = pagan_group
-				is_nomadic = yes
-				religion_group = buddhist_group
-				religion = bogomilist
-			}
-			FROM = {
+			# Both FROM and ROOT have gender equality
+			AND = {
 				OR = {
-	  				gender_equality_trigger = yes
-			   		has_religion_feature = religion_matriarchal
+					trait = brave
+					gender_equality_trigger = yes
+					has_religion_feature = religion_matriarchal
 					religion_group = pagan_group
 					is_nomadic = yes
 					religion_group = buddhist_group
-					religion = bogomilist
+				}
+
+				FROM = {
+					OR = {
+						gender_equality_trigger = yes
+						has_religion_feature = religion_matriarchal
+						religion_group = pagan_group
+						is_nomadic = yes
+						religion_group = buddhist_group
+					}
 				}
 			}
 		}
 	}
 
 	FROM = {
-  		is_within_diplo_range = ROOT
+		is_within_diplo_range = ROOT
 
-		OR = {
-   			is_female = no
-			is_member_of_roots_warrior_lodge_trigger = yes
+		trigger_if = {
+			limit = { is_female = yes }
 
-			# Both FROM and ROOT have gender equality
-			AND = {
-				OR = {
- 					trait = brave
-					gender_equality_trigger = yes
-					has_religion_feature = religion_matriarchal
-					religion_group = pagan_group
-					is_nomadic = yes
-					religion_group = buddhist_group
-					religion = bogomilist
-				}
-				ROOT = {
+			OR = {
+				is_member_of_roots_warrior_lodge_trigger = yes
+
+				# Both FROM and ROOT have gender equality
+				AND = {
 					OR = {
-	  					gender_equality_trigger = yes
+						trait = brave
+						gender_equality_trigger = yes
 						has_religion_feature = religion_matriarchal
 						religion_group = pagan_group
 						is_nomadic = yes
 						religion_group = buddhist_group
-						religion = bogomilist
+					}
+
+					ROOT = {
+						OR = {
+							gender_equality_trigger = yes
+							has_religion_feature = religion_matriarchal
+							religion_group = pagan_group
+							is_nomadic = yes
+							religion_group = buddhist_group
+						}
 					}
 				}
 			}
 		}
+	}
+
+	is_incapable = no
+
+	NOR = {
+		has_character_modifier = bedridden_illness
+		has_character_modifier = severe_illness
 	}
 }
 
@@ -492,7 +497,7 @@ prev_is_lonely_this_romance_makes_sense_trigger = {
 
 	# Check opinions and attraction, etc...
 	prev_attraction_trigger = yes
-	attacted_to_prev_trigger = yes
+	attracted_to_prev_trigger = yes
 
 	OR = {
 		reverse_opinion = {
@@ -500,8 +505,8 @@ prev_is_lonely_this_romance_makes_sense_trigger = {
 			value >= 45
 		}
 		reverse_has_opinion_modifier = {
+			name = opinion_budding_romance
 			who = PREV
-			modifier = opinion_budding_romance
 		}
 	}
 	OR = {
@@ -510,8 +515,8 @@ prev_is_lonely_this_romance_makes_sense_trigger = {
 			value >= 45
 		}
 		has_opinion_modifier = {
+			name = opinion_budding_romance
 			who = ROOT
-			modifier = opinion_budding_romance
 		}
 	}
 }
@@ -527,7 +532,7 @@ interesting_duel_target_for_prev_trigger = {
 			}
 
 			prev_attraction_trigger = yes
-			attacted_to_prev_trigger = yes
+			attracted_to_prev_trigger = yes
 
 			# Check opinions and attraction, etc...
 			OR = {
@@ -536,8 +541,8 @@ interesting_duel_target_for_prev_trigger = {
 					value >= 45
 				}
 				reverse_has_opinion_modifier = {
+					name = opinion_budding_romance
 					who = PREV
-					modifier = opinion_budding_romance
 				}
 			}
 
@@ -547,8 +552,8 @@ interesting_duel_target_for_prev_trigger = {
 					value >= 45
 				}
 				has_opinion_modifier = {
+					name = opinion_budding_romance
 					who = ROOT
-					modifier = opinion_budding_romance
 				}
 			}
 		}
@@ -637,15 +642,13 @@ has_bruises_trigger = {
 
 # Either THIS is the attacker using intrigue, or the defender using intrigue
 is_using_intrigue_trigger = {
-	OR = {
-		AND = {
-			character = event_target:combatant_1
-			has_character_flag = attacker_using_poison@event_target:combatant_2
-		}
-		AND = {
-			character = event_target:combatant_2
-			has_character_flag = defender_using_poison@event_target:combatant_1
-		}
+	trigger_if = {
+		limit = { character = event_target:combatant_1 }
+
+		has_character_flag = attacker_using_poison@event_target:combatant_2
+	}
+	trigger_else = {
+		has_character_flag = defender_using_poison@event_target:combatant_1
 	}
 }
 
@@ -658,6 +661,7 @@ is_indomitable_trigger = {
 		}
 		any_owned_bloodline = {
 			has_bloodline_flag = indomitable_bloodline
+			bloodline_is_active_for = PREV
 		}
 		has_character_flag = is_special_character
 	}
