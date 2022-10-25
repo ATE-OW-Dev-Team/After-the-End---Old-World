@@ -1,3 +1,5 @@
+namespace = chancellor
+
 ##############################
 # CHANCELLOR
 #
@@ -23,31 +25,30 @@
 
 # 910: The Chancellor attempts to improve relations with lord
 character_event = {
-	id = 910
-	title = EVTNAME910
-	desc = EVTDESC910
+	id = chancellor.001
+	title = evt_chancellor_001_title
+	desc = evt_chancellor_001_desc_a
 	picture = GFX_evt_emissary
 	border = GFX_event_normal_frame_diplomacy
-
-	min_age = 16
-	capable_only = yes
-	prisoner = no
 	has_job_title = yes
 
 	trigger = {
 		has_job_action = action_improve_relations
-		NOT = { has_character_modifier = in_seclusion }
+		in_seclusion = no
 		NOT = { has_character_modifier = bedridden_illness }
-		is_incapable = no
 		location = {
 			any_province_lord = {
-				OR = {
-					primary_title = { higher_tier_than = BARON }
+				# No reason to improve relations with irrelevant barons
+				trigger_if = {
+					limit = { real_tier = BARON }
 					same_liege = ROOT
 				}
 				is_priest = no
-				NOT = { is_liege_of = ROOT }
-				NOT = { character = ROOT }
+
+				NOR = {
+					is_liege_of = ROOT
+					character = ROOT
+				}
 			}
 		}
 	}
@@ -70,20 +71,29 @@ character_event = {
 	}
 
 	option = {
-		name = EVTOPTA910
-		hidden_tooltip = {
+		name = evt_chancellor_001_option_a # I have succeeded
+
+		hidden_effect = {
 			location = {
 				random_province_lord = {
 					limit = {
-						is_priest = no
-						NOT = { is_liege_of = ROOT }
-						NOT = { character = ROOT }
-						OR = {
-							primary_title = { higher_tier_than = BARON }
+						trigger_if = {
+							limit = { real_tier = BARON }
 							same_liege = ROOT
 						}
+
+						is_priest = no
+
+						NOR = {
+							is_liege_of = ROOT
+							character = ROOT
+						}
 					}
-					character_event = { id = 20100 days = 7 }
+
+					character_event = {
+						id = chancellor.002 # Inform the noble
+						days = 7
+					}
 				}
 			}
 		}
@@ -92,18 +102,19 @@ character_event = {
 
 # 20100: Inform the noble
 character_event = {
-	id = 20100
-	desc = "EVTDESC20100"
+	id = chancellor.002
+	desc = evt_chancellor_002_desc_a
 	picture = GFX_evt_emissary
 	border = GFX_event_normal_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20100"
-		hidden_tooltip = {
-			FROM = {
-				liege = { letter_event = { id = 20101 } }
+		name = evt_chancellor_002_option_a # I feel a new appreciation
+
+		FROM = {
+			liege = {
+				letter_event = { id = chancellor.003 } # Inform liege
 			}
 		}
 	}
@@ -111,22 +122,20 @@ character_event = {
 
 # 20101: The liege is informed of the success
 letter_event = {
-	id = 20101
-	desc = "EVTDESC20101"
+	id = chancellor.003
+	desc = evt_chancellor_003_desc_a
 	border = GFX_event_letter_frame_diplomacy
 
+	is_triggered_only = yes
 	show_from_from = yes
 
-	is_triggered_only = yes
-
 	option = {
-		name = "EVTOPTA20101"
-		FROM = {
-			opinion = {
-				modifier = opinion_improved_relations
-				who = ROOT
-				years = 4
-			}
+		name = PERFECT
+
+		reverse_opinion = {
+			name = opinion_improved_relations
+			who = FROM
+			years = 4
 		}
 	}
 }
@@ -134,47 +143,54 @@ letter_event = {
 
 # 911: The Chancellor's attempts to improve relations with lord is sabotaged
 character_event = {
-	id = 911
-	title = "EVTNAME911"
-	desc = "EVTDESC911"
+	id = chancellor.101
+	title = evt_chancellor_101_title
+	desc = evt_chancellor_101_desc_a
 	picture = GFX_evt_emissary
 	border = GFX_event_normal_frame_diplomacy
-
-	min_age = 16
-	capable_only = yes
-	prisoner = no
 	has_job_title = yes
 
 	trigger = {
 		has_job_action = action_improve_relations
-		NOT = { has_character_modifier = in_seclusion }
+		in_seclusion = no
 		NOT = { has_character_modifier = bedridden_illness }
-		is_incapable = no
 		location = {
 			any_province_lord = {
 				is_priest = no
-				NOT = { is_liege_of = ROOT }
-				NOT = { character = ROOT }
+
+				NOR = {
+					is_liege_of = ROOT
+					character = ROOT
+				}
 			}
 		}
 	}
 
 	mean_time_to_happen = {
-		months = 120
+		years = 10
+
 		job_event_mtth_modifier_inverted_diplomacy_score = yes
 	}
 
 	option = {
-		name = "EVTOPTA911"
-		hidden_tooltip = {
+		name = evt_chancellor_101_option_a # I have failed miserably
+
+		hidden_effect = {
 			location = {
 				random_province_lord = {
 					limit = {
 						is_priest = no
-						NOT = { is_liege_of = ROOT }
-						NOT = { character = ROOT }
+
+						NOR = {
+							is_liege_of = ROOT
+							character = ROOT
+						}
 					}
-					character_event = { id = 20110 days = 7 }
+
+					character_event = {
+						id = chancellor.102
+						days = 7
+					}
 				}
 			}
 		}
@@ -183,25 +199,27 @@ character_event = {
 
 # 20110: Inform the noble
 character_event = {
-	id = 20110
+	id = chancellor.102
+	picture = GFX_evt_emissary
+	border = GFX_event_normal_frame_diplomacy
+
 	desc = {
-		text = "EVTDESCA20110"
+		text = evt_chancellor_102_desc_a
 		trigger = { NOT = { same_liege = FROM }	}
 	}
 	desc = {
-		text = "EVTDESCB20110"
+		text = evt_chancellor_102_desc_b
 		trigger = { same_liege = FROM }
 	}
-	picture = GFX_evt_emissary
-	border = GFX_event_normal_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20110"
-		hidden_tooltip = {
-			FROM = {
-				liege = { letter_event = { id = 20111 } }
+		name = evt_chancellor_102_option_a
+
+		FROM = {
+			liege = {
+				letter_event = { id = chancellor.103 }
 			}
 		}
 	}
@@ -209,8 +227,8 @@ character_event = {
 
 # 20111: The liege is informed of the failure
 letter_event = {
-	id = 20111
-	desc = "EVTDESC20111"
+	id = chancellor.103
+	desc = evt_chancellor_103_desc_a
 	border = GFX_event_letter_frame_diplomacy
 
 	show_from_from = yes
@@ -218,13 +236,12 @@ letter_event = {
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20111"
-		FROM = {
-			opinion = {
-				modifier = opinion_insulted
-				who = ROOT
-				years = 2
-			}
+		name = evt_chancellor_103_option_a
+
+		reverse_opinion = {
+			name = opinion_insulted
+			who = FROM
+			years = 2
 		}
 	}
 }
@@ -236,56 +253,63 @@ letter_event = {
 
 # 913: The Chancellor fabricates a claim for his liege on a landed noble's title
 character_event = {
-	id = 913
-	title = EVTNAME913
-	desc = EVTDESC913
+	id = chancellor.201
+	title = evt_chancellor_201_title
+	desc = evt_chancellor_201_desc_a
 	picture = GFX_evt_council
 	border = GFX_event_normal_frame_diplomacy
-
-	min_age = 16
-	capable_only = yes
-	prisoner = no
 	has_job_title = yes
 
 	trigger = {
 		has_job_action = action_fabricate_claims
-		NOT = { has_character_modifier = in_seclusion }
-		NOT = { has_character_modifier = bedridden_illness }
-		is_incapable = no
-		NOT = { has_character_modifier = bribed_by_noble_timer }
-		independent = no
+		in_seclusion = no
+
+		NOR = {
+			has_character_modifier = bedridden_illness
+			has_character_modifier = bribed_by_noble_timer
+		}
+
 		liege = {
 			ROOT = {
 				location = {
 					OR = {
 						county = {
-							NOT = { claimed_by = PREVPREVPREV }
+							NOT = { claimed_by = PREVPREVPREV } # liege
+
 							holder_scope = {
-								NOT = { is_liege_of = ROOT }
-								NOT = { character = ROOT }
-								NOT = {
-									AND = {
+								NOR = {
+									is_liege_of = ROOT
+									character = ROOT
+
+									# Not the Pope
+									trigger_if = {
+										limit = { controls_religion = yes }
 										religion = catholic
-										ROOT = { liege = { religion_head = { character = PREVPREVPREV } } }
 									}
 								}
 							}
 						}
 						AND = {
+							ROOT = {
+								diplomacy >= 15
+							}
+
 							duchy = {
-								NOT = { claimed_by = PREVPREVPREV }
+								NOT = { claimed_by = PREVPREVPREV } # liege
+
 								holder_scope = {
-									NOT = { is_liege_of = ROOT }
-									NOT = { character = ROOT }
-									NOT = {
-										AND = {
+									NOR = {
+										is_liege_of = ROOT
+										character = ROOT
+
+										# Not the Pope
+										trigger_if = {
+											limit = { controls_religion = yes }
 											religion = catholic
-											ROOT = { liege = { religion_head = { character = PREVPREVPREV } } }
 										}
 									}
 								}
 							}
-							ROOT = { diplomacy = 15 }
 						}
 						AND = {
 							ROOT = {
@@ -295,14 +319,19 @@ character_event = {
 								}
 							}
 							kingdom = {
-								NOT = { claimed_by = PREVPREVPREV }
+								NOT = { claimed_by = PREVPREVPREV } # liege
+
 								holder_scope = {
-									NOT = { is_liege_of = ROOT }
-									NOT = { character = ROOT }
-									NOT = {
-										AND = {
+									owns = PREVPREV
+
+									NOR = {
+										is_liege_of = ROOT
+										character = ROOT
+
+										# Not the Pope
+										trigger_if = {
+											limit = { controls_religion = yes }
 											religion = catholic
-											ROOT = { liege = { religion_head = { character = PREVPREVPREV } } }
 										}
 									}
 								}
@@ -315,144 +344,50 @@ character_event = {
 	}
 
 	mean_time_to_happen = {
-		months = 360
+		years = 30
 
 		job_event_mtth_modifier_diplomacy_score = yes
 
-		modifier = {
+		mult_modifier = {
 			factor = 0.75
-			liege = { any_owned_bloodline = { has_bloodline_flag = bloodline_faster_claims } }
+
+			liege = {
+				any_owned_bloodline = {
+					has_bloodline_flag = bloodline_faster_claims
+					bloodline_is_active_for = PREV
+				}
+			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			any_owned_bloodline = { has_bloodline_flag = bloodline_faster_claims } #If chancellor is also your relative.
+
+			# If chancellor is also your relative
+			any_owned_bloodline = {
+				has_bloodline_flag = bloodline_faster_claims
+				bloodline_is_active_for = PREV
+			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTA913"
-		hidden_tooltip = {
+		name = evt_chancellor_201_option_a
+
+		hidden_effect = {
 			# Try to claim Kingdom title - only available with Become King ambition
 			if = {
 				limit = {
-					diplomacy = 22
 					liege = {
 						has_ambition = obj_become_king
 						NOT = { has_character_flag = kingdom_claimed_with_ambition }
 						ROOT = {
 							location = {
 								kingdom = {
-									NOT = { claimed_by = PREVPREVPREV }
+									NOT = { claimed_by = PREVPREVPREV } # liege
+
 									holder_scope = {
-										NOT = { character = ROOT }
 										owns = PREVPREV
-									}
-								}
-							}
-						}
-					}
-				}
-				random = {
-					chance = 20
-					location = {
-						kingdom = {
-							save_event_target_as = target_title
-							holder_scope = {
-								set_character_flag = kingdom_claimed
-								character_event = { id = 20130 days = 1 }
-							}
-						}
-					}
-					liege = { set_character_flag = kingdom_claimed_with_ambition }
-					set_character_flag = claim_done
-					break = yes
-				}
-			}
-			if = {
-				limit = {
-					diplomacy = 18
-					NOT = { diplomacy = 22 }
-					liege = {
-						has_ambition = obj_become_king
-						NOT = { has_character_flag = kingdom_claimed_with_ambition }
-						ROOT = {
-							location = {
-								kingdom = {
-									NOT = { claimed_by = PREVPREVPREV }
-									holder_scope = {
 										NOT = { character = ROOT }
-										owns = PREVPREV
-									}
-								}
-							}
-						}
-					}
-				}
-				random = {
-					chance = 10
-					location = {
-						kingdom = {
-							save_event_target_as = target_title
-							holder_scope = {
-								set_character_flag = kingdom_claimed
-								character_event = { id = 20130 days = 1 }
-							}
-						}
-					}
-					liege = { set_character_flag = kingdom_claimed_with_ambition }
-					set_character_flag = claim_done
-					break = yes
-				}
-			}
-			if = {
-				limit = {
-					diplomacy = 15
-					NOT = { diplomacy = 18 }
-					liege = {
-						has_ambition = obj_become_king
-						NOT = { has_character_flag = kingdom_claimed_with_ambition }
-						ROOT = {
-							location = {
-								kingdom = {
-									NOT = { claimed_by = PREVPREVPREV }
-									holder_scope = {
-										NOT = { character = ROOT }
-										owns = PREVPREV
-									}
-								}
-							}
-						}
-					}
-				}
-				random = {
-					chance = 5
-					location = {
-						kingdom = {
-							save_event_target_as = target_title
-							holder_scope = {
-								set_character_flag = kingdom_claimed
-								character_event = { id = 20130 days = 1 }
-							}
-						}
-					}
-					liege = { set_character_flag = kingdom_claimed_with_ambition }
-					set_character_flag = claim_done
-					break = yes
-				}
-			}
-			if = {
-				limit = {
-					NOT = { diplomacy = 15 }
-					liege = {
-						has_ambition = obj_become_king
-						NOT = { has_character_flag = kingdom_claimed_with_ambition }
-						ROOT = {
-							location = {
-								kingdom = {
-									NOT = { claimed_by = PREVPREVPREV }
-									holder_scope = {
-										NOT = { character = ROOT }
-										owns = PREVPREV
 									}
 								}
 							}
@@ -461,32 +396,57 @@ character_event = {
 				}
 				random = {
 					chance = 2
+
+					mult_modifier = {
+						factor = 2.5 # 5% chance
+						diplomacy >= 15
+					}
+
+					mult_modifier = {
+						factor = 2 # 10% chance
+						diplomacy >= 18
+					}
+
+					mult_modifier = {
+						factor = 2 # 20% chance
+						diplomacy >= 22
+					}
 					location = {
 						kingdom = {
 							save_event_target_as = target_title
 							holder_scope = {
-								set_character_flag = kingdom_claimed
-								character_event = { id = 20130 days = 1 }
+								character_event = {
+									id = chancellor.202
+									days = 1
+								}
 							}
 						}
 					}
+					liege = {
+						set_character_flag = kingdom_claimed_with_ambition
+					}
 					set_character_flag = claim_done
-					break = yes
 				}
 			}
-			if = {
+
+			# Try to fabricate a duchy claim
+			else_if = {
 				limit = {
-					diplomacy = 15
-					NOT = { diplomacy = 18 }
+					diplomacy >= 15
+
 					liege = {
 						ROOT = {
 							location = {
 								duchy = {
-									NOT = { claimed_by = PREVPREVPREV }
+									NOT = { claimed_by = PREVPREVPREV } # liege
+
 									holder_scope = {
-										NOT = { is_liege_of = ROOT }
-										NOT = { character = ROOT }
 										owns = PREVPREV
+
+										NOR = {
+											is_liege_of = ROOT
+											character = ROOT
+										}
 									}
 								}
 							}
@@ -495,84 +455,32 @@ character_event = {
 				}
 				random = {
 					chance = 10
+
+					mult_modifier = {
+						factor = 2 # 20% chance
+						diplomacy >= 18
+					}
+
+					mult_modifier = {
+						factor = 1.5 # 30% chance
+						diplomacy >= 20
+					}
 					location = {
 						duchy = {
 							save_event_target_as = target_title
 							holder_scope = {
-								set_character_flag = duchy_claimed
-								character_event = { id = 20130 days = 1 }
-							}
-						}
-					}
-					set_character_flag = claim_done
-				}
-			}
-			if = {
-				limit = {
-					diplomacy = 18
-					NOT = { diplomacy = 20 }
-					liege = {
-						ROOT = {
-							location = {
-								duchy = {
-									NOT = { claimed_by = PREVPREVPREV }
-									holder_scope = {
-										NOT = { is_liege_of = ROOT }
-										NOT = { character = ROOT }
-										owns = PREVPREV
-									}
+								character_event = {
+									id = chancellor.202
+									days = 1
 								}
 							}
 						}
 					}
-				}
-				random = {
-					chance = 20
-					location = {
-						duchy = {
-							save_event_target_as = target_title
-							holder_scope = {
-								set_character_flag = duchy_claimed
-								character_event = { id = 20130 days = 1 }
-							}
-						}
-					}
 					set_character_flag = claim_done
 				}
 			}
-			if = {
-				limit = {
-					diplomacy = 20
-					liege = {
-						ROOT = {
-							location = {
-								duchy = {
-									NOT = { claimed_by = PREVPREVPREV }
-									holder_scope = {
-										NOT = { is_liege_of = ROOT }
-										NOT = { character = ROOT }
-										owns = PREVPREV
-									}
-								}
-							}
-						}
-					}
-				}
-				random = {
-					chance = 30
-					location = {
-						duchy = {
-							save_event_target_as = target_title
-							holder_scope = {
-								set_character_flag = duchy_claimed
-								character_event = { id = 20130 days = 1 }
-							}
-						}
-					}
-					set_character_flag = claim_done
-				}
-			}
-			# Try to claim county title
+
+			# If the kingdom/duchy attempts failed, always fabricate  county claim
 			if = {
 				limit = {
 					NOT = { has_character_flag = claim_done }
@@ -580,11 +488,15 @@ character_event = {
 						ROOT = {
 							location = {
 								county = {
-									NOT = { claimed_by = PREVPREVPREV }
+									NOT = { claimed_by = PREVPREVPREV } # liege
+
 									holder_scope = {
-										NOT = { is_liege_of = ROOT }
-										NOT = { character = ROOT }
 										owns = PREVPREV
+
+										NOR = {
+											is_liege_of = ROOT
+											character = ROOT
+										}
 									}
 								}
 							}
@@ -595,7 +507,10 @@ character_event = {
 					county = {
 						save_event_target_as = target_title
 						holder_scope = {
-							character_event = { id = 20130 days = 1 }
+							character_event = {
+								id = chancellor.202
+								days = 1
+							}
 						}
 					}
 				}
@@ -607,503 +522,220 @@ character_event = {
 
 # 20130: The noble is informed about the claim
 character_event = {
-	id = 20130
-	desc = "EVTDESC20130"
+	id = chancellor.202
+	desc = evt_chancellor_202_desc_a
 	picture = GFX_evt_emissary
 	border = GFX_event_normal_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20130"
-		hidden_tooltip = {
-			# Claim county
-			if = {
-				limit = {
-					NOR = {
-						has_character_flag = duchy_claimed
-						has_character_flag = kingdom_claimed
-					}
+		name = evt_chancellor_202_option_a
+
+		FROM = {
+			liege = {
+				letter_event = {
+					id = chancellor.203
+					days = 1
 				}
-				FROM = { liege = { letter_event = { id = 20131 days = 1 } } }
-			}
-			# Claim duchy
-			if = {
-				limit = { has_character_flag = duchy_claimed }
-				FROM = { liege = { letter_event = { id = 20133 days = 1 } } }
-				clr_character_flag = duchy_claimed
-			}
-			# Claim Kingdom
-			if = {
-				limit = { has_character_flag = kingdom_claimed }
-				FROM = { liege = { letter_event = { id = 20134 days = 1 } } }
-				clr_character_flag = kingdom_claimed
 			}
 		}
 	}
 }
 
 # 20131: The liege is informed and has a choice to press the claim or not
+# County claim
 letter_event = {
-	id = 20131
-	desc = "EVTDESC20131"
+	id = chancellor.203
 	border = GFX_event_letter_frame_diplomacy
 
-	show_from_from = yes
+	desc = {
+		text = evt_chancellor_203_desc_a # I have a forged a county claim
+		trigger = { event_target:target_title = { real_tier = COUNT } }
+	}
+	desc = {
+		text = evt_chancellor_203_desc_b # I have a forged a duchy claim
+		trigger = { event_target:target_title = { real_tier = DUKE } }
+	}
+	desc = {
+		text = evt_chancellor_203_desc_c # I have a forged a kingdom claim
+		trigger = { event_target:target_title = { real_tier = KING } }
+	}
 
 	is_triggered_only = yes
+	show_from_from = yes
 
 	trigger = {
+		FROMFROM = {
+			has_job_action = action_fabricate_claims
+
+			event_target:target_title = {
+				NOT = { claimed_by = ROOT }
+			}
+		}
+	}
+
+	option = { # Emperor or King
+		name = evt_chancellor_203_option_a # Press the Claim
+
+		if = {
+			limit = {
+				event_target:target_title = {
+					real_tier = COUNT
+				}
+			}
+
+			scaled_wealth = -1.0
+
+			if = {
+				limit = { higher_real_tier_than = DUKE }
+				prestige = -150
+			}
+			else_if = {
+				limit = { real_tier = DUKE }
+				prestige = -100
+			}
+			else = {
+				prestige = -50
+			}
+		}
+		else = { # Duchy or Kingdom claim
+			scaled_wealth = -2.0
+
+			if = {
+				limit = { higher_real_tier_than = DUKE }
+				prestige = -300
+			}
+			else_if = {
+				limit = { real_tier = DUKE }
+				prestige = -200
+			}
+			else = {
+				prestige = -100
+			}
+		}
+
+		add_claim = event_target:target_title
 		FROM = {
-			FROM = {
-				has_job_action = action_fabricate_claims
-				location = {
-					OR = {
-						county = {
-							NOT = { claimed_by = ROOT }
-						}
-						duchy = {
-							NOT = { claimed_by = ROOT }
-						}
+			show_scope_change = no
+
+			if = {
+				limit = {
+					event_target:target_title = {
+						real_tier = COUNT
 					}
 				}
-			}
-		}
-	}
 
-	option = {	# Emperor or King
-		name = "EVTOPTA20131" #Press the Claim
-		trigger = { primary_title = { higher_tier_than = DUKE }	}
-		ai_chance = {
-			factor = 90
-			modifier = {
-				factor = 0
-				NOT = { scaled_wealth = 1.25 }
-			}
-			modifier = {
-				factor = 0
-				OR = {
-					spouse = { character = FROM }
-					current_heir = { character = FROM }
+				opinion = {
+					name = opinion_furious
+					who = ROOT
+					years = 10
 				}
 			}
-		}
-		scaled_wealth = -1.0
-		prestige = -150
-#		FROM = {
-#			FROM = {
-#				location = {
-#					county = {
-#						add_claim = ROOT
-#					}
-#				}
-#			}
-#		}
-		event_target:target_title = { show_scope_change = no add_claim = ROOT }
-
-		FROM = {
-			show_scope_change = no
-			opinion = {
-				modifier = opinion_furious
-				who = ROOT
-				years = 10
+			else = {
+				opinion = {
+					name = opinion_furious
+					who = ROOT
+					years = 20
+				}
 			}
-			hidden_tooltip = {
-				character_event = { id = 20132 days = 7 }
+
+			character_event = {
+				id = chancellor.204
+				days = 7
 			}
 		}
 		if = {
-			limit = {
-				has_global_flag = ck2_tutorial_2
-			}
-			character_event = { id = 107300 }
-		}
-	}
-	option = {	# Duke
-		name = "EVTOPTA20131" #Press the Claim
-		trigger = { primary_title = { tier = DUKE } }
-		ai_chance = {
-			factor = 90
-			modifier = {
-				factor = 0
-				NOT = { scaled_wealth = 1.25 }
-			}
-			modifier = {
-				factor = 0
-				OR = {
-					spouse = { character = FROM }
-					current_heir = { character = FROM }
-				}
-			}
-		}
-		scaled_wealth = -1.0
-		prestige = -100
-#		FROM = {
-#			FROM = {
-#				location = {
-#					county = {
-#						add_claim = ROOT
-#					}
-#				}
-#			}
-#		}
-		event_target:target_title = { show_scope_change = no add_claim = ROOT }
-		FROM = {
-			show_scope_change = no
-			opinion = {
-				modifier = opinion_furious
-				who = ROOT
-				years = 10
-			}
-			hidden_tooltip = {
-				character_event = { id = 20132 days = 7 }
-			}
-		}
-		if = {
-			limit = {
-				has_global_flag = ck2_tutorial_2
-			}
-			character_event = { id = 107300 }
-		}
-	}
-	option = {	# Count or Patrician
-		name = "EVTOPTA20131" #Press the Claim
-		trigger = {
-			OR = {
-				primary_title = { tier = COUNT }
-				AND = {
-					is_patrician = yes
-					primary_title = { NOT = { higher_tier_than = COUNT } }
-				}
-			}
-		}
-		ai_chance = {
-			factor = 90
-			modifier = {
-				factor = 0
-				NOT = { scaled_wealth = 1.25 }
-			}
-			modifier = {
-				factor = 0
-				OR = {
-					spouse = { character = FROM }
-					current_heir = { character = FROM }
-				}
-			}
-		}
-		scaled_wealth = -1.0
-		prestige = -50
-#		FROM = {
-#			FROM = {
-#				location = {
-#					county = {
-#						add_claim = ROOT
-#					}
-#				}
-#			}
-#		}
-		event_target:target_title = { show_scope_change = no add_claim = ROOT }
-
-		FROM = {
-			show_scope_change = no
-			opinion = {
-				modifier = opinion_furious
-				who = ROOT
-				years = 10
-			}
-			hidden_tooltip = {
-				character_event = { id = 20132 days = 7 }
-			}
-		}
-		if = {
-			limit = {
-				has_global_flag = ck2_tutorial_2
-			}
+			limit = { has_global_flag = ck2_tutorial_2 }
 			long_character_event = { id = 107300 }
 		}
-	}
-	option = {
-		name = "EVTOPTB20131" #Let it go
 		ai_chance = {
-			factor = 10
-			modifier = {
-				factor = 0
-				scaled_wealth = 1.25
-				NOT = {
-					OR = {
-						spouse = { character = FROM }
-						current_heir = { character = FROM }
+			factor = 90
+
+			trigger = {
+				trigger_if = {
+					limit = {
+						event_target:target_title = {
+							real_tier = COUNT
+						}
+					}
+
+					scaled_wealth = 1.25
+
+					NOR = {
+						is_married = FROM
+						is_primary_heir = FROM
 					}
 				}
-			}
-		}
-		piety = 10
-	}
-}
-
-# 20133: The liege is informed and has a choice to press the claim or not
-letter_event = {
-	id = 20133
-	desc = "EVTDESC20133"
-	border = GFX_event_letter_frame_diplomacy
-
-	show_from_from = yes
-
-	is_triggered_only = yes
-
-	trigger = {
-		FROM = {
-			FROM = {
-				has_job_action = action_fabricate_claims
-				location = {
-					duchy = {
-						NOT = { claimed_by = ROOT }
-					}
+				trigger_else = {
+					scaled_wealth = 2.25
 				}
 			}
 		}
 	}
 
-	option = {	# Emperor or King
-		name = "EVTOPTA20131" #Press the Claim
-		trigger = { primary_title = { higher_tier_than = DUKE } }
-		ai_chance = {
-			factor = 90
-			modifier = {
-				factor = 0
-				NOT = { scaled_wealth = 2.25 }
-			}
-		}
-		scaled_wealth = -2.0
-		prestige = -300
-#		FROM = {
-#			FROM = {
-#				location = {
-#					duchy = {
-#						add_claim = ROOT
-#					}
-#				}
-#			}
-#		}
-		event_target:target_title = { show_scope_change = no add_claim = ROOT }
-		FROM = {
-			show_scope_change = no
-			opinion = {
-				modifier = opinion_furious
-				who = ROOT
-				years = 20
-			}
-			hidden_tooltip = {
-				character_event = { id = 20132 days = 7 }
-			}
-		}
-	}
-	option = {	# Duke
-		name = "EVTOPTA20131" #Press the Claim
-		trigger = { primary_title = { tier = DUKE } }
-		ai_chance = {
-			factor = 90
-			modifier = {
-				factor = 0
-				NOT = { scaled_wealth = 2.25 }
-			}
-		}
-		scaled_wealth = -2.0
-		prestige = -200
-#		FROM = {
-#			FROM = {
-#				location = {
-#					duchy = {
-#						add_claim = ROOT
-#					}
-#				}
-#			}
-#		}
-		event_target:target_title = { show_scope_change = no add_claim = ROOT }
-		FROM = {
-			show_scope_change = no
-			opinion = {
-				modifier = opinion_furious
-				who = ROOT
-				years = 20
-			}
-			hidden_tooltip = {
-				character_event = { id = 20132 days = 7 }
-			}
-		}
-	}
-	option = {	# Count
-		name = "EVTOPTA20131" #Press the Claim
-		trigger = { primary_title = { tier = COUNT } }
-		ai_chance = {
-			factor = 90
-			modifier = {
-				factor = 0
-				NOT = { scaled_wealth = 2.25 }
-			}
-		}
-		scaled_wealth = -2.0
-		prestige = -100
-#		FROM = {
-#			FROM = {
-#				location = {
-#					duchy = {
-#						add_claim = ROOT
-#					}
-#				}
-#			}
-#		}
-		event_target:target_title = { show_scope_change = no add_claim = ROOT }
-		FROM = {
-			show_scope_change = no
-			opinion = {
-				modifier = opinion_furious
-				who = ROOT
-				years = 20
-			}
-			hidden_tooltip = {
-				character_event = { id = 20132 days = 7 }
-			}
-		}
-	}
+
 	option = {
-		name = "EVTOPTB20131" #Let it go
+		name = evt_chancellor_203_option_b # Let it go
+
+		if = {
+			limit = {
+				event_target:target_title = {
+					real_tier = COUNT
+				}
+			}
+
+			piety = 10
+		}
+		else = {
+			piety = 20
+		}
 		ai_chance = {
 			factor = 10
-			modifier = {
-				factor = 0
-				scaled_wealth = 2.25
-			}
-		}
-		piety = 20
-	}
-}
 
-# 20134: The liege is informed and has a choice to press the claim or not
-letter_event = {
-	id = 20134
-	desc = "EVTDESC20134"
-	border = GFX_event_letter_frame_diplomacy
-
-	show_from_from = yes
-
-	is_triggered_only = yes
-
-	trigger = {
-		FROM = {
-			FROM = {
-				has_job_action = action_fabricate_claims
-				location = {
-					kingdom = {
-						NOT = { claimed_by = ROOT }
+			trigger = {
+				trigger_if = {
+					limit = {
+						event_target:target_title = {
+							real_tier = COUNT
+						}
 					}
+
+					trigger_if = {
+						limit = { scaled_wealth = 1.25 }
+
+						is_married = FROM
+						is_primary_heir = FROM
+					}
+				}
+				trigger_else = {
+					NOT = { scaled_wealth = 2.25 }
 				}
 			}
 		}
-	}
-
-	option = {	# Duke
-		name = "EVTOPTA20131" #Press the Claim
-		trigger = { primary_title = { tier = DUKE } }
-		ai_chance = {
-			factor = 90
-			modifier = {
-				factor = 0
-				NOT = { scaled_wealth = 2.25 }
-			}
-		}
-		scaled_wealth = -2.0
-		prestige = -200
-#		FROM = {
-#			FROM = {
-#				location = {
-#					kingdom = {
-#						add_claim = ROOT
-#					}
-#				}
-#			}
-#		}
-		event_target:target_title = { show_scope_change = no add_claim = ROOT }
-		FROM = {
-			show_scope_change = no
-			opinion = {
-				modifier = opinion_furious
-				who = ROOT
-				years = 20
-			}
-			hidden_tooltip = {
-				character_event = { id = 20132 days = 7 }
-			}
-		}
-	}
-	option = {	# Count
-		name = "EVTOPTA20131" #Press the Claim
-		trigger = { primary_title = { tier = COUNT } }
-		ai_chance = {
-			factor = 90
-			modifier = {
-				factor = 0
-				NOT = { scaled_wealth = 2.25 }
-			}
-		}
-		scaled_wealth = -2.0
-		prestige = -100
-#		FROM = {
-#			FROM = {
-#				location = {
-#					kingdom = {
-#						add_claim = ROOT
-#					}
-#				}
-#			}
-#		}
-		event_target:target_title = { show_scope_change = no add_claim = ROOT }
-		FROM = {
-			show_scope_change = no
-			opinion = {
-				modifier = opinion_furious
-				who = ROOT
-				years = 20
-			}
-			hidden_tooltip = {
-				character_event = { id = 20132 days = 7 }
-			}
-		}
-	}
-	option = {
-		name = "EVTOPTB20131" #Let it go
-		ai_chance = {
-			factor = 10
-			modifier = {
-				factor = 0
-				scaled_wealth = 2.25
-			}
-		}
-		piety = 20
 	}
 }
 
 # 20132: The noble is informed if the claim is pressed, and is insulted
 character_event = {
-	id = 20132
-	desc = "EVTDESC20132"
+	id = chancellor.204
+	desc = evt_chancellor_204_desc_a
 	picture = GFX_evt_emissary
 	border = GFX_event_normal_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20132"
-		hidden_tooltip = {
-			FROM = {
-				reverse_remove_opinion = {
-					modifier = opinion_furious
-					who = ROOT
-				}
+		name = evt_chancellor_204_option_a
+
+		hidden_effect = {
+			remove_opinion = {
+				name = opinion_furious
+				who = FROM
 			}
 		}
 		opinion = {
-			modifier = opinion_furious
+			name = opinion_furious
 			who = FROM
 			years = 10
 		}
@@ -1113,52 +745,72 @@ character_event = {
 
 # 914: A Noble finds out that the Chancellor is trying to fabricate claims
 character_event = {
-	id = 914
-	title = "EVTNAME914"
-	desc = "EVTDESC914"
+	id = chancellor.301
+	title = evt_chancellor_301_title
+	desc = evt_chancellor_301_desc_a
 	picture = GFX_evt_emissary
 	border = GFX_event_normal_frame_diplomacy
-
-	min_age = 16
-	capable_only = yes
-	prisoner = no
 	has_job_title = yes
 
 	trigger = {
 		has_job_action = action_fabricate_claims
-		NOT = { has_character_modifier = in_seclusion }
-		NOT = { has_character_modifier = bedridden_illness }
-		is_incapable = no
-		NOT = { has_character_modifier = bribed_by_noble_timer }
+		in_seclusion = no
+
+		NOR = {
+			has_character_modifier = bedridden_illness
+			has_character_modifier = bribed_by_noble_timer
+		}
+
 		location = {
 			owner = {
-				NOT = { is_liege_of = ROOT }
-				NOT = { character = ROOT }
+				NOR = {
+					is_liege_of = ROOT
+					character = ROOT
+				}
 			}
 		}
 	}
 
 	mean_time_to_happen = {
-		months = 240
+		years = 20
 
 		job_event_mtth_modifier_inverted_diplomacy_score = yes
 
-		modifier = {
+		mult_modifier = {
 			factor = 1.25
-			liege = { any_owned_bloodline = { has_bloodline_flag = bloodline_faster_claims } }
+
+			liege = {
+				any_owned_bloodline = {
+					has_bloodline_flag = bloodline_faster_claims
+					bloodline_is_active_for = PREV
+				}
+			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.25
-			any_owned_bloodline = { has_bloodline_flag = bloodline_faster_claims } #If chancellor is also your relative.
+
+			# If chancellor is also your relative
+			any_owned_bloodline = {
+				has_bloodline_flag = bloodline_faster_claims
+				bloodline_is_active_for = PREV
+			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTA914"
+		name = evt_chancellor_301_option_a
+
 		location = {
-			county = {
-				holder_scope = {
-					character_event = { id = 20140 days = 7 tooltip = "EVTTOOLTIP20140" }
+			show_scope_change = no
+
+			owner = {
+				show_scope_change = no
+
+				character_event = {
+					id = chancellor.302
+					days = 7
+					tooltip = evt_chancellor_301_option_a_tooltip
 				}
 			}
 		}
@@ -1167,165 +819,212 @@ character_event = {
 
 # 20140 - The noble knows about the fabricated claims
 character_event = {
-	id = 20140
-	desc = "EVTDESC20140"
+	id = chancellor.302
+	desc = evt_chancellor_302_desc_a
 	picture = GFX_evt_emissary
 	border = GFX_event_normal_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20140" #Make him disappear...
-		ai_chance = { factor = 40 }
+		name = evt_chancellor_302_option_a # Make him disappear...
+
 		piety = -10
 		random_list = {
 			50 = {
 				FROM = {
-					character_event = { id = 20141 days = 7 tooltip = "EVTTOOLTIP20141" }
+					show_scope_change = no
+
+					character_event = {
+						id = chancellor.303 # Assassination succeeds
+						days = 7
+						tooltip = evt_chancellor_302_option_a_tooltip_1
+					}
 				}
 			}
 			50 = {
-				character_event = { id = 20143 days = 7 tooltip = "EVTTOOLTIP20143" }
+				character_event = {
+					id = chancellor.306 # Assassination failed
+					days = 7
+					tooltip = evt_chancellor_302_option_a_tooltip_2
+				}
 			}
 		}
+
+		ai_chance = { factor = 40 }
 	}
 	option = {
-		name = "EVTOPTB20140" #Send him an offer
-		ai_chance = { factor = 30 }
-		treasury = -50
+		name = evt_chancellor_302_option_b # Try to bribe him
+
+		wealth = -50
+
 		FROM = {
-			letter_event = { id = 20144 days = 7 tooltip = "EVTTOOLTIP20144" }
+			show_scope_change = no
+
+			letter_event = {
+				id = chancellor.307
+				days = 7
+				tooltip = evt_chancellor_302_option_b_tooltip
+			}
 		}
+
+		ai_chance = { factor = 30 }
 	}
 	option = {
-		name = "EVTOPTC20140" #I better let it be for now
+		name = evt_chancellor_302_option_c # I better let it be for now
+
 		ai_chance = { factor = 30 }
 	}
 }
 
 # 20141 - Chancellor is assassinated...
 character_event = {
-	id = 20141
-	desc = "EVTDESC20141"
+	id = chancellor.303
+	desc = evt_chancellor_303_desc_a
 	picture = GFX_evt_death
 	border = GFX_event_normal_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20141"
-		hidden_tooltip = {
-			FROM = { character_event = { id = 20142 } }
+		name = evt_chancellor_303_option_a
+
+		FROM = {
+			character_event = { id = chancellor.304 }
 		}
 	}
 }
 
 # 20142 - Noble is informed that the assassination attempt succeeded
 character_event = {
-	id = 20142
-	desc = "EVTDESC20142"
+	id = chancellor.304
+	desc = evt_chancellor_304_desc_a
 	picture = GFX_evt_death
 	border = GFX_event_normal_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20142"
-		hidden_tooltip = {
-			FROM = { liege = { character_event = { id = 20147 } } }
+		name = EXCELLENT
+
+		FROM = {
+			liege = {
+				character_event = { id = chancellor.305 }
+			}
+		}
+	}
+}
+
+# 20147 - The liege is informed about the Chancellor's death
+character_event = {
+	id = chancellor.305
+	desc = evt_chancellor_305_desc_a
+	picture = GFX_evt_death
+	border = GFX_event_normal_frame_diplomacy
+
+	is_triggered_only = yes
+	show_from_from = yes
+
+	option = {
+		name = evt_chancellor_305_option_a
+
+		FROMFROM = {
+			show_scope_change = no
+
+			death = {
+				death_reason = death_murder_unknown
+				killer = FROM
+			}
 		}
 	}
 }
 
 # 20143 - Noble is informed that the assassination attempt failed
 character_event = {
-	id = 20143
-	desc = "EVTDESC20143"
+	id = chancellor.306
+	desc = evt_chancellor_306_desc_a
 	picture = GFX_evt_death
 	border = GFX_event_normal_frame_diplomacy
 
 	is_triggered_only = yes
 
+	ai = no
+
 	option = {
-		name = "EVTOPTA20143"
+		name = evt_chancellor_306_option_a
 	}
 }
 
 # 20144 - Noble tries to bribe Chancellor
 letter_event = {
-	id = 20144
-	desc = "EVTDESC20144"
+	id = chancellor.307
+	desc = evt_chancellor_307_desc_a
 	border = GFX_event_letter_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20144"
+		name = evt_chancellor_307_option_a
+
 		wealth = 50
 		FROM = {
-			letter_event = { id = 20145 tooltip = "EVTTOOLTIP20145" }
-		}
-		hidden_tooltip = {
-			add_character_modifier = {
-				name = bribed_by_noble_timer
-				duration = 365
-				hidden = yes
+			show_scope_change = no
+
+			letter_event = {
+				id = chancellor.308
+				tooltip = evt_chancellor_307_option_a_tooltip
 			}
+		}
+
+		add_character_modifier = {
+			name = bribed_by_noble_timer
+			years = 1
+			hidden = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB20144"
+		name = evt_chancellor_307_option_b
+
 		prestige = 5
-		FROM = { letter_event = { id = 20146 tooltip = "EVTTOOLTIP20146" } }
+
+		FROM = {
+			show_scope_change = no
+
+			letter_event = {
+				id = chancellor.309
+				tooltip = evt_chancellor_307_option_b_tooltip
+			}
+		}
 	}
 }
 
 # 20145 - Noble is informed that the Chancellor accepted the bribe
 letter_event = {
-	id = 20145
-	desc = "EVTDESC20145"
+	id = chancellor.308
+	desc = evt_chancellor_308_desc_a
 	border = GFX_event_letter_frame_diplomacy
 
 	is_triggered_only = yes
 
+	ai = no
+
 	option = {
-		name = "EVTOPTA20145"
+		name = EXCELLENT
 	}
 }
 
 # 20146 - Noble is informed that the Chancellor didn't accept the bribe
 letter_event = {
-	id = 20146
-	desc = "EVTDESC20146"
+	id = chancellor.309
+	desc = evt_chancellor_309_desc_a
 	border = GFX_event_letter_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20146"
+		name = evt_chancellor_309_option_a
+
 		wealth = 50
-	}
-}
-
-# 20147 - The liege is informed about the Chancellor's death
-character_event = {
-	id = 20147
-	desc = "EVTDESC20147"
-	picture = GFX_evt_death
-	border = GFX_event_normal_frame_diplomacy
-
-	show_from_from = yes
-
-	is_triggered_only = yes
-
-	option = {
-		name = "EVTOPTA20147"
-		job_chancellor = {
-			death = {
-				death_reason = death_murder_unknown
-				killer = FROM
-			}
-		}
 	}
 }
 
@@ -1337,26 +1036,19 @@ character_event = {
 
 # 916: The Chancellor sows dissent between a local noble and his liege
 character_event = {
-	id = 916
-	title = "EVTNAME916"
-	desc = "EVTDESC916"
+	id = chancellor.401
+	title = evt_chancellor_401_title
+	desc = evt_chancellor_401_desc_a
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_diplomacy
-
-	min_age = 16
-	capable_only = yes
-	prisoner = no
 	has_job_title = yes
 
 	trigger = {
 		has_job_action = action_sow_dissent
-		NOT = { has_character_modifier = in_seclusion }
+		in_seclusion = no
 		NOT = { has_character_modifier = bedridden_illness }
-		is_incapable = no
 		location = {
 			any_province_lord = {
-				NOT = { is_liege_of = ROOT }
-				NOT = { character = ROOT }
 				NOT = { same_realm = ROOT }
 				independent = no
 			}
@@ -1364,43 +1056,47 @@ character_event = {
 	}
 
 	mean_time_to_happen = {
-		months = 120
+		years = 10
 
-		modifier = {
-			factor = 0.85
-			trait = emul_nimrod
-		}
-		modifier = {
-			factor = 0.85
-			liege = {
-				trait = emul_nimrod
-			}
-		}
-		
 		job_event_mtth_modifier_diplomacy_score = yes
 
-		modifier = {
+		mult_modifier = {
 			factor = 0.75
-			liege = { any_owned_bloodline = { has_bloodline_flag = bloodline_faster_dissent } }
+
+			liege = {
+				any_owned_bloodline = {
+					has_bloodline_flag = bloodline_faster_dissent
+					bloodline_is_active_for = PREV
+				}
+			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			any_owned_bloodline = { has_bloodline_flag = bloodline_faster_dissent } #If chancellor is also your relative.
+
+			# If chancellor is also your relative
+			any_owned_bloodline = {
+				has_bloodline_flag = bloodline_faster_dissent
+				bloodline_is_active_for = PREV
+			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTA916"
-		hidden_tooltip = {
+		name = evt_chancellor_401_option_a
+
+		hidden_effect = {
 			location = {
 				random_province_lord = {
 					limit = {
-						NOT = { is_liege_of = ROOT }
-						NOT = { character = ROOT }
 						NOT = { same_realm = ROOT }
 						independent = no
 					}
-					character_event = { id = 20160 days = 7 }
+
+					character_event = {
+						id = chancellor.402
+						days = 7
+					}
 				}
 			}
 		}
@@ -1409,28 +1105,35 @@ character_event = {
 
 # 20160: The local noble start disliking his liege
 character_event = {
-	id = 20160
-	desc = "EVTDESC20160"
+	id = chancellor.402
+	desc = evt_chancellor_402_desc_a
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20160"
-		liege = {
-			reverse_opinion = {
-				modifier = opinion_furious
-				who = ROOT
-				years = 2
-			}
-			character_event = { id = 20161 days = 7 tooltip = "EVTTOOLTIP20161" }
+		name = evt_chancellor_402_option_a
+
+		opinion = {
+			name = opinion_furious
+			who = liege
+			years = 2
 		}
-		hidden_tooltip = {
-			FROM = {
-				liege = {
-					letter_event = { id = 20162 }
-				}
+
+		liege = {
+			show_scope_change = no
+
+			character_event = {
+				id = chancellor.403 # Inform liege of local noble
+				days = 7
+				tooltip = evt_chancellor_402_option_a_tooltip
+			}
+		}
+
+		FROM = {
+			liege = {
+				letter_event = { id = chancellor.404 } # Inform liege
 			}
 		}
 	}
@@ -1438,26 +1141,25 @@ character_event = {
 
 # 20161: The liege of the local noble is informed
 character_event = {
-	id = 20161
-	desc = "EVTDESC20161"
+	id = chancellor.403
+	desc = evt_chancellor_403_desc_a
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20161"
+		name = evt_chancellor_403_option_a
+
 		tooltip = {
-			FROM = {
-				opinion = {
-					modifier = opinion_furious
-					who = ROOT
-					years = 2
-				}
+			reverse_opinion = {
+				name = opinion_furious
+				who = FROM
+				years = 2
 			}
 		}
 		opinion = {
-			modifier = opinion_angry
+			name = opinion_angry
 			who = FROM
 			years = 2
 		}
@@ -1466,41 +1168,36 @@ character_event = {
 
 # 20162: The liege of the Chancellor is informed
 letter_event = {
-	id = 20162
-	desc = "EVTDESC20162"
+	id = chancellor.404
+	desc = evt_chancellor_404_desc_a
 	border = GFX_event_letter_frame_diplomacy
 
+	is_triggered_only = yes
 	show_from_from = yes
 
-	is_triggered_only = yes
+	ai = no
 
 	option = {
-		name = "EVTOPTA20162"
+		name = evt_chancellor_404_option_a
 	}
 }
 
 
 # 917: Chancellor Discovered
 character_event = {
-	id = 917
-	title = "EVTNAME917"
-	desc = "EVTDESC917"
+	id = chancellor.501
+	title = evt_chancellor_501_title
+	desc = evt_chancellor_501_desc_a
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_diplomacy
-
-	min_age = 16
-	capable_only = yes
-	prisoner = no
 	has_job_title = yes
 
 	trigger = {
 		has_job_action = action_sow_dissent
-		NOT = { has_character_modifier = in_seclusion }
+		in_seclusion = no
 		NOT = { has_character_modifier = bedridden_illness }
-		is_incapable = no
 		location = {
 			any_province_lord = {
-				NOT = { is_liege_of = ROOT }
 				NOT = { same_realm = ROOT }
 				independent = no
 			}
@@ -1508,30 +1205,46 @@ character_event = {
 	}
 
 	mean_time_to_happen = {
-		months = 120
+		years = 10
 
 		job_event_mtth_modifier_inverted_diplomacy_score = yes
 
-		modifier = {
+		mult_modifier = {
 			factor = 1.25
-			liege = { any_owned_bloodline = { has_bloodline_flag = bloodline_faster_dissent } }
+
+			liege = {
+				any_owned_bloodline = {
+					has_bloodline_flag = bloodline_faster_dissent
+					bloodline_is_active_for = PREV
+				}
+			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.25
-			any_owned_bloodline = { has_bloodline_flag = bloodline_faster_dissent } #If chancellor is also your relative.
+
+			# If chancellor is also your relative
+			any_owned_bloodline = {
+				has_bloodline_flag = bloodline_faster_dissent
+				bloodline_is_active_for = PREV
+			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTA917"
+		name = evt_chancellor_501_option_a
+
 		location = {
 			random_province_lord = {
 				limit = {
-					NOT = { is_liege_of = ROOT }
 					NOT = { same_realm = ROOT }
 					independent = no
 				}
-				character_event = { id = 20170 tooltip = "EVTTOOLTIP20170" }
+
+				character_event = {
+					id = chancellor.502
+					tooltip = evt_chancellor_501_option_a_tooltip
+				}
 			}
 		}
 	}
@@ -1539,124 +1252,111 @@ character_event = {
 
 # 20170: The local noble is informed
 character_event = {
-	id = 20170
-	desc = "EVTDESC20170"
+	id = chancellor.502
+	desc = evt_chancellor_502_desc_a
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20170"
+		name = evt_chancellor_502_option_a
+
 		FROM = {
+			show_scope_change = no
+
 			imprison = ROOT
-		}
-		hidden_tooltip = {
-			FROM = {
-				character_event = { id = 20171 }
-				liege = { letter_event = { id = 20172 } }
+			character_event = { id = chancellor.503 }
+
+			liege = {
+				letter_event = { id = chancellor.504 }
 			}
-			liege = { letter_event = { id = 20173 } }
+		}
+
+		liege = {
+			letter_event = { id = chancellor.505 }
 		}
 	}
 	option = {
-		name = "EVTOPTB20170"
+		name = evt_chancellor_502_option_b
+
 		FROM = {
+			show_scope_change = no
+
 			liege = {
+				show_scope_change = no
+
 				reverse_opinion = {
-					modifier = opinion_furious
+					name = opinion_furious
 					who = ROOT
 					years = 2
 				}
+
+				letter_event = { id = chancellor.506 }
 			}
 		}
-		hidden_tooltip = {
-			FROM = {
-				liege = { letter_event = { id = 20175 } }
-			}
-			liege = { letter_event = { id = 20174 } }
+
+		liege = {
+			letter_event = { id = chancellor.507 }
 		}
 	}
 }
 
 # 20171: The Chancellor is imprisoned
 character_event = {
-	id = 20171
-	desc = "EVTDESC20171"
+	id = chancellor.503
+	desc = evt_chancellor_503_desc_a
 	picture = GFX_evt_into_the_dungeon
 	border = GFX_event_normal_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20171"
+		name = evt_chancellor_503_option_a
+
 		prestige = -10
 	}
 }
 
 # 20172: The Chancellor's liege is informed about imprisonment
 letter_event = {
-	id = 20172
-	desc = "EVTDESC20172"
+	id = chancellor.504
+	desc = evt_chancellor_504_desc_a
 	border = GFX_event_letter_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20172"
+		name = evt_chancellor_504_option_a
+
 		prestige = -10
 	}
 }
 
 # 20173: The local noble informs his liege about imprisonment
 letter_event = {
-	id = 20173
-	desc = "EVTDESC20173"
+	id = chancellor.505
+	desc = evt_chancellor_505_desc_a
 	border = GFX_event_letter_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA20173"
-		FROM = {
-			FROM = {
-				liege = {
-					reverse_opinion = {
-						modifier = opinion_furious
-						who = ROOT
-						years = 2
-					}
-					hidden_tooltip = {
-						letter_event = { id = 20176 }
-					}
+		name = evt_chancellor_505_option_a
+
+		FROMFROM = {
+			show_scope_change = no
+
+			liege = {
+				show_scope_change = no
+
+				reverse_opinion = {
+					name = opinion_furious
+					who = ROOT
+					years = 2
 				}
-			}
-		}
-	}
-}
 
-# 20174: The local noble informs his liege about the Chancellor's doing
-letter_event = {
-	id = 20174
-	desc = "EVTDESC20174"
-	border = GFX_event_letter_frame_diplomacy
-
-	is_triggered_only = yes
-
-	option = {
-		name = "EVTOPTA20174"
-		FROM = {
-			FROM = {
-				liege = {
-					reverse_opinion = {
-						modifier = opinion_furious
-						who = ROOT
-						years = 2
-					}
-					hidden_tooltip = {
-						letter_event = { id = 20176 }
-					}
-				}
+				letter_event = { id = chancellor.506 }
 			}
 		}
 	}
@@ -1664,28 +1364,51 @@ letter_event = {
 
 # 20175: The Chancellor's liege is informed about the reaction of the noble
 letter_event = {
-	id = 20175
-	desc = EVTDESC20175
+	id = chancellor.506
+	desc = evt_chancellor_506_desc_a
 	border = GFX_event_letter_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = EVTOPTA20175
+		name = evt_chancellor_506_option_a
+
 		prestige = -5
-		hidden_tooltip = {
-			FROM = {
-				remove_opinion = {
-					modifier = opinion_furious
-					who = ROOT
-				}
+
+		tooltip = {
+			reverse_opinion = {
+				name = opinion_furious
+				who = FROM
+				years = 2
 			}
 		}
-		FROM = {
-			opinion = {
-				modifier = opinion_furious
-				who = ROOT
-				years = 2
+	}
+}
+
+# 20174: The local noble informs his liege about the Chancellor's doing
+letter_event = {
+	id = chancellor.507
+	desc = evt_chancellor_507_desc_a
+	border = GFX_event_letter_frame_diplomacy
+
+	is_triggered_only = yes
+
+	option = {
+		name = evt_chancellor_507_option_a
+
+		FROMFROM = {
+			show_scope_change = no
+
+			liege = {
+				show_scope_change = no
+
+				reverse_opinion = {
+					name = opinion_furious
+					who = ROOT
+					years = 2
+				}
+
+				letter_event = { id = chancellor.508 }
 			}
 		}
 	}
@@ -1693,27 +1416,21 @@ letter_event = {
 
 # 20176: The Chancellor's liege is informed about the reaction of the noble's liege
 letter_event = {
-	id = 20176
-	desc = EVTDESC20176
+	id = chancellor.508
+	desc = evt_chancellor_508_desc_a
 	border = GFX_event_letter_frame_diplomacy
 
 	is_triggered_only = yes
 
 	option = {
-		name = EVTOPTA20176
+		name = evt_chancellor_508_option_a
+
 		prestige = -10
-		hidden_tooltip = {
-			FROM = {
-				remove_opinion = {
-					modifier = opinion_furious
-					who = ROOT
-				}
-			}
-		}
-		FROM = {
-			opinion = {
-				modifier = opinion_furious
-				who = ROOT
+
+		tooltip = {
+			reverse_opinion = {
+				name = opinion_furious
+				who = FROM
 				years = 2
 			}
 		}
@@ -1722,33 +1439,29 @@ letter_event = {
 
 # 20235: The Chancellor successfully increases the sentiment of the local clan
 character_event = {
-	id = 20235
-	title = EVTNAME20235
-	desc = EVTDESC20235
+	id = chancellor.601
+	title = evt_chancellor_601_title
+	desc = evt_chancellor_601_desc_a
 	picture = GFX_evt_market
 	border = GFX_event_normal_frame_diplomacy
-
-	min_age = 16
-	capable_only = yes
-	prisoner = no
 	has_job_title = yes
 
 	trigger = {
 		has_job_action = action_clan_sentiment
-		NOT = { has_character_modifier = in_seclusion }
+		in_seclusion = no
 		NOT = { has_character_modifier = bedridden_illness }
-		is_incapable = no
 		location = {
 			owner = {
 				is_nomadic = yes
 				ROOT = {
 					liege = {
-						NOT = { character = PREVPREV }
 						OR = {
-							overlord_of = PREVPREV
+							is_liege_of = PREVPREV
 							vassal_of = PREVPREV
 							same_liege = PREVPREV
 						}
+
+						NOT = { character = PREVPREV }
 					}
 				}
 			}
@@ -1756,23 +1469,19 @@ character_event = {
 	}
 
 	mean_time_to_happen = {
-		months = 60
+		years = 5
 
-		modifier = {
+		mult_modifier = {
 			factor = 10
 			clan_title = {
 				clan = yes # Is the head of a Clan
 			}
-			location = {
-				owner = {
-					character = ROOT # This is my own clan
-				}
-			}
-			NOT = {
-				opinion = {
-					who = liege
-					value = 0
-				}
+
+			owns = location # This is my own clan
+
+			opinion = {
+				who = liege
+				value < 0
 			}
 		}
 
@@ -1793,40 +1502,43 @@ character_event = {
 	}
 
 	option = {
-		name = EVTOPTA20235 # Increase the sentiments vs the Khan's Clan
-		ai_chance = { factor = 100 }
+		name = evt_chancellor_601_option_a # Increase the sentiments vs the Khan's Clan
 
 		event_target:target_chief = {
 			show_scope_change = no
 			clan_title = {
 				show_scope_change = no
 				clan_opinion = {
+					name = clan_propaganda_effort
 					who = event_target:liege_clan
-					modifier = clan_propaganda_effort
 					years = 5
 				}
 			}
 		}
 
-		hidden_tooltip = {
-			liege = { character_event = { id = 20236 } }
+		liege = {
+			character_event = { id = chancellor.602 }
 		}
 	}
 
 	option = {
-		name = EVTOPTB20235 # Do nothing
+		name = evt_chancellor_601_option_b # Do nothing
+
 		ai_chance = { factor = 0 }
 	}
 }
 
+# 20236: The liege is informed of the success
 character_event = {
-	id = 20236
-	title = EVTNAME20235
-	desc = EVTDESC20236
+	id = chancellor.602
+	title = evt_chancellor_601_title
+	desc = evt_chancellor_602_desc_a
 	picture = GFX_evt_market
 	border = GFX_event_normal_frame_diplomacy
 
 	is_triggered_only = yes
+
+	ai = no
 
 	option = {
 		name = EXCELLENT
@@ -1837,8 +1549,8 @@ character_event = {
 				clan_title = {
 					show_scope_change = no
 					clan_opinion = {
+						name = clan_propaganda_effort
 						who = event_target:liege_clan
-						modifier = clan_propaganda_effort
 						years = 5
 					}
 				}

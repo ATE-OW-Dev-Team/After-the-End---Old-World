@@ -7,9 +7,8 @@
 # Province culture changes
 province_event = {
 	id = 55000
-	desc = "EVTDESC55000"
+	desc = EVTDESC55000
 	picture = GFX_evt_culture_change
-	
 	trigger = {
 		owner = {
 			AND = {
@@ -36,6 +35,7 @@ province_event = {
 				ROOT = {
 					owner = {
 						culture = PREVPREV
+						culture = PREVPREVPREV
 					}
 				}
 			}
@@ -46,138 +46,154 @@ province_event = {
 			}
 		}
 	}
-	
-	mean_time_to_happen = {
-		months = 1200
 
-		modifier = {
+	mean_time_to_happen = {
+		years = 100
+
+		mult_modifier = {
 			factor = 1.5
-			owner = { NOT = { stewardship = 2 } }
+			owner = { stewardship < 2 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.5
-			owner = { NOT = { stewardship = 3 } }
+			owner = { stewardship < 3 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.5
-			owner = { NOT = { stewardship = 4 } }
+			owner = { stewardship < 4 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.5
-			owner = { NOT = { stewardship = 5 } }
+			owner = { stewardship < 5 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			owner = { stewardship = 9 }
+			owner = { stewardship >= 9 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			owner = { stewardship = 11 }
+			owner = { stewardship >= 11 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			owner = { stewardship = 13 }
+			owner = { stewardship >= 13 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			owner = { stewardship = 15 }
+			owner = { stewardship >= 15 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.95
+
 			owner = {
 				job_treasurer = {
-					NOT = {
-						stewardship = 10
-					}
 					has_job_action = action_administer_realm
+					stewardship < 10
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
+
 			owner = {
 				job_treasurer = {
-					stewardship = 10
 					has_job_action = action_administer_realm
+					stewardship >= 10
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
+
 			owner = {
 				OR = {
 					primary_title = {
 						conquest_culture = PREV
 					}
+
 					ROOT = {
-						county = {
-							conquest_culture = PREVPREV
-						}
-					}
-					ROOT = {
-						duchy = {
-							holder_scope = {
-								character = PREVPREVPREV
+						OR = {
+							county = {
+								conquest_culture = PREVPREV
 							}
-							conquest_culture = PREVPREV
-						}
-					}
-					ROOT = {
-						kingdom = {
-							holder_scope = {
-								character = PREVPREVPREV
+
+							duchy = {
+								holder = PREVPREV
+								conquest_culture = PREVPREV
 							}
-							conquest_culture = PREVPREV
-						}
-					}
-					ROOT = {
-						empire = {
-							holder_scope = {
-								character = PREVPREVPREV
+
+							kingdom = {
+								holder = PREVPREV
+								conquest_culture = PREVPREV
 							}
-							conquest_culture = PREVPREV
+
+							empire = {
+								holder = PREVPREV
+								conquest_culture = PREVPREV
+							}
 						}
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
 			has_province_flag = recent_depopulation_1
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.5
 			has_province_flag = recent_depopulation_2
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.25
 			has_province_flag = recent_depopulation_3
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 3
+
 			OR = {
 				has_game_rule = {
 					name = culture_conversion
 					value = slower_normal
 				}
+
 				has_game_rule = {
 					name = culture_conversion
 					value = faster_melting_pots_and_slower_normal
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.25
+
 			OR = {
 				culture = zhangzhung
 				culture = sumpa
 			}
+
 			owner = {
 				culture = bodpa
+
 				OR = {
 					any_owned_bloodline = {
 						has_bloodline_flag = bloodline_songtsen_gampo
 					}
+
 					top_liege = {
 						any_owned_bloodline = {
 							has_bloodline_flag = bloodline_songtsen_gampo
@@ -186,116 +202,119 @@ province_event = {
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			owner = {
-		    	any_owned_bloodline = {
-    				has_bloodline_flag = cultural_saintly_bloodline
-    				founder = {
-    					culture = PREVPREV
-    				}
-    			}
+				any_owned_bloodline = {
+					has_bloodline_flag = cultural_saintly_bloodline
+
+					founder = {
+						culture = PREVPREV
+					}
+				}
 			}
 		}
-		modifier = { #Roman Renaissance.
+		mult_modifier = { #Roman Renaissance.
 			factor = 0.5
 			has_global_flag = flag_started_roman_renaissance
-			liege = { culture = roman }
+			owner = { culture = roman }
 			location = { county = { culture_group = apeninian } }
 		}
-		modifier = { #Greek culture is more impervious to Romanization.
+		mult_modifier = { #Greek culture is more impervious to Romanization.
 			factor = 2
 			liege = { culture = roman }
 			location = { county = { culture_group = byzantine } }
 		}
-		modifier = { #Spanish Renaissance.
+		mult_modifier = { #Spanish Renaissance.
 			factor = 0.5
 			has_global_flag = spanish_culture
 			liege = { culture = spanish }
 			location = { county = { culture_group = hispanophone } }
 		}
-		modifier = { #Portuguese culture is more impervious to Hispanization.
+		mult_modifier = { #Portuguese culture is more impervious to Hispanization.
 			factor = 2
 			liege = { culture = spanish }
 			location = { county = { culture = portuguese } }
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			liege = { OR = { culture = durzi culture = deluzi } }
 			location = { county = { religion = druze } }
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			liege = { culture = mandaeans }
 			location = { county = { religion = mandaeanism } }
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			liege = { culture = nusayri }
 			location = { county = { religion = alawite } }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.5
 			owner = { location = { county = { culture_group = PREVPREV } } }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.25
 			location = { terrain = mountain }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.15
 			location = { terrain = hills }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.15
 			location = { terrain = tells }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.1
 			location = { terrain = desert }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.15
 			location = { terrain = marsh }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.15
 			location = { terrain = jungle }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.15
 			location = { terrain = karst }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.1
 			location = { terrain = forest }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.05
 			location = { terrain = woods }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 0.95
 			location = { terrain = coastal_desert }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.1
 			location = { terrain = arctic }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 0.9
 			location = { terrain = steppe }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 0.9
 			location = { terrain = plains }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 0.8
 			location = { terrain = farmlands }
 		}
 		# Effect of wonder upgrades
-		modifier = {
+		mult_modifier = {
 			factor = 0.75
 			owner = {
 				top_liege = {
@@ -309,22 +328,18 @@ province_event = {
 						}
 					}
 				}
-			} 
+			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTA55000"
-		owner = {
-			ROOT = {
-				culture = PREV
-				if = {
-					limit = {
-						has_province_modifier = nomad_agitation
-					}
-					remove_province_modifier = nomad_agitation
-				}
-			}
+		name = EVTOPTA55000
+
+		culture = owner
+
+		if = {
+			limit = { has_province_modifier = nomad_agitation }
+			remove_province_modifier = nomad_agitation
 		}
 	}
 }
@@ -332,13 +347,14 @@ province_event = {
 # Bring in some settlers
 province_event = {
 	id = 55001
-	desc = "EVTDESC55001"
+	desc = EVTDESC55001
 	picture = GFX_evt_culture_change
-	
 	trigger = {
-		
+		is_capital = yes
+
 		OR = {
-			port = yes
+			is_coastal = yes
+
 			NOR = {
 				has_game_rule = {
 					name = culture_conversion
@@ -350,7 +366,6 @@ province_event = {
 				}
 			}
 		}
-		
 		owner = {
 			OR = {
 				independent = yes
@@ -370,49 +385,37 @@ province_event = {
 					conquest_culture = PREV
 				}
 				ROOT = {
-					county = {
-						conquest_culture = PREVPREV
-					}
-				}
-				ROOT = {
-					duchy = {
-						holder_scope = {
-							character = PREVPREVPREV
+					OR = {
+						county = {
+							conquest_culture = PREVPREV
 						}
-						conquest_culture = PREVPREV
-					}
-				}
-				ROOT = {
-					kingdom = {
-						holder_scope = {
-							character = PREVPREVPREV
+
+						duchy = {
+							holder = PREVPREV
+							conquest_culture = PREVPREV
 						}
-						conquest_culture = PREVPREV
-					}
-				}
-				ROOT = {
-					empire = {
-						holder_scope = {
-							character = PREVPREVPREV
+
+						kingdom = {
+							holder = PREVPREV
+							conquest_culture = PREVPREV
 						}
-						conquest_culture = PREVPREV
+
+						empire = {
+							holder = PREVPREV
+							conquest_culture = PREVPREV
+						}
 					}
 				}
 			}
 		}
-		
 		NOT = { # Exclude provinces covered by event 55000
 			any_neighbor_province = {
 				has_owner = yes
-				ROOT = {
-					owner = {
-						culture = PREVPREV
-					}
-				}
 				owner = {
 					ROOT = {
 						owner = {
 							culture = PREVPREV
+							culture = PREVPREVPREV
 						}
 					}
 				}
@@ -424,75 +427,88 @@ province_event = {
 			}
 		}
 	}
-	
+
 	mean_time_to_happen = {
-		months = 1200
-		
-		modifier = {
+
+		years = 100
+
+		mult_modifier = {
 			factor = 1.5
-			owner = { NOT = { stewardship = 2 } }
+			owner = { stewardship < 2 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.5
-			owner = { NOT = { stewardship = 3 } }
+			owner = { stewardship < 3 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.5
-			owner = { NOT = { stewardship = 4 } }
+			owner = { stewardship < 4 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.5
-			owner = { NOT = { stewardship = 5 } }
+			owner = { stewardship < 5 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.95
+
 			owner = {
 				job_treasurer = {
-					NOT = {
-						stewardship = 10
-					}
 					has_job_action = action_administer_realm
+					stewardship < 10
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
+
 			owner = {
 				job_treasurer = {
-					stewardship = 10
 					has_job_action = action_administer_realm
+					stewardship >= 10
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			owner = { stewardship = 9 }
+			owner = { stewardship >= 9 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			owner = { stewardship = 11 }
+			owner = { stewardship >= 11 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			owner = { stewardship = 13 }
+			owner = { stewardship >= 13 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			owner = { stewardship = 15 }
+			owner = { stewardship >= 15 }
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
 			has_province_flag = recent_depopulation_1
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.5
 			has_province_flag = recent_depopulation_2
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.25
 			has_province_flag = recent_depopulation_3
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5 # Altaic nomad steppe bonus vs non-Altaics
 			owner = {
 				OR = {
@@ -521,7 +537,7 @@ province_event = {
 				}
 			}
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 3
 			OR = {
 				has_game_rule = {
@@ -534,7 +550,7 @@ province_event = {
 				}
 			}
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.25
 			OR = {
 				culture = zhangzhung
@@ -554,74 +570,74 @@ province_event = {
 				}
 			}
 		}
-		modifier = { #Roman Renaissance.
+		mult_modifier = { #Roman Renaissance.
 			factor = 0.5
 			has_global_flag = flag_started_roman_renaissance
 			liege = { culture = roman }
 			location = { county = { culture_group = latin } }
 		}
-		modifier = { #Greek culture is more impervious to Romanization.
+		mult_modifier = { #Greek culture is more impervious to Romanization.
 			factor = 2
 			liege = { culture = roman }
 			location = { county = { culture = greek } }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.5
 			owner = { location = { county = { culture_group = PREVPREV } } }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.25
 			location = { terrain = mountain }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.15
 			location = { terrain = hills }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.15
 			location = { terrain = tells }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.1
 			location = { terrain = desert }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.15
 			location = { terrain = marsh }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.15
 			location = { terrain = jungle }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.15
 			location = { terrain = karst }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.1
 			location = { terrain = forest }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.05
 			location = { terrain = woods }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 0.95
 			location = { terrain = coastal_desert }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 1.1
 			location = { terrain = arctic }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 0.9
 			location = { terrain = steppe }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 0.9
 			location = { terrain = plains }
 		}
-		modifier = { 
+		mult_modifier = { 
 			factor = 0.8
 			location = { terrain = farmlands }
 		}
@@ -652,15 +668,15 @@ province_event = {
 # A ruler is assimilated by the local culture
 character_event = {
 	id = 55010
-	desc = "EVTDESC55010"
+	desc = EVTDESC55010
 	picture = GFX_evt_stone_church
-	
+
+	is_triggered_only = yes # on_five_year_pulse, random_events, ruler_culture_conversion
 	only_rulers = yes
-	min_age = 16
-	capable_only = yes
-	prisoner = no
 	lacks_dlc = "Rajas of India" # Controlled by Decision: convert_to_local_culture
-	
+	min_age = 16
+	only_capable = yes
+	prisoner = no
 	trigger = {
 		NOT = { government = nomadic_government }
 		primary_title = { 
@@ -685,22 +701,25 @@ character_event = {
 		}
 		NOT = { government = chinese_imperial_government }
 	}
-	
-	mean_time_to_happen = {
-		months = 1200
-		modifier = {
-			factor = 0.5
+
+	weight_multiplier = {
+		factor = 1
+
+		mult_modifier = {
+			factor = 2
+
+			independent = no
 			top_liege = {
-				NOT = { character = ROOT }
-				ROOT = { 
+				ROOT = {
 					capital_scope = {
 						culture = PREVPREV
 					}
 				}
 			}
 		}
-		modifier = {
-			factor = 0.5
+
+		mult_modifier = {
+			factor = 2
 			primary_title = {
 				ROOT = {
 					capital_scope = {
@@ -709,85 +728,74 @@ character_event = {
 				}
 			}
 		}
-		modifier = {
-			factor = 2.0
-			capital_scope = {
-				culture_group = ROOT # Same culture group: slower assimilation
-			}
+
+		mult_modifier = {
+			factor = 0.5
+			culture_group = capital_scope # Same culture group: slower assimilation
 		}
 	}
 
 	option = {
-		name = "EVTOPTA55010"
-		
+		name = EVTOPTA55010
+
 		# Piss off the appropriate vassals
 		any_vassal = {
+			show_scope_change = no
+
 			limit = {
 				culture = ROOT
-				age = 16
+				is_adult = yes
 			}
 			opinion = {
+				name = opinion_adopted_foreign_ways
 				who = ROOT
-				modifier = opinion_adopted_foreign_ways
 				years = 10
 			}
-			hidden_tooltip = { character_event = { id = 55011 days = 0 } }
+
+			character_event = { id = 55011 }
 		}
-		
-		capital_scope = {
-			reverse_culture = ROOT
-		}
+
+		culture = capital_scope
 	}
-	
 	option = {
-		name = "EVTOPTB55010"
-		ai_chance = {
-			factor = 0
-		}
+		name = EVTOPTB55010
+
+		ai_chance = { factor = 0 }
 	}
 }
 
 
 character_event = {
 	id = 55011
-	desc = "EVTDESC55011"
+	desc = EVTDESC55011
 	picture = GFX_evt_scandal
 
 	is_triggered_only = yes
 
+	ai = no
+
 	option = {
-		name = "EVTOPTA55011"
+		name = EVTOPTA55011
+
 		tooltip = {
 			opinion = {
+				name = opinion_adopted_foreign_ways
 				who = FROM
-				modifier = opinion_adopted_foreign_ways
 				years = 10
 			}
 		}
 	}
 }
 
+# CleanSlate: Move to appropriate file?
 character_event = {
 	id = 55100
 	desc = EVTDESC55100
 	picture = GFX_evt_courier
-	
 	notification = yes
-	
 	is_triggered_only = yes
 
-	option = {
-		name = OK
-	}
-}
-character_event = {
-	id = 55101
-	desc = EVTDESC55101
-	picture = GFX_evt_courier
-	
-	notification = yes
-	
-	is_triggered_only = yes
+	ai = no
 
 	option = {
 		name = OK

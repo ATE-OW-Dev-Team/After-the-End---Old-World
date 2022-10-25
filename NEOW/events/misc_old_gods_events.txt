@@ -5,27 +5,28 @@
 # Called from on_action: on_prepared_invasion_aborts
 # The target character is in FROM
 character_event = {
-
 	id = 62300
 	desc = EVTDESC62300
-	
 	picture = GFX_evt_viking_battle_oldgods
 	border = GFX_event_normal_frame_war
 
-	is_triggered_only = yes
+	is_triggered_only = yes # on_prepared_invasion_aborts
 
 	immediate = {
 		remove_character_modifier = launched_prepared_invasion
+
 		remove_opinion = {
+			name = preparing_to_invade
 			who = FROM
-			modifier = preparing_to_invade
 		}
+
 		FROM = {
 			remove_opinion = {
+				name = preparing_to_invade_me
 				who = ROOT
-				modifier = preparing_to_invade_me
 			}
 		}
+
 		disband_event_forces = prepared_invasion
 	}
 
@@ -39,34 +40,35 @@ character_event = {
 # Called from on_action: on_prepared_invasion_expires
 # The target character is in FROM
 character_event = {
-
 	id = 62310
 	desc = EVTDESC62310
-	
 	picture = GFX_evt_viking_battle_oldgods
 	border = GFX_event_normal_frame_war
 
-	is_triggered_only = yes
+	is_triggered_only = yes # on_prepared_invasion_expires
 
 	immediate = {
 		remove_opinion = {
+			name = preparing_to_invade
 			who = FROM
-			modifier = preparing_to_invade
 		}
+
 		FROM = {
 			remove_opinion = {
+				name = preparing_to_invade_me
 				who = ROOT
-				modifier = preparing_to_invade_me
 			}
 		}
+
 		if = {
 			limit = {
 				NOT = {
 					any_war = {
-						any_attacker = { character = FROM } 
+						any_attacker = { character = FROM }
 					}
 				}
 			}
+
 			disband_event_forces = prepared_invasion
 		}
 	}
@@ -75,23 +77,27 @@ character_event = {
 		name = {
 			text = EVTOPTB62310
 		}
+
 		if = {
 			limit = {
 				NOT = {
 					any_war = {
-						any_attacker = { character = FROM } 
+						any_attacker = { character = FROM }
 					}
 				}
 			}
+
 			prestige = -200
 			piety = -50
+
 			any_realm_lord = {
-				limit = {
-					religion = ROOT
-				}
+				show_scope_change = no
+
+				limit = { religion = ROOT }
+
 				opinion = {
+					name = opinion_failed_invasion
 					who = ROOT
-					modifier = opinion_failed_invasion
 				}
 			}
 		}
@@ -103,134 +109,153 @@ character_event = {
 # The target character is in FROM
 character_event = {
 	id = 62320
+	picture = GFX_evt_vikings_arriving_oldgods
+	border = GFX_event_normal_frame_war
+
 	desc = {
-        trigger = {
+		text = EVTDESC62320
+		trigger = {
+			has_religion_feature = religion_adventuring
+
+			any_realm_province = {
+				region = world_europe_north
+			}
+
 			NOT = {
 				has_alternate_start_parameter = {
 					key = religion_names
 					value = random
 				}
 			}
-			has_religion_feature = religion_adventuring
-			any_realm_province = {
-				region = world_europe_north
-			}
 		}
-        text = EVTDESC62320
-    }
+	}
 	desc = {
-        trigger = {
+		text = EVTDESC62320_alt
+		trigger = {
 			OR = {
 				has_alternate_start_parameter = {
 					key = religion_names
 					value = random
 				}
-				NOT = {
-					any_realm_province = {
-						region = world_europe_north
+
+				trigger_if = {
+					limit = {
+						any_realm_province = {
+							region = world_europe_north
+						}
 					}
+					NOT = { has_religion_feature = religion_adventuring }
 				}
 			}
 		}
-        text = EVTDESC62320_alt
-    }
-	
-	picture = GFX_evt_vikings_arriving_oldgods
-	border = GFX_event_normal_frame_war
+	}
 
-	is_triggered_only = yes
-	
+	is_triggered_only = yes # on_prepared_invasion_monthly, random_events
+
+	trigger = {
+		relative_power = {
+			who = FROM
+			power < 4.0
+		}
+	}
+
 	# On_action, so BIG is MORE OFTEN!
 	weight_multiplier = {
-		days = 1
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.05
-			martial = 15
+			martial >= 15
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.05
-			martial = 20
+			martial >= 20
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.05
-			diplomacy = 15
+			diplomacy >= 15
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.05
-			diplomacy = 20
+			diplomacy >= 20
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.05
-			prestige = 1000
+			prestige >= 1000
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			NOT = { martial = 10 }
+			martial < 10
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.5
-			NOT = { martial = 7 }
+			martial < 7
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			NOT = { diplomacy = 10 }
+			diplomacy < 10
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.5
-			NOT = { diplomacy = 7 }
+			diplomacy < 7
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.5
-			NOT = { prestige = 100 }
+			prestige < 100
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			lower_tier_than = DUKE
+			lower_real_tier_than = DUKE
 		}
-		modifier = {
-			factor = 0
+
+		mult_modifier = {
+			factor = 0.5
+
 			relative_power = {
 				who = FROM
-				power = 4.0
+				power >= 2.0
 			}
 		}
-		modifier = {
-			factor = 0.5
-			relative_power = {
-				who = FROM
-				power = 2.0
-			}
-		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.25
+
 			relative_power = {
 				who = FROM
-				power = 3.0
+				power >= 3.0
 			}
 		}
 	}
 
 	option = {
 		name = EVTOPTA62320
-		capital_scope = {
-			ROOT = {
-				spawn_unit = {
-					province = PREV
-					owner = ROOT
-					match_character = ROOT
-					match_mult = 0.05
-					earmark = prepared_invasion
-					attrition = 1.0
-				}
-				spawn_fleet = {
-					province = closest_to_capital
-					owner = ROOT
-					match_character = ROOT
-					match_mult = 0.05
-					match_min = 7
-					earmark = prepared_invasion
-				}
-			}
+
+		spawn_unit = {
+			province = capital_scope
+			owner = ROOT
+			match_character = ROOT
+			match_mult = 0.05
+			earmark = prepared_invasion
+			attrition = 1.0
+		}
+
+		spawn_fleet = {
+			province = closest_to_capital
+			owner = ROOT
+			match_character = ROOT
+			match_mult = 0.05
+			match_min = 7
+			earmark = prepared_invasion
 		}
 	}
 }
@@ -240,159 +265,167 @@ character_event = {
 # The target character is in FROM
 character_event = {
 	id = 62321
+	picture = GFX_evt_vikings_arriving_oldgods
+	border = GFX_event_normal_frame_war
+
 	desc = {
-        trigger = {
+		text = EVTDESC62321
+		trigger = {
+			has_religion_feature = religion_adventuring
+
+			any_realm_province = {
+				region = world_europe_north
+			}
+
 			NOT = {
 				has_alternate_start_parameter = {
 					key = religion_names
 					value = random
 				}
 			}
-			OR = {
-				religion = norse_pagan
-				religion = norse_pagan_reformed
-				has_religion_feature = religion_adventuring
-			}
-			any_realm_province = {
-				region = world_europe_north
-			}
 		}
-        text = EVTDESC62321
-    }
+	}
 	desc = {
-        trigger = {
+		text = EVTDESC62321_alt
+		trigger = {
 			OR = {
 				has_alternate_start_parameter = {
 					key = religion_names
 					value = random
 				}
-				NOR = {
-					religion = norse_pagan
-					religion = norse_pagan_reformed
-				}
-				AND = {
-					OR = {
-						religion = norse_pagan
-						religion = norse_pagan_reformed
-					}
-					NOT = {
+
+				trigger_if = {
+					limit = {
 						any_realm_province = {
 							region = world_europe_north
 						}
 					}
+
+					religion_openly_norse_or_reformed_trigger = no
+					NOT = { has_religion_feature = religion_adventuring }
 				}
 			}
 		}
-        text = EVTDESC62321_alt
-    }
-	
-	hide_from = yes
-	
-	picture = GFX_evt_vikings_arriving_oldgods
-	border = GFX_event_normal_frame_war
+	}
 
-	is_triggered_only = yes
-	
+	is_triggered_only = yes # on_prepared_invasion_monthly, random_events
+	hide_from = yes
+
+	trigger = {
+		relative_power = {
+			who = FROM
+			power < 4.0
+		}
+	}
+
 	# On_action, so BIG is MORE OFTEN
 	weight_multiplier = {
-		days = 1
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.05
-			martial = 15
+			martial >= 15
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.05
-			martial = 20
+			martial >= 20
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.05
-			diplomacy = 15
+			diplomacy >= 15
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.05
-			diplomacy = 20
+			diplomacy >= 20
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.05
-			prestige = 1000
+			prestige >= 1000
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			NOT = { martial = 10 }
+			martial < 10
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.5
-			NOT = { martial = 7 }
+			martial < 7
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			NOT = { diplomacy = 10 }
+			diplomacy < 10
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.5
-			NOT = { diplomacy = 7 }
+			diplomacy < 7
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.5
-			NOT = { prestige = 100 }
+			prestige < 100
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			lower_tier_than = DUKE
+			lower_real_tier_than = DUKE
 		}
-		modifier = {
-			factor = 0
+
+		mult_modifier = {
+			factor = 0.5
+
 			relative_power = {
 				who = FROM
-				power = 4.0
+				power >= 2.0
 			}
 		}
-		modifier = {
-			factor = 0.5
-			relative_power = {
-				who = FROM
-				power = 2.0
-			}
-		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.25
+
 			relative_power = {
 				who = FROM
-				power = 3.0
+				power >= 3.0
 			}
 		}
 	}
 
 	option = {
 		name = EVTOPTA62321
-		capital_scope = {
-			create_character = {
-				random_traits = yes
-				dynasty = NONE
-				religion = ROOT
-				culture = ROOT
-				female = no
-				age = 30
-				attributes = {
-					martial = 8
-				}
-				trait = brave
-				trait = zealous
-				trait = brilliant_strategist
-				trait = holy_warrior
+
+		create_character = {
+			random_traits = yes
+			dynasty = none
+			religion = ROOT
+			culture = ROOT
+			female = no
+			age = 30
+
+			attributes = {
+				martial = 8
 			}
-			new_character = {
-				spawn_unit = {
-					province = PREV
-					owner = ROOT
-					match_character = ROOT
-					match_mult = 0.105
-#					earmark = prepared_invasion
-					attrition = 1.0
-				}
-			}
+
+			add_trait = brave
+			add_trait = zealous
+			add_trait = brilliant_strategist
+			add_trait = holy_warrior
 		}
-		
+
+		spawn_unit = {
+			province = capital_scope
+			owner = ROOT
+			match_character = ROOT
+			match_mult = 0.105
+#			earmark = prepared_invasion
+			attrition = 1.0
+		}
+
 		spawn_fleet = {
 			province = closest_to_capital
 			owner = ROOT
@@ -409,148 +442,157 @@ character_event = {
 # The target character is in FROM
 character_event = {
 	id = 62322
+	picture = GFX_evt_vikings_arriving_oldgods
+	border = GFX_event_normal_frame_war
+
 	desc = {
-        trigger = {
+		text = EVTDESC62320
+		trigger = {
+			OR = {
+				religion_openly_norse_or_reformed_trigger = yes
+				has_religion_feature = religion_adventuring
+			}
+
+			any_realm_province = {
+				region = world_europe_north
+			}
+
 			NOT = {
 				has_alternate_start_parameter = {
 					key = religion_names
 					value = random
 				}
 			}
-			OR = {
-				religion = norse_pagan
-				religion = norse_pagan_reformed
-				has_religion_feature = religion_adventuring
-			}
-			any_realm_province = {
-				region = world_europe_north
-			}
 		}
-        text = EVTDESC62320
-    }
+	}
 	desc = {
-        trigger = {
+		text = EVTDESC62320_alt
+		trigger = {
 			OR = {
 				has_alternate_start_parameter = {
 					key = religion_names
 					value = random
 				}
-				NOR = {
-					religion = norse_pagan
-					religion = norse_pagan_reformed
-				}
-				AND = {
-					OR = {
-						religion = norse_pagan
-						religion = norse_pagan_reformed
-					}
-					NOT = {
+
+				trigger_if = {
+					limit = {
 						any_realm_province = {
 							region = world_europe_north
 						}
 					}
+
+					religion_openly_norse_or_reformed_trigger = no
+					NOT = { has_religion_feature = religion_adventuring }
 				}
 			}
 		}
-        text = EVTDESC62320_alt
-    }
-	
-	picture = GFX_evt_vikings_arriving_oldgods
-	border = GFX_event_normal_frame_war
+	}
 
-	is_triggered_only = yes
-	
+	is_triggered_only = yes # on_prepared_invasion_monthly, random_events
+
+	trigger = {
+		relative_power = {
+			who = FROM
+			power < 4.0
+		}
+	}
+
 	# On_action, so BIG is MORE OFTEN
 	weight_multiplier = {
-		days = 1
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.05
-			martial = 15
+			martial >= 15
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.05
-			martial = 20
+			martial >= 20
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.05
-			diplomacy = 15
+			diplomacy >= 15
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.05
-			diplomacy = 20
+			diplomacy >= 20
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.05
-			prestige = 1000
+			prestige >= 1000
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			NOT = { martial = 10 }
+			martial < 10
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.5
-			NOT = { martial = 7 }
+			martial < 7
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			NOT = { diplomacy = 10 }
+			diplomacy < 10
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.5
-			NOT = { diplomacy = 7 }
+			diplomacy < 7
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.5
-			NOT = { prestige = 100 }
+			prestige < 100
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.75
-			lower_tier_than = DUKE
+			lower_real_tier_than = DUKE
 		}
-		modifier = {
-			factor = 0
+
+		mult_modifier = {
+			factor = 0.5
 			relative_power = {
 				who = FROM
-				power = 4.0
+				power >= 2.0
 			}
 		}
-		modifier = {
-			factor = 0.5
-			relative_power = {
-				who = FROM
-				power = 2.0
-			}
-		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.25
+
 			relative_power = {
 				who = FROM
-				power = 3.0
+				power >= 3.0
 			}
 		}
 	}
 
 	option = {
 		name = EVTOPTA62320
-		capital_scope = {
-			ROOT = {
-				spawn_unit = {
-					province = PREV
-					owner = ROOT
-					match_character = ROOT
-					match_mult = 0.05
-					earmark = prepared_invasion
-					attrition = 1.0
-				}
-				spawn_fleet = {
-					province = closest_to_capital
-					owner = ROOT
-					match_character = ROOT
-					match_mult = 0.05
-					match_min = 5
-					earmark = prepared_invasion
-				}
-			}
+
+		spawn_unit = {
+			province = capital_scope
+			owner = ROOT
+			match_character = ROOT
+			match_mult = 0.05
+			earmark = prepared_invasion
+			attrition = 1.0
+		}
+
+		spawn_fleet = {
+			province = closest_to_capital
+			owner = ROOT
+			match_character = ROOT
+			match_mult = 0.05
+			match_min = 5
+			earmark = prepared_invasion
 		}
 	}
 }
@@ -559,34 +601,34 @@ character_event = {
 letter_event = {
 	id = 62800
 	desc = EVTDESC62800
-	
 	border = GFX_event_letter_frame_religion
-	
-	is_triggered_only = yes
-	
+
+	is_triggered_only = yes # convert_to_attacker_religion, conversion_decisions.txt
+
 	option = {
 		name = EVTOPTA62800
+
 		if = {
 			limit = {
-				FROM = { tier = COUNT }
+				FROM = { real_tier = COUNT }
 			}
 			piety = 50
 		}
-		if = {
+		else_if = {
 			limit = {
-				FROM = { tier = DUKE }
+				FROM = { real_tier = DUKE }
 			}
 			piety = 100
 		}
-		if = {
+		else_if = {
 			limit = {
-				FROM = { tier = KING }
+				FROM = { real_tier = KING }
 			}
 			piety = 300
 		}
-		if = {
+		else_if = {
 			limit = {
-				FROM = { tier = EMPEROR }
+				FROM = { real_tier = EMPEROR }
 			}
 			piety = 1000
 		}

@@ -11,62 +11,62 @@
 ### Robin Hood ###
 narrative_event = {
 	id = 10000
-	title = "EVTNAME10000"
-	desc = "EVTDESC10000"
+	title = EVTNAME10000
+	desc = EVTDESC10000
 	picture = GFX_evt_throne_room
+
+	is_triggered_only = yes # on_five_year_pulse, random_events, robin_hood
 
 	ai = no
 	min_age = 20
 	prisoner = no
-	capable_only = yes
+	only_capable = yes
 	war = no
+	in_command = no
 
 	trigger = {
-		NOT = { has_global_flag = robin_hood_existed }
-		in_command = no
-		is_ill = no
 		OR = {
 			religion_group = christian
 			religion_group = pagan_group
 		}
-		NOT = {
-			has_character_flag = killed_robin_hood
-		}
-		NOT = {
-			has_character_flag = robin_marion_married
-		}
-		NOT = {
-			has_character_flag = robin_hood
-		}
 		any_demesne_province = {
 			OR = {
 				has_province_modifier = highway_robber_band
-				revolt_risk = 0.05
+				revolt_risk >= 0.05
 			}
 		}
-		NOT = { is_inaccessible_trigger = yes }
+
+		is_inaccessible_trigger = no
+		is_ill = no
+
+		NOR = {
+			has_global_flag = robin_hood_existed
+			has_character_flag = killed_robin_hood
+			has_character_flag = robin_marion_married
+			has_character_flag = robin_hood
+		}
 	}
 
-	mean_time_to_happen = {
-		months = 2000
+	weight_multiplier = {
+		factor = 1
 
-		modifier = {
-			factor = 1.2
+		mult_modifier = {
+			factor = 0.83
 			trait = just
 		}
 
-		modifier = {
-			factor = 0.2
+		mult_modifier = {
+			factor = 5
 			trait = arbitrary
 		}
 
-		modifier = {
-			factor = 1.3
+		mult_modifier = {
+			factor = 0.77
 			trait = charismatic_negotiator
 		}
 
-		modifier = {
-			factor = 0.3
+		mult_modifier = {
+			factor = 3.33
 			trait = midas_touched
 		}
 	}
@@ -78,240 +78,203 @@ narrative_event = {
 	}
 
 	option = {
-		name = "EVTOPTA10000"
+		name = EVTOPTA10000
+
 		prestige = 10
 		random = {
 			chance = 60
 
 			narrative_event = {
-				id = 10001 #Noble woman
+				id = 10001 # Noble woman
 				days = 5
 				random = 10
-				tooltip = "EVTTOOLTIP10001"
+				tooltip = EVTTOOLTIP10001
 			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTB10000"
-		if = {
-			limit = {
-				NOT = {
-					trait = diligent
-				}
-			}
-			random = {
-				chance = 25
+		name = EVTOPTB10000
 
-				add_trait = diligent
-				set_character_flag = got_trait
-				hidden_tooltip = {
-					character_event = {
-						id = 38256 #Notify Diligent
-					}
+		random = {
+			chance = 25
+
+			if = {
+				limit = {
+					NOT = { trait = diligent }
 				}
+
+				add_trait_fully_diligent_effect = yes
 			}
-		}
-		if = {
-			limit = {
-				trait = diligent
-				NOR = {
-					trait = deceitful
-					has_character_flag = got_trait
-				}
-			}
-			random = {
-				chance = 25
-				set_character_flag = got_trait
-				add_trait = deceitful
-				hidden_tooltip = {
-					character_event = {
-						id = 38255 #Notify Deceitful
-					}
-				}
+			else = {
+				add_trait_fully_deceitful_effect = yes
 			}
 		}
 		random = {
 			chance = 40
 
 			narrative_event = {
-				id = 10002 #Noble man
+				id = 10002 # Noble man
 				days = 5
 				random = 10
-				tooltip = "EVTTOOLTIP10001"
+				tooltip = EVTTOOLTIP10001
 			}
-			break = yes
 		}
-		clr_character_flag = got_trait
 	}
 
 	option = {
-		name = "EVTOPTC10000"
-		if = {
-			limit = {
-				NOT = {
-					trait = content
-				}
-			}
-			random = {
-				chance = 25
+		name = EVTOPTC10000
 
-				add_trait = content
-				hidden_tooltip = {
-					character_event = {
-						id = 38279 #Notify Content
-					}
-				}
-			}
+		random = {
+			chance = 25
+			add_trait_fully_content_effect = yes
+		}
+	}
+
+	after = {
+		narrative_event = {
+			id = 10003 # It's a trap!
+			months = 6
+			random = 180
 		}
 	}
 }
 
-#Noble woman "complains" about merry men
+# Noble woman "complains" about merry men
 narrative_event = {
 	id = 10001
-	title = "EVTNAME10001"
-	desc = "EVTDESC10001"
+	title = EVTNAME10001
+	desc = EVTDESC10001
 	picture = GFX_evt_bandits
 
 	is_triggered_only = yes
 
-	option = {
-		name = "EVTOPTA10001" #Give her gold and send her away
-		scaled_wealth = -0.02
-		set_character_flag = ignore_robin
+	immediate = {
+		clear_delayed_event = { id = 10003 }
 	}
 
 	option = {
-		name = "EVTOPTB10001" #Something must be done! Set a trap
-		set_character_flag = do_something
-		if = {
-			limit = {
-				NOT = {
-					trait = diligent
-				}
-			}
-			random = {
-				chance = 25
+		name = EVTOPTA10001 # Give her gold and send her away
 
-				add_trait = diligent
-				hidden_tooltip = {
-					character_event = {
-						id = 38256 #Notify Diligent
-					}
-				}
-			}
-			break = yes
+		scaled_wealth = -0.02
+		set_character_flag = ignore_robin
+
+		narrative_event = {
+			id = 10003 # It's a trap!
+			years = 1
+			random = 240
 		}
-		if = {
-			limit = {
-				NOT = {
-					trait = ambitious
-				}
-			}
-			random = {
-				chance = 25
+	}
 
-				add_trait = ambitious
-				hidden_tooltip = {
-					character_event = {
-						id = 38278 #Notify Ambitious
-					}
+	option = {
+		name = EVTOPTB10001 # Something must be done! Set a trap
+
+		set_character_flag = do_something
+
+		random = {
+			chance = 25
+
+			if = {
+				limit = {
+					NOT = { trait = diligent }
 				}
+
+				add_trait_fully_diligent_effect = yes
 			}
+			else = {
+				add_trait_fully_ambitious_effect = yes
+			}
+		}
+
+		narrative_event = {
+			id = 10003 # It's a trap!
+			months = 1
+			random = 220
 		}
 	}
 }
 
-#Noble man complains about merry men
+# Noble man complains about merry men
 narrative_event = {
 	id = 10002
-	title = "EVTNAME10002"
-	desc = "EVTDESC10002"
+	title = EVTNAME10002
+	desc = EVTDESC10002
 	picture = GFX_evt_bandits
 
 	is_triggered_only = yes
 
-	option = {
-		name = "EVTOPTA10002" #Give him gold and send him awy
-		scaled_wealth = -0.02
-		set_character_flag = ignore_robin
+	immediate = {
+		clear_delayed_event = { id = 10003 }
 	}
 
 	option = {
-		name = "EVTOPTB10002" #Something must be done! Set a trap
-		set_character_flag = do_something
-		if = {
-			limit = {
-				NOR = {
-					trait = diligent
-					has_character_flag = got_trait
-				}
-			}
-			random = {
-				chance = 25
+		name = EVTOPTA10002 # Give him gold and send him awy
 
-				add_trait = diligent
-				hidden_tooltip = {
-					character_event = {
-						id = 38256 #Notify Diligent
-					}
-				}
-			}
-			clr_character_flag = got_trait
-			break = yes
+		scaled_wealth = -0.02
+		set_character_flag = ignore_robin
+
+		narrative_event = {
+			id = 10003 # It's a trap!
+			years = 1
+			random = 240
 		}
-		if = {
-			limit = {
-				NOT = {
-					trait = ambitious
-					has_character_flag = got_trait
-				}
-			}
-			random = {
-				chance = 25
+	}
 
-				add_trait = ambitious
-				hidden_tooltip = {
-					character_event = {
-						id = 38278 #Notify Ambitious
-					}
+	option = {
+		name = EVTOPTB10002 # Something must be done! Set a trap
+
+		set_character_flag = do_something
+
+		random = {
+			chance = 25
+
+			if = {
+				limit = {
+					NOT = { trait = diligent }
 				}
+
+				add_trait_fully_diligent_effect = yes
 			}
-			clr_character_flag = got_trait
+			else = {
+				add_trait_fully_ambitious_effect = yes
+			}
+		}
+
+		narrative_event = {
+			id = 10003 # It's a trap!
+			months = 1
+			random = 220
 		}
 	}
 }
 
-#It's a trap!
+# It's a trap!
 narrative_event = {
 	id = 10003
-	title = "EVTNAME10003"
-	desc = "EVTDESC10003"
+	title = EVTNAME10003
+	desc = EVTDESC10003
 	picture = GFX_evt_council
 
-	min_age = 20
-	prisoner = no
-	capable_only = yes
+	is_triggered_only = yes
+
 	only_playable = yes
-	war = no
 	has_character_flag = lure_robin
+	prisoner = no
+	only_capable = yes
+	war = no
+	in_command = no
 
-	trigger = {
-		in_command = no
-	}
+	fail_trigger_effect = {
+		if = {
+			limit = {
+				is_playable = yes
+				has_character_flag = lure_robin
+			}
 
-	mean_time_to_happen = {
-		months = 12
-
-		modifier = {
-			factor = 1.7
-			has_character_flag = ignore_robin
-		}
-
-		modifier = {
-			factor = 0.7
-			has_character_flag = do_something
+			repeat_event = {
+				id = 10003
+				months = 1
+			}
 		}
 	}
 
@@ -320,7 +283,8 @@ narrative_event = {
 	}
 
 	option = {
-		name = "EVTOPTA10003" #Too risky
+		name = EVTOPTA10003 # Too risky
+
 		prestige = -10
 		if = {
 			limit = {
@@ -329,28 +293,22 @@ narrative_event = {
 					trait = berserker
 				}
 			}
-			add_trait = craven
-			break = yes
+
+			add_trait_fully_silently_craven_effect = yes
 		}
-		if = {
-			limit = {
-				OR = {
-					trait = craven
-					trait = berserker
-				}
-				NOT = {
-					trait = slothful
-				}
-			}
-			add_trait = slothful
+		else = {
+			add_trait_fully_silently_slothful_effect = yes
 		}
 	}
 
 	option = {
-		name = "EVTOPTB10003" #Archery Contest
+		name = EVTOPTB10003 # Archery Contest
+
 		random_courtier = {
+			show_scope_change = no
+
 			opinion = {
-				modifier = clever_deceive
+				name = clever_deceive
 				who = ROOT
 				years = 5
 			}
@@ -359,133 +317,117 @@ narrative_event = {
 			id = 10010
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10010"
+			tooltip = EVTTOOLTIP10010
 		}
 	}
 
 	option = {
-		name = "EVTOPTC10003"
+		name = EVTOPTC10003
+
 		prestige = 10
 		if = {
 			limit = {
-				NOT = {
-					trait = deceitful
-				}
+				NOT = { trait = deceitful }
 			}
-			add_trait = deceitful
-			narrative_event = {
-				id = 10020
-				days = 1
-				random = 3
-				tooltip = "EVTTOOLTIP10020"
-			}
-			break = yes
+
+			add_trait_fully_silently_deceitful_effect = yes
 		}
-		if = {
-			limit = {
-				trait = deceitful
-				NOT = {
-					trait = patient
-				}
-			}
-			add_trait = patient
-			narrative_event = {
-				id = 10020
-				days = 1
-				random = 3
-				tooltip = "EVTTOOLTIP10020"
-			}
+		else = {
+			add_trait_fully_silently_patient_effect = yes
+		}
+
+
+		narrative_event = {
+			id = 10020
+			days = 1
+			random = 3
+			tooltip = EVTTOOLTIP10020
 		}
 
 	}
 }
 
-#Archery Contest
+# Archery Contest
 narrative_event = {
 	id = 10010
-	title = "EVTNAME10010"
-	desc = "EVTDESC10010"
+	title = EVTNAME10010
+	desc = EVTDESC10010
 	picture = GFX_evt_longbowman
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10010" #Let the game begin!
+		name = EVTOPTA10010 # Let the game begin!
+
 		prestige = 15
 		random_list = {
 			50 = {
 				narrative_event = {
-					id = 10011 #The leader of the Merry Men is captured
+					id = 10011 # The leader of the Merry Men is captured
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10011"
+					tooltip = EVTTOOLTIP10011
 				}
 			}
 			50 = {
 				narrative_event = {
-					id = 10012 #An old man wins
+					id = 10012 # An old man wins
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10012"
+					tooltip = EVTTOOLTIP10012
 				}
 			}
 		}
 	}
 }
 
-#The leader of the Merry Men is captured
+# The leader of the Merry Men is captured
 narrative_event = {
 	id = 10011
-	title = "EVTNAME10011"
-	desc = "EVTDESC10011"
+	title = EVTNAME10011
+	desc = EVTDESC10011
 	picture = GFX_evt_large_army
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10011" #Hang him!
+		name = EVTOPTA10011 # Hang him!
+
 		set_character_flag = killed_robin_hood
 		prestige = 10
 		any_courtier = {
+			show_scope_change = no
+
 			limit = {
-				NOT = {
+				NOR = {
 					trait = charitable
-				}
-				NOT = {
 					trait = kind
 				}
 			}
 			opinion = {
-				modifier = opinion_killed_merrymen
+				name = opinion_killed_merrymen
 				who = ROOT
 				years = 5
 			}
 		}
 		if = {
 			limit = {
-				NOT = {
-					trait = wroth
-				}
+				NOT = { trait = wroth }
 			}
-			add_trait = wroth
-			break = yes
+
+			add_trait_fully_silently_wroth_effect = yes
 		}
-		if = {
-			limit = {
-				trait = wroth
-				NOT = {
-					trait = cruel
-				}
-			}
-			add_trait = cruel
+		else = {
+			add_trait_fully_silently_cruel_effect = yes
 		}
 	}
 
 	option = {
-		name = "EVTOPTB10011" #Hire him and his merry men as gamekeepers
+		name = EVTOPTB10011 # Hire him and his merry men as gamekeepers
+
 		add_character_modifier = {
 			name = the_merciful
-			duration = 365
+			years = 1
 		}
 		create_character = {
 			name = Robin
@@ -493,11 +435,11 @@ narrative_event = {
 			dynasty = random
 			female = no
 			age = 30
-			trait = misguided_warrior
-			trait = brave
-			trait = ambitious
-			trait = proud
-			trait = zealous
+			add_trait = misguided_warrior
+			add_trait = brave
+			add_trait = ambitious
+			add_trait = proud
+			add_trait = zealous
 			health = 10
 			attributes = {
 				martial = 13
@@ -513,11 +455,11 @@ narrative_event = {
 			dynasty = random
 			female = yes
 			age = 25
-			trait = naive_appeaser
-			trait = brave
-			trait = ambitious
-			trait = proud
-			trait = zealous
+			add_trait = naive_appeaser
+			add_trait = brave
+			add_trait = ambitious
+			add_trait = proud
+			add_trait = zealous
 			health = 10
 			attributes = {
 				martial = 10
@@ -531,44 +473,48 @@ narrative_event = {
 			id = 10042
 			days = 7
 			random = 14
-			tooltip = "EVTTOOLTIP10042"
+			tooltip = EVTTOOLTIP10042
 		}
 	}
 }
 
-#An old man wins
+# An old man wins
 narrative_event = {
 	id = 10012
-	title = "EVTNAME10012"
-	desc = "EVTDESC10012"
+	title = EVTNAME10012
+	desc = EVTDESC10012
 	picture = GFX_evt_longbowman
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10012" #What happened?
+		name = EVTOPTA10012 # What happened?
+
 		narrative_event = {
-			id = 10013 #That didn't work
+			id = 10013 # That didn't work
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10013"
+			tooltip = EVTTOOLTIP10013
 		}
 	}
 }
 
-#That didn't work
+# That didn't work
 narrative_event = {
 	id = 10013
-	title = "EVTNAME10013"
-	desc = "EVTDESC10013"
+	title = EVTNAME10013
+	desc = EVTDESC10013
 	picture = GFX_evt_council
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10013" #Leave them alone
+		name = EVTOPTA10013 # Leave them alone
+
 		prestige = -10
 		any_courtier = {
+			show_scope_change = no
+
 			limit = {
 				OR = {
 					trait = brave
@@ -577,7 +523,7 @@ narrative_event = {
 				}
 			}
 			opinion = {
-				modifier = opinion_disapprove
+				name = opinion_disapprove
 				who = ROOT
 				years = 5
 			}
@@ -589,117 +535,106 @@ narrative_event = {
 	}
 
 	option = {
-		name = "EVTOPTB10013" #Let's try something else
+		name = EVTOPTB10013 # Let's try something else
+
 		narrative_event = {
 			id = 10020
 			days = 1
 			random = 3
-			tooltip = "EVTTOOLTIP10020"
+			tooltip = EVTTOOLTIP10020
 		}
 	}
 }
 
-#Devil in Disguise
+# Devil in Disguise
 narrative_event = {
 	id = 10020
-	title = "EVTNAME10020"
-	desc = "EVTDESC10020"
+	title = EVTNAME10020
+	desc = EVTDESC10020
 	picture = GFX_evt_bandits
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10020" #Let's see how this works...
+		name = EVTOPTA10020 # Let's see how this works...
+
 		random_list = {
 			30 = {
-				narrative_event = { #Disguise revealed!
+				narrative_event = { # Disguise revealed!
 					id = 10021
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10021"
+					tooltip = EVTTOOLTIP10021
 				}
 			}
 			30 = {
-				narrative_event = { #Stumbles upon the Merry Men
+				narrative_event = { # Stumbles upon the Merry Men
 					id = 10022
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10022"
+					tooltip = EVTTOOLTIP10022
 				}
 			}
 			30 = {
-				narrative_event = { #Meets Little John
+				narrative_event = { # Meets Little John
 					id = 10023
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10023"
+					tooltip = EVTTOOLTIP10023
 				}
 			}
 		}
 	}
 	option = {
-		name = "EVTOPTB10020"
+		name = EVTOPTB10020
+
 		clr_character_flag = lure_robin
 		clr_character_flag = ignore_robin
 		clr_character_flag = do_something
 		clr_character_flag = robin_hood
-		if = {
-			limit = {
-				trait = deceitful
-			}
-			remove_trait = deceitful
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = slothful
-				}
-			}
-			random = {
-				chance = 25
 
-				add_trait = slothful
-				hidden_tooltip = {
-					character_event = {
-						id = 38251 #Notify Slothful
-					}
-				}
-			}
-		}
-		hidden_tooltip = {
-			random = {
-				chance = 10
+		remove_trait_silently_deceitful_effect = yes
 
-				narrative_event = {
-					id = 10021
-					days = 10
-					random = 30
-				}
+		random = {
+			chance = 25
+			add_trait_fully_slothful_effect = yes
+		}
+
+		random = {
+			chance = 10
+
+			narrative_event = {
+				id = 10021
+				days = 10
+				random = 30
 			}
 		}
 	}
 }
 
-#Disguise revealed!
+# Disguise revealed!
 narrative_event = {
 	id = 10021
-	title = "EVTNAME10021"
-	desc = "EVTDESC10021"
+	title = EVTNAME10021
+	desc = EVTDESC10021
 	picture = GFX_evt_bandits
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10021"
+		name = EVTOPTA10021
+
 		clr_character_flag = lure_robin
 		clr_character_flag = ignore_robin
 		clr_character_flag = do_something
 		clr_character_flag = robin_hood
 		add_character_modifier = {
 			name = modifier_outfoxed
-			duration = 1825
+			years = 5
 		}
 		random_demesne_province = {
+			show_scope_change = no
+
 			limit = {
 				NOT = { has_province_modifier = highway_robber_band }
 			}
@@ -707,42 +642,46 @@ narrative_event = {
 				id = 68030
 				days = 2
 				random = 10
-				tooltip = "EVTTOOLTIP68030"
+				tooltip = EVTTOOLTIP68030
 			}
 		}
 	}
 }
 
-#Stumbles upon the Merry Men
+# Stumbles upon the Merry Men
 narrative_event = {
 	id = 10022
-	title = "EVTNAME10022"
-	desc = "EVTDESC10022"
+	title = EVTNAME10022
+	desc = EVTDESC10022
 	picture = GFX_evt_bandits
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10022"
+		name = EVTOPTA10022
+
 		prestige = 10
 		narrative_event = {
 			id = 10030
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10030"
+			tooltip = EVTTOOLTIP10030
 		}
 	}
 	option = {
-		name = "EVTOPTB10022"
+		name = EVTOPTB10022
+
 		clr_character_flag = lure_robin
 		clr_character_flag = ignore_robin
 		clr_character_flag = do_something
 		clr_character_flag = robin_hood
 		add_character_modifier = {
 			name = modifier_outfoxed
-			duration = 1825
+			years = 5
 		}
 		random_demesne_province = {
+			show_scope_change = no
+
 			limit = {
 				NOT = { has_province_modifier = highway_robber_band }
 			}
@@ -750,52 +689,54 @@ narrative_event = {
 				id = 68030
 				days = 2
 				random = 10
-				tooltip = "EVTTOOLTIP68030"
+				tooltip = EVTTOOLTIP68030
 			}
 		}
 	}
 }
 
-#Meets/Fights Little John
+# Meets/Fights Little John
 narrative_event = {
 	id = 10023
-	title = "EVTNAME10023"
-	desc = "EVTDESC10023"
+	title = EVTNAME10023
+	desc = EVTDESC10023
 	picture = GFX_evt_melee
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10023"
+		name = EVTOPTA10023
+
 		random_list = {
 			30 = {
-				narrative_event = { #Wins
+				narrative_event = { # Wins
 					id = 10024
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10024"
+					tooltip = EVTTOOLTIP10024
 				}
 			}
 			30 = {
-				narrative_event = { #Loses
+				narrative_event = { # Loses
 					id = 10025
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10025"
+					tooltip = EVTTOOLTIP10025
 				}
 			}
 			30 = {
-				narrative_event = { #Is Exposed
+				narrative_event = { # Is Exposed
 					id = 10026
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10026"
+					tooltip = EVTTOOLTIP10026
 				}
 			}
 		}
 	}
 	option = {
-		name = "EVTOPTB10023"
+		name = EVTOPTB10023
+
 		clr_character_flag = lure_robin
 		clr_character_flag = ignore_robin
 		clr_character_flag = do_something
@@ -807,25 +748,19 @@ narrative_event = {
 					trait = berserker
 				}
 			}
-			add_trait = craven
+
+			add_trait_fully_silently_craven_effect = yes
 		}
-		if = {
-			limit = {
-				OR = {
-					trait = craven
-					trait = berserker
-				}
-				NOT = {
-					trait = deceitful
-				}
-			}
-			add_trait = deceitful
+		else = {
+			add_trait_fully_silently_deceitful_effect = yes
 		}
 		add_character_modifier = {
 			name = modifier_outfoxed
-			duration = 1825
+			years = 5
 		}
 		random_demesne_province = {
+			show_scope_change = no
+
 			limit = {
 				NOT = { has_province_modifier = highway_robber_band }
 			}
@@ -833,73 +768,71 @@ narrative_event = {
 				id = 68030
 				days = 2
 				random = 10
-				tooltip = "EVTTOOLTIP68030"
+				tooltip = EVTTOOLTIP68030
 			}
 		}
 	}
 }
 
-#Wins
+# Wins
 narrative_event = {
 	id = 10024
-	title = "EVTNAME10024"
-	desc = "EVTDESC10024"
+	title = EVTNAME10024
+	desc = EVTDESC10024
 	picture = GFX_evt_melee
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10024"
+		name = EVTOPTA10024
+
 		prestige = 10
 		narrative_event = {
 			id = 10030
 			days = 1
-			tooltip = "EVTTOOLTIP10030"
+			tooltip = EVTTOOLTIP10030
 		}
 	}
 }
 
-#Loses
+# Loses
 narrative_event = {
 	id = 10025
-	title = "EVTNAME10025"
-	desc = "EVTDESC10025"
+	title = EVTNAME10025
+	desc = EVTDESC10025
 	picture = GFX_evt_melee
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10025"
+		name = EVTOPTA10025
+
 		prestige = -10
 		narrative_event = {
 			id = 10030
 			days = 1
-			tooltip = "EVTTOOLTIP10030"
+			tooltip = EVTTOOLTIP10030
 		}
 	}
 }
 
-#Is Exposed
+# Is Exposed
 narrative_event = {
 	id = 10026
-	title = "EVTNAME10026"
-	desc = "EVTDESC10026"
+	title = EVTNAME10026
+	desc = EVTDESC10026
 	picture = GFX_evt_bloody_man
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10026"
+		name = EVTOPTA10026
+
 		scaled_wealth = -0.02
 		random = {
 			chance = 10
 
-			add_trait = wounded
-			hidden_tooltip = {
-				character_event = {
-					id = 38280 #Notify Wounded
-				}
-			}
+			add_trait_wounded_effect = yes
 		}
 		clr_character_flag = lure_robin
 		clr_character_flag = ignore_robin
@@ -907,9 +840,11 @@ narrative_event = {
 		clr_character_flag = robin_hood
 		add_character_modifier = {
 			name = modifier_outfoxed
-			duration = 1825
+			years = 5
 		}
 		random_demesne_province = {
+			show_scope_change = no
+
 			limit = {
 				NOT = { has_province_modifier = highway_robber_band }
 			}
@@ -917,66 +852,71 @@ narrative_event = {
 				id = 68030
 				days = 2
 				random = 10
-				tooltip = "EVTTOOLTIP68030"
+				tooltip = EVTTOOLTIP68030
 			}
 		}
 	}
 }
 
-#Meet the Merry Men
+# Meet the Merry Men
 narrative_event = {
 	id = 10030
-	title = "EVTNAME10030"
-	desc = "EVTDESC10030"
+	title = EVTNAME10030
+	desc = EVTDESC10030
 	picture = GFX_evt_bandits
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10030"
-		narrative_event = { #S.F.T.R.G.T.T.P
+		name = EVTOPTA10030
+
+		narrative_event = { # S.F.T.R.G.T.T.P.
 			id = 10031
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10031"
+			tooltip = EVTTOOLTIP10031
 		}
 	}
 
 	option = {
-		name = "EVTOPTB10030"
-		narrative_event = { #Adventure!
+		name = EVTOPTB10030
+
+		narrative_event = { # Adventure!
 			id = 10032
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10032"
+			tooltip = EVTTOOLTIP10032
 		}
 	}
 
 	option = {
-		name = "EVTOPTC10030"
+		name = EVTOPTC10030
+
 		any_courtier = {
+			show_scope_change = no
+
 			limit = {
-				NOT = {
-					trait = honest
-				}
+				NOT = { trait = honest }
 			}
 			opinion = {
-				modifier = clever_deceive
+				name = clever_deceive
 				who = ROOT
 				years = 2
 			}
 		}
-		narrative_event = { #Arrest leader
+
+		narrative_event = { # Arrest leader
 			id = 10040
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10040"
+			tooltip = EVTTOOLTIP10040
 		}
 	}
 
 
 	option = {
-		name = "EVTOPTD10026"
+		name = EVTOPTD10026
+
 		scaled_wealth = -0.02
 		clr_character_flag = lure_robin
 		clr_character_flag = ignore_robin
@@ -984,9 +924,11 @@ narrative_event = {
 		clr_character_flag = robin_hood
 		add_character_modifier = {
 			name = modifier_outfoxed
-			duration = 1825
+			years = 5
 		}
 		random_demesne_province = {
+			show_scope_change = no
+
 			limit = {
 				NOT = { has_province_modifier = highway_robber_band }
 			}
@@ -994,33 +936,35 @@ narrative_event = {
 				id = 68030
 				days = 2
 				random = 10
-				tooltip = "EVTTOOLTIP68030"
+				tooltip = EVTTOOLTIP68030
 			}
 		}
 	}
 }
 
-#S.F.T.R.G.T.T.P
+# S.F.T.R.G.T.T.P.
 narrative_event = {
 	id = 10031
-	title = "EVTNAME10031"
-	desc = "EVTDESC10031"
+	title = EVTNAME10031
+	desc = EVTDESC10031
 	picture = GFX_evt_carriage
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10031" #This has gone too far!
-		narrative_event = { #Arrest leader
+		name = EVTOPTA10031 # This has gone too far!
+
+		narrative_event = { # Arrest leader
 			id = 10040
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10040"
+			tooltip = EVTTOOLTIP10040
 		}
 	}
 
 	option = {
-		name = "EVTOPTB10031" #Time to leave and leave them alone
+		name = EVTOPTB10031 # Time to leave and leave them alone
+
 		scaled_wealth = -0.02
 		clr_character_flag = lure_robin
 		clr_character_flag = ignore_robin
@@ -1028,68 +972,72 @@ narrative_event = {
 		clr_character_flag = robin_hood
 		add_character_modifier = {
 			name = met_merry_men
-			duration = 1825
+			years = 5
 		}
 		random_demesne_province = {
-			limit = {
-				has_province_modifier = highway_robber_band
-			}
+			show_scope_change = no
+			limit = { has_province_modifier = highway_robber_band }
 			remove_province_modifier = highway_robber_band
 		}
 	}
 
 	option = {
-		name = "EVTOPTC10031" #Now I know where to find them
+		name = EVTOPTC10031 # Now I know where to find them
+
 		narrative_event = {
 			id = 10041
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10041"
+			tooltip = EVTTOOLTIP10041
 		}
 	}
 }
 
-#Adventure!
+# Adventure!
 narrative_event = {
 	id = 10032
-	title = "EVTNAME10032"
-	desc = "EVTDESC10032"
+	title = EVTNAME10032
+	desc = EVTDESC10032
 	picture = GFX_evt_bandits
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10032" #Arrest him!
+		name = EVTOPTA10032 # Arrest him!
+
 		narrative_event = {
 			id = 10040
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10040"
+			tooltip = EVTTOOLTIP10040
 		}
 	}
 
 	option = {
-		name = "EVTOPTB10032" #This is wrong!
+		name = EVTOPTB10032 # This is wrong!
+
 		narrative_event = {
 			id = 10041
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10041"
+			tooltip = EVTTOOLTIP10041
 		}
 	}
 
 	option = {
-		name = "EVTOPTC10032" #This was fun!
+		name = EVTOPTC10032 # This was fun!
+
 		narrative_event = {
 			id = 10033
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10033"
+			tooltip = EVTTOOLTIP10033
 		}
 	}
 
 	option = {
-		name = "EVTOPTD10032" #Time to leave and leave them alone
+		name = EVTOPTD10032 # Time to leave and leave them alone
+
 		scaled_wealth = -0.02
 		clr_character_flag = lure_robin
 		clr_character_flag = ignore_robin
@@ -1097,98 +1045,92 @@ narrative_event = {
 		clr_character_flag = robin_hood
 		add_character_modifier = {
 			name = met_merry_men
-			duration = 1825
+			years = 5
 		}
 		random_demesne_province = {
-			limit = {
-				has_province_modifier = highway_robber_band
-			}
+			show_scope_change = no
+			limit = { has_province_modifier = highway_robber_band }
 			remove_province_modifier = highway_robber_band
 		}
 	}
 }
 
-#This was fun!
+# This was fun!
 narrative_event = {
 	id = 10033
-	title = "EVTNAME10033"
-	desc = "EVTDESC10033"
+	title = EVTNAME10033
+	desc = EVTDESC10033
 	picture = GFX_evt_bandits
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10033" #Leave
+		name = EVTOPTA10033 # Leave
+
 		clr_character_flag = lure_robin
 		clr_character_flag = ignore_robin
 		clr_character_flag = do_something
 		clr_character_flag = robin_hood
 		add_character_modifier = {
 			name = met_merry_men
-			duration = 1825
+			years = 5
 		}
 		random_demesne_province = {
-			limit = {
-				has_province_modifier = highway_robber_band
-			}
+			show_scope_change = no
+			limit = { has_province_modifier = highway_robber_band }
 			remove_province_modifier = highway_robber_band
 		}
 	}
 }
 
-#What to do?
+# What to do?
 narrative_event = {
 	id = 10040
-	title = "EVTNAME10040"
-	desc = "EVTDESC10040"
+	title = EVTNAME10040
+	desc = EVTDESC10040
 	picture = GFX_evt_bandits
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10040" #Hang him!
+		name = EVTOPTA10040 # Hang him!
+
 		set_character_flag = killed_robin_hood
 		prestige = 10
 		any_courtier = {
+			show_scope_change = no
+
 			limit = {
-				NOT = {
+				NOR = {
 					trait = charitable
-				}
-				NOT = {
+
 					trait = kind
 				}
 			}
 			opinion = {
-				modifier = opinion_killed_merrymen
+				name = opinion_killed_merrymen
 				who = ROOT
 				years = 5
 			}
 		}
 		if = {
 			limit = {
-				NOT = {
-					trait = wroth
-				}
+				NOT = { trait = wroth }
 			}
-			add_trait = wroth
-			break = yes
+
+			add_trait_fully_silently_wroth_effect = yes
 		}
-		if = {
-			limit = {
-				trait = wroth
-				NOT = {
-					trait = cruel
-				}
-			}
-			add_trait = cruel
+		else = {
+			add_trait_fully_silently_cruel_effect = yes
 		}
 	}
 
 	option = {
-		name = "EVTOPTB10040" #Hire him and his merry men as gamekeepers
+		name = EVTOPTB10040 # Hire him and his merry men as gamekeepers
+
 		add_character_modifier = {
 			name = the_merciful
-			duration = 365
+			years = 1
 		}
 		create_character = {
 			name = Robin
@@ -1196,11 +1138,11 @@ narrative_event = {
 			dynasty = random
 			female = no
 			age = 30
-			trait = misguided_warrior
-			trait = brave
-			trait = ambitious
-			trait = proud
-			trait = zealous
+			add_trait = misguided_warrior
+			add_trait = brave
+			add_trait = ambitious
+			add_trait = proud
+			add_trait = zealous
 			health = 10
 			attributes = {
 				martial = 13
@@ -1216,11 +1158,11 @@ narrative_event = {
 			dynasty = random
 			female = yes
 			age = 25
-			trait = naive_appeaser
-			trait = brave
-			trait = ambitious
-			trait = proud
-			trait = zealous
+			add_trait = naive_appeaser
+			add_trait = brave
+			add_trait = ambitious
+			add_trait = proud
+			add_trait = zealous
 			health = 10
 			attributes = {
 				martial = 10
@@ -1234,32 +1176,28 @@ narrative_event = {
 			id = 10042
 			days = 7
 			random = 14
-			tooltip = "EVTTOOLTIP10042"
+			tooltip = EVTTOOLTIP10042
 		}
 	}
 }
 
-#Ambush!
+# Ambush!
 narrative_event = {
 	id = 10041
-	title = "EVTNAME10041"
-	desc = "EVTDESC10041"
+	title = EVTNAME10041
+	desc = EVTDESC10041
 	picture = GFX_evt_battle
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10041" #Kill them all!
+		name = EVTOPTA10041 # Kill them all!
+
 		set_character_flag = killed_robin_hood
 		random = {
 			chance = 30
 
-			add_trait = wounded
-			hidden_tooltip = {
-				character_event = {
-					id = 38280 #Notify Wounded
-				}
-			}
+			add_trait_wounded_effect = yes
 		}
 		clr_character_flag = lure_robin
 		clr_character_flag = ignore_robin
@@ -1267,42 +1205,34 @@ narrative_event = {
 		clr_character_flag = robin_hood
 		add_character_modifier = {
 			name = met_merry_men
-			duration = 1825
+			years = 5
 		}
 		random_demesne_province = {
-			limit = {
-				has_province_modifier = highway_robber_band
-			}
+			show_scope_change = no
+			limit = { has_province_modifier = highway_robber_band }
 			remove_province_modifier = highway_robber_band
 		}
 		if = {
 			limit = {
-				NOT = {
-					trait = wroth
-				}
+				NOT = { trait = wroth }
 			}
-			add_trait = wroth
+
+			add_trait_fully_silently_wroth_effect = yes
 		}
-		if = {
-			limit = {
-				trait = wroth
-				NOT = {
-					trait = cruel
-				}
-			}
-			add_trait = cruel
+		else = {
+			add_trait_fully_silently_cruel_effect = yes
 		}
 		any_courtier = {
+			show_scope_change = no
+
 			limit = {
-				NOT = {
+				NOR = {
 					trait = charitable
-				}
-				NOT = {
 					trait = kind
 				}
 			}
 			opinion = {
-				modifier = opinion_killed_merrymen
+				name = opinion_killed_merrymen
 				who = ROOT
 				years = 5
 			}
@@ -1310,10 +1240,11 @@ narrative_event = {
 	}
 
 	option = {
-		name = "EVTOPTB10041" #Hire him and his merry men as gamekeepers
+		name = EVTOPTB10041 # Hire him and his merry men as gamekeepers
+
 		add_character_modifier = {
 			name = the_merciful
-			duration = 365
+			years = 1
 		}
 		create_character = {
 			name = Robin
@@ -1321,11 +1252,11 @@ narrative_event = {
 			dynasty = random
 			female = no
 			age = 30
-			trait = misguided_warrior
-			trait = brave
-			trait = ambitious
-			trait = proud
-			trait = zealous
+			add_trait = misguided_warrior
+			add_trait = brave
+			add_trait = ambitious
+			add_trait = proud
+			add_trait = zealous
 			health = 10
 			attributes = {
 				martial = 13
@@ -1341,11 +1272,11 @@ narrative_event = {
 			dynasty = random
 			female = yes
 			age = 25
-			trait = naive_appeaser
-			trait = brave
-			trait = ambitious
-			trait = proud
-			trait = zealous
+			add_trait = naive_appeaser
+			add_trait = brave
+			add_trait = ambitious
+			add_trait = proud
+			add_trait = zealous
 			health = 10
 			attributes = {
 				martial = 10
@@ -1359,352 +1290,398 @@ narrative_event = {
 			id = 10042
 			days = 7
 			random = 14
-			tooltip = "EVTTOOLTIP10042"
+			tooltip = EVTTOOLTIP10042
 		}
 	}
 }
 
-#Marion gets her Robin
+# Marion gets her Robin
 narrative_event = {
 	id = 10042
-	title = "EVTNAME10042"
-	desc = "EVTDESC10042"
+	title = EVTNAME10042
+	desc = EVTDESC10042
 	picture = GFX_evt_marriage
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10042"
+		name = EVTOPTA10042
+
 		set_character_flag = robin_marion_married
 
 		event_target:marion_robin = {
+			show_scope_change = no
+
 			add_spouse = event_target:robin_marion
-			hidden_tooltip = { add_lover = event_target:robin_marion }
+
+			hidden_effect = {
+				add_lover = event_target:robin_marion
+			}
 		}
 	}
 }
 
 ### GATES OF HELL ###
 
-#Gates of Hell - A strange gap has opened
+# TODO: Should this event chain be restricted by the supernatural game rule?
+# Gates of Hell - A strange gap has opened
 narrative_event = {
 	id = 10100
-	title = "EVTNAME10100"
-	desc = "EVTDESC10100"
+	title = EVTNAME10100
+	desc = EVTDESC10100
 	picture = GFX_evt_pagan
+
+	is_triggered_only = yes # on_decade_pulse, random_events, gates_of_hell
 
 	only_playable = yes
 	min_age = 20
 	max_age = 100
-	capable_only = yes
+	only_capable = yes
 	prisoner = no
 	war = no
+	in_command = no
 
 	trigger = {
-		in_command = no
 
 		primary_title = { temporary = no }
 
-		NOT = { is_inaccessible_trigger = yes }
+		is_inaccessible_trigger = no
 
-		NOT = {
-			has_character_modifier = flaming_gap
-		}
-		NOT = {
-			has_character_modifier = gates_hell
-		}
-		NOT = {
-			has_character_modifier = wailing_gap
-		}
 		NOR = {
+			has_character_modifier = flaming_gap
+			has_character_modifier = gates_hell
+			has_character_modifier = wailing_gap
 			has_character_modifier = exorcism_gateshell
 			has_character_modifier = cattle_gateshell
 			has_character_modifier = sacrifice_gateshell
 		}
 	}
 
-	mean_time_to_happen = {
-		months = 10000
+	weight_multiplier = {
+		factor = 1
 
-		modifier = {
-			factor = 0.5
+		mult_modifier = {
+			factor = 2
 			trait = wroth
 		}
 
-		modifier = {
-			factor = 1.5
+		mult_modifier = {
+			factor = 0.67
 			trait = chaste
 		}
 	}
 
 	option = {
-		name = "EVTOPTA10100" #Ignore it
+		name = EVTOPTA10100 # Ignore it
+
 		add_character_modifier = {
 			name = flaming_gap
-			duration = 730
+			years = 2
 		}
-		if = {
-			limit = {
-				NOT = {
-					trait = slothful
-				}
-			}
-			random = {
-				chance = 25
 
-				add_trait = slothful
-				hidden_tooltip = {
-					character_event = {
-						id = 38251 #Notify Slothful
-					}
+		random = {
+			chance = 25
+
+			if = {
+				limit = {
+					NOT = { trait = slothful }
 				}
+
+				add_trait_fully_slothful_effect = yes
 			}
-			break = yes
+			else = {
+				add_trait_fully_content_effect = yes
+			}
 		}
-		if = {
-			limit = {
-				trait = slothful
-				NOT = {
-					trait = content
+
+		trigger_switch = {
+			on_trigger = trait
+
+			lustful = {
+				narrative_event = {
+					id = 10101
+					months = 1
+					random = 150
 				}
 			}
-			random = {
-				chance = 25
 
-				add_trait = content
-				hidden_tooltip = {
-					character_event = {
-						id = 38279 #Notify Content
-					}
+			kind = {
+				narrative_event = {
+					id = 10101
+					years = 1
+					random = 180
+				}
+			}
+
+			fallback = {
+				narrative_event = {
+					id = 10101
+					months = 6
+					random = 180
 				}
 			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTB10100"
+		name = EVTOPTB10100
+
 		add_character_modifier = {
 			name = flaming_gap
-			duration = 730
+			years = 2
 		}
 		narrative_event = {
 			id = 10101
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10101"
+			tooltip = EVTTOOLTIP10101
 		}
 	}
 }
 
-#Flames and fiery stones!
+# Flames and fiery stones!
 narrative_event = {
 	id = 10101
-	title = "EVTNAME10101"
-	desc = "EVTDESC10101"
+	title = EVTNAME10101
+	desc = EVTDESC10101
 	picture = GFX_evt_pagan
 
+	is_triggered_only = yes
+
 	only_playable = yes
-	min_age = 20
-	max_age = 100
-	capable_only = yes
+	only_capable = yes
 	prisoner = no
 	war = no
+	in_command = no
 
 	trigger = {
 		has_character_modifier = flaming_gap
-		in_command = no
 	}
 
-	mean_time_to_happen = {
-		months = 12
+	fail_trigger_effect = {
+		if = {
+			limit = {
+				is_playable = yes
+				has_character_modifier = flaming_gap
+			}
 
-		modifier = {
-			factor = 0.5
-			trait = lustful
-		}
-
-		modifier = {
-			factor = 1.5
-			trait = kind
-		}
-	}
-
-	option = {
-		name = "EVTOPTA10101" #Keep ignoring it
-		remove_character_modifier = flaming_gap
-		add_character_modifier = {
-			name = wailing_gap
-			duration = 730
-		}
-		location = {
-			add_province_modifier = {
-				name = peasants_upset
-				duration = 730
+			repeat_event = {
+				id = 10101
+				months = 1
 			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTB10101"
+		name = EVTOPTA10101 # Keep ignoring it
+
 		remove_character_modifier = flaming_gap
 		add_character_modifier = {
 			name = wailing_gap
-			duration = 730
+			years = 2
+		}
+		location = {
+			show_scope_change = no
+
+			add_province_modifier = {
+				name = peasants_upset
+				years = 2
+			}
+		}
+
+		trigger_switch = {
+			on_trigger = trait
+
+			lustful = {
+				narrative_event = {
+					id = 10102
+					months = 1
+					random = 150
+				}
+			}
+
+			kind = {
+				narrative_event = {
+					id = 10102
+					years = 1
+					random = 180
+				}
+			}
+
+			fallback = {
+				narrative_event = {
+					id = 10102
+					months = 6
+					random = 180
+				}
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB10101
+
+		remove_character_modifier = flaming_gap
+		add_character_modifier = {
+			name = wailing_gap
+			years = 2
 		}
 		narrative_event = {
 			id = 10102
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10102"
+			tooltip = EVTTOOLTIP10102
 		}
 	}
 }
 
-#Wailings, screams and cries for help seems to emit from the burning gap
+# Wailings, screams and cries for help seems to emit from the burning gap
 narrative_event = {
 	id = 10102
-	title = "EVTNAME10102"
-	desc = "EVTDESC10102"
+	title = EVTNAME10102
+	desc = EVTDESC10102
 	picture = GFX_evt_pagan
 
+	is_triggered_only = yes
+
 	only_playable = yes
-	min_age = 20
-	max_age = 100
-	capable_only = yes
+	only_capable = yes
 	prisoner = no
 	war = no
+	in_command = no
 
 	trigger = {
 		has_character_modifier = wailing_gap
-		in_command = no
 	}
 
-	mean_time_to_happen = {
-		months = 12
+	fail_trigger_effect = {
+		if = {
+			limit = {
+				is_playable = yes
+				has_character_modifier = wailing_gap
+			}
 
-		modifier = {
-			factor = 0.5
-			trait = lustful
-		}
-
-		modifier = {
-			factor = 1.5
-			trait = kind
-		}
-	}
-
-	option = {
-		name = "EVTOPTA10102" #Keep ignoring it
-		remove_character_modifier = wailing_gap
-		add_character_modifier = {
-			name = gates_hell
-			duration = 1530
+			repeat_event = {
+				id = 10101
+				months = 1
+			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTB10102"
-		custom_tooltip = {
-			text = EVTTOOLTIP10103
-		}
+		name = EVTOPTA10102 # Keep ignoring it
+
 		remove_character_modifier = wailing_gap
 		add_character_modifier = {
 			name = gates_hell
-			duration = 730
+			years = 4
 		}
+	}
+
+	option = {
+		name = EVTOPTB10102
+
 		narrative_event = {
 			id = 10103
 			days = 5
 			random = 10
+			tooltip = EVTTOOLTIP10103
+		}
+		remove_character_modifier = wailing_gap
+		add_character_modifier = {
+			name = gates_hell
+			years = 2
 		}
 	}
 }
 
-#Close the gap
+# Close the gap
 narrative_event = {
 	id = 10103
-	title = "EVTNAME10103"
-	desc = "EVTDESC10103"
+	title = EVTNAME10103
+	desc = EVTDESC10103
 	picture = GFX_evt_pagan
-
-	only_playable = yes
-	min_age = 20
-	max_age = 100
-	capable_only = yes
-	prisoner = no
-	war = no
-
-	trigger = {
-		has_character_modifier = gates_hell
-		in_command = no
-		NOT = {
-			has_character_flag = choose_solution_gh
-		}
-	}
 
 	is_triggered_only = yes
 
-	option = {
-		name = "EVTOPTA10103" #By using exorcism
-		trigger = {
-			religion_group = christian
+	only_playable = yes
+	only_capable = yes
+	prisoner = no
+	war = no
+	in_command = no
+
+	trigger = {
+		has_character_modifier = gates_hell
+	}
+
+	fail_trigger_effect = {
+		if = {
+			limit = {
+				is_playable = yes
+				has_character_modifier = gates_hell
+			}
+
+			repeat_event = {
+				id = 10101
+				months = 1
+			}
 		}
-		set_character_flag = choose_solution_gh
+	}
+
+	option = {
+		name = EVTOPTA10103 # By using exorcism
+
+		trigger = { religion_group = christian }
+
 		narrative_event = {
 			id = 10104
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10104"
+			tooltip = EVTTOOLTIP10104
 		}
 	}
 
 	option = {
-		name = "EVTOPTB10103" #By feeding it cattle
+		name = EVTOPTB10103 # By feeding it cattle
+
 		trigger = {
-			treasury = 50
-			NOT = {
-				trait = greedy
-			}
+			wealth >= 50
+			NOT = { trait = greedy }
 		}
-		set_character_flag = choose_solution_gh
 		narrative_event = {
 			id = 10105
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10105"
+			tooltip = EVTTOOLTIP10105
 		}
 	}
 
 	option = {
-		name = "EVTOPTC10103" #By rolling down stones into it
-		set_character_flag = choose_solution_gh
+		name = EVTOPTC10103 # By rolling down stones into it
+
 		narrative_event = {
 			id = 10106
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10106"
+			tooltip = EVTTOOLTIP10106
 		}
 	}
 
-	option = { #By sacrificing what the city held to be most dear
-		name = "EVTOPTD10103"
+	option = { # By sacrificing what the city held to be most dear
+		name = EVTOPTD10103
+
 		trigger = {
 			any_child = {
+				is_female = no
+				practical_age >= 10
+				practical_age < 20
 				is_abroad = no
 				prisoner = no
-				is_alive = yes
-				age = 10
-				NOT = {
-					age = 20
-				}
-				is_female = no
-				NOT = {
+
+				NOT = { # youngest son
 					any_sibling = {
+						is_child_of = ROOT
 						is_older_than = PREV
-						OR = {
-							father = { character = ROOT }
-							mother = { character = ROOT }
-						}
 					}
 				}
 			}
@@ -1712,47 +1689,42 @@ narrative_event = {
 		pacifists_lose_piety_effect = yes
 		random_child = {
 			limit = {
+				is_female = no
+				practical_age >= 10
+				practical_age < 20
 				is_abroad = no
 				prisoner = no
-				is_alive = yes
-				age = 10
-				NOT = {
-					age = 20
-				}
-				is_female = no
-				NOT = {
+
+				NOT = { # youngest son
 					any_sibling = {
+						is_child_of = ROOT
 						is_older_than = PREV
-						OR = {
-							father = { character = ROOT }
-							mother = { character = ROOT }
-						}
 					}
 				}
 			}
 			save_event_target_as = human_sacrifice
 		}
-		set_character_flag = choose_solution_gh
 		narrative_event = {
 			id = 10107
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10107"
+			tooltip = EVTTOOLTIP10107
 		}
 	}
 }
 
-#By using exorcism
+# By using exorcism
 narrative_event = {
 	id = 10104
-	title = "EVTNAME10104"
-	desc = "EVTDESC10104"
+	title = EVTNAME10104
+	desc = EVTDESC10104
 	picture = GFX_evt_pagan
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10104"
+		name = EVTOPTA10104
+
 		random_list = {
 			90 = {
 				set_character_flag = gate_exorcism
@@ -1760,7 +1732,7 @@ narrative_event = {
 					id = 10108
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10108" #It worked!
+					tooltip = EVTTOOLTIP10108 # It worked!
 				}
 			}
 			10 = {
@@ -1768,34 +1740,37 @@ narrative_event = {
 					id = 10109
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10109" #It didn't work!
+					tooltip = EVTTOOLTIP10109 # It didn't work!
 				}
 			}
 		}
 	}
 	option = {
-		name = "EVTOPTB10104"
+		name = EVTOPTB10104
+
 		narrative_event = {
 			id = 10103
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10103"
+			tooltip = EVTTOOLTIP10103
 		}
 	}
 }
 
-#By feeding it cattle
+# By feeding it cattle
 narrative_event = {
 	id = 10105
-	title = "EVTNAME10105"
-	desc = "EVTDESC10105"
+	title = EVTNAME10105
+	desc = EVTDESC10105
 	picture = GFX_evt_pagan
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10105"
-		treasury = -50
+		name = EVTOPTA10105
+
+		wealth = -50
+
 		random_list = {
 			90 = {
 				set_character_flag = gate_cattle
@@ -1803,40 +1778,42 @@ narrative_event = {
 					id = 10108
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10108" #It worked!
+					tooltip = EVTTOOLTIP10108 # It worked!
 				}
 			}
 			10 = {
 				narrative_event = {
 					id = 10109
 					days = 30
-					tooltip = "EVTTOOLTIP10109" #It didn't work!
+					tooltip = EVTTOOLTIP10109 # It didn't work!
 				}
 			}
 		}
 	}
 	option = {
-		name = "EVTOPTB10105"
+		name = EVTOPTB10105
+
 		narrative_event = {
 			id = 10103
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10103"
+			tooltip = EVTTOOLTIP10103
 		}
 	}
 }
 
-#By rolling down stones into it
+# By rolling down stones into it
 narrative_event = {
 	id = 10106
-	title = "EVTNAME10106"
-	desc = "EVTDESC10106"
+	title = EVTNAME10106
+	desc = EVTDESC10106
 	picture = GFX_evt_pagan
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10106"
+		name = EVTOPTA10106
+
 		random_list = {
 			90 = {
 				set_character_flag = gate_stones
@@ -1844,7 +1821,7 @@ narrative_event = {
 					id = 10108
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10108" #It worked!
+					tooltip = EVTTOOLTIP10108 # It worked!
 				}
 			}
 			10 = {
@@ -1852,36 +1829,38 @@ narrative_event = {
 					id = 10109
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10109" #It didn't work!
+					tooltip = EVTTOOLTIP10109 # It didn't work!
 				}
 			}
 		}
 	}
 	option = {
-		name = "EVTOPTB10106"
+		name = EVTOPTB10106
+
 		narrative_event = {
 			id = 10103
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10103"
+			tooltip = EVTTOOLTIP10103
 		}
 	}
 }
 
-
-#By sacrificing what the city held to be most dear - child dies
+# By sacrificing what the city held to be most dear - child dies
 narrative_event = {
 	id = 10107
-	title = "EVTNAME10107"
-	desc = "EVTDESC10107"
+	title = EVTNAME10107
+	desc = EVTDESC10107
 	picture = GFX_evt_pagan
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10107"
+		name = EVTOPTA10107
 
 		event_target:human_sacrifice = {
+			show_scope_change = no
+
 			death = {
 				death_reason = death_murder_fall
 				killer = ROOT
@@ -1894,7 +1873,7 @@ narrative_event = {
 					id = 10108
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10108" #It worked!
+					tooltip = EVTTOOLTIP10108 # It worked!
 				}
 			}
 			10 = {
@@ -1902,99 +1881,96 @@ narrative_event = {
 					id = 10109
 					days = 5
 					random = 10
-					tooltip = "EVTTOOLTIP10109" #It didn't work!
+					tooltip = EVTTOOLTIP10109 # It didn't work!
 				}
 			}
 		}
 	}
 	option = {
-		name = "EVTOPTB10107" #I changed my mind!
+		name = EVTOPTB10107 # I changed my mind!
+
 		narrative_event = {
 			id = 10103
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10103"
+			tooltip = EVTTOOLTIP10103
 		}
 	}
 }
 
-#It worked!
+# It worked!
 narrative_event = {
 	id = 10108
-	title = "EVTNAME10108"
-	desc = "EVTDESC10108"
+	title = EVTNAME10108
+	desc = EVTDESC10108
 	picture = GFX_evt_pagan
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10108"
-		trigger = {
-			has_character_flag = gate_exorcism
-		}
+		name = EVTOPTA10108
+
+		trigger = { has_character_flag = gate_exorcism }
+
 		remove_character_modifier = gates_hell
-		clr_character_flag = choose_solution_gh
 		add_character_modifier = {
 			name = exorcism_gateshell
-			duration = 1825
+			years = 5
 		}
 	}
 	option = {
-		name = "EVTOPTB10108"
-		trigger = {
-			has_character_flag = gate_cattle
-		}
+		name = EVTOPTB10108
+
+		trigger = { has_character_flag = gate_cattle }
+
 		remove_character_modifier = gates_hell
-		clr_character_flag = choose_solution_gh
 		add_character_modifier = {
 			name = cattle_gateshell
-			duration = 1825
+			years = 5
 		}
 	}
 	option = {
-		name = "EVTOPTC10108"
-		trigger = {
-			has_character_flag = gate_stones
-		}
+		name = EVTOPTC10108
+
+		trigger = { has_character_flag = gate_stones }
+
 		remove_character_modifier = gates_hell
-		clr_character_flag = choose_solution_gh
 		add_character_modifier = {
 			name = stones_gateshell
-			duration = 1825
+			years = 5
 		}
 	}
 	option = {
-		name = "EVTOPTD10108"
-		trigger = {
-			has_character_flag = gate_human_sacrifice
-		}
+		name = EVTOPTD10108
+
+		trigger = { has_character_flag = gate_human_sacrifice }
+
 		remove_character_modifier = gates_hell
-		clr_character_flag = choose_solution_gh
 		add_character_modifier = {
 			name = sacrifice_gateshell
-			duration = 1825
+			years = 5
 		}
 	}
 }
 
-#It did not work!
+# It did not work!
 narrative_event = {
 	id = 10109
-	title = "EVTNAME10109"
-	desc = "EVTDESC10109"
+	title = EVTNAME10109
+	desc = EVTDESC10109
 	picture = GFX_evt_pagan
 
 	is_triggered_only = yes
 
 	option = {
-		name = "EVTOPTA10109" #Crap! Try something else
+		name = EVTOPTA10109 # Crap! Try something else
+
 		prestige = -15
-		clr_character_flag = choose_solution_gh
 		narrative_event = {
 			id = 10103
 			days = 5
 			random = 10
-			tooltip = "EVTTOOLTIP10103"
+			tooltip = EVTTOOLTIP10103
 		}
 	}
 }

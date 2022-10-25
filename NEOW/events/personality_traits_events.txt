@@ -11,55 +11,46 @@
 # Lustful/Chaste - male
 character_event = {
 	id = 1000
-	desc = "EVTDESC1000"
-	picture = "GFX_evt_lovers"
-	
+	desc = EVTDESC1000
+	picture = GFX_evt_lovers
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_men = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
+
 			has_ambition = obj_zarist_emulate_catherine
 			has_ambition = obj_lutheran_corinthians
 		}
-		NOT = {
+
+		NOR = {
 			religion_group = muslim
-		}
-		NOT = {
 			trait = chaste
-		}
-		NOT = {
 			trait = lustful
-		}
-		NOT = {
 			trait = celibate
-		}
-		NOT = {
-			OR = {trait = homosexual trait = bisexual}
+			trait = homosexual
+			trait = bisexual
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			trait = greedy
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = hedonist
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = gluttonous
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = temperate
 		}
@@ -68,1831 +59,1022 @@ character_event = {
 	}
 
 	option = {
-		name = "EVTOPTA1000"
-		if = {
-			limit = {
+		name = EVTOPTA1000
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = honest
-				NOT = {
+				NOT = { trait = slothful }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = slothful
+				NOT = { trait = honest }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = honest }
 					trait = slothful
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
+				trigger_else = {
+					NOT = { trait = slothful }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = slothful
-				NOT = {
-					trait = honest
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = honest
-				}
-				NOT = {
-					trait = slothful
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = honest
-				trait = slothful
-			}
-			random = {
-				chance = 45
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
+
+			add_trait_lustful_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1000"
-		if = {
-			limit = {
+		name = EVTOPTB1000
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = arbitrary
-				NOT = {
-					trait = proud
-				}
+				NOT = { trait = proud }
 			}
-			random = {
-				chance = 70
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
+
+			mult_modifier = {
+				factor = 20
 				trait = proud
-				NOT = {
+				NOT = { trait = arbitrary }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = proud }
 					trait = arbitrary
 				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
+				trigger_else = {
+					NOT = { trait = arbitrary }
 				}
 			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = proud
-				}
-				NOT = {
-					trait = arbitrary
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = proud
-				trait = arbitrary
-			}
-			random = {
-				chance = 45
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
-				}
-			}
+
+			add_trait_chaste_effect = yes
 		}
 	}
 }
 
-#Gluttonous/Temperate
+# Gluttonous/Temperate
 character_event = {
 	id = 1001
-	desc = "EVTDESC1001"
-	picture = "GFX_evt_feast"
-	
+	desc = EVTDESC1001
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_nicholas
 			has_ambition = obj_lutheran_corinthians
 		}
-		NOT = {
+		NOR = {
 			trait = gluttonous
-		}
-		NOT = {
 			trait = temperate
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			trait = hedonist
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = lustful
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = slothful
 		}
 		zarist_emulate_nicholas_score = yes
 		lutheran_corinthians_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1001"
+		name = EVTOPTA1001
+
 		add_character_modifier = {
 			name = well_fed
 			years = 5
 		}
-		if = {
-			limit = {
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
 				trait = lustful
 			}
-			random = {
-				chance = 70
-				
-				add_trait = gluttonous
-				gain_weight_small_effect = yes
-				weight_trait_check_effect = yes
 
-				hidden_tooltip = {
-					character_event = {
-						id = 38277 #Notify Gluttonous
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
+			mult_modifier = {
+				factor = 20
 				trait = chaste
-				NOT = {
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				NOR = {
 					trait = lustful
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = gluttonous
-				gain_weight_small_effect = yes
-				weight_trait_check_effect = yes
-				hidden_tooltip = {
-					character_event = {
-						id = 38277 #Notify Gluttonous
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
 					trait = chaste
 				}
-				NOT = {
-					trait = lustful
-				}
 			}
-			random = {
-				chance = 45
-				
-				add_trait = gluttonous
-				gain_weight_small_effect = yes
-				weight_trait_check_effect = yes
-				hidden_tooltip = {
-					character_event = {
-						id = 38277 #Notify Gluttonous
-					}
-				}
-			}
+
+			add_trait_gluttonous_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1001"
-		if = {
-			limit = {
+		name = EVTOPTB1001
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = zealous
-				NOT = {
-					trait = greedy
-				}
+				NOT = { trait = greedy }
 			}
-			random = {
-				chance = 70
-				
-				add_trait = temperate
-			lose_weight_small_effect = yes
-			weight_trait_check_effect = yes
-				hidden_tooltip = {
-					character_event = {
-						id = 38276 #Notify Temperate
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
+
+			mult_modifier = {
+				factor = 20
 				trait = greedy
-				NOT = {
+				NOT = { trait = zealous }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = greedy }
 					trait = zealous
 				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = temperate
-			lose_weight_small_effect = yes
-			weight_trait_check_effect = yes
-				hidden_tooltip = {
-					character_event = {
-						id = 38276 #Notify Temperate
-					}
+				trigger_else = {
+					NOT = { trait = zealous }
 				}
 			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = greedy
-				}
-				NOT = {
-					trait = zealous
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = temperate
-			lose_weight_small_effect = yes
-			weight_trait_check_effect = yes
-				hidden_tooltip = {
-					character_event = {
-						id = 38276 #Notify Temperate
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = greedy
-				trait = zealous
-			}
-			random = {
-				chance = 45
-				
-				add_trait = temperate
-			lose_weight_small_effect = yes
-			weight_trait_check_effect = yes
-				hidden_tooltip = {
-					character_event = {
-						id = 38276 #Notify Temperate
-					}
-				}
-			}
+
+			add_trait_temperate_effect = yes
 		}
 	}
 }
 
-#Gluttonous/Temperate
+# Gluttonous/Temperate
 character_event = {
 	id = 1002
-	desc = "EVTDESC1002"
-	picture = "GFX_evt_feast"
-	
+	desc = EVTDESC1002
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_nicholas
 			has_ambition = obj_lutheran_corinthians
 		}
-		NOT = {
+		NOR = {
 			trait = gluttonous
-		}
-		NOT = {
 			trait = temperate
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			trait = hedonist
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.7
 			trait = lustful
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.7
 			trait = slothful
 		}
 		zarist_emulate_nicholas_score = yes
 		lutheran_corinthians_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1001"
+		name = EVTOPTA1001
+
 		add_character_modifier = {
 			name = well_fed
 			years = 5
 		}
-		if = {
-			limit = {
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
 				trait = lustful
-				NOT = {
-					trait = chaste
-				}
 			}
-			random = {
-				chance = 70
-				
-				add_trait = gluttonous
-				gain_weight_small_effect = yes
-				weight_trait_check_effect = yes
-				hidden_tooltip = {
-					character_event = {
-						id = 38277 #Notify Gluttonous
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
+
+			mult_modifier = {
+				factor = 20
 				trait = chaste
-				NOT = {
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				NOR = {
+					trait = chaste
 					trait = lustful
 				}
 			}
-			random = {
-				chance = 20
-				
-				add_trait = gluttonous
-				gain_weight_small_effect = yes
-				weight_trait_check_effect = yes
-				hidden_tooltip = {
-					character_event = {
-						id = 38277 #Notify Gluttonous
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = chaste
-				}
-				NOT = {
-					trait = lustful
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = gluttonous
-			gain_weight_small_effect = yes
-			weight_trait_check_effect = yes
-				hidden_tooltip = {
-					character_event = {
-						id = 38277 #Notify Gluttonous
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = chaste
-				trait = lustful
-			}
-			random = {
-				chance = 45
-				
-				add_trait = gluttonous
-			gain_weight_small_effect = yes
-			weight_trait_check_effect = yes
-				hidden_tooltip = {
-					character_event = {
-						id = 38277 #Notify Gluttonous
-					}
-				}
-			}
+
+			add_trait_gluttonous_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1001"
-		if = {
-			limit = {
+		name = EVTOPTB1001
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = zealous
-				NOT = {
-					trait = greedy
-				}
+				NOT = { trait = greedy }
 			}
-			random = {
-				chance = 70
-				
-				add_trait = temperate
-			lose_weight_small_effect = yes
-			weight_trait_check_effect = yes
-				hidden_tooltip = {
-					character_event = {
-						id = 38276 #Notify Temperate
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
+
+			mult_modifier = {
+				factor = 20
 				trait = greedy
-				NOT = {
+				NOT = { trait = zealous }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = greedy }
 					trait = zealous
 				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = temperate
-			lose_weight_small_effect = yes
-			weight_trait_check_effect = yes
-				hidden_tooltip = {
-					character_event = {
-						id = 38276 #Notify Temperate
-					}
+				trigger_else = {
+					NOT = { trait = zealous }
 				}
 			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = greedy
-				}
-				NOT = {
-					trait = zealous
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = temperate
-			lose_weight_small_effect = yes
-			weight_trait_check_effect = yes
-				hidden_tooltip = {
-					character_event = {
-						id = 38276 #Notify Temperate
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = greedy
-				trait = zealous
-			}
-			random = {
-				chance = 45
-				
-				add_trait = temperate
-			lose_weight_small_effect = yes
-			weight_trait_check_effect = yes
-				hidden_tooltip = {
-					character_event = {
-						id = 38276 #Notify Temperate
-					}
-				}
-			}
+
+			add_trait_temperate_effect = yes
 		}
 	}
 }
 
-#Charitable/Greedy
+# Charitable/Greedy
 character_event = {
 	id = 1003
-	desc = "EVTDESC1003"
-	picture = "GFX_evt_market"
-	
+	desc = EVTDESC1003
+	picture = GFX_evt_market
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_lutheran_luke
 		}
-		NOT = {
+		NOR = {
 			trait = greedy
-		}
-		NOT = {
 			trait = charitable
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			trait = kind
 		}
 		lutheran_luke_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1003"
-		if = {
-			limit = {
+		name = EVTOPTA1003
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = honest
-				NOT = {
+				NOT = { trait = envious }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = envious
+				NOT = { trait = honest }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = honest }
 					trait = envious
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = charitable
-				hidden_tooltip = {
-					character_event = {
-						id = 38273 #Notify Charitable
-					}
+				trigger_else = {
+					NOT = { trait = envious }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = envious
-				NOT = {
-					trait = honest
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = charitable
-				hidden_tooltip = {
-					character_event = {
-						id = 38273 #Notify Charitable
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = envious
-				}
-				NOT = {
-					trait = honest
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = charitable
-				hidden_tooltip = {
-					character_event = {
-						id = 38273 #Notify Charitable
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = envious
-				trait = honest
-			}
-			random = {
-				chance = 45
-				
-				add_trait = charitable
-				hidden_tooltip = {
-					character_event = {
-						id = 38273 #Notify Charitable
-					}
-				}
-			}
+
+			add_trait_charitable_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1003"
-		if = {
-			limit = {
+		name = EVTOPTB1003
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = proud
-				NOT = {
+				NOT = { trait = content }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = content
+				NOT = { trait = proud }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = proud }
 					trait = content
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = greedy
-				hidden_tooltip = {
-					character_event = {
-						id = 38252 #Notify Greedy
-					}
+				trigger_else = {
+					NOT = { trait = content }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = content
-				NOT = {
-					trait = proud
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = greedy
-				hidden_tooltip = {
-					character_event = {
-						id = 38252 #Notify Greedy
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = content
-				}
-				NOT = {
-					trait = proud
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = greedy
-				hidden_tooltip = {
-					character_event = {
-						id = 38252 #Notify Greedy
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = content
-				trait = proud
-			}
-			random = {
-				chance = 45
-				
-				add_trait = greedy
-				hidden_tooltip = {
-					character_event = {
-						id = 38252 #Notify Greedy
-					}
-				}
-			}
+
+			add_trait_greedy_effect = yes
 		}
 	}
 }
 
-#Slothful/Diligent
+# Slothful/Diligent
 character_event = {
 	id = 1004
-	desc = "EVTDESC1004"
-	picture = "GFX_evt_drunk"
-	
+	desc = EVTDESC1004
+	picture = GFX_evt_drunk
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_peter
 			has_ambition = obj_lutheran_galatians
 		}
-		NOT = {
+		NOR = {
 			trait = diligent
-		}
-		NOT = {
 			trait = slothful
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
+		factor = 1
 
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = gluttonous
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.7
 			trait = lustful
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 1.7
 			trait = hedonist
 		}
 		zarist_emulate_peter_score = yes
 		lutheran_galatians_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1004"
-		if = {
-			limit = {
+		name = EVTOPTA1004
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = cruel
-				NOT = {
+				NOT = { trait = ambitious }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = ambitious
+				NOT = { trait = cruel }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = cruel }
 					trait = ambitious
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = slothful
-				hidden_tooltip = {
-					character_event = {
-						id = 38251 #Notify Slothful
-					}
+				trigger_else = {
+					NOT = { trait = ambitious }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = ambitious
-				NOT = {
-					trait = cruel
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = slothful
-				hidden_tooltip = {
-					character_event = {
-						id = 38251 #Notify Slothful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = ambitious
-				}
-				NOT = {
-					trait = cruel
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = slothful
-				hidden_tooltip = {
-					character_event = {
-						id = 38251 #Notify Slothful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = ambitious
-				trait = cruel
-			}
-			random = {
-				chance = 45
-				
-				add_trait = slothful
-				hidden_tooltip = {
-					character_event = {
-						id = 38251 #Notify Slothful
-					}
-				}
-			}
+
+			add_trait_slothful_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1004"
+		name = EVTOPTB1004
+
 		if = {
 			limit = {
-					trait = depressed
-					trait = stressed
-			}
-			health = -0.5
-		}
-		if = {
-			limit = {
-					trait = depressed
-				NOT = {
-					trait = stressed
-				}
+				NOT = { trait = stressed }
 			}
 			random = {
 				chance = 60
-				add_trait = stressed
+				add_trait_stressed_effect = yes
 			}
 		}
-		if = {
-			limit = {
-					trait = stressed
-				NOT = {
-					trait = depressed
+		else = {
+			if = {
+				limit = { trait = depressed }
+				health = -0.5
+			}
+			else = {
+				random = {
+					chance = 60
+					add_trait_depressed_effect = yes
 				}
 			}
-			random = {
-				chance = 60
-				add_trait = depressed
-			}
 		}
-		if = {
-			limit = {
-				NOR = {
-					trait = stressed
-					trait = depressed
-				}
-			}
-			random = {
-				chance = 60
-				add_trait = stressed
-			}
-		}
-		if = {
-			limit = {
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
 				trait = patient
-				NOT = {
+				NOT = { trait = cynical }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = cynical
+				NOT = { trait = patient }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = patient }
 					trait = cynical
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = diligent
-				hidden_tooltip = {
-					character_event = {
-						id = 38256 #Notify Diligent
-					}
+				trigger_else = {
+					NOT = { trait = cynical }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = cynical
-				NOT = {
-					trait = patient
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = diligent
-				hidden_tooltip = {
-					character_event = {
-						id = 38256 #Notify Diligent
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = cynical
-				}
-				NOT = {
-					trait = patient
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = diligent
-				hidden_tooltip = {
-					character_event = {
-						id = 38256 #Notify Diligent
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = cynical
-				trait = patient
-			}
-			random = {
-				chance = 45
-				
-				add_trait = diligent
-				hidden_tooltip = {
-					character_event = {
-						id = 38256 #Notify Diligent
-					}
-				}
-			}
+
+			add_trait_diligent_effect = yes
 		}
 	}
 }
 
-#Kind/Envious - female
+# Kind/Envious - female
 character_event = {
 	id = 1005
-	desc = "EVTDESC1005"
-	picture = "GFX_evt_shadowy_cabal"
-	
+	desc = EVTDESC1005
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	only_women = yes
 	min_age = 16
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_alexander
 			has_ambition = obj_lutheran_luke
 		}
-		NOT = {
+		NOR = {
 			trait = envious
-		}
-		NOT = {
 			trait = kind
-		}
-		NOT = {
-			OR = {trait = homosexual trait = bisexual}
+			trait = homosexual
+			trait = bisexual
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			trait = greedy
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = proud
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = charitable
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = humble
 		}
 		zarist_emulate_alexander_score = yes
 		lutheran_luke_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1005"
-		if = {
-			limit = {
+		name = EVTOPTA1005
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = gregarious
-				NOT = {
-					trait = wroth
-				}
+				NOT = { trait = wroth }
 			}
-			random = {
-				chance = 70
-				
-				add_trait = envious
-				hidden_tooltip = {
-					character_event = {
-						id = 38271 #Notify Envious
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
+
+			mult_modifier = {
+				factor = 20
 				trait = wroth
-				NOT = {
+				NOT = { trait = gregarious }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = wroth }
 					trait = gregarious
 				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = envious
-				hidden_tooltip = {
-					character_event = {
-						id = 38271 #Notify Envious
-					}
+				trigger_else = {
+					NOT = { trait = gregarious }
 				}
 			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = wroth
-				}
-				NOT = {
-					trait = gregarious
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = envious
-				hidden_tooltip = {
-					character_event = {
-						id = 38271 #Notify Envious
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = wroth
-				trait = gregarious
-			}
-			random = {
-				chance = 45
-				
-				add_trait = envious
-				hidden_tooltip = {
-					character_event = {
-						id = 38271 #Notify Envious
-					}
-				}
-			}
+
+			add_trait_envious_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1005"
-		if = {
-			limit = {
+		name = EVTOPTB1005
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = gregarious
-				NOT = {
-					trait = wroth
-				}
+				NOT = { trait = wroth }
 			}
-			random = {
-				chance = 70
-				
-				add_trait = kind
-				hidden_tooltip = {
-					character_event = {
-						id = 38268 #Notify Kind
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
+
+			mult_modifier = {
+				factor = 20
 				trait = wroth
-				NOT = {
+				NOT = { trait = gregarious }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = wroth }
 					trait = gregarious
 				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = kind
-				hidden_tooltip = {
-					character_event = {
-						id = 38268 #Notify Kind
-					}
+				trigger_else = {
+					NOT = { trait = gregarious }
 				}
 			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = wroth
-				}
-				NOT = {
-					trait = gregarious
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = kind
-				hidden_tooltip = {
-					character_event = {
-						id = 38268 #Notify Kind
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = wroth
-				trait = gregarious
-			}
-			random = {
-				chance = 45
-				
-				add_trait = kind
-				hidden_tooltip = {
-					character_event = {
-						id = 38268 #Notify Kind
-					}
-				}
-			}
+
+			add_trait_fully_kind_effect = yes
 		}
 	}
 }
 
-#Kind/Envious - male
+# Kind/Envious - male
 character_event = {
 	id = 1006
-	desc = "EVTDESC1006"
-	picture = "GFX_evt_shadowy_cabal"
-	
+	desc = EVTDESC1006
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	only_men = yes
 	min_age = 16
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_alexander
 			has_ambition = obj_lutheran_luke
 		}
-		NOT = {
+		NOR = {
 			trait = envious
-		}
-		NOT = {
 			trait = kind
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 0.5
 			trait = greedy
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = proud
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = charitable
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = humble
 		}
 		zarist_emulate_alexander_score = yes
 		lutheran_luke_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1006"
-		if = {
-			limit = {
+		name = EVTOPTA1006
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = gregarious
-				NOT = {
-					trait = wroth
-				}
+				NOT = { trait = wroth }
 			}
-			random = {
-				chance = 70
-				
-				add_trait = kind
-				hidden_tooltip = {
-					character_event = {
-						id = 38268 #Notify Kind
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
+
+			mult_modifier = {
+				factor = 20
 				trait = wroth
-				NOT = {
+				NOT = { trait = gregarious }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = wroth }
 					trait = gregarious
 				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = kind
-				hidden_tooltip = {
-					character_event = {
-						id = 38268 #Notify Kind
-					}
+				trigger_else = {
+					NOT = { trait = gregarious }
 				}
 			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = wroth
-				}
-				NOT = {
-					trait = gregarious
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = kind
-				hidden_tooltip = {
-					character_event = {
-						id = 38268 #Notify Kind
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = wroth
-				trait = gregarious
-			}
-			random = {
-				chance = 45
-				
-				add_trait = kind
-				hidden_tooltip = {
-					character_event = {
-						id = 38268 #Notify Kind
-					}
-				}
-			}
+
+			add_trait_fully_kind_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1006"
-		if = {
-			limit = {
+		name = EVTOPTB1006
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = lustful
-				NOT = {
+				NOT = { trait = trusting }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = trusting
+				NOT = { trait = lustful }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = lustful }
 					trait = trusting
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = envious
-				hidden_tooltip = {
-					character_event = {
-						id = 38271 #Notify Envious
-					}
+				trigger_else = {
+					NOT = { trait = trusting }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = trusting
-				NOT = {
-					trait = lustful
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = envious
-				hidden_tooltip = {
-					character_event = {
-						id = 38271 #Notify Envious
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = trusting
-				}
-				NOT = {
-					trait = lustful
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = envious
-				hidden_tooltip = {
-					character_event = {
-						id = 38271 #Notify Envious
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = trusting
-				trait = lustful
-			}
-			random = {
-				chance = 45
-				
-				add_trait = envious
-				hidden_tooltip = {
-					character_event = {
-						id = 38271 #Notify Envious
-					}
-				}
-			}
+
+			add_trait_envious_effect = yes
 		}
 	}
 }
 
-#Wroth/Patient
+# Wroth/Patient
 character_event = {
 	id = 1007
-	desc = "EVTDESC1007"
-	picture = "GFX_evt_spymaster"
-	
+	desc = EVTDESC1007
+	picture = GFX_evt_spymaster
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	
 	is_triggered_only = yes
 	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_ivan
 			has_ambition = obj_lutheran_galatians
 		}
-		NOT = {
+		NOR = {
 			trait = wroth
-		}
-		NOT = {
 			trait = patient
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			trait = envious
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = cruel
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = gluttonous
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = kind
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = temperate
 		}
 		zarist_emulate_ivan_score = yes
 		lutheran_galatians_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1007"
-		if = {
-			limit = {
+		name = EVTOPTA1007
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
 				trait = paranoid
-				NOT = {
-					trait = trusting
-				}
 			}
-			random = {
-				chance = 70
-				
-				add_trait = wroth
-				hidden_tooltip = {
-					character_event = {
-						id = 38254 #Notify Wroth
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
+
+			mult_modifier = {
+				factor = 20
 				trait = trusting
 			}
-			random = {
-				chance = 20
-				
-				add_trait = wroth
-				hidden_tooltip = {
-					character_event = {
-						id = 38254 #Notify Wroth
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
+
+			mult_modifier = {
+				factor = 45
+
+				NOR = {
+					trait = paranoid
 					trait = trusting
 				}
-				NOT = {
-					trait = paranoid
-				}
 			}
-			random = {
-				chance = 45
-				
-				add_trait = wroth
-				hidden_tooltip = {
-					character_event = {
-						id = 38254 #Notify Wroth
-					}
-				}
-			}
+
+			add_trait_wroth_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1007"
-		if = {
-			limit = {
+		name = EVTOPTB1007
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = temperate
-				NOT = {
+				NOT = { trait = craven }
+			}
+
+			mult_modifier = {
+				factor = 20
+
+				trait = craven
+				NOT = { trait = temperate }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = temperate }
 					trait = craven
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = patient
-				hidden_tooltip = {
-					character_event = {
-						id = 38264 #Notify Patient
-					}
+				trigger_else = {
+					NOT = { trait = craven }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = craven
-				NOT = {
-					trait = temperate
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = patient
-				hidden_tooltip = {
-					character_event = {
-						id = 38264 #Notify Patient
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = temperate
-				}
-				NOT = {
-					trait = craven
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = patient
-				hidden_tooltip = {
-					character_event = {
-						id = 38264 #Notify Patient
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = temperate
-				trait = craven
-			}
-			random = {
-				chance = 45
-				
-				add_trait = patient
-				hidden_tooltip = {
-					character_event = {
-						id = 38264 #Notify Patient
-					}
-				}
-			}
+
+			add_trait_patient_effect = yes
 		}
 	}
 }
 
-#Proud/Humble
+# Proud/Humble
 character_event = {
 	id = 1008
-	desc = "EVTDESC1008"
-	picture = "GFX_evt_throne_room"
-	
+	desc = EVTDESC1008
+	picture = GFX_evt_throne_room
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_nicholas
 			has_ambition = obj_lutheran_exodus
 		}
-		NOT = {
+		NOR = {
 			trait = proud
-		}
-		NOT = {
 			trait = humble
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			trait = ambitious
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = content
 		}
 		zarist_emulate_nicholas_score = yes
 		lutheran_exodus_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1008"
-		if = {
-			limit = {
+		name = EVTOPTA1008
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				has_fair_trait_trigger = yes
-				NOT = {
-					trait = honest
-				}
+				NOT = { trait = honest }
 			}
-			random = {
-				chance = 70
-				
-				add_trait = proud
-				hidden_tooltip = {
-					character_event = {
-						id = 38261 #Notify Proud
-					}
-				}
+
+			mult_modifier = {
+				factor = 20
+				trait = honest
+				has_fair_trait_trigger = no
 			}
-		}
-		if = {
-			limit = {
-				NOT = {
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = honest }
 					has_fair_trait_trigger = yes
 				}
-				NOT = {
-					trait = honest
+				trigger_else = {
+					has_fair_trait_trigger = no
 				}
 			}
-			random = {
-				chance = 45
-				
-				add_trait = proud
-				hidden_tooltip = {
-					character_event = {
-						id = 38261 #Notify Proud
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				has_fair_trait_trigger = yes
-				trait = honest
-			}
-			random = {
-				chance = 45
-				
-				add_trait = proud
-				hidden_tooltip = {
-					character_event = {
-						id = 38261 #Notify Proud
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					has_fair_trait_trigger = yes
-				}
-				trait = honest
-			}
-			random = {
-				chance = 20
-				
-				add_trait = proud
-				hidden_tooltip = {
-					character_event = {
-						id = 38261 #Notify Proud
-					}
-				}
-			}
+
+			add_trait_proud_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1008"
-		if = {
-			limit = {
+		name = EVTOPTB1008
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				has_ugly_trait_trigger = yes
-				NOT = {
-					trait = ambitious
-				}
+				NOT = { trait = ambitious }
 			}
-			random = {
-				chance = 60
-				
-				add_trait = humble
-				hidden_tooltip = {
-					character_event = {
-						id = 38260 #Notify Humble
-					}
-				}
+
+			mult_modifier = {
+				factor = 20
+				trait = ambitious
+				has_ugly_trait_trigger = no
 			}
-		}
-		if = {
-			limit = {
-				NOT = {
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = ambitious }
 					has_ugly_trait_trigger = yes
 				}
-				NOT = {
-					trait = ambitious
+				trigger_else = {
+					has_ugly_trait_trigger = no
 				}
 			}
-			random = {
-				chance = 45
-				
-				add_trait = humble
-				hidden_tooltip = {
-					character_event = {
-						id = 38260 #Notify Humble
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				has_ugly_trait_trigger = yes
-				trait = ambitious
-			}
-			random = {
-				chance = 45
-				
-				add_trait = humble
-				hidden_tooltip = {
-					character_event = {
-						id = 38260 #Notify Humble
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					has_ugly_trait_trigger = yes
-				}
-				trait = ambitious
-			}
-			random = {
-				chance = 20
-				
-				add_trait = humble
-				hidden_tooltip = {
-					character_event = {
-						id = 38260 #Notify Humble
-					}
-				}
-			}
+
+			add_trait_humble_effect = yes
 		}
 	}
 }
 
-#Deceitful/Honest
+# Deceitful/Honest
 character_event = {
 	id = 1009
-	desc = "EVTDESC1009"
-	picture = "GFX_evt_whispers"
-	
+	desc = EVTDESC1009
+	picture = GFX_evt_whispers
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_peter
 			has_ambition = obj_zarist_emulate_catherine
 			has_ambition = obj_lutheran_ephesians
 		}
-		NOT = {
+		NOR = {
 			trait = deceitful
-		}
-		NOT = {
 			trait = honest
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			trait = envious
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = cruel
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = arbitrary
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = kind
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = just
 		}
@@ -1900,610 +1082,343 @@ character_event = {
 		zarist_emulate_catherine_score = yes
 		lutheran_ephesians_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1009"
-		if = {
-			limit = {
+		name = EVTOPTA1009
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = kind
-				NOT = {
+				NOT = { trait = gregarious }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = gregarious
+				NOT = { trait = kind }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = kind }
 					trait = gregarious
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = deceitful
-				hidden_tooltip = {
-					character_event = {
-						id = 38255 #Notify Deceitful
-					}
+				trigger_else = {
+					NOT = { trait = gregarious }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = gregarious
-				NOT = {
-					trait = kind
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = deceitful
-				hidden_tooltip = {
-					character_event = {
-						id = 38255 #Notify Deceitful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = kind
-				}
-				NOT = {
-					trait = gregarious
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = deceitful
-				hidden_tooltip = {
-					character_event = {
-						id = 38255 #Notify Deceitful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = kind
-				trait = gregarious
-			}
-			random = {
-				chance = 45
-				
-				add_trait = deceitful
-				hidden_tooltip = {
-					character_event = {
-						id = 38255 #Notify Deceitful
-					}
-				}
-			}
+
+			add_trait_deceitful_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1009"
-		if = {
-			limit = {
+		name = EVTOPTB1009
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
 				trait = zealous
-				NOT = {
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = cynical
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				NOR = {
+					trait = zealous
 					trait = cynical
 				}
 			}
-			random = {
-				chance = 70
-				
-				add_trait = honest
-				hidden_tooltip = {
-					character_event = {
-						id = 38262 #Notify honest
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = cynical
-				NOT = {
-					trait = zealous
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = honest
-				hidden_tooltip = {
-					character_event = {
-						id = 38262 #Notify honest
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = zealous
-				}
-				NOT = {
-					trait = cynical
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = honest
-				hidden_tooltip = {
-					character_event = {
-						id = 38262 #Notify honest
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = zealous
-				trait = cynical
-			}
-			random = {
-				chance = 45
-				
-				add_trait = honest
-				hidden_tooltip = {
-					character_event = {
-						id = 38262 #Notify honest
-					}
-				}
-			}
+
+			add_trait_honest_effect = yes
 		}
 	}
 }
 
-#Craven/Brave
+# Craven/Brave
 character_event = {
 	id = 1010
-	desc = "EVTDESC1010"
-	picture = "GFX_evt_courier"
-	
+	desc = EVTDESC1010
+	picture = GFX_evt_courier
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
-	
-	is_triggered_only = yes
-	
+	only_capable = yes
+
 	trigger = {
 		OR = {
 			has_ambition = obj_lutheran_ephesians
-			NOT = { personality_traits = 5 }
+			personality_traits < 5
 		}
 		NOR = {
-			trait = incapable
 			trait = craven
 			trait = brave
 			trait = berserker
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		lutheran_ephesians_score = yes
+		factor = 1
 	}
-	
 	option = {
-		name = "EVTOPTA1010"
-		if = {
-			limit = {
+		name = EVTOPTA1010
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = paranoid
-				NOT = {
+				NOT = { trait = cruel }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = cruel
+				NOT = { trait = paranoid }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = paranoid }
 					trait = cruel
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = craven
-				hidden_tooltip = {
-					character_event = {
-						id = 38257 #Notify Craven
-					}
+				trigger_else = {
+					NOT = { trait = cruel }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = cruel
-				NOT = {
-					trait = paranoid
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = craven
-				hidden_tooltip = {
-					character_event = {
-						id = 38257 #Notify Craven
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = paranoid
-				}
-				NOT = {
-					trait = cruel
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = craven
-				hidden_tooltip = {
-					character_event = {
-						id = 38257 #Notify Craven
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = paranoid
-				trait = cruel
-			}
-			random = {
-				chance = 45
-				
-				add_trait = craven
-				hidden_tooltip = {
-					character_event = {
-						id = 38257 #Notify Craven
-					}
-				}
-			}
+
+			add_trait_craven_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1010"
-		if = {
-			limit = {
+		name = EVTOPTB1010
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = ambitious
-				NOT = {
+				NOT = { trait = slothful }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = slothful
+				NOT = { trait = ambitious }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = ambitious }
 					trait = slothful
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = brave
-				hidden_tooltip = {
-					character_event = {
-						id = 38270 #Notify brave
-					}
+				trigger_else = {
+					NOT = { trait = slothful }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = slothful
-				NOT = {
-					trait = ambitious
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = brave
-				hidden_tooltip = {
-					character_event = {
-						id = 38270 #Notify brave
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = ambitious
-				}
-				NOT = {
-					trait = slothful
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = brave
-				hidden_tooltip = {
-					character_event = {
-						id = 38270 #Notify brave
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = ambitious
-				trait = slothful
-			}
-			random = {
-				chance = 45
-				
-				add_trait = brave
-				hidden_tooltip = {
-					character_event = {
-						id = 38270 #Notify brave
-					}
-				}
-			}
+
+			add_trait_brave_effect = yes
 		}
 	}
 }
 
-#Shy/Gregarious
+# Shy/Gregarious
 character_event = {
 	id = 1011
-	desc = "EVTDESC1011"
-	picture = "GFX_evt_garden"
-	
+	desc = EVTDESC1011
+	picture = GFX_evt_garden
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_alexis
 		}
-		NOT = {
+		NOR = {
 			trait = shy
-		}
-		NOT = {
 			trait = gregarious
 		}
-		NOT = {
-			trait = stubborn
-		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			trait = chaste
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.7
 			trait = celibate
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.5
 			trait = lustful
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = hedonist
 		}
 		zarist_emulate_alexis_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1011"
-		if = {
-			limit = {
+		name = EVTOPTA1011
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = craven
-				NOT = {
+				NOT = { trait = cynical }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = cynical
+				NOT = { trait = craven }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = craven }
 					trait = cynical
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = shy
-				hidden_tooltip = {
-					character_event = {
-						id = 38263 #Notify shy
-					}
+				trigger_else = {
+					NOT = { trait = cynical }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = cynical
-				NOT = {
-					trait = craven
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = shy
-				hidden_tooltip = {
-					character_event = {
-						id = 38263 #Notify shy
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = craven
-				}
-				NOT = {
-					trait = cynical
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = shy
-				hidden_tooltip = {
-					character_event = {
-						id = 38263 #Notify shy
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = craven
-				trait = cynical
-			}
-			random = {
-				chance = 45
-				
-				add_trait = shy
-				hidden_tooltip = {
-					character_event = {
-						id = 38263 #Notify shy
-					}
-				}
-			}
+
+			add_trait_shy_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1011"
+		name = EVTOPTB1011
+
 		if = {
-			limit = {
-					trait = stressed
-			}
+			limit = { trait = stressed }
+
 			random = {
 				chance = 50
+
+				mult_modifier = {
+					factor = 1.5
+					trait = paranoid
+				}
+
 				health = -0.5
-				modifier = {
-					factor = 1.5
-					trait = paranoid
-				}
 			}
 		}
-		if = {
-			limit = {
-				NOT = {
-					trait = stressed
-				}
-			}
+
+		else = {
 			random = {
 				chance = 50
-				add_trait = stressed
-				modifier = {
+
+				mult_modifier = {
 					factor = 1.5
 					trait = paranoid
 				}
+
+				add_trait_stressed_effect = yes
 			}
 		}
-		if = {
-			limit = {
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
 				trait = brave
-				NOT = {
+				NOT = { trait = paranoid }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = paranoid
+				NOT = { trait = brave }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = brave }
 					trait = paranoid
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = gregarious
-				hidden_tooltip = {
-					character_event = {
-						id = 38265 #Notify Gregarious
-					}
+				trigger_else = {
+					NOT = { trait = paranoid }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = paranoid
-				NOT = {
-					trait = brave
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = gregarious
-				hidden_tooltip = {
-					character_event = {
-						id = 38265 #Notify Gregarious
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = brave
-				}
-				NOT = {
-					trait = paranoid
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = gregarious
-				hidden_tooltip = {
-					character_event = {
-						id = 38265 #Notify Gregarious
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = brave
-				trait = paranoid
-			}
-			random = {
-				chance = 45
-				
-				add_trait = gregarious
-				hidden_tooltip = {
-					character_event = {
-						id = 38265 #Notify Gregarious
-					}
-				}
-			}
+
+			add_trait_gregarious_effect = yes
 		}
 	}
 }
 
-#Ambitious/Content
+# Ambitious/Content
 character_event = {
 	id = 1012
-	desc = "EVTDESC1012"
-	picture = "GFX_evt_council"
-	
+	desc = EVTDESC1012
+	picture = GFX_evt_council
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_catherine
 			has_ambition = obj_zarist_emulate_nicholas
 			has_ambition = obj_lutheran_psalm
 		}
-		NOT = {
+		NOR = {
 			trait = ambitious
-		}
-		NOT = {
 			trait = content
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 15
 			any_owned_bloodline = {
 				has_bloodline_flag = bloodline_ambition
+				bloodline_is_active_for = PREV
 			}
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = proud
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = humble
 		}
@@ -2511,460 +1426,280 @@ character_event = {
 		zarist_emulate_nicholas_score = yes
 		lutheran_psalm_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1012"
+		name = EVTOPTA1012
+
 		if = {
 			limit = {
 				any_owned_bloodline = {
 					has_bloodline_flag = bloodline_ambition
+					bloodline_is_active_for = PREV
 				}
 			}
 			add_trait = ambitious
 		}
 		else = {
-			if = {
-				limit = {
+			random = {
+				chance = 1
+
+				mult_modifier = {
+					factor = 70
+
 					trait = proud
-					NOT = {
-						trait = shy
-					}
+					NOT = { trait = shy }
 				}
-				random = {
-					chance = 70
-					
-					add_trait = ambitious
-					hidden_tooltip = {
-						character_event = {
-							id = 38278 #Notify Ambitious
-						}
-					}
-				}
-			}
-			if = {
-				limit = {
+
+				mult_modifier = {
+					factor = 20
 					trait = shy
-					NOT = {
-						trait = proud
+					NOT = { trait = proud }
+				}
+
+				mult_modifier = {
+					factor = 45
+
+					# Both traits or neither
+					trigger_if = {
+						limit = { trait = brave }
+						trait = paranoid
+					}
+					trigger_else = {
+						NOT = { trait = paranoid }
 					}
 				}
-				random = {
-					chance = 20
-					
-					add_trait = ambitious
-					hidden_tooltip = {
-						character_event = {
-							id = 38278 #Notify Ambitious
-						}
-					}
-				}
-			}
-			if = {
-				limit = {
-					NOT = {
-						trait = proud
-					}
-					NOT = {
-						trait = shy
-					}
-				}
-				random = {
-					chance = 45
-					
-					add_trait = ambitious
-					hidden_tooltip = {
-						character_event = {
-							id = 38278 #Notify Ambitious
-						}
-					}
-				}
-			}
-			if = {
-				limit = {
-					trait = proud
-					trait = shy
-				}
-				random = {
-					chance = 45
-					
-					add_trait = ambitious
-					hidden_tooltip = {
-						character_event = {
-							id = 38278 #Notify Ambitious
-						}
-					}
-				}
+
+				add_trait_ambitious_effect = yes
 			}
 		}
 	}
 	option = {
-		name = "EVTOPTB1012"
+		name = EVTOPTB1012
+
 		trigger = {
 			NOT = {
 				any_owned_bloodline = {
 					has_bloodline_flag = bloodline_ambition
+					bloodline_is_active_for = PREV
 				}
 			}
 		}
-		if = {
-			limit = {
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
 				trait = patient
-				NOT = {
+				NOT = { trait = lustful }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = lustful
+				NOT = { trait = patient }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = patient }
 					trait = lustful
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = content
-				hidden_tooltip = {
-					character_event = {
-						id = 38279 #Notify Content
-					}
+				trigger_else = {
+					NOT = { trait = lustful }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = lustful
-				NOT = {
-					trait = patient
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = content
-				hidden_tooltip = {
-					character_event = {
-						id = 38279 #Notify Content
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = patient
-				}
-				NOT = {
-					trait = lustful
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = content
-				hidden_tooltip = {
-					character_event = {
-						id = 38279 #Notify Content
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = patient
-				trait = lustful
-			}
-			random = {
-				chance = 45
-				
-				add_trait = content
-				hidden_tooltip = {
-					character_event = {
-						id = 38279 #Notify Content
-					}
-				}
-			}
+
+			add_trait_content_effect = yes
 		}
 	}
 }
 
-#Arbitrary/Just
+# Arbitrary/Just
 character_event = {
 	id = 1013
-	desc = "EVTDESC1013"
-	picture = "GFX_evt_beheading"
+	desc = EVTDESC1013
+	picture = GFX_evt_beheading
 	border = GFX_event_normal_frame_economy
-	
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
 	min_age = 16
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_alexander
 			has_ambition = obj_lutheran_psalm
 		}
-		NOT = {
+		NOR = {
 			trait = arbitrary
-		}
-		NOT = {
 			trait = just
+			has_character_flag = had_event_1013
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			trait = deceitful
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = cruel
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = honest
 		}
 		zarist_emulate_alexander_score = yes
 		lutheran_psalm_score = yes
 	}
-	
+
+	immediate = {
+		set_character_flag = had_event_1013
+	}
 	option = {
-		name = "EVTOPTA1013"
+		name = EVTOPTA1013
+
 		if = {
-			limit = {
-				NOR = {
-					trait = stressed
-					trait = depressed
-				}
-			}
-			health = 0.5
-		}
-		if = {
-			limit = {
-				trait = stressed
-				NOT = {
-					trait = depressed
-				}
-			}
-			remove_trait = stressed
-		}
-		if = {
-			limit = {
-				trait = depressed
-			}
+			limit = { trait = depressed }
 			remove_trait = depressed
 		}
-		if = {
-			limit = {
+		else_if = {
+			limit = { trait = stressed }
+			remove_trait = stressed
+		}
+		else = {
+			health = 0.5
+		}
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
 				trait = diligent
-				NOT = {
+				NOT = { trait = shy }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = shy
+				NOT = { trait = diligent }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = diligent }
 					trait = shy
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = arbitrary
-				hidden_tooltip = {
-					character_event = {
-						id = 38266 #Notify Arbitrary
-					}
+				trigger_else = {
+					NOT = { trait = shy }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = shy
-				NOT = {
-					trait = diligent
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = arbitrary
-				hidden_tooltip = {
-					character_event = {
-						id = 38266 #Notify Arbitrary
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = diligent
-				}
-				NOT = {
-					trait = shy
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = arbitrary
-				hidden_tooltip = {
-					character_event = {
-						id = 38266 #Notify Arbitrary
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = diligent
-				trait = shy
-			}
-			random = {
-				chance = 45
-				
-				add_trait = arbitrary
-				hidden_tooltip = {
-					character_event = {
-						id = 38266 #Notify Arbitrary
-					}
-				}
-			}
+
+			add_trait_arbitrary_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1013"
-		if = {
-			limit = {
+		name = EVTOPTB1013
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = honest
-				NOT = {
+				NOT = { trait = content }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = content
+				NOT = { trait = honest }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = honest }
 					trait = content
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = just
-				hidden_tooltip = {
-					character_event = {
-						id = 38267 #Notify Just
-					}
+				trigger_else = {
+					NOT = { trait = content }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = content
-				NOT = {
-					trait = honest
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = just
-				hidden_tooltip = {
-					character_event = {
-						id = 38267 #Notify Just
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = honest
-				}
-				NOT = {
-					trait = content
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = just
-				hidden_tooltip = {
-					character_event = {
-						id = 38267 #Notify Just
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = honest
-				trait = content
-			}
-			random = {
-				chance = 45
-				
-				add_trait = just
-				hidden_tooltip = {
-					character_event = {
-						id = 38267 #Notify Just
-					}
-				}
-			}
+
+			add_trait_just_effect = yes
 		}
 	}
 }
 
-#Cynical/Zealous
+# Cynical/Zealous
 character_event = {
 	id = 1014
-	desc = "EVTDESC1014"
-	picture = "GFX_evt_bishop"
-	
-	min_age = 16
+	desc = EVTDESC1014
+	picture = GFX_evt_bishop
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	religion_group = christian
-	
-	is_triggered_only = yes
-	
+	min_age = 16
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_alexis
 			has_ambition = obj_lutheran_exodus
 			has_ambition = obj_lutheran_hebrews
 		}
-		NOT = {
+		NOR = {
 			trait = cynical
-		}
-		NOT = {
 			trait = zealous
 		}
 	}
 
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			OR = {
 				trait = quick
 				trait = shrewd
 			}
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.5
 			trait = genius
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			OR = {
 				trait = slow
 				trait = dull
 			}
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 2
 			trait = imbecile
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.5
 			trait = detached_priest
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 2
 			trait = mastermind_theologian
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 2
 			trait = scholarly_theologian
 		}
@@ -2972,211 +1707,119 @@ character_event = {
 		lutheran_exodus_score = yes
 		lutheran_hebrews_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1014"
-		if = {
-			limit = {
+		name = EVTOPTA1014
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = patient
-				NOT = {
+				NOT = { trait = paranoid }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = paranoid
+				NOT = { trait = patient }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = patient }
 					trait = paranoid
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = zealous
-				hidden_tooltip = {
-					character_event = {
-						id = 38269 #Notify Zealous
-					}
+				trigger_else = {
+					NOT = { trait = paranoid }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = paranoid
-				NOT = {
-					trait = patient
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = zealous
-				hidden_tooltip = {
-					character_event = {
-						id = 38269 #Notify Zealous
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = patient
-				}
-				NOT = {
-					trait = paranoid
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = zealous
-				hidden_tooltip = {
-					character_event = {
-						id = 38269 #Notify Zealous
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = patient
-				trait = paranoid
-			}
-			random = {
-				chance = 45
-				
-				add_trait = zealous
-				hidden_tooltip = {
-					character_event = {
-						id = 38269 #Notify Zealous
-					}
-				}
-			}
+
+			add_trait_zealous_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1014"
-		if = {
-			limit = {
+		name = EVTOPTB1014
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = wroth
-				NOT = {
+				NOT = { trait = slothful }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = slothful
+				NOT = { trait = wroth }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = wroth }
 					trait = slothful
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = cynical
-				hidden_tooltip = {
-					character_event = {
-						id = 38258 #Notify Cynical
-					}
+				trigger_else = {
+					NOT = { trait = slothful }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = slothful
-				NOT = {
-					trait = wroth
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = cynical
-				hidden_tooltip = {
-					character_event = {
-						id = 38258 #Notify Cynical
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = wroth
-				}
-				NOT = {
-					trait = slothful
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = cynical
-				hidden_tooltip = {
-					character_event = {
-						id = 38258 #Notify Cynical
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = wroth
-				trait = slothful
-			}
-			random = {
-				chance = 45
-				
-				add_trait = cynical
-				hidden_tooltip = {
-					character_event = {
-						id = 38258 #Notify Cynical
-					}
-				}
-			}
+
+			add_trait_cynical_effect = yes
 		}
 	}
 }
 
-#Lustful/chaste - female
+# Lustful/chaste - female
 character_event = {
 	id = 1015
-	desc = "EVTDESC1015"
-	picture = "GFX_evt_lovers"
-	
-	min_age = 16
+	desc = EVTDESC1015
+	picture = GFX_evt_lovers
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	only_women = yes
-	
-	is_triggered_only = yes
-	
+	min_age = 16
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_catherine
 			has_ambition = obj_lutheran_corinthians
 		}
-		NOT = {
+		NOR = {
 			religion_group = muslim
-		}
-		NOT = {
 			trait = chaste
-		}
-		NOT = {
 			trait = lustful
-		}
-		NOT = {
 			trait = celibate
-		}
-		NOT = {
-			OR = {trait = homosexual trait = bisexual}
+			trait = homosexual 
+			trait = bisexual
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			trait = greedy
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = hedonist
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = gluttonous
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = temperate
 		}
@@ -3185,199 +1828,113 @@ character_event = {
 	}
 
 	option = {
-		name = "EVTOPTA1015"
-		if = {
-			limit = {
+		name = EVTOPTA1015
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = honest
-				NOT = {
+				NOT = { trait = slothful }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = slothful
+				NOT = { trait = honest }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = wroth }
 					trait = slothful
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
+				trigger_else = {
+					NOT = { trait = slothful }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = slothful
-				NOT = {
-					trait = honest
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = honest
-				}
-				NOT = {
-					trait = slothful
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = honest
-				trait = slothful
-			}
-			random = {
-				chance = 45
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
+
+			add_trait_lustful_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1015"
-		if = {
-			limit = {
+		name = EVTOPTB1015
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = arbitrary
-				NOT = {
+				NOT = { trait = proud }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = proud
+				NOT = { trait = arbitrary }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = arbitrary }
 					trait = proud
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
+				trigger_else = {
+					NOT = { trait = proud }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = proud
-				NOT = {
-					trait = arbitrary
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = proud
-				}
-				NOT = {
-					trait = arbitrary
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = proud
-				trait = arbitrary
-			}
-			random = {
-				chance = 45
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
-				}
-			}
+
+			add_trait_chaste_effect = yes
 		}
 	}
 }
 
-#Paranoid/Trusting
+# Paranoid/Trusting
 character_event = {
 	id = 1016
-	desc = "EVTDESC1016"
-	picture = "GFX_evt_lunatic"
-	
+	desc = EVTDESC1016
+	picture = GFX_evt_lunatic
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_alexis
 			has_ambition = obj_zarist_emulate_ivan
 		}
-		NOT = {
+		NOR = {
 			trait = paranoid
-		}
-		NOT = {
 			trait = trusting
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			trait = ambitious
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = envious
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.5
 			trait = content
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = kind
 		}
@@ -3386,201 +1943,115 @@ character_event = {
 	}
 
 	option = {
-		name = "EVTOPTA1016"
-		if = {
-			limit = {
+		name = EVTOPTA1016
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = cynical
-				NOT = {
-					trait = charitable
-				}
+				NOT = { trait = charitable }
 			}
-			random = {
-				chance = 70
-				
-				add_trait = paranoid
-				hidden_tooltip = {
-					character_event = {
-						id = 38275 #Notify Paranoid
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
+
+			mult_modifier = {
+				factor = 20
 				trait = charitable
-				NOT = {
+				NOT = { trait = cynical }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = charitable }
 					trait = cynical
 				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = paranoid
-				hidden_tooltip = {
-					character_event = {
-						id = 38275 #Notify Paranoid
-					}
+				trigger_else = {
+					NOT = { trait = cynical }
 				}
 			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = cynical
-				}
-				NOT = {
-					trait = charitable
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = paranoid
-				hidden_tooltip = {
-					character_event = {
-						id = 38275 #Notify Paranoid
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = cynical
-				trait = charitable
-			}
-			random = {
-				chance = 45
-				
-				add_trait = paranoid
-				hidden_tooltip = {
-					character_event = {
-						id = 38275 #Notify Paranoid
-					}
-				}
-			}
+
+			add_trait_paranoid_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1016"
-		if = {
-			limit = {
+		name = EVTOPTB1016
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = gregarious
-				NOT = {
+				NOT = { trait = deceitful }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = deceitful
+				NOT = { trait = gregarious }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = gregarious }
 					trait = deceitful
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = trusting
-				hidden_tooltip = {
-					character_event = {
-						id = 38250 #Notify Trusting
-					}
+				trigger_else = {
+					NOT = { trait = deceitful }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = deceitful
-				NOT = {
-					trait = gregarious
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = trusting
-				hidden_tooltip = {
-					character_event = {
-						id = 38250 #Notify Trusting
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = gregarious
-				}
-				NOT = {
-					trait = deceitful
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = trusting
-				hidden_tooltip = {
-					character_event = {
-						id = 38250 #Notify Trusting
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = gregarious
-				trait = deceitful
-			}
-			random = {
-				chance = 45
-				
-				add_trait = trusting
-				hidden_tooltip = {
-					character_event = {
-						id = 38250 #Notify Trusting
-					}
-				}
-			}
+
+			add_trait_trusting_effect = yes
 		}
 	}
 }
 
-#Cruel/Kind
+# Cruel/Kind
 character_event = {
 	id = 1017
-	desc = "EVTDESC1017"
-	picture = "GFX_evt_lunatic"
-	
+	desc = EVTDESC1017
+	picture = GFX_evt_lunatic
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_ivan
 			has_ambition = obj_zarist_emulate_alexander
 			has_ambition = obj_zarist_emulate_peter
 			has_ambition = obj_lutheran_luke
 		}
-		NOT = {
+		NOR = {
 			trait = kind
-		}
-		NOT = {
 			trait = cruel
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 0.5
 			trait = ambitious
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = envious
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = content
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = kind
 		}
@@ -3591,212 +2062,131 @@ character_event = {
 	}
 
 	option = {
-		name = "EVTOPTA1017"
-		if = {
-			limit = {
+		name = EVTOPTA1017
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = arbitrary
-				NOT = {
+				NOT = { trait = honest }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = honest
+				NOT = { trait = arbitrary }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = arbitrary }
 					trait = honest
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = cruel
-				hidden_tooltip = {
-					character_event = {
-						id = 38259 #Notify
-					}
+				trigger_else = {
+					NOT = { trait = honest }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = honest
-				NOT = {
-					trait = arbitrary
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = cruel
-				hidden_tooltip = {
-					character_event = {
-						id = 38259 #Notify
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = arbitrary
-				}
-				NOT = {
-					trait = honest
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = cruel
-				hidden_tooltip = {
-					character_event = {
-						id = 38259 #Notify
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = arbitrary
-				trait = honest
-			}
-			random = {
-				chance = 45
-				
-				add_trait = cruel
-				hidden_tooltip = {
-					character_event = {
-						id = 38259 #Notify
-					}
-				}
-			}
+
+			add_trait_cruel_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1017"
-		if = {
-			limit = {
+		name = EVTOPTB1017
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = gregarious
-				NOT = {
+				NOT = { trait = wroth }
+			}
+
+			mult_modifier = {
+				factor = 20
+
+				trait = wroth
+				NOT = { trait = gregarious }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = gregarious }
 					trait = wroth
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = kind
-				hidden_tooltip = {
-					character_event = {
-						id = 38268 #Notify Kind
-					}
+				trigger_else = {
+					NOT = { trait = wroth }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = wroth
-				NOT = {
-					trait = gregarious
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = kind
-				hidden_tooltip = {
-					character_event = {
-						id = 38268 #Notify Kind
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = wroth
-				}
-				NOT = {
-					trait = gregarious
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = kind
-				hidden_tooltip = {
-					character_event = {
-						id = 38268 #Notify Kind
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = wroth
-				trait = gregarious
-			}
-			random = {
-				chance = 45
-				
-				add_trait = kind
-				hidden_tooltip = {
-					character_event = {
-						id = 38268 #Notify Kind
-					}
-				}
-			}
+
+			add_trait_fully_kind_effect = yes
 		}
 	}
 }
 
-#Lustful/chaste - Homosexual female
+# Lustful/chaste - Homosexual female
 character_event = {
 	id = 1018
-	desc = "EVTDESC1018"
-	picture = "GFX_evt_lovers"
-	
-	min_age = 16
+	desc = EVTDESC1018
+	picture = GFX_evt_lovers
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	only_women = yes
-	
-	is_triggered_only = yes
-	
+	min_age = 16
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_catherine
 			has_ambition = obj_lutheran_corinthians
 		}
-		NOT = {
+		NOR = {
 			religion_group = muslim
-		}
-		NOT = {
 			trait = chaste
-		}
-		NOT = {
 			trait = lustful
-		}
-		NOT = {
 			trait = celibate
 		}
-		OR = {trait = homosexual trait = bisexual}
+		OR = {
+			trait = homosexual 
+			trait = bisexual
+
+		}
 		any_courtier = {
 			is_female = yes
-			age = 16
-			OR = {trait = homosexual trait = bisexual}
+			is_adult = yes
+			OR = {
+				trait = homosexual 
+				trait = bisexual
+
+			}
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			trait = greedy
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = hedonist
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = gluttonous
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = temperate
 		}
@@ -3805,163 +2195,86 @@ character_event = {
 	}
 
 	option = {
-		name = "EVTOPTA1018"
-		if = {
-			limit = {
+		name = EVTOPTA1018
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = honest
-				NOT = {
-					trait = slothful
-				}
+				NOT = { trait = slothful }
 			}
-			random = {
-				chance = 70
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
+
+			mult_modifier = {
+				factor = 20
 				trait = slothful
-				NOT = {
+				NOT = { trait = honest }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = slothful }
 					trait = honest
 				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
+				trigger_else = {
+					NOT = { trait = honest }
 				}
 			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = honest
-				}
-				NOT = {
-					trait = slothful
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = honest
-				trait = slothful
-			}
-			random = {
-				chance = 45
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
+
+			add_trait_lustful_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1018"
-		if = {
-			limit = {
+		name = EVTOPTB1018
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = arbitrary
-				NOT = {
+				NOT = { trait = proud }
+			}
+
+			mult_modifier = {
+				factor = 20
+				trait = proud
+				NOT = { trait = arbitrary }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = arbitrary }
 					trait = proud
 				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
+				trigger_else = {
+					NOT = { trait = proud }
 				}
 			}
-		}
-		if = {
-			limit = {
-				trait = proud
-				NOT = {
-					trait = arbitrary
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = proud
-				}
-				NOT = {
-					trait = arbitrary
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = proud
-				trait = arbitrary
-			}
-			random = {
-				chance = 45
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
-				}
-			}
+
+			add_trait_chaste_effect = yes
 		}
 	}
 }
 
-#Lustful/chaste - Homosexual male
+# Lustful/chaste - Homosexual male
 character_event = {
 	id = 1019
-	desc = "EVTDESC1019"
-	picture = "GFX_evt_lovers"
-	
+	desc = EVTDESC1019
+	picture = GFX_evt_lovers
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
+	only_men = yes
 	min_age = 16
 	only_men = yes
 	
@@ -3969,48 +2282,39 @@ character_event = {
 	
 	trigger = {
 		OR = {
-			NOT = {
-				personality_traits = 5
-			}
+			personality_traits < 5
 			has_ambition = obj_zarist_emulate_catherine
 			has_ambition = obj_lutheran_corinthians
 		}
-		NOT = {
+		NOR = {
 			religion_group = muslim
-		}
-		NOT = {
 			trait = chaste
-		}
-		NOT = {
 			trait = lustful
-		}
-		NOT = {
 			trait = celibate
 		}
 		OR = {trait = homosexual trait = bisexual}
 		any_courtier = {
 			is_female = no
-			age = 16
+			is_adult = yes
 			OR = {trait = homosexual trait = bisexual}
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 1.7
 			trait = greedy
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = hedonist
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 1.7
 			trait = gluttonous
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.5
 			trait = temperate
 		}
@@ -4019,191 +2323,347 @@ character_event = {
 	}
 
 	option = {
-		name = "EVTOPTA1019"
-		if = {
-			limit = {
+		name = EVTOPTA1019
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
 				trait = honest
-				NOT = {
-					trait = slothful
-				}
+				NOT = { trait = slothful }
 			}
-			random = {
-				chance = 70
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
+
+			mult_modifier = {
+				factor = 20
+
 				trait = slothful
-				NOT = {
+				NOT = { trait = honest }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = slothful }
 					trait = honest
 				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
+				trigger_else = {
+					NOT = { trait = honest }
 				}
 			}
+
+			add_trait_lustful_effect = yes
 		}
-		if = {
-			limit = {
-				NOT = {
+	}
+
+	option = {
+		name = EVTOPTB1019
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
+				trait = arbitrary
+				NOT = { trait = proud }
+			}
+
+			mult_modifier = {
+				factor = 20
+
+				trait = proud
+				NOT = { trait = arbitrary }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = arbitrary }
+					trait = proud
+				}
+				trigger_else = {
+					NOT = { trait = proud }
+				}
+			}
+
+			add_trait_chaste_effect = yes
+		}
+	}
+}
+
+### Lustful Muslim ###
+character_event = {
+	id = 1060
+	desc = EVTDESC1060
+	picture = GFX_evt_lovers
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
+	religion_group = muslim
+	min_age = 16
+	only_capable = yes
+
+	trigger = {
+		personality_traits < 5
+
+		NOR = {
+			trait = lustful
+			trait = homosexual
+			trait = bisexual
+		}
+	}
+
+	weight_multiplier = {
+		factor = 1
+
+		mult_modifier = {
+			factor = 1.7
+			trait = greedy
+		}
+
+		mult_modifier = {
+			factor = 1.7
+			trait = hedonist
+		}
+
+		mult_modifier = {
+			factor = 1.7
+			trait = gluttonous
+		}
+
+		mult_modifier = {
+			factor = 0.5
+			trait = temperate
+		}
+	}
+
+	option = {
+		name = EVTOPTA1060
+
+		random = {
+			chance = 1
+
+			mult_modifier = {
+				factor = 70
+
+				trait = honest
+				NOT = { trait = slothful }
+			}
+
+			mult_modifier = {
+				factor = 20
+
+				trait = slothful
+				NOT = { trait = honest }
+			}
+
+			mult_modifier = {
+				factor = 45
+
+				# Both traits or neither
+				trigger_if = {
+					limit = { trait = slothful }
 					trait = honest
 				}
-				NOT = {
-					trait = slothful
+				trigger_else = {
+					NOT = { trait = honest }
 				}
 			}
-			random = {
-				chance = 45
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = honest
-				trait = slothful
-			}
-			random = {
-				chance = 45
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
+
+			add_trait_lustful_effect = yes
 		}
 	}
 	option = {
-		name = "EVTOPTB1019"
-		if = {
-			limit = {
-				trait = arbitrary
-				NOT = {
-					trait = proud
-				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
-				}
+		name = EVTOPTB1060
+		piety = 10
+	}
+}
+
+### Hafiz - only for Muslims ###
+character_event = {
+	id = 1070
+	desc = EVTDESC1070
+	picture = GFX_evt_monk
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
+	religion_group = muslim
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+
+	trigger = {
+		personality_traits < 5
+		is_dumb_trigger = no
+
+		NOR = {
+			trait = hafiz
+			trait = inbred
+			trait = infirm
+
+			has_alternate_start_parameter = {
+				key = religion_names
+				value = random
 			}
 		}
+	}
+
+	weight_multiplier = {
+		factor = 1
+
+		mult_modifier = {
+			factor = 1.7
+			trait = scholar
+		}
+
+		mult_modifier = {
+			factor = 1.7
+			trait = zealous
+		}
+
+		mult_modifier = {
+			factor = 0.5
+			trait = cynical
+		}
+
+		mult_modifier = {
+			factor = 0.5
+			trait = slothful
+		}
+
+		mult_modifier = {
+			factor = 0.5
+			trait = content
+		}
+	}
+
+	option = {
+		name = EVTOPTA1070
+
+		add_character_modifier = {
+			name = aspiring_hafiz
+			duration = -1
+		}
+
 		if = {
 			limit = {
-				trait = proud
-				NOT = {
-					trait = arbitrary
+				OR = {
+					trait = cynical
+					trait = slothful
+					trait = content
+				}
+
+				NOR = {
+					trait = scholar
+					trait = zealous
 				}
 			}
+
+			character_event = {
+				id = 1071
+				years = 1
+				random = 548 # 1.5 years
+			}
+		}
+		else = {
+			character_event = {
+				id = 1071
+				years = 1
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB1070
+
+		if = {
+			limit = { trait = slothful }
+			piety = -10
+		}
+		else = {
 			random = {
 				chance = 20
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = proud
-				}
-				NOT = {
-					trait = arbitrary
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = proud
-				trait = arbitrary
-			}
-			random = {
-				chance = 45
-				
-				add_trait = chaste
-				hidden_tooltip = {
-					character_event = {
-						id = 38274 #Notify Chaste
-					}
-				}
+				add_trait_slothful_effect = yes
 			}
 		}
 	}
 }
 
-### THESE EVENTS REMOVES TRAITS ###
+# Become Hafiz [Root.GetTitledFirstName]
+character_event = {
+	id = 1071
+	desc = EVTDESC1071
+	picture = GFX_evt_monk
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	religion_group = muslim
+	only_capable = yes
+	prisoner = no
+
+	trigger = {
+		has_character_modifier = aspiring_hafiz
+		NOT = { trait = hafiz }
+	}
+
+	fail_trigger_effect = {
+		if = {
+			limit = {
+				religion_group = muslim
+				has_character_modifier = aspiring_hafiz
+				NOT = { trait = hafiz }
+			}
+
+			repeat_event = {
+				id = 1071
+				months = 2
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTA1071
+
+		add_trait = hafiz
+		remove_character_modifier = aspiring_hafiz
+	}
+}
+
+### THESE EVENTS REMOVE TRAITS ###
 
 # Remove Lustful - male
 character_event = {
 	id = 1028
-	desc = "EVTDESC1028"
-	picture = "GFX_evt_lovers"
-	
+	desc = EVTDESC1028
+	picture = GFX_evt_lovers
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_men = yes
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		trait = lustful
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_lutheran_corinthians
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 		lutheran_corinthians_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1028"
+		name = EVTOPTA1028
+
 		remove_trait = lustful
 	}
 }
@@ -4211,278 +2671,214 @@ character_event = {
 # Remove Chaste
 character_event = {
 	id = 1029
-	desc = "EVTDESC1029"
-	picture = "GFX_evt_lovers"
-	
+	desc = EVTDESC1029
+	picture = GFX_evt_lovers
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		trait = chaste
-		OR = {
-			personality_traits = 6
-			has_ambition = obj_zarist_emulate_catherine
-		}
+		personality_traits > 5
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 		zarist_emulate_catherine_score = yes
 	}
 
 	option = {
-		name = "EVTOPTA1000"
-		trigger = {
-			OR = {
-				AND = {
-					is_female = yes
-					OR = {trait = homosexual trait = bisexual}
-				}
-				AND = {
-					is_female = no
-					NOT = { OR = {trait = homosexual trait = bisexual} }
-				}
-			}
+		name = {
+			text = EVTOPTA1000
+			trigger = { prefers_men_trigger = no }
 		}
-		remove_trait = chaste
-	}
-	
-	option = {
-		name = "EVTOPTB1029"
-		trigger = {
-			OR = {
-				AND = {
-					is_female = yes
-					NOT = {
-						OR = {trait = homosexual trait = bisexual}
-					}
-				}
-				AND = {
-					is_female = no
-					OR = {trait = homosexual trait = bisexual}
-				}
-			}
+		name = {
+			text = EVTOPTB1029
+			trigger = { prefers_men_trigger = yes }
 		}
 		remove_trait = chaste
 	}
 }
 
-#Remove Temperate
+# Remove Temperate
 character_event = {
 	id = 1030
-	desc = "EVTDESC1030"
-	picture = "GFX_evt_feast"
-	
+	desc = EVTDESC1030
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
 	prisoner = no
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		trait = temperate
-		personality_traits = 6
+		personality_traits > 5
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 	}
-	
 	option = {
-		name = "EVTOPTA1030"
+		name = EVTOPTA1030
+
 		remove_trait = temperate
 	}
 }
 
-#Remove Gluttonous
+# Remove Gluttonous
 character_event = {
 	id = 1031
-	desc = "EVTDESC1031"
-	picture = "GFX_evt_feast"
-	
+	desc = EVTDESC1031
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
+		trait = gluttonous
+
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_buddhist_temperance_food
 			has_ambition = obj_zarist_emulate_nicholas
 			has_ambition = obj_lutheran_corinthians
 		}
-		trait = gluttonous
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 2
-			personality_traits = 6
+			personality_traits > 5
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 10
 			has_ambition = obj_buddhist_temperance_food
 		}
 		zarist_emulate_nicholas_score = yes
 		lutheran_corinthians_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1031"
-		remove_trait = gluttonous
-		lose_weight_small_effect = yes
-		weight_trait_check_effect = yes
+		name = EVTOPTA1031
+
+		remove_trait_silently_gluttonous_effect = yes
 	}
 }
 
-#Remove Charitable
+# Remove Charitable
 character_event = {
 	id = 1032
-	desc = "EVTDESC1032"
-	picture = "GFX_evt_market"
-	
+	desc = EVTDESC1032
+	picture = GFX_evt_market
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
-		personality_traits = 6
 		trait = charitable
+		personality_traits > 5
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 	}
-	
 	option = {
-		name = "EVTOPTA1032"
+		name = EVTOPTA1032
+
 		remove_trait = charitable
 	}
-	
+
 	option = {
-		name = "EVTOPTB1032"
-		if = {
-			limit = { NOT = { trait = stressed } }
-			add_trait = stressed
-		}
+		name = EVTOPTB1032
+
+		add_trait_silently_stressed_effect = yes
 	}
 }
 
-#Remove Greedy
+# Remove Greedy
 character_event = {
 	id = 1033
-	desc = "EVTDESC1033"
-	picture = "GFX_evt_market"
-	
+	desc = EVTDESC1033
+	picture = GFX_evt_market
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
+		trait = greedy
+
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_buddhist_reject_greed
 			has_ambition = obj_lutheran_luke
 		}
-		trait = greedy
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 2
-			personality_traits = 6
+			personality_traits > 5
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 20
 			has_ambition = obj_buddhist_reject_greed
 		}
 		lutheran_luke_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1033"
+		name = EVTOPTA1033
+
 		remove_trait = greedy
 	}
 }
 
-#Remove Diligent
+# Remove Diligent
 character_event = {
 	id = 1034
-	desc = "EVTDESC1034"
-	picture = "GFX_evt_emissary"
-	
+	desc = EVTDESC1034
+	picture = GFX_evt_emissary
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
-		personality_traits = 6
 		trait = diligent
+		personality_traits > 5
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 	}
-	
 	option = {
-		name = "EVTOPTA1034"
+		name = EVTOPTA1034
+
 		remove_trait = diligent
 	}
 }
 
-#Remove Slothful
+# Remove Slothful
 character_event = {
 	id = 1035
-	desc = "EVTDESC1035"
-	picture = "GFX_evt_drunk"
-	
+	desc = EVTDESC1035
+	picture = GFX_evt_drunk
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_zarist_emulate_peter
 			has_ambition = obj_lutheran_galatians
 		}
 		trait = slothful
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
+		factor = 2
 		modifier = {
 			factor = 2
 			personality_traits = 6
@@ -4490,416 +2886,362 @@ character_event = {
 		zarist_emulate_peter_score = yes
 		lutheran_galatians_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1035"
+		name = EVTOPTA1035
+
 		remove_trait = slothful
 	}
 }
 
-#Remove Kind
+# Remove Kind
 character_event = {
 	id = 1036
-	desc = "EVTDESC1036"
-	picture = "GFX_evt_family"
-	
+	desc = EVTDESC1036
+	picture = GFX_evt_family
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_zarist_emulate_ivan
 			has_ambition = obj_zarist_emulate_peter
 		}
 		trait = kind
 	}
-	
+
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 		zarist_emulate_ivan_score = yes
 		zarist_emulate_peter_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1036"
+		name = EVTOPTA1036
+
 		remove_trait = kind
 	}
 }
 
-#Remove Envious
+# Remove Envious
 character_event = {
 	id = 1037
-	desc = "EVTDESC1037"
-	picture = "GFX_evt_shadowy_cabal"
-	
+	desc = EVTDESC1037
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
 	prisoner = no
-	
-	is_triggered_only = yes
-	
 	trigger = {
+		trait = envious
+
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_buddhist_reject_envy
 			has_ambition = obj_zarist_emulate_alexander
 			has_ambition = obj_lutheran_luke
 		}
-		trait = envious
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 2
-			personality_traits = 6
+			personality_traits > 5
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 20
 			has_ambition = obj_buddhist_reject_envy
 		}
 		zarist_emulate_alexander_score = yes
 		lutheran_luke_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1037"
+		name = EVTOPTA1037
+
 		remove_trait = envious
 	}
 }
 
-#Remove Patient
+# Remove Patient
 character_event = {
 	id = 1038
-	desc = "EVTDESC1038"
-	picture = "GFX_evt_emissary"
-	
+	desc = EVTDESC1038
+	picture = GFX_evt_emissary
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_zarist_emulate_ivan
 		}
 		trait = patient
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 		zarist_emulate_ivan_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1038"
+		name = EVTOPTA1038
+
 		remove_trait = patient
 	}
 }
 
-#Remove Wroth
+# Remove Wroth
 character_event = {
 	id = 1039
-	desc = "EVTDESC1039"
-	picture = "GFX_evt_melee"
-	
+	desc = EVTDESC1039
+	picture = GFX_evt_melee
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
+		trait = wroth
+
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_buddhist_reject_hate
 			has_ambition = obj_lutheran_galatians
 		}
-		trait = wroth
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 2
-			personality_traits = 6
+			personality_traits > 5
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 20
 			has_ambition = obj_buddhist_reject_hate
 		}
 		lutheran_galatians_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1039"
+		name = EVTOPTA1039
+
 		remove_trait = wroth
 	}
 }
 
-#Remove Humble
+# Remove Humble
 character_event = {
 	id = 1040
-	desc = "EVTDESC1040"
-	picture = "GFX_evt_garden"
-	
+	desc = EVTDESC1040
+	picture = GFX_evt_garden
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
-		personality_traits = 6
+		personality_traits > 5
 		trait = humble
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 	}
-	
 	option = {
-		name = "EVTOPTA1040"
+		name = EVTOPTA1040
+
 		remove_trait = humble
 	}
 }
 
-#Remove Proud
+# Remove Proud
 character_event = {
 	id = 1041
-	desc = "EVTDESC1041"
-	picture = "GFX_evt_throne_room"
-	
+	desc = EVTDESC1041
+	picture = GFX_evt_throne_room
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
+		trait = proud
+
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_buddhist_reject_pride
 			has_ambition = obj_zarist_emulate_nicholas
 			has_ambition = obj_lutheran_exodus
 		}
-		trait = proud
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 2
-			personality_traits = 6
+			personality_traits > 5
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 20
 			has_ambition = obj_buddhist_reject_pride
 		}
 		zarist_emulate_nicholas_score = yes
 		lutheran_exodus_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1041"
+		name = EVTOPTA1041
+
 		remove_trait = proud
 	}
 }
 
-#Remove Lustful - female
+# Remove Lustful - female
 character_event = {
 	id = 1042
-	desc = "EVTDESC1042"
-	picture = "GFX_evt_lovers"
-	
+	desc = EVTDESC1042
+	picture = GFX_evt_lovers
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
+	only_women = yes
 	min_age = 16
 	only_capable = yes
-	only_women = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_lutheran_corinthians
 		}
 		trait = lustful
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 		lutheran_corinthians_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1028"
+		name = EVTOPTA1028
+
 		remove_trait = lustful
 	}
 }
 
-#Remove Honest
+# Remove Honest
 character_event = {
 	id = 1043
-	desc = "EVTDESC1043"
-	picture = "GFX_evt_quarrel"
-	
+	desc = EVTDESC1043
+	picture = GFX_evt_quarrel
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_zarist_emulate_catherine
 		}
 		trait = honest
 	}
 	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 		zarist_emulate_catherine_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1043"
+		name = EVTOPTA1043
+
 		remove_trait = honest
 	}
 }
-	
 # Remove Deceitful
 character_event = {
 	id = 1044
-	desc = "EVTDESC1044"
-	picture = "GFX_evt_shadowy_cabal"
-	
+	desc = EVTDESC1044
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			personality_traits = 6
+		personality_traits > 5
 			has_ambition = obj_zarist_emulate_peter
 			has_ambition = obj_lutheran_ephesians
 		}
 		trait = deceitful
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 		zarist_emulate_peter_score = yes
 		lutheran_ephesians_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1044"
+		name = EVTOPTA1044
+
 		remove_trait = deceitful
 	}
 }
-	
 # Remove Brave
 character_event = {
 	id = 1045
-	desc = "EVTDESC1045"
-	picture = "GFX_evt_melee"
-	
+	desc = EVTDESC1045
+	picture = GFX_evt_melee
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
-		personality_traits = 6
+		personality_traits > 5
 		trait = brave
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 	}
-	
 	option = {
-		name = "EVTOPTA1045"
+		name = EVTOPTA1045
+
 		remove_trait = brave
 	}
 }
-	
 # Remove Craven
 character_event = {
 	id = 1046
-	desc = "EVTDESC1046"
-	picture = "GFX_evt_courier"
-	
+	desc = EVTDESC1046
+	picture = GFX_evt_courier
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
+		trait = craven
+
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_buddhist_defeat_fear
 			has_ambition = obj_lutheran_ephesians
 		}
-		trait = craven
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 2
-			personality_traits = 6
+			personality_traits > 5
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 20
 			has_ambition = obj_buddhist_defeat_fear
 		}
 		lutheran_ephesians_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1046"
+		name = EVTOPTA1046
+
 		remove_trait = craven
 	}
 }
@@ -4907,34 +3249,27 @@ character_event = {
 # Remove Gregarious
 character_event = {
 	id = 1047
-	desc = "EVTDESC1047"
-	picture = "GFX_evt_feast"
-	
+	desc = EVTDESC1047
+	picture = GFX_evt_feast
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_zarist_emulate_alexander
 		}
 		trait = gregarious
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 		zarist_emulate_alexander_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1047"
+		name = EVTOPTA1047
+
 		remove_trait = gregarious
 	}
 }
@@ -4942,69 +3277,54 @@ character_event = {
 # Remove Shy
 character_event = {
 	id = 1048
-	desc = "EVTDESC1048"
-	picture = "GFX_evt_family"
-	
+	desc = EVTDESC1048
+	picture = GFX_evt_family
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_zarist_emulate_alexis
 		}
 		trait = shy
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 		zarist_emulate_alexis_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1048"
+		name = EVTOPTA1048
+
 		remove_trait = shy
 	}
 }
-	
 # Remove Content
 character_event = {
 	id = 1049
-	desc = "EVTDESC1049"
-	picture = "GFX_evt_garden"
-	
+	desc = EVTDESC1049
+	picture = GFX_evt_garden
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_zarist_emulate_catherine
 		}
 		trait = content
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 		zarist_emulate_catherine_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1049"
+		name = EVTOPTA1049
+
 		remove_trait = content
 	}
 }
@@ -5012,14 +3332,13 @@ character_event = {
 # Remove Ambitious
 character_event = {
 	id = 1050
-	desc = "EVTDESC1050"
-	picture = "GFX_evt_emissary"
-	
+	desc = EVTDESC1050
+	picture = GFX_evt_emissary
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
 			personality_traits = 6
@@ -5028,30 +3347,27 @@ character_event = {
 		}
 		trait = ambitious
 		OR = {
+
 			NOR = {
 				has_character_flag = is_child_of_destiny
+
 				any_owned_bloodline = {
 					has_bloodline_flag = bloodline_ambition
+					bloodline_is_active_for = PREV
 				}
 			}
 			has_ambition = obj_zarist_emulate_nicholas
 			has_ambition = obj_lutheran_psalm
 		}
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 		zarist_emulate_nicholas_score = yes
 		lutheran_psalm_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1050"
+		name = EVTOPTA1050
+
 		remove_trait = ambitious
 	}
 }
@@ -5059,30 +3375,23 @@ character_event = {
 # Remove Just
 character_event = {
 	id = 1051
-	desc = "EVTDESC1051"
-	picture = "GFX_evt_emissary"
-	
+	desc = EVTDESC1051
+	picture = GFX_evt_emissary
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
-		personality_traits = 6
+		personality_traits > 5
 		trait = just
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 	}
-	
 	option = {
-		name = "EVTOPTA1051"
+		name = EVTOPTA1051
+
 		remove_trait = just
 	}
 }
@@ -5090,17 +3399,16 @@ character_event = {
 # Remove Arbitrary
 character_event = {
 	id = 1052
-	desc = "EVTDESC1052"
-	picture = "GFX_evt_beheading"
-	
+	desc = EVTDESC1052
+	picture = GFX_evt_beheading
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_zarist_emulate_alexander
 			has_ambition = obj_lutheran_psalm
 		}
@@ -5108,18 +3416,13 @@ character_event = {
 	}
 	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 		zarist_emulate_alexander_score = yes
 		lutheran_psalm_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1052"
+		name = EVTOPTA1052
+
 		remove_trait = arbitrary
 	}
 }
@@ -5127,30 +3430,24 @@ character_event = {
 # Remove Zealous
 character_event = {
 	id = 1053
-	desc = "EVTDESC1053"
-	picture = "GFX_evt_beheading"
-	
+	desc = EVTDESC1053
+	picture = GFX_evt_beheading
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
-		personality_traits = 6
+		personality_traits > 5
 		trait = zealous
 	}
 
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 	}
-	
 	option = {
-		name = "EVTOPTA1053"
+		name = EVTOPTA1053
+
 		remove_trait = zealous
 	}
 }
@@ -5158,38 +3455,31 @@ character_event = {
 # Remove Cynical
 character_event = {
 	id = 1054
-	desc = "EVTDESC1054"
-	picture = "GFX_evt_jugglers"
-	
+	desc = EVTDESC1054
+	picture = GFX_evt_jugglers
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_zarist_emulate_alexis
 			has_ambition = obj_lutheran_exodus
 			has_ambition = obj_lutheran_hebrews
 		}
 		trait = cynical
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
+		factor = 2
 		zarist_emulate_alexis_score = yes
 		lutheran_exodus_score = yes
 		lutheran_hebrews_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1054"
+		name = EVTOPTA1054
+
 		remove_trait = cynical
 	}
 }
@@ -5197,39 +3487,37 @@ character_event = {
 # Remove Paranoid
 character_event = {
 	id = 1057
-	desc = "EVTDESC1057"
-	picture = "GFX_evt_lunatic"
-	
+	desc = EVTDESC1057
+	picture = GFX_evt_lunatic
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
+
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
 		OR = {
-			personality_traits = 6
+			personality_traits > 5
 			has_ambition = obj_buddhist_defeat_fear
 			has_ambition = obj_zarist_emulate_alexis
 		}
 		trait = paranoid
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 2
-			personality_traits = 6
+			personality_traits > 5
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 20
 			has_ambition = obj_buddhist_defeat_fear
 		}
 		zarist_emulate_alexis_score = yes
 	}
-	
 	option = {
-		name = "EVTOPTA1057"
+		name = EVTOPTA1057
+
 		remove_trait = paranoid
 	}
 }
@@ -5237,1008 +3525,23 @@ character_event = {
 # Remove Trusting
 character_event = {
 	id = 1058
-	desc = "EVTDESC1058"
-	picture = "GFX_evt_family"
-	
+	desc = EVTDESC1058
+	picture = GFX_evt_family
+
+	is_triggered_only = yes # on_five_year_pulse, random_events
 	min_age = 16
 	only_capable = yes
-	
-	is_triggered_only = yes
-	
 	trigger = {
-		OR = {
-			personality_traits = 6
-			has_ambition = obj_zarist_emulate_ivan
-		}
 		trait = trusting
+		personality_traits > 5
 	}
-	
 	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
-		zarist_emulate_ivan_score = yes
+		factor = 2
 	}
-	
+
 	option = {
-		name = "EVTOPTA1058"
+		name = EVTOPTA1058
+
 		remove_trait = trusting
-	}
-}
-
-### Lustful Muslim ###
-character_event = {
-	id = 1060
-	desc = "EVTDESC1060"
-	picture = "GFX_evt_lovers"
-	
-	min_age = 16
-	only_capable = yes
-	religion_group = muslim
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		NOT = {
-			personality_traits = 5
-		}
-		NOT = {
-			trait = lustful
-		}
-		NOT = {
-			OR = {trait = homosexual trait = bisexual}
-		}
-	}
-	
-	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 1.7
-			trait = greedy
-		}
-		modifier = {
-			factor = 1.7
-			trait = hedonist
-		}
-		modifier = {
-			factor = 1.7
-			trait = gluttonous
-		}
-		modifier = {
-			factor = 0.5
-			trait = temperate
-		}
-	}
-
-	option = {
-		name = "EVTOPTA1060"
-		if = {
-			limit = {
-				trait = honest
-				NOT = {
-					trait = slothful
-				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = slothful
-				NOT = {
-					trait = honest
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = honest
-				}
-				NOT = {
-					trait = slothful
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = honest
-				trait = slothful
-			}
-			random = {
-				chance = 45
-				
-				add_trait = lustful
-				hidden_tooltip = {
-					character_event = {
-						id = 38272 #Notify Lustful
-					}
-				}
-			}
-		}
-	}
-	option = {
-		name = "EVTOPTB1060"
-		piety = 10
-	}
-}
-
-### Hafiz - only for Muslims ###
-character_event = {
-	id = 1070
-	desc = "EVTDESC1070"
-	picture = GFX_evt_monk
-	border = GFX_event_normal_frame_religion
-	
-	min_age = 16
-	capable_only = yes
-	prisoner = no
-	religion_group = muslim
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		NOT = {
-			personality_traits = 5
-		}
-		NOT = {
-			trait = hafiz
-		}
-		NOT = {
-			trait = inbred
-		}
-		is_dumb_trigger = no
-		NOT = {
-			trait = infirm
-		}
-		NOT = {
-			has_alternate_start_parameter = {
-				key = religion_names
-				value = random
-			}
-		}
-	}
-	
-	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 1.7
-			trait = scholar
-		}
-		modifier = {
-			factor = 1.7
-			trait = zealous
-		}
-		modifier = {
-			factor = 0.5
-			trait = cynical
-		}
-		modifier = {
-			factor = 0.5
-			trait = slothful
-		}
-		modifier = {
-			factor = 0.5
-			trait = content
-		}
-	}
-
-	option = {
-		name = "EVTOPTA1070"
-		set_character_flag = aspiring_hafiz_flag
-		add_character_modifier = {
-			name = aspiring_hafiz
-			duration = -1
-		}
-	}
-	option = {
-		name = "EVTOPTB1070"
-		if = {
-			limit = {
-				NOT = {
-					trait = slothful
-				}
-			}
-			random = {
-				chance = 20
-				add_trait = slothful
-				hidden_tooltip = {
-					character_event = {
-						id = 38251 #Notify Slothful
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = slothful
-			}
-			piety = -10
-		}
-	}
-}
-
-#Become Hafiz [Root.GetTitledFirstName]
-character_event = {
-	id = 1071
-	desc = "EVTDESC1071"
-	picture = GFX_evt_monk
-	border = GFX_event_normal_frame_religion
-	
-	min_age = 16
-	capable_only = yes
-	prisoner = no
-	religion_group = muslim
-	has_character_flag = aspiring_hafiz_flag
-	
-	trigger = {
-		has_character_modifier = aspiring_hafiz
-		NOT = {
-			trait = hafiz
-		}
-		had_character_flag = {
-			flag = aspiring_hafiz_flag
-			days = 365
-		}
-	}
-	
-	mean_time_to_happen = {
-		months = 12
-		
-		modifier = {
-			factor = 0.7
-			trait = scholar
-		}
-		modifier = {
-			factor = 0.7
-			trait = zealous
-		}
-		modifier = {
-			factor = 2
-			trait = cynical
-		}
-		modifier = {
-			factor = 2
-			trait = slothful
-		}
-		modifier = {
-			factor = 2
-			trait = content
-		}
-	}
-
-	option = {
-		name = "EVTOPTA1071"
-		add_trait = hafiz
-		remove_character_modifier = aspiring_hafiz
-		clr_character_flag = aspiring_hafiz_flag
-	}
-}
-
-# Remove Stubborn
-character_event = {
-	id = 1080
-	desc = "EVTDESC1080"
-	picture = "GFX_evt_feast"
-	
-	min_age = 16
-	only_capable = yes
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		OR = {
-			personality_traits = 6
-			has_ambition = obj_zarist_emulate_alexis
-		}
-		trait = stubborn
-	}
-	
-	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
-		zarist_emulate_alexis_score = yes
-	}
-	
-	option = {
-		name = "EVTOPTA1080"
-		remove_trait = stubborn
-	}
-}
-
-#Stubborn/Gregarious
-character_event = {
-	id = 1081
-	desc = "EVTDESC1081"
-	picture = "GFX_evt_courtiers_talking"
-	
-	min_age = 16
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		OR = {
-			NOT = {
-				personality_traits = 5
-			}
-			has_ambition = obj_zarist_emulate_alexis
-			has_ambition = obj_zarist_emulate_alexander
-		}
-		NOT = {
-			trait = stubborn
-		}
-		NOT = {
-			trait = shy
-		}
-		NOT = {
-			trait = gregarious
-		}
-	}
-	
-	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 1.7
-			trait = zealous
-		}
-		modifier = {
-			factor = 0.7
-			trait = cynical
-		}
-		modifier = {
-			factor = 1.5
-			trait = ambitious
-		}
-		modifier = {
-			factor = 0.5
-			trait = content
-		}
-		zarist_emulate_alexander_score = yes
-		zarist_emulate_alexis_score = yes
-	}
-	
-	option = {
-		name = "EVTOPTA1081"
-		if = {
-			limit = {
-				trait = proud
-				NOT = {
-					trait = patient
-				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = stubborn
-				hidden_tooltip = {
-					character_event = {
-						id = 38330 #Notify stubborn
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = patient
-				NOT = {
-					trait = proud
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = stubborn
-				hidden_tooltip = {
-					character_event = {
-						id = 38330 #Notify stubborn
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = patient
-				}
-				NOT = {
-					trait = proud
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = stubborn
-				hidden_tooltip = {
-					character_event = {
-						id = 38330 #Notify stubborn
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = patient
-				trait = proud
-			}
-			random = {
-				chance = 45
-				
-				add_trait = stubborn
-				hidden_tooltip = {
-					character_event = {
-						id = 38330 #Notify stubborn
-					}
-				}
-			}
-		}
-	}
-	option = {
-		name = "EVTOPTB1081"
-		if = {
-			limit = {
-				trait = lunatic
-			}
-			random = {
-				chance = 20
-				health = -0.5
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = lunatic
-				}
-			}
-			random = {
-				chance = 20
-				add_trait = lunatic
-			}
-		}
-		if = {
-			limit = {
-				trait = trusting
-				NOT = {
-					trait = wroth
-				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = gregarious
-				hidden_tooltip = {
-					character_event = {
-						id = 38265 #Notify Gregarious
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = wroth
-				NOT = {
-					trait = trusting
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = gregarious
-				hidden_tooltip = {
-					character_event = {
-						id = 38265 #Notify Gregarious
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = trusting
-				}
-				NOT = {
-					trait = wroth
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = gregarious
-				hidden_tooltip = {
-					character_event = {
-						id = 38265 #Notify Gregarious
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = wroth
-				trait = trusting
-			}
-			random = {
-				chance = 45
-				
-				add_trait = gregarious
-				hidden_tooltip = {
-					character_event = {
-						id = 38265 #Notify Gregarious
-					}
-				}
-			}
-		}
-	}
-}
-
-# Remove Cruel
-character_event = {
-	id = 1082
-	desc = "EVTDESC1082"
-	picture = "GFX_evt_beheading"
-	
-	min_age = 16
-	only_capable = yes
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		OR = {
-			personality_traits = 6
-			has_ambition = obj_zarist_emulate_alexander
-			has_ambition = obj_lutheran_luke
-		}
-		trait = cruel
-	}
-	
-	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
-		modifier = {
-			factor = 10
-			has_ambition = obj_buddhist_reject_cruelty
-		}
-		zarist_emulate_alexander_score = yes
-		lutheran_luke_score = yes
-	}
-	
-	option = {
-		name = "EVTOPTA1082"
-		remove_trait = cruel
-	}
-}
-
-character_event = {
-	id = 1083
-	desc = "EVTDESC1083"
-	picture = "GFX_evt_uncomfortable"
-	
-	min_age = 16
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		OR = {
-			NOT = {
-				personality_traits = 5
-			}
-			has_ambition = obj_lutheran_hebrews
-		}
-		NOR = {
-			trait = erudite
-			trait = groomed
-			trait = uncouth
-		}
-	}
-	
-	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 1.5
-			trait = content
-		}
-		modifier = {
-			factor = 0.7
-			trait = ambitious
-		}
-		modifier = {
-			factor = 1.5
-			trait = lustful
-		}
-		modifier = {
-			factor = 0.7
-			trait = chaste
-		}
-		lutheran_hebrews_score = yes
-	}
-	
-	option = {
-		name = "EVTOPTA1083"
-		if = {
-			limit = {
-				trait = proud
-				NOT = {
-					trait = shy
-				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = groomed
-				hidden_tooltip = {
-					character_event = {
-						id = 38332 #Notify groomed
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = shy
-				NOT = {
-					trait = proud
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = groomed
-				hidden_tooltip = {
-					character_event = {
-						id = 38332 #Notify groomed
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = shy
-				}
-				NOT = {
-					trait = proud
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = groomed
-				hidden_tooltip = {
-					character_event = {
-						id = 38332 #Notify groomed
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = shy
-				trait = proud
-			}
-			random = {
-				chance = 45
-				
-				add_trait = groomed
-				hidden_tooltip = {
-					character_event = {
-						id = 38332 #Notify groomed
-					}
-				}
-			}
-		}
-	}
-	option = {
-		name = "EVTOPTB1083"
-		if = {
-			limit = {
-				trait = stressed
-			}
-			random = {
-				chance = 30
-				health = -0.5
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = stressed
-				}
-			}
-			random = {
-				chance = 30
-				add_trait = stressed
-			}
-		}
-		if = {
-			limit = {
-				trait = patient
-				NOT = {
-					trait = slothful
-				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = erudite
-				hidden_tooltip = {
-					character_event = {
-						id = 38336 #Notify erudite
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = slothful
-				NOT = {
-					trait = patient
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = erudite
-				hidden_tooltip = {
-					character_event = {
-						id = 38336 #Notify erudite
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = patient
-				}
-				NOT = {
-					trait = slothful
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = erudite
-				hidden_tooltip = {
-					character_event = {
-						id = 38336 #Notify erudite
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = patient
-				trait = slothful
-			}
-			random = {
-				chance = 45
-				
-				add_trait = erudite
-				hidden_tooltip = {
-					character_event = {
-						id = 38336 #Notify erudite
-					}
-				}
-			}
-		}
-	}
-	option = {
-		name = "EVTOPTC1083"
-		if = {
-			limit = {
-				trait = stressed
-			}
-			random = {
-				chance = 30
-				remove_trait = stressed
-			}
-		}
-		if = {
-			limit = {
-				trait = humble
-				NOT = {
-					trait = paranoid
-				}
-			}
-			random = {
-				chance = 70
-				
-				add_trait = uncouth
-				hidden_tooltip = {
-					character_event = {
-						id = 38334 #Notify uncouth
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = paranoid
-				NOT = {
-					trait = humble
-				}
-			}
-			random = {
-				chance = 20
-				
-				add_trait = uncouth
-				hidden_tooltip = {
-					character_event = {
-						id = 38334 #Notify uncouth
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				NOT = {
-					trait = humble
-				}
-				NOT = {
-					trait = paranoid
-				}
-			}
-			random = {
-				chance = 45
-				
-				add_trait = uncouth
-				hidden_tooltip = {
-					character_event = {
-						id = 38334 #Notify uncouth
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				trait = humble
-				trait = paranoid
-			}
-			random = {
-				chance = 45
-				
-				add_trait = uncouth
-				hidden_tooltip = {
-					character_event = {
-						id = 38334 #Notify uncouth
-					}
-				}
-			}
-		}
-	}
-}
-
-character_event = {
-	id = 1084
-	desc = "EVTDESC1084"
-	picture = "GFX_evt_brothel"
-	
-	min_age = 16
-	only_capable = yes
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		OR = {
-			personality_traits = 6
-			has_ambition = obj_lutheran_hebrews
-		}
-		trait = groomed
-	}
-	
-	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
-		lutheran_hebrews_score = yes
-	}
-	
-	option = {
-		name = "EVTOPTA1084"
-		remove_trait = groomed
-	}
-}
-
-character_event = {
-	id = 1085
-	desc = "EVTDESC1085"
-	picture = "GFX_evt_brothel"
-	
-	min_age = 16
-	only_capable = yes
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		personality_traits = 6
-		trait = uncouth
-	}
-	
-	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
-	}
-	
-	option = {
-		name = "EVTOPTA1085"
-		remove_trait = uncouth
-	}
-}
-
-character_event = {
-	id = 1086
-	desc = "EVTDESC1086"
-	picture = "GFX_evt_open_book_hf"
-	
-	min_age = 16
-	only_capable = yes
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		personality_traits = 6
-		trait = erudite
-	}
-	
-	weight_multiplier = {
-		days = 1
-		
-		modifier = {
-			factor = 2
-			personality_traits = 6
-		}
-	}
-	
-	option = {
-		name = "EVTOPTA1086"
-		remove_trait = erudite
 	}
 }

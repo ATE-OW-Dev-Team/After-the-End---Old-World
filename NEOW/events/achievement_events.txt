@@ -2,245 +2,234 @@
 # Steam Achievement Events
 ################################
 
+namespace = steam
+
 # Viking Raider
 unit_event = {
-	id = 700
+	id = steam.001
+
+	is_triggered_only = yes # on_entering_port
 	hide_window = yes
-	
+
 	ai = no
-	
-	is_triggered_only = yes
-	
+
 	trigger = {
+		is_ironman = yes
+		loot >= 1000
+
 		FROM = {
+			NOT = { has_character_flag = achievement_viking_raider }
 			culture_group = north_germanic
-			OR = {
-				religion = norse_pagan
-				religion = norse_pagan_reformed
-			}
+			religion_openly_norse_or_reformed_trigger = yes
 		}
-		loot = 1000
 	}
-	
+
 	immediate = {
 		FROM = {
-			if = {
-				limit = {
-					NOT = { has_global_flag = achievement_viking_raider }
-				}
-				set_global_flag = achievement_viking_raider
-			}
+			set_character_flag = achievement_viking_raider
 		}
 	}
 }
 
 # Mr. Doge-Elect
 character_event = {
-	id = 701
+	id = steam.002
+
+	is_triggered_only = yes # on_become_doge
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
 	ai = no
-	
+
 	trigger = {
-		NOT = { has_global_flag = achievement_doge_elect }
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_doge_elect }
 	}
-	
+
 	immediate = {
-		achievement_doge_elect_done_effect = yes
+		set_character_flag = achievement_doge_elect
 	}
 }
 
 # Empressive
 character_event = {
-	id = 702
+	id = steam.003
+
+	is_triggered_only = yes # on_new_holder(_inheritance/usurpation)
 	hide_window = yes
-	
+
 	ai = no
 	only_women = yes
-	
+
 	trigger = {
-		primary_title = { tier = EMPEROR }
-		mother_even_if_dead = {
-			primary_title = { tier = EMPEROR }
-		}
-		mother_even_if_dead = {
-			mother_even_if_dead = {
-				primary_title = { tier = EMPEROR }
+		is_ironman = yes
+		real_tier = EMPEROR
+
+		mother_even_if_dead = { # Mother
+			real_tier = EMPEROR
+
+			mother_even_if_dead = { # Grandmother
+				real_tier = EMPEROR
 			}
 		}
-		NOT = { has_global_flag = achievement_empressive }
 	}
-	
-	mean_time_to_happen = {
-		days = 1
-	}
-	
+
 	immediate = {
-		achievement_empressive_done_effect = yes
+		set_character_flag = achievement_empressive
 	}
 }
 
 # Black Widow
 character_event = {
-	id = 703
+	id = steam.004
+
+	is_triggered_only = yes # on_death
 	hide_window = yes
-	
-	ai = no
-	only_women = yes
-	min_age = 16
-	
+
+	is_married = yes
+
 	trigger = {
-		any_spouse_even_if_dead = {
-			count = 3
-			is_alive = no
-			killer = { character = ROOT }
+		is_ironman = yes
+
+		killer = {
+			ai = no
+			is_female = yes
+			is_married = ROOT
+			NOT = { has_character_flag = achievement_black_widow }
+
+			any_spouse_even_if_dead = {
+				count >= 3
+				is_alive = no
+
+				killer = {
+					character = PREVPREV
+				}
+			}
 		}
-		NOT = { has_global_flag = achievement_black_widow }
 	}
-	
-	mean_time_to_happen = {
-		days = 1
-	}
-	
+
 	immediate = {
-		achievement_black_widow_done_effect = yes
+		killer = {
+			set_character_flag = achievement_black_widow
+		}
 	}
 }
 
 # The Black Bishop
 character_event = {
-	id = 704
+	id = steam.005
+
+	is_triggered_only = yes # on_rel_head_chosen
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
 	trigger = {
+		is_ironman = yes
 		trait = bad_priest_christian
+
 		any_liege = {
 			ai = no
-			reverse_has_opinion_modifier = { who = ROOT modifier = opinion_supported_pope }
-			NOT = { has_global_flag = achievement_black_bishop }
+			NOT = { has_character_flag = achievement_black_bishop }
+
+			reverse_has_opinion_modifier = {
+				name = opinion_supported_pope
+				who = ROOT
+			}
 		}
 	}
-	
+
 	immediate = {
 		any_liege = {
 			limit = {
 				ai = no
-				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_supported_pope }
-				NOT = { has_global_flag = achievement_black_bishop }
+				NOT = { has_character_flag = achievement_black_bishop }
+
+				reverse_has_opinion_modifier = {
+					name = opinion_supported_pope
+					who = ROOT
+				}
 			}
-			achievement_black_bishop_done_effect = yes
+
+			set_character_flag = achievement_black_bishop
 		}
 	}
 }
 
 # Turbulent Priest
 character_event = {
-	id = 705
+	id = steam.006
+
+	is_triggered_only = yes # on_death
 	hide_window = yes
-	
-	is_triggered_only = yes
+
 	religion = catholic
-	
+
 	trigger = {
+		is_ironman = yes
 		is_theocracy = yes
+
 		killer = {
+			NOT = { has_character_flag = achievement_turbulent_priest }
 			ai = no
 			is_liege_of = ROOT
 			religion = catholic
-			NOT = { has_global_flag = achievement_turbulent_priest }
-		}
-		killer = {
-			rightful_religious_head_scope = {
+
+			rightful_religious_head_scope = { # includes antipoptes
 				ROOT = {
-					likes_better_than = { 
+					likes_better_than = {
 						who = PREV
 						than = PREVPREV
 					}
 				}
 			}
-		}	
+		}
 	}
-	
+
 	immediate = {
 		killer = {
-			achievement_turbulent_priest_done_effect = yes
+			set_character_flag = achievement_turbulent_priest
 		}
 	}
 }
 
 # Full House
 character_event = {
-	id = 706
+	id = steam.007
+
+	is_triggered_only = yes # on_birth
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
 	trigger = {
-		OR = {
-			father = {
-				ai = no
-				NOT = { has_global_flag = achievement_full_house }
-			}
-			mother = { 
-				ai = no 
-				NOT = { has_global_flag = achievement_full_house }
-			}
+		is_ironman = yes
+
+		any_close_relative = {
+			ai = no
+			is_parent_of = ROOT
+			NOT = { has_character_flag = achievement_full_house }
 		}
 	}
-	
+
 	immediate = {
-		
-		if = {
+		any_close_relative = {
 			limit = {
-				father = { 
-					ai = no
-					NOT = { has_global_flag = achievement_full_house }
-					NOT = { check_variable = { which = "bob_saget" value = 4.5 } }
+				ai = no
+				is_parent_of = ROOT
+				NOT = { has_character_flag = achievement_full_house }
+			}
+
+			if = {
+				limit = {
+					check_variable = {
+						which = bob_saget
+						value <= 4
+					}
+				}
+
+				change_variable = {
+					which = bob_saget
+					value = 1
 				}
 			}
-			father = {
-				change_variable = { which = "bob_saget" value = 1 }
-			}
-		}
-		if = {
-			limit = {
-				mother = { 
-					ai = no
-					NOT = { has_global_flag = achievement_full_house }
-					NOT = { check_variable = { which = "bob_saget" value = 4.5 } }
-				}
-			}
-			mother = {
-				change_variable = { which = "bob_saget" value = 1 }
-			}
-		}
-		
-		if = {
-			limit = {
-				father = { 
-					ai = no
-					NOT = { has_global_flag = achievement_full_house }
-					check_variable = { which = "bob_saget" value = 4.5 }
-				}
-			}
-			father = {
-				achievement_full_house_done_effect = yes
-			}
-		}
-		if = {
-			limit = {
-				mother = { 
-					ai = no
-					NOT = { has_global_flag = achievement_full_house }
-					check_variable = { which = "bob_saget" value = 4.5 }
-				}
-			}
-			mother = {
-				achievement_full_house_done_effect = yes
+			else = {
+				set_character_flag = achievement_full_house
 			}
 		}
 	}
@@ -248,173 +237,170 @@ character_event = {
 
 # Keeping it in the Family
 character_event = {
-	id = 707
+	id = steam.008
+
+	is_triggered_only = yes # on_birth
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
 	trigger = {
+		is_ironman = yes
 		trait = inbred
-		OR = {
-			father = {
-				ai = no
-				NOT = { has_global_flag = achievement_in_the_family }
-			}
-			mother = {
-				ai = no
-				NOT = { has_global_flag = achievement_in_the_family }
-			}
+
+		any_close_relative = {
+			ai = no
+			is_parent_of = ROOT
+			NOT = { has_character_flag = achievement_in_the_family }
 		}
 	}
-	
+
 	immediate = {
-		if = {
+		any_close_relative = {
 			limit = {
-				father = {
-					ai = no
-					NOT = { has_global_flag = achievement_in_the_family }
-				}
+				ai = no
+				is_parent_of = ROOT
+				NOT = { has_character_flag = achievement_in_the_family }
 			}
-			father = { achievement_in_the_family_done_effect = yes }
+
+			set_character_flag = achievement_in_the_family
 		}
-		if = {
-			limit = {
-				mother = {
-					ai = no
-					NOT = { has_global_flag = achievement_in_the_family }
-				}
-			}
-			mother = { achievement_in_the_family_done_effect = yes }
-		}
-	}	
+	}
 }
 
 # The Marriage Game
 character_event = {
-	id = 708
+	id = steam.009
+
+	is_triggered_only = yes # on_marriage
 	hide_window = yes
-	
+
 	ai = no
-	
-	is_triggered_only = yes
-	
+
 	trigger = {
-		NOT = { has_global_flag = achievement_the_marriage_game }
-		OR = {
-			new_character = { character = ROOT }
-			FROM = { character = ROOT }
-		}
-		new_character = {
-			NOT = { has_character_flag = achievement_the_marriage_game_block }
-		}
-		FROM = {
-			NOT = { has_character_flag = achievement_the_marriage_game_block }
-		}
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_get_married }
 	}
-	
+
 	immediate = {
-		achievement_the_marriage_game_done_effect = yes
-	}	
+		set_character_flag = achievement_get_married
+	}
 }
 
 # The British Raj
 character_event = {
-	id = 709
+	id = steam.010
+
+	is_triggered_only = yes # on_new_holder(_inheritance/usurpation); on_character_convert_religion
 	hide_window = yes
-	
+
 	ai = no
 	religion_group = indian_group
-	
+	has_dlc = "Rajas of India"
+
 	trigger = {
-		has_dharmic_religion_trigger = yes
-		has_dlc = "Rajas of India"
-		NOT = { has_global_flag = achievement_the_british_raj }
 		has_landed_title = e_britannia
+		has_dharmic_religion_trigger = yes
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_the_british_raj }
 	}
-	
-	mean_time_to_happen = {
-		days = 1
-	}
-	
+
 	immediate = {
-		set_global_flag = achievement_the_british_raj
-	}	
+		set_character_flag = achievement_the_british_raj
+	}
 }
 
 # Beyond the Indus
 character_event = {
-	id = 710
+	id = steam.011
 
 	hide_window = yes
-	
+
 	ai = no
-	
+	has_dlc = "Rajas of India"
+
 	trigger = {
-		has_dlc = "Rajas of India"
-		NOT = { has_global_flag = achievement_beyond_the_indus }
-		NOT = { has_dynasty_flag = block_achievement_beyond_the_indus }
-		NOR = { 
-			culture_group = central_indo_aryan_group
-			culture_group = eastern_indo_aryan_group
-			culture_group = north_west_indo_aryan_group
-			culture_group = northern_indo_aryan_group
-					culture_group = dardic
-			culture_group = southern_indo_aryan_group
-			culture_group = west_indo_aryan_group
-					culture_group = northern_dravidian_group
-					culture_group = eastern_dravidian_group
-					culture_group = southern_dravidian_group
-		}
+		is_ironman = yes
+
 		OR = {
-			has_landed_title = e_rajastan
 			has_landed_title = e_bengal
 			has_landed_title = e_deccan
 			has_landed_title = e_india
+			has_landed_title = e_rajastan
+
 			any_realm_title = {
-				tier = KING
-				capital_scope = { region = world_india }
+				real_tier = KING
+
+				OR = {
+					de_jure_liege = e_bengal
+					de_jure_liege = e_deccan
+					de_jure_liege = e_india
+					de_jure_liege = e_rajastan
+				}
 			}
 		}
+
+	#	 any_demesne_title = {
+	#		real_tier = KING
+	#
+	#		capital_scope = {
+	#			region = world_india
+	#		}
+	#	}
+
+		NOR = {
+			culture_group = dravidian_group
+			culture_group = indo_aryan_group
+			has_character_flag = achievement_beyond_the_indus
+			has_dynasty_flag = block_achievement_beyond_the_indus
+		}
 	}
-	
+
 	mean_time_to_happen = {
 		days = 1
 	}
-	
+
 	immediate = {
-		achievement_beyond_the_indus_done_effect = yes
-	}	
+		set_character_flag = achievement_beyond_the_indus
+	}
 }
 
 # Great Indian Sultanate
 character_event = {
-	id = 711
+	id = steam.012
+
 	hide_window = yes
-	
+
 	ai = no
 	religion_group = muslim
-	
+	has_dlc = "Rajas of India"
+
 	trigger = {
-		has_dlc = "Rajas of India"
-		NOT = { has_global_flag = achievement_great_indian_sultanate }
-		OR = {
-			AND = {
-				has_landed_title = e_rajastan
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_great_indian_sultanate }
+
+		trigger_if = {
+			limit = { has_landed_title = e_india }
+
+			e_india = {
 				NOT = {
-					any_independent_ruler = {
-						any_realm_province = {
-							county = { empire = { title = e_rajastan } }
+					any_de_jure_vassal_title = {
+						tier = COUNT
+
+						location = {
 							NOT = { religion_group = muslim }
 						}
 					}
 				}
 			}
-			AND = {
-				has_landed_title = e_india
+		}
+		trigger_else = {
+			has_landed_title = e_rajastan
+
+			e_rajastan = {
 				NOT = {
-					any_independent_ruler = {
-						any_realm_province = {
-							county = { empire = { title = e_india } }
+					any_de_jure_vassal_title = {
+						tier = COUNT
+
+						location = {
 							NOT = { religion_group = muslim }
 						}
 					}
@@ -422,386 +408,421 @@ character_event = {
 			}
 		}
 	}
-	
+
 	mean_time_to_happen = {
 		days = 1
 	}
-	
+
 	immediate = {
-		achievement_great_indian_sultanate_done_effect = yes
-	}	
+		set_character_flag = achievement_great_indian_sultanate
+	}
 }
 
 # Saint Thomas' Dream
 character_event = {
-	id = 712
+	id = steam.013
+
 	hide_window = yes
-	
+
 	ai = no
 	religion_group = christian
-	
+	has_dlc = "Rajas of India"
+
 	trigger = {
-		has_dlc = "Rajas of India"
-		NOT = { has_global_flag = achievement_saint_thomas_dream }
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_saint_thomas_dream }
+
 		any_demesne_title = {
-			higher_tier_than = DUKE
-			region = world_india
+			higher_real_tier_than = DUKE
+
+			capital_scope = {
+				region = world_india
+			}
+
+		#	holder_scope = {
+		#		completely_controls = PREV
+		#	}
+
 			NOT = {
-				any_independent_ruler = {
-					any_realm_province = {
-						county = {
-							OR = {
-								kingdom = { title = PREVPREVPREVPREV }
-								empire = { title = PREVPREVPREVPREV }
-							}
-						}
+				any_de_jure_vassal_title = {
+					tier = COUNT
+
+					location = {
 						NOT = { religion_group = christian }
 					}
 				}
 			}
 		}
 	}
-	
+
 	mean_time_to_happen = {
 		days = 1
 	}
-	
+
 	immediate = {
-		achievement_saint_thomas_dream_done_effect = yes
-	}	
+		set_character_flag = achievement_saint_thomas_dream
+	}
 }
 
 # What Schism?
 character_event = {
-	id = 713
+	id = steam.014
+
 	hide_window = yes
-	
+
 	ai = no
 	religion_group = indian_group
-	
+	has_dlc = "Rajas of India"
+
 	trigger = {
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_what_schism }
 		has_dharmic_religion_trigger = yes
-		has_dlc = "Rajas of India"
-		NOT = { has_global_flag = achievement_what_schism }
-		333 = { # Rome
-			religion = ROOT
-			OR = {
-				owner = { character = ROOT }
-				owner = {
-					top_liege = {
-						character = ROOT
-					}
+
+		c_roma = { # Rome
+			location = { religion = ROOT }
+
+			holder_scope = {
+				OR = {
+					character = ROOT
+					is_vassal_or_below_of = ROOT
 				}
 			}
 		}
-		496 = { # Constantinople
-			religion = ROOT
-			OR = {
-				owner = { character = ROOT }
-				owner = {
-					top_liege = {
-						character = ROOT
-					}
+
+		c_constantinopolis = { # Constantinople
+			location = { religion = ROOT }
+
+			holder_scope = {
+				OR = {
+					character = ROOT
+					is_vassal_or_below_of = ROOT
 				}
 			}
 		}
 	}
-	
+
 	mean_time_to_happen = {
 		days = 1
 	}
-	
+
 	immediate = {
-		set_global_flag = achievement_what_schism
-	}	
+		set_character_flag = achievement_what_schism
+	}
 }
 
 # Red Sea Resort
 character_event = {
-	id = 714
+	id = steam.015
+
 	hide_window = yes
-	
+
 	ai = no
 	religion_group = indian_group
-	
+	has_dlc = "Rajas of India"
+
 	trigger = {
+		is_ironman = yes
 		has_dharmic_religion_trigger = yes
-		has_dlc = "Rajas of India"
-		NOT = { has_global_flag = achievement_red_sea_resort }
-		719 = { # Mecca
-			religion = ROOT
-			OR = {
-				owner = { character = ROOT }
-				owner = {
-					top_liege = {
-						character = ROOT
-					}
-				}
+		NOT = { has_character_flag = achievement_red_sea_resort }
+
+		c_mecca = { # Mecca
+			location = { religion = ROOT }
+
+			holder_scope = {
+				character = ROOT
+				is_vassal_or_below_of = ROOT
 			}
 		}
 	}
-	
+
 	mean_time_to_happen = {
 		days = 1
 	}
-	
+
 	immediate = {
-		set_global_flag = achievement_red_sea_resort
-	}	
+		set_character_flag = achievement_red_sea_resort
+	}
 }
 
 # Looking East and West
 character_event = {
-	id = 715
+	id = steam.016
+
+	is_triggered_only = yes # on_new_holder(_inheritance/usurpation)
 	hide_window = yes
-	
+
 	ai = no
-	
+	has_dlc = "Rajas of India"
+
 	trigger = {
-		has_dlc = "Rajas of India"
-		NOT = { has_global_flag = achievement_looking_east_and_west }
 		has_landed_title = e_persia
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_looking_east_and_west }
+
 		OR = {
 			has_landed_title = e_rajastan
 			has_landed_title = e_india
 		}
 	}
-	
-	mean_time_to_happen = {
-		days = 1
-	}
-	
+
 	immediate = {
-		achievement_looking_east_and_west_done_effect = yes
-	}	
+		set_character_flag = achievement_looking_east_and_west
+	}
 }
 
 # Medieval Schlieffen
 character_event = {
-	id = 716
+	id = steam.017
+
+	is_triggered_only = yes # on_war_started
 	hide_window = yes
-	
+
 	ai = no
-	
+
 	trigger = {
-		NOT = {
+		is_ironman = yes
+
+		NOR = {
 			culture = mongol
+		#	culture = nahua
+			has_character_flag = achievement_medieval_schlieffen
 		}
-		OR = {
-			any_war = {
-				defender = { character = ROOT }
-				attacker = {
-					culture = mongol			
-				}
+
+		any_war = {
+			trigger_if = {
+				limit = { attacker = { character = ROOT } }
+				defender = { culture = nahua }
 			}
-			any_war = {
-				attacker = { character = ROOT }
-				defender = {
-					culture = mongol				
-				}
+			trigger_else = {
+				defender = { character = ROOT }
+				attacker = { culture = nahua }
 			}
 		}
-		OR = {
-			any_war = {
-				defender = { character = ROOT }
-				attacker = { culture = nahuatl }
+
+		any_war = {
+			trigger_if = {
+				limit = { attacker = { character = ROOT } }
+				defender = { culture = mongol }
 			}
-			any_war = {
-				attacker = { character = ROOT }
-				defender = { culture = nahuatl }
+			trigger_else = {
+				defender = { character = ROOT }
+				attacker = { culture = mongol }
 			}
 		}
 	}
-	
-	mean_time_to_happen = {
-		days = 1
-	}
-	
+
 	immediate = {
-		set_global_flag = achievement_medieval_schlieffen
-	}		
+		set_character_flag = achievement_medieval_schlieffen
+	}
 }
 
 # I'm sorry, Desiderata
 character_event = {
-	id = 717
+	id = steam.018
+
+	is_triggered_only = yes # on_divorce
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
 	trigger = {
-		culture = lombard
-		is_female = yes
-		father = { 
-			primary_title = { higher_tier_than = DUKE }
-		}
+		is_ironman = yes
+
 		FROM = {
 			ai = no
+			NOT = { has_character_flag = achievement_desiderata }
+		#	religion_group = christian
+		}
+
+		culture = lombard
+		is_female = yes
+
+		father = {
+			higher_real_tier_than = DUKE
 		}
 	}
-	
+
 	immediate = {
 		FROM = {
-			set_global_flag = achievement_desiderata
+			set_character_flag = achievement_desiderata
 		}
-	}	
+	}
 }
 
 # Casanova
 character_event = {
-	id = 718
+	id = steam.019
+
+	is_triggered_only = yes # wol_seduction_events.txt
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
 	ai = no
-	
+
 	trigger = {
-		NOT = { has_global_flag = achievement_casanova }
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_casanova }
 	}
-	
+
 	immediate = {
 		if = {
 			limit = {
-				NOT = { check_variable = { which = "casanova_check" value = 9.5 } }
+				check_variable = {
+					which = casanova_check
+					value < 10
+				}
 			}
-			change_variable = { which = "casanova_check" value = 1 }
+
+			change_variable = {
+				which = casanova_check
+				value = 1
+			}
 		}
-		if = {
-			limit = {
-				check_variable = { which = "casanova_check" value = 9.5 }
-			}
-			achievement_casanova_done_effect = yes
+		else = {
+			set_character_flag = achievement_casanova
 		}
 	}
 }
 
 # Mudslinger
 character_event = {
-	id = 719
+	id = steam.020
+
+	is_triggered_only = yes # wol_intrigue_events.txt
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
 	ai = no
-	
+
 	trigger = {
-		NOT = { has_global_flag = achievement_mudslinger }
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_mudslinger }
 	}
-	
+
 	immediate = {
 		if = {
 			limit = {
-				NOT = { check_variable = { which = "mudslinger_check" value = 19.5 } }
+				check_variable = {
+					which = mudslinger_check
+					value < 20
+				}
 			}
-			change_variable = { which = "mudslinger_check" value = 1 }
+
+			change_variable = {
+				which = mudslinger_check
+				value = 1
+			}
 		}
-		if = {
-			limit = {
-				check_variable = { which = "mudslinger_check" value = 19.5 }
-			}
-			achievement_mudslinger_done_effect = yes
+		else = {
+			set_character_flag = achievement_mudslinger
 		}
 	}
 }
 
 # Bring it On
 character_event = {
-	id = 720
+	id = steam.021
+
+	is_triggered_only = yes # wol_war_events.txt, apply_generic_duel_victory_effect
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
 	ai = no
-	
+
 	trigger = {
-		NOT = { has_global_flag = achievement_bring_it_on }
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_bring_it_on }
 	}
-	
+
 	immediate = {
 		if = {
 			limit = {
-				NOT = { check_variable = { which = bring_it_on_check value = 6.5 } }
+				check_variable = {
+					which = bring_it_on_check
+					value < 7
+				}
 			}
-			change_variable = { which = bring_it_on_check value = 1 }
+
+			change_variable = {
+				which = bring_it_on_check
+				value = 1
+			}
 		}
-		if = {
-			limit = {
-				check_variable = { which = bring_it_on_check value = 6.5 }
-			}
-			achievement_bring_it_on_done_effect = yes
+		else = {
+			set_character_flag = achievement_bring_it_on
 		}
 	}
 }
 
 # Family Bliss
 character_event = {
-	id = 721
+	id = steam.022
+
 	hide_window = yes
-	
+
 	ai = no
-	
+
 	trigger = {
-		NOT = { has_global_flag = achievement_family_bliss }
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_family_bliss }
+
 		any_close_relative = {
-			count = 6
+			count >= 6
+
 			is_friend = ROOT
 		}
 	}
-	
+
 	mean_time_to_happen = {
 		days = 1
 	}
 
 	immediate = {
-		achievement_family_bliss_done_effect = yes
+		set_character_flag = achievement_family_bliss
 	}
 }
 
 # Until Death Do Us Part
 character_event = {
-	id = 722
+	id = steam.023
+
+	is_triggered_only = yes # on_death
 	hide_window = yes
-	is_triggered_only = yes
-	
+
 	trigger = {
+		is_ironman = yes
+
 		killer = {
 			ai = no
-			any_spouse = {
-				character = ROOT
-			}
+			is_married = ROOT
+			NOT = { has_character_flag = achievement_spouse_killer }
 		}
 	}
-	
+
 	immediate = {
 		killer = {
-			if = {
-				limit = {
-					NOT = { has_global_flag = achievement_death_do_us_part }
-				}
-				achievement_death_do_us_part_done_effect = yes
-			}
+			set_character_flag = achievement_spouse_killer
 		}
 	}
 }
 
 # Who needs Vasco da Gama? Own all the silk route ports in india as a European merchant republic.
 character_event = {
-	id = 723
+	id = steam.024
+
 	hide_window = yes
 
 	ai = no
-	
+	is_patrician = yes
+	has_dlc = "Horse Lords"
+
 	trigger = {
-		NOT = { has_global_flag = achievement_no_vasco_da_gama }
-		has_dlc = "Horse Lords"
-		is_patrician = yes
-		capital_scope = { 
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_no_vasco_da_gama }
+
+		capital_scope = {
 			OR = {
 				region = world_europe
 				region = world_asia_minor
 			}
 		}
+
 		completely_controls = c_debul
 		completely_controls = c_navasarika
 		completely_controls = c_mahoyadapuram
@@ -812,57 +833,72 @@ character_event = {
 		completely_controls = c_kataka
 		completely_controls = c_samatata
 	}
-	
+
 	mean_time_to_happen = {
 		days = 1
 	}
-	
+
 	immediate = {
-		set_global_flag = achievement_no_vasco_da_gama
+		set_character_flag = achievement_no_vasco_da_gama
 	}
 }
 
 # Pax Mongolica
 character_event = {
-	id = 724
+	id = steam.025
+
 	hide_window = yes
-	
+
 	ai = no
-	
+
 	trigger = {
-		NOT = { has_global_flag = achievement_pax_mongolica }
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_pax_mongolica }
+
 		any_demesne_province = {
-			count = 3
+			count >= 3
+
 			trade_post_has_building = tr_silk_road_3
 		}
 	}
-	
+
 	mean_time_to_happen = {
 		days = 1
 	}
-	
+
 	immediate = {
-		set_global_flag = achievement_pax_mongolica
+		set_character_flag = achievement_pax_mongolica
 	}
 }
 
-# Just don't point that pointy thing at me! Achievement + flag clearing
+# "Sword to Ploughshare" Achievement + flag clearing
 character_event = {
-	id = 725
+	id = steam.026
+
+	is_triggered_only = yes # SETTLE_ADVENTURER_INTERACTION_ACCEPT_EVENT
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
+	trigger = {
+		OR = {
+			NOT = { has_character_flag = achievement_pointy_thing }
+			has_character_flag = is_mercenary_leader
+			has_character_flag = raiding_adventurer
+		}
+	}
+
 	immediate = {
 		if = {
 			limit = {
-				FROM = {  
-					has_character_flag = is_mercenary_leader
-				}
-				ai = no 
+				ai = no
+				is_ironman = yes
+				NOT = { has_character_flag = achievement_pointy_thing }
+				FROM = { has_character_flag = is_mercenary_leader }
 			}
-			achievement_sword_ploughshare_done_effect = yes
+
+			set_character_flag = achievement_pointy_thing
 		}
+
+		# TODO: Is this scoped correctly?
 		clr_character_flag = is_mercenary_leader
 		clr_character_flag = raiding_adventurer
 	}
@@ -870,353 +906,419 @@ character_event = {
 
 # I am the law
 character_event = {
-	id = 726
+	id = steam.027
+
+	is_triggered_only = yes # on_law_vote_passed
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
 	trigger = {
-		FROM = { 
+		is_ironman = yes
+
+		FROM = {
 			ai = no
-			NOT = { character = ROOT }
+
+			NOR = {
+				character = ROOT
+				has_character_flag = achievement_i_am_the_law
+			}
 		}
 	}
-	
+
 	immediate = {
-		FROM = { achievement_i_am_the_law_done_effect = yes }
+		FROM = {
+			set_character_flag = achievement_i_am_the_law
+		}
 	}
 }
 
 # Peace in our time
 character_event = {
-	id = 727
+	id = steam.028
+
+	is_triggered_only = yes # on_enforce_peace_six_vassals
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
+	ai = no
+
 	trigger = {
-		ai = no
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_peace_in_our_time }
 	}
-	
+
 	immediate = {
-		achievement_peace_in_our_time_done_effect = yes
+		set_character_flag = achievement_peace_in_our_time
 	}
 }
 
 # Somebody paid to win
 character_event = {
-	id = 728
+	id = steam.029
+
+	is_triggered_only = yes # on_player_mercenary_income
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
+	ai = no
+
+	trigger = {
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_someone_paid_to_win }
+	}
+
 	immediate = {
-		if = {
-			limit = { 
-				has_dlc = "Conclave"
-			}
-			achievement_someone_paid_to_win_done_effect = yes
-		}
+		set_character_flag = achievement_someone_paid_to_win
 	}
 }
 
 # Pay to win (Victory)
 character_event = {
-	id = 729
+	id = steam.030
+
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+	is_triggered_only = yes # on_war_ended_victory
+
 	trigger = {
-		FROM = { 
+		is_ironman = yes
+
+		FROM = {
 			ai = no
 			owns_mercenary_units = yes
+			NOT = { has_character_flag = achievement_pay_to_win }
 		}
-		has_dlc = "Conclave"
 	}
-	
+
 	immediate = {
-		FROM = { achievement_pay_to_win_done_effect = yes }
+		FROM = {
+			set_character_flag = achievement_pay_to_win
+		}
 	}
 }
 
 # Pay to win (Reverse Demands)
 character_event = {
-	id = 730
+	id = steam.031
+
+	is_triggered_only = yes # on_war_ended_defeat
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
+	ai = no
+
 	trigger = {
-		ai = no
+		is_ironman = yes
 		owns_mercenary_units = yes
-		has_dlc = "Conclave"
+		NOT = { has_character_flag = achievement_pay_to_win }
 	}
-	
+
 	immediate = {
-		achievement_pay_to_win_done_effect = yes
+		set_character_flag = achievement_pay_to_win
 	}
 }
 
-# Eternity Denied (on death check)
+# Eternity Denied
 character_event = {
-	id = 731
+	id = steam.032
+
+	is_triggered_only = yes # on_death
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
+	has_dlc = "Reapers"
+
 	trigger = {
-		has_dlc = "Reapers"
+		is_ironman = yes
 		immortal = yes
+
 		killer = {
-			has_dlc = "Reapers"
 			ai = no
-			NOT = { has_global_flag = achievement_eternity_denied }
+			NOT = { has_character_flag = achievement_eternity_denied }
 		}
 	}
-	
+
 	immediate = {
-		killer = { achievement_eternity_denied_done_effect = yes }
+		killer = {
+			set_character_flag = achievement_eternity_denied
+		}
 	}
 }
 
-# Papal Mache ping (on death check)
+# Papal Mache
 character_event = {
-	id = 732
+	id = steam.033
+
+	is_triggered_only = yes # on_death
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
+	has_dlc = "Reapers"
+
 	trigger = {
-		has_dlc = "Reapers"
-		OR = {
-			primary_title = { title = k_papacy }
-			primary_title = { title = d_fraticelli }
-			has_landed_title = d_sunni 
-			has_landed_title = d_shiite
-			has_landed_title = d_ibadi
-		}
+		is_ironman = yes
+		controls_religion = yes
 		death_reason = death_execution_elephants
+
+		OR = {
+			religion_group = christian
+			religion_group = muslim
+		}
+
 		killer = {
 			ai = no
-			NOT = { has_global_flag = achievement_papal_mache }
+			NOT = { has_character_flag = achievement_papal_mache }
 		}
 	}
-	
+
 	immediate = {
-		killer = { achievement_papal_mache_done_effect = yes }
+		killer = {
+			set_character_flag = achievement_papal_mache
+		}
 	}
 }
 
 # Hospitable, build a hospital
 character_event = {
-	id = 733
+	id = steam.034
+
+	is_triggered_only = yes # on_hospital_construction_completed
 	hide_window = yes
-	
+
 	ai = no
-	is_triggered_only = yes
-	
+	has_dlc = "Reapers"
+
 	trigger = {
-		has_dlc = "Reapers"
-		NOT = { has_global_flag = achievement_hospitable }
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_hospitable }
 	}
-	
+
 	immediate = {
-		achievement_hospitable_done_effect = yes
+		set_character_flag = achievement_hospitable
 	}
 }
 
-# Aptly Named (on death check)
+# Aptly Named
 character_event = {
-	id = 734
+	id = steam.035
+
 	hide_window = yes
-	
-	is_triggered_only = yes
+	is_triggered_only = yes # on_death
+
 	ai = no
-	
+	has_dlc = "Reapers"
+
 	trigger = {
-		has_dlc = "Reapers"
-		trait = has_bubonic_plague
+		is_ironman = yes
+		trait = bubonic_plague
 		death_reason = death_trait
 	}
-	
+
 	immediate = {
-		achievement_aptly_named_done_effect = yes
+		set_global_flag = achievement_aptly_named
 	}
 }
 
 # Dark Lord. Become Grandmaster of any devil-worshiper society
 character_event = {
-	id = 735
+	id = steam.036
+
+	is_triggered_only = yes # on_character_society_rank_up
 	hide_window = yes
-	
-	is_triggered_only = yes
+
 	ai = no
-	
+
 	trigger = {
-		NOT = { has_global_flag = achievement_dark_lord }
 		is_devil_worshiper_trigger = yes
 		is_society_grandmaster = yes
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_dark_lord }
 	}
+
 	immediate = {
-		achievement_dark_lord_done_effect = yes
+		set_character_flag = achievement_dark_lord
 	}
 }
 
 # Birthright. As the Anti-christ/spawn of satan, become Grand master of the Satanists
 character_event = {
-	id = 736
+	id = steam.037
+
+	is_triggered_only = yes # on_character_society_rank_up
 	hide_window = yes
-	
-	is_triggered_only = yes
+
 	ai = no
-	
+
 	trigger = {
-		NOT = { has_global_flag = achievement_birthright }
+		society_member_of = the_satanists
+		is_society_grandmaster = yes
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_birthright }
+
 		OR = {
 			has_character_flag = demon_child_non_pagan
 			has_character_flag = demon_child
 		}
-		society_member_of = the_satanists
-		is_society_grandmaster = yes
 	}
+
 	immediate = {
-		set_global_flag = achievement_birthright
+		set_character_flag = achievement_birthright
 	}
 }
 
 # Jihad Sultan. As a Muslim King or higher, become Grandmaster of the Assassins
 character_event = {
-	id = 737
+	id = steam.038
+
+	is_triggered_only = yes # on_character_society_rank_up
 	hide_window = yes
-	
-	is_triggered_only = yes
+
 	ai = no
-	
+
 	trigger = {
-		NOT = { has_global_flag = achievement_jihad_sultan }
-		society_member_of = the_assassins
 		is_society_grandmaster = yes
-		OR = {
-			tier = emperor
-			tier = king
-		}
+		society_member_of = the_assassins
+		higher_real_tier_than = DUKE
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_jihad_sultan }
 	}
+
 	immediate = {
-		set_global_flag = achievement_jihad_sultan
+		set_character_flag = achievement_jihad_sultan
 	}
 }
 
 # Black Pope. Have a priest you corrupted (as a Satanist) become Pope
 character_event = {
-	id = 738
+	id = steam.039
+
+	is_triggered_only = yes # on_new_holder(_inheritance/usurpation)
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
+	has_character_flag = corrupted_by_player
+
 	trigger = {
-		has_character_flag = corrupted_by_player 
-		FROM = { title = k_papacy }
+		is_ironman = yes
+		NOT = { has_global_flag = achievement_black_pope }
+
+		FROM = {
+			OR = {
+				title = k_papacy
+				title = d_fraticelli
+			}
+		}
 	}
+
 	immediate = {
-		achievement_black_pope_done_effect = yes
+		set_global_flag = achievement_black_pope
 	}
 }
 
-# Got Land. Start as the holder of gotland and form Scandinavia
+# Got Land. Start as the holder of Gotland and form Scandinavia
 character_event = {
-	id = 739
+	id = steam.040
+
+	is_triggered_only = yes # on_create_title
 	hide_window = yes
-	
-	is_triggered_only = yes
+
 	ai = no
-	
+
 	trigger = {
-		NOT = { has_global_flag = achievement_got_land }
 		FROM = { title = e_scandinavia }
+		is_ironman = yes
+		NOT = { has_character_flag = achievement_got_land }
 	}
+
 	immediate = {
-		set_global_flag = achievement_got_land
+		set_character_flag = achievement_got_land
 	}
 }
 
 # Unwelcome Visitors. As an assassin, assassinate a Crusader King in the Holy land.
 character_event = {
-	id = 740
+	id = steam.041
+
+	is_triggered_only = yes # on_death
 	hide_window = yes
-	
-	is_triggered_only = yes
-	
+
+	religion_group = christian
+
 	trigger = {
-		#is_ironman = yes
-		killer = {
-			ai = no
-			society_member_of = the_assassins
-			NOT = { has_global_flag = achievement_unwelcome_visitors }
-		}
-		tier = king
-		religion_group = christian
-		OR = {
-			AND = {
+		is_ironman = yes
+		real_tier = KING
+
+		trigger_if = {
+			limit = {
 				any_war = {
 					OR = {
 						using_cb = crusade
 						using_cb = new_crusade
 					}
 				}
-				crusade_target = {
-					region = world_middle_east
-				}
 			}
-			any_realm_title = {
-				region = world_middle_east
-			}
-			location = {
+
+			crusade_target = {
 				region = world_middle_east
 			}
 		}
+		trigger_else = {
+			OR = {
+				any_realm_title = {
+					region = world_middle_east
+				}
+
+				location = {
+					region = world_middle_east
+				}
+			}
+		}
+
+		killer = {
+			ai = no
+			society_member_of = the_assassins
+			NOT = { has_character_flag = achievement_unwelcome_visitors }
+		}
 	}
+
 	immediate = {
 		killer = {
-			achievement_unwelcome_visitors_done_effect = yes
+			set_character_flag = achievement_unwelcome_visitors
 		}
 	}
 }
 
 # Block Beyond Indus achievement if you start and already fulfill the conditions
 character_event = {
-	id = 741
+	id = steam.042
+
+	is_triggered_only = yes # on_startup
 	hide_window = yes
 
-	is_triggered_only = yes
 	ai = no
+	has_dlc = "Rajas of India"
 
 	trigger = {
+		is_ironman = yes
 		is_save_game = no
-		has_dlc = "Rajas of India"
-		NOR = { 
-			culture_group = central_indo_aryan_group
-			culture_group = eastern_indo_aryan_group
-			culture_group = north_west_indo_aryan_group
-			culture_group = northern_indo_aryan_group
-					culture_group = dardic
-			culture_group = southern_indo_aryan_group
-			culture_group = west_indo_aryan_group
-					culture_group = northern_dravidian_group
-					culture_group = eastern_dravidian_group
-					culture_group = southern_dravidian_group
-		}
+
 		OR = {
 			has_landed_title = e_rajastan
 			has_landed_title = e_bengal
 			has_landed_title = e_deccan
 			has_landed_title = e_india
+
 			any_realm_title = {
 				tier = KING
-				capital_scope = { region = world_india } 
+
+				OR = {
+					de_jure_liege = e_rajastan
+					de_jure_liege = e_bengal
+					de_jure_liege = e_deccan
+					de_jure_liege = e_india
+				}
 			}
 		}
+
+		NOR = {
+			culture_group = indo_aryan_group
+			culture_group = dravidian_group
+			has_dynasty_flag = block_achievement_beyond_the_indus
+		}
 	}
+
 	immediate = {
 		set_dynasty_flag = block_achievement_beyond_the_indus
 	}

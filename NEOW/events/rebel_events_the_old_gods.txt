@@ -1,7 +1,7 @@
 #########################################################
 #
 # Rebel Events for The Old Gods DLC
-# ( TOG.1000 to TOG.1199)
+# (TOG.999 to TOG.1199)
 #
 # NOTE: The Old Gods DLC disables the old rebel system
 #
@@ -11,137 +11,237 @@
 
 namespace = TOG
 
+# Single event to decide which uprising occurs
+# Avoids all manner of messy, ugly triggers
+province_event = {
+	id = TOG.999
+
+	is_triggered_only = yes # on_rebel_revolt
+	hide_window = yes
+
+	immediate = {
+		# See if a minor clan could rise up
+		if = {
+			limit = {
+				has_dlc = "Horse Lords"
+				culture = owner
+				has_empty_holding = yes # To allow a Clan capital
+
+				owner = {
+					independent = yes
+					is_nomadic = yes
+					risks_minor_clan_rising = yes
+					in_revolt = no
+					NOT = { is_capital = ROOT }
+				}
+			}
+
+			if = {
+				limit = {
+					top_liege = {
+						any_war = {
+							defender = { character = PREVPREV }
+							using_cb = cb_minor_clan_revolt
+						}
+					}
+				}
+
+				province_event = { id = HL.2010 } # Reinforce ongoing minor clan uprising
+			}
+			else = {
+				province_event = { id = HL.2000 } # Start new minor clan uprising
+			}
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_castle = yes
+					has_tribal = yes
+					has_temple = yes
+					has_city = yes
+				}
+
+				has_dlc = "The Old Gods"
+			}
+
+			# Heretic revolts have the highest priority
+			if = {
+				limit = {
+					is_heresy_of = top_liege
+
+					NOT = { # Not if there is already an ongoing revolt
+						top_liege = {
+							any_war = {
+								defender = { character = PREVPREV }
+
+								OR = {
+									AND = {
+										using_cb = peasant_revolt
+										war_title = ROOT # The county
+									}
+
+									AND = {
+										using_cb = religious_revolt
+										attacker = { religion = ROOT }
+									}
+								}
+							}
+						}
+					}
+				}
+
+				if = {
+					limit = {
+						top_liege = {
+							any_war = {
+								defender = { character = PREVPREV }
+								using_cb = heretic_revolt
+								attacker = { religion = ROOT }
+							}
+						}
+					}
+
+					province_event = { id = TOG.1030 } # Reinforce ongoing heretic revolt
+				}
+				else = {
+					province_event = { id = TOG.1020 } # Start new heretic revolt
+				}
+			}
+			# Nationalist revolts have the next highest priority
+			else_if = {
+				limit = {
+					NOT = { culture = top_liege }
+
+					kingdom = {
+						has_holder = no
+						culture = ROOT
+
+						# The de jure kingdom must have had an appropriate holder in the past
+						any_previous_holder = {
+							ROOT = {
+								top_liege = {
+									NOT = { dynasty = PREVPREV }
+
+									trigger_if = {
+										limit = { is_nomadic = yes }
+										NOT = { culture_group = ROOT }
+									}
+								}
+							}
+						}
+					}
+
+					NOT = { # Not if there is already an ongoing revolt
+						top_liege = {
+							any_war = {
+								defender = { character = PREVPREV }
+
+								trigger_if = {
+									limit = { using_cb = heretic_revolt }
+									attacker = { religion = ROOT }
+								}
+								trigger_else = {
+									using_cb = liberation_revolt
+									ROOT = { de_jure_liege_or_above = thirdparty_title_scope }
+								}
+							}
+						}
+					}
+				}
+
+				if = {
+					limit = {
+						# There is already an ongoing nationalist revolt for the same kingdom
+						top_liege = {
+							any_war = {
+								using_cb = liberation_revolt
+								defender = { character = PREVPREV }
+								ROOT = { de_jure_liege_or_above = thirdparty_title_scope }
+							}
+						}
+					}
+
+					province_event = { id = TOG.1050 } # Reinforce ongoing revolt
+				}
+				else = {
+					province_event = { id = TOG.1040 } # Start new revolt
+				}
+			}
+			# Religious revolts are lower priority still
+			else_if = {
+				limit = {
+					NOT = { religion_group = top_liege }
+
+					NOT = { # Not if there is already an ongoing revolt
+						top_liege = {
+							any_war = {
+								defender = { character = PREVPREV }
+								using_cb = peasant_revolt
+								war_title = ROOT # The province
+							}
+						}
+					}
+				}
+
+				if = {
+					limit = {
+						top_liege = {
+							any_war = {
+								using_cb = religious_revolt
+								defender = { character = PREVPREV }
+								attacker = { religion = ROOT }
+							}
+						}
+					}
+
+					province_event = { id = TOG.1070 } # Reinforce ongoing religious revolt
+				}
+				else = {
+					province_event = { id = TOG.1060 } # Start new religious revolt
+				}
+			}
+			# Peasant revolts are the fallback
+			else = {
+				if = {
+					limit = {
+						top_liege = {
+							any_war = {
+								defender = { character = PREVPREV }
+								using_cb = peasant_revolt
+								war_title = ROOT # The province
+							}
+						}
+					}
+
+					province_event = { id = TOG.1010 } # Reinforce ongoing peasant uprising
+				}
+				else = {
+					province_event = { id = TOG.1000 } # Start new peasant uprising
+				}
+			}
+		}
+	}
+}
+
 # Peasant Rebels rise up (temporary rebel title created, with a leader and a war)
-# Triggered from "on_rebel_revolt"
 province_event = {
 	id = TOG.1000
 	desc = EVTDESC_TOG_1000
 	picture = GFX_evt_peasants
 	border = GFX_event_normal_frame_war
 
-	is_triggered_only = yes
-
-	trigger = {
-		OR = {
-			has_dlc = "The Old Gods"
-			has_province_flag = force_peasant_revolt
-		}
-
-		# Will get clan rebels instead
-		NAND = {
-			has_empty_holding = yes
-			owner = {
-				is_nomadic = yes
-			}
-		}
-
-		any_province_holding = {
-			NOT = { holding_type = nomad }
-		}
-
-		# Heretic revolts have prio
-		OR = {
-			is_heretic = no
-			owner = {
-				top_liege = {
-					NOT = { is_parent_religion = ROOT }
-				}
-			}
-			has_province_flag = force_peasant_revolt
-		}
-
-		# Religious revolts have prio
-		OR = {
-			owner = {
-				top_liege = {
-					religion_group = ROOT
-				}
-			}
-			has_province_flag = force_peasant_revolt
-		}
-
-		# Nationalist revolts have prio
-		OR = {
-			owner = {
-				top_liege = {
-					culture = ROOT
-				}
-			}
-			kingdom = {
-				OR = {
-					has_holder = yes
-					NOT = { culture = ROOT }
-					NOT = {
-						# The de jure kingdom must have had an appropriate holder in the past
-						any_previous_holder = {
-							ROOT = {
-								owner = {
-									top_liege = {
-										NOT = { dynasty = PREVPREVPREV }
-										OR = {
-											is_nomadic = no
-											NOT = { culture_group = ROOT }
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			has_province_flag = force_peasant_revolt
-		}
-
-		OR = {
-			has_province_flag = force_peasant_revolt
-			NOT = { # Not if there is already an ongoing peasant revolt for this province
-				owner = {
-					top_liege = {
-						war = yes
-
-						any_war = {
-							defender = { character = PREV }
-							OR = {
-								AND = {
-									using_cb = peasant_revolt
-									war_title = ROOT # The county
-								}
-								AND = {
-									using_cb = heretic_revolt
-									attacker = { religion = ROOT }
-								}
-								AND = {
-									using_cb = religious_revolt
-									attacker = { religion = ROOT }
-								}
-								AND = {
-									using_cb = liberation_revolt
-									thirdparty_title_scope = {
-										ROOT = {
-											kingdom = {
-												title = PREVPREV
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+	is_triggered_only = yes # on_rebel_revolt via TOG.999; MNM.20017, mnm_devil_worshipers_events.txt
 
 	immediate = {
 		add_province_modifier = {
-			name = recent_county_uprising
-			duration = 1825 # Five years of -100% revolt risk in this county
+			name = recent_county_uprising # -100% revolt risk
+			years = 5
 		}
+
 		remove_province_modifier = rumors_of_witchcraft
 
-		#Clean-up leaders who are unfit to lead Holy Orders
-		owner = {
-			abdicate_holy_order_if_religion_changes_effect = yes
+		top_liege = {
+			save_event_target_as = province_top_liege
 		}
 
 		create_character = {
@@ -151,11 +251,12 @@ province_event = {
 			culture = ROOT
 			female = no
 			age = 25
+			add_trait = tough_soldier
+			add_trait = peasant_leader
+
 			attributes = {
 				martial = 5
 			}
-			trait = peasant_leader
-			trait = tough_soldier
 		}
 
 		new_character = {
@@ -165,12 +266,11 @@ province_event = {
 				temporary = yes
 				rebel = yes
 				culture = ROOT
-				name = "PEASANT_REVOLT"
+				name = PEASANT_REVOLT
 				holder = THIS
 			}
 
 			wealth = 100
-
 			spawn_peasant_army_effect = yes
 
 			if = {
@@ -180,30 +280,31 @@ province_event = {
 						value = powerful
 					}
 				}
+
 				spawn_peasant_army_effect = yes
 				wealth = 150
 			}
-
-			if = {
+			else_if = {
 				limit = {
 					has_game_rule = {
 						name = provincial_revolt_strength
 						value = very_powerful
 					}
 				}
+
 				spawn_peasant_army_effect = yes
 				spawn_peasant_army_effect = yes
 				spawn_peasant_army_effect = yes
 				wealth = 250
 			}
-
-			if = {
+			else_if = {
 				limit = {
 					has_game_rule = {
 						name = provincial_revolt_strength
 						value = extremely_powerful
 					}
 				}
+
 				spawn_peasant_army_effect = yes
 				spawn_peasant_army_effect = yes
 				spawn_peasant_army_effect = yes
@@ -213,35 +314,27 @@ province_event = {
 			}
 
 			# DoW on the province top liege
-			ROOT = {
-				owner = {
-					top_liege = {
-#						set_defacto_vassal = PREVPREVPREV
-						reverse_war = {
-							target = PREVPREVPREV
-							casus_belli = peasant_revolt
-							thirdparty_title = ROOT # The county
-						}
-						reverse_opinion = {
-							who = PREVPREVPREV
-							modifier = opinion_evil_tyrant
-						}
-					}
-				}
+			war = {
+				target = event_target:province_top_liege
+				casus_belli = peasant_revolt
+				thirdparty_title = ROOT
+			}
+
+			opinion = {
+				name = opinion_evil_tyrant
+				who = event_target:province_top_liege
 			}
 		}
 
 		owner = {
 			any_liege = { # Inform the lieges
-				character_event = {
-					id = TOG.1001
-				}
+				character_event = { id = TOG.1001 }
 			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTA_TOG_1000"
+		name = EVTOPTA_TOG_1000
 	}
 }
 
@@ -253,20 +346,24 @@ character_event = {
 
 	is_triggered_only = yes
 
+	ai = no
+
 	option = {
-		name = "EVTOPTA_TOG_1000"
+		name = EVTOPTA_TOG_1000
 	}
 }
 
 # Peasants seize a holding. Fired from 'on_siege_over_winner'.
 character_event = {
 	id = TOG.1005
+
+	is_triggered_only = yes # on_siege_over_winner
 	hide_window = yes
-	is_triggered_only = yes
 
 	trigger = {
 		trait = peasant_leader
 		rebel = yes
+
 		FROM = {
 			is_capital = yes # The capital holding
 		}
@@ -279,9 +376,10 @@ character_event = {
 					limit = {
 						NOT = { has_province_modifier = peasant_unrest }
 					}
+
 					add_province_modifier = {
 						name = peasant_unrest
-						duration = 730
+						years = 2
 					}
 				}
 			}
@@ -290,50 +388,29 @@ character_event = {
 }
 
 # Peasant Rebels rise up to reinforce an ongoing provincial peasant revolt
-# Triggered from "on_rebel_revolt"
 province_event = {
 	id = TOG.1010
 	desc = EVTDESC_TOG_1010
 	picture = GFX_evt_peasants
 	border = GFX_event_normal_frame_war
 
-	is_triggered_only = yes
-
-	trigger = {
-		has_dlc = "The Old Gods"
-
-		any_province_holding = {
-			NOT = { holding_type = nomad }
-		}
-
-		# There is already an ongoing peasant revolt for this province
-		owner = {
-			top_liege = {
-				war = yes
-				any_war = {
-					defender = { character = PREV }
-					using_cb = peasant_revolt
-					war_title = ROOT # The county
-				}
-			}
-		}
-	}
+	is_triggered_only = yes # on_rebel_revolt via TOG.999
 
 	immediate = {
-
 		add_province_modifier = {
-			name = recent_county_uprising
-			duration = 1825 # Five years of -100% revolt risk in this county
+			name = recent_county_uprising # -100% revolt risk
+			years = 5
 		}
 
 		owner = {
 			top_liege = {
 				any_war = {
 					limit = {
-						defender = { character = PREV }
+						defender = { character = PREVPREV }
 						using_cb = peasant_revolt
-						war_title = ROOT # The county
+						war_title = ROOT # The province
 					}
+
 					attacker = {
 						spawn_peasant_reinforcements_effect = yes
 
@@ -344,28 +421,29 @@ province_event = {
 									value = powerful
 								}
 							}
+
 							spawn_peasant_reinforcements_effect = yes
 						}
-
-						if = {
+						else_if = {
 							limit = {
 								has_game_rule = {
 									name = provincial_revolt_strength
 									value = very_powerful
 								}
 							}
+
 							spawn_peasant_reinforcements_effect = yes
 							spawn_peasant_reinforcements_effect = yes
 							spawn_peasant_reinforcements_effect = yes
 						}
-
-						if = {
+						else_if = {
 							limit = {
 								has_game_rule = {
 									name = provincial_revolt_strength
 									value = extremely_powerful
 								}
 							}
+
 							spawn_peasant_reinforcements_effect = yes
 							spawn_peasant_reinforcements_effect = yes
 							spawn_peasant_reinforcements_effect = yes
@@ -375,19 +453,15 @@ province_event = {
 					}
 				}
 			}
-		}
 
-		owner = {
 			any_liege = { # Inform the lieges
-				character_event = {
-					id = TOG.1011
-				}
+				character_event = { id = TOG.1011 }
 			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTA_TOG_1010"
+		name = EVTOPTA_TOG_1010
 	}
 }
 
@@ -399,67 +473,36 @@ character_event = {
 
 	is_triggered_only = yes
 
+	ai = no
+
 	option = {
-		name = "EVTOPTA_TOG_1010"
+		name = EVTOPTA_TOG_1010
 	}
 }
 
 # Heretic Rebels rise up (temporary rebel title created, with a leader and a war)
-# Triggered from "on_rebel_revolt"
 province_event = {
 	id = TOG.1020
 	desc = EVTDESC_TOG_1020
 	picture = GFX_evt_heretic
 	border = GFX_event_normal_frame_war
 
-	is_triggered_only = yes
-
-	trigger = {
-		has_dlc = "The Old Gods"
-
-		is_heretic = yes
-
-		any_province_holding = {
-			NOT = { holding_type = nomad }
-		}
-
-		owner = {
-			top_liege = {
-				is_parent_religion = ROOT
-			}
-		}
-
-		NOT = { # Not if there is already an ongoing revolt
-			owner = {
-				top_liege = {
-					war = yes
-					any_war = {
-						defender = { character = PREV }
-						OR = {
-							AND = {
-								using_cb = peasant_revolt
-								war_title = ROOT # The county
-							}
-							AND = {
-								using_cb = heretic_revolt
-								attacker = { religion = ROOT }
-							}
-							AND = {
-								using_cb = religious_revolt
-								attacker = { religion = ROOT }
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+	is_triggered_only = yes # on_rebel_revolt via TOG.999
 
 	immediate = {
 		add_province_modifier = {
-			name = recent_county_uprising
-			duration = 1825 # Five years of -100% revolt risk in this county
+			name = recent_county_uprising # -100% revolt risk
+			years = 5
 		}
+
+		top_liege = {
+			save_event_target_as = province_top_liege
+		}
+
+		duchy = {
+			save_event_target_as = province_duchy
+		}
+
 		create_character = {
 			random_traits = yes
 			dynasty = none
@@ -467,14 +510,15 @@ province_event = {
 			culture = ROOT
 			female = no
 			age = 32
+			add_trait = heresiarch
+			add_trait = zealous
+			add_trait = scholar
+			add_trait = skilled_tactician
+
 			attributes = {
 				martial = 7
 				learning = 7
 			}
-			trait = heresiarch
-			trait = zealous
-			trait = scholar
-			trait = skilled_tactician
 		}
 
 		new_character = {
@@ -486,7 +530,7 @@ province_event = {
 				temporary = yes
 				rebel = yes
 				culture = ROOT
-				name = "HERETIC_REVOLT"
+				name = HERETIC_REVOLT
 				holder = THIS
 			}
 
@@ -501,30 +545,31 @@ province_event = {
 						value = powerful
 					}
 				}
+
 				spawn_heretic_army_effect = yes
 				wealth = 150
 			}
-
-			if = {
+			else_if = {
 				limit = {
 					has_game_rule = {
 						name = provincial_revolt_strength
 						value = very_powerful
 					}
 				}
+
 				spawn_heretic_army_effect = yes
 				spawn_heretic_army_effect = yes
 				spawn_heretic_army_effect = yes
 				wealth = 250
 			}
-
-			if = {
+			else_if = {
 				limit = {
 					has_game_rule = {
 						name = provincial_revolt_strength
 						value = extremely_powerful
 					}
 				}
+
 				spawn_heretic_army_effect = yes
 				spawn_heretic_army_effect = yes
 				spawn_heretic_army_effect = yes
@@ -534,35 +579,27 @@ province_event = {
 			}
 
 			# DoW on the province top liege
-			ROOT = {
-				owner = {
-					top_liege = {
-						reverse_war = {
-							target = PREVPREVPREV
-							casus_belli = heretic_revolt
-							thirdparty_title = ROOT # The county...
-							tier = DUKE # ... but really the de jure duchy
-						}
-						reverse_opinion = {
-							who = PREVPREVPREV
-							modifier = opinion_evil_tyrant
-						}
-					}
-				}
+			war = {
+				target = event_target:province_top_liege
+				casus_belli = heretic_revolt
+				thirdparty_title = event_target:province_duchy
+			}
+
+			opinion = {
+				name = opinion_evil_tyrant
+				who = event_target:province_top_liege
 			}
 		}
 
 		owner = {
 			any_liege = { # Inform the lieges
-				character_event = {
-					id = TOG.1021
-				}
+				character_event = { id = TOG.1021 }
 			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTA_TOG_1020"
+		name = EVTOPTA_TOG_1020
 	}
 }
 
@@ -574,6 +611,8 @@ character_event = {
 
 	is_triggered_only = yes
 
+	ai = no
+
 	option = {
 		name = EVTOPTA_TOG_1020
 	}
@@ -582,12 +621,14 @@ character_event = {
 # Heretics seize a holding. Fired from 'on_siege_over_winner'.
 character_event = {
 	id = TOG.1025
+
+	is_triggered_only = yes # on_siege_over_winner
 	hide_window = yes
-	is_triggered_only = yes
 
 	trigger = {
 		trait = heresiarch
 		rebel = yes
+
 		FROM = {
 			is_capital = yes # The capital holding
 		}
@@ -600,18 +641,21 @@ character_event = {
 					limit = {
 						NOT = { religion = ROOT }
 					}
+
 					random = {
 						chance = 50
 						religion = ROOT
 					}
 				}
+
 				if = {
 					limit = {
 						NOT = { has_province_modifier = religious_unrest }
 					}
+
 					add_province_modifier = {
 						name = religious_unrest
-						duration = 730
+						years = 2
 					}
 				}
 			}
@@ -620,57 +664,29 @@ character_event = {
 }
 
 # Heretic Rebels rise up to reinforce an ongoing heretic uprising
-# Triggered from "on_rebel_revolt"
 province_event = {
 	id = TOG.1030
 	desc = EVTDESC_TOG_1030
 	picture = GFX_evt_heretic
 	border = GFX_event_normal_frame_war
 
-	is_triggered_only = yes
-
-	trigger = {
-		has_dlc = "The Old Gods"
-
-		is_heretic = yes
-
-		owner = {
-			top_liege = {
-				is_parent_religion = ROOT
-			}
-		}
-
-		any_province_holding = {
-			NOT = { holding_type = nomad }
-		}
-
-		owner = {
-			top_liege = {
-				war = yes
-				any_war = {
-					defender = { character = PREV }
-					using_cb = heretic_revolt
-					attacker = { religion = ROOT }
-				}
-			}
-		}
-	}
+	is_triggered_only = yes # on_rebel_revolt via TOG.999
 
 	immediate = {
-
 		add_province_modifier = {
-			name = recent_county_uprising
-			duration = 1825 # Five years of -100% revolt risk in this county
+			name = recent_county_uprising # -100% revolt risk
+			years = 5
 		}
 
 		owner = {
 			top_liege = {
 				any_war = {
 					limit = {
-						defender = { character = PREV }
 						using_cb = heretic_revolt
+						defender = { character = PREVPREV }
 						attacker = { religion = ROOT }
 					}
+
 					attacker = {
 						spawn_heretic_reinforcements_effect = yes
 
@@ -681,28 +697,29 @@ province_event = {
 									value = powerful
 								}
 							}
+
 							spawn_heretic_reinforcements_effect = yes
 						}
-
-						if = {
+						else_if = {
 							limit = {
 								has_game_rule = {
 									name = provincial_revolt_strength
 									value = very_powerful
 								}
 							}
+
 							spawn_heretic_reinforcements_effect = yes
 							spawn_heretic_reinforcements_effect = yes
 							spawn_heretic_reinforcements_effect = yes
 						}
-
-						if = {
+						else_if = {
 							limit = {
 								has_game_rule = {
 									name = provincial_revolt_strength
 									value = extremely_powerful
 								}
 							}
+
 							spawn_heretic_reinforcements_effect = yes
 							spawn_heretic_reinforcements_effect = yes
 							spawn_heretic_reinforcements_effect = yes
@@ -712,19 +729,15 @@ province_event = {
 					}
 				}
 			}
-		}
 
-		owner = {
 			any_liege = { # Inform the lieges
-				character_event = {
-					id = TOG.1031
-				}
+				character_event = { id = TOG.1031 }
 			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTA_TOG_1030"
+		name = EVTOPTA_TOG_1030
 	}
 }
 
@@ -736,97 +749,36 @@ character_event = {
 
 	is_triggered_only = yes
 
+	ai = no
+
 	option = {
-		name = "EVTOPTA_TOG_1030"
+		name = EVTOPTA_TOG_1030
 	}
 }
 
 # Royalist Nationalist Rebels rise up to create a kingdom (temporary rebel title created, with a leader and a war)
-# Triggered from "on_rebel_revolt"
 province_event = {
 	id = TOG.1040
 	desc = EVTDESC_TOG_1040
 	picture = GFX_evt_siege
 	border = GFX_event_normal_frame_war
 
-	is_triggered_only = yes
-
-	trigger = {
-		has_dlc = "The Old Gods"
-
-		any_province_holding = {
-			NOT = { holding_type = nomad }
-		}
-
-		owner = {
-			top_liege = {
-				NOT = { culture = ROOT }
-			}
-		}
-
-		kingdom = {
-			has_holder = no
-			culture = ROOT
-
-			# The de jure kingdom must have had an appropriate holder in the past
-			any_previous_holder = {
-				ROOT = {
-					owner = {
-						top_liege = {
-							NOT = { dynasty = PREVPREVPREV }
-							OR = {
-								is_nomadic = no
-								NOT = { culture_group = ROOT }
-							}
-						}
-					}
-				}
-			}
-		}
-
-		# Heretic revolts have prio
-		OR = {
-			is_heretic = no
-			owner = {
-				top_liege = {
-					NOT = { is_parent_religion = ROOT }
-				}
-			}
-		}
-
-		NOT = { # Not if there is already an ongoing revolt
-			owner = {
-				top_liege = {
-					war = yes
-					any_war = {
-						defender = { character = PREV }
-						OR = {
-							AND = {
-								using_cb = heretic_revolt
-								attacker = { religion = ROOT }
-							}
-							AND = {
-								using_cb = liberation_revolt
-								thirdparty_title_scope = {
-									ROOT = {
-										kingdom = {
-											title = PREVPREV
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+	is_triggered_only = yes # on_rebel_revolt via TOG.999
 
 	immediate = {
 		add_province_modifier = {
-			name = recent_county_uprising
-			duration = 1825 # Five years of -100% revolt risk in this county
+			name = recent_county_uprising # -100% revolt risk
+			years = 5
 		}
+
+		top_liege = {
+			save_event_target_as = province_top_liege
+		}
+
+		kingdom = {
+			save_event_target_as = province_kingdom
+		}
+
 		create_character = {
 			random_traits = yes
 			dynasty = random
@@ -836,16 +788,17 @@ province_event = {
 			age = 20
 			health = 7
 			fertility = 0.7
+			add_trait = just
+			add_trait = brave
+			add_trait = gregarious
+			add_trait = ambitious
+			add_trait = brilliant_strategist
+			add_trait = inspiring_leader
+
 			attributes = {
 				martial = 8
 				diplomacy = 9
 			}
-			trait = just
-			trait = brave
-			trait = gregarious
-			trait = ambitious
-			trait = brilliant_strategist
-			trait = inspiring_leader
 		}
 
 		new_character = {
@@ -857,7 +810,7 @@ province_event = {
 				temporary = yes
 				rebel = yes
 				culture = ROOT
-				name = "NATIONALIST_REVOLT"
+				name = NATIONALIST_REVOLT
 				holder = THIS
 			}
 
@@ -867,8 +820,9 @@ province_event = {
 				province = ROOT
 				home = ROOT
 				owner = THIS
-				#leader = THIS
 				scaled_by_biggest_garrison = 1.75
+				attrition = 1.0
+
 				troops = {
 					archers = { 6 6 }
 					light_cavalry = { 3 3 }
@@ -876,7 +830,6 @@ province_event = {
 					light_infantry = { 7 7 }
 					heavy_infantry = { 3 3 }
 				}
-				attrition = 1.0
 			}
 
 			spawn_nationalist_army_effect = yes
@@ -888,30 +841,31 @@ province_event = {
 						value = powerful
 					}
 				}
+
 				spawn_nationalist_army_effect = yes
 				wealth = 150
 			}
-
-			if = {
+			else_if = {
 				limit = {
 					has_game_rule = {
 						name = provincial_revolt_strength
 						value = very_powerful
 					}
 				}
+
 				spawn_nationalist_army_effect = yes
 				spawn_nationalist_army_effect = yes
 				spawn_nationalist_army_effect = yes
 				wealth = 250
 			}
-
-			if = {
+			else_if = {
 				limit = {
 					has_game_rule = {
 						name = provincial_revolt_strength
 						value = extremely_powerful
 					}
 				}
+
 				spawn_nationalist_army_effect = yes
 				spawn_nationalist_army_effect = yes
 				spawn_nationalist_army_effect = yes
@@ -921,35 +875,27 @@ province_event = {
 			}
 
 			# DoW on the province top liege
-			ROOT = {
-				owner = {
-					top_liege = {
-						reverse_war = {
-							target = PREVPREVPREV
-							casus_belli = liberation_revolt
-							thirdparty_title = ROOT # The county...
-							tier = KING # ... but really the de jure kingdom
-						}
-						reverse_opinion = {
-							who = PREVPREVPREV
-							modifier = opinion_evil_tyrant
-						}
-					}
-				}
+			war = {
+				target = event_target:province_top_liege
+				casus_belli = liberation_revolt
+				thirdparty_title = event_target:province_kingdom
+			}
+
+			opinion = {
+				name = opinion_evil_tyrant
+				who = event_target:province_top_liege
 			}
 		}
 
 		owner = {
 			any_liege = { # Inform the lieges
-				character_event = {
-					id = TOG.1041
-				}
+				character_event = { id = TOG.1041 }
 			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTA_TOG_1040"
+		name = EVTOPTA_TOG_1040
 	}
 }
 
@@ -961,6 +907,8 @@ character_event = {
 
 	is_triggered_only = yes
 
+	ai = no
+
 	option = {
 		name = EVTOPTA_TOG_1040
 	}
@@ -969,14 +917,17 @@ character_event = {
 # Nationalists seize a holding. Fired from 'on_siege_over_winner'.
 character_event = {
 	id = TOG.1045
+
+	is_triggered_only = yes # on_siege_over_winner
 	hide_window = yes
-	is_triggered_only = yes
 
 	trigger = {
 		rebel = yes
+
 		FROM = {
 			is_capital = yes # The capital holding
 		}
+
 		any_war = {
 			attacker = { character = ROOT }
 			using_cb = liberation_revolt
@@ -987,23 +938,27 @@ character_event = {
 		FROM = {
 			location = {
 				if = {
+					limit = { culture = ROOT }
+
+					if = {
+						limit = {
+							NOT = { has_province_modifier = cultural_unrest }
+						}
+
+						add_province_modifier = {
+							name = cultural_unrest
+							years = 2
+						}
+					}
+				}
+				else_if = {
 					limit = {
-						NOT = { culture = ROOT }
 						kingdom = { culture = ROOT }
 					}
+
 					random = {
 						chance = 20
 						culture = ROOT
-					}
-				}
-				if = {
-					limit = {
-						culture = ROOT
-						NOT = { has_province_modifier = cultural_unrest }
-					}
-					add_province_modifier = {
-						name = cultural_unrest
-						duration = 730
 					}
 				}
 			}
@@ -1012,60 +967,29 @@ character_event = {
 }
 
 # Nationalist Rebels rise up to reinforce an ongoing revolt
-# Triggered from "on_rebel_revolt"
 province_event = {
 	id = TOG.1050
 	desc = EVTDESC_TOG_1050
 	picture = GFX_evt_siege
 	border = GFX_event_normal_frame_war
 
-	is_triggered_only = yes
-
-	trigger = {
-		has_dlc = "The Old Gods"
-
-		any_province_holding = {
-			NOT = { holding_type = nomad }
-		}
-
-		# There is already an ongoing nationalist revolt for the same kingdom
-		owner = {
-			top_liege = {
-				war = yes
-				any_war = {
-					defender = { character = PREV }
-					using_cb = liberation_revolt
-					thirdparty_title_scope = {
-						ROOT = {
-							kingdom = {
-								title = PREVPREV
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+	is_triggered_only = yes # on_rebel_revolt via TOG.999
 
 	immediate = {
 		add_province_modifier = {
-			name = recent_county_uprising
-			duration = 1825 # Five years of -100% revolt risk in this county
+			name = recent_county_uprising # -100% revolt risk
+			years = 5
 		}
+
 		owner = {
 			top_liege = {
 				any_war = {
 					limit = {
-						defender = { character = PREV }
 						using_cb = liberation_revolt
-						thirdparty_title_scope = {
-							ROOT = {
-								kingdom = {
-									title = PREVPREV
-								}
-							}
-						}
+						defender = { character = PREVPREV }
+						ROOT = { de_jure_liege_or_above = thirdparty_title_scope }
 					}
+
 					attacker = {
 						spawn_nationalist_reinforcements_effect = yes
 
@@ -1076,28 +1000,29 @@ province_event = {
 									value = powerful
 								}
 							}
+
 							spawn_nationalist_reinforcements_effect = yes
 						}
-
-						if = {
+						else_if = {
 							limit = {
 								has_game_rule = {
 									name = provincial_revolt_strength
 									value = very_powerful
 								}
 							}
+
 							spawn_nationalist_reinforcements_effect = yes
 							spawn_nationalist_reinforcements_effect = yes
 							spawn_nationalist_reinforcements_effect = yes
 						}
-
-						if = {
+						else_if = {
 							limit = {
 								has_game_rule = {
 									name = provincial_revolt_strength
 									value = extremely_powerful
 								}
 							}
+
 							spawn_nationalist_reinforcements_effect = yes
 							spawn_nationalist_reinforcements_effect = yes
 							spawn_nationalist_reinforcements_effect = yes
@@ -1107,19 +1032,15 @@ province_event = {
 					}
 				}
 			}
-		}
 
-		owner = {
 			any_liege = { # Inform the lieges
-				character_event = {
-					id = TOG.1051
-				}
+				character_event = { id = TOG.1051 }
 			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTA_TOG_1000"
+		name = EVTOPTA_TOG_1000
 	}
 }
 
@@ -1131,99 +1052,36 @@ character_event = {
 
 	is_triggered_only = yes
 
+	ai = no
+
 	option = {
 		name = EVTOPTA_TOG_1000
 	}
 }
 
 # Religious Rebels rise up (temporary rebel title created, with a leader and a war)
-# Triggered from "on_rebel_revolt"
 province_event = {
 	id = TOG.1060
 	desc = EVTDESC_TOG_1060
 	picture = GFX_evt_heretic
 	border = GFX_event_normal_frame_war
 
-	is_triggered_only = yes
-
-	trigger = {
-		has_dlc = "The Old Gods"
-
-		is_heretic = no
-
-		any_province_holding = {
-			NOT = { holding_type = nomad }
-		}
-
-		owner = {
-			top_liege = {
-				NOT = { religion_group = ROOT }
-			}
-		}
-
-		# Nationalist revolts have prio
-		OR = {
-			owner = {
-				top_liege = {
-					culture = ROOT
-				}
-			}
-			kingdom = {
-				OR = {
-					has_holder = yes
-					NOT = { culture = ROOT }
-					NOT = {
-						# The de jure kingdom must have had an appropriate holder in the past
-						any_previous_holder = {
-							ROOT = {
-								owner = {
-									top_liege = {
-										NOT = { dynasty = PREVPREVPREV }
-										OR = {
-											is_nomadic = no
-											NOT = { culture_group = ROOT }
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			has_province_flag = force_peasant_revolt
-		}
-
-		NOT = { # Not if there is already an ongoing revolt
-			owner = {
-				top_liege = {
-					war = yes
-					any_war = {
-						defender = { character = PREV }
-						OR = {
-							AND = {
-								using_cb = peasant_revolt
-								war_title = ROOT # The county
-							}
-							AND = {
-								using_cb = heretic_revolt
-								attacker = { religion = ROOT }
-							}
-							AND = {
-								using_cb = religious_revolt
-								attacker = { religion = ROOT }
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+	is_triggered_only = yes # on_rebel_revolt via TOG.999
 
 	immediate = {
 		add_province_modifier = {
-			name = recent_county_uprising
-			duration = 1825 # Five years of -100% revolt risk in this county
+			name = recent_county_uprising # -100% revolt risk
+			years = 5
 		}
+
+		top_liege = {
+			save_event_target_as = province_top_liege
+		}
+
+		duchy = {
+			save_event_target_as = province_duchy
+		}
+
 		create_character = {
 			random_traits = yes
 			dynasty = none
@@ -1231,13 +1089,14 @@ province_event = {
 			culture = ROOT
 			female = no
 			age = 32
+			add_trait = zealous
+			add_trait = scholar
+			add_trait = skilled_tactician
+
 			attributes = {
 				martial = 7
 				learning = 7
 			}
-			trait = zealous
-			trait = scholar
-			trait = skilled_tactician
 		}
 
 		new_character = {
@@ -1249,13 +1108,12 @@ province_event = {
 				temporary = yes
 				rebel = yes
 				culture = ROOT
-				name = "HERETIC_REVOLT"
+				name = HERETIC_REVOLT
 				holder = THIS
 			}
 
-			wealth = 100
-
 			spawn_religious_army_effect = yes
+			wealth = 100
 
 			if = {
 				limit = {
@@ -1264,30 +1122,31 @@ province_event = {
 						value = powerful
 					}
 				}
+
 				spawn_religious_army_effect = yes
 				wealth = 150
 			}
-
-			if = {
+			else_if = {
 				limit = {
 					has_game_rule = {
 						name = provincial_revolt_strength
 						value = very_powerful
 					}
 				}
+
 				spawn_religious_army_effect = yes
 				spawn_religious_army_effect = yes
 				spawn_religious_army_effect = yes
 				wealth = 250
 			}
-
-			if = {
+			else_if = {
 				limit = {
 					has_game_rule = {
 						name = provincial_revolt_strength
 						value = extremely_powerful
 					}
 				}
+
 				spawn_religious_army_effect = yes
 				spawn_religious_army_effect = yes
 				spawn_religious_army_effect = yes
@@ -1297,43 +1156,33 @@ province_event = {
 			}
 
 			# DoW on the province top liege
-			ROOT = {
-				owner = {
-					top_liege = {
-						reverse_war = {
-							target = PREVPREVPREV
-							casus_belli = religious_revolt
-							thirdparty_title = ROOT # The county...
-							tier = DUKE # ... but really the de jure duchy
-						}
-						reverse_opinion = {
-							who = PREVPREVPREV
-							modifier = opinion_evil_tyrant
-						}
-					}
-				}
+			war = {
+				target = event_target:province_top_liege
+				casus_belli = religious_revolt
+				thirdparty_title = event_target:province_duchy
+			}
+
+			opinion = {
+				name = opinion_evil_tyrant
+				who = event_target:province_top_liege
 			}
 		}
 
 		owner = {
 			any_liege = { # Inform the lieges
-				character_event = {
-					id = TOG.1061
-				}
+				character_event = { id = TOG.1061 }
 			}
 		}
 	}
 
 	option = {
-		name = EVTOPTA_TOG_1060
-		trigger = {
-			owner = { religion_group = ROOT }
+		name = {
+			text = EVTOPTA_TOG_1060
+			trigger = { religion_group = owner }
 		}
-	}
-	option = {
-		name = EVTOPTB_TOG_1060
-		trigger = {
-			owner = { NOT = { religion_group = ROOT	} }
+		name = {
+			text = EVTOPTB_TOG_1060
+			trigger = { NOT = { religion_group = owner } }
 		}
 	}
 }
@@ -1346,16 +1195,16 @@ character_event = {
 
 	is_triggered_only = yes
 
+	ai = no
+
 	option = {
-		name = EVTOPTA_TOG_1060
-		trigger = {
-			religion_group = FROM
+		name = {
+			text = EVTOPTA_TOG_1060
+			trigger = { religion_group = FROM }
 		}
-	}
-	option = {
-		name = EVTOPTB_TOG_1060
-		trigger = {
-			NOT = { religion_group = FROM	}
+		name = {
+			text = EVTOPTB_TOG_1060
+			trigger = { NOT = { religion_group = FROM } }
 		}
 	}
 }
@@ -1363,12 +1212,14 @@ character_event = {
 # Religious Rebels seize a holding. Fired from 'on_siege_over_winner'. Owner of the winning unit is ROOT. The taken Holding title is in FROM.
 character_event = {
 	id = TOG.1065
+
+	is_triggered_only = yes # on_siege_over_winner
 	hide_window = yes
-	is_triggered_only = yes
 
 	trigger = {
 		has_character_flag = religious_revolter
 		rebel = yes
+
 		FROM = {
 			is_capital = yes # The capital holding
 		}
@@ -1381,18 +1232,21 @@ character_event = {
 					limit = {
 						NOT = { religion = ROOT }
 					}
+
 					random = {
 						chance = 5
 						religion = ROOT
 					}
 				}
+
 				if = {
 					limit = {
 						NOT = { has_province_modifier = religious_unrest }
 					}
+
 					add_province_modifier = {
 						name = religious_unrest
-						duration = 730
+						years = 2
 					}
 				}
 			}
@@ -1408,50 +1262,23 @@ province_event = {
 	picture = GFX_evt_heretic
 	border = GFX_event_normal_frame_war
 
-	is_triggered_only = yes
-
-	trigger = {
-		has_dlc = "The Old Gods"
-
-		is_heretic = no
-
-		any_province_holding = {
-			NOT = { holding_type = nomad }
-		}
-
-		owner = {
-			top_liege = {
-				NOT = { religion_group = ROOT }
-			}
-		}
-
-		owner = {
-			top_liege = {
-				war = yes
-				any_war = {
-					defender = { character = PREV }
-					using_cb = religious_revolt
-					attacker = { religion = ROOT }
-				}
-			}
-		}
-	}
+	is_triggered_only = yes # on_rebel_revolt via TOG.999
 
 	immediate = {
-
 		add_province_modifier = {
-			name = recent_county_uprising
-			duration = 1825 # Five years of -100% revolt risk in this county
+			name = recent_county_uprising # -100% revolt risk
+			years = 5
 		}
 
 		owner = {
 			top_liege = {
 				any_war = {
 					limit = {
-						defender = { character = PREV }
 						using_cb = religious_revolt
+						defender = { character = PREVPREV }
 						attacker = { religion = ROOT }
 					}
+
 					attacker = {
 						spawn_religious_reinforcements_effect = yes
 
@@ -1462,28 +1289,29 @@ province_event = {
 									value = powerful
 								}
 							}
+
 							spawn_religious_reinforcements_effect = yes
 						}
-
-						if = {
+						else_if = {
 							limit = {
 								has_game_rule = {
 									name = provincial_revolt_strength
 									value = very_powerful
 								}
 							}
+
 							spawn_religious_reinforcements_effect = yes
 							spawn_religious_reinforcements_effect = yes
 							spawn_religious_reinforcements_effect = yes
 						}
-
-						if = {
+						else_if = {
 							limit = {
 								has_game_rule = {
 									name = provincial_revolt_strength
 									value = extremely_powerful
 								}
 							}
+
 							spawn_religious_reinforcements_effect = yes
 							spawn_religious_reinforcements_effect = yes
 							spawn_religious_reinforcements_effect = yes
@@ -1493,19 +1321,15 @@ province_event = {
 					}
 				}
 			}
-		}
 
-		owner = {
 			any_liege = { # Inform the lieges
-				character_event = {
-					id = TOG.1071
-				}
+				character_event = { id = TOG.1071 }
 			}
 		}
 	}
 
 	option = {
-		name = "EVTOPTA_TOG_1070"
+		name = EVTOPTA_TOG_1070
 	}
 }
 
@@ -1517,8 +1341,10 @@ character_event = {
 
 	is_triggered_only = yes
 
+	ai = no
+
 	option = {
-		name = "EVTOPTA_TOG_1070"
+		name = EVTOPTA_TOG_1070
 	}
 }
 
@@ -1530,30 +1356,33 @@ character_event = {
 	picture = GFX_evt_beheading
 	border = GFX_event_normal_frame_war
 
-	is_triggered_only = yes
+	is_triggered_only = yes # on_siege_over_loc_chars, random_events
 
 	trigger = {
 		new_character = {
 			rebel = yes
 
-			OR = {
-				NOT = { religion = ROOT }
-				AND = {
-					NOT = { has_character_flag = heretic_revolter }
-					NOT = { has_character_flag = religious_revolter }
-					NOT = { has_character_flag = shepherds_crusade_leader }
+			trigger_if = {
+				limit = { religion = ROOT }
+
+				OR = {
+					has_character_flag = heretic_revolter
+					has_character_flag = religious_revolter
+					has_character_flag = shepherds_crusade_leader
 				}
 			}
 		}
 	}
 
 	weight_multiplier = {
-		days = 1
-		modifier = {
+		factor = 1
+
+		mult_modifier = {
 			factor = 0.5
 			is_female = yes
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.5
 			is_adult = no
 		}
@@ -1561,15 +1390,14 @@ character_event = {
 
 	immediate = {
 		any_liege = { # Inform the victim's lieges
-			character_event = {
-				id = TOG.1191
-			}
+			character_event = { id = TOG.1191 }
 		}
+
 		new_character = {
 			ROOT = {
 				death = {
 					death_reason = death_rabble
-					#killer = PREV
+					# killer = PREV
 				}
 			}
 		}
@@ -1589,7 +1417,6 @@ character_event = {
 	border = GFX_event_normal_frame_war
 
 	is_triggered_only = yes
-
 	notification = yes
 
 	ai = no

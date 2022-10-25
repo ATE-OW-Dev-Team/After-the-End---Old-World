@@ -8,24 +8,22 @@
 #
 # Written by Sara Wendel-Örtqvist
 
-#Sex Crusader Kings
+# Sex Crusader Kings
 character_event = {
 	id = 6500
-	desc = "EVTDESC6500"
+	desc = EVTDESC6500
 	picture = GFX_evt_brothel
-	
-	min_age = 35
-	only_men = yes
-	only_playable = yes
-	prisoner = no
+
+	is_triggered_only = yes # on_decade_pulse, random_events, critical_events
+
 	ai = no
-	
+	only_men = yes
+	min_age = 35
+	prisoner = no
 	trigger = {
-		NOT = {
-			num_traits = 4
-		}
 		trait = indulgent_wastrel
-		NOT = { is_inaccessible_trigger = yes }
+		personality_traits < 4
+		is_inaccessible_trigger = no
 		immortal = no
 		NOT = {
 			has_game_rule = {
@@ -34,62 +32,45 @@ character_event = {
 			}
 		}
 	}
-	
-	mean_time_to_happen = {
-		months = 50000
-		
-		modifier = {
-			factor = 0.8
+
+	weight_multiplier = {
+		factor = 1
+
+		mult_modifier = {
+			factor = 1.25
 			trait = imbecile
 		}
 	}
-	
 	option = {
-		name = "EVTOPTA6500"
+		name = EVTOPTA6500 # one woman
+
 		random_list = {
-			50 = {
-				add_trait = lustful
-			}
-			50 = {
-				add_trait = infirm
-			}
+			50 = { add_trait_fully_lustful_effect = yes }
+			50 = { add_trait_infirm_effect = yes }
 		}
 	}
-	
 	option = {
-		name = "EVTOPTB6500"
+		name = EVTOPTB6500 # two women
+
 		random_list = {
-			25 = {
-				add_trait = lustful
-			}
-			25 = {
-				add_trait = ambitious
-			}
-			25 = {
-				add_trait = greedy
-			}
-			25 = {
-				if = {
-					limit = {
-						immortal = no
-					}
-					add_trait = incapable
-				}
-			}
+			25 = { add_trait_fully_lustful_effect = yes }
+			25 = { add_trait_fully_ambitious_effect = yes }
+			25 = { add_trait_fully_greedy_effect = yes }
+			25 = { add_trait_incapable_effect = yes }
 		}
 	}
 }
 
-#Marco... 
+# Marco...
 character_event = {
 	id = 6501
-	desc = "EVTDESC6501"
+	desc = EVTDESC6501
 	picture = GFX_evt_lunatic
-	
-	min_age = 20
-	only_playable = yes
+
+	is_triggered_only = yes # on_decade_pulse, random_events, critical_events
+
 	ai = no
-	
+	min_age = 20
 	trigger = {
 		NOT = {
 			has_game_rule = {
@@ -98,108 +79,82 @@ character_event = {
 			}
 		}
 	}
-	
-	mean_time_to_happen = {
-		months = 100000
-	}
-	
 	option = {
-		name = "EVTOPTA6501" #...Polo
+		name = EVTOPTA6501 #...Polo
+
 		prestige = 50
 	}
 }
 
-#Stroke the kitty
+# Stroke the kitty
 character_event = {
 	id = 6502
-	picture = "GFX_evt_family"
+	desc = EVTDESC6502
+	picture = GFX_evt_cat
 
-	desc = {
-		trigger = { has_dlc = "Reapers" }
-		text = "EVTDESC6502"
-		picture = "GFX_evt_cat"
-	}
-	desc = {
-		trigger = { NOT = { has_dlc = "Reapers" } }
-		text = "EVTDESC6502"
-		picture = "GFX_evt_family"
-	}
-	
-	min_age = 20
-	only_playable = yes
-	capable_only = yes
-	prisoner = no
+	is_triggered_only = yes # on_decade_pulse, random_events, critical_events
+
 	ai = no
-	
-	mean_time_to_happen = {
-		months = 3500
-	}
-	
+	min_age = 20
+	only_capable = yes
+	prisoner = no
 	option = {
-		name = "EVTOPTA6502"
-		
+		name = EVTOPTA6502
+
 		if = {
 			limit = { trait = kind }
 			prestige = 25
 		}
-		if = {
-			limit = { NOT = { trait = kind } }
+
+		else = {
 			random = {
 				chance = 20
-				add_trait = kind
-				character_event = { id = 38268 }
+				add_trait_fully_kind_effect = yes
 			}
 		}
 	}
 
 	option = {
-		trigger =  { NOT = { has_character_modifier = pet_cat } }
-		name = "EVTOPTC6502"
+		name = EVTOPTC6502
+
+		trigger = {
+			NOT = { has_character_modifier = pet_cat }
+		}
 
 		add_cat_effect = yes
 	}
 
 
 	option = {
-		name = "EVTOPTB6502"
+		name = EVTOPTB6502
+
+		add_trait_silently_cruel_effect = yes
 
 		if = {
-			limit = { NOT = { trait = cruel } }
-			add_trait = cruel
-		}
-		if = {
 			limit = {
-				OR = {
-					AND = {
-						NOT = { has_dlc = "Reapers" }
-						NOT = { trait = maimed }
-					}
-					AND = {
-						has_dlc = "Reapers"
-						NOT = { trait = one_eyed }
-					}
+				trigger_if = {
+					limit = { has_dlc = "Reapers" }
+					NOT = { trait = one_eyed }
+				}
+				trigger_else = {
+					NOT = { trait = maimed }
 				}
 			}
 			random = {
 				chance = 25
 				if = {
-					limit = {
-						NOT = { has_dlc = "Reapers" }
-					}
-					add_trait = maimed
+					limit = { has_dlc = "Reapers" }
+					add_trait_one_eyed_effect = yes
 				}
-				if = {
-					limit = {
-						has_dlc = "Reapers"
-					}
-					add_trait = one_eyed
-					character_event = { id = RIP.11501 } #Notify one-eyed
+
+				else = {
+					add_trait_maimed_effect = yes
 				}
 			}
 		}
 	}
 }
 
-#Bohemian Rhapsody - only for the king of Bohemia
+# Bohemian Rhapsody - only for the king of Bohemia
 
-#Letter event - "Mama, I killed a man" - after a battle?
+# Letter event - "Mama, I killed a man" - after a battle?
