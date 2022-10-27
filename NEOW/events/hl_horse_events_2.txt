@@ -54,6 +54,78 @@ character_event = {
 	}
 }
 
+# Other horse bit my horse
+character_event = {
+	id = HL.6510
+	hide_window = yes
+	is_triggered_only = yes
+	
+	only_playable = yes
+	
+	trigger = {
+		has_character_modifier = nomad_warhorse
+		NOT = { trait = incapable }
+		NOT = { is_inaccessible_trigger = yes }
+		OR = {
+		    any_vassal = {
+			    is_adult = yes
+			    prisoner = no
+			    NOT = { trait = incapable }
+		    	ai = yes
+		    }
+		    any_courtier = {
+			    is_adult = yes
+			    prisoner = no
+			    NOT = { trait = incapable }
+			    ai = yes
+		    }
+		}
+	}
+	
+	weight_multiplier = {
+		days = 1
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				any_vassal = {
+					is_adult = yes
+				    prisoner = no
+				    NOT = { trait = incapable }
+			    	ai = yes
+				}
+			}
+			any_vassal = {
+				limit = {
+					is_adult = yes
+				    prisoner = no
+				    NOT = { trait = incapable }
+			    	ai = yes
+				}
+				score_value = { #Prioritizes selecting an interesting courtier...
+		            value = 10
+		            interesting_courtier_selection_score = yes
+		        }
+				character_event = { id = HL.6511 }
+				break = yes
+			}
+		}
+		any_courtier = {
+			limit = {
+				is_adult = yes
+			    prisoner = no
+			    NOT = { trait = incapable }
+			    ai = yes
+			}
+			score_value = { #Prioritizes selecting an interesting courtier...
+	            value = 10
+	            interesting_courtier_selection_score = yes
+	        }
+			character_event = { id = HL.6511 }
+		}
+	}
+}
 character_event = {
 	id = HL.6511
 	hide_window = yes
