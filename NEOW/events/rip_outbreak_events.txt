@@ -3,309 +3,470 @@ namespace = RIP
 # The Black Death has been discovered
 province_event = {
 	id = RIP.10000
-
-	is_triggered_only = yes # on_outbreak
 	hide_window = yes
-
+	
+	is_triggered_only = yes
+	
 	trigger = {
 		disease = bubonic_plague
 		NOT = { has_global_flag = black_death_broadcasted }
 	}
-
+		
 	immediate = {
 		set_global_flag = black_death_broadcasted
 		save_event_target_as = plague_outbreak_location
-
 		owner = {
 			narrative_event = { id = RIP.10001 }
 		}
 	}
 }
 
-# The Black Death has been discovered and is broadcasted
+# The Black Death has been discovered and is broadcasted 
 narrative_event = {
 	id = RIP.10001
 	title = EVTNAME_RIP_10001
-	desc = EVTDESC_RIP_10001
 	picture = GFX_evt_plague_doctor
 	border = GFX_event_narrative_frame_religion
+
+	desc = {
+		text = EVTDESC_RIP_10001
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = yes
+			}
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_10001B
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = no
+			}
+		}
+	}
 
 	is_triggered_only = yes
 
 	immediate = {
 		set_character_flag = black_death_close
-
-		any_player = {
+		any_playable_ruler = {
+			limit = { 
+				ai = no
+			}
+			if = {
+				limit = { 
+					distance = { value = 1000 where = FROM } 
+					NOT = { is_vassal_or_below = ROOT }
+				}
+				narrative_event = { id = RIP.10002 days = 6 random = 3 }
+			}
+			if = {
+				limit = { 
+					NOT = { distance = { value = 1000 where = FROM } } 
+					NOT = { is_vassal_or_below = ROOT }
+				}
+				narrative_event = { id = RIP.10003 days = 3 random = 3 }
+			}
 			if = {
 				limit = { is_vassal_or_below = ROOT }
 				narrative_event = { id = RIP.10004 days = 2 random = 2 }
 			}
-			else_if = {
-				limit = {
-					distance = { value < 1000 where = FROM }
-				}
-				narrative_event = { id = RIP.10003 days = 3 random = 3 }
-			}
-			else = {
-				narrative_event = { id = RIP.10002 days = 6 random = 3 }
-			}
 		}
 	}
-
+	
 	option = {
 		name = EVTOPTA_RIP_10001
 	}
 }
 
-# The Black Death has been discovered and is broadcasted to rulers far away (Player only)
+# The Black Death has been discovered and is broadcasted to rulers far away
 narrative_event = {
 	id = RIP.10002
 	title = EVTNAME_RIP_10002
-	desc = EVTDESC_RIP_10002
 	picture = GFX_evt_danse_macabre
 	border = GFX_event_narrative_frame_religion
 
+	desc = {
+		text = EVTDESC_RIP_10002
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = yes
+			}
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_10002B
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = no
+			}
+		}
+	}
+
+	only_playable = yes
 	is_triggered_only = yes
+	ai = no
 
 	immediate = {
 		set_global_flag = black_death_broadcasted
-
 		random_list = {
 			10 = {
-				trigger = {
+				set_character_flag = option_a
+				modifier = {
+					factor = 0
 					OR = {
+						OR = {
+							trait = erudite
+							trait = shrewd
+							trait = genius
+							trait = quick
+						}
+						AND = {
+							NOT = { religion_group = FROM }
+							OR = {
+								trait = zealous
+								trait = cruel
+							}
+						}
+						OR = {
+							trait = kind 
+							trait = charitable 
+						}
+						NAND = {
+							OR = { 
+								trait = strong 
+								trait = robust 
+								trait = brave 
+							}
+							OR = {
+								trait = stubborn
+								trait = proud
+							}
+						}
+						trait = paranoid
+					}
+				}
+			}
+			10 = {
+				set_character_flag = option_b
+				modifier = {
+					factor = 0
+					NOR = {
 						trait = erudite
 						trait = shrewd
 						trait = genius
 						trait = quick
 					}
 				}
-
-				set_character_flag = option_b
 			}
-
 			10 = {
-				trigger = {
-					NOT = { religion_group = FROM }
-
-					OR = {
-						trait = zealous
-						trait = cruel
-					}
-				}
-
 				set_character_flag = option_c
+				modifier = {
+					factor = 0
+					NAND = {
+							NOT = { religion_group = FROM }
+							OR = {
+								trait = zealous
+								trait = cruel
+							}
+						}
+				}
 			}
-
 			10 = {
-				trigger = {
-					OR = {
-						trait = kind
-						trait = charitable
+				set_character_flag = option_d
+				modifier = {
+					factor = 0
+					NOR = { 
+						trait = kind 
+						trait = charitable 
 					}
 				}
-
-				set_character_flag = option_d
 			}
-
 			10 = {
-				trigger = {
-					OR = {
-						trait = strong
-						trait = robust
-						trait = brave
+				set_character_flag = option_e
+				modifier = {
+					factor = 0
+					NOR = { 
+						trait = strong 
+						trait = robust 
+						trait = brave 
 					}
-
-					OR = {
+					NOR = {
 						trait = stubborn
 						trait = proud
 					}
 				}
-
-				set_character_flag = option_e
 			}
-
 			10 = {
-				trigger = { trait = paranoid }
-
 				set_character_flag = option_f
-			}
-
-			fallback = {
-				set_character_flag = option_a
+				modifier = {
+					factor = 0
+					NOT = { trait = paranoid }
+				}
 			}
 		}
-
 		chronicle = {
 			entry = CHRONICLE_DISTANT_PLAGUE
 			picture = GFX_evt_plague_spreading
 		}
 	}
+	
+	option = {
+		trigger = {
+			has_character_flag = option_a
+		}
+		name = EVTOPTA_RIP_10002
+		clr_character_flag = option_a
+	}
 
 	option = {
-		name = {
-			text = EVTOPTA_RIP_10002
-			trigger = { has_character_flag = option_a }
+		trigger = {
+			has_character_flag = option_b
 		}
-		name = {
-			text = EVTOPTB_RIP_10002
-			trigger = { has_character_flag = option_b }
-		}
-		name = {
-			text = EVTOPTC_RIP_10002
-			trigger = { has_character_flag = option_c }
-		}
-		name = {
-			text = EVTOPTD_RIP_10002
-			trigger = { has_character_flag = option_d }
-		}
-		name = {
-			text = EVTOPTE_RIP_10002
-			trigger = { has_character_flag = option_e }
-		}
-		name = {
-			text = EVTOPTF_RIP_10002
-			trigger = { has_character_flag = option_f }
-		}
-
-		clr_character_flag = option_a
+		name = EVTOPTB_RIP_10002
 		clr_character_flag = option_b
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_c
+		}
+		name = EVTOPTC_RIP_10002
 		clr_character_flag = option_c
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_d
+		}
+		name = EVTOPTD_RIP_10002
 		clr_character_flag = option_d
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_e
+		}
+		name = EVTOPTE_RIP_10002
 		clr_character_flag = option_e
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_f
+		}
+		name = EVTOPTF_RIP_10002
 		clr_character_flag = option_f
 	}
 }
 
-# The Black Death has been discovered and is broadcasted to nearby rulers (Player only)
+# The Black Death has been discovered and is broadcasted to nearby rulers
 narrative_event = {
 	id = RIP.10003
 	title = EVTNAME_RIP_10002
-	desc = EVTDESC_RIP_10003
 	picture = GFX_evt_bring_out_your_dead
 	border = GFX_event_narrative_frame_religion
+	
+	desc = {
+		text = EVTDESC_RIP_10003
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = yes
+			}
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_10003B
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = no
+			}
+		}
+	}
 
+	only_playable = yes
 	is_triggered_only = yes
+	ai = no
 
 	immediate = {
 		set_global_flag = black_death_broadcasted
-
 		random_list = {
 			10 = {
-				trigger = {
+				set_character_flag = option_a
+				modifier = {
+					factor = 0
 					OR = {
+						OR = {
+							trait = erudite
+							trait = shrewd
+							trait = genius
+							trait = quick
+						}
+						AND = {
+							NOT = { religion_group = FROM }
+							OR = {
+								trait = zealous
+								trait = cruel
+							}
+						}
+						OR = {
+							trait = kind 
+							trait = charitable 
+						}
+						NAND = {
+							OR = { 
+								trait = strong 
+								trait = robust 
+								trait = brave 
+							}
+							OR = {
+								trait = stubborn
+								trait = proud
+							}
+						}
+						trait = paranoid
+					}
+				}
+			}
+			10 = {
+				set_character_flag = option_b
+				modifier = {
+					factor = 0
+					NOR = {
 						trait = erudite
 						trait = shrewd
 						trait = genius
 						trait = quick
 					}
 				}
-
-				set_character_flag = option_b
 			}
-
 			10 = {
-				trigger = {
-					NOT = { religion_group = FROM }
-
-					OR = {
-						trait = zealous
-						trait = cruel
-					}
-				}
-
 				set_character_flag = option_c
+				modifier = {
+					factor = 0
+					NAND = {
+							NOT = { religion_group = FROM }
+							OR = {
+								trait = zealous
+								trait = cruel
+							}
+						}
+				}
 			}
-
 			10 = {
-				trigger = {
-					OR = {
-						trait = kind
-						trait = charitable
+				set_character_flag = option_d
+				modifier = {
+					factor = 0
+					NOR = { 
+						trait = kind 
+						trait = charitable 
 					}
 				}
-
-				set_character_flag = option_d
 			}
-
 			10 = {
-				trigger = {
-					OR = {
-						trait = strong
-						trait = robust
-						trait = brave
+				set_character_flag = option_e
+				modifier = {
+					factor = 0
+					NOR = { 
+						trait = strong 
+						trait = robust 
+						trait = brave 
 					}
-
-					OR = {
+					NOR = {
 						trait = stubborn
 						trait = proud
 					}
 				}
-
-				set_character_flag = option_e
 			}
-
 			10 = {
-				trigger = { trait = paranoid }
-
 				set_character_flag = option_f
-			}
-
-			fallback = {
-				set_character_flag = option_a
+				modifier = {
+					factor = 0
+					NOT = { trait = paranoid }
+				}
 			}
 		}
-
 		chronicle = {
 			entry = CHRONICLE_NEARBY_PLAGUE
 			picture = GFX_evt_plague_spreading
 		}
 	}
+	
+	option = {
+		trigger = {
+			has_character_flag = option_a
+		}
+		name = EVTOPTA_RIP_10003
+	}
 
 	option = {
-		name = {
-			text = EVTOPTA_RIP_10002
-			trigger = { has_character_flag = option_a }
+		trigger = {
+			has_character_flag = option_b
 		}
-		name = {
-			text = EVTOPTB_RIP_10002
-			trigger = { has_character_flag = option_b }
-		}
-		name = {
-			text = EVTOPTC_RIP_10002
-			trigger = { has_character_flag = option_c }
-		}
-		name = {
-			text = EVTOPTD_RIP_10002
-			trigger = { has_character_flag = option_d }
-		}
-		name = {
-			text = EVTOPTE_RIP_10002
-			trigger = { has_character_flag = option_e }
-		}
-		name = {
-			text = EVTOPTF_RIP_10002
-			trigger = { has_character_flag = option_f }
-		}
-
-		clr_character_flag = option_a
+		name = EVTOPTB_RIP_10002
 		clr_character_flag = option_b
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_c
+		}
+		name = EVTOPTC_RIP_10002
 		clr_character_flag = option_c
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_d
+		}
+		name = EVTOPTD_RIP_10002
 		clr_character_flag = option_d
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_e
+		}
+		name = EVTOPTE_RIP_10002
 		clr_character_flag = option_e
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_f
+		}
+		name = EVTOPTF_RIP_10002
 		clr_character_flag = option_f
 	}
 }
 
-# The Black Death has been discovered and is broadcasted to liege and upwards (Player only)
+# The Black Death has been discovered and is broadcasted to liege and upwards
 narrative_event = {
 	id = RIP.10004
 	title = EVTNAME_RIP_10001
-	desc = EVTDESC_RIP_10001
 	picture = GFX_evt_bring_out_your_dead
 	border = GFX_event_narrative_frame_religion
 
+	desc = {
+		text = EVTDESC_RIP_10001
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = yes
+			}
+		}
+	}
+	desc = {
+		text = EVTDESC_RIP_10001B
+		trigger = {
+			event_target:plague_outbreak_location = {
+				port = no
+			}
+		}
+	}
+	
+	only_playable = yes
 	is_triggered_only = yes
+	ai = no
 
 	immediate = {
 		set_character_flag = black_death_close
@@ -315,54 +476,47 @@ narrative_event = {
 			set_character_flag = negative_event_flag
 		}
 	}
-
+	
 	option = {
 		name = EVTOPTA_RIP_10001
-
-		trigger = { has_power_omen_modifier_trigger = no }
+		trigger = {
+			has_power_omen_modifier_trigger = no
+		}
 	}
 
 	option = { # Monks & Mystics - Hermetics Scrying reaction
 		name = EVTOPTA_SSI_006
-		tooltip_info = yes
-
-		trigger = { has_power_omen_modifier_trigger = yes }
 
 		calculate_scrying_outcome_effect = yes
 		remove_scrying_omen_modifiers_effect = yes
+		tooltip_info = yes
+		trigger = {
+			has_power_omen_modifier_trigger = yes
+		}
 	}
 }
 
 ## After first known outbreaks, Plague spreads
+
 province_event = {
 	id = RIP.10005
-
-	is_triggered_only = yes # on_province_infection
 	hide_window = yes
+
+	is_triggered_only = yes
 
 	trigger = {
 		disease = bubonic_plague
 		has_global_flag = black_death_broadcasted
-
 		any_neighbor_province = {
-			owner = {
-				OR = {
-					AND = {
-						OR = {
-							ai = no
-							society_member_of = hermetics
-						}
-
-						NOT = { has_character_flag = black_death_close }
-					}
-
+			OR = {
+				owner = { 
+					ai = no
+					NOT = { has_character_flag = black_death_close } 
+				}
+				owner = { 
 					any_liege = {
-						OR = {
-							ai = no
-							society_member_of = hermetics
-						}
-
-						NOT = { has_character_flag = black_death_close }
+						ai = no
+						NOT = { has_character_flag = black_death_close } 
 					}
 				}
 			}
@@ -371,253 +525,294 @@ province_event = {
 
 	immediate = {
 		save_event_target_as = infected_province
-
 		any_neighbor_province = {
 			limit = {
-				owner = {
-					OR = {
-						AND = {
-							OR = {
-								ai = no
-								society_member_of = hermetics
-							}
-
-							NOT = { has_character_flag = black_death_close }
-						}
-
-						any_liege = {
-							OR = {
-								ai = no
-								society_member_of = hermetics
-							}
-
-							NOT = { has_character_flag = black_death_close }
-						}
-					}
-				}
+				owner = { NOT = { has_character_flag = black_death_close } }
 			}
-
 			save_event_target_as = bordering_province
-
-			owner = {
-				if = {
-					limit = {
-						OR = {
-							ai = no
-							society_member_of = hermetics
-						}
-
-						NOT = { has_character_flag = black_death_close }
-					}
-
-					narrative_event = {
-						id = RIP.10006
-						days = 10
-					}
-				}
-
-				if = {
-					limit = { independent = no }
-
-					any_liege = {
-						limit = {
-							OR = {
-								ai = no
-								society_member_of = hermetics
-							}
-
-							NOT = { has_character_flag = black_death_close }
-						}
-
-						narrative_event = {
-							id = RIP.10006
-							days = 15
-						}
-					}
-				}
+			owner = { 
+				narrative_event = { id = RIP.10006 days = 10 } 
+				any_liege = { narrative_event = { id = RIP.10006 days = 15 } }
 			}
 		}
 	}
 }
 
-# Plague is in a province bordering realm
+#Plague is in a province bordering realm
 narrative_event = {
 	id = RIP.10006
 	title = EVTNAME_RIP_10006
-	desc = EVTDESC_RIP_10006
 	picture = GFX_evt_bring_out_your_dead
 	border = GFX_event_narrative_frame_religion
+	desc = EVTDESC_RIP_10006
 
 	is_triggered_only = yes
 
+	ai = no
+	has_global_flag = black_death_broadcasted
+	
+	trigger = {
+		NOT = { has_character_flag = black_death_close }
+	}
+
 	immediate = {
 		set_character_flag = black_death_close
-
 		random_list = {
 			10 = {
-				trigger = {
+				set_character_flag = option_a
+				modifier = {
+					factor = 0
 					OR = {
+						OR = {
+							trait = erudite
+							trait = shrewd
+							trait = genius
+							trait = quick
+						}
+						AND = {
+							NOT = { religion_group = FROM }
+							OR = {
+								trait = zealous
+								trait = cruel
+							}
+						}
+						OR = {
+							trait = kind 
+							trait = charitable 
+						}
+						AND = {
+							OR = { 
+								trait = strong 
+								trait = robust 
+								trait = brave 
+							}
+							OR = {
+								trait = stubborn
+								trait = proud
+							}
+						}
+						trait = paranoid
+					}
+				}
+			}
+			10 = {
+				set_character_flag = option_b
+				modifier = {
+					factor = 0
+					NOR = {
 						trait = erudite
 						trait = shrewd
 						trait = genius
 						trait = quick
 					}
 				}
-
-				set_character_flag = option_b
 			}
-
 			10 = {
-				trigger = {
-					NOT = { religion_group = FROM }
-
-					OR = {
-						trait = zealous
-						trait = cruel
-					}
-				}
-
 				set_character_flag = option_c
-			}
-
-			10 = {
-				trigger = {
-					OR = {
-						trait = kind
-						trait = charitable
+				modifier = {
+					factor = 0
+					NAND = {
+						NOT = { religion_group = FROM }
+						OR = {
+							trait = zealous
+							trait = cruel
+						}
 					}
 				}
-
-				set_character_flag = option_d
 			}
-
 			10 = {
-				trigger = {
-					OR = {
-						trait = strong
-						trait = robust
-						trait = brave
+				set_character_flag = option_d
+				modifier = {
+					factor = 0
+					NOR = { 
+						trait = kind 
+						trait = charitable 
 					}
-
-					OR = {
+				}
+			}
+			10 = {
+				set_character_flag = option_e
+				modifier = {
+					factor = 0
+					NOR = { 
+						trait = strong 
+						trait = robust 
+						trait = brave 
+					}
+					NOR = {
 						trait = stubborn
 						trait = proud
 					}
 				}
-
-				set_character_flag = option_e
 			}
-
 			10 = {
-				trigger = { trait = paranoid }
-
 				set_character_flag = option_f
-			}
-
-			fallback = {
-				set_character_flag = option_a
+				modifier = {
+					factor = 0
+					NOT = { trait = paranoid }
+				}
 			}
 		}
-
 		if = {
-			limit = { ai = no }
-
-			chronicle = {
-				entry = CHRONICLE_BORDERING_PLAGUE
-				picture = GFX_evt_plague_spreading
+			limit = {
+				NOR = {
+					has_character_flag = option_a
+					has_character_flag = option_b
+					has_character_flag = option_c
+					has_character_flag = option_d
+					has_character_flag = option_e
+					has_character_flag = option_f
+				}
 			}
+			set_character_flag = option_a
 		}
-
+		chronicle = {
+			entry = CHRONICLE_BORDERING_PLAGUE
+			picture = GFX_evt_plague_spreading
+		}
 		if = {
 			limit = { has_power_omen_modifier_trigger = yes }
 			set_character_flag = negative_event_flag
 		}
 	}
+	
+	option = {
+		trigger = {
+			has_character_flag = option_a
+			has_power_omen_modifier_trigger = no
+		}
+		name = EVTOPTA_RIP_10006
+	}
 
 	option = {
-		name = {
-			text = EVTOPTA_RIP_10006
-			trigger = { has_character_flag = option_a }
+		trigger = {
+			has_character_flag = option_b
+			has_power_omen_modifier_trigger = no
 		}
-		name = {
-			text = EVTOPTB_RIP_10006
-			trigger = { has_character_flag = option_b }
-		}
-		name = {
-			text = EVTOPTC_RIP_10006
-			trigger = { has_character_flag = option_c }
-		}
-		name = {
-			text = EVTOPTD_RIP_10006
-			trigger = { has_character_flag = option_d }
-		}
-		name = {
-			text = EVTOPTE_RIP_10006
-			trigger = { has_character_flag = option_e }
-		}
-		name = {
-			text = EVTOPTF_RIP_10006
-			trigger = { has_character_flag = option_f }
-		}
+		name = EVTOPTB_RIP_10006
+		clr_character_flag = option_b
+	}
 
-		trigger = { has_power_omen_modifier_trigger = no }
+	option = {
+		trigger = {
+			has_character_flag = option_c
+			has_power_omen_modifier_trigger = no
+		}
+		name = EVTOPTC_RIP_10006
+		clr_character_flag = option_c
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_d
+			has_power_omen_modifier_trigger = no
+		}
+		name = EVTOPTD_RIP_10006
+		clr_character_flag = option_d
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_e
+			has_power_omen_modifier_trigger = no
+		}
+		name = EVTOPTE_RIP_10006
+		clr_character_flag = option_e
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_f
+			has_power_omen_modifier_trigger = no
+		}
+		name = EVTOPTF_RIP_10006
+		clr_character_flag = option_f
 	}
 
 	### Hermetics: Scrying Omen result options below... ###
 	option = {
-		name = {
-			text = EVTOPTA_RIP_10006
-			trigger = { has_character_flag = option_a }
+		trigger = {
+			has_character_flag = option_a
+			has_power_omen_modifier_trigger = yes
 		}
-		name = {
-			text = EVTOPTB_RIP_10006
-			trigger = { has_character_flag = option_b }
-		}
-		name = {
-			text = EVTOPTC_RIP_10006
-			trigger = { has_character_flag = option_c }
-		}
-		name = {
-			text = EVTOPTD_RIP_10006
-			trigger = { has_character_flag = option_d }
-		}
-		name = {
-			text = EVTOPTE_RIP_10006
-			trigger = { has_character_flag = option_e }
-		}
-		name = {
-			text = EVTOPTF_RIP_10006
-			trigger = { has_character_flag = option_f }
-		}
-
-		tooltip_info = yes
-
-		trigger = { has_power_omen_modifier_trigger = yes }
+		name = EVTOPTA_RIP_10006
 
 		calculate_scrying_outcome_effect = yes
 		remove_scrying_omen_modifiers_effect = yes
+		tooltip_info = yes
 	}
 
-	after = {
-		clr_character_flag = option_a
+	option = {
+		trigger = {
+			has_character_flag = option_b
+			has_power_omen_modifier_trigger = yes
+		}
+		name = EVTOPTB_RIP_10006
+		calculate_scrying_outcome_effect = yes
+		remove_scrying_omen_modifiers_effect = yes
+		tooltip_info = yes
 		clr_character_flag = option_b
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_c
+			has_power_omen_modifier_trigger = yes
+		}
+		name = EVTOPTC_RIP_10006
+		calculate_scrying_outcome_effect = yes
+		remove_scrying_omen_modifiers_effect = yes
+		tooltip_info = yes
 		clr_character_flag = option_c
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_d
+			has_power_omen_modifier_trigger = yes
+		}
+		name = EVTOPTD_RIP_10006
+		calculate_scrying_outcome_effect = yes
+		remove_scrying_omen_modifiers_effect = yes
+		tooltip_info = yes
 		clr_character_flag = option_d
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_e
+			has_power_omen_modifier_trigger = yes
+		}
+		name = EVTOPTE_RIP_10006
+		calculate_scrying_outcome_effect = yes
+		remove_scrying_omen_modifiers_effect = yes
+		tooltip_info = yes
 		clr_character_flag = option_e
+	}
+
+	option = {
+		trigger = {
+			has_character_flag = option_f
+			has_power_omen_modifier_trigger = yes
+		}
+		name = EVTOPTF_RIP_10006
+		calculate_scrying_outcome_effect = yes
+		remove_scrying_omen_modifiers_effect = yes
+		tooltip_info = yes
 		clr_character_flag = option_f
 	}
+	
 }
 
-# See if any world_region has been severely damaged by the plague
+#See if any world_region has been severely damaged by the plague
 character_event = {
 	id = RIP.10012
-
 	is_triggered_only = yes
+
 	hide_window = yes
+	ai = no
 
 	trigger = {
-		owns = event_target:pulse_province
-
 		NAND = {
 			has_global_flag = bp_world_india_broadcasted
 			has_global_flag = bp_world_persia_broadcasted
@@ -629,6 +824,7 @@ character_event = {
 			has_global_flag = bp_world_europe_west_broadcasted
 			has_global_flag = bp_world_europe_north_broadcasted
 			has_global_flag = bp_world_steppe_broadcasted
+			has_global_flag = bp_world_far_north_broadcasted
 		}
 	}
 
@@ -636,11 +832,9 @@ character_event = {
 		if = {
 			limit = {
 				NOT = { has_global_flag = bp_world_india_broadcasted }
-
 				regional_percentage = {
 					region = world_india
-					percentage >= 0.5
-
+					percentage = 0.5
 					OR = {
 						has_province_modifier = depopulated_1
 						has_province_modifier = depopulated_2
@@ -648,33 +842,19 @@ character_event = {
 					}
 				}
 			}
-
 			set_global_flag = bp_world_india_broadcasted
-
-			event_target:pulse_province = {
-				province_event = { # Ensure it fires for whoever owns this province
-					id = RIP.10115
-					days = 10
-					random = 250
-				}
-			}
-
-			any_player = {
-				chronicle = {
-					entry = CHRONICLE_INDIA_GONE
-					picture = GFX_evt_monk
-				}
+			capital_scope = { province_event = { id = RIP.10115 } }
+			chronicle = {
+			entry = CHRONICLE_INDIA_GONE
+			picture = GFX_evt_monk
 			}
 		}
-
 		if = {
 			limit = {
 				NOT = { has_global_flag = bp_world_persia_broadcasted }
-
 				regional_percentage = {
 					region = world_persia
-					percentage >= 0.5
-
+					percentage = 0.5
 					OR = {
 						has_province_modifier = depopulated_1
 						has_province_modifier = depopulated_2
@@ -682,33 +862,19 @@ character_event = {
 					}
 				}
 			}
-
 			set_global_flag = bp_world_persia_broadcasted
-
-			event_target:pulse_province = {
-				province_event = {
-					id = RIP.10116
-					days = 10
-					random = 250
-				}
-			}
-
-			any_player = {
-				chronicle = {
-					entry = CHRONICLE_INDIA_GONE
-					picture = GFX_evt_monk
-				}
+			capital_scope = { province_event = { id = RIP.10116 } }
+			chronicle = {
+			entry = CHRONICLE_PERSIA_GONE
+			picture = GFX_evt_monk
 			}
 		}
-
 		if = {
 			limit = {
 				NOT = { has_global_flag = bp_world_middle_east_broadcasted }
-
 				regional_percentage = {
 					region = world_middle_east
-					percentage >= 0.5
-
+					percentage = 0.5
 					OR = {
 						has_province_modifier = depopulated_1
 						has_province_modifier = depopulated_2
@@ -716,33 +882,19 @@ character_event = {
 					}
 				}
 			}
-
 			set_global_flag = bp_world_middle_east_broadcasted
-
-			event_target:pulse_province = {
-				province_event = {
-					id = RIP.10117
-					days = 10
-					random = 250
-				}
-			}
-
-			any_player = {
-				chronicle = {
-					entry = CHRONICLE_MIDDLEEAST_GONE
-					picture = GFX_evt_monk
-				}
+			capital_scope = { province_event = { id = RIP.10117 } }
+			chronicle = {
+			entry = CHRONICLE_MIDDLEEAST_GONE
+			picture = GFX_evt_monk
 			}
 		}
-
 		if = {
 			limit = {
 				NOT = { has_global_flag = bp_world_africa_broadcasted }
-
 				regional_percentage = {
 					region = world_africa
-					percentage >= 0.5
-
+					percentage = 0.5
 					OR = {
 						has_province_modifier = depopulated_1
 						has_province_modifier = depopulated_2
@@ -750,33 +902,19 @@ character_event = {
 					}
 				}
 			}
-
 			set_global_flag = bp_world_africa_broadcasted
-
-			event_target:pulse_province = {
-				province_event = {
-					id = RIP.10118
-					days = 10
-					random = 250
-				}
-			}
-
-			any_player = {
-				chronicle = {
-					entry = CHRONICLE_AFRICA_GONE
-					picture = GFX_evt_monk
-				}
+			capital_scope = { province_event = { id = RIP.10118 } }
+			chronicle = {
+			entry = CHRONICLE_AFRICA_GONE
+			picture = GFX_evt_monk
 			}
 		}
-
 		if = {
 			limit = {
 				NOT = { has_global_flag = bp_world_asia_minor_broadcasted }
-
 				regional_percentage = {
 					region = world_asia_minor
-					percentage >= 0.5
-
+					percentage = 0.5
 					OR = {
 						has_province_modifier = depopulated_1
 						has_province_modifier = depopulated_2
@@ -784,33 +922,19 @@ character_event = {
 					}
 				}
 			}
-
 			set_global_flag = bp_world_asia_minor_broadcasted
-
-			event_target:pulse_province = {
-				province_event = {
-					id = RIP.10119
-					days = 10
-					random = 250
-				}
-			}
-
-			any_player = {
-				chronicle = {
-					entry = CHRONICLE_ASIAMINOR_GONE
-					picture = GFX_evt_monk
-				}
+			capital_scope = { province_event = { id = RIP.10119 } }
+			chronicle = {
+			entry = CHRONICLE_ASIAMINOR_GONE
+			picture = GFX_evt_monk
 			}
 		}
-
 		if = {
 			limit = {
 				NOT = { has_global_flag = bp_world_europe_east_broadcasted }
-
 				regional_percentage = {
 					region = world_europe_east
-					percentage >= 0.5
-
+					percentage = 0.5
 					OR = {
 						has_province_modifier = depopulated_1
 						has_province_modifier = depopulated_2
@@ -818,34 +942,19 @@ character_event = {
 					}
 				}
 			}
-
-
 			set_global_flag = bp_world_europe_east_broadcasted
-
-			event_target:pulse_province = {
-				province_event = {
-					id = RIP.10120
-					days = 10
-					random = 250
-				}
-			}
-
-			any_player = {
-				chronicle = {
-					entry = CHRONICLE_EASTEUROPE_GONE
-					picture = GFX_evt_monk
-				}
+			capital_scope = { province_event = { id = RIP.10120 } }
+			chronicle = {
+			entry = CHRONICLE_EASTEUROPE_GONE
+			picture = GFX_evt_monk
 			}
 		}
-
 		if = {
 			limit = {
 				NOT = { has_global_flag = bp_world_europe_south_broadcasted }
-
 				regional_percentage = {
 					region = world_europe_south
-					percentage >= 0.5
-
+					percentage = 0.5
 					OR = {
 						has_province_modifier = depopulated_1
 						has_province_modifier = depopulated_2
@@ -853,33 +962,19 @@ character_event = {
 					}
 				}
 			}
-
 			set_global_flag = bp_world_europe_south_broadcasted
-
-			event_target:pulse_province = {
-				province_event = {
-					id = RIP.10121
-					days = 10
-					random = 250
-				}
-			}
-
-			any_player = {
-				chronicle = {
-					entry = CHRONICLE_SOUTHEUROPE_GONE
-					picture = GFX_evt_monk
-				}
+			capital_scope = { province_event = { id = RIP.10121 } }
+			chronicle = {
+			entry = CHRONICLE_SOUTHEUROPE_GONE
+			picture = GFX_evt_monk
 			}
 		}
-
 		if = {
 			limit = {
 				NOT = { has_global_flag = bp_world_europe_west_broadcasted }
-
 				regional_percentage = {
 					region = world_europe_west
-					percentage >= 0.5
-
+					percentage = 0.5
 					OR = {
 						has_province_modifier = depopulated_1
 						has_province_modifier = depopulated_2
@@ -887,33 +982,19 @@ character_event = {
 					}
 				}
 			}
-
 			set_global_flag = bp_world_europe_west_broadcasted
-
-			event_target:pulse_province = {
-				province_event = {
-					id = RIP.10122
-					days = 10
-					random = 250
-				}
-			}
-
-			any_player = {
-				chronicle = {
-					entry = CHRONICLE_WESTEUROPE_GONE
-					picture = GFX_evt_monk
-				}
+			capital_scope = { province_event = { id = RIP.10122 } }
+			chronicle = {
+			entry = CHRONICLE_WESTEUROPE_GONE
+			picture = GFX_evt_monk
 			}
 		}
-
 		if = {
 			limit = {
 				NOT = { has_global_flag = bp_world_europe_north_broadcasted }
-
 				regional_percentage = {
 					region = world_europe_north
-					percentage >= 0.5
-
+					percentage = 0.5
 					OR = {
 						has_province_modifier = depopulated_1
 						has_province_modifier = depopulated_2
@@ -921,33 +1002,19 @@ character_event = {
 					}
 				}
 			}
-
 			set_global_flag = bp_world_europe_north_broadcasted
-
-			event_target:pulse_province = {
-				province_event = {
-					id = RIP.10123
-					days = 10
-					random = 250
-				}
-			}
-
-			any_player = {
-				chronicle = {
-					entry = CHRONICLE_NORTHEUROPE_GONE
-					picture = GFX_evt_monk
-				}
+			capital_scope = { province_event = { id = RIP.10123 } }
+			chronicle = {
+			entry = CHRONICLE_NORTHEUROPE_GONE
+			picture = GFX_evt_monk
 			}
 		}
-
 		if = {
 			limit = {
 				NOT = { has_global_flag = bp_world_steppe_broadcasted }
-
 				regional_percentage = {
 					region = world_steppe
-					percentage >= 0.5
-
+					percentage = 0.5
 					OR = {
 						has_province_modifier = depopulated_1
 						has_province_modifier = depopulated_2
@@ -955,22 +1022,11 @@ character_event = {
 					}
 				}
 			}
-
 			set_global_flag = bp_world_steppe_broadcasted
-
-			event_target:pulse_province = {
-				province_event = {
-					id = RIP.10124
-					days = 10
-					random = 250
-				}
-			}
-
-			any_player = {
-				chronicle = {
-					entry = CHRONICLE_STEPPE_GONE
-					picture = GFX_evt_monk
-				}
+			capital_scope = { province_event = { id = RIP.10124 } }
+			chronicle = {
+			entry = CHRONICLE_STEPPE_GONE
+			picture = GFX_evt_monk
 			}
 		}
 		if = {
@@ -999,32 +1055,34 @@ character_event = {
 # The Black Death has ravaged india
 province_event = {
 	id = RIP.10115
-
-	is_triggered_only = yes
 	hide_window = yes
+	is_triggered_only = yes
 
-	immediate = {
-		owner = {
-			narrative_event = { id = RIP.10015 }
-		}
-	}
+	immediate = { province_event = { id = RIP.10215 days = 10 random = 250 } } 
+}
+
+province_event = {
+	id = RIP.10215
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = { owner = { narrative_event = { id = RIP.10015 } } }
 }
 
 narrative_event = {
 	id = RIP.10015
 	title = EVTNAME_RIP_10015
-	desc = EVTDESC_RIP_10015
 	picture = GFX_evt_danse_macabre
 	border = GFX_event_narrative_frame_religion
 
+	desc = EVTDESC_RIP_10015
+
 	is_triggered_only = yes
+
 	hide_from = yes
+	
 	major = yes
-
-	major_trigger = {
-		ai = no
-	}
-
+	
 	option = {
 		name = EVTOPTA_RIP_10015
 	}
@@ -1033,32 +1091,33 @@ narrative_event = {
 # The Black Death has ravaged Persia
 province_event = {
 	id = RIP.10116
-
-	is_triggered_only = yes
 	hide_window = yes
+	is_triggered_only = yes
 
-	immediate = {
-		owner = {
-			narrative_event = { id = RIP.10016 }
-		}
-	}
+	immediate = { province_event = { id = RIP.10216 days = 20 random = 250 } } 
+}
+
+province_event = {
+	id = RIP.10216
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = { owner = { narrative_event = { id = RIP.10016 } } }
 }
 
 narrative_event = {
 	id = RIP.10016
 	title = EVTNAME_RIP_10016
-	desc = EVTDESC_RIP_10016
 	picture = GFX_evt_danse_macabre
 	border = GFX_event_narrative_frame_religion
 
+	desc = EVTDESC_RIP_10016
+
 	is_triggered_only = yes
 	hide_from = yes
+
 	major = yes
-
-	major_trigger = {
-		ai = no
-	}
-
+	
 	option = {
 		name = EVTOPTA_RIP_10015
 	}
@@ -1067,32 +1126,33 @@ narrative_event = {
 # The Black Death has ravaged the Middle East
 province_event = {
 	id = RIP.10117
-
-	is_triggered_only = yes
 	hide_window = yes
+	is_triggered_only = yes
 
-	immediate = {
-		owner = {
-			narrative_event = { id = RIP.10017 }
-		}
-	}
+	immediate = { province_event = { id = RIP.10217 days = 30 random = 250 } } 
+}
+
+province_event = {
+	id = RIP.10217
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = { owner = { narrative_event = { id = RIP.10017 } } }
 }
 
 narrative_event = {
 	id = RIP.10017
 	title = EVTNAME_RIP_10017
-	desc = EVTDESC_RIP_10017
 	picture = GFX_evt_danse_macabre
 	border = GFX_event_narrative_frame_religion
 
+	desc = EVTDESC_RIP_10017
+
 	is_triggered_only = yes
 	hide_from = yes
+
 	major = yes
-
-	major_trigger = {
-		ai = no
-	}
-
+	
 	option = {
 		name = EVTOPTA_RIP_10015
 	}
@@ -1101,32 +1161,33 @@ narrative_event = {
 # The Black Death has ravaged Africa
 province_event = {
 	id = RIP.10118
-
-	is_triggered_only = yes
 	hide_window = yes
+	is_triggered_only = yes
 
-	immediate = {
-		owner = {
-			narrative_event = { id = RIP.10018 }
-		}
-	}
+	immediate = { province_event = { id = RIP.10218 days = 40 random = 250 } } 
+}
+
+province_event = {
+	id = RIP.10218
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = { owner = { narrative_event = { id = RIP.10018 } } }
 }
 
 narrative_event = {
 	id = RIP.10018
 	title = EVTNAME_RIP_10018
-	desc = EVTDESC_RIP_10018
 	picture = GFX_evt_danse_macabre
 	border = GFX_event_narrative_frame_religion
 
+	desc = EVTDESC_RIP_10018
+
 	is_triggered_only = yes
 	hide_from = yes
+
 	major = yes
-
-	major_trigger = {
-		ai = no
-	}
-
+	
 	option = {
 		name = EVTOPTA_RIP_10015
 	}
@@ -1135,32 +1196,33 @@ narrative_event = {
 # The Black Death has ravaged Asia Minor (Turkey)
 province_event = {
 	id = RIP.10119
-
-	is_triggered_only = yes
 	hide_window = yes
+	is_triggered_only = yes
 
-	immediate = {
-		owner = {
-			narrative_event = { id = RIP.10019 }
-		}
-	}
+	immediate = { province_event = { id = RIP.10219 days = 50 random = 250 } } 
+}
+
+province_event = {
+	id = RIP.10219
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = { owner = { narrative_event = { id = RIP.10019 } } }
 }
 
 narrative_event = {
 	id = RIP.10019
 	title = EVTNAME_RIP_10019
-	desc = EVTDESC_RIP_10019
 	picture = GFX_evt_danse_macabre
 	border = GFX_event_narrative_frame_religion
 
+	desc = EVTDESC_RIP_10019
+
 	is_triggered_only = yes
 	hide_from = yes
+
 	major = yes
-
-	major_trigger = {
-		ai = no
-	}
-
+	
 	option = {
 		name = EVTOPTA_RIP_10015
 	}
@@ -1169,32 +1231,33 @@ narrative_event = {
 # The Black Death has ravaged Europe East
 province_event = {
 	id = RIP.10120
-
-	is_triggered_only = yes
 	hide_window = yes
+	is_triggered_only = yes
 
-	immediate = {
-		owner = {
-			narrative_event = { id = RIP.10020 }
-		}
-	}
+	immediate = { province_event = { id = RIP.10220 days = 60 random = 250 } } 
+}
+
+province_event = {
+	id = RIP.10220
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = { owner = { narrative_event = { id = RIP.10020 } } }
 }
 
 narrative_event = {
 	id = RIP.10020
 	title = EVTNAME_RIP_10020
-	desc = EVTDESC_RIP_10020
 	picture = GFX_evt_danse_macabre
 	border = GFX_event_narrative_frame_religion
 
+	desc = EVTDESC_RIP_10020
+
 	is_triggered_only = yes
 	hide_from = yes
+
 	major = yes
-
-	major_trigger = {
-		ai = no
-	}
-
+	
 	option = {
 		name = EVTOPTA_RIP_10015
 	}
@@ -1203,32 +1266,33 @@ narrative_event = {
 # The Black Death has ravaged Europe South
 province_event = {
 	id = RIP.10121
-
-	is_triggered_only = yes
 	hide_window = yes
+	is_triggered_only = yes
 
-	immediate = {
-		owner = {
-			narrative_event = { id = RIP.10021 }
-		}
-	}
+	immediate = { province_event = { id = RIP.10221 days = 70 random = 250 } } 
+}
+
+province_event = {
+	id = RIP.10221
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = { owner = { narrative_event = { id = RIP.10021 } } }
 }
 
 narrative_event = {
 	id = RIP.10021
 	title = EVTNAME_RIP_10021
-	desc = EVTDESC_RIP_10021
 	picture = GFX_evt_danse_macabre
 	border = GFX_event_narrative_frame_religion
 
+	desc = EVTDESC_RIP_10021
+
 	is_triggered_only = yes
 	hide_from = yes
+
 	major = yes
-
-	major_trigger = {
-		ai = no
-	}
-
+	
 	option = {
 		name = EVTOPTA_RIP_10015
 	}
@@ -1237,32 +1301,33 @@ narrative_event = {
 # The Black Death has ravaged Europe West
 province_event = {
 	id = RIP.10122
-
-	is_triggered_only = yes
 	hide_window = yes
+	is_triggered_only = yes
 
-	immediate = {
-		owner = {
-			narrative_event = { id = RIP.10022 }
-		}
-	}
+	immediate = { province_event = { id = RIP.10222 days = 80 random = 250 } } 
+}
+
+province_event = {
+	id = RIP.10222
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = { owner = { narrative_event = { id = RIP.10022 } } }
 }
 
 narrative_event = {
 	id = RIP.10022
 	title = EVTNAME_RIP_10022
-	desc = EVTDESC_RIP_10022
 	picture = GFX_evt_danse_macabre
 	border = GFX_event_narrative_frame_religion
 
+	desc = EVTDESC_RIP_10022
+
 	is_triggered_only = yes
 	hide_from = yes
+
 	major = yes
-
-	major_trigger = {
-		ai = no
-	}
-
+	
 	option = {
 		name = EVTOPTA_RIP_10015
 	}
@@ -1271,32 +1336,33 @@ narrative_event = {
 # The Black Death has ravaged Europe North
 province_event = {
 	id = RIP.10123
-
-	is_triggered_only = yes
 	hide_window = yes
+	is_triggered_only = yes
 
-	immediate = {
-		owner = {
-			narrative_event = { id = RIP.10023 }
-		}
-	}
+	immediate = { province_event = { id = RIP.10223 days = 90 random = 250 } } 
+}
+
+province_event = {
+	id = RIP.10223
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = { owner = { narrative_event = { id = RIP.10023 } } }
 }
 
 narrative_event = {
 	id = RIP.10023
 	title = EVTNAME_RIP_10023
-	desc = EVTDESC_RIP_10023
 	picture = GFX_evt_danse_macabre
 	border = GFX_event_narrative_frame_religion
 
+	desc = EVTDESC_RIP_10023
+
 	is_triggered_only = yes
 	hide_from = yes
+
 	major = yes
-
-	major_trigger = {
-		ai = no
-	}
-
+	
 	option = {
 		name = EVTOPTA_RIP_10015
 	}
@@ -1305,30 +1371,35 @@ narrative_event = {
 # The Black Death has ravaged the Steppe
 province_event = {
 	id = RIP.10124
-
-	is_triggered_only = yes
 	hide_window = yes
+	is_triggered_only = yes
 
-	immediate = {
-		owner = {
-			narrative_event = { id = RIP.10024 }
-		}
-	}
+	immediate = { province_event = { id = RIP.10224 days = 100 random = 250 } } 
+}
+
+province_event = {
+	id = RIP.10224
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = { owner = { narrative_event = { id = RIP.10024 } } }
 }
 
 narrative_event = {
 	id = RIP.10024
 	title = EVTNAME_RIP_10024
-	desc = EVTDESC_RIP_10024
 	picture = GFX_evt_danse_macabre
 	border = GFX_event_narrative_frame_religion
 
+	desc = EVTDESC_RIP_10024
+
 	is_triggered_only = yes
 	hide_from = yes
-	major = yes
 
-	major_trigger = {
-		ai = no
+	major = yes
+	
+	option = {
+		name = EVTOPTA_RIP_10015
 	}
 }
 
@@ -1367,123 +1438,110 @@ narrative_event = {
 	}
 }
 
-# Depopulation modifier dissipating
+#depopulation modifier dissipating
 province_event = {
 	id = RIP.10030
-
-	is_triggered_only = yes # on_province_major_modifier
 	hide_window = yes
 
-	trigger = {
-		has_disease = no
+	is_triggered_only = yes
 
+	trigger = {
 		OR = {
 			has_province_modifier = depopulated_1
 			has_province_modifier = depopulated_2
 			has_province_modifier = depopulated_3
 		}
+		NOT = {
+			has_disease = yes
+		}
 	}
-
+	
 	immediate = {
 		random_list = {
 			30 = {
-				mult_modifier = {
+				modifier = {
 					factor = 1.5
 					is_capital = yes
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.3
-					is_coastal = yes
+					port = yes
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.3
 					has_trade_post = yes
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.3
-					owner = { stewardship >= 20 }
+					holder_scope = {
+						stewardship = 20
+					}
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.2
-					owner = { stewardship >= 15 }
+					holder_scope = {
+						stewardship = 15
+					}
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.1
-					owner = { stewardship >= 10 }
+					holder_scope = {
+						stewardship = 10
+					}
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.1
-					num_of_settlements >= 2
+					num_of_settlements = 2
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.1
-					num_of_settlements >= 3
+					num_of_settlements = 3
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.1
-					num_of_settlements >= 4
+					num_of_settlements = 4
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.1
-					num_of_settlements >= 5
+					num_of_settlements = 5
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.1
-					num_of_settlements >= 6
+					num_of_settlements = 6
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.1
-					num_of_settlements >= 7
+					num_of_settlements = 7
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.1
-					hospital_level >= 1
+					hospital_level = 1
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.1
-					hospital_level >= 2
+					hospital_level = 2
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.1
-					hospital_level >= 3
+					hospital_level = 3
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.1
-					hospital_level >= 4
+					hospital_level = 4
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.1
-					hospital_level >= 5
+					hospital_level = 5
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.1
-					hospital_level >= 6
+					hospital_level = 6
 				}
-
 				decrease_depopulation_effect = yes
 			}
-
 			70 = { # Nothing Happens
-				mult_modifier = {
+				modifier = {
 					factor = 3
-
 					any_province_holding = {
 						OR = {
 							is_occupied = yes
@@ -1491,18 +1549,15 @@ province_event = {
 						}
 					}
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.2
 					is_winter = yes
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 1.5
 					has_province_modifier = depopulated_2
 				}
-
-				mult_modifier = {
+				modifier = {
 					factor = 2
 					has_province_modifier = depopulated_3
 				}
@@ -1513,19 +1568,18 @@ province_event = {
 
 character_event = {
 	id = RIP.10031
-
-	is_triggered_only = yes # on_decade_pulse
 	hide_window = yes
 
 	ai = no
 	has_global_flag = black_death_broadcasted
+	
+	is_triggered_only = yes
 
 	trigger = {
 		NOR = {
 			any_province = {
 				disease = bubonic_plague
 			}
-
 			regional_percentage = {
 				region = world_india
 				percentage = 0.5
@@ -1535,7 +1589,6 @@ character_event = {
 					has_province_modifier = depopulated_3
 				}
 			}
-
 			regional_percentage = {
 				region = world_persia
 				percentage = 0.5
@@ -1545,7 +1598,6 @@ character_event = {
 					has_province_modifier = depopulated_3
 				}
 			}
-
 			regional_percentage = {
 				region = world_middle_east
 				percentage = 0.5
@@ -1555,7 +1607,6 @@ character_event = {
 					has_province_modifier = depopulated_3
 				}
 			}
-
 			regional_percentage = {
 				region = world_africa
 				percentage = 0.5
@@ -1565,7 +1616,6 @@ character_event = {
 					has_province_modifier = depopulated_3
 				}
 			}
-
 			regional_percentage = {
 				region = world_asia_minor
 				percentage = 0.5
@@ -1575,7 +1625,6 @@ character_event = {
 					has_province_modifier = depopulated_3
 				}
 			}
-
 			regional_percentage = {
 				region = world_europe_east
 				percentage = 0.5
@@ -1585,7 +1634,6 @@ character_event = {
 					has_province_modifier = depopulated_3
 				}
 			}
-
 			regional_percentage = {
 				region = world_europe_south
 				percentage = 0.5
@@ -1595,7 +1643,6 @@ character_event = {
 					has_province_modifier = depopulated_3
 				}
 			}
-
 			regional_percentage = {
 				region = world_europe_west
 				percentage = 0.5
@@ -1605,7 +1652,6 @@ character_event = {
 					has_province_modifier = depopulated_3
 				}
 			}
-
 			regional_percentage = {
 				region = world_europe_north
 				percentage = 0.5
@@ -1615,9 +1661,17 @@ character_event = {
 					has_province_modifier = depopulated_3
 				}
 			}
-
 			regional_percentage = {
 				region = world_steppe
+				percentage = 0.5
+				OR = {
+					has_province_modifier = depopulated_1
+					has_province_modifier = depopulated_2
+					has_province_modifier = depopulated_3
+				}
+			}
+			regional_percentage = {
+				region = world_far_north
 				percentage = 0.5
 				OR = {
 					has_province_modifier = depopulated_1
@@ -1640,5 +1694,6 @@ character_event = {
 		clr_global_flag = bp_world_europe_west_broadcasted
 		clr_global_flag = bp_world_europe_north_broadcasted
 		clr_global_flag = bp_world_steppe_broadcasted
+		clr_global_flag = bp_world_far_north_broadcasted
 	}
 }
