@@ -3828,212 +3828,106 @@ add_symptom_effect = {
 	}
 }
 
-add_symptom_effect = {
-	custom_tooltip = {
-		text = add_symptom_tooltip
-		hidden_tooltip = {
-			random_list = {
-				10 = {
-					modifier = {
-						factor = 0
-							trait = cough
-					}
-					character_event = { id = RIP.5000 days = 1 }
-				}
-				10 = {
-					modifier = {
-						factor = 0
-							trait = fever
-
-					}
-					character_event = { id = RIP.5001 days = 1 }
-				}
-				10 = {
-					modifier = {
-						factor = 0
-							trait = diarrhea
-
-					}
-					character_event = { id = RIP.5002 days = 1 }
-				}
-				10 = {
-					modifier = {
-						factor = 0
-							trait = vomiting
-					}
-					character_event = { id = RIP.5003 days = 1 }
-				}
-				10 = {
-					modifier = {
-						factor = 0
-							trait = headache
-					}
-					character_event = { id = RIP.5004 days = 1 }
-				}
-				10 = {
-					modifier = {
-						factor = 0
-							trait = chest_pain
-					}
-					character_event = { id = RIP.5005 days = 1 }
-				}
-				10 = {
-					modifier = {
-						factor = 0
-							trait = cramps
-					}
-					character_event = { id = RIP.5006 days = 1 }
-				}
-				10 = {
-					modifier = {
-						factor = 0
-							trait = rash
-					}
-					character_event = { id = RIP.5007 days = 1 }
-				}
-				10 = {
-					modifier = {
-						factor = 0
-							trait = abdominal_pain
-					}
-					character_event = { id = RIP.5008 days = 1 }
-				}
-				10 = {
-					modifier = {
-						factor = 0
-							trait = fatigue
-					}
-					character_event = { id = RIP.5009 days = 1 }
-				}
-				10 = {
-					modifier = {
-						factor = 0
-							trait = malaise
-					}
-					character_event = { id = RIP.5010 days = 1 }
-				}
-			}
-		}
-	}
-}
-
-
 add_maimed_trait_effect = {
 	custom_tooltip = {
 		text = maimed_effect_tooltip
-		hidden_tooltip = {
+
+		hidden_effect = {
 			random_list = {
 				10 = {
-					modifier = {
-						factor = 0
-						has_dlc = "Reapers"
+					trigger = {
+						NOT = { has_dlc = "Reapers" }
 					}
+
 					add_trait = maimed
-					character_event = { id = 38281 }
+					character_event = { id = 38281 } # Notification: I have become maimed
 				}
+
 				15 = {
-					modifier = {
-						factor = 0
-						OR = {
+					trigger = {
+						has_dlc = "Reapers"
+
+						NOR = {
 							trait = one_eyed
 							trait = blinded
-							NOT = { has_dlc = "Reapers" }
 						}
 					}
+
 					add_trait = one_eyed
-					character_event = { id = RIP.11501 }
+					character_event = { id = RIP.11501 } # Inform player
 				}
+
+
 				10 = {
-					modifier = {
-						factor = 0
-						OR = {
-							trait = one_legged
-							NOT = { has_dlc = "Reapers" }
-						}
+					trigger = {
+						has_dlc = "Reapers"
+						NOT = { trait = one_legged }
 					}
+
 					add_trait = one_legged
-					character_event = { id = RIP.11503 }
+					character_event = { id = RIP.11503 } # Inform player
 				}
+
 				20 = {
-					modifier = {
-						factor = 0
-						OR = {
-							trait = one_handed
-							NOT = { has_dlc = "Reapers" }
-						}
+					trigger = {
+						has_dlc = "Reapers"
+						NOT = { trait = one_handed }
 					}
+
 					add_trait = one_handed
-					character_event = { id = RIP.11502 }
+					character_event = { id = RIP.11502 } # Inform player
 				}
+
 				10 = {
-					modifier = {
-						factor = 0
-						OR = {
-							trait = disfigured
-							NOT = { has_dlc = "Reapers" }
-						}
+					trigger = {
+						has_dlc = "Reapers"
+						NOT = { trait = disfigured }
 					}
+
 					add_trait = disfigured
-					character_event = { id = RIP.11504 }
+					character_event = { id = RIP.11504 } # Inform player
 				}
+
 				5 = {
-					modifier = {
-						factor = 0
-						OR = {
-							trait = mangled
-							NOT = { has_dlc = "Reapers" }
-						}
+					trigger = {
+						has_dlc = "Reapers"
+						NOT = { trait = mangled }
 					}
+
 					add_trait = mangled
-					character_event = { id = RIP.11505 }
+					character_event = { id = RIP.11505 } # Inform player
 				}
 			}
 		}
 	}
-	if = {
-		limit = {
-			AND = {
-				has_dlc = "Reapers"
-				NOT = { trait = severely_injured }
-			}
-		}
-		add_trait = severely_injured
-		hidden_tooltip = {
-			random_list = {
-				75 = { #Get rid of severely_injured
-					character_event = { id = RIP.11000 days = 90 random = 275}
-				}
-				25 = { #Get rid of severely_injured but develop infection
-					set_character_flag = pending_infection
-					character_event = { id = RIP.11000 days = 90 random = 275}
-				}
-			}
-		}
-	}
+
+	add_trait_severely_injured_effect = yes
 }
 
 add_plague_symptom_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				factor = 0
-				trait = malaise
+			trigger = {
+				NOT = { trait = malaise }
 			}
-			character_event = { id = RIP.5010 }
+
+			character_event = { id = RIP.5010 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fever
+			trigger = {
+				NOT = { trait = fever }
 			}
-			character_event = { id = RIP.5001 }
+
+			character_event = { id = RIP.5001 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = cramps
+			trigger = {
+				NOT = { trait = cramps }
 			}
-			character_event = { id = RIP.5006 }
+
+			character_event = { id = RIP.5006 } # Determine disease, get treatment
 		}
 	}
 }
@@ -4041,25 +3935,27 @@ add_plague_symptom_effect = {
 add_pneumonia_symptom_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				factor = 0
-				trait = cough
+			trigger = {
+				NOT = { trait = cough }
 			}
-			character_event = { id = RIP.5000 }
+
+			character_event = { id = RIP.5000 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fever
+			trigger = {
+				NOT = { trait = fever }
 			}
-			character_event = { id = RIP.5001 }
+
+			character_event = { id = RIP.5001 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = chest_pain
+			trigger = {
+				NOT = { trait = chest_pain }
 			}
-			character_event = { id = RIP.5005 }
+
+			character_event = { id = RIP.5005 } # Determine disease, get treatment
 		}
 	}
 }
@@ -4067,25 +3963,27 @@ add_pneumonia_symptom_effect = {
 add_syphilis_symptom_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				factor = 0
-				trait = rash
+			trigger = {
+				NOT = { trait = rash }
 			}
-			character_event = { id = RIP.5007 }
+
+			character_event = { id = RIP.5007 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fever
+			trigger = {
+				NOT = { trait = fever }
 			}
-			character_event = { id = RIP.5001 }
+
+			character_event = { id = RIP.5001 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = headache
+			trigger = {
+				NOT = { trait = headache }
 			}
-			character_event = { id = RIP.5004 }
+
+			character_event = { id = RIP.5004 } # Determine disease, get treatment
 		}
 	}
 }
@@ -4093,32 +3991,35 @@ add_syphilis_symptom_effect = {
 add_tuberculosis_symptom_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				factor = 0
-				trait = cough
+			trigger = {
+				NOT = { trait = cough }
 			}
-			character_event = { id = RIP.5000 }
+
+			character_event = { id = RIP.5000 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fever
+			trigger = {
+				NOT = { trait = fever }
 			}
-			character_event = { id = RIP.5001 }
+
+			character_event = { id = RIP.5001 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = chest_pain
+			trigger = {
+				NOT = { trait = chest_pain }
 			}
-			character_event = { id = RIP.5005 }
+
+			character_event = { id = RIP.5005 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fatigue
+			trigger = {
+				NOT = { trait = fatigue }
 			}
-			character_event = { id = RIP.5009 }
+
+			character_event = { id = RIP.5009 } # Determine disease, get treatment
 		}
 	}
 }
@@ -4126,32 +4027,35 @@ add_tuberculosis_symptom_effect = {
 add_typhoid_symptom_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				factor = 0
-				trait = diarrhea
+			trigger = {
+				NOT = { trait = diarrhea }
 			}
-			character_event = { id = RIP.5002 }
+
+			character_event = { id = RIP.5002 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fever
+			trigger = {
+				NOT = { trait = fever }
 			}
-			character_event = { id = RIP.5001 }
+
+			character_event = { id = RIP.5001 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = abdominal_pain
+			trigger = {
+				NOT = { trait = abdominal_pain }
 			}
-			character_event = { id = RIP.5008 }
+
+			character_event = { id = RIP.5008 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = malaise
+			trigger = {
+				NOT = { trait = malaise }
 			}
-			character_event = { id = RIP.5010 }
+
+			character_event = { id = RIP.5010 } # Determine disease, get treatment
 		}
 	}
 }
@@ -4159,46 +4063,51 @@ add_typhoid_symptom_effect = {
 add_typhus_symptom_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				factor = 0
-				trait = diarrhea
+			trigger = {
+				NOT = { trait = diarrhea }
 			}
-			character_event = { id = RIP.5002 }
+
+			character_event = { id = RIP.5002 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fever
+			trigger = {
+				NOT = { trait = fever }
 			}
-			character_event = { id = RIP.5001 }
+
+			character_event = { id = RIP.5001 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = abdominal_pain
+			trigger = {
+				NOT = { trait = abdominal_pain }
 			}
-			character_event = { id = RIP.5008 }
+
+			character_event = { id = RIP.5008 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fatigue
+			trigger = {
+				NOT = { trait = fatigue }
 			}
-			character_event = { id = RIP.5009 }
+
+			character_event = { id = RIP.5009 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = rash
+			trigger = {
+				NOT = { trait = rash }
 			}
-			character_event = { id = RIP.5007 }
+
+			character_event = { id = RIP.5007 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = headache
+			trigger = {
+				NOT = { trait = headache }
 			}
-			character_event = { id = RIP.5004 }
+
+			character_event = { id = RIP.5004 } # Determine disease, get treatment
 		}
 	}
 }
@@ -4206,25 +4115,27 @@ add_typhus_symptom_effect = {
 add_measles_symptom_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				factor = 0
-				trait = rash
+			trigger = {
+				NOT = { trait = rash }
 			}
-			character_event = { id = RIP.5007 }
+
+			character_event = { id = RIP.5007 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fever
+			trigger = {
+				NOT = { trait = fever }
 			}
-			character_event = { id = RIP.5001 }
+
+			character_event = { id = RIP.5001 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = cough
+			trigger = {
+				NOT = { trait = cough }
 			}
-			character_event = { id = RIP.5000 }
+
+			character_event = { id = RIP.5000 } # Determine disease, get treatment
 		}
 	}
 }
@@ -4232,32 +4143,35 @@ add_measles_symptom_effect = {
 add_smallpox_symptom_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				factor = 0
-				trait = rash
+			trigger = {
+				NOT = { trait = rash }
 			}
-			character_event = { id = RIP.5007 }
+
+			character_event = { id = RIP.5007 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fever
+			trigger = {
+				NOT = { trait = fever }
 			}
-			character_event = { id = RIP.5001 }
+
+			character_event = { id = RIP.5001 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = headache
+			trigger = {
+				NOT = { trait = headache }
 			}
-			character_event = { id = RIP.5004 }
+
+			character_event = { id = RIP.5004 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = malaise
+			trigger = {
+				NOT = { trait = malaise }
 			}
-			character_event = { id = RIP.5010 }
+
+			character_event = { id = RIP.5010 } # Determine disease, get treatment
 		}
 	}
 }
@@ -4265,60 +4179,67 @@ add_smallpox_symptom_effect = {
 add_flu_symptom_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fatigue
+			trigger = {
+				NOT = { trait = fatigue }
 			}
-			character_event = { id = RIP.5009 }
+
+			character_event = { id = RIP.5009 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fever
+			trigger = {
+				NOT = { trait = fever }
 			}
-			character_event = { id = RIP.5001 }
+
+			character_event = { id = RIP.5001 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = headache
+			trigger = {
+				NOT = { trait = headache }
 			}
-			character_event = { id = RIP.5004 }
+
+			character_event = { id = RIP.5004 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = malaise
+			trigger = {
+				NOT = { trait = malaise }
 			}
-			character_event = { id = RIP.5010 }
+
+			character_event = { id = RIP.5010 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = cough
+			trigger = {
+				NOT = { trait = cough }
 			}
-			character_event = { id = RIP.5000 }
+
+			character_event = { id = RIP.5000 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = abdominal_pain
+			trigger = {
+				NOT = { trait = abdominal_pain }
 			}
-			character_event = { id = RIP.5008 }
+
+			character_event = { id = RIP.5008 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = diarrhea
+			trigger = {
+				NOT = { trait = diarrhea }
 			}
-			character_event = { id = RIP.5002 }
+
+			character_event = { id = RIP.5002 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = vomiting
+			trigger = {
+				NOT = { trait = vomiting }
 			}
-			character_event = { id = RIP.5003 }
+
+			character_event = { id = RIP.5003 } # Determine disease, get treatment
 		}
 	}
 }
@@ -4326,25 +4247,27 @@ add_flu_symptom_effect = {
 add_dysentery_symptom_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				factor = 0
-				trait = diarrhea
+			trigger = {
+				NOT = { trait = diarrhea }
 			}
-			character_event = { id = RIP.5002 }
+
+			character_event = { id = RIP.5002 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fever
+			trigger = {
+				NOT = { trait = fever }
 			}
-			character_event = { id = RIP.5001 }
+
+			character_event = { id = RIP.5001 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = abdominal_pain
+			trigger = {
+				NOT = { trait = abdominal_pain }
 			}
-			character_event = { id = RIP.5008 }
+
+			character_event = { id = RIP.5008 } # Determine disease, get treatment
 		}
 	}
 }
@@ -4352,18 +4275,19 @@ add_dysentery_symptom_effect = {
 add_gout_symptom_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fatigue 
+			trigger = {
+				NOT = { trait = fatigue }
 			}
-			character_event = { id = RIP.5009 }
+
+			character_event = { id = RIP.5009 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fever
+			trigger = {
+				NOT = { trait = fever }
 			}
-			character_event = { id = RIP.5001 }
+
+			character_event = { id = RIP.5001 } # Determine disease, get treatment
 		}
 	}
 }
@@ -4371,32 +4295,35 @@ add_gout_symptom_effect = {
 add_food_poisoning_symptom_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				factor = 0
-				trait = diarrhea
+			trigger = {
+				NOT = { trait = diarrhea }
 			}
-			character_event = { id = RIP.5002 }
+
+			character_event = { id = RIP.5002 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fever
+			trigger = {
+				NOT = { trait = fever }
 			}
-			character_event = { id = RIP.5001 }
+
+			character_event = { id = RIP.5001 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = cramps
+			trigger = {
+				NOT = { trait = cramps }
 			}
-			character_event = { id = RIP.5006 }
+
+			character_event = { id = RIP.5006 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = vomiting
+			trigger = {
+				NOT = { trait = vomiting }
 			}
-			character_event = { id = RIP.5003 }
+
+			character_event = { id = RIP.5003 } # Determine disease, get treatment
 		}
 	}
 }
@@ -4404,25 +4331,27 @@ add_food_poisoning_symptom_effect = {
 add_rabies_symptom_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				factor = 0
-				trait = malaise
+			trigger = {
+				NOT = { trait = malaise }
 			}
-			character_event = { id = RIP.5010 }
+
+			character_event = { id = RIP.5010 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fever
+			trigger = {
+				NOT = { trait = fever }
 			}
-			character_event = { id = RIP.5001 }
+
+			character_event = { id = RIP.5001 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fatigue
+			trigger = {
+				NOT = { trait = fatigue }
 			}
-			character_event = { id = RIP.5009 }
+
+			character_event = { id = RIP.5009 } # Determine disease, get treatment
 		}
 	}
 }
@@ -4430,60 +4359,67 @@ add_rabies_symptom_effect = {
 add_cancer_symptom_effect = {
 	random_list = {
 		10 = {
-			modifier = {
-				factor = 0
-				trait = fatigue
+			trigger = {
+				NOT = { trait = fatigue }
 			}
-			character_event = { id = RIP.5009 }
+
+			character_event = { id = RIP.5009 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = chest_pain
+			trigger = {
+				NOT = { trait = chest_pain }
 			}
-			character_event = { id = RIP.5005 }
+
+			character_event = { id = RIP.5005 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = headache
+			trigger = {
+				NOT = { trait = headache }
 			}
-			character_event = { id = RIP.5004 }
+
+			character_event = { id = RIP.5004 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = malaise
+			trigger = {
+				NOT = { trait = malaise }
 			}
-			character_event = { id = RIP.5010 }
+
+			character_event = { id = RIP.5010 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = cough
+			trigger = {
+				NOT = { trait = cough }
 			}
-			character_event = { id = RIP.5000 }
+
+			character_event = { id = RIP.5000 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = abdominal_pain
+			trigger = {
+				NOT = { trait = abdominal_pain }
 			}
-			character_event = { id = RIP.5008 }
+
+			character_event = { id = RIP.5008 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = diarrhea
+			trigger = {
+				NOT = { trait = diarrhea }
 			}
-			character_event = { id = RIP.5002 }
+
+			character_event = { id = RIP.5002 } # Determine disease, get treatment
 		}
+
 		10 = {
-			modifier = {
-				factor = 0
-				trait = vomiting
+			trigger = {
+				NOT = { trait = vomiting }
 			}
-			character_event = { id = RIP.5003 }
+
+			character_event = { id = RIP.5003 } # Determine disease, get treatment
 		}
 	}
 }
@@ -4897,84 +4833,52 @@ prisoner_humiliation_effect = {
 }
 maim_hand_effect = {
 	if = {
-		limit = {
-			NOT = {
-				has_dlc = "Reapers"
-			}
-		}
-		add_trait = maimed
-	}
-	if = {
-		limit = {
-			has_dlc = "Reapers"
-		}
+		limit = { has_dlc = "Reapers" }
+
 		if = {
 			limit = {
 				trait = one_handed
 				NOT = { trait = mangled }
 			}
+
 			add_trait = mangled
-			hidden_tooltip = { character_event = { id = RIP.11505 } }
+			character_event = { id = RIP.11505 }
 		}
-		if = {
+		else_if = {
 			limit = {
 				NOT = { trait = one_handed }
 			}
+
 			add_trait = one_handed
-			hidden_tooltip = { character_event = { id = RIP.11502 } }
+			character_event = { id = RIP.11502 }
 		}
 	}
-	add_trait = severely_injured
-	hidden_tooltip = {
-		hidden_tooltip = {
-			random_list = {
-				75 = { #Get rid of severely_injured
-					character_event = { id = RIP.11000 days = 90 random = 275}
-				}
-				25 = { #Get rid of severely_injured but develop infection
-					set_character_flag = pending_infection
-					character_event = { id = RIP.11000 days = 90 random = 275}
-				}
-			}
-		}
+	else = {
+		add_trait = maimed
 	}
+
+	add_severely_injured_effect = yes
 }
 
 mangle_effect = {
 	if = {
-		limit = {
-			NOT = {
-				has_dlc = "Reapers"
-			}
-		}
-		add_trait = maimed
-	}
-	if = {
-		limit = {
-			has_dlc = "Reapers"
-		}
+		limit = { has_dlc = "Reapers" }
+
 		if = {
 			limit = {
 				NOT = { trait = mangled }
 			}
+
 			add_trait = mangled
-			hidden_tooltip = { character_event = { id = RIP.11505 } }
+			character_event = { id = RIP.11505 }
 		}
 	}
+	else = {
+		add_trait = maimed
+	}
+
 	add_trait = severely_injured
-	hidden_tooltip = {
-		hidden_tooltip = {
-			random_list = {
-				75 = { #Get rid of severely_injured
-					character_event = { id = RIP.11000 days = 90 random = 275}
-				}
-				25 = { #Get rid of severely_injured but develop infection
-					set_character_flag = pending_infection
-					character_event = { id = RIP.11000 days = 90 random = 275}
-				}
-			}
-		}
-	}
+	resolve_severely_injured_effect = yes
 }
 
 remove_treatment_modifiers_effect = {
@@ -5074,12 +4978,10 @@ give_epidemic_disease_effect = {
 
 		set_character_flag = got_tuberculosis
 		set_character_flag = developing_illness
-
-		character_event = { id = RIP.5015 }
-
-		break = yes
+		character_event = { id = RIP.5015 } # Develop disease
 	}
-	if = {
+
+	else_if = {
 		limit = {
 			location = { disease = typhoid_fever }
 			NOT = { has_character_flag = immune_typhoid_fever }
@@ -5087,12 +4989,10 @@ give_epidemic_disease_effect = {
 
 		set_character_flag = got_typhoid_fever
 		set_character_flag = developing_illness
-
-		character_event = { id = RIP.5016 }
-
-		break = yes
+		character_event = { id = RIP.5016 } # Develop disease
 	}
-	if = {
+
+	else_if = {
 		limit = {
 			location = { disease = typhus }
 			NOT = { has_character_flag = immune_typhus }
@@ -5100,38 +5000,32 @@ give_epidemic_disease_effect = {
 
 		set_character_flag = got_typhus
 		set_character_flag = developing_illness
-
-		character_event = { id = RIP.5017 }
-
-		break = yes
+		character_event = { id = RIP.5017 } # Develop disease
 	}
-	if = {
-		limit = { 
+
+	else_if = {
+		limit = {
 			location = { disease = bubonic_plague }
 			NOT = { has_character_flag = immune_bubonic_plague }
 		}
 
 		set_character_flag = got_bubonic_plague
 		set_character_flag = developing_illness
-
-		character_event = { id = RIP.5012 }
-
-		break = yes
+		character_event = { id = RIP.5012 } # Develop disease
 	}
-	if = {
-		limit = { 
+
+	else_if = {
+		limit = {
 			location = { disease = measles }
 			NOT = { has_character_flag = immune_measles }
 		}
 
 		set_character_flag = got_measles
 		set_character_flag = developing_illness
-
-		character_event = { id = RIP.5018 }
-
-		break = yes
+		character_event = { id = RIP.5018 } # Develop disease
 	}
-	if = {
+
+	else_if = {
 		limit = {
 			location = { disease = small_pox }
 			NOT = { has_character_flag = immune_smallpox }
@@ -5139,23 +5033,18 @@ give_epidemic_disease_effect = {
 
 		set_character_flag = got_small_pox
 		set_character_flag = developing_illness
-
-		character_event = { id = RIP.5019 }
-
-		break = yes
+		character_event = { id = RIP.5019 } # Develop disease
 	}
-	if = {
-		limit = { 
+
+	else_if = {
+		limit = {
 			location = { disease = syphilis }
 			NOT = { has_character_flag = immune_syphilis }
 		}
 
 		set_character_flag = got_syphilis
 		set_character_flag = developing_illness
-
-		character_event = { id = RIP.5014 }
-
-		break = yes
+		character_event = { id = RIP.5014 } # Develop disease
 	}
 }
 
@@ -5166,15 +5055,24 @@ blessing_removes_disease_effect = {
 			has_character_flag = old_gods_blessing
 			has_character_modifier = blessing_of_health
 		}
-		hidden_tooltip = { character_event = { id = TOG.7015 days = 30 } }
+
+		character_event = {
+			id = TOG.7015 # Blessing of health healing illness
+			days = 30
+		}
 	}
+
 	if = {
 		limit = {
 			has_dlc = "Sons of Abraham"
 			has_character_flag = pilgrim_blessing
-			has_character_modifier = blessing_of_health 
+			has_character_modifier = blessing_of_health
 		}
-		hidden_tooltip = { character_event = { id = SoA.5068 days = 30 } }
+
+		character_event = {
+			id = SoA.5068 # Blessing of health cures disease after having visited the monks
+			days = 30
+		}
 	}
 }
 
@@ -5182,12 +5080,17 @@ deaths_gift_removes_disease_effect = {
 	if = {
 		limit = {
 			has_dlc = "Reapers"
-			has_character_modifier = deaths_gift 
+			has_character_modifier = deaths_gift
 		}
-		hidden_tooltip = { character_event = { id = RIP.30233 days = 30 } }
+
+		character_event = {
+			id = RIP.30233 # Death's gift
+			days = 30
+		}
 	}
 }
 
+# Only generates tooltip for present traits
 remove_disease_trait_effect = {
 	if = {
 	 	limit = { trait = ill }
@@ -5265,19 +5168,29 @@ remove_disease_trait_effect = {
 	 	limit = { trait = leper }
 	 	remove_trait = leper
 	}
+
+	if = {
+		limit = { trait = sickly }
+		remove_trait = sickly
+	}
+
 	clear_disease_level_effect = yes
 }
 
 resolve_severely_injured_effect = {
-	hidden_tooltip = {
-		random_list = {
-			70 = { #Get rid of severely_injured
-				character_event = { id = RIP.11000 days = 100 random = 300 }
-			}
-			30 = { #Get rid of severely_injured but develop infection
-				set_character_flag = pending_infection
-				character_event = { id = RIP.11000 days = 100 random = 300 }
-			}
+	hidden_effect = {
+		random = {
+			chance = 30
+
+			# Develop infection instead
+			set_character_flag = pending_infection
+		}
+
+		# Get rid of severely_injured
+		character_event = {
+			id = RIP.11000
+			days = 100
+			random = 300
 		}
 	}
 }
@@ -5421,131 +5334,169 @@ decrease_prosperity_variable_effect = {
 }
 
 add_disease_level_effect = {
-		random_list = {
-			65 = { 
-				custom_tooltip = {
-					text = become_normal_ill
-				}
+	random_list = {
+		65 = {
+			custom_tooltip = {
+				text = become_normal_ill
 			}
-			20 = { 
-				modifier = {
-					factor = 2
-					trait = strong
-				}
-				modifier = {
-					factor = 2
-					trait = robust
-				}
-				custom_tooltip = {
-					text = become_mild_ill
-					hidden_tooltip = { 
-						add_character_modifier = { name = mild_illness duration = -1 }
-					}
-				}
+		}
+
+		20 = {
+			mult_modifier = {
+				factor = 2
+				trait = strong
 			}
-			10 = { 
-				modifier = {
-					factor = 1.5
-					trait = feeble
-				}
-				modifier = {
-					factor = 1.5
-					trait = weak
-				}
-				modifier = {
-					factor = 0.5
-					trait = strong
-				}
-				modifier = {
-					factor = 0.5
-					trait = robust
-				}
-				modifier = {
-					factor = 1.5
-					age = 50
-				}
-				modifier = {
-					factor = 1.5
-					age = 60
-				}
-				modifier = {
-					factor = 1.5
-					age = 70
-				}
-				modifier = {
-					factor = 1.5
-					age = 80
-				}
-				custom_tooltip = {
-					text = become_severe_ill
-					hidden_tooltip = { 
-						add_character_modifier = { name = severe_illness duration = -1 }
-					}
-				}
+
+			mult_modifier = {
+				factor = 2
+				trait = robust
 			}
-			5= { 
-				modifier = {
-					factor = 0
-					immortal = yes
-				}
-				modifier = {
-					factor = 2
-					trait = feeble
-				}
-				modifier = {
-					factor = 2
-					trait = weak
-				}
-				modifier = {
-					factor = 0.5
-					trait = strong
-				}
-				modifier = {
-					factor = 0.5
-					trait = robust
-				}
-				 modifier = {
-					factor = 2
-					age = 50
-				}
-				modifier = {
-					factor = 2
-					age = 60
-				}
-				modifier = {
-					factor = 2
-					age = 70
-				}
-				modifier = {
-					factor = 2
-					age = 80
-				}
-				custom_tooltip = {
-					text = become_bedridden_ill
-					hidden_tooltip = { 
-						add_character_modifier = { name = bedridden_illness duration = -1 }
-						add_trait = sick_incapable
-					}
+
+			custom_tooltip = {
+				text = become_mild_ill
+
+				add_character_modifier = {
+					name = mild_illness
+					duration = -1
 				}
 			}
 		}
+
+		10 = {
+			mult_modifier = {
+				factor = 1.5
+				trait = feeble
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				trait = weak
+			}
+
+			mult_modifier = {
+				factor = 0.5
+				trait = strong
+			}
+
+			mult_modifier = {
+				factor = 0.5
+				trait = robust
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				practical_age >= 50
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				practical_age >= 60
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				practical_age >= 70
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				practical_age >= 80
+			}
+
+			custom_tooltip = {
+				text = become_severe_ill
+
+				add_character_modifier = {
+					name = severe_illness
+					duration = -1
+				}
+			}
+		}
+
+		5 = {
+			trigger = {
+				immortal = no
+			}
+
+			mult_modifier = {
+				factor = 2
+				trait = feeble
+			}
+
+			mult_modifier = {
+				factor = 2
+				trait = weak
+			}
+
+			mult_modifier = {
+				factor = 0.5
+				trait = strong
+			}
+
+			mult_modifier = {
+				factor = 0.5
+				trait = robust
+			}
+
+			mult_modifier = {
+				factor = 2
+				practical_age >= 50
+			}
+
+			mult_modifier = {
+				factor = 2
+				practical_age >= 60
+			}
+
+			mult_modifier = {
+				factor = 2
+				practical_age >= 70
+			}
+
+			mult_modifier = {
+				factor = 2
+				practical_age >= 80
+			}
+
+			custom_tooltip = {
+				text = become_bedridden_ill
+
+				add_character_modifier = {
+					name = bedridden_illness
+					duration = -1
+				}
+
+				hidden_effect = {
+					add_trait = sick_incapable
+				}
+			}
+		}
+	}
 }
 
 clear_disease_level_effect = {
-	if = {
-		limit = { has_character_modifier = mild_illness }
-		remove_character_modifier = mild_illness
+	trigger_switch = {
+		on_trigger = has_character_modifier
+
+		mild_illness = { remove_character_modifier = mild_illness }
+		severe_illness = { remove_character_modifier = severe_illness }
+		bedridden_illness = { remove_character_modifier = bedridden_illness }
 	}
-	if = {
-		limit = { has_character_modifier = severe_illness }
-		remove_character_modifier = severe_illness
-	}
-	if = {
-		limit = { has_character_modifier = bedridden_illness }
-		remove_character_modifier = bedridden_illness
-		hidden_tooltip = {
-			remove_trait = sick_incapable
-		}
+
+	hidden_effect = {
+		remove_trait = sick_incapable
+		remove_character_modifier = mystic_treatment_decent
+		remove_character_modifier = mystic_treatment_poor
+		remove_character_modifier = mystic_treatment_terrible
+		remove_character_modifier = symptom_treatment_1
+		remove_character_modifier = symptom_treatment_2
+		remove_character_modifier = symptom_treatment_3
+		remove_character_modifier = symptom_treatment_4
+		remove_character_modifier = successful_treatment_1
+		remove_character_modifier = successful_treatment_2
+		remove_character_modifier = successful_treatment_3
+		remove_character_modifier = failed_treatment_1
+		remove_character_modifier = failed_treatment_2
 	}
 }
 
@@ -20937,65 +20888,146 @@ pacifists_lose_piety_effect = {
 add_scarred_tiered_effect = {
 	if = {
 		limit = { has_dlc = "Holy Fury" }
-		hidden_tooltip = { change_variable = { which = scarred_variable value = 1 } } 
-		if = {
-			limit = {
-				check_variable = { which = scarred_variable value = 1 }
-				NOT = { check_variable = { which = scarred_variable value = 5 } } 
+
+		hidden_effect = {
+			change_variable = {
+				which = scarred_variable
+				value = 1
 			}
-			if = { 
-				limit = { trait = scarred_mid } 
-				remove_trait = scarred_mid 
-			}
-			if = { 
-				limit = { trait = scarred_high } 
-				remove_trait = scarred_high 
-			}
-			add_trait = scarred
 		}
-		if = {
-			limit = {
-				check_variable = { which = scarred_variable value = 5 }
-				NOT = { check_variable = { which = scarred_variable value = 10 } } 
-			}
-			if = { 
-				limit = { trait = scarred } 
-				remove_trait = scarred
-			}
-			if = { 
-				limit = { trait = scarred_high } 
-				remove_trait = scarred_high 
-			}
-			add_trait = scarred_mid
-		}
-		if = {
-			limit = {
-				check_variable = { which = scarred_variable value = 10 }
-			}
-			if = { 
-				limit = { trait = scarred_mid } 
-				remove_trait = scarred_mid 
-			}
-			if = { 
-				limit = { trait = scarred } 
-				remove_trait = scarred 
-			}
+
+		# Tooltip for actual effect doesn't account for incremented variable above
+		tooltip = {
 			if = {
 				limit = {
-					NOT = { trait = scarred_high }
+					check_variable = {
+						which = scarred_variable
+						value >= 9
+					}
 				}
-				add_trait = scarred_high
+
+				if = {
+					limit = { trait = scarred_mid }
+					remove_trait = scarred_mid
+				}
+				else_if = {
+					limit = { trait = scarred }
+					remove_trait = scarred
+				}
+
+				if = {
+					limit = {
+						NOT = { trait = scarred_high }
+					}
+					add_trait = scarred_high
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = scarred_variable
+						value >= 4
+					}
+				}
+
+				if = {
+					limit = { trait = scarred }
+					remove_trait = scarred
+				}
+				else_if = {
+					limit = { trait = scarred_high }
+					remove_trait = scarred_high
+				}
+
+				add_trait = scarred_mid
+			}
+			else = {
+				if = {
+					limit = { trait = scarred_mid }
+					remove_trait = scarred_mid
+				}
+				else_if = {
+					limit = { trait = scarred_high }
+					remove_trait = scarred_high
+				}
+
+				add_trait = scarred
+			}
+		}
+
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = {
+						which = scarred_variable
+						value >= 10
+					}
+				}
+
+				if = {
+					limit = { trait = scarred_mid }
+					remove_trait = scarred_mid
+				}
+				else_if = {
+					limit = { trait = scarred }
+					remove_trait = scarred
+				}
+
+				if = {
+					limit = {
+						NOT = { trait = scarred_high }
+					}
+					add_trait = scarred_high
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = scarred_variable
+						value >= 5
+					}
+				}
+
+				if = {
+					limit = { trait = scarred }
+					remove_trait = scarred
+				}
+				else_if = {
+					limit = { trait = scarred_high }
+					remove_trait = scarred_high
+				}
+
+				add_trait = scarred_mid
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = scarred_variable
+						value >= 1
+					}
+				}
+
+				if = {
+					limit = { trait = scarred_mid }
+					remove_trait = scarred_mid
+				}
+				else_if = {
+					limit = { trait = scarred_high }
+					remove_trait = scarred_high
+				}
+
+				add_trait = scarred
 			}
 		}
 	}
-	else_if =  { 
-		limit = { NOT = { has_dlc = "Holy Fury" } }
+	else = {
 		add_trait = scarred
 	}
-	hidden_tooltip = {
+
+	hidden_effect = {
 		if = {
 			limit = {
-				NOR = { 
+				NOR = {
 					trait = scarred_type_1
 					trait = scarred_type_2
 					trait = scarred_type_3
@@ -21008,16 +21040,17 @@ add_scarred_tiered_effect = {
 					trait = scarred_type_10
 				}
 			}
-			random_list = { 
-				10 = { add_trait = scarred_type_1 } 
-				10 = { add_trait = scarred_type_2 } 
-				10 = { add_trait = scarred_type_3 } 
-				10 = { add_trait = scarred_type_4 } 
-				10 = { add_trait = scarred_type_5 } 
-				10 = { add_trait = scarred_type_6 } 
-				10 = { add_trait = scarred_type_7 } 
-				10 = { add_trait = scarred_type_8 } 
-				10 = { add_trait = scarred_type_9 } 
+
+			random_list = {
+				10 = { add_trait = scarred_type_1 }
+				10 = { add_trait = scarred_type_2 }
+				10 = { add_trait = scarred_type_3 }
+				10 = { add_trait = scarred_type_4 }
+				10 = { add_trait = scarred_type_5 }
+				10 = { add_trait = scarred_type_6 }
+				10 = { add_trait = scarred_type_7 }
+				10 = { add_trait = scarred_type_8 }
+				10 = { add_trait = scarred_type_9 }
 				10 = { add_trait = scarred_type_10 }
 			}
 		}
@@ -21025,33 +21058,35 @@ add_scarred_tiered_effect = {
 }
 
 add_scarred_medium_effect = {
-	if = { 
+	if = {
 		limit = { has_dlc = "Holy Fury" }
-	hidden_tooltip = { set_variable = { which = scarred_variable value = 5 } }
-		if = {
-			limit = {
-				check_variable = { which = scarred_variable value = 5 }
-				NOT = { check_variable = { which = scarred_variable value = 10 } } 
+
+		hidden_effect = {
+			set_variable = {
+				which = scarred_variable
+				value = 5
 			}
-			if = { 
-				limit = { trait = scarred_high } 
-				remove_trait = scarred_high 
-			}
-			if = { 
-				limit = { trait = scarred } 
-				remove_trait = scarred
-			}
-			add_trait = scarred_mid
 		}
+
+		if = {
+			limit = { trait = scarred_high }
+			remove_trait = scarred_high
+		}
+		else_if = {
+			limit = { trait = scarred }
+			remove_trait = scarred
+		}
+
+		add_trait = scarred_mid
 	}
-	else_if =  { 
-		limit = { NOT = { has_dlc = "Holy Fury" } }
+	else = {
 		add_trait = scarred
 	}
-	hidden_tooltip = { 
+
+	hidden_effect = {
 		if = {
 			limit = {
-				NOR = { 
+				NOR = {
 					trait = scarred_type_1
 					trait = scarred_type_2
 					trait = scarred_type_3
@@ -21064,48 +21099,53 @@ add_scarred_medium_effect = {
 					trait = scarred_type_10
 				}
 			}
-			random_list = { 
-				10 = { add_trait = scarred_type_1 } 
-				10 = { add_trait = scarred_type_2 } 
-				10 = { add_trait = scarred_type_3 } 
-				10 = { add_trait = scarred_type_4 } 
-				10 = { add_trait = scarred_type_5 } 
-				10 = { add_trait = scarred_type_6 } 
-				10 = { add_trait = scarred_type_7 } 
-				10 = { add_trait = scarred_type_8 } 
-				10 = { add_trait = scarred_type_9 } 
+
+			random_list = {
+				10 = { add_trait = scarred_type_1 }
+				10 = { add_trait = scarred_type_2 }
+				10 = { add_trait = scarred_type_3 }
+				10 = { add_trait = scarred_type_4 }
+				10 = { add_trait = scarred_type_5 }
+				10 = { add_trait = scarred_type_6 }
+				10 = { add_trait = scarred_type_7 }
+				10 = { add_trait = scarred_type_8 }
+				10 = { add_trait = scarred_type_9 }
 				10 = { add_trait = scarred_type_10 }
 			}
 		}
 	}
 }
+
 add_scarred_high_effect = {
-	if = { 
+	if = {
 		limit = { has_dlc = "Holy Fury" }
-	hidden_tooltip = { set_variable = { which = scarred_variable value = 10 } } 
-		if = {
-			limit = {
-				check_variable = { which = scarred_variable value = 10 }
+
+		hidden_effect = {
+			set_variable = {
+				which = scarred_variable
+				value = 10
 			}
-			if = { 
-				limit = { trait = scarred } 
-				remove_trait = scarred
-			}
-			if = { 
-				limit = { trait = scarred_mid } 
-				remove_trait = scarred_mid
-			}
-			add_trait = scarred_high
 		}
+
+		if = {
+			limit = { trait = scarred }
+			remove_trait = scarred
+		}
+		else_if = {
+			limit = { trait = scarred_mid }
+			remove_trait = scarred_mid
+		}
+
+		add_trait = scarred_high
 	}
-	else_if =  { 
-		limit = { NOT = { has_dlc = "Holy Fury" } }
+	else = {
 		add_trait = scarred
 	}
-	hidden_tooltip = { 
+
+	hidden_effect = {
 		if = {
 			limit = {
-				NOR = { 
+				NOR = {
 					trait = scarred_type_1
 					trait = scarred_type_2
 					trait = scarred_type_3
@@ -21118,16 +21158,17 @@ add_scarred_high_effect = {
 					trait = scarred_type_10
 				}
 			}
-			random_list = { 
-				10 = { add_trait = scarred_type_1 } 
-				10 = { add_trait = scarred_type_2 } 
-				10 = { add_trait = scarred_type_3 } 
-				10 = { add_trait = scarred_type_4 } 
-				10 = { add_trait = scarred_type_5 } 
-				10 = { add_trait = scarred_type_6 } 
-				10 = { add_trait = scarred_type_7 } 
-				10 = { add_trait = scarred_type_8 } 
-				10 = { add_trait = scarred_type_9 } 
+
+			random_list = {
+				10 = { add_trait = scarred_type_1 }
+				10 = { add_trait = scarred_type_2 }
+				10 = { add_trait = scarred_type_3 }
+				10 = { add_trait = scarred_type_4 }
+				10 = { add_trait = scarred_type_5 }
+				10 = { add_trait = scarred_type_6 }
+				10 = { add_trait = scarred_type_7 }
+				10 = { add_trait = scarred_type_8 }
+				10 = { add_trait = scarred_type_9 }
 				10 = { add_trait = scarred_type_10 }
 			}
 		}
@@ -21135,35 +21176,42 @@ add_scarred_high_effect = {
 }
 
 add_scarred_start_effect = {
-	if = { 
+	if = {
 		limit = { has_dlc = "Holy Fury" }
+
 		if = {
-			limit = {
-				trait = scarred
+			limit = { trait = scarred }
+
+			change_variable = {
+				which = scarred_variable
+				value = 1
 			}
-			change_variable = { which = scarred_variable value = 1 }
 		}
-		if = {
-			limit = {
-				trait = scarred_mid
+		else_if = {
+			limit = { trait = scarred_mid }
+
+			change_variable = {
+				which = scarred_variable
+				value = 5
 			}
-			change_variable = { which = scarred_variable value = 5 }
 		}
-		if = {
-			limit = {
-				trait = scarred_high
+		else_if = {
+			limit = { trait = scarred_high }
+
+			change_variable = {
+				which = scarred_variable
+				value = 10
 			}
-			change_variable = { which = scarred_variable value = 10 }
 		}
 	}
-	else_if =  { 
-		limit = { NOT = { has_dlc = "Holy Fury" } }
+	else = {
 		add_trait = scarred
 	}
-	hidden_tooltip = { 
+
+	hidden_effect = {
 		if = {
 			limit = {
-				NOR = { 
+				NOR = {
 					trait = scarred_type_1
 					trait = scarred_type_2
 					trait = scarred_type_3
@@ -21176,16 +21224,17 @@ add_scarred_start_effect = {
 					trait = scarred_type_10
 				}
 			}
-			random_list = { 
-				10 = { add_trait = scarred_type_1 } 
-				10 = { add_trait = scarred_type_2 } 
-				10 = { add_trait = scarred_type_3 } 
-				10 = { add_trait = scarred_type_4 } 
-				10 = { add_trait = scarred_type_5 } 
-				10 = { add_trait = scarred_type_6 } 
-				10 = { add_trait = scarred_type_7 } 
-				10 = { add_trait = scarred_type_8 } 
-				10 = { add_trait = scarred_type_9 } 
+
+			random_list = {
+				10 = { add_trait = scarred_type_1 }
+				10 = { add_trait = scarred_type_2 }
+				10 = { add_trait = scarred_type_3 }
+				10 = { add_trait = scarred_type_4 }
+				10 = { add_trait = scarred_type_5 }
+				10 = { add_trait = scarred_type_6 }
+				10 = { add_trait = scarred_type_7 }
+				10 = { add_trait = scarred_type_8 }
+				10 = { add_trait = scarred_type_9 }
 				10 = { add_trait = scarred_type_10 }
 			}
 		}

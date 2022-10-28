@@ -530,77 +530,99 @@ character_event = {
 			has_job_action = action_uncover_plots
 			has_job_action = action_organize_spies_mystics
 		}
-		NOT = { has_character_modifier = in_seclusion }
+
+		in_seclusion = no
 		NOT = { has_character_modifier = bedridden_illness }
-		NOT = { trait = incapable }
 		location = {
-			OR = {
-				owner = {
-					same_liege = ROOT
-					independent = no
-					NOT = { is_liege_of = ROOT }
-					NOT = { character = ROOT }
-					NOT = { trait = incapable }
-					NOT = { has_opinion_modifier = { who = liege modifier = opinion_coerced_into_leaving_faction } }
-					NOT = { has_character_flag = faction_member }
-					age = 16
-					prisoner = no
-					primary_title = { higher_tier_than = BARON }
-				}
-				owner = {
-					liege = { same_liege = ROOT }
-					independent = no
-					NOT = { is_liege_of = ROOT }
-					NOT = { character = ROOT }
-					liege = {
+			owner = {
+				OR = {
+					AND = {
+						higher_real_tier_than = BARON
 						independent = no
-						NOT = { is_liege_of = ROOT }
-						NOT = { character = ROOT }
-						NOT = { trait = incapable }
-						NOT = { has_opinion_modifier = { who = liege modifier = opinion_coerced_into_leaving_faction } }
-						NOT = { has_character_flag = faction_member }
-						age = 16
+						same_liege = ROOT
+						is_incapable = no
+						is_adult = yes
 						prisoner = no
-						primary_title = { higher_tier_than = BARON }
+
+						NOR = {
+							has_character_flag = faction_member
+							is_liege_of = ROOT
+							character = ROOT
+
+							has_opinion_modifier = {
+								name = opinion_coerced_into_leaving_faction
+								who = liege
+							}
+						}
+					}
+
+					AND = {
+						independent = no
+
+						liege = {
+							higher_real_tier_than = BARON
+							is_adult = yes
+							prisoner = no
+							same_liege = ROOT
+							independent = no
+							is_incapable = no
+
+							NOR = {
+								has_character_flag = faction_member
+								is_liege_of = ROOT
+								character = ROOT
+
+								has_opinion_modifier = {
+									name = opinion_coerced_into_leaving_faction
+									who = liege
+								}
+							}
+						}
+					}
+
+					NOR = {
+						is_liege_of = ROOT
+						character = ROOT
 					}
 				}
 			}
 		}
 	}
-	
+
 	mean_time_to_happen = {
 		months = 110
 		job_event_mtth_modifier_intrigue_score = yes
 	}
-	
+
 	immediate = {
-		IF = {
-			limit = {
-				location = {
-					owner = {
-						same_liege = ROOT
-					}
+		location = {
+			owner = {
+				if = {
+					limit = { same_liege = ROOT }
+					set_character_flag = faction_member
 				}
 			}
-			location = { owner = { set_character_flag = faction_member } }
-		}
-		IF = {
-			limit = {
-				location = {
-					owner = {
-						liege = { same_liege = ROOT }
-					}
+
+			liege = {
+				if = {
+					limit = { same_liege = ROOT }
+					set_character_flag = faction_member
 				}
-			}
-			location = { 
-				owner = { liege = { set_character_flag = faction_member } }
 			}
 		}
 	}
-	
+
 	option = {
-		name = "EVTOPTA9000"
-		liege = { letter_event = { id = 9001 tooltip = EVTTOOLTIP9001 } }
+		name = evt_spymaster_201_option_a
+
+		liege = {
+			show_scope_change = no
+
+			letter_event = {
+				id = spymaster.202
+				tooltip = evt_spymaster_201_option_a_tooltip
+			}
+		}
 	}
 }
 
@@ -611,13 +633,15 @@ letter_event = {
 	border = GFX_event_letter_frame_intrigue
 
 	is_triggered_only = yes
-	
+
 	option = { # Blackmail
-		name = "EVTOPTA9001"
+		name = evt_spymaster_202_option_a
+
 		trigger = {
 			any_vassal = {
 				has_character_flag = faction_member
 				OR = {
+					trait = bisexual
 					trait = homosexual
 					trait = impaler
 					trait = lustful
@@ -627,16 +651,22 @@ letter_event = {
 				}
 			}
 		}
-		ai_chance = {
-			factor = 10000
-		}
 		random_vassal = {
+			show_scope_change = no
+			
 			limit = { has_character_flag = faction_member }
-			letter_event = { id = 9002 tooltip = EVTTOOLTIP9002 }
-		}	
+
+			letter_event = {
+				id = spymaster.203
+				tooltip = evt_spymaster_202_option_a_tooltip
+			}
+		}
+
+		ai_chance = { factor = 10000 }
 	}
 	option = { # Legalism
-		name = "EVTOPTB9001"
+		name = evt_spymaster_202_option_b
+
 		trigger = {
 			any_vassal = {
 				has_character_flag = faction_member
@@ -649,16 +679,22 @@ letter_event = {
 				}
 			}
 		}
-		ai_chance = {
-			factor = 10000
-		}
 		random_vassal = {
+			show_scope_change = no
+			
 			limit = { has_character_flag = faction_member }
-			letter_event = { id = 9005 tooltip = EVTTOOLTIP9005 }
-		}	
+
+			letter_event = {
+				id = spymaster.205
+				tooltip = evt_spymaster_202_option_b_tooltip
+			}
+		}
+
+		ai_chance = { factor = 10000 }
 	}
 	option = { # Threaten
-		name = "EVTOPTC9001"
+		name = evt_spymaster_202_option_c
+
 		trigger = {
 			any_vassal = {
 				has_character_flag = faction_member
@@ -671,58 +707,64 @@ letter_event = {
 				}
 			}
 		}
-		ai_chance = {
-			factor = 10000
-		}
 		random_vassal = {
+			show_scope_change = no
+			
 			limit = { has_character_flag = faction_member }
-			letter_event = { id = 9008 tooltip = EVTTOOLTIP9008 }
-		}	
+
+			letter_event = {
+				id = spymaster.207
+				tooltip = evt_spymaster_202_option_c_tooltip
+			}
+		}
+
+		ai_chance = { factor = 10000 }
 	}
 	option = { # Ask Nicely
-		name = "EVTOPTD9001"
+		name = evt_spymaster_202_option_d
+
 		trigger = {
 			any_vassal = {
 				has_character_flag = faction_member
-				NOT = {
-					OR = {
-						trait = craven
-						trait = paranoid
-						trait = cynical
-						trait = humble
-						trait = slothful
-						trait = just
-						trait = honest
-						trait = trusting
-						trait = content
-						trait = kind
-						trait = homosexual
-						trait = impaler
-						trait = lustful
-						trait = drunkard
-						trait = hedonist
-						trait = syphilitic
-					}
+				NOR = {
+					trait = craven
+					trait = paranoid
+					trait = cynical
+					trait = humble
+					trait = slothful
+					trait = just
+					trait = honest
+					trait = trusting
+					trait = content
+					trait = kind
+					trait = homosexual
+					trait = bisexual
+					trait = impaler
+					trait = lustful
+					trait = drunkard
+					trait = hedonist
+					trait = syphilitic
 				}
 			}
 		}
-		ai_chance = {
-			factor = 100
-		}
 		random_vassal = {
 			limit = { has_character_flag = faction_member }
-			letter_event = { id = 9003 tooltip = EVTTOOLTIP9023 }
-		}	
+
+			letter_event = {
+				id = spymaster.209
+				tooltip = evt_spymaster_202_option_d_tooltip
+			}
+		}
+
+		ai_chance = { factor = 100 }
 	}
 	option = { # Do Nothing
-		name = "EVTOPTE9001"
-		ai_chance = {
-			factor = 1
-		}
+		name = evt_spymaster_202_option_e
+
 		random_vassal = {
 			limit = { has_character_flag = faction_member }
 			clr_character_flag = faction_member
-		}	
+		}
 	}
 }
 
