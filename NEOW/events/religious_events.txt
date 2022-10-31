@@ -3323,15 +3323,9 @@ character_event = {
 			has_character_flag = flag_converting_baptism
 			has_character_modifier = baptism_request_cooldown
 		}
-
-		# Don't allow players to game over
-		trigger_if = {
-			limit = {
-				ai = no
-				is_nomadic = no
-			}
-
-			FROM = { has_safe_religion = yes }
+		OR = {
+			ai = yes
+			FROMs_religion_is_playable_trigger = yes
 		}
 	}
 
@@ -3741,15 +3735,12 @@ character_event = {
 	picture = GFX_evt_heretic
 	border = GFX_event_normal_frame_religion
  	trigger = {
-		trigger_if = {
-			limit = {
-				ai = no
-				is_nomadic = no
-			}
-
-			FROM = { has_safe_religion = yes }
+		OR = {
+			ai = yes
+			FROMs_religion_is_playable_trigger = yes
 		}
 	}
+	
 	is_triggered_only = yes
 	option = {
 		name = EVTOPTA39601
@@ -3759,17 +3750,21 @@ character_event = {
 			limit = {
 				independent = yes
 				has_dlc = "Holy Fury"
-				is_unreformed_pagan_trigger = yes
+				religion_group = pagan_group
 				higher_real_tier_than = COUNT
 				is_tribal = yes
 				is_incapable = no
+				NOT = { is_reformed_religion = yes }
 				NOT = { has_character_flag = flag_converting_baptism }
 
 				FROM = {
 					liege = {
 						independent = yes
 						higher_real_tier_than = DUKE
-						is_not_unreformed_pagan_trigger = yes
+						OR = {
+							NOT = { religion_group = pagan_group }
+							is_reformed_religion = yes
+						}
 						is_tribal = no
 						is_nomadic = no
 
@@ -3944,7 +3939,6 @@ character_event = {
 		ai_chance = {
 			factor = 1
 
-			trigger = { is_unreformed_pagan_trigger = yes }
 			# Traits
 			mult_modifier = {
 				factor = 0.3
@@ -4274,8 +4268,10 @@ character_event = {
 					religion = aztec_pagan
 
 					any_neighbor_independent_ruler = {
-						is_not_unreformed_pagan_trigger = yes
-
+						NAND = {
+							religion_group = pagan_group
+							is_reformed_religion = no
+						}
 						any_realm_province = {
 							TECH_RECRUITMENT >= 4 # More cocky when pagan homeland attrition effect is active against neighbors
 						}
