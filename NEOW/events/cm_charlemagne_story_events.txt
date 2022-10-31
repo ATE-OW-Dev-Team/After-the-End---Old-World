@@ -1,0 +1,724 @@
+###########################################
+#                                         #
+# Charlemagne Story Events                #
+#                                         #
+# ID CM.998-CM.1999                      #
+#                                         #
+###########################################
+
+# Written by Tobias Bodlund
+
+namespace = CM
+
+###################################################################
+#                                                                 #
+# Bertrada meddles in everything CM.1150-1399                     #
+#                                                                 #
+# Any of these events can happen to any player character's mother #
+# if she gets the flag meddling_mother                            #
+###################################################################
+
+# Your mother starts to meddle in your affairs (hidden)
+character_event = {
+	id = CM.1150
+
+	is_triggered_only = yes # on_yearly_pulse, random_events
+	hide_window = yes
+
+	ai = no
+	has_dlc = "Charlemagne"
+
+	trigger = {
+		mother = {
+			is_alive = yes
+			vassal_of = ROOT
+			is_ruler = no
+
+			OR = {
+				trait = ambitious
+				trait = proud
+				trait = envious
+				trait = intricate_webweaver
+				trait = elusive_shadow
+			}
+		}
+	}
+
+	weight_multiplier = {
+		factor = 1
+
+		mult_modifier = {
+			factor = 5
+			mother = { culture_group = mongolic }
+		}
+	}
+
+	immediate = {
+		mother = {
+			set_character_flag = meddling_mother
+		}
+	}
+}
+
+# Mother dislikes your spouse
+character_event = {
+	id = CM.1160
+	desc = EVTDESC_CM_1160
+	picture = GFX_evt_daughter_asking_father
+
+	is_triggered_only = yes # on_yearly_pulse, random_events
+
+	ai = no
+	is_married = yes
+	has_dlc = "Charlemagne"
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	in_command = no
+
+	trigger = {
+		is_inaccessible_trigger = no
+		has_polygamy = no
+
+		mother = {
+			has_character_flag = meddling_mother
+			is_ascetic_trigger = no
+			is_incapable = no
+			prisoner = no
+		}
+
+		spouse = {
+			is_ruler = no
+			vassal_of = ROOT
+
+			OR = {
+				trait = ambitious
+				trait = proud
+				trait = diligent
+				is_smart_trigger = yes
+			}
+
+			NOR = {
+				is_mother = ROOT
+				has_character_flag = meddling_mother_conflict
+			}
+		}
+	}
+
+	weight_multiplier = {
+		factor = 10
+	}
+
+	immediate = {
+		spouse = {
+			set_character_flag = meddling_mother_conflict
+			save_event_target_as = target_spouse
+		}
+
+		mother = {
+			save_event_target_as = target_mother
+		}
+	}
+
+	option = {
+		name = EVTOPTA_CM_1160 # Yes mother
+
+		set_character_flag = meddling_mother_gone_too_far
+
+		spouse = {
+			show_scope_change = no
+
+			if = {
+				limit = { is_lover = ROOT }
+				remove_lover = ROOT
+			}
+
+			opinion = {
+				name = opinion_bitter
+				who = ROOT
+				years = 5
+			}
+		}
+
+		event_target:target_mother = {
+			show_scope_change = no
+
+			opinion = {
+				name = opinion_dislike
+				who = event_target:target_spouse
+				years = 100
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB_CM_1160 # No mother
+
+		event_target:target_mother = {
+			show_scope_change = no
+
+			opinion = {
+				name = opinion_hate
+				who = event_target:target_spouse
+				years = 100
+			}
+
+			reverse_opinion = {
+				name = opinion_dislike
+				who = event_target:target_spouse
+				years = 100
+			}
+
+			opinion = {
+				name = opinion_angry
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTC_CM_1160  # Send her to a convent
+
+		trigger = {
+			mother = { has_character_flag = meddling_mother_gone_too_far }
+			religion_group = christian
+			NOT = { trait = craven }
+		}
+
+		event_target:target_mother = {
+			show_scope_change = no
+
+			add_trait = nun
+
+			opinion = {
+				name = opinion_hate
+				who = event_target:target_spouse
+				years = 100
+			}
+
+			opinion = {
+				name = opinion_bitter
+				who = ROOT
+				years = 10
+			}
+		}
+	}
+}
+
+# Mother dislikes your councillor
+
+character_event = {
+	id = CM.1172
+	desc = EVTDESC_CM_1172
+	picture = GFX_evt_daughter_asking_father
+
+	is_triggered_only = yes # on_yearly_pulse, random_events
+
+	ai = no
+	min_age = 16
+	only_capable = yes
+	has_dlc = "Charlemagne"
+	in_command = no
+	prisoner = no
+
+	trigger = {
+		is_inaccessible_trigger = no
+
+		mother = {
+			has_character_flag = meddling_mother
+			is_ascetic_trigger = no
+			is_incapable = no
+			prisoner = no
+		}
+
+		any_courtier = {
+			is_councillor = yes
+
+			OR = {
+				trait = ambitious
+				trait = proud
+				trait = diligent
+				is_smart_trigger = yes
+			}
+
+			NOR = {
+				has_character_flag = meddling_mother_conflict
+				is_mother = ROOT
+				is_parent_of = ROOT
+			}
+		}
+	}
+
+	weight_multiplier = {
+		factor = 10
+	}
+
+	immediate = {
+		any_courtier = {
+			limit = {
+				is_councillor = yes
+
+				OR = {
+					trait = ambitious
+					trait = proud
+					trait = diligent
+					is_smart_trigger = yes
+				}
+
+				vassal_of = ROOT
+				NOT = { is_parent_of = ROOT }
+			}
+
+			score_value = {
+				value = 10
+				interesting_courtier_selection_score = yes
+			}
+
+			set_character_flag = meddling_mother_conflict
+			save_event_target_as = target_councillor
+		}
+
+		mother = {
+			save_event_target_as = target_mother
+		}
+	}
+
+	option = {
+		name = EVTOPTA_CM_1172 # Yes mother
+
+		set_character_flag = meddling_mother_gone_too_far
+
+		event_target:target_councillor = {
+			show_scope_change = no
+
+			if = {
+				limit = { is_lover = ROOT }
+				remove_lover = ROOT
+			}
+
+			trigger_switch = {
+				on_trigger = has_job_title
+
+				job_chancellor = { remove_title = job_chancellor }
+				job_marshal    = { remove_title = job_marshal }
+				job_treasurer  = { remove_title = job_treasurer }
+				job_spymaster  = { remove_title = job_spymaster }
+				job_spiritual  = { remove_title = job_spiritual }
+			}
+
+			if = {
+				limit = { is_ruler = no }
+				banish = yes
+			}
+
+			prestige = -30
+
+			opinion = {
+				name = opinion_fired_from_council
+				who = ROOT
+				years = 5
+			}
+		}
+
+		event_target:target_mother = {
+			show_scope_change = no
+
+			opinion = {
+				who = event_target:target_councillor
+				years = 100
+				name = opinion_dislike
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB_CM_1172 # No mother
+
+		event_target:target_mother = {
+			show_scope_change = no
+
+			prestige = -30
+
+			opinion = {
+				name = opinion_hate
+				who = event_target:target_councillor
+				years = 100
+			}
+
+			reverse_opinion = {
+				name = opinion_dislike
+				who = event_target:target_councillor
+				years = 100
+			}
+
+			opinion = {
+				name = opinion_angry
+				who = ROOT
+				years = 3
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTC_CM_1172 # Send her to a convent
+
+		trigger = {
+			mother = { has_character_flag = meddling_mother_gone_too_far }
+			religion_group = christian
+			NOT = { trait = craven }
+		}
+
+		event_target:target_mother = {
+			show_scope_change = no
+
+			add_trait = nun
+
+			opinion = {
+				name = opinion_hate
+				who = event_target:target_councillor
+				years = 100
+			}
+
+			opinion = {
+				name = opinion_bitter
+				who = ROOT
+				years = 10
+			}
+		}
+	}
+}
+
+# Mother insists on being regent
+character_event = {
+	id = CM.1180
+
+	is_triggered_only = yes # on_yearly_pulse, random_events
+	hide_window = yes
+
+	ai = no
+	has_dlc = "Charlemagne"
+	in_command = no
+	prisoner = no
+
+	trigger = {
+		has_regent = yes
+
+		mother = {
+			has_character_flag = meddling_mother
+			is_ascetic_trigger = no
+			is_incapable = no
+			prisoner = no
+			NOT = { has_minor_title = title_regent }
+		}
+
+		regent = {
+			ai = yes
+			NOT = { has_character_flag = meddling_mother_conflict }
+		}
+
+		is_inaccessible_trigger = no
+	}
+
+	weight_multiplier = {
+		factor = 100
+	}
+
+	immediate = {
+		mother = {
+			save_event_target_as = target_mother
+		}
+
+		regent = {
+			set_character_flag = meddling_mother_conflict
+			character_event = { id = CM.1181 }
+		}
+	}
+}
+
+character_event = {
+	id = CM.1181
+	desc = EVTDESC_CM_1181
+	picture = GFX_evt_throne_room
+
+	is_triggered_only = yes
+
+	option = {
+		name = I_SEE
+
+		tooltip = {
+			remove_title = title_regent
+
+			event_target:target_mother = {
+				show_scope_change = no
+
+				give_minor_title = title_regent
+			}
+		}
+
+		FROM = {
+			character_event = { id = CM.1182 }
+		}
+	}
+
+	option = {
+		name = EVTOPTB_CM_1181 # Fight it
+
+		add_rival = event_target:target_mother
+
+		ai_chance = { factor = 0 }
+	}
+}
+
+character_event = {
+	id = CM.1182
+	desc = EVTDESC_CM_1182
+	picture = GFX_evt_throne_room
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_CM_1182 # Mother knows best
+
+		trigger = {
+			NOT = { has_character_flag = meddling_mother_gone_too_far }
+		}
+
+		set_character_flag = meddling_mother_gone_too_far
+
+		FROM = {
+			show_scope_change = no
+
+			remove_title = title_regent
+		}
+
+		mother = {
+			show_scope_change = no
+
+			give_minor_title = title_regent
+		}
+	}
+
+	option = {
+		name = EVTOPTB_CM_1182 # Hmm, who really rules here?
+
+		trigger = { has_character_flag = meddling_mother_gone_too_far }
+
+		FROM = {
+			show_scope_change = no
+
+			remove_title = title_regent
+		}
+
+		mother = {
+			show_scope_change = no
+
+			give_minor_title = title_regent
+		}
+	}
+}
+
+# Mother seduces your spouse
+character_event = {
+	id = CM.1192
+	desc = EVTDESC_CM_1192
+	picture = GFX_evt_lovers
+
+	is_triggered_only = yes
+
+	ai = no
+	is_married = yes
+	has_dlc = "Charlemagne"
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	in_command = no
+
+	trigger = {
+		is_inaccessible_trigger = no
+
+		mother = {
+			has_character_flag = meddling_mother
+			is_ascetic_trigger = no
+			is_incapable = no
+			prisoner = no
+		}
+
+		any_spouse = {
+			ROOT = {
+				mother = {
+					is_valid_romance_target = PREVPREV
+				}
+			}
+
+			vassal_of = ROOT
+			ai = yes
+
+			OR = {
+				trait = humble
+				trait = slow
+				trait = dull
+				trait = stressed
+				trait = depressed
+				has_fair_trait_trigger = yes
+			}
+
+			NOR = {
+				trait = celibate
+				has_character_flag = meddling_mother_conflict
+				is_mother = ROOT
+			}
+		}
+	}
+
+	weight_multiplier = {
+		factor = 10
+	}
+
+	immediate = {
+		mother = {
+			save_event_target_as = target_mother
+		}
+
+		random_spouse = {
+			limit = {
+				is_valid_romance_target = event_target:target_mother
+				vassal_of = ROOT
+				ai = yes
+
+				OR = {
+					trait = humble
+					trait = slow
+					trait = dull
+					trait = stressed
+					trait = depressed
+					has_fair_trait_trigger = yes
+				}
+
+				NOR = {
+					trait = celibate
+					has_character_flag = meddling_mother_conflict
+					is_mother = ROOT
+				}
+			}
+
+			save_event_target_as = target_spouse
+			add_lover = event_target:target_mother
+		}
+	}
+
+	option = {
+		name = EVTOPTA_CM_1192 # Accept
+
+		set_character_flag = meddling_mother_gone_too_far
+	}
+
+	option = {
+		name = EVTOPTB_CM_1192 # Send spouse to convent
+
+		set_character_flag = meddling_mother_gone_too_far
+		remove_spouse = event_target:target_spouse
+
+		event_target:target_spouse = {
+			show_scope_change = no
+
+			if = {
+				limit = { is_female = no }
+				add_trait = monk
+			}
+			else = {
+				add_trait = nun
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTC_CM_1192  # Send mother to a convent
+
+		trigger = {
+			religion_group = christian
+			NOT = { trait = craven }
+
+			mother = {
+				has_character_flag = meddling_mother_gone_too_far
+				vassal_of = ROOT
+				is_ruler = no
+			}
+		}
+
+		event_target:target_mother = {
+			show_scope_change = no
+
+			add_trait = nun
+			remove_lover = event_target:target_spouse
+
+			opinion = {
+				name = opinion_hate
+				who = event_target:target_spouse
+				years = 100
+			}
+
+			opinion = {
+				name = opinion_bitter
+				who = ROOT
+				years = 10
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTD_CM_1192  # Send them both to the orders
+
+		trigger = {
+			mother = {
+				has_character_flag = meddling_mother_gone_too_far
+				vassal_of = ROOT
+				is_ruler = no
+			}
+
+			religion_group = christian
+			NOT = { trait = craven }
+		}
+
+		event_target:target_spouse = {
+			if = {
+				limit = { is_female = no }
+				add_trait = monk
+			}
+			else = {
+				add_trait = nun
+			}
+		}
+
+		event_target:target_mother = {
+			show_scope_change = no
+
+			add_trait = nun
+			remove_lover = event_target:target_spouse
+
+			opinion = {
+				name = opinion_hate
+				who = event_target:target_spouse
+				years = 100
+			}
+
+			opinion = {
+				name = opinion_bitter
+				who = ROOT
+				years = 10
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTE_CM_1192 # The dungeon
+
+		trigger = {
+			has_character_flag = meddling_mother_gone_too_far
+			NOT = { religion_group = christian }
+		}
+
+		reverse_imprison = mother
+		reverse_imprison = event_target:target_spouse
+	}
+}
