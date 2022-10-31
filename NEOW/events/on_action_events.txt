@@ -6076,13 +6076,22 @@ character_event = {
 	trigger = {
 		is_nomadic = no
 		player_heir = {
-			# Secret religions are always allowed
-			has_safe_religion = no
+			OR = {
+				has_unsafe_secret_religion = yes
+				has_unsafe_religion = yes
+			}
 		}
 	}
 	immediate = {
 		player_heir = {
-			religion = ROOT
+			if = {
+				limit = { has_unsafe_secret_religion = yes }
+				clear_secret_religion = yes
+			}
+			if = {
+				limit = { has_unsafe_religion = yes }
+				religion = ROOT
+			}
 		}
 	}
 }
