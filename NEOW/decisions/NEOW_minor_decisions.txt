@@ -2038,43 +2038,89 @@ targeted_decisions = {
 		allow = {
 			FROM = {
 				OR = {
-					AND = {
-						ai = no
-						TECH_MAJESTY = 3
-						TECH_RECRUITMENT = 3
-						prestige = 1000
-						PREV = {
-							OR = {
-								trait = misguided_warrior
-								trait = tough_soldier
-								trait = skilled_tactician
-								trait = brilliant_strategist
+					OR = {
+						AND = {
+							ai = no
+							government = mandala_government
+							TECH_MAJESTY = 2
+							TECH_RECRUITMENT = 2
+							prestige = 750
+							PREV = {
+								OR = {
+									trait = misguided_warrior
+									trait = tough_soldier
+									trait = skilled_tactician
+									trait = brilliant_strategist
+								}
 							}
+						}
+						AND = {
+							ai = yes
+							government = mandala_government
+							ROOT = {
+								NOR ={
+									de_jure_vassal_or_below = FROM
+									culture = FROM
+								}
+							}
+							ROOT = {
+								NOT = { culture_group = FROM }
+							}
+							PREV = {
+								OR = {
+									trait = misguided_warrior
+									trait = tough_soldier
+									trait = skilled_tactician
+									trait = brilliant_strategist
+								}
+							}
+							TECH_MAJESTY = 3
+							TECH_RECRUITMENT = 3
+							prestige = 750
+							NOT = { government = confederation_government }
 						}
 					}
-					AND = {
-						ai = yes
-						ROOT = {
-							NOR ={
-								de_jure_vassal_or_below = FROM
-								culture = FROM
+					OR = {
+						AND = {
+							ai = no
+							NOT = { government = mandala_government }
+							TECH_MAJESTY = 3
+							TECH_RECRUITMENT = 3
+							prestige = 1000
+							PREV = {
+								OR = {
+									trait = misguided_warrior
+									trait = tough_soldier
+									trait = skilled_tactician
+									trait = brilliant_strategist
+								}
 							}
 						}
-						ROOT = {
-							NOT = { culture_group = FROM }
-						}
-						PREV = {
-							OR = {
-								trait = misguided_warrior
-								trait = tough_soldier
-								trait = skilled_tactician
-								trait = brilliant_strategist
+						AND = {
+							ai = yes
+							NOT = { government = mandala_government }
+							ROOT = {
+								NOR ={
+									de_jure_vassal_or_below = FROM
+									culture = FROM
+								}
 							}
+							ROOT = {
+								NOT = { culture_group = FROM }
+							}
+							PREV = {
+								OR = {
+									trait = misguided_warrior
+									trait = tough_soldier
+									trait = skilled_tactician
+									trait = brilliant_strategist
+								}
+							}
+							TECH_MAJESTY = 4
+							TECH_RECRUITMENT = 4
+							prestige = 1000
+							NOT = { government = confederation_government }
 						}
-						TECH_MAJESTY = 4
-						TECH_RECRUITMENT = 4
-						prestige = 1000
-						NOT = { government = confederation_government }
 					}
 				}
 			}
@@ -2086,7 +2132,13 @@ targeted_decisions = {
 					who = PREV
 					tributary_type = march
 				}
-				prestige = -2000
+				if = {
+					trigger = { government = mandala_government }
+					prestige = -750
+				}
+				else = {
+					prestige = -1000
+				}
 			}
 			opinion = { modifier = opinion_released_tributary who = FROM }
 		}
