@@ -2594,25 +2594,28 @@ character_event = {
 
 	immediate = {
 		set_character_flag = tribal_physician
-
 		random_independent_ruler = {
 			limit = {
-				higher_real_tier_than = DUKE
-				is_feudal = yes
+				ai = yes
 				is_adult = yes
-				is_not_unreformed_pagan_trigger = yes
+				is_feudal = yes
+				higher_tier_than = DUKE
 				NOT = { religion_group = ROOT }
 				is_within_diplo_range = ROOT
-				ai = yes
 				mercenary = no
 				holy_order = no
 				controls_religion = no
-
 				primary_title = {
 					is_landless_type_title = no
 				}
+				OR = {
+					NOT = { religion_group = pagan_group }
+					AND = {
+						religion_group = pagan_group
+						is_reformed_religion = yes
+					}
+				}
 			}
-
 			create_character = {
 				religion = THIS
 				culture = THIS
@@ -2620,17 +2623,15 @@ character_event = {
 				age = 35
 				random_traits = yes
 				female = no
-				health = 6
-				add_trait = scholarly_theologian
-				add_trait = zealous
-				add_trait = physician
-				flag = is_court_physician
-
 				attributes = {
 					learning = 6
 				}
+				health = 6
+				trait = scholarly_theologian
+				trait = zealous
+				trait = physician
+				flag = is_court_physician
 			}
-
 			new_character = {
 				remove_trait = cynical
 				remove_trait = mystic
@@ -2653,33 +2654,27 @@ character_event = {
 				save_event_target_as = missionary_physician_target
 				move_character = ROOT
 			}
-
 			save_event_target_as = origin_realm_of_missionary_physician_target
 		}
 	}
 
 	option = { # Recruit him
 		name = EVTOPTA_RIP_4100
-
+		
 		event_target:missionary_physician_target = {
 			show_scope_change = no
-
 			opinion = {
-				name = opinion_loyal_servant
+				modifier = opinion_loyal_servant
 				who = ROOT
 				years = 10
 			}
-
 			give_minor_title = title_court_physician
 		}
-
+		
 		if = {
 			limit = { controls_religion = no }
-
-			character_event = {
-				id = RIP.4101
-				months = 1
-				random = 30
+			hidden_tooltip = {
+				character_event = { id = RIP.4101 days = 30 random = 30 }
 			}
 		}
 
@@ -2695,28 +2690,27 @@ character_event = {
 
 	option = { # Seize his assets and execute him!
 		name = EVTOPTB_RIP_4100
-
+		
 		wealth = 50
-
 		event_target:missionary_physician_target = {
 			show_scope_change = no
-
 			death = {
 				death_reason = death_execution_burning
 				killer = ROOT
 			}
 		}
-
-		reverse_opinion = {
-			name = opinion_dishonorable_scum
-			who = event_target:origin_realm_of_missionary_physician_target
-			years = 15
+		event_target:origin_realm_of_missionary_physician_target = {
+			show_scope_change = no
+			opinion = {
+				modifier = opinion_dishonorable_scum
+				who = ROOT
+				years = 15
+			}
 		}
-
+		
 		ai_chance = {
 			factor = 30
-
-			mult_modifier = {
+			modifier = {
 				factor = 5
 				trait = zealous
 			}
