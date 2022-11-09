@@ -19,7 +19,6 @@ offmap_decisions = {
 			has_dlc = "Jade Dragon"
 			mercenary = no
 			is_landed = yes
-			holy_order = no
 		}
 
 		allow = {
@@ -32,7 +31,7 @@ offmap_decisions = {
 					NOT = { has_character_modifier = chinese_grace_send_gift_timer }
 				}
 				prisoner = no
-				is_incapable = no
+				NOT = { trait = incapable }
 				is_inaccessible_trigger = no
 			}
 			# china_offmap_decisions_enabled_trigger = yes #leave in please, to be used if the tooltip for china_offmap_tribute_decisions_enabled_trigger changes and we need to reference things uniquely again
@@ -40,8 +39,6 @@ offmap_decisions = {
 		}
 		effect = {
 			FROM = {
-				show_scope_change = no
-
 				sound_effect = china_grace_gain
 				scaled_wealth = { value = -4 min = -500 } #If this changes the ai chances should probably be adjusted
 				hidden_effect = {
@@ -58,66 +55,108 @@ offmap_decisions = {
 								type = offmap_china
 								context = wealth
 							}
-						}
-
-						if = {
-							limit = {
+							NOT = {
 								disliked_by_offmap = {
 									type = offmap_china
 									context = wealth
 								}
 							}
-
-							add_offmap_currency = {
-								offmap = offmap_china
-								value = 300
-							}
-
-							custom_tooltip = { text = emperor_has_ambiguous_feelings_of_THIS_tt }
 						}
-						else = {
-							add_offmap_currency = {
-								offmap = offmap_china
-								value = 450
+						add_offmap_currency = {
+							offmap = offmap_china
+							value = 450
+						}
+						e_china_west_governor = {
+							show_scope_change = no
+							offmap_power = {
+								show_scope_change = no
+								custom_tooltip = { text = likes_tt }
 							}
-
-							custom_tooltip = { text = emperor_likes_THIS_tt }
 						}
 					}
-					else_if = {
+					if = {
 						limit = {
 							disliked_by_offmap = {
 								type = offmap_china
 								context = wealth
 							}
+							NOT = {
+								liked_by_offmap = {
+									type = offmap_china
+									context = wealth
+								}
+							}
 						}
-
 						add_offmap_currency = {
 							offmap = offmap_china
 							value = 150
 						}
-
-						custom_tooltip = { text = emperor_dislikes_THIS_tt }
+						e_china_west_governor = {
+							show_scope_change = no
+							offmap_power = {
+								show_scope_change = no
+								custom_tooltip = { text = dislikes_tt }
+							}
+						}
 					}
-					else = {
+					if = {
+						limit = {
+							liked_by_offmap = {
+								type = offmap_china
+								context = wealth
+							}
+							disliked_by_offmap = {
+								type = offmap_china
+								context = wealth
+							}
+						}
+						add_offmap_currency = {
+							offmap = offmap_china
+							value = 300
+						}
+						e_china_west_governor = {
+							show_scope_change = no
+							offmap_power = {
+								show_scope_change = no
+								custom_tooltip = { text = likes_but_dislikes_tt }
+							}
+						}
+					}
+					if = {
+						limit = {
+							NOR = {
+								liked_by_offmap = {
+									type = offmap_china
+									context = wealth
+								}
+								disliked_by_offmap = {
+									type = offmap_china
+									context = wealth
+								}
+							}
+						}
 						add_offmap_currency = {
 							offmap = offmap_china
 							value = 300
 						}
 					}
 				}
-
-				letter_event = { id = JD.20024 }
 			}
+			hidden_effect = { offmap_china = { governor = { character_event = { id = JD.20023 } } } }
+		}
+
+		revoke_allowed = {
+			always = no
 		}
 
 		ai_will_do = {
-			factor = 0.66
-
-			mult_modifier = {
+			factor = 1
+			modifier = {
+				factor = 0.66 # slow down
+			}
+			modifier = {
 				factor = 0.1
-				# I.e. it would take more than 4 years to collect the 500 gold
-				FROM = { yearly_income < 125 }
+				FROM = { NOT = { monthly_income = 11 } } #I.e. it would take more than 4 years to collect the 500 gold
 			}
 		}
 	}
