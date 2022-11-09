@@ -4641,6 +4641,7 @@ character_event = {
 			} 
 		}
 	}
+	picture = GFX_evt_comet
 
 	trigger = { trait = pregnant }
 
@@ -4695,6 +4696,7 @@ character_event = {
 			} 
 		}
 	}
+	picture = GFX_evt_illness
 
 	trigger = { trait = pregnant }
 
@@ -4741,99 +4743,84 @@ character_event = {
 
 	option = { 
 		name = EVTOPTAHFP20505
-
-		if = {
-			limit = { event_target:pregnancy_spouse_physician = { always = yes } }
-
-			save_persistent_event_target = {
-				name = pregnancy_spouse_physician_per
-				scope = event_target:pregnancy_spouse_physician
+		hidden_tooltip = {
+			FROM = { character_event = { id = HFP.20507 } } 
+			ROOT = {
+				if = {
+					limit = {
+						event_target:pregnancy_spouse_physician = {
+							always = yes
+						}
+					}
+					save_persistent_event_target = { name = pregnancy_spouse_physician_per scope = event_target:pregnancy_spouse_physician }
+				}
+			}
+			ROOT = {
+				if = {
+					limit = {
+						event_target:pregnancy_regent_physician = {
+							always = yes
+						}
+					}
+					save_persistent_event_target = { name = pregnancy_regent_physician_per scope = event_target:pregnancy_regent_physician }
+				}
 			}
 		}
-		else = {
-			save_persistent_event_target = {
-				name = pregnancy_regent_physician_per
-				scope = event_target:pregnancy_regent_physician
-			}
-		}
-
-		FROM = {
-			show_scope_change = no
-
-			opinion = {
-				name = opinion_relieved
+		FROM = { 
+			opinion = { 
+				modifier = opinion_relieved
 				who = ROOT
 				years = 1
 			}
-
-			character_event = { id = HFP.20507 }
 		}
-
-		ai_chance = {
-			factor = 80
-
-			mult_modifier = {
-				factor = 0.5
-				is_married = FROM
-				event_target:pregnancy_spouse_physician = { learning < 10 }
+		ai_chance = { 
+			factor = 80 
+			modifier = { 
+				factor = 0.5 
+				FROM = { is_married = ROOT }
+				NOT = { persistent_event_target:pregnancy_spouse_physician_per = { learning = 10 } }
 			}
-
-			mult_modifier = {
-				factor = 0.5
-				NOT = { is_married = FROM }
-				event_target:pregnancy_regent_physician = { learning < 10 }
+			modifier = { 
+				factor = 0.5 
+				FROM = { NOT = { is_married = ROOT } }
+				NOT = { persistent_event_target:pregnancy_regent_physician_per = { learning = 10 } }
 			}
 		}
 	}
-
-	option = {
+	option = { 
 		name = EVTOPTBHFP20505
-
-		FROM = {
-			show_scope_change = no
-
-			opinion = {
-				name = opinion_worried
-				who = ROOT
-				years = 1
-			}
-
-			character_event = { id = HFP.20508 }
-		}
-
-		hidden_effect = {
-			if = {
-				limit = { is_married = FROM }
+		hidden_tooltip = {
+			FROM = { character_event = { id = HFP.20508 } } 
+			if = { 
+				limit = { is_married = FROM } 
 				clear_event_target = pregnancy_spouse_physician
 			}
-			else = {
+			if = { 
+				limit = { NOT = { is_married = FROM } } 
 				clear_event_target = pregnancy_regent_physician
 			}
 		}
-
-		ai_chance = {
+		ai_chance = { 
 			factor = 20
-
-			trigger = { is_ruler = yes }
-
-			mult_modifier = {
+			modifier = { 
 				factor = 1.5
 				trait = stubborn
 			}
-
-			mult_modifier = {
+			modifier = { 
 				factor = 1.5
 				trait = envious
 			}
-
-			mult_modifier = {
-				factor = 1.5
+			modifier = { 
+				factor = 1.5 
 				trait = zealous
 			}
-
-			mult_modifier = {
-				factor = 1.5
+			modifier = { 
+				factor = 1.5 
 				is_rival = FROM
+			}
+			modifier = { 
+				factor = 0 
+				is_ruler = no
 			}
 		}
 	}
@@ -4852,94 +4839,68 @@ character_event = {
 
 	is_triggered_only = yes
 
-	option = {
+	option = { 
 		name = EVTOPTAHFP20506
-
-		FROM = {
-			show_scope_change = no
-
-			opinion = {
-				name = opinion_relieved
+		FROM = { 
+			opinion = { 
+				modifier = opinion_relieved
 				who = ROOT
 				years = 1
 			}
-
-			character_event = { id = HFP.20507 }
 		}
-
-		if = {
-			limit = { event_target:pregnancy_spouse_physician = { always = yes } }
-
-			save_persistent_event_target = {
-				name = pregnancy_spouse_physician_per
-				scope = event_target:pregnancy_spouse_physician
+		hidden_tooltip = {
+			FROM = { character_event = { id = HFP.20507 } } 
+			if = { 
+				limit = { event_target:pregnancy_spouse_physician = { is_alive = yes } }
+				ROOT = { save_persistent_event_target = { name = pregnancy_spouse_physician_per scope = event_target:pregnancy_spouse_physician } }
+			}
+			if = { 
+				limit = { event_target:pregnancy_regent_physician = { is_alive = yes } }
+				ROOT = { save_persistent_event_target = { name = pregnancy_regent_physician_per scope = event_target:pregnancy_regent_physician } }
 			}
 		}
-		else = {
-			save_persistent_event_target = {
-				name = pregnancy_regent_physician_per
-				scope = event_target:pregnancy_regent_physician
-			}
-		}
-
-		ai_chance = {
-			factor = 80
-
-			mult_modifier = {
-				factor = 0.5
-				FROM = { learning < 10 }
+		ai_chance = { 
+			factor = 80 
+			modifier = { 
+				factor = 0.5 
+				FROM = { NOT = { learning = 10 } }
 			}
 		}
 	}
-
-	option = {
+	option = { 
 		name = EVTOPTBHFP20506
-
-		FROM = {
-			show_scope_change = no
-
-			opinion = {
-				name = opinion_worried
-				who = ROOT
-				years = 1
-			}
-
-			character_event = { id = HFP.20508 }
-		}
-
-		hidden_effect = {
-			if = {
-				limit = { is_married = FROM }
+		hidden_tooltip = {
+			FROM = { character_event = { id = HFP.20508 } }
+			if = { 
+				limit = { is_married = FROM } 
 				clear_event_target = pregnancy_spouse_physician
 			}
-			else = {
+			if = { 
+				limit = { NOT = { is_married = FROM } } 
 				clear_event_target = pregnancy_regent_physician
 			}
 		}
-
-		ai_chance = {
+		ai_chance = { 
 			factor = 20
-
-			trigger = { is_ruler = yes }
-
-			mult_modifier = {
+			modifier = { 
 				factor = 1.5
 				trait = stubborn
 			}
-
-			mult_modifier = {
+			modifier = { 
 				factor = 1.5
 				trait = envious
 			}
-
-			mult_modifier = {
-				factor = 1.5
+			modifier = { 
+				factor = 1.5 
 				trait = zealous
 			}
-
-			mult_modifier = {
-				factor = 1.5
+			modifier = { 
+				factor = 1.5 
 				is_rival = FROM
+			}
+			modifier = { 
+				factor = 0 
+				is_ruler = no
 			}
 		}
 	}
@@ -4948,41 +4909,33 @@ character_event = {
 #Notify regent/spouse that his physician will help woman.
 character_event = {
 	id = HFP.20507
-	picture = GFX_evt_bad_news
-
 	desc = {
 		text = EVTDESCHFPA20507
-		trigger = {	# If spouse/regent receiving notification is also the physician
-			FROM = {
-				OR = {
-					persistent_event_target:pregnancy_spouse_physician_per = { character = ROOT }
-					persistent_event_target:pregnancy_regent_physician_per = { character = ROOT }
-				}
+		trigger = {			#If spouse/regent receiving notification is also the physician.
+			OR = { 
+				persistent_event_target:pregnancy_spouse_physician_per = { character = ROOT }
+				persistent_event_target:pregnancy_regent_physician_per = { character = ROOT }
 			}
 		}
 	}
 	desc = {
 		text = EVTDESCHFPB20507
 		trigger = {
-			FROM = {
-				NOR = {
-					persistent_event_target:pregnancy_spouse_physician_per = { character = ROOT }
-					persistent_event_target:pregnancy_regent_physician_per = { character = ROOT }
-				}
+			NOR = { 
+				persistent_event_target:pregnancy_spouse_physician_per = { character = ROOT }
+				persistent_event_target:pregnancy_regent_physician_per = { character = ROOT }
 			}
 		}
 	}
+	picture = GFX_evt_bad_news
 
 	is_triggered_only = yes
 
-	ai = no
-
-	option = {
+	option = { 
 		name = EVTOPTAHFP20507
-
-		tooltip = {
-			opinion = {
-				name = opinion_relieved
+		tooltip = { 
+			opinion = { 
+				modifier = opinion_relieved
 				who = FROM
 				years = 1
 			}
@@ -4998,17 +4951,12 @@ character_event = {
 
 	is_triggered_only = yes
 
-	ai = no
-
-	option = {
+	option = { 
 		name = EVTOPTAHFP20508
-
-		tooltip = {
-			opinion = {
-				name = opinion_worried
-				who = FROM
-				years = 1
-			}
+		opinion = { 
+			modifier = opinion_worried
+			who = FROM
+			years = 1
 		}
 	}
 }
@@ -5045,33 +4993,18 @@ character_event = {
 	id = HFP.20511
 	desc = EVTDESCHFPA20511
 	picture = GFX_evt_shadow
-
-	is_triggered_only = yes
 	hide_from = yes
 
-	immediate = {
-		FROM = {
-			character_event = { id = HFP.20512 }
-		}
+	is_triggered_only = yes
 
-		if = {
-			limit = { multiplayer = yes }
-			death = { death_reason = death_troubled_pregnancy }
-		}
-	}
-
-	option = {
+	option = { 
 		name = EVTOPTAHFP20511
-
-		if = {
-			limit = { multiplayer = yes }
-
-			tooltip = {
-				death = { death_reason = death_troubled_pregnancy }
+		death = { death_reason = death_troubled_pregnancy }
+		hidden_tooltip = { 
+			random_courtier_or_vassal = {
+				limit = { has_minor_title = title_regent }
+				character_event = { id = HFP.20512 }
 			}
-		}
-		else = {
-			death = { death_reason = death_troubled_pregnancy }
 		}
 	}
 }
@@ -5084,9 +5017,7 @@ character_event = {
 	
 	is_triggered_only = yes
 
-	ai = no
-
-	option = {
+	option = { 
 		name = EVTOPTAHFP20512
 	}
 }
@@ -5096,33 +5027,20 @@ character_event = {
 	id = HFP.20513
 	desc = EVTDESCHFPA20513
 	picture = GFX_evt_shadow
-
-	is_triggered_only = yes
 	hide_from = yes
 
-	immediate = {
-		FROM = {
-			character_event = { id = HFP.20514 }
-		}
+	is_triggered_only = yes
 
-		if = {
-			limit = { multiplayer = yes }
-			death = { death_reason = death_childbirth }
-		}
-	}
-
-	option = {
+	option = { 
 		name = EVTOPTAHFP20513
-
-		if = {
-			limit = { multiplayer = yes }
-
-			tooltip = {
-				death = { death_reason = death_childbirth }
-			}
+		death = { 
+			death_reason = death_childbirth
 		}
-		else = {
-			death = { death_reason = death_childbirth }
+		hidden_tooltip = { 
+			random_courtier_or_vassal = {
+				limit = { has_minor_title = title_regent }
+				character_event = { id = HFP.20514 }
+			}
 		}
 	}
 }
@@ -5135,9 +5053,7 @@ character_event = {
 	
 	is_triggered_only = yes
 
-	ai = no
-
-	option = {
+	option = { 
 		name = EVTOPTAHFP20514
 	}
 }
@@ -5149,40 +5065,32 @@ character_event = {
 	
 	is_triggered_only = yes
 
-	option = {
-		name = EVTOPTAHFP20515 # Guards! Seize [From.GetHerHim]!"
-
-		opinion = {
-			name = opinion_traitor
+	option = { 
+		name = EVTOPTAHFP20515
+		#Guards! Seize [From.GetHerHim]!"
+		opinion = { 
+			modifier = opinion_traitor
 			who = FROM
 			years = 30
 		}
-
-		FROM = {
-			show_scope_change = no
-
-			imprison = ROOT
+		random_courtier_or_vassal = {
+			limit = { has_minor_title = title_regent }
+			imprison = ROOT 
 			remove_title = title_regent
-			character_event = { id = HFP.20516 }
+			hidden_tooltip = { character_event = { id = HFP.20516 } }
 		}
-
+		ai_chance = { factor = 50 }
 	}
 
-	option = {
-		name = EVTOPTBHFP20515 # Guards! Kill [From.GetHerHim]!"
-
-		FROM = {
-			show_scope_change = no
-
-			tooltip = {
-				death = {
-					death_reason = death_execution
-					killer = FROM
-				}
-			}
-
-			character_event = { id = HFP.20517 }
+	option = { 
+		name = EVTOPTBHFP20515 
+		#Guards! Kill [From.GetHerHim]!"
+		random_courtier_or_vassal = {
+			limit = { has_minor_title = title_regent }
+			imprison = ROOT 
+			hidden_tooltip = { character_event = { id = HFP.20517 } }
 		}
+	ai_chance = { factor = 50 }
 	}
 }
 
@@ -5194,16 +5102,16 @@ character_event = {
 	
 	is_triggered_only = yes
 
-	option = {
-		name = EVTOPTHFPA20516
-
-		piety = -300
-
-		tooltip = {
-			reverse_opinion = {
-				name = opinion_traitor
-				who = FROM
-				years = 30
+	option = { 
+		name = EVTOPTAHFPA20516
+		piety = -300 
+		tooltip = { 
+			FROM = { 
+				opinion = { 
+					modifier = opinion_traitor
+					who = ROOT
+					years = 30
+				}
 			}
 		}
 	}
@@ -5217,38 +5125,13 @@ character_event = {
 	
 	is_triggered_only = yes
 
-	immediate = {
-		if = {
-			limit = { multiplayer = yes }
-
-			death = {
-				death_reason = death_execution
-				killer = FROM
-			}
+	option = { 
+		name = EVTOPTAHFPA20517
+		death = { 
+			death_reason = death_execution 
+			killer = FROM 
 		}
-	}
-
-	option = {
-		name = EVTOPTHFPA20517
-
-		piety = -300
-
-		if = {
-			limit = { multiplayer = yes }
-
-			tooltip = {
-				death = {
-					death_reason = death_execution
-					killer = FROM
-				}
-			}
-		}
-		else = {
-			death = {
-				death_reason = death_execution
-				killer = FROM
-			}
-		}
+		piety = -300 
 	}
 }
 
@@ -5260,39 +5143,37 @@ character_event = {
 	
 	is_triggered_only = yes
 
-	option = {
-		name = EVTOPTAHFP20518 # Guards! Seize [FromFrom.GetHerHim]!"
-
-		opinion = {
-			name = opinion_traitor
+	option = { 
+		name = EVTOPTAHFP20518
+		#Guards! Seize [FromFrom.GetHerHim]!"
+		opinion = { 
+			modifier = opinion_traitor
 			who = FROM
 			years = 30
 		}
-
-		FROM = {
-			show_scope_change = no
-
-			imprison = ROOT
+		random_courtier_or_vassal = {
+			limit = { has_minor_title = title_regent }
+			imprison = ROOT 
 			remove_title = title_regent
-			character_event = { id = HFP.20516 }
+			hidden_tooltip = { character_event = { id = HFP.20516 } }
 		}
+		ai_chance = { factor = 50 }
 	}
 
-	option = {
-		name = EVTOPTBHFP20518 # Guards! Kill [FromFrom.GetHerHim]!"
-
-		FROM = {
-			show_scope_change = no
-
-			tooltip = {
-				death = {
-					death_reason = death_execution
-					killer = FROM
+	option = { 
+		name = EVTOPTBHFP20518
+		#Guards! Kill [FromFrom.GetHerHim]!"
+		random_courtier_or_vassal = {
+			limit = { has_minor_title = title_regent }
+			tooltip = { 
+				death = { 
+					death_reason = death_execution 
+					killer = FROM 
 				}
 			}
-
-			character_event = { id = HFP.20517 }
+			hidden_tooltip = { character_event = { id = HFP.20517 } }
 		}
+	ai_chance = { factor = 50 }
 	}
 }
 
@@ -5317,596 +5198,459 @@ character_event = {
 
 	is_triggered_only = yes
 
-	option = { # My Physician will help me
+	option = { #My Physician will help me.
 		name = EVTOPTAHFP20520
-
-		trigger = { has_assigned_minor_title = title_court_physician }
-
+		#custom_tooltip = { text = EVTOOLTIPAHFP20520 }
 		wealth = -50
-
-		random_courtier_or_vassal = {
-			limit = { has_minor_title = title_court_physician }
-
-			ROOT = {
-				save_persistent_event_target = {
-					name = pregnancy_mother_physician_per
-					scope = PREV
-				}
-			}
+		trigger = { 
+			is_ruler = yes
+			any_courtier_or_vassal = { has_minor_title = title_court_physician }
 		}
-
-		ai_chance = {
-			factor = 70
-
-			mult_modifier = {
+		random_courtier_or_vassal = { 
+			limit = { has_minor_title = title_court_physician } 
+			save_event_target_as = pregnancy_mother_physician
+		}
+		ROOT = { save_persistent_event_target = { name = pregnancy_mother_physician_per scope = event_target:pregnancy_mother_physician } }
+		ai_chance = { 
+			factor = 70 
+			modifier = { 
 				factor = 1.5
-
-				any_courtier_or_vassal = {
+				any_courtier_or_vassal = { 
 					has_minor_title = title_court_physician
-					trait = quick
+					trait = quick 
 				}
 			}
-
-			mult_modifier = {
+			modifier = { 
 				factor = 1.5
-
-				any_courtier_or_vassal = {
+				any_courtier_or_vassal = { 
 					has_minor_title = title_court_physician
-					trait = genius
+					trait = genius 
 				}
 			}
-
-			mult_modifier = {
+			modifier = { 
 				factor = 1.5
-
-				any_courtier_or_vassal = {
+				any_courtier_or_vassal = { 
 					has_minor_title = title_court_physician
-					learning >= 20
+					learning = 20
 				}
 			}
-
-			mult_modifier = {
+			modifier = { 
 				factor = 0.5
-
-				any_courtier_or_vassal = {
+				any_courtier_or_vassal = { 
 					has_minor_title = title_court_physician
-					learning < 10
+					NOT = { learning = 10 }
 				}
 			}
 		}
 	}
-
-	option = { # Call for a Healer (don't have Physicians due to lack of Reaper's Due DLC)
+	option = { #Call for a Healer (don't have Physicians due to lack of Reaper's Due DLC)
 		name = EVTOPTBHFP20520
-
-		trigger = {
+		#custom_tooltip = { text = EVTOOLTIPBHFP20520 }
+		trigger = { 
 			is_ruler = yes
 			NOT = { has_dlc = "Reapers" }
 		}
-
 		set_character_flag = pregnancy_healer_help
 		wealth = -50
-
-		ai_chance = {
-			factor = 10
-
-			mult_modifier = {
+		ai_chance = { 
+			factor = 10 
+			modifier = { 
 				factor = 0.75
 				trait = zealous
 			}
 		}
 	}
-
-	option = { # Call for a Priest
+	option = { #Call for a Priest
 		name = EVTOPTCHFP20520
-
-		trigger = {
+		#custom_tooltip = { text = EVTOOLTIPCHFP20520 }
+		trigger = { 
+			NOT = { has_character_flag = pregnancy_priest_comfort } #Already taken from the spouse/regent
+			NOT = { has_character_flag = pregnancy_shaman_comfort }
 			is_ruler = yes
 			OR = { 
 				is_reformed_religion = yes 
 				NOT = { religion_group = pagan_group }
 			}
-
-			NOR = {
-				has_character_flag = pregnancy_priest_comfort # Already taken from the spouse/regent
-				has_character_flag = pregnancy_shaman_comfort
-			}
 		}
-
 		set_character_flag = pregnancy_priest_comfort
 		piety = 100
 		wealth = -20
-
-		ai_chance = {
-			factor = 10
-
-			mult_modifier = {
+		ai_chance = { 
+			factor = 10 
+			modifier = { 
 				factor = 2
 				trait = zealous
 			}
 		}
 	}
-
-	option = { # Call for a Shaman
+	option = { #Call for a Shaman
 		name = EVTOPTDHFP20520
-
-		trigger = {
+		#custom_tooltip = { text = EVTOOLTIPDHFP20520 }
+		trigger = { 
 			is_ruler = yes
 			is_reformed_religion = no 
 			religion_group = pagan_group
-
-			NOR = {
-				has_character_flag = pregnancy_shaman_comfort # Already taken from the spouse/regent
-				has_character_flag = pregnancy_priest_comfort
-			}
+			NOT = { has_character_flag = pregnancy_shaman_comfort } #Already taken from the spouse/regent
+			NOT = { has_character_flag = pregnancy_priest_comfort }
 		}
-
 		set_character_flag = pregnancy_shaman_comfort
 		piety = 50
 		prestige = 50
 		wealth = -5
-
-		ai_chance = {
-			factor = 20
-
-			mult_modifier = {
+		ai_chance = { 
+			factor = 20 
+			modifier = { 
 				factor = 2
 				is_tribal = yes
 			}
-
-			mult_modifier = {
+			modifier = { 
 				factor = 2.5
 				is_nomadic = yes
 			}
-
-			mult_modifier = {
+			modifier = { 
 				factor = 2
 				trait = zealous
 			}
 		}
 	}
 
-	option = { # Do nothing
+	option = { #Do nothing.
 		name = EVTOPTEHFP20520
-	}
-
-	after = { # Now for randomized pain
-		character_event = {
-			id = HFP.20521
-			days = 15
-			random = 15
+		ai_chance = { 
+			factor = 1
 		}
+	}
+	after = { #Now for randomized pain.
+		character_event = { id = HFP.20521 }
 	}
 }
 
 character_event = {
 	id = HFP.20521
-
-	is_triggered_only = yes
 	hide_window = yes
 
-	immediate = {
-		random_list = {
-			5 = {
-				mult_modifier = {
+	is_triggered_only = yes
+
+	immediate = { 
+		random_list = { 
+			5 = { 
+				modifier = { 
 					factor = 0.25
 					trait = cough
 				}
-
-				character_event = { id = HFP.20522 } # Asthma
-			}
-
-			5 = {
-				mult_modifier = {
+				character_event = { id = HFP.20522 days = 15 random = 15 } } #Asthma
+			5 = { 
+				modifier = { 
 					factor = 0.25
 					trait = vomiting
 				}
-
-				character_event = { id = HFP.20523 } # Vomiting
-			}
-
-			5 = {
-				mult_modifier = {
+				character_event = { id = HFP.20523 days = 15 random = 15  } } #Vomiting
+			5 = { 
+				modifier = { 
 					factor = 0.25
 					trait = rash
 				}
-
-				character_event = { id = HFP.20524 } # Hair and rashes
-			}
-
-			5 = {
-				mult_modifier = {
+				character_event = { id = HFP.20524 days = 15 random = 15  } } #Hair and rashes
+			5 = { 
+				modifier = { 
 					factor = 0.25
 					trait = malaise
 				}
-
-				character_event = { id = HFP.20525 } # Metalmouth
-			}
-
-			5 = {
-				mult_modifier = {
+				character_event = { id = HFP.20525 days = 15 random = 15  } } #metalmouth
+			5 = { 
+				modifier = { 
 					factor = 0.25
 					trait = fever
 				}
-
-				character_event = { id = HFP.20526 } # Fever and sweat
-			}
-
-			5 = {
-				mult_modifier = {
+				character_event = { id = HFP.20526 days = 15 random = 15  } } #fever and sweath
+			5 = { 
+				modifier = { 
 					factor = 0.25
 					trait = headache
 				}
+				character_event = { id = HFP.20527 days = 15 random = 15  } } #amnesia
+			5 = { character_event = { id = HFP.20528 days = 15 random = 15  } } #panic attack
 
-				character_event = { id = HFP.20527 } # Amnesia
-			}
-
-			5 = {
-				character_event = { id = HFP.20528 } # Panic attack
-			}
-
-			5 = {
-				character_event = { id = HFP.20529 } # Undernourishment
-			}
-
-			5 = {
-				mult_modifier = {
+			5 = { character_event = { id = HFP.20529 days = 15 random = 15  } } #undernourishment
+			5 = { 
+				modifier = { 
 					factor = 0.25
 					trait = stressed
 				}
-
-				character_event = { id = HFP.20530 } # Epileptic episode
-			}
-
-			10 = {
-				mult_modifier = {
+				character_event = { id = HFP.20530 days = 15 random = 15  } } #epileptic episode
+			10 = { 
+				modifier = { 
 					factor = 0.25
 					trait = cramps
 				}
-
-				character_event = { id = HFP.20531 } # Blood and cramps
-			}
-
-			5 = {
-				mult_modifier = {
+				character_event = { id = HFP.20531 days = 15 random = 15  } } #blood and cramps
+			5 = { 
+				modifier = { 
 					factor = 0.25
 					trait = infection
 				}
-
-				character_event = { id = HFP.20532 } # Teeth hurting and falling
-			}
-
-			5 = {
-				mult_modifier = {
+				character_event = { id = HFP.20532 days = 15 random = 15  } } #teeth hurting and falling
+			5 = { 
+				modifier = { 
 					factor = 0.25
 					trait = fatigue
 				}
-
-				character_event = { id = HFP.20533 } # Insomnia
-			}
-
-			5 = {
-				mult_modifier = {
+				character_event = { id = HFP.20533 days = 15 random = 15  } } #insomnia
+			5 = { 
+				modifier = { 
 					factor = 0.25
 					trait = fatigue
 				}
-
-				character_event = { id = HFP.20534 } # Hallucinations
-			}
-
-			5 = {
-				mult_modifier = {
+				character_event = { id = HFP.20534 days = 15 random = 15 } } #hallucinations
+			5 = { 
+				modifier = { 
 					factor = 0.25
 					trait = fatigue
 				}
-
-				character_event = { id = HFP.20535 } # Sleepwalking
-			}
-
-			3 = {
-				mult_modifier = {
+				character_event = { id = HFP.20535 days = 15 random = 15  } } #sleepwalking
+			3 = { 
+				modifier = { 
 					factor = 0.9
-					health < 2
+					NOT = { health = 2 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.8
-					practical_age >= 40
+					age = 40
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
-					has_character_modifier = mother_comforted
+					has_character_modifier = mother_comforted 
 				}
-
-				mult_modifier = {
-					factor = 0.95 # Fasting
-					has_character_modifier = mother_vow_temperance
+				modifier = { 
+					factor = 0.95		#Fasting
+					has_character_modifier = mother_vow_temperance 
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.15
-					has_character_modifier = mother_vow_charity
+					has_character_modifier = mother_vow_charity 
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.15
-					has_character_modifier = mother_vow_humility
+					has_character_modifier = mother_vow_humility 
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.15
-					has_character_modifier = mother_vow_chastity
+					has_character_modifier = mother_vow_chastity 
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.9
-					has_character_modifier = mother_bad_omen
+					has_character_modifier = mother_bad_omen  
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.15
-					has_character_modifier = mother_good_omen
+					has_character_modifier = mother_good_omen  
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
-					has_character_modifier = mother_minor_rest
+					has_character_modifier = mother_minor_rest  
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.45
-					has_character_modifier = mother_resting_health
+					has_character_modifier = mother_resting_health 
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.15
-					has_character_modifier = mother_praying_health
+					has_character_modifier = mother_praying_health 
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.9
-					has_character_modifier = mother_partying_health
+					has_character_modifier = mother_partying_health 
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.8
 					has_character_modifier = mother_exposed_to_elements
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.7
-					persistent_event_target:pregnancy_mother_physician_per = { learning < 5 }
+					persistent_event_target:pregnancy_mother_physician_per = { NOT = { learning = 5 } }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.8
-					persistent_event_target:pregnancy_mother_physician_per = { learning < 10 }
+					persistent_event_target:pregnancy_mother_physician_per = { NOT = { learning = 10 } }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.9
 					persistent_event_target:pregnancy_mother_physician_per = { trait = slow }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.8
 					persistent_event_target:pregnancy_mother_physician_per = { trait = imbecile }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
 					persistent_event_target:pregnancy_mother_physician_per = { trait = scholar }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.5
 					persistent_event_target:pregnancy_mother_physician_per = { trait = physician }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
 					persistent_event_target:pregnancy_mother_physician_per = { trait = quick }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.5
 					persistent_event_target:pregnancy_mother_physician_per = { trait = genius }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
-					persistent_event_target:pregnancy_mother_physician_per = { learning >= 10 }
+					persistent_event_target:pregnancy_mother_physician_per = { learning = 10 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
-					persistent_event_target:pregnancy_mother_physician_per = { learning >= 15 }
+					persistent_event_target:pregnancy_mother_physician_per = { learning = 15 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
-					persistent_event_target:pregnancy_mother_physician_per = { learning >= 20 }
+					persistent_event_target:pregnancy_mother_physician_per = { learning = 20 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.5
-					persistent_event_target:pregnancy_mother_physician_per = { learning >= 25 }
+					persistent_event_target:pregnancy_mother_physician_per = { learning = 25 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.7
-					persistent_event_target:pregnancy_spouse_physician_per = { learning < 5 }
+					persistent_event_target:pregnancy_spouse_physician_per = { NOT = { learning = 5 } }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.8
-					persistent_event_target:pregnancy_spouse_physician_per = { learning < 10 }
+					persistent_event_target:pregnancy_spouse_physician_per = { NOT = { learning = 10 } }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.9
 					persistent_event_target:pregnancy_spouse_physician_per = { trait = slow }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.8
 					persistent_event_target:pregnancy_spouse_physician_per = { trait = imbecile }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
 					persistent_event_target:pregnancy_spouse_physician_per = { trait = scholar }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.5
 					persistent_event_target:pregnancy_spouse_physician_per = { trait = physician }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
 					persistent_event_target:pregnancy_spouse_physician_per = { trait = quick }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.5
 					persistent_event_target:pregnancy_spouse_physician_per = { trait = genius }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
-					persistent_event_target:pregnancy_spouse_physician_per = { learning >= 10 }
+					persistent_event_target:pregnancy_spouse_physician_per = { learning = 10 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
-					persistent_event_target:pregnancy_spouse_physician_per = { learning >= 15 }
+					persistent_event_target:pregnancy_spouse_physician_per = { learning = 15 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
-					persistent_event_target:pregnancy_spouse_physician_per = { learning >= 20 }
+					persistent_event_target:pregnancy_spouse_physician_per = { learning = 20 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.5
-					persistent_event_target:pregnancy_spouse_physician_per = { learning >= 25 }
+					persistent_event_target:pregnancy_spouse_physician_per = { learning = 25 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.7
-					persistent_event_target:pregnancy_regent_physician_per = { learning < 5 }
+					persistent_event_target:pregnancy_regent_physician_per = { NOT = { learning = 5 } }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.8
-					persistent_event_target:pregnancy_regent_physician_per = { learning < 10 }
+					persistent_event_target:pregnancy_regent_physician_per = { NOT = { learning = 10 } }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.9
 					persistent_event_target:pregnancy_regent_physician_per = { trait = slow }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 0.8
 					persistent_event_target:pregnancy_regent_physician_per = { trait = imbecile }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
 					persistent_event_target:pregnancy_regent_physician_per = { trait = scholar }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.5
 					persistent_event_target:pregnancy_regent_physician_per = { trait = physician }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
 					persistent_event_target:pregnancy_regent_physician_per = { trait = quick }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.5
 					persistent_event_target:pregnancy_regent_physician_per = { trait = genius }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
-					persistent_event_target:pregnancy_regent_physician_per = { learning >= 10 }
+					persistent_event_target:pregnancy_regent_physician_per = { learning = 10 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
-					persistent_event_target:pregnancy_regent_physician_per = { learning >= 15 }
+					persistent_event_target:pregnancy_regent_physician_per = { learning = 15 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
-					persistent_event_target:pregnancy_regent_physician_per = { learning >= 20 }
+					persistent_event_target:pregnancy_regent_physician_per = { learning = 20 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.5
-					persistent_event_target:pregnancy_regent_physician_per = { learning >= 25 }
+					persistent_event_target:pregnancy_regent_physician_per = { learning = 25 }
 				}
-
-				# Every successful healing on random event reduces variable, lower the variable, more likely mother is to recover.
-				mult_modifier = {
+				modifier = { #Every successful healing on random event reduces variable, lower the variable, more likely mother is to recover.
 					factor = 1.25
-					check_variable = { which = troubled_pregnancy_variable value >= -1 }
+					check_variable =  { which = troubled_pregnancy_variable value = -1 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
-					check_variable = { which = troubled_pregnancy_variable value >= -2 }
+					check_variable =  { which = troubled_pregnancy_variable value = -2 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.5
-					check_variable = { which = troubled_pregnancy_variable value >= -4 }
+					check_variable =  { which = troubled_pregnancy_variable value = -4 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.75
-					check_variable = { which = troubled_pregnancy_variable value >= -6 }
+					check_variable =  { which = troubled_pregnancy_variable value = -6 }
 				}
-
-				character_event = { id = HFP.20536 } # RECOVERY
+				character_event = { id = HFP.20536 days = 15 random = 15  } #RECOVERY
 			}
-
-			1 = {
-				# Every failed healing on random event increases variable, higher the variable, more likely mother is to die
-				mult_modifier = {
+			1 = { 
+				modifier = { #Every failed healing on random event increases variable, higher the variable, more likely mother is to die.
 					factor = 1.25
-					check_variable = { which = troubled_pregnancy_variable value >= 1 }
+					check_variable =  { which = troubled_pregnancy_variable value = 1 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.25
-					check_variable = { which = troubled_pregnancy_variable value >= 2 }
+					check_variable =  { which = troubled_pregnancy_variable value = 2 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 1.5
-					check_variable = { which = troubled_pregnancy_variable value >= 3 }
+					check_variable =  { which = troubled_pregnancy_variable value = 3 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 2
-					check_variable = { which = troubled_pregnancy_variable value >= 4 }
+					check_variable =  { which = troubled_pregnancy_variable value = 4 }
 				}
-
-				mult_modifier = {
+				modifier = { 
 					factor = 3
-					check_variable = { which = troubled_pregnancy_variable value >= 5 }
+					check_variable =  { which = troubled_pregnancy_variable value = 5 }
 				}
 
-				character_event = { id = HFP.20537 } # DEATH
-			}
+				character_event = { id = HFP.20537 days = 15 random = 15  } #DEATH
+			} 
 		}
 	}
 }
