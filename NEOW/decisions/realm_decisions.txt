@@ -1,166 +1,189 @@
 decisions = {
 
 	hold_a_epic_tournament  = {
-		only_independent = yes
-		is_high_prio = yes
 		ai_check_interval = 24
-		
+
+		is_high_prio = yes
+
+		only_independent = yes
+
 		potential = {
-			is_playable = yes
-			NOR = {
-				has_character_modifier = epic_tournament
-				has_character_flag = epic_tournament
-			}
+			independent = yes
+			higher_real_tier_than = DUKE
+			is_nomadic = no
+			owns = location
+
 			OR = {
 				religion_group = christian
 				religion_group = jewish_group
 				religion_group = zoroastrian_group
 			}
-			independent = yes
-			NOT = { is_nomadic = yes }
-			OR = {
+
+			trigger_if = {
+				limit = { is_female = yes }
 				gender_equality_trigger = yes
-				NOT = { is_female = yes	}
 			}
-			OR = {
-				tier = king
-				tier = emperor 
-			}
-			location = {
-				owner = { character = ROOT }
+
+			NOR = {
+				has_character_modifier = epic_tournament
+				has_character_flag = epic_tournament
 			}
 		}
+
 		allow = {
+			prestige >= 500
+			wealth >= 200
+			is_adult = yes
 			war = no
 			prisoner = no
 			in_command = no
-			NOT = { is_inaccessible_trigger = yes }
-			age = 16
-			prestige = 500
-			wealth = 200
-			custom_tooltip = {
-				text = is_not_busy_trigger_tooltip
-				hidden_tooltip = { NOT = { has_character_flag = do_not_disturb } }
-			}
+			is_inaccessible_trigger = no
 		}
+
 		effect = {
+			wealth = -200
+			prestige = 100
+
 			add_character_modifier = {
 				name = epic_tournament
 				years = 100
 				hidden = yes
 			}
+
 			set_character_flag = do_not_disturb
-			clr_character_flag = tournament_has_ended
-			hidden_tooltip = { character_event = { id = 70999 days = 300 } } # Safety catch flag clearing
-			wealth = -200
-			prestige = 100
-			character_event = { id = 70033 tooltip = "tournament_invite" }
-			hidden_tooltip = {
-				clr_character_flag = tournament_has_ended
+			set_character_flag = epic_tournament
+
+			character_event = {
+				id = 70033
+				tooltip = tournament_invite
 			}
 		}
+
 		ai_will_do = {
 			factor = 1
-			modifier = {
-				factor = 0
-				NOT = {
-					OR = {
-						wealth = 1000
-						scaled_wealth = 3.0
-					}
+
+			trigger = {
+				scaled_wealth = {
+					value = 3.0
+					max = 1000
 				}
 			}
 		}
 	}
 	
 	buy_indulgence_for_sins = {
-		only_playable = yes
 		ai_check_interval = 6
+
+		only_playable = yes
+
 		potential = {
 			religion = sevillian
-			age = 16
-			demesne_size = 1
-			NOT = { has_character_flag = ask_for_indulgence }
-			NOT = { trait = excommunicated }
-		}
-		allow = {
-			prisoner = no
-			NOT = { trait = incapable }
-			NOT = { is_inaccessible_trigger = yes }
-			scaled_wealth = 1.0
-			wealth = 25
-			is_heretic = no
-		}
-		effect = {
-			set_character_flag = ask_for_indulgence
-			rightful_religious_head_scope = {
-				character_event = { id = 39250 days = 5 random = 12 tooltip = "indulgence_ask" }
+			is_adult = yes
+			demesne_size >= 1
+
+			NOR = {
+				has_character_flag = ask_for_indulgence
+				trait = excommunicated
 			}
 		}
+
+		allow = {
+			scaled_wealth = {
+				value = 1.0
+				min = 25
+			}
+
+			is_heretic = no
+			prisoner = no
+			is_incapable = no
+			is_inaccessible_trigger = no
+		}
+
+		effect = {
+			set_character_flag = ask_for_indulgence
+
+			rightful_religious_head_scope = {
+				character_event = {
+					id = 39250
+					days = 5
+					random = 12
+					tooltip = indulgence_ask
+				}
+			}
+		}
+
 		ai_will_do = {
 			factor = 1
-			modifier = {
-				factor = 0
-				OR = {
-					NOT = { scaled_wealth = 10.0 }
-					piety = 0
-				}
+
+			trigger = {
+				piety < 0
+				NOT = { scaled_wealth = 10.0 }
 			}
 		}
 	}
 
 	issue_declaration_of_repentance = {
-		only_playable = yes
 		ai_check_interval = 80
+
 		is_high_prio = yes
+
+		only_playable = yes
+
 		potential = {
-			age = 16
-			is_playable = yes
+			higher_real_tier_than = BARON # Low nobility requires somebody else to ask their religious head to Lift the Excommunication on their behalf
 			is_landed = yes
-			higher_tier_than = BARON #Low nobility requires somebody else to ask the Papacy to Lift the Excommunication on their behalf.
-			religion = sevillian #Fraticelli, Reformed Pagans, etc.
+			is_adult = yes
+
 			rightful_religious_head_scope = {
-				ROOT = {
-					excommunicated_for = PREV
-				}
+				ROOT = { excommunicated_for = PREV }
 			}
 		}
+
 		allow = {
 			is_heretic = no
-			custom_tooltip = { 
+
+			custom_tooltip = {
 				text = tooltip_issued_decla_repentance_recently
-				hidden_tooltip = { NOT = { has_character_modifier = asked_repentance_from_sins_cooldown } } 
+
+				NOT = { has_character_modifier = asked_repentance_from_sins_cooldown }
 			}
 		}
+
 		effect = {
-			hidden_tooltip = {
-				add_character_modifier = {
-					name = asked_repentance_from_sins_cooldown
-					months = 48
-					hidden = yes
+			add_character_modifier = {
+				name = asked_repentance_from_sins_cooldown
+				years = 4
+				hidden = yes
+			}
+
+			rightful_religious_head_scope = {
+				show_scope_change = no
+
+				character_event = {
+					id = HFP.23003
+					days = 5
+					random = 12
+					tooltip = repentance_ask
 				}
 			}
-			rightful_religious_head_scope = {
-				character_event = { id = HFP.23003 days = 5 random = 12 tooltip = "repentance_ask" }
-			}
 		}
+
 		ai_will_do = {
 			factor = 1
-			modifier = {
-				factor = 0.25
-				NOT = {
-					scaled_wealth = 2.0
+
+			trigger = {
+				NOR = {
+					trait = stubborn
+					trait = cynical
 				}
 			}
-			modifier = {
-				factor = 0
-				trait = stubborn
+
+			mult_modifier = {
+				factor = 0.25
+				NOT = { scaled_wealth = 2.0 }
 			}
-			modifier = {
-				factor = 0
-				trait = cynical
-			}
-			modifier = {
+
+			mult_modifier = {
 				factor = 2
 				trait = zealous
 			}
@@ -304,19 +327,25 @@ decisions = {
 			}
 		}
 		effect = {
-			set_character_flag = do_not_disturb
+			wealth  = -200
+			prestige = 100
+			decadence = -5
+
 			add_character_modifier = {
 				name = epic_tournament_furusiyya
 				years = 100
 				hidden = yes
 			}
-			clr_character_flag = tournament_has_ended_furusiyya
-			hidden_tooltip = { character_event = { id = 88999 days = 300 } } # Safety catch flag clearing
-			wealth = -200
-			prestige = 100
-			decadence = -5
-			character_event = { id = 88283 tooltip = "furusiyya_invite" }
+
+			set_character_flag = do_not_disturb
+			set_character_flag = epic_tournament_furusiyya
+
+			character_event = {
+				id = 88283
+				tooltip = furusiyya_invite
+			}
 		}
+
 		ai_will_do = {
 			factor = 1
 			modifier = {
