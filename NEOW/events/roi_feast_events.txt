@@ -62,6 +62,22 @@ character_event = {
 					letter_event = { id = RoI.1940 }
 				}
 			}
+			
+			else_if = {
+				limit = { has_character_modifier = holding_vessak_feast }
+
+				any_vassal = {
+					show_scope_change = no
+
+					limit = {
+						block_general_event_trigger = no
+						war = no
+						in_command = no
+					}
+
+					letter_event = { id = RoI.2000 }
+				}
+			}
 		}
 
 		# Gift for spouse/lover
@@ -180,6 +196,109 @@ letter_event = {
 letter_event = {
 	id = RoI.1940
 	desc = EVTDESC_RoI_1940
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_RoI_1001 # Travel to the feast
+
+		set_character_flag = do_not_disturb
+
+		character_event = {
+			id = RoI.1989 # Hidden - arrives at feast
+			days = 12
+		}
+
+		character_event = {
+			id = RoI.1990 # Safety event for clearing all flags
+			days = 42
+		}
+
+		# Gift for spouse/lover
+		if = {
+			limit = { is_married = yes }
+			character_event = { id = RoI.1005 }
+		}
+		else_if = {
+			limit = { has_lover = yes }
+			character_event = { id = RoI.1006 }
+		}
+
+		ai_chance = {
+			factor = 2
+
+			mult_modifier = {
+				factor = 5
+				has_focus = focus_carousing
+			}
+
+			modifier = {
+				factor = 2
+
+				opinion = {
+					who = FROM
+					value >= -30
+				}
+			}
+
+			mult_modifier = {
+				factor = 5
+
+				opinion = {
+					who = FROM
+					value >= -15
+				}
+			}
+
+			mult_modifier = {
+				factor = 5
+
+				opinion = {
+					who = FROM
+					value >= 0
+				}
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB_RoI_1001 # Refuse invitation
+
+		FROM = {
+			show_scope_change = no
+
+			tooltip = {
+				opinion = {
+					name = opinion_dislike
+					who = ROOT
+					years = 2
+				}
+			}
+
+			letter_event = {
+				id = RoI.1002
+				days = 3
+				tooltip = EVTTOOLTIP1_RoI_2001
+			}
+		}
+
+		ai_chance = {
+			factor = 1
+
+			trigger = {
+				opinion = {
+					who = FROM
+					value < 25
+				}
+			}
+		}
+	}
+}
+
+# Vassal receives invitation - Vessak
+letter_event = {
+	id = RoI.4200
+	desc = EVTDESC_RoI_4200
 
 	is_triggered_only = yes
 
@@ -2210,6 +2329,7 @@ character_event = {
 	immediate = {
 		remove_character_modifier = holding_diwali_feast
 		remove_character_modifier = holding_kali_puja_feast
+		remove_character_modifier = holding_vessak_feast_feast
 		clr_character_flag = attending_diwali_feast
 		clr_character_flag = diwali_feast_begun
 		clr_character_flag = diwali_monkeys
