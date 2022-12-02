@@ -597,6 +597,52 @@ decisions = {
 			factor = 1
 		}
 	}
+	create_shinko_priesthood = {
+		only_independent = yes
+		is_high_prio = yes
+		ai_check_interval = 24
+		
+		potential = {
+			is_playable = yes
+			is_random_world = no
+			religion = shinko
+			has_landed_title = k_ryukyu
+			NOT = { has_global_flag = shinko_priesthood_founded }
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		allow = {
+			num_of_holy_sites = 3
+			piety = 500
+		}
+		effect = {
+			set_global_flag = shinko_priesthood_founded
+			piety = -500
+			activate_title = { title = d_shinko status = yes }
+			hidden_tooltip = {
+				create_random_priest = {
+					random_traits = yes
+					religion = shinko
+					culture = ryukyuan
+					dynasty = random
+					female = yes
+					age = 41
+				}
+				new_character = {
+					d_shinko = {
+						grant_title = PREV
+					}
+				}
+				d_shinko = {
+					set_defacto_liege = ROOT
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
 	restore_priesthood = {
 		only_independent = yes
 		is_high_prio = yes
@@ -1865,6 +1911,110 @@ decisions = {
 					NOT = { religion = ROOT }
 				}
 			}
+		}
+	}
+	reform_shinsengumi = {
+		only_independent = yes
+		is_high_prio = yes
+		ai_check_interval = 24
+		
+		potential = {
+			is_playable = yes
+			independent = yes
+			OR = {
+				is_female = no
+				gender_equality_trigger = yes
+			}
+			prisoner = no
+			is_adult = yes
+			NOT = { trait = incapable }
+			has_landed_title = k_bakufu
+			NOT = { has_global_flag = shinsengumi_founded }
+		}
+		allow = {
+			prestige = 1000
+			wealth = 200
+		}
+		effect = {
+			set_global_flag = shinsengumi_founded
+			prestige = -1000
+			wealth = -200
+			activate_title = { title = d_shinsengumi status = yes }
+			hidden_tooltip = {
+				if = {
+					limit = {
+						gender_equality_trigger = yes
+					}
+					create_character = {
+						random_traits = yes
+						religion = shinto
+						culture = kanto
+						dynasty = NONE
+						female = 50
+						age = 34
+						trait = skilled_tactician
+					}
+				}
+				else = {
+					create_character = {
+						random_traits = yes
+						religion = shinto
+						culture = kanto
+						dynasty = NONE
+						female = no
+						age = 34
+						trait = skilled_tactician
+					}
+				}
+				new_character = {
+					set_character_flag = is_chosen_shinsengumi_leader
+					d_shinsengumi = {
+						grant_title = PREV
+					}
+					set_defacto_liege = ROOT
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	reclaim_shinsengumi = {
+		only_independent = yes
+		is_high_prio = yes
+		ai_check_interval = 24
+		
+		potential = {
+			is_playable = yes
+			independent = yes
+			OR = {
+				is_female = no
+				gender_equality_trigger = yes
+			}
+			prisoner = no
+			is_adult = yes
+			NOT = { trait = incapable }
+			has_landed_title = k_bakufu
+			d_shinsengumi = {
+				NOT = { defacto_liege = ROOT }
+			}
+			has_global_flag = shinsengumi_founded
+		}
+		allow = {
+			prestige = 500
+			wealth = 100
+		}
+		effect = {
+			prestige = -500
+			wealth = -100
+			hidden_tooltip = {
+				d_shinsengumi = {
+					set_defacto_liege = ROOT
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
 		}
 	}
 	organize_legata_guard = {
