@@ -874,6 +874,174 @@ decisions = {
 		}
 	}
 
+	wuxia_training = {
+		is_high_prio = yes
+		ai_check_interval = 6
+		
+		potential = {
+			religion = wuxia
+			OR = {
+				trait = wuxia_apprentice
+				trait = wuxia_expert
+				trait = wuxia_master
+				trait = wuxia_grandmaster
+			}
+			has_character_flag = wuxia_flag_set
+			war = no
+			prisoner = no
+			is_incapable = no
+			NOT = {
+				has_character_modifier = hidden_timer_modif
+			}
+		}
+		allow = {
+			prestige = 100
+			wealth = 50
+		}
+		effect = {
+			prestige = -100
+			wealth = -50
+			hidden_tooltip = { add_character_modifier = { name = hidden_timer_modif duration = 180 hidden = yes} }
+			change_variable = { which = wuxia_training_progress value = 1 }
+			if = {
+				limit = {
+					check_variable = { which = wuxia_training_progress value == 10 }
+					trait = wuxia_apprentice
+				}
+				remove_trait = wuxia_apprentice
+				add_trait = wuxia_expert
+			}
+			else_if = {
+				limit = {
+					check_variable = { which = wuxia_training_progress value == 20 }
+					trait = wuxia_expert
+				}
+				remove_trait = wuxia_expert
+				add_trait = wuxia_master
+			}
+			else_if = {
+				limit = {
+					check_variable = { which = wuxia_training_progress value == 30 }
+					trait = wuxia_master
+				}
+				remove_trait = wuxia_master
+				add_trait = wuxia_grandmaster
+			}
+			else = {
+			}
+			character_event = { id = wuxia.3 days = 30 }
+			random_list = {
+				10 = {#sect friend
+					character_event = { id = wuxia.4 days = 10 random = 2 }
+				}
+				10 = {#rival sect
+					character_event = { id = wuxia.5 days = 10 random = 2 }
+				}
+				10 = {#good gains
+					mult_modifier = {
+						factor = 0
+						NOR = {
+							check_variable = { which = wuxia_training_progress value == 10 }
+							check_variable = { which = wuxia_training_progress value == 20 }
+							check_variable = { which = wuxia_training_progress value == 30 }
+						}
+					}
+					character_event = { id = wuxia.6 days = 10 random = 2 }
+				}
+				10 = {#bad gains
+					mult_modifier = {
+						factor = 0
+						NOR = {
+							check_variable = { which = wuxia_training_progress value == 10 }
+							check_variable = { which = wuxia_training_progress value == 20 }
+							check_variable = { which = wuxia_training_progress value == 30 }
+						}
+					}
+					character_event = { id = wuxia.7 days = 10 random = 2 }
+				}
+				10 = {#too fat
+					mult_modifier = {
+						factor = 0
+						NOR = {
+							trait = is_fat
+							trait = gluttonous
+						}
+					}
+					character_event = { id = wuxia.8 days = 10 random = 2 }
+				}
+				10 = {#too thin
+					mult_modifier = {
+						factor = 0
+						NOT = {
+							trait = is_malnourished
+						}
+					}
+					character_event = { id = wuxia.9 days = 10 random = 2 }
+				}
+				10 = {#night med
+					character_event = { id = wuxia.10 days = 10 random = 2 }
+				}
+				10 = {#sun med
+					mult_modifier = {
+						factor = 0
+						NOR = {
+							month == 5
+							month == 6
+							month == 7
+						}
+					}
+					character_event = { id = wuxia.11 days = 10 random = 2 }
+				}
+				10 = {#snow med
+					mult_modifier = {
+						factor = 0
+						NOR = {
+							month == 0
+							month == 1
+							month == 11
+						}
+					}
+					character_event = { id = wuxia.12 days = 10 random = 2 }
+				}
+				10 = {#traveller
+					mult_modifier = {
+						factor = 0.05
+					}
+					character_event = { id = wuxia.13 days = 10 random = 2 }
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.8
+			}
+			modifier = {
+				factor = 2
+				trait = zealous
+			}
+			modifier = {
+				factor = 2
+				trait = diligent
+			}
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			modifier = {
+				factor = 0.5
+				trait = slothful
+			}
+			modifier = {
+				factor = 0.5
+				trait = cynical
+			}
+			modifier = {
+				factor = 0.5
+				trait = content
+			}
+		}
+	}
 	study_era_law = {
 		only_playable = yes
 		is_high_prio = yes
