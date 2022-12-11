@@ -1130,8 +1130,8 @@ NEconomy = {
 	LOOT_IDEAL_MIN_TROOPS = 500,					-- Minimum troops for maximum loot, less than this scales down the amount looted
 	BUILDING_COST_MULT = 0.5,						-- Increase to the build cost of all buildings that cost GOLD
 	SILK_ROAD_TP_BUILD_COST_MOT = 0.333,			-- Build cost modifier for non-Merchant republic Trade Posts
-	TRADE_ROUTE_SIEGE_MULTIPLIER = 0.9,				-- Sieges multiply the value of trade routes by this amount downstream
-	TRADE_ROUTE_OCCUPATION_MULTIPLIER = 0.75,		-- Occupied provinces multiply the value of trade routes by this amount downstream. If sieged as well, the lowest of this and TRADE_ROUTE_SIEGE_MULTIPLIER is used
+	TRADE_ROUTE_SIEGE_MULTIPLIER = 0.75,				-- Sieges multiply the value of trade routes by this amount downstream
+	TRADE_ROUTE_OCCUPATION_MULTIPLIER = 0.5,		-- Occupied provinces multiply the value of trade routes by this amount downstream. If sieged as well, the lowest of this and TRADE_ROUTE_SIEGE_MULTIPLIER is used
 	FORT_CONSUMED_IN_SETTLEMENT_CONTRUCTION = 1,	-- If set to 1 then fort holdings are consumed by the construction of another holding in the province while giving a discount to the construction cost in return.
 	WONDER_ABORT_FIRST_STAGE_RETURN_FACTOR = 0.0,	-- Factor for the amount the owner of a wonder gets when they abort the first stage of a wonder construction
 	WONDER_STACKING_PENALTY = 0.4,					-- Additional cost for each consecutive wonder construction
@@ -1312,9 +1312,9 @@ NMilitary = {
 	LOOTED_MODIFIER_MONTHS = 36,					-- How long pagan looting lasts
 	LOOT_TAX_MULTIPLIER = 1.5,						-- Base gold looted from raided holdings is (tax * LOOT_TAX_MULTIPLIER) + (total building value * LOOT_BUILDING_MULTIPLIER)
 	LOOT_BUILDING_MULTIPLIER = 0.02,				-- Extra gold looted from raided holdings, from buildings (LOOT_BUILDING_MULTIPLIER * building built cost)
-	LOOT_HOLDING_DEST_MIN_SAFE = 4,					-- there is a 1 in LOOT_HOLDING_DESTRUCTION_ODDS chance that
-	LOOT_HOLDING_DESTRUCTION_ODDS = 20,				-- a holding with less than LOOT_HOLDING_DEST_MIN_SAFE buildings will be destroyed by looting
-	LOOT_HOLDING_BUILDING_DEST_ODDS = 10,			-- there is a 1 in this chance a random building is destroyed when looted
+	LOOT_HOLDING_DEST_MIN_SAFE = 6,					-- there is a 1 in LOOT_HOLDING_DESTRUCTION_ODDS chance that
+	LOOT_HOLDING_DESTRUCTION_ODDS = 33,				-- a holding with less than LOOT_HOLDING_DEST_MIN_SAFE buildings will be destroyed by looting
+	LOOT_HOLDING_BUILDING_DEST_ODDS = 5,			-- there is a 1 in this chance a random building is destroyed when looted
 	SETTLED_ADVENTURER_MODIFIER_YEARS = 20,			-- How long provinces are spared from raiding after settling a raider adventurer.
 
 	RETINUE_FROM_REALMSIZE = 2.0,
@@ -1577,8 +1577,8 @@ NGraphics = {
 },
 
 NEngine = {
-	EVENT_PROCESS_OFFSET = 40, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
-	COURTIER_EVENT_PROCESS_OFFSET = 90, 	 -- Events are checked every X day for courtiers. Max value of 255
+	EVENT_PROCESS_OFFSET = 55, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
+	COURTIER_EVENT_PROCESS_OFFSET = 110, 	 -- Events are checked every X day for courtiers. Max value of 255
 	COURTIERS_MTTTH_EVENTS = 1,  -- Toggles if courtiers are allowed to run MTTH events or not
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_YEAR = 1066, -- The missing scripted successor error will not be shown before this date
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_MONTH = 8,
