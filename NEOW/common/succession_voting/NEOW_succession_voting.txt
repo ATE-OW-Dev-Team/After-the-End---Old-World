@@ -8004,8 +8004,103 @@ phonocratic_elective = {
 				has_minor_title = title_chechnik_2
 			}
 		}
+		additive_modifier = { #MPS
+			value = 2
+			localisation_key = tooltip_phonocratic_murder_positive_1
+			vassal_of = FROMFROM 
+    		any_kill_list_character = {
+				count = 5
+			}
+		}
+		additive_modifier = { #MPS
+			value = 2
+			localisation_key = tooltip_phonocratic_murder_positive_2
+			vassal_of = FROMFROM 
+    		any_kill_list_character = {
+				count = 10
+			}
+		}
+		additive_modifier = { #MPS
+			value = 2
+			localisation_key = tooltip_phonocratic_murder_positive_3
+			vassal_of = FROMFROM 
+    		any_kill_list_character = {
+				count = 15
+			}
+		}
+		additive_modifier = { #MPS
+			value = 2
+			localisation_key = tooltip_phonocratic_murder_positive_4
+			vassal_of = FROMFROM 
+    		any_kill_list_character = {
+				count = 20
+			}
+		}
+		additive_modifier = { #MPS
+			value = 2
+			localisation_key = tooltip_phonocratic_murder_positive_5
+			vassal_of = FROMFROM 
+    		any_kill_list_character = {
+				count = 30
+			}
+		}
+		additive_modifier = { #MPS
+			value = 2
+			localisation_key = tooltip_phonocratic_murder_positive_6
+			vassal_of = FROMFROM 
+    		any_kill_list_character = {
+				count = 40
+			}
+		}
+		additive_modifier = { #MPS
+			value = 2
+			localisation_key = tooltip_phonocratic_murder_positive_7
+			vassal_of = FROMFROM 
+    		any_kill_list_character = {
+				count = 50
+			}
+		}
+		additive_modifier = { #MPS
+			value = 2
+			localisation_key = tooltip_phonocratic_murder_positive_8
+			vassal_of = FROMFROM 
+    		any_kill_list_character = {
+				count = 60
+			}
+		}
+		additive_modifier = { #MPS
+			value = 2
+			localisation_key = tooltip_phonocratic_murder_positive_9
+			vassal_of = FROMFROM 
+    		any_kill_list_character = {
+				count = 70
+			}
+		}
+		additive_modifier = { #MPS
+			value = 2
+			localisation_key = tooltip_phonocratic_murder_positive_10
+			vassal_of = FROMFROM 
+    		any_kill_list_character = {
+				count = 80
+			}
+		}
+		additive_modifier = { #MPS
+			value = 2
+			localisation_key = tooltip_phonocratic_murder_positive_11
+			vassal_of = FROMFROM 
+    		any_kill_list_character = {
+				count = 90
+			}
+		}
+		additive_modifier = { #MPS
+			value = 2
+			localisation_key = tooltip_phonocratic_murder_positive_12
+			vassal_of = FROMFROM 
+    		any_kill_list_character = {
+				count = 100
+			}
+		}
 	}
-	
 	elector_selection = {
 		days = -5 		#If below 0, ROOT is not valid to be an Elector.
 		additive_modifier = { #Current ruler is always an elector.
@@ -8046,26 +8141,31 @@ phonocratic_elective = {
 				has_minor_title = title_chechnik_2
 			}
 		}
-		additive_modifier = { 
+		additive_modifier = { #
 			value = 10
-			is_vassal_or_below_of = FROMFROM 
-			OR = { #Any vassals of one or two lower tiers than the main title are viable Electors.
-				AND = {
-					FROMFROM = { real_tier = COUNT }
-					is_ruler = yes #Barons
+			FROMFROM = { #Either title is higher than Duke-tier, or must be primary.
+				OR = { 
+					higher_tier_than = DUKE
+					holder_scope = { primary_title = { title = PREVPREV } }
 				}
+			}
+			OR = { #
 				AND = {
-					FROMFROM = { real_tier = DUKE }
-					is_ruler = yes #Barons and Counts
+					higher_real_tier_than = BARON
+					FROMFROM = { real_tier = DUKE } #If the Elector Title is a Duchy, any vassal is an elector, otherwise only Dukes and above.
 				}
+				higher_real_tier_than = COUNT
+			}
+			OR = { #Either defacto direct vassal, or independent ruler who is dejure vassal.
+				vassal_of = FROMFROM 
+				independent = yes
+			}
+			OR = { #dejure vassal, or any vassal if title titular.
 				AND = {
-					FROMFROM = { real_tier = KING }
-					higher_real_tier_than = BARON #Counts and Dukes
+					FROMFROM = { is_titular = yes }
+					vassal_of = FROMFROM 
 				}
-				AND = {
-					FROMFROM = { real_tier = EMPEROR }
-					higher_real_tier_than = BARON #Counts, Dukes, and Kings
-				}
+				any_dejure_liege = { title = FROMFROM }
 			}
 		}
 		additive_modifier = {
@@ -8150,8 +8250,8 @@ phonocratic_elective = {
 				any_dejure_liege = { title = FROMFROM }
 			}
 		}
-		additive_modifier = { #high prioritization based on religion.
-			value = 10
+		additive_modifier = { #Slight prioritization based on religion.
+			value = 4
 			FROMFROM = { #Either title is higher than Duke-tier, or must be primary.
 				OR = { 
 					higher_tier_than = DUKE
@@ -8160,7 +8260,7 @@ phonocratic_elective = {
 			}
 			is_feudal = yes
 			vassal_of = FROMFROM
-			higher_real_tier_than = BARON
+			higher_real_tier_than = COUNT
 			OR = { #dejure vassal, or any vassal if title titular.
 				AND = {
 					FROMFROM = { is_titular = yes }
@@ -8175,7 +8275,7 @@ phonocratic_elective = {
 			}
 		}
 		additive_modifier = { #Slight prioritization based on religion_group.
-			value = 6
+			value = 4
 			FROMFROM = { #Either title is higher than Duke-tier, or must be primary.
 				OR = { 
 					higher_tier_than = DUKE
@@ -8184,7 +8284,7 @@ phonocratic_elective = {
 			}
 			is_feudal = yes
 			vassal_of = FROMFROM
-			higher_real_tier_than = BARON
+			higher_real_tier_than = COUNT
 			OR = { #dejure vassal, or any vassal if title titular.
 				AND = {
 					FROMFROM = { is_titular = yes }
@@ -8209,7 +8309,7 @@ phonocratic_elective = {
 			}
 			is_feudal = yes
 			vassal_of = FROMFROM
-			higher_real_tier_than = BARON
+			higher_real_tier_than = COUNT
 			OR = { #dejure vassal, or any vassal if title titular.
 				AND = {
 					FROMFROM = { is_titular = yes }
