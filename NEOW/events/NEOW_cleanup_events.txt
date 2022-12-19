@@ -1,4 +1,5 @@
 namespace=cleanup
+namespace=celtic
 
 character_event = { # Give Indian characters appropriate schools at game start
 	id = cleanup.1
@@ -180,6 +181,467 @@ character_event = {
 					}
 				}
 				90 = {
+				}
+			}
+		}
+	}
+}
+#Offerings start
+character_event = {
+	id = celtic.248
+	desc = celtic.248.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.248.a
+		scaled_wealth = -0.25
+		hidden_tooltip = {
+			character_event = { id = celtic.253 days = 5 }
+		}
+	}
+	option = {
+		name = celtic.248.b
+		trigger = {
+			OR = {
+				trait = poet
+				any_vassal = {
+					trait = poet
+				}
+				any_courtier = {
+					trait = poet
+				}
+			}
+		}
+		hidden_tooltip = {
+			character_event = { id = celtic.249 days = 5 }
+		}
+	}
+}
+
+#Offerings middle (Poem)
+character_event = {
+	id = celtic.249
+	desc = celtic.249.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.249.a
+		if = {
+			limit = {
+				NOT = { learning = 8 }
+			}
+			random_list = {
+				35 = { character_event = { id = celtic.250 days = 2 tooltip = "celtic.250.tooltip" } } #bad
+				50 = { character_event = { id = celtic.251 days = 2 tooltip = "celtic.251.tooltip" } } #neutral
+				15 = { character_event = { id = celtic.252 days = 2 tooltip = "celtic.252.tooltip" } } #good
+			}
+		}
+		if = {
+			limit = {
+				learning = 8
+				NOT = { learning = 16 }
+			}
+			random_list = {
+				25 = { character_event = { id = celtic.250 days = 2 tooltip = "celtic.250.tooltip" } } #bad
+				50 = { character_event = { id = celtic.251 days = 2 tooltip = "celtic.251.tooltip" } } #neutral
+				25 = { character_event = { id = celtic.252 days = 2 tooltip = "celtic.252.tooltip" } } #good
+			}
+		}
+		if = {
+			limit = {
+				learning = 16
+			}
+			random_list = {
+				15 = { character_event = { id = celtic.250 days = 2 tooltip = "celtic.250.tooltip" } } #bad
+				50 = { character_event = { id = celtic.251 days = 2 tooltip = "celtic.251.tooltip" } } #neutral
+				35 = { character_event = { id = celtic.252 days = 2 tooltip = "celtic.252.tooltip" } } #good
+			}
+		}
+	}
+}
+
+#Offerings bad
+character_event = {
+	id = celtic.250
+	desc = celtic.250.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.250.a
+		prestige = -25
+		piety = -15
+		clr_character_flag = sidhe_offerings_giving
+		add_character_modifier = {
+			name = sidhe_offerings_bad
+			duration = 730
+		}
+	}
+}
+
+#Offerings neutral
+character_event = {
+	id = celtic.251
+	desc = celtic.251.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.251.a
+		piety = 5
+		clr_character_flag = sidhe_offerings_giving
+		add_character_modifier = {
+			name = sidhe_offerings_neutral
+			duration = 730
+		}
+	}
+}
+
+#Offerings good
+character_event = {
+	id = celtic.252
+	desc = celtic.252.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.252.a
+		prestige = 25
+		piety = 15
+		clr_character_flag = sidhe_offerings_giving
+		add_character_modifier = {
+			name = sidhe_offerings_good
+			duration = 730
+		}
+	}
+}
+
+#Offerings middle (Gold)
+character_event = {
+	id = celtic.253
+	desc = celtic.253.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = celtic.253.a
+		if = {
+			limit = {
+				NOT = { stewardship = 8 }
+			}
+			random_list = {
+				35 = { character_event = { id = celtic.250 days = 2 tooltip = "celtic.250.tooltip" } } #bad
+				50 = { character_event = { id = celtic.251 days = 2 tooltip = "celtic.251.tooltip" } } #neutral
+				15 = { character_event = { id = celtic.252 days = 2 tooltip = "celtic.252.tooltip" } } #good
+			}
+		}
+		if = {
+			limit = {
+				stewardship = 8
+				NOT = { stewardship = 16 }
+			}
+			random_list = {
+				25 = { character_event = { id = celtic.250 days = 2 tooltip = "celtic.250.tooltip" } } #bad
+				50 = { character_event = { id = celtic.251 days = 2 tooltip = "celtic.251.tooltip" } } #neutral
+				25 = { character_event = { id = celtic.252 days = 2 tooltip = "celtic.252.tooltip" } } #good
+			}
+		}
+		if = {
+			limit = {
+				stewardship = 16
+			}
+			random_list = {
+				15 = { character_event = { id = celtic.250 days = 2 tooltip = "celtic.250.tooltip" } } #bad
+				50 = { character_event = { id = celtic.251 days = 2 tooltip = "celtic.251.tooltip" } } #neutral
+				35 = { character_event = { id = celtic.252 days = 2 tooltip = "celtic.252.tooltip" } } #good
+			}
+		}
+	}
+}
+character_event = {
+	id = cleanup.1000
+	desc = cleanup.1000.desc
+	picture = GFX_evt_nuada_mag_tuired
+
+	is_triggered_only = yes
+
+	only_playable = yes
+
+	trigger = {
+		OR = {
+			religion = celtic_pagan
+			religion = celtic_pagan_reformed
+		}
+		NOT = { has_character_modifier = unfit_gaelic_king }
+		is_maimed_trigger = yes
+	}
+
+	option = {
+		name = TROUBLESOME
+		add_character_modifier = { name = unfit_gaelic_king duration = -1 }
+	}
+}
+character_event = {
+	id = celtic.270
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	only_men = yes
+	has_dlc = "Rajas of India"
+	
+	trigger = {
+		religion_openly_in_celtic_subgroup_trigger = yes
+		OR = {
+			father = {
+				supernatural_events_trigger = yes
+				is_reincarnated = no
+				father_even_if_dead = {
+					OR = {
+						is_alive = no
+						father_even_if_dead = {
+							is_alive = no
+						}
+					}
+				}
+				NOT = {
+					any_sibling = {
+						is_reincarnated = yes
+					}
+				}
+			}
+			mother = {
+				supernatural_events_trigger = yes
+				is_reincarnated = no
+				father_even_if_dead = {
+					OR = {
+						is_alive = no
+						father_even_if_dead = {
+							is_alive = no
+						}
+					}
+				}
+				NOT = {
+					any_sibling = {
+						is_reincarnated = yes
+					}
+				}
+			}
+		}
+		NOT = {
+			any_sibling = {
+				is_reincarnated = yes
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				father = { 
+					supernatural_events_trigger = yes
+				}
+			}
+			if = {
+				limit = {
+					father = {
+						father_even_if_dead = {
+							father_even_if_dead = {
+								is_alive = no
+							}
+						}
+					}
+				}
+				father = {
+					father_even_if_dead = {
+						father_even_if_dead = {
+							ROOT = {
+								set_reincarnation = THIS
+							}
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					is_reincarnated = no
+				}
+				father = {
+					father_even_if_dead = {
+						ROOT = {
+							set_reincarnation = THIS
+						}
+					}
+				}
+			}
+			
+			father = {
+				character_event = {
+					id = celtic.271
+					days = 3
+				}
+			}
+		}
+		if = {
+			limit = {
+				mother = {
+					supernatural_events_trigger = yes
+				}
+				is_reincarnated = no
+			}
+			if = {
+				limit = {
+					mother = {
+						father_even_if_dead = {
+							father_even_if_dead = {
+								is_alive = no
+							}
+						}
+					}
+				}
+				mother = {
+					father_even_if_dead = {
+						father_even_if_dead = {
+							ROOT = {
+								set_reincarnation = THIS
+							}
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					is_reincarnated = no
+				}
+				mother = {
+					father_even_if_dead = {
+						ROOT = {
+							set_reincarnation = THIS
+						}
+					}
+				}
+			}
+			
+			mother = {
+				character_event = {
+					id = celtic.271
+					days = 3
+				}
+			}
+		}
+	}
+}
+
+# Reincarnation: Player notices the similarities
+character_event = {
+	id = celtic.271
+	desc = celtic.271.desc
+	picture = GFX_evt_reincarnation
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {# Yes, clearly
+		name = celtic.271.a 
+		
+		hidden_tooltip = {
+			FROM = {
+				add_trait = reincarnation
+				character_event = {
+					id = RoI.10002 # Back to RoI event chain, which is not Indian specific.
+					days = 912
+				}
+			}
+		}
+	}
+	
+	option = {# Nonsense!
+		name = celtic.271.b
+		
+		hidden_tooltip = {
+			FROM = {
+				set_reincarnation = 0
+			}
+		}
+	}
+}
+
+# [on_yearly_childhood_pulse] Reincarnation: Youth picks up a personality trait from the previous life
+# Duplicate event RoI.10010 for the religion check
+character_event = {
+	id = celtic.272
+	desc = EVTDESC_RoI_10010
+	picture = GFX_evt_reincarnation
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	has_dlc = "Rajas of India"
+	has_character_flag = reincarnation_education
+	
+	trigger = {
+		religion_openly_in_celtic_subgroup_trigger = yes
+		NOT = { personality_traits = 5 }
+		reincarnation_scope = {
+			ROOT = {
+				can_copy_personality_trait_from = PREV
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_RoI_10010
+		reincarnation_scope = {
+			ROOT = {
+				copy_random_personality_trait = PREV
+			}
+		}
+		hidden_tooltip = {
+			if = {
+				limit = {
+					father = {
+						ai = no
+					}
+				}
+				father = {
+					character_event = {
+						id = RoI.10011
+						days = 2
+					}
+				}
+			}
+			if = {
+				limit = {
+					mother = {
+						ai = no
+					}
+				}
+				mother = {
+					character_event = {
+						id = RoI.10011
+						days = 2
+					}
+				}
+			}
+			if = {
+				limit = {
+					guardian = {
+						ai = no
+					}
+				}
+				guardian = {
+					character_event = {
+						id = RoI.10011
+						days = 2
+					}
 				}
 			}
 		}
