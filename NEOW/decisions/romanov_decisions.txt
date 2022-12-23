@@ -101,4 +101,103 @@ targeted_decisions = {
 			factor = 1
 		}
 	}
+	buy_uncle_body_part = {
+		is_high_prio = no
+		ai_check_interval = 24
+		filter = all
+		ai_target_filter = realm
+		from_potential = {
+			OR = {
+				religion = caodai
+				religion = ho_cult
+			}
+		}
+		potential = {
+			OR = {
+				is_priest = yes
+				is_landed = no
+				NOR = {
+					religion = ho_cult
+					religion = caodai
+					religion = juche
+					religion = stalinist
+					religion = maoist
+				}
+			}
+			OR = {
+				has_artifact = ho_head
+				has_artifact = ho_hand
+				has_artifact = ho_arm
+				has_artifact = ho_foot
+				has_artifact = ho_blood
+			}
+		}
+		allow = {
+			FROM = 
+			{
+				NOT = {
+					trait = cynical
+				}
+				scaled_wealth = 2
+			}
+			ROOT = 
+			{
+				is_within_diplo_range = FROM
+				opinion = {
+					who = FROM
+					value >= 25
+				}
+			}
+			
+		}
+		effect = {
+			if = {
+				limit = {
+					ROOT = {
+						NOT = {
+							has_artifact = ho_blood							
+						}						
+					}
+				}
+				random_artifact = {
+					limit = {
+						quality == 2
+					}
+					transfer_artifact = {
+						from = ROOT
+						to = FROM
+					}
+				}
+				transfer_scaled_wealth = {
+					to = ROOT
+					from = FROM
+					value = 2
+				}
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+						has_artifact = ho_blood
+					}
+				}
+				random_artifact = {
+					limit = {
+						quality == 4
+					}
+					transfer_artifact = {
+						from = ROOT
+						to = FROM
+					}
+				}
+				transfer_scaled_wealth = {
+					to = ROOT
+					from = FROM
+					value = 4
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
 }
