@@ -1265,7 +1265,7 @@ narrative_event = {
 					set_character_flag = jacobinist_leader
 					save_global_event_target_as = jacobin_invasion_leader
 					add_trait = peasant_noble
-					#add_trait = jacobinist_leader
+					add_trait = jacobinist_leader
 					remove_trait = slow
 					remove_trait = imbecile
 					remove_trait = dull
@@ -1754,6 +1754,98 @@ narrative_event = {##formation of Sans-Culottes
 		name = "EVTOPTB_sans_creation"
 		trigger = {
 			NOT = { religion = jacobinist }
+		}
+	}
+}
+#Jacobinist Warrior Lodge has been created.
+#Players notified.
+narrative_event = {
+	id = jacobinists.5003
+	title = EVTNAME_jacobinist_warrior_lodge_creation
+	desc = EVTDESC_jacobinist_warrior_lodge_creation
+	hide_new = yes
+
+	picture = GFX_evt_hippodrome_byzantine
+	
+	only_playable = yes
+	hide_from = yes
+	
+	trigger = {
+		NOT = { #immersion-breaking
+			has_alternate_start_parameter = { key = religion_names value = random }
+		}
+		has_global_flag = jacobin_revolt_successful
+	}
+	
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	immediate = {
+		set_global_flag = flag_created_warrior_lodge_jacobinist
+		join_society = warrior_lodge_jacobinist
+		set_society_grandmaster = yes # Set character as Grand Master
+		add_society_currency_massive_effect = yes
+		spawn_good_commander_effect = yes
+		new_character = { join_society = warrior_lodge_jacobinist }
+		spawn_good_commander_effect = yes
+		new_character = { join_society = warrior_lodge_jacobinist }
+		spawn_good_commander_effect = yes
+		new_character = { join_society = warrior_lodge_jacobinist }
+		spawn_good_commander_effect = yes
+		new_character = { join_society = warrior_lodge_jacobinist }
+		spawn_good_commander_effect = yes
+		new_character = { join_society = warrior_lodge_jacobinist }
+		spawn_good_commander_effect = yes
+		new_character = { join_society = warrior_lodge_jacobinist }
+			any_vassal = {
+				limit = {
+					ai = yes
+					can_join_society = warrior_lodge_jacobinist
+				}
+				random = { chance = 75 join_society = warrior_lodge_jacobinist }
+			}
+			any_neighbor_independent_ruler = {
+				limit = {
+					ai = yes
+					can_join_society = warrior_lodge_jacobinist
+				}
+				random = { chance = 35 join_society = warrior_lodge_jacobinist }
+			}
+			any_player = {
+				limit = {
+					religion = jacobinist
+				}
+				narrative_event = { id = ATV.69 }
+			}
+	}
+	
+	option = {
+		name = EVTOPTAATV25026
+		trigger = {
+			OR = {
+				society_member_of = warrior_lodge_jacobinist
+				religion = jacobinist
+				secret_religion = jacobinist
+				can_join_society = warrior_lodge_jacobinist
+			}
+		}
+		if = {
+			limit = { 
+				NOT = { society_member_of = warrior_lodge_jacobinist }
+				can_join_society = warrior_lodge_jacobinist
+			}
+			join_society = warrior_lodge_jacobinist
+		}
+	}
+	option = {
+		name = EVTOPTBATV25026
+		trigger = {
+			NOR = {
+				society_member_of = warrior_lodge_jacobinist
+				religion = jacobinist
+				secret_religion = jacobinist
+			}
 		}
 	}
 }
