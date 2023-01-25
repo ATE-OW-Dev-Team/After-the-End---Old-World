@@ -847,6 +847,32 @@ religion_doctrine = {
 			factor = 50
 		}
 	}
+	religion_feature_shindo = {
+		picture = GFX_religion_feature_shindo
+		potential = {
+			has_game_started = yes
+			religion = shindo_reformed
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		trigger = {
+			religion = shindo_reformed
+			NOR = {
+				has_selected_religion_feature = religion_alchemy 
+				has_selected_religion_feature = religion_haruspicy #Redundant
+				has_selected_religion_feature = religion_beatification
+			}
+		}
+		effect = {
+			custom_tooltip = { text = tooltip_religion_feature_alchemy }
+			custom_tooltip = { text = tooltip_religion_feature_haruspicy }
+			custom_tooltip = { text = tooltip_religion_feature_beatification }
+		}
+		ai_will_do = {
+			factor = 50
+		}
+	}
 	religion_self_immolate = { #Gives option to earn piety and a virtue in exchange of immolating a bodypart
 		picture = GFX_religion_feature_immolation
 		potential = {
@@ -1055,7 +1081,7 @@ religion_doctrine = {
 				has_selected_religion_feature = religion_proselytizing
 				has_selected_religion_feature = religion_feature_satsana_phi #Redundant
 				has_selected_religion_feature = religion_meritocratic
-				has_selected_religion_feature = religion_ritual_sacrifice
+				has_selected_religion_feature = religion_monastic
 			}
 		}
 		effect = {
@@ -1214,6 +1240,52 @@ religion_doctrine = {
 					religion = tengri_pagan
 				}
 			}
+		}
+	}
+	religion_feature_neoncult = {
+		picture = GFX_religion_feature_neoncult
+		potential = {
+			has_game_started = yes
+			religion = neoncult_reformed
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		trigger = {
+			religion = neoncult_reformed
+			NOR = {
+				has_selected_religion_feature = religion_ritual_sacrifice
+				has_selected_religion_feature = religion_monastic
+				has_selected_religion_feature = religion_adventuring
+				has_selected_religion_feature = religion_animistic
+			}
+		}
+		effect = {
+			custom_tooltip = { text = tooltip_religion_feature_monastic }
+			custom_tooltip = { text = tooltip_religion_feature_learning_boost }
+			custom_tooltip = { text = tooltip_religion_feature_celibate_priests }
+			hidden_tooltip = { 
+				set_can_retire_to_monastery = yes
+				set_priests_can_marry = no
+				set_priests_can_inherit = no
+				set_allow_looting = yes
+			}
+			custom_tooltip = { text = tooltip_religion_feature_adventuring }
+			custom_tooltip = { text = tooltip_religion_feature_pirating }
+			hidden_tooltip = { enable_prepared_invasion = ROOT }
+			set_character_modifier = {
+				learning = 2
+				key = "MONASTIC_ATTR_RELIGION"
+			}
+			hidden_tooltip = { 
+				set_unit_modifier = { 
+					land_morale = 0.075
+					key = "ANIMISTIC_RELIGION"
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 50
 		}
 	}
 	religion_feature_sarna = {
