@@ -8370,6 +8370,242 @@ cadaverist_pope_rescue = {
 	}
 }
 
+chinese_imperial_reconquest = {
+	name = CB_NAME_CHINESE_IMPERIAL
+	war_name = WAR_NAME_CHINESE_IMPERIAL
+	sprite = 16
+	truce_days = 3650
+	is_permanent = yes
+	check_de_jure_tier = DUKE # this scans all dejure duchies for the counties which are held by or vassals(or below) of selected character. Only valid if is_permanent = yes
+
+	allowed_to_target_tributaries = no
+	
+	sort_priority = 1900
+
+	can_use_gui = {
+		check_if_crusader_trigger = yes
+	}
+
+	can_use = {
+		ROOT = { bhutan_major_cb = yes	}
+		NAND = {
+			ROOT = {
+				OR = {
+					culture = kyushu
+					culture = shikoku
+					culture = chugoku
+					culture = kansai
+					culture = kanto
+					culture = tohoku
+					culture = chubu
+					culture = hokkaido
+					culture = ainu
+				}
+			}
+			FROM = {
+				OR = {
+					has_landed_title = e_tokyo
+					trait = japanese_emperor_trait
+				}
+			}
+		}
+		ROOT = {
+			OR = {
+				has_landed_title = e_ming
+				has_landed_title = e_qing
+				has_landed_title = e_katoliko_china
+				has_landed_title = e_yuan
+				has_landed_title = e_maoist
+				has_landed_title = e_legalist
+				has_landed_title = e_taoist
+				has_landed_title = e_white_lotus
+				has_landed_title = e_tridemism
+				has_landed_title = e_wuxia
+				has_landed_title = e_xianxia
+				has_landed_title = e_heavenly
+				has_landed_title = e_manchuria
+				has_landed_title = e_taiwan
+				has_landed_title = e_han
+				has_landed_title = e_qin
+				has_landed_title = e_tibet
+				has_landed_title = e_yangtze
+				has_landed_title = e_zhujiang
+				has_landed_title = e_minyue
+			}
+			OR = {
+				religion_group = chinese_traditional_group
+				religion = white_lotus
+				religion = maoist
+				religion = red_cult
+				religion = tridemism
+				religion = neoncult
+				religion = xinjiao
+				religion = eastern_lightning
+			}
+			independent = yes
+			NOT = { same_realm = FROM }
+			mercenary = no
+		}
+		FROM = {
+			NOT = { religion_group = muslim }
+		}
+	}
+
+	can_use_title = {
+		OR = {
+			de_jure_liege_or_above = k_liaoning
+			de_jure_liege_or_above = k_heilongjiang
+			de_jure_liege_or_above = k_oroqen
+			de_jure_liege_or_above = k_jilin
+			de_jure_liege_or_above = k_taiwan
+			de_jure_liege_or_above = k_guangdong
+			de_jure_liege_or_above = k_guangxi
+			de_jure_liege_or_above = k_guizhou
+			de_jure_liege_or_above = k_yunnan
+			de_jure_liege_or_above = k_hainan
+			de_jure_liege_or_above = k_hunan
+			de_jure_liege_or_above = k_fujian
+			de_jure_liege_or_above = k_jiangxi
+			de_jure_liege_or_above = k_zhejiang
+			de_jure_liege_or_above = k_yarlung
+			de_jure_liege_or_above = k_guge
+			de_jure_liege_or_above = k_kham
+			de_jure_liege_or_above = k_henan
+			de_jure_liege_or_above = k_anhui
+			de_jure_liege_or_above = k_hebei
+			de_jure_liege_or_above = k_jiangsu
+			de_jure_liege_or_above = k_shandong
+			de_jure_liege_or_above = k_xixia
+			de_jure_liege_or_above = k_gansu
+			de_jure_liege_or_above = k_shaanxi
+			de_jure_liege_or_above = k_sichuan
+			de_jure_liege_or_above = k_chongqing
+			de_jure_liege_or_above = k_hubei
+			de_jure_liege_or_above = k_khotan
+			de_jure_liege_or_above = k_khabarovsk
+			de_jure_liege_or_above = k_primorye
+			de_jure_liege_or_above = k_phiabac
+			de_jure_liege_or_above = k_mongolia
+			de_jure_liege_or_above = k_inner_mongolia
+		}
+	}
+	
+	is_valid = {
+		ROOT = {
+			independent = yes
+			OR = {
+				religion_group = chinese_traditional_group
+				religion = white_lotus
+				religion = maoist
+				religion = red_cult
+				religion = tridemism
+				religion = neoncult
+				religion = xinjiao
+				religion = eastern_lightning
+			}
+			NOT = { same_realm = FROM }
+		}
+	}
+
+	on_add = {
+		general_on_add_effect = yes
+	}
+	
+	on_success = {
+		ROOT = {
+			participation_scaled_prestige = 100
+		}
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			hidden_tooltip = { 
+				participation_scaled_prestige = 100
+			}
+		}
+		
+		FROM = { prestige = -100 }
+	}
+
+	on_success_title = {
+		custom_tooltip = {
+			text = other_invasion_succ_tip
+			hidden_tooltip = {
+				ROOT = {
+					vassalize_or_take_under_title = {
+						title = PREV
+						enemy = FROM
+						type = invasion
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				holder_scope = { character = FROM }
+			}
+			usurp_title_only = { target = ROOT type = invasion }
+		}
+
+		hidden_tooltip = {
+			check_if_reconquista_finished_effect = yes
+			FROM = {
+				landless_pope_effect = yes
+			}
+		}
+	}
+
+	on_fail = {
+		ROOT = { prestige = -150 }
+	}
+
+	on_reverse_demand = {
+		ROOT = {
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 4.0
+			}
+			ROOT = { prestige = -200 }
+		}
+		FROM = {
+			participation_scaled_piety = 100
+			participation_scaled_prestige = 200
+			if = {
+				limit = {
+					uses_decadence = yes
+				}
+				participation_scaled_decadence = -10
+			}
+		}
+		any_defender = {
+			limit = { NOT = { character = FROM } }
+			hidden_tooltip = { 
+				participation_scaled_piety = 100
+				participation_scaled_prestige = 200
+				if = {
+					limit = {
+						uses_decadence = yes
+					}
+					participation_scaled_decadence = -10
+				}
+			}
+		}
+	}
+
+	attacker_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	attacker_ai_defeat_worth = {
+		factor = 100
+	}
+
+	defender_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	defender_ai_defeat_worth = {
+		factor = 100
+	}
+}
 taoist_county_conquest = {
 	name = CB_TAOIST_COUNTY_CONQUEST
 	war_name = WAR_TAOIST_COUNTY_CONQUEST
