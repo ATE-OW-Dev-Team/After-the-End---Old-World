@@ -1,0 +1,868 @@
+namespace = GOVCOR
+
+#Inefficiency event on check or if the title is new
+
+character_event = {
+	id = GOVCOR.999 
+	
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		primary_title = {
+			OR = {
+				tier = EMPEROR
+				tier = KING
+			}
+			temporary = no
+			is_tribal = no
+			is_nomadic = no
+		}
+		is_nomadic = no
+		is_tribal = no
+		OR = {
+			government = eastern_feudal
+			government = chinese_imperial_government
+			government = bhutanese_decayed_government
+			government = bhutanese_restored_government
+			government = roman_imperial_government
+		}
+		independent = yes
+	}
+	
+	immediate = {
+		primary_title = { save_event_target_as = government_corruption_title }
+		
+		character_event = { id = GOVCOR.1001 days = 1 }
+		
+		# remove the corruption modifier from the former owner, if alive
+	}
+}
+
+# Main corruption event upon an imperial title being inherited/usurped
+# ROOT is the character, FROM is the title, FROMFROM is the old holder
+character_event = {
+	id = GOVCOR.1000 
+	
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		AND = {
+			FROMFROM = { always = yes } #If there is a FROMFROM
+			FROM = {
+				OR = {
+					tier = EMPEROR
+					tier = KING
+				}
+				independent = yes
+				temporary = no
+				is_tribal = no
+				is_nomadic = no
+				is_primary_holder_title = yes
+				OR = {
+					government = eastern_feudal
+					government = chinese_imperial_government
+					government = bhutanese_decayed_government
+					government = bhutanese_restored_government
+					government = roman_imperial_government
+				}
+			}
+			is_nomadic = no
+			is_tribal = no
+		}
+	}
+	
+	immediate = {
+		FROM = { save_event_target_as = government_corruption_title }
+		
+		character_event = { id = GOVCOR.1001 days = 1 }
+		
+		# remove the corruption modifier from the former owner, if alive
+		FROMFROM = {
+			if = {
+				limit = {
+					is_alive = yes
+					lower_tier_than = KING
+				}
+				remove_character_modifier = government_corruption_0
+				remove_character_modifier = government_corruption_1
+				remove_character_modifier = government_corruption_2
+				remove_character_modifier = government_corruption_3
+				remove_character_modifier = government_corruption_4
+				remove_character_modifier = government_corruption_5
+				remove_character_modifier = government_corruption_6
+				remove_character_modifier = government_corruption_7
+				remove_character_modifier = government_corruption_8
+				remove_character_modifier = government_corruption_9
+				remove_character_modifier = government_corruption_10
+			}
+		}
+	}
+}
+
+# ROOT/FROM is the character, FROMFROM is the title, FROMFROMFROM is the old holder
+character_event = {
+	id = GOVCOR.1001
+	
+	hide_window = yes
+	is_triggered_only = yes
+	only_rulers = yes
+	
+	trigger = {
+		has_landed_title = event_target:government_corruption_title
+		is_nomadic = no
+		is_tribal = no
+	}
+	
+	immediate = {
+		event_target:government_corruption_title = {
+			
+			# reset the corruption value to 0, in case it's negative
+			if = {
+				limit = { NOT = { check_variable = { which = "government_corruption" value = 0.5 } } }
+				set_variable = { which = "government_corruption" value = 0 }
+			}
+			
+			# set new ruler corruption to 0
+			set_variable = { which = "government_corruption" value = 0 }
+			
+			#determine how much the realm size should change it
+			if = {
+				limit = { ROOT = { realm_size = 45 } } #15 counties
+				change_variable = { which = "government_corruption" value = 15 }
+			}
+			if = {
+				limit = { ROOT = { realm_size = 90 } } #30 counties
+				change_variable = { which = "government_corruption" value = 5 } #20
+			}
+			if = {
+				limit = { ROOT = { realm_size = 180 } } #60 counties
+				change_variable = { which = "government_corruption" value = 5 } #25
+			}
+			if = {
+				limit = { ROOT = { realm_size = 270 } } #90 counties
+				change_variable = { which = "government_corruption" value = 5 } #30
+			}
+			if = {
+				limit = { ROOT = { realm_size = 450 } } #150 counties
+				change_variable = { which = "government_corruption" value = 5 } #35
+			}
+			if = {
+				limit = { ROOT = { realm_size = 600 } } #200 counties
+				change_variable = { which = "government_corruption" value = 5 } #40
+			}
+			if = {
+				limit = { ROOT = { realm_size = 750 } } #250 counties
+				change_variable = { which = "government_corruption" value = 5 } #45
+			}
+			if = {
+				limit = { ROOT = { realm_size = 900 } } #300 counties
+				change_variable = { which = "government_corruption" value = 5 } #50
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1050 } } #350 counties
+				change_variable = { which = "government_corruption" value = 5 } #55
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1200 } } #400 counties
+				change_variable = { which = "government_corruption" value = 5 } #60
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1350 } } #450 counties
+				change_variable = { which = "government_corruption" value = 5 } #65
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1500 } } #500 counties
+				change_variable = { which = "government_corruption" value = 5 } #70
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1650 } } #550 counties 
+				change_variable = { which = "government_corruption" value = 5 } #75
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1800 } } #600 counties
+				change_variable = { which = "government_corruption" value = 5 } #80
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2100 } } #700 counties
+				change_variable = { which = "government_corruption" value = 5 } #85
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2400 } } #800 counties
+				change_variable = { which = "government_corruption" value = 5 } #90
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2700 } } #900 counties
+				change_variable = { which = "government_corruption" value = 5 } #95
+			}
+			if = {
+				limit = { ROOT = { realm_size = 3000 } } #1000 counties
+				change_variable = { which = "government_corruption" value = 3 } #98
+			}
+			
+			#Check realm stewardship
+			if = {
+				limit = { NOT = { ROOT = { realm_stewardship = 10 } } }
+				change_variable = { which = "government_corruption" value = 5 }
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_stewardship = 20 } } }
+				change_variable = { which = "government_corruption" value = 5 }
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_stewardship = 30 } } }
+				change_variable = { which = "government_corruption" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = hedonist } }
+				change_variable = { which = "government_corruption" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = inbred } }
+				change_variable = { which = "government_corruption" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = slow } }
+				change_variable = { which = "government_corruption" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = imbecile } }
+				change_variable = { which = "government_corruption" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = gluttonous } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = greedy } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = slothful } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = wroth } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = envious } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = proud } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = arbitrary } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = cruel } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = kinslayer } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = familial_kinslayer } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = dynastic_kinslayer } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { realm_stewardship = 40 } }
+				change_variable = { which = "government_corruption" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { realm_stewardship = 50 } }
+				change_variable = { which = "government_corruption" value = -7 }
+			}
+			if = {
+				limit = { ROOT = { realm_stewardship = 60 } }
+				change_variable = { which = "government_corruption" value = -10 }
+			}
+			if = {
+				limit = { ROOT = { trait = administrator } }
+				change_variable = { which = "government_corruption" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = ambitious } }
+				change_variable = { which = "government_corruption" value = -10 }
+			}
+			if = {
+				limit = { ROOT = { trait = genius } }
+				change_variable = { which = "government_corruption" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = quick } }
+				change_variable = { which = "government_corruption" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = shrewd } }
+				change_variable = { which = "government_corruption" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = temperate } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = charitable } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = diligent } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = patient } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = kind } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = humble } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = just } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = paranoid } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			
+			if = {
+				limit = { check_variable = { which = "government_corruption" value = 100.5 } }
+				set_variable = { which = "government_corruption" value = 100 }
+			}
+			if = {
+				limit = { NOT = { check_variable = { which = "government_corruption" value = 0.5 } } }
+				set_variable = { which = "government_corruption" value = 0 }
+			}
+		}
+		
+		# change the corruption modifier
+		character_event = { id = GOVCOR.1002 }
+		clear_event_target = government_corruption_title
+	}
+}
+
+# Notification of corruption change and adding the proper corruption modifier
+character_event = {
+	id = GOVCOR.1002
+	desc = EVTDESC_GOVCOR.1002
+	picture = "GFX_evt_diplomat_hf"
+	
+	is_triggered_only = yes
+	notification = yes
+	
+	immediate = {
+		# remove old corruption modifier and add the new one
+		remove_character_modifier = government_corruption_0
+		remove_character_modifier = government_corruption_1
+		remove_character_modifier = government_corruption_2
+		remove_character_modifier = government_corruption_3
+		remove_character_modifier = government_corruption_4
+		remove_character_modifier = government_corruption_5
+		remove_character_modifier = government_corruption_6
+		remove_character_modifier = government_corruption_7
+		remove_character_modifier = government_corruption_8
+		remove_character_modifier = government_corruption_9
+		remove_character_modifier = government_corruption_10
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_corruption" value = 0 }
+					NOT = { check_variable = { which = "government_corruption" value = 5 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_corruption_0
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_corruption" value = 5 }
+					NOT = { check_variable = { which = "government_corruption" value = 15 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_corruption_1
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_corruption" value = 15 }
+					NOT = { check_variable = { which = "government_corruption" value = 25 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_corruption_2
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_corruption" value = 25 }
+					NOT = { check_variable = { which = "government_corruption" value = 35 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_corruption_3
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_corruption" value = 35 }
+					NOT = { check_variable = { which = "government_corruption" value = 45 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_corruption_4
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_corruption" value = 45 }
+					NOT = { check_variable = { which = "government_corruption" value = 55 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_corruption_5
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_corruption" value = 55 }
+					NOT = { check_variable = { which = "government_corruption" value = 65 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_corruption_6
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_corruption" value = 65 }
+					NOT = { check_variable = { which = "government_corruption" value = 75 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_corruption_7
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_corruption" value = 75 }
+					NOT = { check_variable = { which = "government_corruption" value = 85 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_corruption_8
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_corruption" value = 85 }
+					NOT = { check_variable = { which = "government_corruption" value = 95 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_corruption_9
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_corruption" value = 95 }
+				}
+			}
+			add_character_modifier = {
+				name = government_corruption_10
+				duration = -1
+			}
+		} 
+	}
+	
+	option = {
+		name = "OK"
+	}
+}
+
+###Setup inefficiencies at startup
+
+
+
+#Inefficiency for titles on startup
+
+character_event = {
+	id = GOVCOR.1003
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		OR = {
+			ROOT = {
+				primary_title = {
+					OR = {
+						tier = EMPEROR
+						tier = KING
+					}
+					temporary = no
+				}
+				independent = yes
+				is_nomadic = no
+				is_tribal = no
+				OR = {
+					government = eastern_feudal
+					government = chinese_imperial_government
+					government = bhutanese_decayed_government
+					government = bhutanese_restored_government
+					government = roman_imperial_government
+				}
+			}
+			FROM = {
+				primary_title = {
+					OR = {
+						tier = EMPEROR
+						tier = KING
+					}
+					temporary = no
+				}
+				independent = yes
+				is_nomadic = no
+				is_tribal = no
+				OR = {
+					government = eastern_feudal
+					government = chinese_imperial_government
+					government = bhutanese_decayed_government
+					government = bhutanese_restored_government
+					government = roman_imperial_government
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				primary_title = {
+					OR = {
+						tier = EMPEROR
+						tier = KING
+					}
+					temporary = no
+				}
+				is_nomadic = no
+				is_tribal = no
+				independent = yes
+				OR = {
+					government = eastern_feudal
+					government = chinese_imperial_government
+					government = bhutanese_decayed_government
+					government = bhutanese_restored_government
+					government = roman_imperial_government
+				}
+			}
+			primary_title = { save_event_target_as = government_corruption_title }
+			character_event = { id = GOVCOR.1004 days = 1 }
+		}
+		if = {
+			limit = {
+				FROM = {
+					primary_title = {
+						OR = {
+							tier = EMPEROR
+							tier = KING
+						}
+						temporary = no
+					}
+					is_nomadic = no
+					is_tribal = no
+					independent = yes
+					OR = {
+						government = eastern_feudal
+						government = chinese_imperial_government
+						government = bhutanese_decayed_government
+						government = bhutanese_restored_government
+						government = roman_imperial_government
+					}
+				}
+			}
+			FROM = {
+				primary_title = { save_event_target_as = government_corruption_title }
+				character_event = { id = GOVCOR.1004 days = 1 }
+			}
+		}
+	}
+}
+
+
+character_event = {
+	id = GOVCOR.1004
+	
+	hide_window = yes
+	is_triggered_only = yes
+	only_rulers = yes
+	
+	trigger = {
+		has_landed_title = event_target:government_corruption_title
+		is_nomadic = no
+		is_tribal = no
+	}
+	
+	immediate = {
+		event_target:government_corruption_title = {
+			
+			# reset the corruption value to 0, in case it's negative
+			if = {
+				limit = { NOT = { check_variable = { which = "government_corruption" value = 0.5 } } }
+				set_variable = { which = "government_corruption" value = 0 }
+			}
+			
+			# set new ruler corruption to 0
+			set_variable = { which = "government_corruption" value = 0 }
+			
+			#determine how much the realm size should change it
+			if = {
+				limit = { ROOT = { realm_size = 50 } } #17 counties
+				change_variable = { which = "government_corruption" value = 25 }
+			}
+			if = {
+				limit = { ROOT = { realm_size = 90 } } #30 counties
+				change_variable = { which = "government_corruption" value = 5 } #30
+			}
+			if = {
+				limit = { ROOT = { realm_size = 120 } } #40 counties
+				change_variable = { which = "government_corruption" value = 5 } #35
+			}
+			if = {
+				limit = { ROOT = { realm_size = 150 } } #50 counties
+				change_variable = { which = "government_corruption" value = 5 } #40
+			}
+			if = {
+				limit = { ROOT = { realm_size = 180 } } #60 counties
+				change_variable = { which = "government_corruption" value = 5 } #45
+			}
+			if = {
+				limit = { ROOT = { realm_size = 225 } } #75 counties
+				change_variable = { which = "government_corruption" value = 5 } #50
+			}
+			if = {
+				limit = { ROOT = { realm_size = 270 } } #90 counties
+				change_variable = { which = "government_corruption" value = 5 } #55
+			}
+			if = {
+				limit = { ROOT = { realm_size = 300 } } #100 counties
+				change_variable = { which = "government_corruption" value = 5 } #60
+			}
+			if = {
+				limit = { ROOT = { realm_size = 330 } } #110 counties
+				change_variable = { which = "government_corruption" value = 5 } #65
+			}
+			if = {
+				limit = { ROOT = { realm_size = 375 } } #125 counties
+				change_variable = { which = "government_corruption" value = 5 } #70
+			}
+			if = {
+				limit = { ROOT = { realm_size = 420 } } #140 counties
+				change_variable = { which = "government_corruption" value = 5 } #75
+			}
+			if = {
+				limit = { ROOT = { realm_size = 450 } } #150 counties
+				change_variable = { which = "government_corruption" value = 5 } #80
+			}
+			if = {
+				limit = { ROOT = { realm_size = 600 } } #200 counties
+				change_variable = { which = "government_corruption" value = 10 } #90
+			}
+			if = {
+				limit = { ROOT = { realm_size = 750 } } #250 counties
+				change_variable = { which = "government_corruption" value = 5 } #95
+			}
+			if = {
+				limit = { ROOT = { realm_size = 900 } } #300 counties
+				change_variable = { which = "government_corruption" value = 3 } #98
+			}
+			
+			#Check realm stewardship
+			if = {
+				limit = { NOT = { ROOT = { realm_stewardship = 10 } } }
+				change_variable = { which = "government_corruption" value = 5 }
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_stewardship = 20 } } }
+				change_variable = { which = "government_corruption" value = 5 }
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_stewardship = 30 } } }
+				change_variable = { which = "government_corruption" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = hedonist } }
+				change_variable = { which = "government_corruption" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = inbred } }
+				change_variable = { which = "government_corruption" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = slow } }
+				change_variable = { which = "government_corruption" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = imbecile } }
+				change_variable = { which = "government_corruption" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = gluttonous } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = greedy } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = slothful } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = wroth } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = envious } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = proud } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = arbitrary } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = cruel } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = kinslayer } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = familial_kinslayer } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = dynastic_kinslayer } }
+				change_variable = { which = "government_corruption" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { realm_stewardship = 40 } }
+				change_variable = { which = "government_corruption" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { realm_stewardship = 50 } }
+				change_variable = { which = "government_corruption" value = -7 }
+			}
+			if = {
+				limit = { ROOT = { realm_stewardship = 60 } }
+				change_variable = { which = "government_corruption" value = -10 }
+			}
+			if = {
+				limit = { ROOT = { trait = administrator } }
+				change_variable = { which = "government_corruption" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = ambitious } }
+				change_variable = { which = "government_corruption" value = -10 }
+			}
+			if = {
+				limit = { ROOT = { trait = genius } }
+				change_variable = { which = "government_corruption" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = quick } }
+				change_variable = { which = "government_corruption" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = shrewd } }
+				change_variable = { which = "government_corruption" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = temperate } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = charitable } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = diligent } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = patient } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = kind } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = humble } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = just } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = paranoid } }
+				change_variable = { which = "government_corruption" value = -2 }
+			}
+			
+			###Put any more startups here for the special councillors 
+			
+			if = {
+				limit = { check_variable = { which = "government_corruption" value = 100.5 } }
+				set_variable = { which = "government_corruption" value = 100 }
+			}
+			if = {
+				limit = { NOT = { check_variable = { which = "government_corruption" value = 0.5 } } }
+				set_variable = { which = "government_corruption" value = 0 }
+			}		
+		}
+		
+		# change the corruption modifier
+		character_event = { id = GOVCOR.1002 }
+		clear_event_target = government_corruption_title
+	}
+}
