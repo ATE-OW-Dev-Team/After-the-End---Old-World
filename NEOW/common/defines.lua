@@ -94,10 +94,10 @@ NDiplomacy = {
 	BASE_REVOLT_CHANCE_MOD = 250,								-- Pre Old Gods rebel spawn chance modifier (fires on_rebel_revolt) : lower means fewer revolts. MUST NOT BE ZERO.
 	TOG_REVOLT_CHANCE_MOD = 100,								-- Old Gods rebel spawn chance modifier (fires on_rebel_revolt) : lower means fewer revolts. MUST NOT BE ZERO.
 	JAIN_LIEGE_OPINION_BONUS = 15,								-- Jain Lieges Get Vassal Opinion Bonus
-	MAX_DIPLO_DISTANCE = 700,									-- Most diplomacy is disallowed if two rulers are too distant
-	MAX_DIPLO_DISTANCE_SAME_RELIGION = 100,						-- Bonus to max diplo distance for being of the same religion
-	MAX_DIPLO_DISTANCE_SAME_RELIGION_GROUP = 0, 				-- Bonus to max diplo distance for being of the same religion group
-	MAX_DIPLO_DISTANCE_SAME_CULTURE = 100, 						-- Bonus to max diplo distance for being of the same culture
+	MAX_DIPLO_DISTANCE = 800,									-- Most diplomacy is disallowed if two rulers are too distant
+	MAX_DIPLO_DISTANCE_SAME_RELIGION = 150,						-- Bonus to max diplo distance for being of the same religion
+	MAX_DIPLO_DISTANCE_SAME_RELIGION_GROUP = 100, 				-- Bonus to max diplo distance for being of the same religion group
+	MAX_DIPLO_DISTANCE_SAME_CULTURE = 150, 						-- Bonus to max diplo distance for being of the same culture
 	MAX_DIPLO_DISTANCE_SAME_CULTURE_GROUP = 100,				-- Bonus to max diplo distance for being of the same culture group
 	MAX_DISTANCE_HOLY_WAR_JOIN = 200,							-- How far away people are willing to join in defense against a holy war (capital to capital. Direct neighbors considered distance 0)
 	MAX_DISTANCE_REL_HEAD_DEFENSE_JOIN = 600,					-- How far away people are willing to join in defense of their rel head (capital to capital. Direct neighbors considered distance 0)
@@ -108,7 +108,7 @@ NDiplomacy = {
 
 	DUKE_POWERFUL_VASSAL_COUNT = 4,				-- The x most powerful vassal will expect a seat in the council
 	KING_POWERFUL_VASSAL_COUNT = 5,				-- The x most powerful vassal will expect a seat in the council
-	EMPEROR_POWERFUL_VASSAL_COUNT = 6,			-- The x most powerful vassal will expect a seat in the council
+	EMPEROR_POWERFUL_VASSAL_COUNT = 7,			-- The x most powerful vassal will expect a seat in the council
 
 	IMPRISON_CHARACTER_INTERACTION_MONEY = 0,
 	IMPRISON_CHARACTER_INTERACTION_PIETY = 10,
