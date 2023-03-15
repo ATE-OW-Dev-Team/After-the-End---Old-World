@@ -1036,13 +1036,13 @@ NTitle = {
 	TITULAR_TITLE_CREATION_COST_MULT = 2,		-- Titular titles are more expensive to create
 	BECOME_KING_TITLE_GOLD_CREATION_COST_MULT = 0.5,	-- The de-jure kingdom of your capital is cheaper to create with the become king ambition
 	BECOME_KING_TITLE_PIETY_CREATION_COST_MULT = 0.5,	-- The de-jure kingdom of your capital is cheaper to create with the become king ambition
-	ENFORCE_ONE_OF_EACH_HOLDING = 1,			-- Require players to build at least one City, Temple and Castle in each province
+	ENFORCE_ONE_OF_EACH_HOLDING = 0,			-- Require players to build at least one City, Temple and Castle in each province
 	MAX_REPUBLIC_COUNTIES_IN_REALM = 0.15,		-- 15% of a feudal realm is allowed to be under vassal republics (affects title grants)
 	MAX_THEOCRACY_COUNTIES_IN_REALM = 0.15,		-- 15% of a feudal realm is allowed to be under vassal theocracies/bishoprics (affects title grants)
 	THEOCRACY_COUNTIES_CAN_BORDER = 1,			-- Can feudal lords create neighboring theocracy counties?
 	REPUBLIC_COUNTIES_CAN_BORDER = 1,				-- Can feudal lords create neighboring republic counties?
 	MIN_REVOKE_MONTHS_AFTER_GRANT = 12,			-- Months that must pass before you can revoke the title off someone you granted it to
-	MILITARY_GOV_CREATE_KINGDOMS = 0,		-- If Mercenaries and holy orders are allowed to create kingdom titles
+	MILITARY_GOV_CREATE_KINGDOMS = 1,		-- If Mercenaries and holy orders are allowed to create kingdom titles
 
 -- Title creation and usurpation requirements
 	DEJURE_COUNTY_LIMIT_TO_CREATE = 0.51,			-- Fraction of de jure counties that you must control to create a non-imperial title
