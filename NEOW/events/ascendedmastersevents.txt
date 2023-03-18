@@ -1,0 +1,802 @@
+namespace = ascendedmaster
+
+narrative_event = {
+	id = ascendedmaster.1
+	title = "EVTITLE_ascension_pathstart"
+	desc = "EVTDESC_ascension_pathstart"
+	picture = GFX_evt_cathedral_zun_pagan
+	is_triggered_only = yes
+
+	option = {
+		name = EVOTPA_ascendedmaster_pathstart
+		custom_tooltip = { text = TXT_thestartofascension }
+		piety = -500
+		add_trait = theo_initiate
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 50
+				OR = {
+					trait = zealous
+					trait = erudite
+					trait = scholar
+					trait = genius
+					trait = quick
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVOTPB_ascendedmaster_pathstart
+		custom_tooltip = { text = TXT_notinterestedinascendedmaster }
+		piety = -100
+		prestige = 20
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = ignores_the_radiant_light
+				hidden = yes
+				years = 5
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 10
+				OR = {
+					trait = cynical
+					trait = slow
+					trait = imbecile
+				}
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					trait = zealous
+				}
+			}
+		}
+	}
+}
+
+narrative_event = {
+	id = ascendedmaster.2
+	title = "EVTITLE_ascension_pathstart"
+	desc = "EVTDESC_ascension_pathmiddle1"
+	picture = GFX_evt_cathedral_zun_pagan
+	is_triggered_only = yes
+
+	trigger = {
+		religion = theosophy
+	}
+	
+	option = {
+		name = EVOPTA_ascendedmaster_2
+		custom_tooltip = { text = TXT_EVTOPTA_ascendedmaster_2 }
+		hidden_tooltip = {
+			set_character_flag = once_returned_path
+			ROOT = { set_variable = { which = once_returned_path value = 1 } }
+			character_event = { id = ascendedmaster.3 days = 5 }
+		}
+	}
+}
+
+character_event = {
+	id = ascendedmaster.3
+	desc = "EVTDESC_ascension_pathmiddle2"
+	picture = GFX_evt_cathedral_zun_pagan
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = once_returned_path
+		religion = theosophy
+	}
+	
+	option = {
+		name = EVOPTA_ascendedmaster_3
+		custom_tooltip = { text = TXT_EVTOPTA_ascended_master_3 }
+		hidden_tooltip = {
+			lose_weight_large_effect = yes
+			weight_trait_check_effect = yes
+			ROOT = { change_variable = { which = once_returned_path value = 2 } }
+			character_event = { id = ascendedmaster.4 days = 2 }
+		}
+		
+	}
+	
+	option = {
+		name = EVOPTB_ascendedmaster_52
+		prestige = -100
+		custom_tooltip = { text = TXT_EVTOPTB_ascended_master_3 }
+		hidden_tooltip = {
+			ROOT = { change_variable = { which = once_returned_path value = 1 } }
+			character_event = { id = ascendedmaster.4 days = 2 }
+		}
+	}
+	
+	option = {
+		name = EVOPTC_ascendedmaster_3
+		trigger = {
+			intrigue = 10
+		}
+		tooltip_info = intrigue
+		custom_tooltip = { text = TXT_EVTOPTC_ascendedmaster_3 }
+		hidden_tooltip = {
+			character_event = { id = ascendedmaster.4 days = 2 }
+		}
+	}
+}
+
+character_event = {
+	id = ascendedmaster.4
+	desc = "EVTDESC_ascension_pathmiddle3"
+	picture = GFX_evt_battle
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = once_returned_path
+		religion = theosophy
+	}
+	
+	option = {
+		name = EVOPTA_ascendedmaster_4
+		custom_tooltip = { text = TXT_EVTOPTA_ascendedmaster_53 }
+		hidden_tooltip = {
+			random_list = {
+				50 = {
+					modifier = {
+						factor = 0.8
+						combat_rating = 12
+					}
+					modifier = {
+						factor = 0.6
+						AND = {
+							combat_rating = 9
+							NOT = { combat_rating = 12 }
+						}
+					}
+					modifier = {
+						factor = 0.4
+						AND = {
+							combat_rating = 6
+							NOT = { combat_rating = 9 }
+						}
+					}
+					modifier = {
+						factor = 0.2
+						AND = {
+							combat_rating = 3
+							NOT = { combat_rating = 6 }
+						}
+					}
+					modifier = {
+						factor = 0
+						NOT = { combat_rating = 3 }
+					}
+					character_event = { id = atom.54 }
+				}
+				50 = {
+					modifier = {
+						factor = 0
+						combat_rating = 15
+					}
+					modifier = {
+						factor = 0.2
+						AND = {
+							combat_rating = 12
+							NOT = { combat_rating = 15 }
+						}
+					}
+					modifier = {
+						factor = 0.4
+						AND = {
+							combat_rating = 9
+							NOT = { combat_rating = 12 }
+						}
+					}
+					modifier = {
+						factor = 0.6
+						AND = {
+							combat_rating = 6
+							NOT = { combat_rating = 9 }
+						}
+					}
+					modifier = {
+						factor = 0.8
+						combat_rating = 3
+						NOT = { combat_rating = 6 }
+					}
+					character_event = { id = ascendedmaster.6 }
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = ascendedmaster.5
+	desc = "EVTDESC_ascension_pathmiddle4"
+	picture = GFX_evt_battle
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = once_returned_path
+		religion = theosophy
+	}
+	
+	option = {
+		name = EVOPTA_ascendedmaster_5
+		tooltip_info = combat_rating
+		hidden_tooltip = {
+			ROOT = { change_variable = { which = once_returned_path value = 2 } }
+			character_event = { id = ascendedmaster.7 days = 3 }
+		}
+	}
+}
+
+character_event = {
+	id = ascendedmaster.6
+	desc = "EVTDESC_ascension_pathmiddle5"
+	picture = GFX_evt_battle
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = once_returned_path
+		religion = theosophy
+	}
+	
+	option = {
+		name = EVOPTA_ascendedmaster_6
+		hidden_tooltip = {
+			ROOT = { subtract_variable = { which = once_returned_path value = 1 } }
+			character_event = { id = ascendedmaster.7 days = 3 }
+		}
+	}
+}
+
+character_event = {
+	id = ascendedmaster.7
+	desc = "EVTDESC_ascension_pathmiddle6"
+	picture = GFX_evt_cathedral_zun_pagan
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = once_returned_path
+		religion = theosophy
+	}
+	
+	option = {
+		name = EVTOPTA_ascendedmaster_7
+		trigger = {
+			learning = 12
+		}
+		tooltip_info = learning
+		custom_tooltip = { text = TXT_EVTOPTA_ascendedmaster_7 }
+		hidden_tooltip = {
+			ROOT = { change_variable = { which = once_returned_path value = 2 } }
+			character_event = { id = ascendedmaster.8 }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ascendedmaster_7
+		trigger = {
+			NOT = { learning = 12 }
+		}
+		custom_tooltip = { text = TXT_EVTOPTB_ascendedmaster_7 }
+		hidden_tooltip = {
+			ROOT = { subtract_variable = { which = once_returned_path value = 2 } }
+			character_event = { id = ascendedmaster.8 }
+		}
+	}
+}
+
+character_event = {
+	id = ascendedmaster.8
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = once_returned_path
+		OR = {
+			religion = ashtari
+			religion = theosophy
+			religion = wedgewoodist
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				ROOT = { check_variable = { which = once_returned_path value = 7 } }
+			}
+			narrative_event = { id = ascendedmaster.9 days = 1 }
+		}
+		else_if = {
+			limit = {
+				ROOT = { check_variable = { which = once_returned_path value = 4 } }
+				NOT = { ROOT = { check_variable = { which = once_returned_path value = 7 } } }
+			}
+			narrative_event = { id = ascendedmaster.10 days = 1 }
+		}
+		else_if = {
+			limit = {
+				NOT = { ROOT = { check_variable = { which = once_returned_path value = 4 } } }
+			}
+			narrative_event = { id = ascendedmaster.11 days = 1 }
+		}
+	}
+}
+
+narrative_event = {
+	id = ascendedmaster.9
+	title = "EVTITLE_ascension_pathmiddle7"
+	desc = "EVTDESC_ascension_pathmiddle7"
+	picture = GFX_evt_cathedral_zun_pagan
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = once_returned_path
+		religion = theosophy
+	}
+	
+	option = {
+		name = EVTOPTA_ascendedmaster_9
+		custom_tooltip = { text = TXT_EVTOPTA_ascendedmaster_9 }
+		remove_trait = theo_initiate
+		add_trait = once_returner
+		prestige = 500
+	}
+	
+	after = {
+		clr_character_flag = once_returned_path
+		hidden_tooltip = {
+			ROOT = { set_variable = { which = once_returned_path value = 1 } }
+		}
+	}
+}
+
+narrative_event = {
+	id = ascendedmaster.10
+	title = "EVTITLE_ascension_pathmiddle8"
+	desc = "EVTDESC_ascension_pathmiddle8"
+	picture = GFX_evt_cathedral_zun_pagan
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = once_returned_path
+	}
+	
+	option = {
+		name = EVTOPTA_ascendedmaster_10
+		custom_tooltip = { text = TXT_EVTOPTA_ascendedmaster_9 }
+		remove_trait = theo_initiate
+		add_trait = once_returner
+	}
+	
+	after = {
+		clr_character_flag = once_returned_path
+		hidden_tooltip = {
+			ROOT = { set_variable = { which = once_returned_path value = 1 } }
+		}
+	}
+}
+
+narrative_event = {
+	id = ascendedmaster.11
+	title = "EVTITLE_ascension_pathmiddle9"
+	desc = "EVTDESC_ascension_pathmiddle9"
+	picture = GFX_evt_bad_news
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = once_returned_path
+	}
+	
+	option = {
+		name = EVTOPTA_ascendedmaster_11
+		custom_tooltip = { text = TXT_EVTOPTA_ascendedmaster_11 }
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = ascended_path_cooldown
+				hidden = yes
+				years = 10
+			}
+		}
+	}
+	
+	after = {
+		clr_character_flag = once_returned_path
+		hidden_tooltip = {
+			ROOT = { set_variable = { which = once_returned_path value = 1 } }
+		}
+	}
+}
+
+character_event = {
+	id = ascendedmaster.12
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		clr_character_flag = once_returned_path
+		hidden_tooltip = {
+			ROOT = { set_variable = { which = once_returned_path value = 1 } }
+		}
+	}
+}
+	
+narrative_event = {
+	id = ascendedmaster.13
+	title = "EVTITLE_ascension_pathend1"
+	desc = "EVTDESC_ascension_pathend1"
+	picture = GFX_evt_cathedral_zun_pagan
+	is_triggered_only = yes
+	
+	immediate = {
+		ROOT = { set_variable = { which = ascended_path value = 1 } }
+		set_character_flag = ascended_path
+	}
+	
+	option = {
+		name = EVTOPTA_ascendedmaster_13
+		custom_tooltip = { text = TXT_EVTOPTA_ascendedmaster_13 }
+	}
+	
+	option = {
+		name = EVTOPTB_ascendedmaster_13
+		custom_tooltip = { text = TXT_EVTOPTB_ascendedmaster_13 }
+	}
+	
+	option = {
+		name = EVTOPTC_ascendedmaster_13
+		trigger = {
+			trait = paranoid
+		}
+		tooltip_info = paranoid
+		custom_tooltip = { text = TXT_EVTOPTC_ascendedmaster_13 }
+		hidden_tooltip = {
+			ROOT = { change_variable = { which = ascended_path value = 1 } }
+		}
+	}
+	
+	after = {
+		character_event = { id = ascendedmaster.14 days = 7 }
+	}
+}
+
+character_event = {
+	id = ascendedmaster.14
+	desc = "EVTDESC_ascension_pathend2"
+	picture = GFX_evt_secluded_in_prayer
+	is_triggered_only = yes
+
+	trigger = {
+		has_character_flag = ascended_path
+		trait = travelling
+		religion = theosophy
+	}
+	
+	option = {
+		name = EVTOPTA_ascendedmaster_14
+		trigger = {
+			NOR = {
+				trait = proud
+				learning = 12
+			}
+		}
+		custom_tooltip = { text = TXT_EVTOPTA_ascendedmaster_14 }
+		hidden_tooltip = {
+			ROOT = { change_variable = { which = ascended_path value = 1 } }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ascendedmaster_14
+		trigger = {
+			trait = proud
+		}
+		tooltip_info = proud
+		piety = -25
+		custom_tooltip = { text = TXT_EVTOPTB_ascendedmaster_14 }
+		hidden_tooltip = {
+			ROOT = { subtract_variable = { which = ascended_path value = 1 } }
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_ascendedmaster_14
+		trigger = {
+			learning = 12
+		}
+		tooltip_info = learning
+		piety = 50
+		custom_tooltip = { text = TXT_EVTOPTC_ascendedmaster_14 }
+		hidden_tooltip = {
+			ROOT = { change_variable = { which = ascended_path value = 2 } }
+		}
+	}
+	
+	after = {
+		character_event = { id = ascendedmaster.15 days = 7 }
+	}
+}
+
+character_event = {
+	id = ascendedmaster.15
+	desc = "EVTDESC_ascension_pathend3"
+	picture = GFX_evt_secluded_in_prayer
+	is_triggered_only = yes
+
+	trigger = {
+		has_character_flag = ascended_path
+		trait = travelling
+		religion = theosophy
+	}
+	
+	option = {
+		name = EVTOPTA_ascendedmaster_15
+		trigger = {
+			NOT = {
+				trait = stubborn
+			}
+		}
+		custom_tooltip = { text = TXT_EVTOPTA_ascendedmaster_15 }
+		hidden_tooltip = {
+			give_pneumonic_effect = yes
+			ROOT = { change_variable = { which = ascended_path value = 1 } }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ascendedmaster_15
+		trigger = {
+			trait = stubborn
+		}
+		tooltip_info = stubborn
+		prestige = -25
+		custom_tooltip = { text = TXT_EVTOPTB_ascendedmaster_15 }
+		hidden_tooltip = {
+			give_pneumonic_effect = yes
+			ROOT = { subtract_variable = { which = ascended_path value = 1 } }
+		}
+	}
+	
+	after = {
+		character_event = { id = ascendedmaster.16 days = 7 }
+	}	
+}
+
+character_event = {
+	id = ascendedmaster.16
+	desc = "EVTDESC_ascension_pathend65"
+	picture = GFX_evt_secluded_in_prayer
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = ascended_path
+		trait = travelling
+		religion = theosophy
+	}
+	
+	option = {
+		name = EVTOPTA_ascendedmaster_16
+		trigger = {
+			NOT = {
+				trait = temperate
+			}
+		}
+		custom_tooltip = { text = TXT_EVTOPTA_ascendedmaster_16 }
+		hidden_tooltip = {
+			lose_weight_large_effect = yes
+			lose_weight_small_effect = yes
+			weight_trait_check_effect = yes
+			ROOT = { change_variable = { which = ascended_path value = 1 } }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ascendedmaster_16
+		trigger = {
+			trait = temperate
+		}
+		tooltip_info = temperate
+		custom_tooltip = { text = TXT_EVTOPTB_ascendedmaster_16 }
+		hidden_tooltip = {
+			lose_weight_medium_effect = yes
+			weight_trait_check_effect = yes
+			ROOT = { change_variable = { which = ascended_path value = 2 } }
+		}
+	}
+	
+	after = {
+		character_event = { id = ascendedmaster.17 days = 7 }
+	}
+}
+
+
+character_event = {
+	id = ascendedmaster.17
+	desc = "EVTDESC_ascension_pathend4"
+	picture = GFX_evt_secluded_in_prayer
+	is_triggered_only = yes
+
+	trigger = {
+		has_character_flag = ascended_path
+		trait = travelling
+		religion = theosophy
+	}
+	
+	option = {
+		name = EVTOPTA_ascendedmaster_17
+		trigger = {
+			NOR = {
+				trait = patient
+				trait = wroth
+			}
+		}
+		custom_tooltip = { text = TXT_EVTOPTA_ascendedmaster_17 }
+		hidden_tooltip = {
+			ROOT = { subtract_variable = { which = ascended_path value = 1 } }
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_ascendedmaster_17
+		trigger = {
+			trait = patient
+		}
+		tooltip_info = patient
+		custom_tooltip = { text = TXT_EVTOPTB_ascendedmaster_17 }
+		hidden_tooltip = {
+			ROOT = { change_variable = { which = ascended_path value = 1 } }
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_ascendedmaster_17
+		trigger = {
+			trait = wroth
+		}
+		tooltip_info = wroth
+		custom_tooltip = { text = TXT_EVTOPTC_ascendedmaster_17 }
+		hidden_tooltip = {
+			ROOT = { subtract_variable = { which = ascended_path value = 2 } }
+		}
+	}
+	
+	after = {
+		character_event = { id = ascendedmaster.18 }
+	}
+}
+
+character_event = {
+	id = ascendedmaster.18
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = ascended_path
+		trait = travelling
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				ROOT = { check_variable = { which = ascended_path value = 7 } }
+			}
+			narrative_event = { id = ascendedmaster.19 days = 7 }
+		}
+		else_if = {
+			limit = {
+				ROOT = { check_variable = { which = ascended_path value = 4 } }
+				NOT = { ROOT = { check_variable = { which = ascended_path value = 7 } } }
+			}
+			narrative_event = { id = ascendedmaster.19 days = 7 }
+		}
+		else_if = {
+			limit = {
+				NOT = { ROOT = { check_variable = { which = ascended_path value = 4 } } }
+			}
+			narrative_event = { id = ascendedmaster.20 days = 7 }
+		}
+	}
+}
+
+narrative_event = {
+	id = ascendedmaster.19
+	title = "EVTTITLE_ascension_pathend5"
+	desc = "EVTDESC_ascension_pathend5"
+	picture = GFX_evt_mushroom_cloud
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = ascended_path
+		trait = travelling
+		religion = theosophy
+	}
+	
+	option = {
+		name = EVTOPTA_ascendedmaster_19
+		custom_tooltip = { text = TXT_EVTOPTA_ascendedmaster_19 }
+		remove_trait = once_returner
+		add_trait = ascended_master
+		give_nickname = nick_the_ascended_master
+		if = { #Ascended Master Blood (male)
+			limit = { 
+				has_dlc = "Holy Fury" 
+				is_female = no
+			}
+			create_bloodline = {
+				type = ascended_master_male
+			}
+			new_bloodline = {
+				set_description = "bloodline_desc_ascended_master"
+			}	
+			sound_effect = bloodline_added
+		}
+		else_if = { #Ascended Master Blood (female)
+			limit = { 
+				has_dlc = "Holy Fury" 
+				is_female = yes
+			}
+			create_bloodline = {
+				type = ascended_master_female
+			}
+			new_bloodline = {
+				set_description = "bloodline_desc_ascended_master"
+			}	
+			sound_effect = bloodline_added
+		}
+	}
+	
+	after = {
+		clr_character_flag = ascended_path
+		ROOT = { set_variable = { which = ascended_path value = 1 } }
+		remove_trait = travelling
+	}
+}
+
+narrative_event = {
+	id = ascendedmaster.20
+	title = "EVTTITLE_ascension_pathend6"
+	desc = "EVTDESC_ascension_pathend6"
+	picture = GFX_evt_bad_news
+	is_triggered_only = yes
+	
+	trigger = {
+		has_character_flag = once_returned_path
+		trait = travelling
+		religion = theosophy
+	}
+	
+	option = {
+		name = EVTOPTA_ascendedmaster_20
+		custom_tooltip = { text = TXT_EVTOPTA_ascendedmaster_20 }
+		hidden_tooltip = {
+			add_character_modifier = {
+				name = ascended_path_cooldown
+				hidden = yes
+				years = 10
+			}
+		}
+	}
+	
+	after = {
+		clr_character_flag = ascended_path
+		ROOT = { set_variable = { which = once_returned_path value = 1 } }
+		remove_trait = travelling
+	}
+}
+
+character_event = {
+	id = ascendedmaster.21
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		clr_character_flag = ascended_path
+		ROOT = { set_variable = { which = once_returned_path value = 1 } }
+		remove_trait = travelling
+	}
+}
