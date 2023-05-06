@@ -30,7 +30,7 @@ float2 vFoWOpacity_Time			: register( c21 );
 */
 
 static const float3 STANDARD_vDiffuseLight = float3( 1.0f, 1.0f, 1.0f );
-static const float  STANDARD_vIntensity    = 1.2f;
+static const float  STANDARD_vIntensity    = 1.4f;
 
 // CONSTANTS
 static const float STANDARD_HDR_RANGE 	= 0.8f;
@@ -43,8 +43,8 @@ static const float STANDARD_HDR_RANGE 	= 0.8f;
 float3 Hue( float H )
 {
 	float X = 1 - abs( ( mod( H, 2 ) ) - 1 );
-	if ( H < 1.0f )			return float3( 1.0f,    X, 0.0f );
-	else if ( H < 2.0f )	return float3(    X, 1.0f, 0.0f );
+	if ( H < 1.0f )			return float3( 1.0f,    X, 0.1f );
+	else if ( H < 2.0f )	return float3(    X, 1.1f, 0.0f );
 	else if ( H < 3.0f )	return float3( 0.0f, 1.0f,    X );
 	else if ( H < 4.0f )	return float3( 0.0f,    X, 1.0f );
 	else if ( H < 5.0f )	return float3(    X, 0.0f, 1.0f );
@@ -93,7 +93,7 @@ float3 GetOverlay( float3 vColor, float3 vOverlay, float vOverlayPercent )
 	res.g = vOverlay.g < .5 ? (2 * vOverlay.g * vColor.g) : (1 - 2 * (1 - vOverlay.g) * (1 - vColor.g));
 	res.b = vOverlay.b < .5 ? (2 * vOverlay.b * vColor.b) : (1 - 2 * (1 - vOverlay.b) * (1 - vColor.b));
 
-	return lerp( vColor, res, vOverlayPercent );
+	return lerp( vColor, res, vOverlayPercent )*0.85;
 }
 
 float3 Levels( float3 vInColor, float vMinInput, float vMaxInput )
@@ -181,10 +181,10 @@ float3 ApplyDistanceFog( float3 vColor, float3 vPos, in sampler2D FoWTexture, in
 	return ApplyDistanceFog( vColor, vPos ) * GetFoW( vPos, FoWTexture, FoWDiffuse );
 }
 
-const static float SNOW_START_HEIGHT 	= 18.0f;
+const static float SNOW_START_HEIGHT 	= 16.0f;
 const static float SNOW_RIDGE_START_HEIGHT 	= 22.0f;
 const static float SNOW_NORMAL_START 	= 0.7f;
-const static float3 SNOW_COLOR = float3( 0.7f, 0.7f, 0.7f );
+const static float3 SNOW_COLOR = float3( 0.86f, 0.88f, 1.0f );
 const static float3 SNOW_WATER_COLOR = float3( 0.5f, 0.7f, 0.7f );
 
 float GetSnow( float4 vFoWColor )
@@ -195,7 +195,7 @@ float GetSnow( float4 vFoWColor )
 float3 ApplySnow( float3 vColor, float3 vPos, inout float3 vNormal, float4 vFoWColor, in sampler2D FoWDiffuse, float3 vSnowColor )
 {
 	float vSnowFade = saturate( vPos.y - SNOW_START_HEIGHT );
-	float vNormalFade = saturate( saturate( vNormal.y - SNOW_NORMAL_START ) * 3.0f );
+	float vNormalFade = saturate( saturate( vNormal.y - SNOW_NORMAL_START ) * 2.2f );
 
 	float vNoise = tex2D( FoWDiffuse, ( vPos.xz + 0.5f ) / 100.0f  ).r;
 	float vSnowTexture = tex2D( FoWDiffuse, ( vPos.xz + 0.5f ) / 10.0f  ).r;

@@ -179,7 +179,7 @@ float4 main( VS_OUTPUT In ) : COLOR
 	float vSpecRemove = 1.0f - abs( 0.5f - In.vUV.w ) * 2.0f;
 
 	float vSpecWidth = 70.0f;
-	float vSpecMultiplier = 0.65f;
+	float vSpecMultiplier = 0.25f;
 	float specular = saturate( pow( saturate( dot( H, vSurfaceNormal ) ), vSpecWidth ) * vSpecMultiplier ) * vSpecRemove/*  dot( vWaterSurface, vWaterSurface )*/;
 
 	float2 vDistort = refract( vCamLookAtDir, vSurfaceNormal, 0.66f ).xz;
@@ -200,9 +200,9 @@ float4 main( VS_OUTPUT In ) : COLOR
 
 	float3 vColor = lerp( vBottom, vWaterSurface.xyz, vWaterSurface.a * 0.8f );
 	float4 vFoWColor = GetFoWColor( In.vPrePos_Fade.xyz, FoWTexture);
-	vColor = ApplyWaterSnow( vColor, In.vPrePos_Fade.xyz, vSurfaceNormal, vFoWColor, FoWDiffuse );
+
 	vColor = CalculateLighting( vColor, vBottomNormal );
-	float vFoW = GetFoW( In.vPrePos_Fade.xyz, FoWTexture, FoWDiffuse );
+	float vFoW = GetFoW( In.vPrePos_Fade.xyz, FoWTexture, FoWDiffuse )*0.6;
 	vColor = ApplyDistanceFog( vColor, In.vPrePos_Fade.xyz ) * vFoW;
 	return float4( ComposeSpecular( vColor, specular * ( 1.0f - In.vPrePos_Fade.w ) * vWaterSurface.a * vFoW ), vBottomAlpha * ( 1.0f - In.vPrePos_Fade.w ) );
 }
