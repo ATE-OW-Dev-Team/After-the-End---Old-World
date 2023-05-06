@@ -128,7 +128,7 @@ VS_OUTPUT_BORDER main( const VS_INPUT_BORDER VertexIn )
 
 	float vClampHeight = saturate( ( WATER_HEIGHT - VertexIn.position.y ) * 10000 );
 
-	pos.y = vClampHeight * WATER_HEIGHT + ( 1.0f - vClampHeight ) * pos.y +0.2f;
+	pos.y = vClampHeight * WATER_HEIGHT + ( 1.0f - vClampHeight ) * pos.y;
 	VertexOut.pos = pos.xyz;
 
 	float4 vDistortedPos = pos - float4( vCamLookAtDir * 0.05f, 0.0f );
@@ -155,7 +155,7 @@ float4 main( VS_OUTPUT_BORDER Input ) : COLOR
 		vData.r * vColorTint[0] + vData.g * vColorTint[1] + vData.b * vColorTint[2], 
 		vData.r * vColorTint[3] + vData.g * vColorTint[4] + vData.b * vColorTint[5], vData.a ).rgb;
 
-	vColor.a *= lerp( vColorTint[0].a, vColorTint[3].a, vData.a )*0.8f;
+	vColor.a *= lerp( vColorTint[0].a, vColorTint[3].a, vData.a )*0.9f;
 	
 	float vPulseFactor = saturate( smoothstep( 0.0f, 1.0f, ( 0.8f - abs( Input.uv.x - 0.5f ) ) + sin( vTime * 2.5f ) * 0.15f ) ) * vSelectionColor.a; 
 
