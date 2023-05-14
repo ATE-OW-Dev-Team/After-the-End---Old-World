@@ -24,7 +24,6 @@ narrative_event = {##Recreating Ottoman Empire
 			has_global_flag = ottomans_refounded
 		}
 		religion_group = muslim
-		culture_group = oghuz
 		e_ottoman = {
 			title = FROM
 		}
@@ -33,12 +32,25 @@ narrative_event = {##Recreating Ottoman Empire
 	immediate = {
 
 		give_nickname = nick_the_glorious
-			create_bloodline = {
-				type = osman
-			}
-			new_bloodline = {
-				set_description = "osman_desc"
-			}
+        if = {
+            limit = {
+                is_female = yes
+                has_landed_title = e_ottoman
+            }
+            create_bloodline = {
+                type = osman
+                inheritance = matrilineal
+            }
+        }
+        else_if = {
+            limit = {
+                is_female = no
+                has_landed_title = e_ottoman
+            }
+            create_bloodline = {
+                type = osman
+            }
+        }
 		
 		set_global_flag = ottomans_refounded
 		prestige = 500
@@ -135,7 +147,17 @@ narrative_event = {
 		NOT = {
 			has_global_flag = byzantium_refounded
 		}
-		religion_group = christian
+		AND = {
+			religion_group = christian	
+			NOR = {
+				religion = catholic
+				religion = sevillian
+				religion = cadaverist
+				religion = hussite
+				religion = fraticelli
+				religion = transatlantic
+			}
+		}
 		e_byzantium = {
 			title = FROM
 		}
@@ -144,12 +166,25 @@ narrative_event = {
 	immediate = {
 
 		give_nickname = nick_the_glorious
-			create_bloodline = {
-				type = constantine
-			}
-			new_bloodline = {
-				set_description = "constantine_desc"
-			}
+        if = {
+            limit = {
+                is_female = yes
+                has_landed_title = e_byzantium
+            }
+            create_bloodline = {
+                type = constantine
+                inheritance = matrilineal
+            }
+        }
+        else_if = {
+            limit = {
+                is_female = no
+                has_landed_title = e_byzantium
+            }
+            create_bloodline = {
+                type = constantine
+            }
+        }
 		
 		set_global_flag = byzantium_refounded
 		prestige = 500
@@ -260,13 +295,26 @@ narrative_event = {
 	immediate = {
 
 		give_nickname = nick_the_glorious
-			create_bloodline = {
-				type = anaxorgi
-			}
-			new_bloodline = {
-				set_description = "anaxorgi_desc"
-			}
 		
+        if = {
+            limit = {
+                is_female = yes
+                has_landed_title = e_macedonia
+            }
+            create_bloodline = {
+                type = anaxorgi
+                inheritance = matrilineal
+            }
+        }
+        else_if = {
+            limit = {
+                is_female = no
+                has_landed_title = e_macedonia
+            }
+            create_bloodline = {
+                type = anaxorgi
+            }
+        }
 		set_global_flag = makedon_refounded
 		prestige = 500
 		piety = 250
@@ -346,10 +394,25 @@ narrative_event = {
 	immediate = {
 
 		give_nickname = nick_the_marble_emperor
-			create_bloodline = {
-				type = marble_emperor
-			}
-		
+        if = {
+            limit = {
+                is_female = yes
+                has_landed_title = e_marblists
+            }
+            create_bloodline = {
+                type = marble_emperor
+                inheritance = matrilineal
+            }
+        }
+        else_if = {
+            limit = {
+                is_female = no
+                has_landed_title = e_marblists
+            }
+            create_bloodline = {
+                type = marble_emperor
+            }
+        }
 		set_global_flag = marblists_refounded
 		prestige = 500
 		piety = 250
@@ -425,6 +488,102 @@ narrative_event = {
 				culture_group = byzantine
 				culture_group = armenian_group
 				culture_group = caucasian
+			}
+		}
+	}
+}
+
+##Form Latin Empire
+
+narrative_event = {
+	id = bloodlines.5
+	title = bloodlines5Title
+	desc = bloodlines5Desc
+	picture = GFX_event_Hagia_sofia
+
+	major = yes
+	show_ROOT = yes
+	hide_from = yes
+	
+	only_playable = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_global_flag = latinites_refounded
+		}
+		OR = {
+			religion = catholic
+			religion = sevillian
+			religion = cadaverist
+			religion = hussite
+			religion = fraticelli
+			religion = transatlantic
+		}
+		primary_title = { title = e_latin_empire }
+	}
+
+	immediate = {
+
+		give_nickname = nick_the_glorious
+		if = {
+            limit = {
+                is_female = yes
+                has_landed_title = e_latin_empire
+            }
+            create_bloodline = {
+                type = latin_empire_blood
+                inheritance = matrilineal
+            }
+        }
+        else_if = {
+            limit = {
+                is_female = no
+                has_landed_title = e_latin_empire
+            }
+            create_bloodline = {
+                type = latin_empire_blood
+            }
+        }
+		set_global_flag = latinites_refounded
+		prestige = 500
+		piety = 250
+	}
+	
+	weight_multiplier = {
+		factor = 1
+	}
+
+	option = {
+		name = bloodlines5A
+		trigger = {
+			religion_group = christian
+		}
+	}
+	option = {
+		name = bloodlines5C
+		trigger = {
+			OR = {
+				religion = hellenic_pagan
+				religion = hellenic_pagan_reformed
+			}
+		}
+	}
+	option = {
+		name = bloodlines5F
+		trigger = {
+			religion_group = muslim
+		}
+	}		
+	option = {#None of the above
+		name = bloodlines5G
+		trigger = {
+			NOR = {
+				religion_group = christian
+				religion_group = muslim
+				religion = hellenic_pagan
+				religion = hellenic_pagan_reformed
 			}
 		}
 	}
