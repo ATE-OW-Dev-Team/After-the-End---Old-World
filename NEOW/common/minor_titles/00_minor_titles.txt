@@ -3339,8 +3339,14 @@ title_hermetics_apprentice = {
 	
 	allowed_to_grant = {
 		has_dlc = "Mystics"
-		society_member_of = hermetics
-		ai = no
+		OR = {
+			society_member_of = hermetics
+			has_religion_feature = religion_alchemy
+			AND = {
+				religion_group = muslim
+				trait = mystic
+			}
+		}
 	}
 	
 	allowed_to_hold = {
@@ -3354,6 +3360,15 @@ title_hermetics_apprentice = {
 		OR = {
 			society_member_of = hermetics
 			is_in_society = no
+			has_religion_feature = religion_alchemy
+			AND = {
+				OR = {
+					religion_group = muslim
+					religion = yazidi
+					religion = yersenism
+				}
+				trait = mystic
+			}
 		}
 
 		NOT = { trait = in_hiding }
@@ -3361,8 +3376,20 @@ title_hermetics_apprentice = {
 		prisoner = no
 		
 		hidden_trigger = {
-			liege = { society_member_of = hermetics }
-			ai = yes
+			liege = { 
+				OR = { 
+					society_member_of = hermetics 
+					has_religion_feature = religion_alchemy 
+					AND = {
+						OR = {
+							religion_group = muslim
+							religion = yazidi
+							religion = yersenism
+						}
+						trait = mystic
+					}
+				} 
+			}
 			NOT = { has_character_flag = completed_apprenticeship }
 			OR = {
 				FROM = { ai = no }
@@ -3371,16 +3398,42 @@ title_hermetics_apprentice = {
 				trait = gardener
 				trait = scholar
 				trait = mystic
+				trait = martial_cleric
+				trait = scholarly_theologian
+				trait = mastermind_theologian
 			}
 		}
 	}
 	
 	gain_effect = {
 		if = {
-			limit = { NOT = { society_member_of = hermetics } }
+			limit = { 
+				NOT = { society_member_of = hermetics } 
+				OR = {
+					has_religion_feature = religion_astrology
+					has_religion_feature = religion_feature_folklorist
+					religion_group = christian
+					religion_group = muslim
+					religion_group = jewish_group
+					religion_group = zoroastrian_group
+					religion_group = old_world_cultist_group
+					religion_group = esoteric
+					religion_group = syncratic_group
+					religion = hellenic_pagan
+					religion = hellenic_pagan_reformed
+					religion_openly_novelist_or_reformed_trigger = yes
+					religion_openly_starist_pagan_or_reformed_trigger = yes
+					religion = poseidonian
+					has_landed_title = e_bhutan
+					top_liege = { has_landed_title = e_bhutan }
+				}
+				FROM = {
+					society_member_of = hermetics
+				}
+			}
 			join_society = hermetics
+			character_event = { id = MNM.1413 days = 4500 random = 1000 }  #Some years later, the apprenticeship ends
 		}
-		character_event = { id = MNM.1413 days = 4500 random = 1000 }  #Some years later, the apprenticeship ends
 
 		opinion = { 
 			modifier = opinion_hermetic_apprentice

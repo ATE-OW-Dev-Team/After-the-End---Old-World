@@ -118,6 +118,913 @@ targeted_decisions = {
 			}
 		}
 	}
+	brew_anti_depression_potion = {
+		filter = realm_including_me
+		ai_target_filter = realm_including_me
+		ai_check_interval = 24
+	    diplomacy_icon = GFX_anti_depression_potion
+
+		from_potential = {
+			OR = {
+				has_religion_feature = religion_alchemy
+				AND = {
+					OR = {
+						religion_group = muslim
+						religion = yazidi
+						religion = yersenism
+					}
+					trait = mystic
+				}
+			}
+			wealth = 100
+		}
+
+		potential = {
+			OR = {
+				trait = stressed
+				trait = depressed
+			}
+			OR = {
+				liege = {
+					character = FROM
+				}
+				character = FROM
+			}
+			OR = {
+				FROM = { ai = no }
+				character = FROM
+				is_close_relative = FROM
+				is_friend = FROM
+				is_lover = FROM
+			}
+		}
+
+		allow = {
+			FROM = { wealth = 150 }
+			custom_tooltip = {
+				text = must_have_ingredients_tt
+				hidden_tooltip = {
+					FROM = {
+						any_artifact = {
+							count = 2
+							has_artifact_flag = ingredient
+						}
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = { wealth = -150 }
+			FROM = {
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}	
+			}	
+			if = {
+				limit = { FROM = { learning = 15 } }
+			random_list = {
+				20 = {
+					add_character_modifier = {
+						name = potion_bad_health_modifier
+						duration = 182
+						stacking = yes
+					}	
+				}
+				80 = {	
+					if = { 
+						limit = { trait = stressed }
+						remove_trait = stressed
+					}
+					if = { 
+						limit = { trait = depressed }
+						remove_trait = depressed
+					}
+					if = {
+						limit = { has_character_modifier = apathetic }
+						remove_character_modifier = apathetic
+					}
+				}
+			}
+			}
+			else_if = {
+				limit = { FROM = { learning = 10 NOT = { learning = 15 } } }
+			random_list = {
+				40 = {
+					add_character_modifier = {
+						name = potion_bad_health_modifier
+						duration = 182
+						stacking = yes
+					}	
+				}
+				60 = {	
+					if = { 
+						limit = { trait = stressed }
+						remove_trait = stressed
+					}
+					if = { 
+						limit = { trait = depressed }
+						remove_trait = depressed
+					}
+					if = {
+						limit = { has_character_modifier = apathetic }
+						remove_character_modifier = apathetic
+					}
+				}
+			}
+			}
+			else = {
+			random_list = {
+				60 = {
+					add_character_modifier = {
+						name = potion_bad_health_modifier
+						duration = 182
+						stacking = yes
+					}	
+				}
+				40 = {	
+					if = { 
+						limit = { trait = stressed }
+						remove_trait = stressed
+					}
+					if = { 
+						limit = { trait = depressed }
+						remove_trait = depressed
+					}
+					if = {
+						limit = { has_character_modifier = apathetic }
+						remove_character_modifier = apathetic
+					}
+				}
+			}
+			}
+		}
+
+		revoke_allowed = { always = no }
+
+		ai_will_do = {
+
+			factor = 1
+			modifier = {	
+				factor = 0.1
+			}
+			modifier = {	
+				factor = 100
+				character = FROM
+			}
+			modifier = {
+				factor = 10
+				reverse_opinion = {
+					who = FROM
+					value = 30
+				}
+			}
+		}
+	}
+	brew_combat_potion = {
+		filter = realm_including_me
+		ai_target_filter = realm_including_me
+		ai_check_interval = 24
+	    diplomacy_icon = GFX_combat_potion
+
+		from_potential = {
+			OR = {
+				has_religion_feature = religion_alchemy
+				AND = {
+					OR = {
+						religion_group = muslim
+						religion = yazidi
+						religion = yersenism
+					}
+					trait = mystic
+				}
+			}
+			wealth = 100
+		}
+
+		potential = {
+			OR = {
+				liege = {
+					character = FROM
+				}
+				character = FROM
+			}
+			OR = {
+				FROM = { ai = no }
+				character = FROM
+				is_close_relative = FROM
+				is_friend = FROM
+				is_lover = FROM
+			}
+		}
+
+		allow = {
+			FROM = { wealth = 150 }
+			custom_tooltip = {
+				text = must_have_ingredients_tt
+				hidden_tooltip = {
+					FROM = {
+						any_artifact = {
+							count = 2
+							has_artifact_flag = ingredient
+						}
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = { wealth = -150 }
+			FROM = {
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}	
+			}
+			if = {
+				limit = { FROM = { learning = 15 } }
+			random_list = {
+				20 = {
+					add_character_modifier = {
+						name = potion_bad_health_modifier
+						duration = 182
+						stacking = yes
+					}	
+				}
+				80 = {	
+					add_character_modifier = {
+						name = potion_combat_modifier
+						duration = 182
+						stacking = yes
+					}
+				}
+			}
+			}
+			else_if = {
+				limit = { FROM = { learning = 10 NOT = { learning = 15 } } }
+			random_list = {
+				40 = {
+					add_character_modifier = {
+						name = potion_bad_health_modifier
+						duration = 182
+						stacking = yes
+					}	
+				}
+				60 = {	
+					add_character_modifier = {
+						name = potion_combat_modifier
+						duration = 182
+						stacking = yes
+					}
+				}
+			}
+			}
+			else = {
+			random_list = {
+				60 = {
+					add_character_modifier = {
+						name = potion_bad_health_modifier
+						duration = 182
+						stacking = yes
+					}	
+				}
+				40 = {	
+					add_character_modifier = {
+						name = potion_combat_modifier
+						duration = 182
+						stacking = yes
+					}
+				}
+			}
+			}
+		}
+
+		revoke_allowed = { always = no }
+
+		ai_will_do = {
+
+			factor = 1
+			modifier = {	
+				factor = 0.1
+			}
+			modifier = {	
+				factor = 100
+				character = FROM
+			}
+			modifier = {
+				factor = 10
+				reverse_opinion = {
+					who = FROM
+					value = 30
+				}
+			}
+		}
+	}
+	brew_health_potion = {
+		is_in_society = yes
+		filter = realm_including_me
+		ai_target_filter = realm_including_me
+		ai_check_interval = 24
+	    diplomacy_icon = GFX_health_potion
+
+		from_potential = {
+			OR = {
+				has_religion_feature = religion_alchemy
+				AND = {
+					OR = {
+						religion_group = muslim
+						religion = yazidi
+						religion = yersenism
+					}
+					trait = mystic
+				}
+			}
+			wealth = 100
+		}
+
+		potential = {
+			OR = {
+				liege = {
+					character = FROM
+				}
+				character = FROM
+			}
+			OR = {
+				FROM = { ai = no }
+				character = FROM
+				is_close_relative = FROM
+				is_friend = FROM
+				is_lover = FROM
+			}
+		}
+
+		allow = {
+			FROM = { wealth = 150 }
+			custom_tooltip = {
+				text = must_have_ingredients_tt
+				hidden_tooltip = {
+					FROM = {
+						any_artifact = {
+							count = 2
+							has_artifact_flag = ingredient
+						}
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = { wealth = -150 }
+			FROM = {
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}	
+			}
+			ROOT = {	
+				random_list = {
+					20 = {
+						add_character_modifier = {
+							name = potion_bad_health_modifier
+							duration = 182
+							stacking = yes
+						}	
+					}
+					80 = {	
+						add_character_modifier = {
+							name = potion_health_modifier
+							duration = 182
+							stacking = yes
+						}	
+					}
+				}
+			}
+			if = {
+				limit = { FROM = { learning = 15 } }
+			random_list = {
+				20 = {
+					add_character_modifier = {
+						name = potion_bad_health_modifier
+						duration = 182
+						stacking = yes
+					}	
+				}
+				80 = {	
+					add_character_modifier = {
+						name = potion_health_modifier
+						duration = 182
+						stacking = yes
+					}
+				}
+			}
+			}
+			else_if = {
+				limit = { FROM = { learning = 10 NOT = { learning = 15 } } }
+			random_list = {
+				40 = {
+					add_character_modifier = {
+						name = potion_bad_health_modifier
+						duration = 182
+						stacking = yes
+					}	
+				}
+				60 = {	
+					add_character_modifier = {
+						name = potion_health_modifier
+						duration = 182
+						stacking = yes
+					}
+				}
+			}
+			}
+			else = {
+			random_list = {
+				60 = {
+					add_character_modifier = {
+						name = potion_bad_health_modifier
+						duration = 182
+						stacking = yes
+					}	
+				}
+				40 = {	
+					add_character_modifier = {
+						name = potion_health_modifier
+						duration = 182
+						stacking = yes
+					}
+				}
+			}
+			}
+		}
+
+		revoke_allowed = { always = no }
+
+		ai_will_do = {
+
+			factor = 1
+			modifier = {	
+				factor = 0.1
+			}
+			modifier = {	
+				factor = 100
+				character = FROM
+			}
+			modifier = {
+				factor = 10
+				reverse_opinion = {
+					who = FROM
+					value = 30
+				}
+			}
+		}
+	}
+	brew_fertility_potion = {
+		filter = realm_including_me
+		ai_target_filter = realm_including_me
+		ai_check_interval = 24
+	    diplomacy_icon = GFX_fertility_potion
+
+		from_potential = {
+			OR = {
+				has_religion_feature = religion_alchemy
+				AND = {
+					OR = {
+						religion_group = muslim
+						religion = yazidi
+						religion = yersenism
+					}
+					trait = mystic
+				}
+			}
+			wealth = 100
+		}
+
+		potential = {
+			OR = {
+				liege = {
+					character = FROM
+				}
+				character = FROM
+			}
+			OR = {
+				FROM = { ai = no }
+				character = FROM
+				is_close_relative = FROM
+				is_friend = FROM
+				is_lover = FROM
+			}
+		}
+
+		allow = {
+			FROM = { wealth = 150 }
+			custom_tooltip = {
+				text = must_have_ingredients_tt
+				hidden_tooltip = {
+					FROM = {
+						any_artifact = {
+							count = 2
+							has_artifact_flag = ingredient
+						}
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = { wealth = -150 }
+			FROM = {
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}	
+			}
+			if = {
+				limit = { FROM = { learning = 15 } }
+			random_list = {
+				20 = {
+					add_character_modifier = {
+						name = potion_bad_health_modifier
+						duration = 182
+						stacking = yes
+					}	
+				}
+				80 = {	
+					add_character_modifier = {
+						name = potion_fertility_modifier
+						duration = 182
+						stacking = yes
+					}
+				}
+			}
+			}
+			else_if = {
+				limit = { FROM = { learning = 10 NOT = { learning = 15 } } }
+			random_list = {
+				40 = {
+					add_character_modifier = {
+						name = potion_bad_health_modifier
+						duration = 182
+						stacking = yes
+					}	
+				}
+				60 = {	
+					add_character_modifier = {
+						name = potion_fertility_modifier
+						duration = 182
+						stacking = yes
+					}
+				}
+			}
+			}
+			else = {
+			random_list = {
+				60 = {
+					add_character_modifier = {
+						name = potion_bad_health_modifier
+						duration = 182
+						stacking = yes
+					}	
+				}
+				40 = {	
+					add_character_modifier = {
+						name = potion_fertility_modifier
+						duration = 182
+						stacking = yes
+					}
+				}
+			}
+			}
+		}
+
+		revoke_allowed = { always = no }
+
+		ai_will_do = {
+
+			factor = 1
+			modifier = {	
+				factor = 0.1
+			}
+			modifier = {	
+				factor = 100
+				character = FROM
+			}
+			modifier = {
+				factor = 10
+				reverse_opinion = {
+					who = FROM
+					value = 30
+				}
+			}
+		}
+	}
+	brew_immortality_potion = {
+		filter = realm_including_me
+		ai_target_filter = realm_including_me
+		ai_check_interval = 24
+	    diplomacy_icon = GFX_immortality_potion
+
+		from_potential = {
+			OR = {
+				has_religion_feature = religion_alchemy
+			}
+			wealth = 100
+		}
+
+		potential = {
+			OR = {
+				liege = {
+					character = FROM
+				}
+				character = FROM
+			}
+			OR = {
+				FROM = { ai = no }
+				character = FROM
+				is_close_relative = FROM
+				is_friend = FROM
+				is_lover = FROM
+			}
+		}
+
+		allow = {
+			FROM = { wealth = 250 }
+			custom_tooltip = {
+				text = must_have_ingredients_5_tt
+				hidden_tooltip = {
+					FROM = {
+						any_artifact = {
+							count = 5
+							has_artifact_flag = ingredient
+						}
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = { wealth = -250 }
+			FROM = {
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}	
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}	
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}	
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}	
+			}
+			if = {
+				limit = { FROM = { learning = 30 } }
+				random_list = {
+					99 = {
+						add_character_modifier = {
+						name = potion_bad_health_modifier
+						duration = 182
+						stacking = yes
+						}	
+					}
+					1 = {
+						add_trait = immortal
+					}
+				}
+			}
+			else = {
+				random_list = {
+					99 = {
+						add_character_modifier = {
+							name = potion_bad_health_modifier
+							duration = 182
+							stacking = yes
+						}	
+					}
+					1 = {	
+						random_list = {
+							99 = {
+								add_character_modifier = {
+								name = potion_bad_health_modifier
+								duration = 182
+								stacking = yes
+								}	
+							}
+							1 = {
+								add_trait = immortal
+							}
+						}
+					}
+				}
+			}
+		}
+
+		revoke_allowed = { always = no }
+
+		ai_will_do = {
+
+			factor = 1
+			modifier = {	
+				factor = 0.1
+			}
+			modifier = {	
+				factor = 100
+				character = FROM
+			}
+			modifier = {
+				factor = 10
+				reverse_opinion = {
+					who = FROM
+					value = 30
+				}
+			}
+		}
+	}
+	brew_gender_potion = {
+		filter = realm_including_me
+		ai_target_filter = realm_including_me
+		ai_check_interval = 24
+	    diplomacy_icon = GFX_gender_potion
+
+		from_potential = {
+			OR = {
+				has_religion_feature = religion_alchemy
+				AND = {
+					OR = {
+						religion_group = muslim
+						religion = yazidi
+						religion = yersenism
+					}
+					trait = mystic
+				}
+			}
+			wealth = 100
+		}
+
+		potential = {
+			OR = {
+				liege = {
+					character = FROM
+				}
+				character = FROM
+			}
+			OR = {
+				FROM = { ai = no }
+				character = FROM
+				is_close_relative = FROM
+				is_friend = FROM
+				is_lover = FROM
+			}
+		}
+
+		allow = {
+			FROM = { wealth = 250 }
+			custom_tooltip = {
+				text = must_have_ingredients_5_tt
+				hidden_tooltip = {
+					FROM = {
+						any_artifact = {
+							count = 5
+							has_artifact_flag = ingredient
+						}
+					}
+				}
+			}
+		}
+
+		effect = {
+			FROM = { wealth = -250 }
+			FROM = {
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}	
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}	
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}	
+				random_artifact = { 
+					limit = {
+						has_artifact_flag = ingredient
+					}
+					destroy_artifact = yes
+				}	
+			}
+			if = {
+				limit = { FROM = { learning = 30 } }
+				random_list = {
+					60 = {
+						add_character_modifier = {
+							name = potion_bad_health_modifier
+							duration = 182
+							stacking = yes
+						}	
+					}
+					30 = {	
+						add_trait = androgynous
+					}
+					10 = {	
+						set_gender = opposite
+					}
+				}
+			}
+			else = {
+				random_list = {
+					75 = {
+						add_character_modifier = {
+						name = potion_bad_health_modifier
+						duration = 182
+						stacking = yes
+						}	
+					}
+					24 = {	
+						add_trait = androgynous
+					}
+					1 = {
+						set_gender = opposite
+					}
+				}
+			}
+		}
+
+		revoke_allowed = { always = no }
+
+		ai_will_do = {
+
+			factor = 1
+			modifier = {	
+				factor = 0
+				ai = yes
+			}
+		}
+	}
 
 	hermetics_perform_scrying = {
 		is_in_society = yes
@@ -489,12 +1396,113 @@ targeted_decisions = {
 	
 }
 
-society_decisions = {
+decisions = {
+	assign_apprentice = { # For the AI, because they are dumb enough not to hand out minor titles
+		only_playable = yes
+				
+		potential = {
+			ai = yes
+			primary_title = { higher_tier_than = BARON }
+			OR = {
+				has_religion_feature = religion_alchemy
+				AND = {
+					OR = {
+						religion_group = muslim
+						religion = yazidi
+						religion = yersenism
+					}
+					trait = mystic
+				}
+				society_member_of = hermetics
+			}
+			NOT = { 
+				any_courtier = {
+					has_minor_title = title_hermetics_apprentice
+				}
+			}
+		}
+		allow = {
+			any_courtier = {
+					OR = {
+						society_member_of = hermetics
+						is_in_society = no
+						has_religion_feature = religion_alchemy
+						AND = {
+							OR = {
+								religion_group = muslim
+								religion = yazidi
+								religion = yersenism
+							}
+							trait = mystic
+						}
+					}
+					OR = {
+						learning = 10
+						is_smart_trigger = yes
+						trait = gardener
+						trait = scholar
+						trait = mystic
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+			}
+		}
+		effect = {
+			random_courtier = {
+				limit = {
+					OR = {
+						society_member_of = hermetics
+						is_in_society = no
+						has_religion_feature = religion_alchemy
+						AND = {
+							OR = {
+								religion_group = muslim
+								religion = yazidi
+								religion = yersenism
+							}
+							trait = mystic
+						}
+					}
+					OR = {
+						learning = 10
+						is_smart_trigger = yes
+						trait = gardener
+						trait = scholar
+						trait = mystic
+						trait = martial_cleric
+						trait = scholarly_theologian
+						trait = mastermind_theologian
+					}
+				}
+				give_minor_title = title_hermetics_apprentice
+			}
+			
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.75 #Decrease chance AI will do this - they'll still do it eventually anyways, this will just prevent them from doing it immediately
+				always = yes
+			}
+		}
+	}
 	hermetics_acquire_ingredients_decision = {
 		ai_check_interval = 24
 
 		potential = {
-			society_member_of = hermetics
+			OR = {
+				has_religion_feature = religion_alchemy
+				AND = {
+					OR = {
+						religion_group = muslim
+						religion = yazidi
+						religion = yersenism
+					}
+					trait = mystic
+				}
+				society_member_of = hermetics
+			}
 		}
 		
 		allow = {
@@ -551,10 +1559,10 @@ society_decisions = {
 		ai_will_do = {
 			factor = 1
 			modifier = {
-				factor = 0.01 # Slow down
+				factor = 0.66 # Slow down
 			}
 			modifier = {
-				factor = 0 # Already have ingredients
+				factor = 0.5 # Already have ingredients
 				any_artifact = {
 					has_artifact_flag = ingredient
 				}
