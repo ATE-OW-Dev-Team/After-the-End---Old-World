@@ -33,29 +33,98 @@ character_event = { # Give Indian characters appropriate schools at game start
 		character_event = { id = RoI.30120 }
 	}
 }
-province_event = { 
+character_event = { 
 	id = cleanup.9999
 	hide_window = yes
-
-	is_triggered_only = yes
+	only_rulers = yes
 	
 	trigger = {
-		OR = {
-			climate = mild_winter
-			climate = normal_winter
-			climate = severe_winter
+		any_realm_province = {
+			OR = {
+				climate = mild_winter
+				climate = normal_winter
+				climate = severe_winter
+			}
+			NOT = {
+				has_province_modifier = summerautumnbonus_modif
+			}
 		}
-		NOT = {
-			has_province_modifier = summerautumnbonus_modif
-		}
+		month == 3
+	}
+	mean_time_to_happen = {
+		days = 1
 	}
 	immediate = {
-		add_province_modifier = {
-			name = summerautumnbonus_modif
-			hidden = yes
-			stacking = no
-			duration = 142
+		any_realm_province = {
+			add_province_modifier = {
+				name = summerautumnbonus_modif
+				hidden = yes
+				stacking = no
+				duration = 142
+			}
 		}
+		character_event = {
+			id = cleanup.9998	days = 142
+		}
+	}
+}
+character_event = { 
+	id = cleanup.9998
+	hide_window = yes
+	only_rulers = yes
+	
+	trigger = {
+		any_realm_province = {
+			OR = {
+				climate = mild_winter
+				climate = normal_winter
+				climate = severe_winter
+			}
+			NOT = {
+				has_province_modifier = septemberbonus_modif
+			}
+		}
+		month == 8
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	immediate = {
+		any_realm_province = {
+			add_province_modifier = {
+				name = septemberbonus_modif
+				hidden = yes
+				stacking = no
+				duration = 31
+			}
+		}
+	}
+}
+character_event = { 
+	id = cleanup.9997
+	hide_window = yes
+	only_rulers = yes
+	
+	trigger = {
+		any_realm_province = {
+			OR = {
+				has_province_modifier = summerautumnbonus_modif
+				has_province_modifier = septemberbonus_modif
+			}
+		}
+		OR = {
+			month == 9
+			month == 10
+			month == 11
+			month == 0
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	immediate = {
+		remove_province_modifier = summerautumnbonus_modif
+		remove_province_modifier = septemberbonus_modif
 	}
 }
 
