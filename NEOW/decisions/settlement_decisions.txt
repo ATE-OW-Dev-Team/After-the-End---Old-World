@@ -450,7 +450,13 @@ settlement_decisions = {
 			OR = {
 				is_nomadic = yes
 				is_tribal = yes
-				government = phonocratic_government
+				religion = stalinist
+				religion = jacobinist
+				religion = trotskyite
+				religion = titoist
+				trait = cruel
+				trait = impaler
+				trait = wroth
 			}
 			has_dlc = "Horse Lords"
 		}
@@ -458,21 +464,18 @@ settlement_decisions = {
 		potential = {
 			NOT = { holding_type = nomad }
 			OR = {
-				NOT = { holding_type = tribal }
-				FROM = { is_tribal = no }
-			}
-			OR = {
 				FROM = { is_nomadic = yes }
 				location = {
 					num_of_settlements = 2
 				}
 			}
-			owner = { character = FROM }
+			owner = { NOT = { character = FROM } }
+			controller = { character = FROM }
 		}
 		
 		allow = {
 			NOT = { has_holding_modifier = recently_burnt_the_land }
-			owner = { independent = yes }
+			controller = { independent = yes }
 			has_siege = no
 			custom_tooltip = {
 				text = stop_pillaging_custom_tooltip
@@ -489,7 +492,7 @@ settlement_decisions = {
 				FROM = { save_event_target_as = nickname_receiver }
 				if = {
 					limit = {
-						owner = { 
+						controller = { 
 							has_nickname = no
 							is_adult = yes
 							NOT = { trait = incapable }
@@ -497,27 +500,27 @@ settlement_decisions = {
 					}
 					random_list = {
 						5 = {
-							owner = { give_nickname = nick_the_destroyer }
+							controller = { give_nickname = nick_the_destroyer }
 						}
 						5 = {
-							owner = { give_nickname = nick_the_scourge_of_god }
+							controller = { give_nickname = nick_the_scourge_of_god }
 							modifier = {
 								factor = 0
 								event_target:nickname_target = { religion = FROM }
 							}
 						}
 						5 = {
-							owner = { give_nickname = nick_the_slayer_of_culture }
+							controller = { give_nickname = nick_the_slayer_of_culture }
 							modifier = {
 								factor = 0
 								event_target:nickname_target = { culture = FROM }
 							}
 						}
 						5 = {
-							owner = { give_nickname = nick_the_terror_of_provincename }
+							controller = { give_nickname = nick_the_terror_of_provincename }
 						}
 						5 = {
-							owner = { give_nickname = nick_the_culture_marauder }
+							controller = { give_nickname = nick_the_culture_marauder }
 							modifier = {
 								factor = 0
 								event_target:nickname_target = { culture = FROM }
@@ -531,16 +534,16 @@ settlement_decisions = {
 			if = {
 				limit = { NOT = { holding_type = tribal } }
 				FROM = {
-					wealth = 50
+					wealth = 100
 				}
 				custom_tooltip = {
 					text = gain_tech_custom_tooltip
 					hidden_tooltip = {
 						FROM = {
 							random_list = {
-								10 = { military_techpoints = 5 }
-								10 = { economy_techpoints = 5 }
-								10 = { culture_techpoints = 5 }
+								10 = { military_techpoints = 7 }
+								10 = { economy_techpoints = 7 }
+								10 = { culture_techpoints = 7 }
 							}
 						}
 					}
@@ -549,7 +552,7 @@ settlement_decisions = {
 			if = {
 				limit = { holding_type = tribal }
 				FROM = { 
-					wealth = 25 
+					wealth = 50 
 					population = 150 
 				}
 			}
@@ -557,6 +560,7 @@ settlement_decisions = {
 			custom_tooltip = {
 				text = "PILLAGE_DESTROY_BUILDINGS"
 				hidden_tooltip = {
+					destroy_random_building = THIS
 					destroy_random_building = THIS
 					destroy_random_building = THIS
 					add_holding_modifier = {
@@ -634,10 +638,44 @@ settlement_decisions = {
 		}
 		ai_will_do = {
 			factor = 1
-			
-			modifier = { # Only for tribal holdings
-				factor = 0
-				NOT = { holding_type = tribal }
+			modifier = { 
+				factor = 0.5
+			}
+			modifier = { 
+				factor = 0.1
+				trait = kind
+			}
+			modifier = { 
+				factor = 0.1
+				trait = humble
+			}
+			modifier = { 
+				factor = 0.1
+				trait = just
+			}
+			modifier = { 
+				factor = 1.5
+				trait = arbitrary
+			}
+			modifier = { 
+				factor = 1.5
+				trait = greedy
+			}
+			modifier = { 
+				factor = 1.5
+				location = {
+					NOT = {
+						religion_group = FROM
+					}
+				}
+				trait = zealous
+			}
+			modifier = { 
+				factor = 0.25
+				location = {
+					religion_group = FROM
+				}
+				trait = zealous
 			}
 		}
 	}
@@ -652,7 +690,13 @@ settlement_decisions = {
 			OR = {
 				is_nomadic = yes
 				is_tribal = yes
-				government = phonocratic_government
+				religion = stalinist
+				religion = jacobinist
+				religion = trotskyite
+				religion = titoist
+				trait = cruel
+				trait = impaler
+				trait = wroth
 			}
 			has_dlc = "Horse Lords"
 		}
@@ -661,10 +705,6 @@ settlement_decisions = {
 			has_holding_modifier = recently_burnt_the_land
 			NOT = { has_holding_modifier = stop_burning_land }
 			NOT = { holding_type = nomad }
-			OR = {
-				NOT = { holding_type = tribal }
-				FROM = { is_tribal = no }
-			}
 			owner = { character = FROM }
 		}
 		
