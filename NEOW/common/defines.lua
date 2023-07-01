@@ -10,7 +10,7 @@ NDiplomacy = {
 	SUZERAIN_DEFENDER_CALL_DECLINE_COST = 150,	-- Prestige cost for a suzerain refusing to join a defensive war, when they are supposed to alway accept
 	ALLIED_CALL_DECLINE_COST = 200,
 
-	TRIBAL_VASSAL_CALL_DECLINE_COST_FACTOR = 3.0, -- Prestige cost multiplier for tribal vassals
+	TRIBAL_VASSAL_CALL_DECLINE_COST_FACTOR = 2.0, -- Prestige cost multiplier for tribal vassals
 	PAPAL_INVEST_PIETY_COST_MULT = 0.5, 		-- The effect of Papal investiture on the piety cost of the special Papal actions
 	SHORT_REIGN_YEARS_END = 9,
 	LONG_REIGN_YEARS_START = 10,
