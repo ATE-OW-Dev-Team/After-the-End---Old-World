@@ -1,4 +1,4 @@
-name="NEOW Turkish+Byzantine Portraits Remover"
+name="NEOW Remover Turkish+Byzantine Portraits"
 path="mod/NEOW_turkish_and_byzantine_Portraits"
 picture="NEOWICON.png"
 dependencies = { 

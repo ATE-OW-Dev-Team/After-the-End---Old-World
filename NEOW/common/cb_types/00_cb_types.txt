@@ -1457,13 +1457,14 @@ other_claim_on_liege = {
 	truce_days = 3650
 	hostile_against_others = yes
 	can_ask_to_join_war = no
-
+	
 	press_claim = yes
 	can_call_vassals = no
 	#attacker_can_call_allies = no
 	major_revolt = yes
-	
+
 	allowed_to_target_tributaries = no
+	allowed_to_target_suzerains = no
 
 	infamy_modifier = 0.5
 	
@@ -1565,7 +1566,13 @@ other_claim_on_liege = {
 	}
 
 	on_success = {
-		ROOT = {
+		any_attacker = {
+			limit = {
+				OR = {
+					character = ROOT
+					character = PREV
+				}
+			}
 			participation_scaled_prestige = 100
 			hidden_tooltip = {  disband_event_forces = faction_revolters }
 		}
@@ -1590,7 +1597,7 @@ other_claim_on_liege = {
 
 		FROM = {
 			hidden_tooltip = { disband_event_forces = faction_loyalists }
-			
+
 			if = {
 				limit = { NOT = { has_dlc = "Zeus" } }
 				any_demesne_title = { # All titles
@@ -1621,7 +1628,7 @@ other_claim_on_liege = {
 				}
 			}
 		}
-		
+
 		if = {
 			limit = {
 				ROOT = {
@@ -1632,7 +1639,7 @@ other_claim_on_liege = {
 			ROOT = { prisoner = no }
 		}
 	}
-	
+
 	on_success_title = {
 		if = {
 			limit = {
@@ -1642,7 +1649,7 @@ other_claim_on_liege = {
 				FROM = { set_character_flag = temp_other_claim_on_liege_prison }
 			}
 		}
-		
+
 		hidden_tooltip = {
 			ROOT = {
 				if = {
@@ -1657,7 +1664,7 @@ other_claim_on_liege = {
 				}
 			}
 		}
-		
+
 		# If the claimant has the wrong government type, take care of that first.
 		if = {
 			limit = {
@@ -1751,6 +1758,12 @@ other_claim_on_liege = {
 		}
 	}
 
+	on_invalidation = {
+		attacker = {
+			opinion = { who = ROOT  modifier = opinion_ff_intended_claimant }
+		}
+	}
+
 	on_fail = {
 		prestige = -100
 		
@@ -1766,8 +1779,9 @@ other_claim_on_liege = {
 		#		imprison = FROM
 		#	}
 		#}
-		
-		FROM = {
+
+		any_defender = {
+			limit = { character = FROM }
 			participation_scaled_prestige = 50
 		}
 		any_defender = {
@@ -1799,8 +1813,9 @@ other_claim_on_liege = {
 		#		imprison = FROM
 		#	}
 		#}
-		
-		FROM = {
+
+		any_defender = {
+			limit = { character = FROM }
 			participation_scaled_prestige = 100
 			hidden_tooltip = { 
 				if = { 
@@ -3739,6 +3754,8 @@ crusade = {
 							religion = transatlantic
 							religion = marblists
 							religion = neodonatists
+							religion = katoliko
+							religion = aglipayan
 						}
 					}
 					custom_tooltip = {
@@ -4505,8 +4522,6 @@ new_crusade = {
 							religion = catholic
 							religion = fraticelli
 							religion = cadaverist
-							religion = katoliko
-							religion = aglipayan
 						}
 					}
 					custom_tooltip = {
@@ -6078,6 +6093,7 @@ religious = {
 		}
 		ROOT = {
 			is_nomadic = no
+			NOT = { government = viceroyal_government }
 			NOT = { government = confederation_government }
 			NOT = { religion_group = pagan_group }
 			NOT = { pacifist = yes }
@@ -6091,6 +6107,9 @@ religious = {
 				reconquista_check_trigger = yes
 			}
 			NOT = { same_realm = FROM }
+			NOT = {
+				religion = dahatatta
+			}
 			OR = {
 				AND = {##Neovedantics have to use minor holy wars against other religions other than parabrahmanist 
 					NOT = { religion_group = FROM }
@@ -6333,6 +6352,9 @@ religious = {
 			NOT = { religion_group = pagan_group }
 			NOT = { pacifist = yes }
 			NOT = { same_realm = FROM }
+			NOT = {
+				religion = dahatatta
+			}
 			OR = {
 				AND = {##Neovedantics have to use minor holy wars against other religions other than parabrahmanist 
 					NOT = { religion_group = FROM }
@@ -15183,8 +15205,10 @@ buddhist_holy_war = {
 			}
 		}
 		ROOT = {
+			NOT = { government = viceroyal_government }
 			bhutan_medium_cb = yes
 			OR = {
+				religion = dahatatta
 				religion = neovedantic
 				AND = {
 					religion_group = buddhist_group
@@ -15273,6 +15297,7 @@ buddhist_holy_war = {
 	is_valid = {
 		ROOT = {
 			OR = {
+				religion = dahatatta
 				religion = neovedantic
 				AND = {
 					religion_group = buddhist_group
