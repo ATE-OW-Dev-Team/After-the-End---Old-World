@@ -240,7 +240,6 @@ PdxMeshStandardSkinned = {
 	PixelShader = "PixelPdxMeshStandard";
 	ShaderModel = 3;
 }
--- (The Avtokrator)PdxMeshStandard variations
 AvtMeshSettlements = {
 	VertexShader = "VertexPdxMeshStandard";
 	PixelShader = "PixelAvtMeshSettlements";
