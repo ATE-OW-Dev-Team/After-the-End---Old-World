@@ -46,6 +46,9 @@ law_groups = {
 	sevillian_investiture_law = {
 		law_type = realm
 	}
+	mil_train_laws = {
+		law_type = realm
+	}
 }
 
 laws = {
@@ -2959,5 +2962,360 @@ laws = {
 		effect = {
 			set_investiture = any
 		}
+	}
+	
+	# MILITARY TRAINING LAWS
+	##############################
+	
+	mil_train_0 = {
+		group = mil_train_laws
+		default_selection = {
+			factor = 0
+			additive_modifier = { 
+				value = 15			
+				holder_scope = {
+					OR = { 
+						government = tribal_government
+						government = nomadtribal_government
+						government = nomadic_government
+					}
+				}
+			}
+		}
+		allow = {
+			conditional_tooltip = {
+				trigger = {
+					holder_scope = { independent = no }
+				}
+				holder_scope = {
+					top_liege = {
+						has_law = mil_train_0
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.85
+				holder_scope = { 
+					OR = {
+						religion_group = christian 
+						religion_group = jewish_group 
+						religion_group = muslim 
+						religion_group = zoroastrian_group 
+						religion_group = esoteric 
+						religion_group = buddhist_group 
+						religion_group = indian_group 
+						religion_group = shintoist_group
+						religion_group = chinese_traditional_group
+					}
+				}
+			}
+			modifier = {
+				factor = 0.8
+				holder_scope = { 
+					OR = { 
+						religion = sisukkuus
+						religion = maoist
+						religion = constitutional
+						AND = {
+							is_reformed_religion = yes
+							religion_group = pagan_group 
+						}
+						religion = donyipolo
+						religion = kiratist
+						religion = red_cult
+						religion = sanamahist
+						religion = novelist
+						religion = hellenic_pagan
+					}
+				}
+			}
+			modifier = {
+				factor = 1.1
+				holder_scope = { 
+					OR = {
+						AND = {
+							is_reformed_religion = no
+							religion_group = pagan_group 
+						}
+						religion_group = oceanic 
+						religion_group = old_world_cultist_group 
+						religion_group = syncratic_group 
+						religion_group = pagan_group 
+					}
+				}
+			}
+			modifier = {
+				factor = 0.75
+				holder_scope = { martial = 16 }
+			}
+			modifier = {
+				factor = 0
+				holder_scope = { has_character_flag = issued_mil_train_2 }
+			}
+		}
+		ai_will_revoke = {
+			factor = 0
+		}
+		effect = {
+			hidden_tooltip = {
+				revoke_law = mil_train_0
+				revoke_law = mil_train_1
+				revoke_law = mil_train_2
+				holder_scope = {
+					if = {
+						limit = { independent = yes }
+						set_character_flag = issued_mil_train_0
+						revoke_law = mil_train_1
+						revoke_law = mil_train_2
+						any_realm_lord = {
+							limit = { NOT = { character = PREV } }
+							primary_title = {
+								add_law = { 
+									law = mil_train_0
+									cooldown = no 
+									opinion_effect = no 
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		land_morale = -0.2
+		land_organisation = -0.15
+		levy_reinforce_rate = 0.3
+	}
+	
+	mil_train_1 = {
+		group = mil_train_laws
+		default_selection = {
+			factor = 10
+			additive_modifier = { 
+				value = 15			
+				holder_scope = {
+					OR = { 
+						government = feudal_government
+						government = agrarian_feudal_government
+						government = indian_feudal
+						government = japanese_feudal
+						government = hellenic_government
+						government = muslim_government
+						government = viceroyal_government
+						government = makhzen_government
+						government = theocracy_government
+						government = republic_government
+						government = phonocratic_government
+						government = ghazwa_government
+						government = theocratic_feudal_government
+						government = calvinist_government
+					}
+				}
+			}
+		}
+		allow = {
+			conditional_tooltip = {
+				trigger = {
+					holder_scope = { independent = no }
+				}
+				holder_scope = {
+					top_liege = {
+						has_law = mil_train_0
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				holder_scope = { has_character_flag = issued_mil_train_2 }
+			}
+			modifier = {
+				factor = 0
+				holder_scope = { has_character_flag = issued_mil_train_0 }
+			}
+		}
+		ai_will_revoke = {
+			factor = 0
+		}
+		effect = {
+			hidden_tooltip = {
+				revoke_law = mil_train_0
+				revoke_law = mil_train_1
+				revoke_law = mil_train_2
+				holder_scope = {
+					if = {
+						limit = { independent = yes }
+						set_character_flag = issued_mil_train_1
+						revoke_law = mil_train_0
+						revoke_law = mil_train_2
+						any_realm_lord = {
+							limit = { NOT = { character = PREV } }
+							primary_title = {
+								add_law = { 
+									law = mil_train_1
+									cooldown = no 
+									opinion_effect = no 
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	mil_train_2 = {
+		group = mil_train_laws
+		default_selection = {
+			factor = 0
+			additive_modifier = { 
+				value = 20			
+				holder_scope = {
+					OR = { 
+						government = eastern_feudal
+						government = chinese_imperial_government
+						government = bhutanese_decayed_government
+						government = confucian_bureaucracy
+						government = bhutanese_restored_government
+						government = roman_imperial_government
+						government = neoziamet_government
+						government = oligarchic_republic
+						government = merchant_republic_government
+						government = mandala_government
+					}
+				}
+			}
+		}
+		allow = {
+			conditional_tooltip = {
+				trigger = {
+					holder_scope = { independent = no }
+				}
+				holder_scope = {
+					top_liege = {
+						has_law = mil_train_2
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 1.25
+				holder_scope = { 
+					OR = {
+						religion_group = christian 
+						religion_group = jewish_group 
+						religion_group = muslim 
+						religion_group = zoroastrian_group 
+						religion_group = esoteric 
+						religion_group = buddhist_group 
+						religion_group = indian_group 
+						religion_group = chinese_traditional_group
+					}
+				}
+			}
+			modifier = {
+				factor = 1.35
+				holder_scope = { 
+					OR = { 
+						religion = sisukkuus
+						religion = maoist
+						religion = constitutional
+						AND = {
+							is_reformed_religion = yes
+							religion_group = pagan_group 
+						}
+						religion = donyipolo
+						religion = kiratist
+						religion = red_cult
+						religion = sanamahist
+						religion = novelist
+						religion = hellenic_pagan
+					}
+				}
+			}
+			modifier = {
+				factor = 0.9
+				holder_scope = { 
+					OR = {
+						AND = {
+							is_reformed_religion = no
+							religion_group = pagan_group 
+						}
+						religion_group = oceanic 
+						religion_group = old_world_cultist_group 
+						religion_group = syncratic_group 
+						religion_group = pagan_group 
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				holder_scope = { lower_tier_than = duke }
+			}
+			modifier = {
+				factor = 1.25
+				holder_scope = { higher_tier_than = duke }
+			}
+			modifier = {
+				factor = 1.15
+				holder_scope = { martial = 18 }
+			}
+			modifier = {
+				factor = 0.5
+				holder_scope = { NOT = { martial = 12 } }
+			}
+			modifier = {
+				factor = 0
+				holder_scope = { has_character_flag = issued_mil_train_0 }
+			}
+		}
+		ai_will_revoke = {
+			factor = 0
+		}
+		effect = {
+			hidden_tooltip = {
+				revoke_law = mil_train_0
+				revoke_law = mil_train_1
+				revoke_law = mil_train_2
+				holder_scope = {
+					if = {
+						limit = { independent = yes }
+						set_character_flag = issued_mil_train_2
+						revoke_law = mil_train_0
+						revoke_law = mil_train_1
+						any_realm_lord = {
+							limit = { NOT = { character = PREV } }
+							primary_title = {
+								add_law = { 
+									law = mil_train_2
+									cooldown = no 
+									opinion_effect = no 
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		land_morale = 0.25
+		land_organisation = 0.2
+		levy_reinforce_rate = -0.2
+		global_tax_modifier = -0.15
+		retinue_maintenence_cost = 0.15
 	}
 }
