@@ -1,0 +1,642 @@
+# -*- ck2.objectives -*-
+
+# Faction tags need to start with 'faction_'
+
+# Supported types:
+# liege_titles, liege_titles_w_claimant, character
+
+# The succession law factions have hard coded elements to ensure that the correct heir is shown in Plot and 
+# Faction interfaces and that AI faction members vote for laws in accordance with the faction goal.
+# The valid tags correspond to the law name: faction_succ_seniority, faction_succ_primogeniture, etc.
+
+###############
+# FACTIONS
+###############
+
+# Court faction: desires more power for vassals
+faction_court = {
+	type = liege_titles
+	
+	# Plotter scope
+	potential = {
+		is_nomadic = no
+		emf_faction_basic_vassal_requirements = yes
+		liege = {
+			is_nomadic = no
+			NOR = {
+				character = ROOT
+				has_character_flag = faction_court_war
+				has_opinion_modifier = { who = ROOT modifier = opinion_civil_war_loser }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated_other_rel }
+				any_demesne_title = { temporary = yes }
+			}
+		}
+		OR = {
+			NOT = { has_character_flag = former_faction_leader }
+			had_character_flag = { flag = former_faction_leader days = 7 }
+		}
+		NOT = {
+			any_faction_backer = {
+				in_faction = faction_court
+				NOT = { has_character_flag = removed_from_leadership }
+				higher_real_tier_than = ROOT
+			}
+		}
+		NOR = {
+			in_faction = faction_prosperity
+			in_faction = faction_glory
+			in_faction = faction_tradition
+		}
+	}
+	
+	# Target scope (ROOT = liege title, FROM = faction leader)
+	allow = {
+		is_primary_holder_title = yes
+		FROM = { primary_title = { is_primary_type_title = no } }
+	}
+	
+	# Faction member scope (ROOT = joiner, FROM = target)
+	allow_join = {
+		ROOT = {
+			is_nomadic = no
+			emf_faction_basic_vassal_requirements = yes
+			OR = {
+				has_character_flag = will_join_civil_war
+				NOR = {
+					in_faction = faction_prosperity
+					in_faction = faction_glory
+					in_faction = faction_tradition
+				}
+			}
+			NOR = {
+				AND = {
+					NOT = { has_character_flag = will_join_civil_war }
+					reverse_has_opinion_modifier = { who = LIEGE modifier = opinion_civil_war_loser }
+				}
+				liege = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated } }
+				liege = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated_other_rel } }
+			}
+		}
+	}
+	
+	# AI creation weight (ROOT = title, FROM = faction creator)
+	chance = {
+		factor = 100
+		modifier = {
+			factor = 0
+			FROM = {
+				NOT = { has_character_flag = faction_court_supporter }
+			}
+		}
+		modifier = {
+			factor = 0
+			FROM = {
+				OR = {
+					controls_religion = yes
+					rightful_religious_head_scope = { character = PREV }
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			FROM = {
+				real_tier = KING
+				liege = { real_tier = EMPEROR }
+			}
+		}
+		modifier = {
+			factor = 10
+			FROM = {
+				real_tier = DUKE
+				liege = { real_tier = KING }
+			}
+		}
+		modifier = {
+			factor = 0
+			current_heir = { character = FROM }
+		}
+		modifier = {
+			factor = 0
+			FROM = { primary_title = { is_primary_type_title = yes } }
+		}
+	}
+	
+	# AI membership weight: ROOT is the prospective member. FROM is the faction leader. FROMFROM is the target title or character.
+	membership = {
+		factor = 100
+		modifier = {
+			factor = 0
+			NOR = {
+				ROOT = { has_character_flag = faction_court_supporter }
+				AND = {
+					ROOT = { has_character_flag = will_join_civil_war }
+					FROM = {
+						has_character_flag = civil_war_faction_leader
+						pf_not_regular_faction_war_trigger = no
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			ROOT = { has_character_flag = will_join_civil_war }
+		}
+		modifier = {
+			factor = 0
+			OR = {
+				controls_religion = yes
+				rightful_religious_head = ROOT
+			}
+		}
+	}
+
+	success = {
+		always = no
+	}
+
+	abort = {
+		always = no
+	}
+
+	abort_effect = {
+	}
+
+	effect = {
+	}
+}	
+
+# Prosperity faction: desires wealth and a healthy economy
+faction_prosperity = {
+	type = liege_titles
+	
+	# Plotter scope
+	potential = {
+		is_nomadic = no
+		emf_faction_basic_vassal_requirements = yes
+		liege = {
+			is_nomadic = no
+			NOR = {
+				character = ROOT
+				has_character_flag = faction_prosperity_war
+				has_opinion_modifier = { who = ROOT modifier = opinion_civil_war_loser }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated_other_rel }
+				any_demesne_title = { temporary = yes }
+			}
+		}
+		OR = {
+			NOT = { has_character_flag = former_faction_leader }
+			had_character_flag = { flag = former_faction_leader days = 7 }
+		}
+		NOT = {
+			any_faction_backer = {
+				in_faction = faction_prosperity
+				NOT = { has_character_flag = removed_from_leadership }
+				higher_real_tier_than = ROOT
+			}
+		}
+		NOR = {
+			in_faction = faction_court
+			in_faction = faction_glory
+			in_faction = faction_tradition
+		}
+	}
+
+	# Target scope (ROOT = liege title, FROM = faction leader)
+	allow = {
+		is_primary_holder_title = yes
+		FROM = { primary_title = { is_primary_type_title = no } }
+	}
+	
+	# Faction member scope (ROOT = joiner, FROM = target)
+	allow_join = {
+		ROOT = {
+			is_nomadic = no
+			emf_faction_basic_vassal_requirements = yes
+			OR = {
+				has_character_flag = will_join_civil_war
+				NOR = {
+					trait = in_hiding
+					in_faction = faction_court
+					in_faction = faction_glory
+					in_faction = faction_tradition
+				}
+			}
+			NOR = {
+				AND = {
+					NOT = { has_character_flag = will_join_civil_war }
+					reverse_has_opinion_modifier = { who = LIEGE modifier = opinion_civil_war_loser }
+				}
+				liege = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated } }
+				liege = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated_other_rel } }
+			}
+		}
+	}
+	
+	# AI creation weight (ROOT = title, FROM = faction creator)
+	chance = {
+		factor = 100
+		modifier = {
+			factor = 0
+			FROM = {
+				NOT = { has_character_flag = faction_prosperity_supporter }
+			}
+		}
+		modifier = {
+			factor = 0
+			FROM = {
+				OR = {
+					controls_religion = yes
+					rightful_religious_head_scope = { character = PREV }
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			FROM = {
+				real_tier = KING
+				liege = { real_tier = EMPEROR }
+			}
+		}
+		modifier = {
+			factor = 10
+			FROM = {
+				real_tier = DUKE
+				liege = { real_tier = KING }
+			}
+		}
+		modifier = {
+			factor = 0
+			current_heir = { character = FROM }
+		}
+		modifier = {
+			factor = 0
+			FROM = { primary_title = { is_primary_type_title = yes } }
+		}
+	}
+		
+	# AI membership weight: ROOT is the prospective member. FROM is the faction leader. FROMFROM is the target title or character.
+	membership = {
+		factor = 100
+		modifier = {
+			factor = 0
+			NOR = {
+				ROOT = { has_character_flag = faction_prosperity_supporter }
+				AND = {
+					ROOT = { has_character_flag = will_join_civil_war }
+					FROM = {
+						has_character_flag = civil_war_faction_leader
+						pf_not_regular_faction_war_trigger = no
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			ROOT = { has_character_flag = will_join_civil_war }
+		}
+		modifier = {
+			factor = 0
+			OR = {
+				controls_religion = yes
+				rightful_religious_head = ROOT
+			}
+		}
+	}
+
+	success = {
+		always = no
+	}
+
+	abort = {
+		always = no
+	}
+
+	abort_effect = {
+	}
+
+	effect = {
+	}
+}	
+
+# Glory faction: desires prestige and the spoils of war
+faction_glory = {
+	type = liege_titles
+	
+	# Plotter scope
+	potential = {
+		is_nomadic = no
+		emf_faction_basic_vassal_requirements = yes
+		liege = {
+			is_nomadic = no
+			NOR = {
+				character = ROOT
+				has_character_flag = faction_glory_war
+				has_opinion_modifier = { who = ROOT modifier = opinion_civil_war_loser }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated_other_rel }
+				any_demesne_title = { temporary = yes }
+			}
+		}
+		OR = {
+			NOT = { has_character_flag = former_faction_leader }
+			had_character_flag = { flag = former_faction_leader days = 7 }
+		}
+		NOT = {
+			any_faction_backer = {
+				in_faction = faction_glory
+				NOT = { has_character_flag = removed_from_leadership }
+				higher_real_tier_than = ROOT
+			}
+		}
+		NOR = {
+			in_faction = faction_court
+			in_faction = faction_prosperity
+			in_faction = faction_tradition
+		}
+	}
+
+	# Target scope (ROOT = liege title, FROM = faction leader)
+	allow = {
+		is_primary_holder_title = yes
+		FROM = { primary_title = { is_primary_type_title = no } }
+	}
+	
+	# Faction member scope (ROOT = joiner, FROM = target)
+	allow_join = {
+		ROOT = {
+			is_nomadic = no
+			emf_faction_basic_vassal_requirements = yes
+			OR = {
+				has_character_flag = will_join_civil_war
+				NOR = {
+					trait = in_hiding
+					in_faction = faction_court
+					in_faction = faction_prosperity
+					in_faction = faction_tradition
+				}
+			}
+			NOR = {
+				AND = {
+					NOT = { has_character_flag = will_join_civil_war }
+					reverse_has_opinion_modifier = { who = LIEGE modifier = opinion_civil_war_loser }
+				}
+				liege = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated } }
+				liege = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated_other_rel } }
+			}
+		}
+	}
+	
+	# AI creation weight (ROOT = title, FROM = faction creator)
+	chance = {
+		factor = 100
+		modifier = {
+			factor = 0
+			FROM = {
+				NOT = { has_character_flag = faction_glory_supporter }
+			}
+		}
+		modifier = {
+			factor = 0
+			FROM = {
+				OR = {
+					controls_religion = yes
+					rightful_religious_head_scope = { character = PREV }
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			FROM = {
+				real_tier = KING
+				liege = { real_tier = EMPEROR }
+			}
+		}
+		modifier = {
+			factor = 10
+			FROM = {
+				real_tier = DUKE
+				liege = { real_tier = KING }
+			}
+		}
+		modifier = {
+			factor = 0
+			current_heir = { character = FROM }
+		}
+		modifier = {
+			factor = 0
+			FROM = { primary_title = { is_primary_type_title = yes } }
+		}
+	}
+	
+	# AI membership weight: ROOT is the prospective member. FROM is the faction leader. FROMFROM is the target title or character.
+	membership = {
+		factor = 100
+		modifier = {
+			factor = 0
+			NOR = {
+				ROOT = { has_character_flag = faction_glory_supporter }
+				AND = {
+					ROOT = { has_character_flag = will_join_civil_war }
+					FROM = {
+						has_character_flag = civil_war_faction_leader
+						pf_not_regular_faction_war_trigger = no
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			ROOT = { has_character_flag = will_join_civil_war }
+		}
+		modifier = {
+			factor = 0
+			OR = {
+				controls_religion = yes
+				rightful_religious_head = ROOT
+			}
+		}
+	}
+
+	success = {
+		always = no
+	}
+
+	abort = {
+		always = no
+	}
+
+	abort_effect = {
+	}
+
+	effect = {
+	}
+}	
+
+# Tradition faction: desires piety and support for religion
+faction_tradition = {
+	type = liege_titles
+	
+	# Plotter scope
+	potential = {
+		is_nomadic = no
+		emf_faction_basic_vassal_requirements = yes
+		NOT = { trait = excommunicated }
+		liege = {
+			is_nomadic = no
+			religion = ROOT
+			NOR = {
+				character = ROOT
+				has_character_flag = faction_tradition_war
+				has_opinion_modifier = { who = ROOT modifier = opinion_civil_war_loser }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated }
+				reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated_other_rel }
+				any_demesne_title = { temporary = yes }
+			}
+		}
+		OR = {
+			NOT = { has_character_flag = former_faction_leader }
+			had_character_flag = { flag = former_faction_leader days = 7 }
+		}
+		NOT = {
+			any_faction_backer = {
+				in_faction = faction_tradition
+				NOT = { has_character_flag = removed_from_leadership }
+				higher_real_tier_than = ROOT
+			}
+		}
+		NOR = {
+			in_faction = faction_court
+			in_faction = faction_prosperity
+			in_faction = faction_glory
+		}
+	}
+
+	# Target scope (ROOT = liege title, FROM = faction leader)
+	allow = {
+		is_primary_holder_title = yes
+		FROM = { primary_title = { is_primary_type_title = no } }
+	}
+	
+	# Faction member scope (ROOT = joiner, FROM = target)
+	allow_join = {
+		ROOT = {
+			is_nomadic = no
+			emf_faction_basic_vassal_requirements = yes
+			OR = {
+				has_character_flag = will_join_civil_war
+				NOR = {
+					NOT = { liege = { religion = PREV } }
+					trait = excommunicated
+					trait = in_hiding
+					in_faction = faction_court
+					in_faction = faction_prosperity
+					in_faction = faction_glory
+				}
+			}
+			NOR = {
+				AND = {
+					NOT = { has_character_flag = will_join_civil_war }
+					reverse_has_opinion_modifier = { who = LIEGE modifier = opinion_civil_war_loser }
+				}
+				liege = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated } }
+				liege = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_subjugated_other_rel } }
+			}
+		}
+	}
+	
+	# AI creation weight (ROOT = title, FROM = faction creator)
+	chance = {
+		factor = 100
+		modifier = {
+			factor = 0
+			FROM = {
+				NOT = { has_character_flag = faction_tradition_supporter }
+			}
+		}
+		modifier = {
+			factor = 0
+			FROM = {
+				OR = {
+					controls_religion = yes
+					rightful_religious_head_scope = { character = PREV }
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			FROM = {
+				real_tier = KING
+				liege = { real_tier = EMPEROR }
+			}
+		}
+		modifier = {
+			factor = 10
+			FROM = {
+				real_tier = DUKE
+				liege = { real_tier = KING }
+			}
+		}
+		modifier = {
+			factor = 0
+			current_heir = { character = FROM }
+		}
+		modifier = {
+			factor = 0
+			FROM = { primary_title = { is_primary_type_title = yes } }
+		}
+	}
+	
+	# AI membership weight: ROOT is the prospective member. FROM is the faction leader. FROMFROM is the target title or character.
+	membership = {
+		factor = 100
+		modifier = {
+			factor = 0
+			NOR = {
+				ROOT = { has_character_flag = faction_tradition_supporter }
+				AND = {
+					ROOT = { has_character_flag = will_join_civil_war }
+					FROM = {
+						has_character_flag = civil_war_faction_leader
+						pf_not_regular_faction_war_trigger = no
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 10
+			ROOT = { has_character_flag = will_join_civil_war }
+		}
+		modifier = {
+			factor = 0
+			OR = {
+				controls_religion = yes
+				rightful_religious_head = ROOT
+			}
+		}
+		modifier = {
+			factor = 0
+			ROOT = {
+				trait = cynical
+				NOT = { has_character_flag = will_join_civil_war }
+			}
+		}
+	}
+
+	success = {
+		always = no
+	}
+
+	abort = {
+		always = no
+	}
+
+	abort_effect = {
+	}
+
+	effect = {
+	}
+}	
+
+
