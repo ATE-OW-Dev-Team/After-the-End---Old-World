@@ -1,0 +1,101 @@
+# -*- ck2.events -*-
+
+namespace = PlusFactionStandalone
+#This isn’t as good as the implementation in EMF as we can’t override the CB file to fire the effects for specific CB's.
+# on_war_ended_victory 
+character_event = {
+	id = PlusFactionStandalone.1
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		if = {
+			limit = { FROM = { NOT = { religion = ROOT } } }
+			FROM = { pf_glory_plus2_effect = yes }
+			FROM = { pf_tradition_plus4_effect = yes }
+			ROOT = { pf_glory_minus2_effect = yes }
+			ROOT = { pf_tradition_minus4_effect = yes }
+		}
+		if = {
+			limit = { FROM = { religion = ROOT } } 
+			FROM = { pf_glory_plus2_effect = yes }
+			ROOT = { pf_glory_minus2_effect = yes }
+		}
+		#MR Wins against another MR, both care
+		if = {
+			limit = { 
+			FROM = { is_merchant_republic = yes } 
+			ROOT = { is_merchant_republic = yes } 
+			}
+			FROM = { pf_prosperity_plus4_effect = yes }
+			ROOT = { pf_prosperity_minus4_effect = yes }
+		}
+		#MR Wins against other gov, Only MR prosperity faction cares
+		if = {
+			limit = { 
+			FROM = { is_merchant_republic = yes } 
+			ROOT = { is_merchant_republic = no } 
+			}
+			FROM = { pf_prosperity_plus2_effect = yes }
+		}
+		#Other gov  wins against MR both care but one less
+		if = {
+			limit = { 
+			FROM = { is_merchant_republic = no } 
+			ROOT = { is_merchant_republic = yes } 
+			}
+			FROM = { pf_prosperity_minus2_effect = yes }
+			ROOT = { pf_prosperity_minus4_effect = yes }
+		}
+	}
+}
+
+# on_war_ended_defeat
+character_event = {
+	id = PlusFactionStandalone.2
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		if = {
+			limit = { FROM = { NOT = { religion = ROOT } } }
+			ROOT = { pf_glory_plus2_effect = yes }
+			ROOT = { pf_tradition_plus4_effect = yes }
+			FROM = { pf_glory_plus2_effect = yes }
+			FROM = { pf_tradition_plus4_effect = yes }
+		}
+		if = {
+			limit = { FROM = { religion = ROOT } } 
+			ROOT = { pf_glory_minus2_effect = yes }
+			FROM = { pf_glory_plus2_effect = yes }
+		}
+		#MR Wins against another MR, both care
+		if = {
+			limit = { 
+			FROM = { is_merchant_republic = yes } 
+			ROOT = { is_merchant_republic = yes } 
+			}
+			ROOT = { pf_prosperity_plus4_effect = yes }
+			FROM = { pf_prosperity_minus4_effect = yes }
+		}
+		#MR Wins against other gov, Only MR prosperity faction cares
+		if = {
+			limit = { 
+			FROM = { is_merchant_republic = yes } 
+			ROOT = { is_merchant_republic = no } 
+			}
+			ROOT = { pf_prosperity_plus2_effect = yes }
+		}
+		#Other gov  wins against MR both care but one less
+		if = {
+			limit = { 
+			FROM = { is_merchant_republic = no } 
+			ROOT = { is_merchant_republic = yes } 
+			}
+			ROOT = { pf_prosperity_minus2_effect = yes }
+			FROM = { pf_prosperity_minus4_effect = yes }
+		}
+	}
+}
