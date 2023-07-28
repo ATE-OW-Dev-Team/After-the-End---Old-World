@@ -2,6 +2,7 @@ namespace=cleanup
 namespace=celtic
 namespace=razumist
 namespace=sufist
+namespace=gods
 
 character_event = { # Give Indian characters appropriate schools at game start
 	id = cleanup.1
@@ -1737,7 +1738,11 @@ character_event = {
 	
 	option = {
 		name = celtic.248.a
-		scaled_wealth = -0.25
+		scaled_wealth = {
+			value = -0.15
+			min = -5
+			max = -75
+		}
 		hidden_tooltip = {
 			character_event = { id = celtic.253 days = 5 }
 		}
@@ -1773,7 +1778,7 @@ character_event = {
 		name = celtic.249.a
 		if = {
 			limit = {
-				NOT = { learning = 8 }
+				NOT = { diplomacy = 8 }
 			}
 			random_list = {
 				35 = { character_event = { id = celtic.250 days = 2 tooltip = "celtic.250.tooltip" } } #bad
@@ -1783,8 +1788,8 @@ character_event = {
 		}
 		if = {
 			limit = {
-				learning = 8
-				NOT = { learning = 16 }
+				diplomacy = 8
+				NOT = { diplomacy = 16 }
 			}
 			random_list = {
 				25 = { character_event = { id = celtic.250 days = 2 tooltip = "celtic.250.tooltip" } } #bad
@@ -1794,7 +1799,7 @@ character_event = {
 		}
 		if = {
 			limit = {
-				learning = 16
+				diplomacy = 16
 			}
 			random_list = {
 				15 = { character_event = { id = celtic.250 days = 2 tooltip = "celtic.250.tooltip" } } #bad
@@ -1903,6 +1908,190 @@ character_event = {
 				15 = { character_event = { id = celtic.250 days = 2 tooltip = "celtic.250.tooltip" } } #bad
 				50 = { character_event = { id = celtic.251 days = 2 tooltip = "celtic.251.tooltip" } } #neutral
 				35 = { character_event = { id = celtic.252 days = 2 tooltip = "celtic.252.tooltip" } } #good
+			}
+		}
+	}
+}
+#Offerings start
+character_event = {
+	id = gods.248
+	desc = gods.248.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = gods.248.a
+		scaled_wealth = {
+			value = -0.15
+			min = -5
+			max = -75
+		}
+		hidden_tooltip = {
+			character_event = { id = gods.253 days = 5 }
+		}
+	}
+	option = {
+		name = gods.248.b
+		trigger = {
+			OR = {
+				trait = poet
+				any_vassal = {
+					trait = poet
+				}
+				any_courtier = {
+					trait = poet
+				}
+			}
+		}
+		hidden_tooltip = {
+			character_event = { id = gods.249 days = 5 }
+		}
+	}
+}
+
+#Offerings middle (Poem)
+character_event = {
+	id = gods.249
+	desc = gods.249.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = gods.249.a
+		if = {
+			limit = {
+				NOT = { diplomacy = 8 }
+			}
+			random_list = {
+				35 = { character_event = { id = gods.250 days = 2 tooltip = "gods.250.tooltip" } } #bad
+				50 = { character_event = { id = gods.251 days = 2 tooltip = "gods.251.tooltip" } } #neutral
+				15 = { character_event = { id = gods.252 days = 2 tooltip = "gods.252.tooltip" } } #good
+			}
+		}
+		if = {
+			limit = {
+				diplomacy = 8
+				NOT = { diplomacy = 16 }
+			}
+			random_list = {
+				25 = { character_event = { id = gods.250 days = 2 tooltip = "gods.250.tooltip" } } #bad
+				50 = { character_event = { id = gods.251 days = 2 tooltip = "gods.251.tooltip" } } #neutral
+				25 = { character_event = { id = gods.252 days = 2 tooltip = "gods.252.tooltip" } } #good
+			}
+		}
+		if = {
+			limit = {
+				diplomacy = 16
+			}
+			random_list = {
+				15 = { character_event = { id = gods.250 days = 2 tooltip = "gods.250.tooltip" } } #bad
+				50 = { character_event = { id = gods.251 days = 2 tooltip = "gods.251.tooltip" } } #neutral
+				35 = { character_event = { id = gods.252 days = 2 tooltip = "gods.252.tooltip" } } #good
+			}
+		}
+	}
+}
+
+#Offerings bad
+character_event = {
+	id = gods.250
+	desc = gods.250.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = gods.250.a
+		prestige = -25
+		piety = -15
+		clr_character_flag = gods_offerings_giving
+		add_character_modifier = {
+			name = gods_offerings_bad
+			duration = 730
+		}
+	}
+}
+
+#Offerings neutral
+character_event = {
+	id = gods.251
+	desc = gods.251.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = gods.251.a
+		piety = 5
+		clr_character_flag = gods_offerings_giving
+		add_character_modifier = {
+			name = gods_offerings_neutral
+			duration = 730
+		}
+	}
+}
+
+#Offerings good
+character_event = {
+	id = gods.252
+	desc = gods.252.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = gods.252.a
+		prestige = 25
+		piety = 15
+		clr_character_flag = gods_offerings_giving
+		add_character_modifier = {
+			name = gods_offerings_good
+			duration = 730
+		}
+	}
+}
+
+#Offerings middle (Gold)
+character_event = {
+	id = gods.253
+	desc = gods.253.desc
+	picture = GFX_evt_Pagan_dolmen
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = gods.253.a
+		if = {
+			limit = {
+				NOT = { stewardship = 8 }
+			}
+			random_list = {
+				35 = { character_event = { id = gods.250 days = 2 tooltip = "gods.250.tooltip" } } #bad
+				50 = { character_event = { id = gods.251 days = 2 tooltip = "gods.251.tooltip" } } #neutral
+				15 = { character_event = { id = gods.252 days = 2 tooltip = "gods.252.tooltip" } } #good
+			}
+		}
+		if = {
+			limit = {
+				stewardship = 8
+				NOT = { stewardship = 16 }
+			}
+			random_list = {
+				25 = { character_event = { id = gods.250 days = 2 tooltip = "gods.250.tooltip" } } #bad
+				50 = { character_event = { id = gods.251 days = 2 tooltip = "gods.251.tooltip" } } #neutral
+				25 = { character_event = { id = gods.252 days = 2 tooltip = "gods.252.tooltip" } } #good
+			}
+		}
+		if = {
+			limit = {
+				stewardship = 16
+			}
+			random_list = {
+				15 = { character_event = { id = gods.250 days = 2 tooltip = "gods.250.tooltip" } } #bad
+				50 = { character_event = { id = gods.251 days = 2 tooltip = "gods.251.tooltip" } } #neutral
+				35 = { character_event = { id = gods.252 days = 2 tooltip = "gods.252.tooltip" } } #good
 			}
 		}
 	}
