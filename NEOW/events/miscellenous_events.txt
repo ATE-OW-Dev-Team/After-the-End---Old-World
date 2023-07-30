@@ -1,0 +1,1711 @@
+namespace = Plus
+
+#reserved: Plus.100 to Plus.149
+#reserved: Plus.1750 to Plus.1849
+
+#######################################
+# GENERATE RANDOM CLAIMS
+#######################################
+
+# Generate random claim on a neighbour
+character_event = {
+	id = Plus.115 # formerly 1000182425
+	desc = EVTDESC_Plus_115
+	picture = GFX_evt_emissary
+
+	is_triggered_only = yes
+
+	only_rulers = yes
+	war = no
+
+	trigger = {
+		OR = {
+			is_feudal = yes
+			is_tribal = yes
+		}
+
+		higher_real_tier_than = BARON
+		has_regent = no
+
+		any_realm_province = {
+			held_under_PREV = yes
+
+			any_neighbor_province = {
+				owner = {
+					religion_group = ROOT
+
+					trigger_if = {
+						limit = { same_realm = ROOT }
+						same_liege = ROOT
+					}
+
+					OR = {
+						is_feudal = yes
+						is_tribal = yes
+					}
+
+					NOR = {
+						character = ROOT
+						is_vassal_or_below_of = ROOT
+						is_liege_or_above_of = ROOT
+					}
+				}
+
+				county = {
+					NOT = { claimed_by = ROOT }
+				}
+
+				duchy = {
+					NOT = { claimed_by = ROOT }
+
+					trigger_if = {
+						limit = { has_holder = yes }
+
+						holder_scope = {
+							religion_group = ROOT
+
+							trigger_if = {
+								limit = { same_realm = ROOT }
+								same_liege = ROOT
+							}
+
+							OR = {
+								is_feudal = yes
+								is_tribal = yes
+							}
+
+							NOR = {
+								character = ROOT
+								is_vassal_or_below_of = ROOT
+								is_liege_or_above_of = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	weight_multiplier = {
+		days = 1
+
+		mult_modifier = {
+			factor = 0.5
+			ai = no
+		}
+
+		mult_modifier = {
+			factor = 0.25
+
+			is_unreformed_pagan_trigger = yes
+			NOT = { has_ambition = obj_become_king }
+		}
+
+		mult_modifier = {
+			factor = 1.1
+
+			ai = no
+			has_ambition = obj_become_king
+		}
+
+		mult_modifier = {
+			factor = 1.2
+			ai = yes
+			has_ambition = obj_become_king
+		}
+
+		mult_modifier = {
+			factor = 2.5 # AI doesn't fabricate claims effectively
+			ai = yes
+		}
+
+		mult_modifier = {
+			factor = 3.0 # Encourage AI independent counts and dukes to form Kingdoms
+
+			independent = yes
+			num_of_duke_titles < 2
+			ai = yes
+
+			OR = {
+				real_tier = COUNT
+				real_tier = DUKE
+			}
+		}
+
+		mult_modifier = {
+			factor = 1.2
+
+			independent = yes
+			trait = ambitious
+		}
+
+		mult_modifier = {
+			factor = 0.5
+
+			independent = yes
+			trait = content
+		}
+
+		mult_modifier = {
+			factor = 0.5 # Discourage free claims for bigger AI
+
+			independent = yes
+			real_tier = KING
+			realm_size >= 35
+			ai = yes
+		}
+
+		mult_modifier = {
+			factor = 0.25 # Discourage free claims for bigger AI
+
+			independent = yes
+			real_tier = EMPEROR
+			realm_size >= 120
+			ai = yes
+		}
+
+		mult_modifier = {
+			factor = 0.25
+			independent = no
+		}
+
+		mult_modifier = {
+			factor = 1.1
+			realm_diplomacy >= 20
+		}
+
+		mult_modifier = {
+			factor = 1.1
+			realm_diplomacy >= 30
+		}
+
+		mult_modifier = {
+			factor = 1.1
+			realm_diplomacy >= 40
+		}
+
+		mult_modifier = {
+			factor = 1.1
+			realm_diplomacy >= 50
+		}
+	}
+
+	immediate = {
+		random = {
+			chance = 20
+			set_character_flag = duchy_claim
+		}
+
+		set_character_flag = claim_by_event
+	}
+
+	option = {
+		name = EXCELLENT
+
+		random_realm_province = {
+			show_scope_change = no
+
+			limit = {
+				held_under_PREV = yes
+
+				any_neighbor_province = {
+					owner = {
+						religion_group = ROOT
+
+						trigger_if = {
+							limit = { same_realm = ROOT }
+							same_liege = ROOT
+						}
+
+						OR = {
+							is_feudal = yes
+							is_tribal = yes
+						}
+
+						NOR = {
+							character = ROOT
+							is_vassal_or_below_of = ROOT
+							is_liege_or_above_of = ROOT
+						}
+					}
+
+					county = {
+						NOT = { claimed_by = ROOT }
+					}
+
+					duchy = {
+						NOT = { claimed_by = ROOT }
+
+						trigger_if = {
+							limit = { has_holder = yes }
+
+							holder_scope = {
+								religion_group = ROOT
+
+								trigger_if = {
+									limit = { same_realm = ROOT }
+									same_liege = ROOT
+								}
+
+								OR = {
+									is_feudal = yes
+									is_tribal = yes
+								}
+
+								NOR = {
+									character = ROOT
+									is_vassal_or_below_of = ROOT
+									is_liege_or_above_of = ROOT
+								}
+							}
+						}
+					}
+				}
+			}
+
+			preferred_limit = { owned_by = ROOT } # Prefer claims near demesne
+
+			random_neighbor_province = {
+				show_scope_change = no
+
+				limit = {
+					owner = {
+						religion_group = ROOT
+
+						trigger_if = {
+							limit = { same_realm = ROOT }
+							same_liege = ROOT
+						}
+
+						OR = {
+							is_feudal = yes
+							is_tribal = yes
+						}
+
+						NOR = {
+							character = ROOT
+							is_vassal_or_below_of = ROOT
+							is_liege_or_above_of = ROOT
+						}
+					}
+
+					county = {
+						NOT = { claimed_by = ROOT }
+					}
+
+					duchy = {
+						NOT = { claimed_by = ROOT }
+
+						trigger_if = {
+							limit = { has_holder = yes }
+
+							holder_scope = {
+								religion_group = ROOT
+
+								trigger_if = {
+									limit = { same_realm = ROOT }
+									same_liege = ROOT
+								}
+
+								OR = {
+									is_feudal = yes
+									is_tribal = yes
+								}
+
+								NOR = {
+									character = ROOT
+									is_vassal_or_below_of = ROOT
+									is_liege_or_above_of = ROOT
+								}
+							}
+						}
+					}
+				}
+
+				if = {
+					limit = {
+						ROOT = { has_character_flag = duchy_claim }
+						duchy = { has_holder = yes }
+					}
+
+					duchy = {
+						show_scope_change = no
+
+						add_claim = ROOT
+
+						hidden_effect = {
+							holder_scope = { character_event = { id = Plus.116 } }
+						}
+					}
+				}
+				else = {
+					county = {
+						show_scope_change = no
+
+						add_claim = ROOT
+
+						hidden_effect = {
+							holder_scope = { character_event = { id = Plus.116 } }
+						}
+					}
+				}
+			}
+		}
+
+		clr_character_flag = duchy_claim
+	}
+}
+
+# Neighbor is informed of the claim
+character_event = {
+	id = Plus.116
+	picture = GFX_evt_emissary
+	desc = EVTDESC_Plus_116
+
+	is_triggered_only = yes
+
+	ai = no
+
+	option = {
+		name = EVTOPTA_Plus_116
+	}
+}
+
+#######################################
+# ABDICATION
+#######################################
+
+# Ruler considers Abdication
+character_event = {
+	id = Plus.120
+	desc = EVTDESC_Plus_120
+	picture = GFX_evt_recovery
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_Plus_120 # Go ahead and abdicate
+
+		hidden_effect = {
+			current_heir = {
+				character_event = {
+					id = Plus.121
+					days = 1
+				}
+			}
+		}
+
+		if = {
+			limit = { is_priest = yes }
+			set_character_flag = was_priest
+		}
+
+		# Renew tributes automatically
+		any_independent_ruler = {
+			limit = {
+				pays_tribute_to = ROOT
+
+				NOR = {
+					is_tributary = { type = imperial suzerain = ROOT }
+					is_tributary = { type = permanent suzerain = ROOT }
+					is_tributary = { type = offmap suzerain = ROOT }
+					is_tributary = { type = nomadic suzerain = ROOT }
+				}
+			}
+
+			ROOT = {
+				current_heir = { save_event_target_as = abdicate_heir }
+			}
+
+			if = {
+				limit = {
+					OR = {
+						is_tributary = {
+							type = voluntary
+							suzerain = ROOT
+						}
+
+						is_tributary = {
+							type = default
+							suzerain = ROOT
+						}
+					}
+				}
+
+				set_character_flag = is_voluntary_tributary
+			}
+			else_if = {
+				limit = {
+					is_tributary = {
+						type = forced
+						suzerain = ROOT
+					}
+				}
+				set_character_flag = is_forced_tributary
+			}
+			else_if = {
+				limit = {
+					is_tributary = {
+						type = protectorate
+						suzerain = ROOT
+					}
+				}
+				set_character_flag = is_protectorate
+			}
+
+			character_event = {
+				id = Plus.420
+				days = 1
+			}
+		}
+
+		abdicate = yes
+
+		if = {
+			limit = { NOT = { trait = content } }
+			add_trait = content
+		}
+
+		if = {
+			limit = {
+				religion_group = christian
+
+				OR = {
+					trait = zealous
+					trait = humble
+					has_character_flag = was_priest
+				}
+			}
+
+			set_christian_ascetic_effect = yes
+		}
+		else = {
+			add_trait = abdicated
+		}
+
+		clr_character_flag = was_priest
+
+		ai_chance = { factor = 100 }
+	}
+
+	option = {
+		name = EVTOPTB_Plus_120  # Reconsider
+
+		clr_character_flag = considering_abdication
+
+		ai_chance = { factor = 0 }
+	}
+}
+
+# Notify heir of abdication
+character_event = {
+	id = Plus.121
+	picture = GFX_evt_council
+	desc = EVTDESC_Plus_121
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_Plus_121
+
+		opinion = {
+			name = abdicated_for_me
+			who = FROM
+			years = 100
+		}
+
+		hidden_effect = {
+			FROM = {
+				transfer_scaled_wealth = {
+					to = ROOT
+					value = all
+				}
+
+				any_artifact = {
+					transfer_artifact = {
+						from = PREV
+						to = ROOT
+					}
+				}
+
+				banish = ROOT
+			}
+		}
+	}
+}
+
+#######################################
+# VASSAL ASKS FOR KING TITLE
+#######################################
+
+# Liege holds too many king titles in an uncentralized realm
+# TODO: Turn into decision?
+character_event = {
+	id = Plus.130
+	desc = EVTDESC_Plus_130
+	picture = GFX_evt_council
+
+	is_triggered_only = yes # on_yearly_pulse, random_events
+
+	only_playable = yes
+	min_age = 16
+	only_capable = yes
+	prisoner = no
+	war = no
+
+	trigger = {
+		independent = no
+		is_feudal = yes
+		religion = liege
+
+		trigger_if = {
+			limit = { real_tier = COUNT }
+			num_of_count_titles >= 3
+		}
+		trigger_else = {
+			real_tier = DUKE
+		}
+
+		# Liege is an uncrowned or incapable king/emperor with at least three king titles & two counties
+		liege = {
+			OR = {
+				trait = uncrowned
+				is_incapable = yes
+
+				AND = {
+					prisoner = yes
+					host = { character = ROOT }
+				}
+			}
+
+			higher_real_tier_than = DUKE
+			num_of_king_titles >= 3
+			num_of_count_titles >= 2
+			war = no
+			is_feudal = yes
+		}
+
+		OR = {
+			trait = ambitious
+			trait = envious
+			opinion = { who = liege value < -50 }
+		}
+
+		NOR = {
+			trait = content
+			trait = craven
+			trait = humble
+			is_dumb_trigger = yes
+			has_character_flag = demanded_king_title
+			any_heir_title = { higher_real_tier_than = DUKE }
+			any_demesne_title = { temporary = yes }
+		}
+
+		# The liege has a spare king title
+		liege = {
+			any_demesne_title = {
+				real_tier = KING
+				is_titular = no
+				can_be_given_away = yes
+
+				# which does not have his capital
+				PREV = {
+					capital_scope = {
+						kingdom = { NOT = { title = PREVPREVPREV } }
+					}
+				}
+
+				# but has the duke's capital
+				ROOT = {
+					capital_scope = {
+						kingdom = { title = PREVPREVPREV }
+					}
+
+					NOT = {
+						any_heir_title = { title = PREVPREV }
+					}
+				}
+
+				# and has low crown authority
+				OR = {
+					has_law = crown_authority_0
+					has_law = crown_authority_1
+				}
+			}
+
+			trigger_if = {
+				limit = { real_tier = KING }
+
+				reverse_opinion = {
+					who = ROOT
+					value < 0
+				}
+			}
+			trigger_else = { # Must be emperor, by elimination
+				reverse_opinion = {
+					who = ROOT
+					value < 25
+				}
+			}
+
+			NOR = {
+				reverse_has_truce = ROOT
+				has_non_aggression_pact_with = ROOT
+				reverse_has_opinion_modifier = { who = ROOT name = opinion_coerced_into_leaving_faction }
+				has_character_flag = king_title_demanded
+			}
+		}
+	}
+
+	weight_multiplier = {
+		factor = 1
+
+		mult_modifier = {
+			factor = 2
+			trait = ambitious
+		}
+
+		mult_modifier = {
+			factor = 1.33
+			trait = envious
+		}
+
+		mult_modifier = {
+			factor = 0.67
+			trait = kind
+		}
+
+		mult_modifier = {
+			factor = 0.67
+			trait = charitable
+		}
+
+		mult_modifier = {
+			factor = 0.33
+			prestige < 100
+		}
+
+		mult_modifier = {
+			factor = 1.33
+			prestige >= 1000
+		}
+
+		mult_modifier = {
+			factor = 0.67
+			NOT = { culture = liege }
+		}
+
+		mult_modifier = {
+			factor = 2
+
+			OR = {
+				leads_faction = yes
+				in_faction = faction_court
+			}
+		}
+
+		mult_modifier = {
+			factor = 0.2
+			relative_power_to_liege < 0.1
+		}
+
+		mult_modifier = {
+			factor = 2
+			relative_power_to_liege >= 0.5
+		}
+
+		mult_modifier = {
+			factor = 2
+			relative_power_to_liege >= 1.0
+		}
+
+		mult_modifier = {
+			factor = 2
+			liege = { num_of_king_titles >= 4 }
+		}
+	}
+
+	immediate = {
+		set_character_flag = demanded_king_title
+
+		# The liege has a spare king title
+		liege = {
+			random_demesne_title = {
+				limit = {
+					real_tier = KING
+					is_titular = no
+					can_be_given_away = yes
+
+					# which does not have his capital
+					PREV = {
+						capital_scope = {
+							kingdom = { NOT = { title = PREVPREVPREV } }
+						}
+					}
+
+					# but has the duke's capital
+					ROOT = {
+						capital_scope = {
+							kingdom = { title = PREVPREVPREV }
+						}
+
+						NOT = {
+							any_heir_title = { title = PREVPREV }
+						}
+					}
+
+					# and has low crown authority
+					OR = {
+						has_law = crown_authority_0
+						has_law = crown_authority_1
+					}
+				}
+
+				save_event_target_as = petitioned_title
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTA_Plus_130 # Make the demand
+
+		liege = {
+			show_scope_change = no
+
+			log = "[Root.GetBestName] has demanded that [This.GetBestName] surrender [petitioned_title.GetName], as [This.GetSheHe] has too many."
+			set_character_flag = king_title_demanded
+
+			character_event = {
+				id = Plus.131
+				tooltip = demand_kingdom_title
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB_Plus_130 # No, leave it be
+
+		random = {
+			chance = 30
+			add_trait_fully_content_effect = yes
+		}
+
+		ai_chance = { factor = 0 }
+	}
+}
+
+# liege receives the demand for a king title
+character_event = {
+	id = Plus.131
+	desc = EVTDESC_Plus_131
+	picture = GFX_evt_emissary
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_child = {
+			limit = {
+				is_alive = yes
+				is_adult = yes
+				same_realm = ROOT
+
+				trigger_if = {
+					limit = { is_female = no }
+
+					event_target:petitioned_title = {
+						NOR = {
+							has_law = enatic_cognatic_succession
+							has_law = enatic_succession
+						}
+					}
+				}
+				trigger_else = {
+					event_target:petitioned_title = {
+						NOR = {
+							has_law = cognatic_succession
+							has_law = agnatic_succession
+						}
+					}
+				}
+
+				NOR = {
+					real_tier = KING
+					character = FROM
+					is_primary_heir = ROOT
+				}
+			}
+
+			save_event_target_as = child_recipient
+		}
+
+		event_target:petitioned_title = {
+			if = {
+				limit = {
+					any_claimant = {
+						has_strong_claim = PREV
+						same_realm = ROOT
+						is_adult = yes
+						lower_real_tier_than = KING
+
+						NOR = {
+							is_child_of = ROOT
+							character = FROM
+							is_primary_heir = ROOT
+						}
+					}
+				}
+
+				random_realm_character = { # TODO: Replace with 'random_claimant' if Paradox come to their senses
+					limit = {
+						has_strong_claim = PREV
+						same_realm = ROOT
+						is_adult = yes
+						lower_real_tier_than = KING
+
+						NOR = {
+							is_child_of = ROOT
+							character = FROM
+							is_primary_heir = ROOT
+						}
+					}
+
+					save_event_target_as = claimant_recipient
+				}
+			}
+			else = {
+				random_pretender = {
+					limit = {
+						same_realm = ROOT
+						is_adult = yes
+						lower_real_tier_than = KING
+
+						NOR = {
+							is_child_of = ROOT
+							character = FROM
+							is_primary_heir = ROOT
+						}
+					}
+
+					save_event_target_as = pretender_recipient
+				}
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTA_Plus_131 # Give it to him
+
+		reverse_opinion = {
+			name = opinion_granted_kingdom
+			who = FROM
+			years = 200
+		}
+
+		prestige = -200
+
+		event_target:petitioned_title = {
+			show_scope_change = no
+
+			log = "[Root.GetBestName] has agreed to surrender [This.GetFullName] to [From.GetBestName]."
+			grant_title = FROM
+
+			hidden_effect = {
+				remove_claim = ROOT
+				add_weak_pressed_claim = ROOT
+
+				if = {
+					limit = { ROOT = { real_tier = EMPEROR } }
+
+					FROM = {
+						set_defacto_liege = ROOT
+						pf_liege_change_effect = yes
+					}
+				}
+			}
+		}
+
+		pf_court_plus4_effect = yes
+		pf_glory_plus2_effect = yes
+
+		ai_chance = {
+			factor = 50
+
+			mult_modifier = {
+				factor = 0.75
+				opinion = { who = FROM value < -25 }
+			}
+
+			mult_modifier = {
+				factor = 0.75
+				opinion = { who = FROM value < -50 }
+			}
+
+			mult_modifier = {
+				factor = 0.75
+				opinion = { who = FROM value < -75 }
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				opinion = { who = FROM value >= 25 }
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				opinion = { who = FROM value >= 50 }
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				dynasty = FROM
+			}
+
+			mult_modifier = {
+				factor = 0.75
+				NOT = { culture = FROM }
+			}
+
+			mult_modifier = {
+				factor = 0.5
+				NOT = { culture_group = FROM }
+			}
+
+			mult_modifier = {
+				factor = 2
+				relative_power = { who = FROM power < 1.0 }
+			}
+
+			mult_modifier = {
+				factor = 1.5
+				relative_power = { who = FROM power < 0.5 }
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB_Plus_131 # Give it to one of my children instead
+
+		trigger = {
+			trigger_if = {
+				limit = { prisoner = yes }
+				host = { NOT = { character = FROM } }
+			}
+
+			event_target:child_recipient = { always = yes }
+		}
+
+		prestige = -100
+
+		hidden_effect = {
+			FROM = {
+				letter_event = {
+					id = Plus.133
+					days = 3
+				}
+			}
+		}
+
+		event_target:child_recipient = {
+			show_scope_change = no
+
+			hidden_effect = {
+				reverse_opinion = {
+					name = jealous
+					who = FROM
+					years = 20
+				}
+			}
+
+			opinion = {
+				name = opinion_granted_kingdom
+				who = ROOT
+				years = 200
+			}
+		}
+
+		event_target:petitioned_title = {
+			show_scope_change = no
+
+			hidden_effect = {
+				if = {
+					limit = { NOT = { claimed_by = FROM } }
+					add_claim = FROM
+				}
+			}
+
+			log = "[Root.GetBestName] has granted [This.GetFullName] to [PrevPrev.GetBestName] instead."
+			grant_title = event_target:child_recipient
+
+			hidden_effect = {
+				remove_claim = ROOT
+				add_weak_pressed_claim = ROOT
+			}
+		}
+
+		if = {
+			limit = { ROOT = { real_tier = EMPEROR } }
+			set_defacto_liege = ROOT
+			pf_liege_change_effect = yes
+		}
+
+		pf_court_plus2_effect = yes
+		pf_glory_plus2_effect = yes
+
+		ai_chance = { factor = 200 }
+	}
+
+	option = {
+		name = EVTOPTC_Plus_131 # Give it to someone in line for the title
+
+		trigger = {
+			event_target:pretender_recipient = { always = yes }
+
+			trigger_if = {
+				limit = { prisoner = yes }
+				host = { NOT = { character = FROM } }
+			}
+		}
+
+		prestige = -200
+
+		hidden_effect = {
+			FROM = {
+				letter_event = {
+					id = Plus.133
+					days = 3
+				}
+			}
+
+			opinion = {
+				name = jealous
+				who = event_target:pretender_recipient
+				years = 20
+			}
+		}
+
+		reverse_opinion = {
+			name = opinion_granted_kingdom
+			who = event_target:pretender_recipient
+			years = 200
+		}
+
+		event_target:petitioned_title = {
+			show_scope_change = no
+
+			hidden_effect = {
+				if = {
+					limit = { NOT = { claimed_by = FROM } }
+					add_claim = FROM
+				}
+			}
+
+			log = "[Root.GetBestName] has granted [This.GetFullName] to [PrevPrev.GetBestName] instead."
+			grant_title = event_target:pretender_recipient
+
+			hidden_effect = {
+				remove_claim = ROOT
+				add_weak_pressed_claim = ROOT
+			}
+		}
+
+		if = {
+			limit = { ROOT = { real_tier = EMPEROR } }
+
+			set_defacto_liege = ROOT
+			pf_liege_change_effect = yes
+		}
+
+		pf_court_plus2_effect = yes
+		pf_glory_plus2_effect = yes
+
+		ai_chance = { factor = 50 }
+	}
+
+	option = {
+		name = EVTOPTD_Plus_131 # Give it to a claimant
+
+		trigger = {
+			event_target:claimant_recipient = { always = yes }
+
+			trigger_if = {
+				limit = { prisoner = yes }
+				host = { NOT = { character = FROM } }
+			}
+		}
+
+		prestige = -200
+
+		hidden_effect = {
+			FROM = {
+				letter_event = {
+					id = Plus.133
+					days = 3
+				}
+			}
+
+			opinion = {
+				name = jealous
+				who = event_target:claimant_recipient
+				years = 20
+			}
+		}
+
+		reverse_opinion = {
+			name = opinion_granted_kingdom
+			who = event_target:claimant_recipient
+			years = 200
+		}
+
+		event_target:petitioned_title = {
+			show_scope_change = no
+
+			hidden_effect = {
+				if = {
+					limit = { NOT = { claimed_by = FROM } }
+					add_claim = FROM
+				}
+			}
+
+			log = "[Root.GetBestName] has granted [Prev.GetFullName] to [This.GetBestName] instead."
+			grant_title = event_target:claimant_recipient
+
+			hidden_effect = {
+				remove_claim = ROOT
+				add_weak_pressed_claim = ROOT
+			}
+		}
+
+		pf_court_plus2_effect = yes
+		pf_glory_plus2_effect = yes
+
+		ai_chance = { factor = 100 }
+	}
+
+	option = {
+		name = EVTOPTE_Plus_131 # Never! The title is mine!
+
+		trigger = {
+			is_incapable = no
+
+			trigger_if = {
+				limit = { prisoner = yes }
+				host = { NOT = { character = FROM } }
+			}
+		}
+
+		log = "[Root.GetBestName] has refused the demand from [From.GetBestName] for a kingdom."
+
+		FROM = {
+			show_scope_change = no
+
+			letter_event = {
+				id = Plus.132
+				days = 3
+				tooltip = refuse_kingdom_title
+			}
+		}
+
+		pf_court_minus2_effect = yes
+		pf_glory_minus2_effect = yes
+
+		ai_chance = {
+			factor = 100
+
+			trigger = { has_regent = no }
+
+			mult_modifier = {
+				factor = 4
+				real_tier = KING
+			}
+
+			mult_modifier = {
+				factor = 0.5
+				num_of_king_titles >= 4
+			}
+
+			mult_modifier = {
+				factor = 0.5
+				num_of_king_titles >= 5
+			}
+
+			mult_modifier = {
+				factor = 10
+				trait = ambitious
+			}
+
+			mult_modifier = {
+				factor = 5
+				trait = greedy
+			}
+
+			mult_modifier = {
+				factor = 3
+				trait = proud
+			}
+
+			mult_modifier = {
+				factor = 0.5
+				trait = content
+			}
+
+			mult_modifier = {
+				factor = 0.5
+				trait = humble
+			}
+
+			mult_modifier = {
+				factor = 0.5
+				trait = charitable
+			}
+
+			mult_modifier = {
+				factor = 0.5
+				trait = craven
+			}
+		}
+	}
+}
+
+# liege has refused to give up the title at all
+letter_event = {
+	id = Plus.132
+	desc = EVTDESC_Plus_132
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_Plus_132
+
+		opinion = {
+			name = opinion_denied_title
+			who = FROM
+			years = 20
+		}
+
+		add_pressed_claim = event_target:petitioned_title
+
+		FROM = {
+			show_scope_change = no
+
+			any_vassal = {
+				show_scope_change = no
+
+				limit = {
+					likes_better_than = {
+						who = ROOT
+						than = FROM
+					}
+
+					has_regent = no
+
+					NOR = {
+						character = ROOT
+						is_primary_heir = FROM
+					}
+				}
+
+				opinion = {
+					name = refused_to_give_up_title
+					who = FROM
+					years = 5
+				}
+
+				opinion = {
+					name = sympathetic_to_cause
+					who = ROOT
+					years = 5
+				}
+			}
+		}
+	}
+}
+
+# liege gave the title to someone else
+letter_event = {
+	id = Plus.133
+	desc = EVTDESC_Plus_133
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_Plus_133
+
+		opinion = {
+			name = opinion_denied_title
+			who = FROM
+			years = 5
+		}
+	}
+}
+
+#######################################
+# TANIST/FEUDAL ELECTIVE CLAIMS
+#######################################
+
+# Ruler with Tanist succession dies without heir being a child
+character_event = {
+	id = Plus.136
+
+	is_triggered_only = yes # on_death
+	hide_window = yes
+
+	only_rulers = yes
+
+	trigger = {
+		num_of_children >= 1
+
+		any_demesne_title = {
+			has_law = succ_tanistry
+			current_heir = { NOT = { is_child_of = ROOT } }
+		}
+	}
+
+	immediate = {
+		any_demesne_title = {
+			limit = {
+				has_law = succ_tanistry
+				current_heir = { NOT = { is_child_of = ROOT } }
+			}
+
+			save_event_target_as = rightful_tanist_title
+
+			if = {
+				limit = { has_law = true_cognatic_succession }
+
+				ROOT = {
+					random_child = {
+						limit = {
+							has_inheritance_blocker = no
+
+							NOT = {
+								any_sibling = {
+									has_inheritance_blocker = no
+									is_older_than = PREV
+								}
+							}
+						}
+
+						character_event = {
+							id = Plus.137
+							days = 3
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						has_law = agnatic_succession
+						has_law = cognatic_succession
+					}
+				}
+
+				ROOT = {
+					random_child = {
+						limit = {
+							is_female = no
+							has_inheritance_blocker = no
+
+							NOT = {
+								any_sibling = {
+									is_female = no
+									has_inheritance_blocker = no
+									is_older_than = PREV
+								}
+							}
+						}
+
+						character_event = {
+							id = Plus.137
+							days = 3
+						}
+					}
+				}
+			}
+			else = {
+				ROOT = {
+					random_child = {
+						limit = {
+							is_female = yes
+							has_inheritance_blocker = no
+
+							NOT = {
+								any_sibling = {
+									is_female = yes
+									has_inheritance_blocker = no
+									is_older_than = PREV
+								}
+							}
+						}
+
+						character_event = {
+							id = Plus.137
+							days = 3
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Child gets a strong claim to Tanist titles
+character_event = {
+	id = Plus.137
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		set_character_flag = justified_claimant
+		add_pressed_claim = event_target:rightful_tanist_title
+	}
+}
+
+# Ruler with Feudal Elective succession dies
+character_event = {
+	id = Plus.138
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	only_rulers = yes
+
+	trigger = {
+		any_demesne_title = {
+			OR = {
+				has_law = succ_feudal_elective
+				has_law = succ_byzantine_elective
+				has_law = succ_hre_elective
+			}
+		}
+	}
+
+	immediate = {
+		any_demesne_title = {
+			limit = {
+				OR = {
+					has_law = succ_feudal_elective
+					has_law = succ_byzantine_elective
+					has_law = succ_hre_elective
+				}
+
+				current_heir = { NOT = { is_child_of = ROOT } }
+			}
+
+			save_event_target_as = rightful_elective_title
+
+			if = {
+				limit = { has_law = true_cognatic_succession }
+
+				ROOT = {
+					random_child = {
+						limit = {
+							has_inheritance_blocker = no
+
+							NOT = {
+								any_sibling = {
+									has_inheritance_blocker = no
+									is_older_than = PREV
+								}
+							}
+						}
+
+						set_character_flag = justified_claimant
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						has_law = agnatic_succession
+						has_law = cognatic_succession
+					}
+				}
+
+				ROOT = {
+					random_child = {
+						limit = {
+							is_female = no
+							has_inheritance_blocker = no
+
+							NOT = {
+								any_sibling = {
+									is_female = no
+									has_inheritance_blocker = no
+									is_older_than = PREV
+								}
+							}
+						}
+
+						set_character_flag = justified_claimant
+					}
+				}
+			}
+			else = {
+				ROOT = {
+					random_child = {
+						limit = {
+							is_female = yes
+							has_inheritance_blocker = no
+
+							NOT = {
+								any_sibling = {
+									is_female = yes
+									has_inheritance_blocker = no
+									is_older_than = PREV
+								}
+							}
+						}
+
+						set_character_flag = justified_claimant
+					}
+				}
+			}
+		}
+
+		any_demesne_title = {
+			limit = {
+				OR = {
+					has_law = succ_feudal_elective
+					has_law = succ_byzantine_elective
+					has_law = succ_hre_elective
+				}
+			}
+
+			save_event_target_as = rightful_elective_title
+
+			any_pretender = {
+				character_event = { id = Plus.139 days = 3 }
+			}
+		}
+	}
+}
+
+# Pretenders get a weak non-inheritable claim to Feudal Elective titles
+character_event = {
+	id = Plus.139
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		set_character_flag = justified_claimant
+
+		if = {
+			limit = { NOT = { has_claim = event_target:rightful_elective_title }  }
+			add_weak_claim = event_target:rightful_elective_title
+		}
+	}
+}
+
+### Inherited kingdom is destroyed if no de jure land is controlled
+character_event = {
+	id = Plus.1750
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		FROM = {
+			real_tier = KING
+			is_titular = no
+			is_primary_type_title = no
+			is_landless_type_title = no
+		}
+
+		OR = {
+			lower_real_tier_than = EMPEROR
+		}
+
+		has_game_rule = {
+			name = de_jure_requirement
+			value = required
+		}
+	}
+
+	immediate = {
+		character_event = {
+			id = Plus.1751
+			days = 2
+		}
+	}
+}
+
+character_event = {
+	id = Plus.1751
+	desc = EVTDESC_Plus_1751
+	title = EVTNAME_Plus_1751
+	picture = GFX_evt_coronation
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+	major = yes
+
+	trigger = {
+		FROMFROM = {
+			holder = ROOT
+			is_contested = no
+
+			NOT = {
+				any_de_jure_vassal_title = {
+					real_tier = COUNT
+
+					holder_scope = {
+						OR = {
+							character = ROOT
+							is_vassal_or_below_of = ROOT
+						}
+					}
+				}
+			}
+		}
+
+		pf_war_flag_trigger = no
+		pf_war_trait_trigger = no
+	}
+
+	major_trigger = {
+		OR = {
+			is_close_relative = ROOT
+			has_claim = FROMFROM
+			same_realm = ROOT
+
+			FROMFROM = {
+				num_title_realm_provs = {
+					who = PREV
+					value >= 1
+				}
+
+				# any_de_jure_vassal_title = {
+				#	holder_scope = {
+				#		OR = {
+				#			character = PREVPREVPREV
+				#			is_vassal_or_below_of = PREVPREVPREV
+				#		}
+				#	}
+				# }
+			}
+
+			distance = {
+				who = ROOT
+				distance < 300
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTA_Plus_1751
+
+		trigger = { character = ROOT }
+
+		log = "The [FromFrom.GetFullName] has been destroyed after being inherited by [Root.GetTitledName], who owns no land in [FromFrom.GetName]."
+		destroy_landed_title = FROMFROM
+	}
+
+	option = {
+		name = OK
+
+		trigger = { NOT = { character = ROOT } }
+	}
+}

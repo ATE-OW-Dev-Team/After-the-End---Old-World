@@ -116,6 +116,92 @@ targetted_decisions = {
 			
 		}
 	}
+	abdicate_rule = {
+		filter = self
+		ai_target_filter = self
+		ai_check_interval = 12
+	    diplomacy_icon = GFX_abdicate_rule
+
+		only_rulers = yes
+
+		potential = {
+			is_not_unreformed_pagan_trigger = yes
+			has_regent = no
+			controls_religion = no
+			is_nomadic = no
+			NOT = { has_character_flag = considering_abdication }
+
+			player_heir = {
+				religion = ROOT
+				culture = ROOT
+				war = no
+				is_adult = yes
+				is_incapable = no
+
+				NOR = {
+					trait = lunatic
+					trait = possessed
+				}
+			}
+
+			age >= 50
+			ruled_years >= 10
+
+			trigger_if = {
+				limit = { health >= 3.1 }
+
+				OR = {
+					trait = depressed
+					trait = stressed
+					trait = infirm
+				}
+			}
+		}
+
+		allow = {
+			war = no
+
+			NOR = {
+				trait = ambitious
+				trait = proud
+				trait = lunatic
+				trait = possessed
+				trait = paranoid
+				trait = envious
+				trait = greedy
+			}
+
+			is_inaccessible_trigger = no
+		}
+
+		effect = {
+			set_character_flag = considering_abdication
+
+			character_event = {
+				id = Plus.120
+				tooltip = consider_abdication
+			}
+		}
+
+		ai_will_do = {
+			factor = 1
+
+			trigger = {
+				age >= 60
+				ruled_years >= 15
+
+				OR = {
+					trait = content
+					trait = humble
+				}
+
+				opinion = {
+					who = player_heir
+					value >= 25
+				}
+			}
+		}
+	}
 
 	dissolve_mercenary_company_feudal = {
 		only_playable = yes
