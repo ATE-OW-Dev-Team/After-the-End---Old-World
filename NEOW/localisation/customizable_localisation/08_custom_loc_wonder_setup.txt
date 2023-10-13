@@ -22,12 +22,30 @@ defined_text = {
 
 	use_first_valid = yes # (Defaults to no)
 
+	text = { # Unique name (Constantinople)
+		trigger = {
+			has_wonder = wonder_city_of_wonders_byz
+		}
+		localisation_key = wonder_city_of_wonders_byz
+	}
+	text = { # Unique name (Roma)
+		trigger = {
+			has_wonder = wonder_city_of_wonders_roma
+		}
+		localisation_key = wonder_city_of_wonders_roma
+	}
+	text = { # Unique name (Jerusalem)
+		trigger = {
+			has_wonder = wonder_city_of_wonders_jeru
+		}
+		localisation_key = wonder_city_of_wonders_jeru
+	}
+
 	######### Very rare...
 	text = {
 		trigger = {
 			wonder_stage = 3
-			NOR = {
-				has_wonder_flag = no_name_change
+			NOT = {
 				has_wonder = wonder_statue_ruler
 			}
 			OR = {
@@ -68,17 +86,12 @@ defined_text = {
 	text = {
 		trigger = {
 			wonder_stage = 3
-			OR={
 			NOT = {
 				has_game_rule = {
 					name = supernatural_events
 					value = off
 				}
 				has_wonder = wonder_statue_ruler
-			}
-			NOT ={
-				has_wonder_flag = no_name_change
-			}
 			}
 			OR = {
 				has_wonder_flag = wonder_name_5			
@@ -90,9 +103,8 @@ defined_text = {
 	text = {
 		trigger = {
 			wonder_stage = 3
-			NOR = {
+			NOT = {
 				has_wonder = wonder_statue_ruler
-				has_wonder_flag = no_name_change
 			}
 			OR = {
 				has_wonder_flag = wonder_name_2
@@ -106,14 +118,9 @@ defined_text = {
 	}
 	text = {
 		trigger = {
-			OR = {
 			NOT = {
 				wonder_stage = 2
 				has_wonder = wonder_statue_ruler
-			}
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 			}
 			OR = {
 				has_wonder_flag = wonder_name_1
@@ -134,9 +141,6 @@ defined_text = { #special wonders
 
 	text = {
 		trigger = {
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 			has_wonder_flag = holy_building
 			any_upgrade_on_wonder = {
 				count = 2
@@ -147,9 +151,6 @@ defined_text = { #special wonders
 	}
 	text = {
 		trigger = {
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 			any_upgrade_on_wonder = {
 				count = 3
 				has_wonder_upgrade_flag = decorative
@@ -339,6 +340,7 @@ defined_text = {
 				has_wonder = wonder_mosque
 				has_wonder = wonder_synagogue
 				has_wonder = wonder_temple_pagan
+				has_wonder = wonder_temple_hellenic_pagan
 				has_wonder = wonder_temple_buddhist
 				has_wonder = wonder_temple_hindu			
 			}
@@ -555,6 +557,7 @@ defined_text = {
 				has_wonder = wonder_mosque
 				has_wonder = wonder_synagogue
 				has_wonder = wonder_temple_pagan
+				has_wonder = wonder_temple_hellenic_pagan
 				has_wonder = wonder_temple_buddhist
 				has_wonder = wonder_temple_hindu			
 			}
@@ -622,6 +625,7 @@ defined_text = {
 		trigger = {
 			OR = {
 				has_wonder = wonder_temple_pagan
+				has_wonder = wonder_temple_hellenic_pagan
 				has_wonder = wonder_temple_hindu
 				has_wonder = wonder_temple_buddhist
 			}
@@ -770,6 +774,56 @@ defined_text = {
 		trigger = { has_wonder = wonder_cathedral_notre_dame }
 		localisation_key = String_Cathedral
 	}
+	text = {
+		trigger = { has_wonder = wonder_cathedral_hagia_sophia }
+		localisation_key = String_Cathedral
+	}
+	text = {
+		trigger = { 
+			uses_dynamic_name_cow_trigger = yes
+			wonder_stage = 1
+			NOT = { wonder_stage = 3 }
+		}
+		localisation_key = String_cow_City1
+	}
+	text = {
+		trigger = { 
+			uses_dynamic_name_cow_trigger = yes
+			wonder_stage = 3
+			NOT = { wonder_stage = 6 }
+		}
+		localisation_key = String_cow_City2
+	}
+	text = {
+		trigger = { 
+			uses_dynamic_name_cow_trigger = yes
+			wonder_stage = 6
+			NOT = { wonder_stage = 9 }
+		}
+		localisation_key = String_cow_City3
+	}
+	text = {
+		trigger = { 
+			uses_dynamic_name_cow_trigger = yes
+			OR = {
+				wonder_stage = 9
+				wonder_stage = 10
+			}
+		}
+		localisation_key = String_cow_City4
+	}
+	text = {
+		trigger = { has_wonder = wonder_city_of_wonders_byz }
+		localisation_key = String_cow_byz_Basileuousa
+	}
+	text = {
+		trigger = { has_wonder = wonder_city_of_wonders_roma }
+		localisation_key = String_cow_roma_Eternal
+	}
+	text = {
+		trigger = { has_wonder = wonder_city_of_wonders_jeru }
+		localisation_key = String_cow_jeru_Holy
+	}
 	
 	#In case it cannot find anything...
     fallback_text = {
@@ -799,6 +853,7 @@ defined_text = {
 		trigger = {
 			OR = {
 				has_wonder = wonder_temple_pagan
+				has_wonder = wonder_temple_hellenic_pagan
 				has_wonder = wonder_temple_hindu
 				has_wonder = wonder_temple_buddhist
 				has_wonder = wonder_temple_hindu_konark
@@ -923,6 +978,16 @@ defined_text = {
 		trigger = { has_wonder = wonder_cathedral_notre_dame }
 		localisation_key = String_cathedral
 	}
+	text = {
+		trigger = { has_wonder = wonder_cathedral_hagia_sophia }
+		localisation_key = String_cathedral
+	}
+	text = {
+		trigger = {
+			has_city_of_wonders_trigger = yes
+		}
+		localisation_key = String_cow_city
+	}
 	
 	#In case it cannot find anything...
     fallback_text = {
@@ -1011,12 +1076,48 @@ defined_text = {
 	name = GetWonderDesc
 	#Dependent on event-targets: upgrade_00, upgrade_01 and upgrade_02
 	text = {
+		trigger = { #For City of Wonders (Constantinople)
+			has_wonder = wonder_city_of_wonders_byz
+		}
+		localisation_key = wonder_city_of_wonders_byz_desc
+	}
+	text = {
+		trigger = { #For City of Wonders (Roma)
+			has_wonder = wonder_city_of_wonders_roma
+		}
+		localisation_key = wonder_city_of_wonders_roma_desc
+	}
+	text = {
+		trigger = { #For City of Wonders (Alexandria)
+			has_wonder = wonder_city_of_wonders_alex
+		}
+		localisation_key = wonder_city_of_wonders_alex_desc
+	}
+	text = {
+		trigger = { #For City of Wonders (Antioch)
+			has_wonder = wonder_city_of_wonders_anti
+		}
+		localisation_key = wonder_city_of_wonders_anti_desc
+	}
+	text = {
+		trigger = { #For City of Wonders (Jerusalem)
+			has_wonder = wonder_city_of_wonders_jeru
+		}
+		localisation_key = wonder_city_of_wonders_jeru_desc
+	}
+	text = {
+		trigger = { #For City of Wonders (Babylon/Baghdad)
+			has_wonder = wonder_city_of_wonders_baby
+		}
+		localisation_key = wonder_city_of_wonders_baby_desc
+	}
+	text = {
 		trigger = { #for baby wonders (adds upgrade mention)
 			has_wonder_upgrade = yes
 			NOT = { num_of_wonder_upgrades = 3 }
 			NOT = { wonder_age = 15 }
 			NOT = {
-				has_wonder_flag = no_name_change
+				has_city_of_wonders_trigger = yes
 			}
 		}
 		localisation_key = String_Wonder_Desc00
@@ -1025,7 +1126,7 @@ defined_text = {
 		trigger = {
 			has_wonder_upgrade = no
 			NOT = {
-				has_wonder_flag = no_name_change
+				has_city_of_wonders_trigger = yes
 			}
 		}
 		localisation_key = String_Wonder_Desc01
@@ -1034,17 +1135,17 @@ defined_text = {
 		trigger = { 
 			num_of_wonder_upgrades = 2 
 			NOT = {
-				has_wonder_flag = no_name_change
+				has_city_of_wonders_trigger = yes
 			}
 		}
 		localisation_key = String_Wonder_Desc02
 	}
 	text = { #Variant 2: mentions an upgrade
 		trigger = { 
-			num_of_wonder_upgrades = 5
+			num_of_wonder_upgrades = 5 
 			NOT = {
-				has_wonder_flag = no_name_change
-			} 
+				has_city_of_wonders_trigger = yes
+			}
 		}
 		localisation_key = String_Wonder_Desc03
 	}
@@ -1054,19 +1155,13 @@ defined_text = {
 	name = GetWonderAgeDesc
 
 	text = {
-		trigger = { NOT = { wonder_age = 1 }
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { NOT = { wonder_age = 1 } }
 		localisation_key = String_months
 	}
 	text = {
 		trigger = {
 			wonder_age = 1
 			NOT = { wonder_age = 20 }
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_years
 	}
@@ -1074,9 +1169,6 @@ defined_text = {
 		trigger = {
 			wonder_age = 20
 			NOT = { wonder_age = 100 }
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_decades
 	}
@@ -1084,9 +1176,6 @@ defined_text = {
 		trigger = {
 			wonder_age = 80
 			NOT = { wonder_age = 100 }
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_almost_a_century
 	}
@@ -1094,9 +1183,6 @@ defined_text = {
 		trigger = {
 			wonder_age = 100
 			NOT = { wonder_age = 150 }
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_ages
 	}
@@ -1104,45 +1190,30 @@ defined_text = {
 		trigger = {
 			wonder_age = 100
 			NOT = { wonder_age = 150 }
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_more_than_a_hundred_years
 	}
 	text = {
 		trigger = {
 			wonder_age = 250
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_hundreds_of_years
 	}
 	text = {
 		trigger = {
 			wonder_age = 250
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_as_long_as_anyone_can_remember
 	}
 	text = {
 		trigger = {
 			wonder_age = 250
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_centuries
 	}
 	text = {
 		trigger = {
 			wonder_age = 350
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_time_immemorial
 	}
@@ -1160,24 +1231,15 @@ defined_text = {
 	# All in past tense! Eg. <the wonder has> "inspired scholars and hardworking students" <for years>
 
 	text = {
-		trigger = { has_wonder_flag = inspires_piety 
-			NOT = {
-				has_wonder_flag = no_name_change
-			}}
+		trigger = { has_wonder_flag = inspires_piety }
 		localisation_key = String_inspired_pious
 	}
 	text = {
-		trigger = { has_wonder_flag = inspires_piety
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { has_wonder_flag = inspires_piety }
 		localisation_key = String_safe_haven_for_lost_souls
 	}
 	text = {
-		trigger = { has_wonder_flag = inspires_piety
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { has_wonder_flag = inspires_piety }
 		localisation_key = String_a_place_of_comfort_for_believers
 	}
 	text = {
@@ -1185,18 +1247,13 @@ defined_text = {
 			OR = {
 				has_wonder = wonder_cathedral
 				has_wonder = wonder_temple_pagan
-			}
-			NOT = {
-				has_wonder_flag = no_name_change
+				has_wonder = wonder_temple_hellenic_pagan
 			}
 		}
 		localisation_key = String_brought_people_together
 	}
 	text = {
-		trigger = { has_wonder = wonder_fortress 
-			NOT = {
-				has_wonder_flag = no_name_change
-			}}
+		trigger = { has_wonder = wonder_fortress }
 		localisation_key = String_lent_its_protection
 	}
 	text = {
@@ -1205,137 +1262,83 @@ defined_text = {
 				has_wonder = wonder_fortress
 				has_wonder = wonder_wall
 			}
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_shielded_its_people
 	}
 	text = {
-		trigger = { has_wonder = wonder_underground_city
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { has_wonder = wonder_underground_city }
 		localisation_key = String_been_impressive_curiosity
 	}
 	text = {
-		trigger = { has_wonder = wonder_underground_city
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { has_wonder = wonder_underground_city }
 		localisation_key = String_inspired_wonder
 	}
 	text = {
-		trigger = { has_wonder = wonder_harbor
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { has_wonder = wonder_harbor }
 		localisation_key = String_been_bringing_traffic
 	}
 	text = {
-		trigger = { has_wonder = wonder_lighthouse
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { has_wonder = wonder_lighthouse }
 		localisation_key = String_been_aiding_maritime_matters
 	}
 	text = {
-		trigger = { has_wonder = wonder_lighthouse
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { has_wonder = wonder_lighthouse }
 		localisation_key = String_been_guiding_ships_to_port
 	}
 	text = {
-		trigger = { has_wonder = wonder_amphitheater 
-			NOT = {
-				has_wonder_flag = no_name_change
-			}}
+		trigger = { has_wonder = wonder_amphitheater }
 		localisation_key = String_tourist_attraction
 	}
 	text = {
 		trigger = {
 			has_wonder = wonder_garden
 			wonder_stage = 2
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_center_of_leisure
 	}
 	text = {
-		trigger = { has_wonder = wonder_mausoleum
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { has_wonder = wonder_mausoleum }
 		localisation_key = String_source_of_veneration
 	}
 	text = {
-		trigger = { has_wonder = wonder_pyramid
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { has_wonder = wonder_pyramid }
 		localisation_key = String_impressive_feat_of_architecture
 	}
 	text = {
-		trigger = { has_wonder = wonder_pagan_stones
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { has_wonder = wonder_pagan_stones }
 		localisation_key = String_inspired_imagination
 	}
 	text = {
 		trigger = {
 			has_wonder_flag = inspires_relaxing
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_eased_the_burden
 	}
 	text = {
 		trigger = {
 			has_wonder_flag = inspires_contentedness
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_improved_lives
 	}
 	text = {
-		trigger = { has_wonder = wonder_palace
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { has_wonder = wonder_palace }
 		localisation_key = String_hot_spot_for_gossip
 	}
 	text = {
-		trigger = { has_wonder = wonder_palace
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { has_wonder = wonder_palace }
 		localisation_key = String_house_of_envy
 	}
 	text = {
-		trigger = { has_wonder_flag = inspires_greatness
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { has_wonder_flag = inspires_greatness }
 		localisation_key = String_encouraged_greatness_1
 	}
 	text = {
-		trigger = { has_wonder_flag = inspires_greatness
-			NOT = {
-				has_wonder_flag = no_name_change
-			} }
+		trigger = { has_wonder_flag = inspires_greatness }
 		localisation_key = String_encouraged_greatness_2
 	}
 	text = {
 		trigger = {
 			has_wonder_flag = inspires_learning
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_inspired_students
 	}
@@ -1347,9 +1350,6 @@ defined_text = {
 					has_wonder_upgrade_flag = inspires_learning
 					wonder_upgrade_age = 100
 				}
-			}
-			NOT = {
-				has_wonder_flag = no_name_change
 			}
 		}
 		localisation_key = String_encouraged_learning
@@ -1367,9 +1367,6 @@ defined_text = {
 		trigger = {
 			has_wonder_upgrade_flag = scary
 			has_wonder_upgrade_flag = is_singular
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_upgrade_sends_chills
 	}
@@ -1377,9 +1374,6 @@ defined_text = {
 		trigger = {
 			has_wonder_upgrade_flag = scary
 			has_wonder_upgrade_flag = is_plural
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_upgrade_send_chills
 	}
@@ -1387,9 +1381,6 @@ defined_text = {
 		trigger = {
 			has_wonder_upgrade_flag = defensive
 			has_wonder_upgrade_flag = is_singular
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_upgrade_promises_safety
 	}
@@ -1397,9 +1388,6 @@ defined_text = {
 		trigger = {
 			has_wonder_upgrade_flag = defensive
 			has_wonder_upgrade_flag = is_plural
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_upgrade_promises_safety
 	}
@@ -1407,9 +1395,6 @@ defined_text = {
 		trigger = {
 			has_wonder_upgrade_flag = decorative
 			has_wonder_upgrade_flag = is_singular
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_upgrade_is_a_work_of_art
 	}
@@ -1417,9 +1402,6 @@ defined_text = {
 		trigger = {
 			has_wonder_upgrade_flag = decorative
 			has_wonder_upgrade_flag = is_plural
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_upgrade_are_beautifully_made
 	}
@@ -1429,45 +1411,30 @@ defined_text = {
 				has_wonder_upgrade_flag = statues
 				has_wonder_upgrade = upgrade_gargoyles
 			}
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_statues_keep_demons_away
 	}
 	text = {
 		trigger = {
 			has_wonder_upgrade = upgrade_dome
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_dome_is_second_sky
 	}
 	text = {
 		trigger = {
 			has_wonder_upgrade = upgrade_herb_garden
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_said_to_be_the_envy_of_gardeners
 	}
 	text = {
 		trigger = {
 			has_wonder_upgrade = upgrade_pet_graveyard
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_brings_comfort_to_pet_owners
 	}
 	text = {
 		trigger = {
 			has_wonder_upgrade = upgrade_watch_tower
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_lends_moral_support
 	}
@@ -1479,18 +1446,12 @@ defined_text = {
 				has_wonder_upgrade = upgrade_moat_water
 				has_wonder_upgrade = upgrade_moat_water
 			}
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_keeps_people_on_their_toes
 	}
 	text = {
 		trigger = {
 			has_wonder_upgrade = upgrade_roads
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_improves_accessibility
 	}
@@ -1498,45 +1459,30 @@ defined_text = {
 		trigger = {
 			has_wonder_upgrade_flag = defensive
 			NOT = { has_wonder_upgrade_flag = decorative }
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_contribute_to_heightened_security
 	}
 	text = {
 		trigger = {
 			has_wonder_upgrade_flag = heating
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_bring_luxury_during_colder_seasons
 	}
 	text = {
 		trigger = {
 			has_wonder_upgrade_flag = entertainment
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_acts_as_entertainment
 	}
 	text = {
 		trigger = {
 			has_wonder_upgrade_flag = towering
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_can_be_seen_from_far_away
 	}
 	text = {
 		trigger = {
 			has_wonder_upgrade = upgrade_torture_chamber
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_signals_expected_obedience
 	}
@@ -1544,9 +1490,6 @@ defined_text = {
 		trigger = {
 			has_wonder_upgrade_flag = produces_alcohol
 			has_wonder_upgrade_flag = is_singular
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_rumored_to_be_the_best
 	}
@@ -1554,36 +1497,24 @@ defined_text = {
 		trigger = {
 			has_wonder_upgrade = upgrade_road_tolls
 			has_wonder_upgrade_flag = is_plural
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_bring_in_cash
 	}
 	text = {
 		trigger = {
 			has_wonder_upgrade_flag = air_bnb
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_offers_relaxation
 	}
 	text = {
 		trigger = {
 			has_wonder_upgrade_flag = contemplative
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_inspires_awe
 	}
 	text = {
 		trigger = {
 			has_wonder_upgrade_flag = body_stash
-			NOT = {
-				has_wonder_flag = no_name_change
-			}
 		}
 		localisation_key = String_remains_a_rumor
 	}
