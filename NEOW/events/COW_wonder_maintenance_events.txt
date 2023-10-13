@@ -1,0 +1,600 @@
+###########################################
+#                                         #
+# City of Wonders Maintenance Events      #             
+#                                         #
+# ID COW.10000-COW.30000                  #
+#                                         #
+###########################################
+
+namespace = COW
+
+# Wonder desc update event (fired from: on_wonder_stage_finish)
+# ROOT = owner
+# FROM = wonder
+# FROMFROM = province (location of wonder)
+character_event = {
+    id = COW.10000
+    is_triggered_only = yes
+    hide_window = yes
+    trigger = {
+		OR = {
+			has_wonder = wonder_city_of_wonders
+			has_wonder = wonder_city_of_wonders_delh
+			has_wonder = wonder_city_of_wonders_rep
+		}
+    }
+
+    immediate = {
+    	FROM = { save_event_target_as = target_wonder }
+    	FROMFROM = { save_event_target_as = target_province }
+		FROM = { 
+			original_wonder_owner = { 
+				save_event_target_as = wonder_owner_original 
+			} 
+		}
+		
+    	log = "[From.GetName] is the wonder, pre-saved as event-target"
+    	
+		wonder_stage_completion_sound_effect = yes
+
+        event_target:target_wonder = {
+            log = "[target_wonder.GetName] is the wonder"
+			
+			# City of Wonders
+            if = {
+                limit = {
+                    wonder_stage = 1
+					NOT = { wonder_stage = 3 }
+					OR = {
+						has_wonder = wonder_city_of_wonders
+						has_wonder = wonder_city_of_wonders_delh
+					}
+				}
+                set_wonder_flag = wonder_cow_desc_1
+                set_description = wonder_city_of_wonders1_desc #1st!
+            }
+            if = {
+                limit = {
+                    wonder_stage = 3
+					NOT = { wonder_stage = 6 }
+					OR = {
+						has_wonder = wonder_city_of_wonders
+						has_wonder = wonder_city_of_wonders_delh
+					}
+					has_wonder_flag = wonder_cow_desc_1
+				}
+                clr_wonder_flag = wonder_cow_desc_1
+				set_wonder_flag = wonder_cow_desc_2
+                set_description = wonder_city_of_wonders2_desc #2nd!
+            }
+            if = {
+                limit = {
+                    wonder_stage = 6
+					NOT = { wonder_stage = 9 }
+					OR = {
+						has_wonder = wonder_city_of_wonders
+						has_wonder = wonder_city_of_wonders_delh
+					}
+					has_wonder_flag = wonder_cow_desc_2
+				}
+                clr_wonder_flag = wonder_cow_desc_2
+				set_wonder_flag = wonder_cow_desc_3
+                set_description = wonder_city_of_wonders3_desc #3rd!
+            }
+            if = {
+                limit = {
+                    wonder_stage = 9
+					OR = {
+						has_wonder = wonder_city_of_wonders
+						has_wonder = wonder_city_of_wonders_delh
+					}
+					has_wonder_flag = wonder_cow_desc_3
+				}
+                clr_wonder_flag = wonder_cow_desc_3
+				set_wonder_flag = wonder_cow_desc_4
+                set_description = wonder_city_of_wonders4_desc #4th!
+            }
+            # City of Wonders (Republic)
+			if = {
+                limit = {
+                    wonder_stage = 1
+					NOT = { wonder_stage = 3 }
+					has_wonder = wonder_city_of_wonders_rep
+				}
+                set_wonder_flag = wonder_cow_rep_desc_1
+                set_description = wonder_city_of_wonders1_rep_desc #1st!
+            }
+            if = {
+                limit = {
+                    wonder_stage = 3
+					NOT = { wonder_stage = 6 }
+					has_wonder = wonder_city_of_wonders_rep
+					has_wonder_flag = wonder_cow_rep_desc_1
+				}
+                clr_wonder_flag = wonder_cow_rep_desc_1
+				set_wonder_flag = wonder_cow_rep_desc_2
+                set_description = wonder_city_of_wonders2_rep_desc #2nd!
+            }
+            if = {
+                limit = {
+                    wonder_stage = 6
+					NOT = { wonder_stage = 9 }
+					has_wonder = wonder_city_of_wonders_rep
+					has_wonder_flag = wonder_cow_rep_desc_2
+				}
+                clr_wonder_flag = wonder_cow_rep_desc_2
+				set_wonder_flag = wonder_cow_rep_desc_3
+                set_description = wonder_city_of_wonders3_rep_desc #3rd!
+            }
+            if = {
+                limit = {
+                    wonder_stage = 9
+					has_wonder = wonder_city_of_wonders_rep
+					has_wonder_flag = wonder_cow_rep_desc_3
+				}
+                clr_wonder_flag = wonder_cow_rep_desc_3
+				set_wonder_flag = wonder_cow_rep_desc_4
+                set_description = wonder_city_of_wonders4_rep_desc #4th!
+            }
+        }
+    }
+}
+
+# Wonder name update event (fired from: on_wonder_stage_finish)
+# ROOT = owner
+# FROM = wonder
+# FROMFROM = province (location of wonder)
+character_event = {
+    id = COW.10001
+    is_triggered_only = yes
+    hide_window = yes
+    trigger = {
+		uses_dynamic_name_cow_trigger = yes
+    }
+
+    immediate = {
+    	FROM = { save_event_target_as = target_wonder }
+    	FROMFROM = { save_event_target_as = target_province }
+		FROM = { 
+			original_wonder_owner = { 
+				save_event_target_as = wonder_owner_original 
+			} 
+		}
+
+    	log = "[From.GetName] is the wonder, pre-saved as event-target"
+    	
+		wonder_stage_completion_sound_effect = yes
+
+        event_target:target_wonder = {
+            log = "[target_wonder.GetName] is the wonder"
+			
+			# City of Wonders
+            if = {
+                limit = {
+                    wonder_stage = 1
+					NOT = { wonder_stage = 3 }
+					uses_dynamic_name_cow_trigger = yes
+					has_custom_name = no #only change the name if the player has not used the renaming button
+					NOR = { 
+						has_wonder_flag = wonder_cow_name_1 
+						has_wonder_flag = wonder_cow_name_2 
+						has_wonder_flag = wonder_cow_name_3 
+						has_wonder_flag = wonder_cow_name_4 
+					}
+				}
+                set_wonder_flag = wonder_cow_name_1
+                set_name = String_location_cow #1st!
+            }
+            if = {
+                limit = {
+                    wonder_stage = 3
+					NOT = { wonder_stage = 6 }
+					uses_dynamic_name_cow_trigger = yes
+					has_wonder_flag = wonder_cow_name_1
+					has_custom_name = no #only change the name if the player has not used the renaming button
+					NOR = { 
+						has_wonder_flag = wonder_cow_name_2 
+						has_wonder_flag = wonder_cow_name_3 
+						has_wonder_flag = wonder_cow_name_4 
+					}
+				}
+                clr_wonder_flag = wonder_cow_name_1
+				set_wonder_flag = wonder_cow_name_2
+                set_name = String_location_cow2 #2nd!
+            }
+            if = {
+                limit = {
+                    wonder_stage = 6
+					NOT = { wonder_stage = 9 }
+					uses_dynamic_name_cow_trigger = yes
+					has_wonder_flag = wonder_cow_name_2
+					has_custom_name = no #only change the name if the player has not used the renaming button
+					NOR = { 
+						has_wonder_flag = wonder_cow_name_1
+						has_wonder_flag = wonder_cow_name_3 
+						has_wonder_flag = wonder_cow_name_4 
+					}
+				}
+                clr_wonder_flag = wonder_cow_name_2
+				set_wonder_flag = wonder_cow_name_3
+                set_name = String_location_cow3 #3rd!
+            }
+            if = {
+                limit = {
+                    wonder_stage = 9
+					uses_dynamic_name_cow_trigger = yes
+					has_wonder_flag = wonder_cow_name_3
+					has_custom_name = no #only change the name if the player has not used the renaming button
+					NOR = { 
+						has_wonder_flag = wonder_cow_name_1 
+						has_wonder_flag = wonder_cow_name_2 
+						has_wonder_flag = wonder_cow_name_4 
+					}
+				}
+                clr_wonder_flag = wonder_cow_name_3
+				set_wonder_flag = wonder_cow_name_4
+                set_name = String_location_cow4 #4th!
+            }
+        }
+    }
+}
+
+# ROOT = owner
+# FROM = wonder
+# FROMFROM = province (location of wonder)
+province_event = { #Reclaim Land
+	id = COW.11705
+	title = COW_PROSPERITY_TITLE
+	desc = COW.11705.d
+	picture = "GFX_evt_culture_change"
+	border = GFX_event_normal_frame_economy
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = {
+			FROMFROM = { num_of_max_settlements = 7 }
+		}
+		FROMFROM = { has_city_of_wonders_trigger = yes }
+		has_dlc = "Reapers"
+	}
+	
+	option = {
+		name = COW.11705.a
+		
+		ai_chance = { 
+			factor = 95
+		}
+		
+		owner = {
+			scaled_wealth = -1.5
+		}
+		
+		FROMFROM = { add_holding_slot = 1 }
+	}
+	option = {
+		name = COW.11705.b
+		
+		ai_chance = { 
+			factor = 5
+		}
+		
+	}
+}
+
+#On_startup:Removes Antioch and Jerusalem if COW:Pentarchy is off.
+character_event = {
+	id = COW.23028
+	hide_window = yes
+	trigger = { 
+		has_game_rule = {
+			name = cow_pentarchy_rule
+			value = off
+		}
+		is_save_game = no
+		is_alternate_start = no
+		has_landed_title = k_papal_state
+	}
+	
+	is_triggered_only = yes
+
+	immediate = { 
+		764 = { # Antiocheia
+			if = {
+				limit = { has_wonder = wonder_city_of_wonders_anti }
+				destroy_wonder = wonder_city_of_wonders_anti
+			}
+		}
+		774 = { # Jerusalem
+			if = {
+				limit = { has_wonder = wonder_city_of_wonders_jeru }
+				destroy_wonder = wonder_city_of_wonders_jeru
+			}
+		}
+	}
+}
+
+#On_startup:Adds Babylon/Baghdad and Delhi if COW:Semi-Historical COWs is on.
+character_event = {
+	id = COW.23029
+	hide_window = yes
+	trigger = { 
+		has_game_rule = {
+			name = cow_semi_historical
+			value = on
+		}
+		NOT = {
+			has_game_rule = {
+				name = wonder_rule_historical
+				value = off
+			}
+		}
+		is_save_game = no
+		is_alternate_start = no
+		has_landed_title = k_papal_state
+	}
+	
+	is_triggered_only = yes
+
+	immediate = { 
+		693 = { # Baghdad
+			if = {
+				limit = { has_wonder = wonder_house_of_wisdom }
+				destroy_wonder = wonder_house_of_wisdom
+			}
+			if = {
+				limit = { 
+					AND = {
+						has_wonder = no
+						NOT = { year = 1259 }
+					}
+				}
+				add_wonder = wonder_city_of_wonders_baby
+				wonder = { 
+					add_wonder_stage = 1
+					add_wonder_upgrade = upgrade_cow_collection_drama
+					add_wonder_upgrade = upgrade_cow_collection_math
+					add_wonder_upgrade = upgrade_cow_collection_architecture
+					add_wonder_upgrade = upgrade_cow_collection_science
+					add_wonder_upgrade = upgrade_cow_collection_history
+					add_wonder_upgrade = upgrade_cow_district_house_of_wisdom
+				}
+				wonder = {
+					add_wonder_stage = 1
+				}
+				wonder = {
+					add_wonder_stage = 1
+				}
+				wonder = {
+					add_wonder_stage = 1
+				}
+				wonder = {
+					add_wonder_stage = 1
+				}
+				wonder = {
+					add_wonder_stage = 1
+				}
+			}
+			else_if = {
+				limit = { has_wonder = no }
+				add_wonder = wonder_city_of_wonders_baby
+				wonder = {
+					set_wonder_damaged = yes
+				}
+			}
+		}
+		1365 = { # Delhi
+			if = {
+				limit = { has_wonder = no }
+				add_wonder = wonder_city_of_wonders_delh
+			}
+		}
+	}
+}
+
+#On_startup:Removes Athens, Carthage, Cordoba, Persepolis and Syracuse if COW:Ancient Cities is off.
+character_event = {
+	id = COW.23030
+	hide_window = yes
+	trigger = { 
+		has_game_rule = {
+			name = cow_ancient_cities
+			value = off
+		}
+		is_save_game = no
+		is_alternate_start = no
+		has_landed_title = k_papal_state
+	}
+	
+	is_triggered_only = yes
+
+	immediate = { 
+		482 = { # Athens
+			if = {
+				limit = { has_wonder = wonder_city_of_wonders_athens }
+				destroy_wonder = wonder_city_of_wonders_athens
+			}
+		}
+		644 = { # Shiraz (Persepolis)
+			if = {
+				limit = { has_wonder = wonder_city_of_wonders_parsa }
+				destroy_wonder = wonder_city_of_wonders_parsa
+			}
+		}
+		817 = { # Tunis (Carthage)
+			if = {
+				limit = { has_wonder = wonder_city_of_wonders_carth }
+				destroy_wonder = wonder_city_of_wonders_carth
+			}
+		}
+		343 = { # Siracusa
+			if = {
+				limit = { has_wonder = wonder_city_of_wonders_syra }
+				destroy_wonder = wonder_city_of_wonders_syra
+			}
+		}
+		181 = { # Cordoba
+			if = {
+				limit = { has_wonder = wonder_city_of_wonders_cord }
+				destroy_wonder = wonder_city_of_wonders_cord
+			}
+		}
+	}
+}
+
+#Changes the 'ruined' descriptions for Antioch and Jerusalem to their restored versions.
+character_event = {
+	id = COW.20808
+	hide_window = yes
+    is_triggered_only = yes
+	
+	trigger = {
+		FROM = { 
+			NOT = { has_wonder_flag = restored_cow_pentarchy }
+		}
+	}
+
+    immediate = {
+		FROM = { 
+			if = { # Antiocheia
+				limit = { 
+					AND = { 
+						has_wonder = wonder_city_of_wonders_anti
+						NOT = { has_wonder_flag = restored_cow_pentarchy }
+					}
+				}
+				set_description = wonder_city_of_wonders_anti_desc
+				set_wonder_flag = restored_cow_pentarchy
+			}
+			else_if = { # Jerusalem
+				limit = { 
+					AND = { 
+						has_wonder = wonder_city_of_wonders_jeru
+						NOT = { has_wonder_flag = restored_cow_pentarchy }
+					}
+				}
+				set_description = wonder_city_of_wonders_jeru_desc
+				set_wonder_flag = restored_cow_pentarchy
+			}
+		}
+	}
+}
+
+#Changes the 'ruined' descriptions for Persepolis, Carthage, and Syracuse to their reconstructed versions.
+character_event = {
+	id = COW.20809
+	hide_window = yes
+    is_triggered_only = yes
+	
+	trigger = {
+		FROM = { 
+			NOT = { has_wonder_flag = reconstructed_cow_ancient_city }
+		}
+	}
+
+    immediate = {
+		FROM = { 
+			if = { # Persepolis (Shiraz)
+				limit = { 
+					AND = { 
+						has_wonder = wonder_city_of_wonders_parsa
+						NOT = { has_wonder_flag = reconstructed_cow_ancient_city }
+					}
+				}
+				set_description = wonder_city_of_wonders_parsa_reconstructed_desc
+				set_wonder_flag = reconstructed_cow_ancient_city
+			}
+			else_if = { # Carthage (Tunis)
+				limit = { 
+					AND = { 
+						has_wonder = wonder_city_of_wonders_carth
+						NOT = { has_wonder_flag = reconstructed_cow_ancient_city }
+					}
+				}
+				set_description = wonder_city_of_wonders_carth_reconstructed_desc
+				set_wonder_flag = reconstructed_cow_ancient_city
+			}
+			else_if = { # Syracuse (Siracusa)
+				limit = { 
+					AND = { 
+						has_wonder = wonder_city_of_wonders_syra
+						NOT = { has_wonder_flag = reconstructed_cow_ancient_city }
+					}
+				}
+				set_description = wonder_city_of_wonders_syra_reconstructed_desc
+				set_wonder_flag = reconstructed_cow_ancient_city
+			}
+		}
+	}
+}
+
+#Changes the 'reconstructed' descriptions for Athens, Persepolis, Carthage, Cordoba, and Syracuse to their fully restored versions.
+character_event = {
+	id = COW.20810
+	hide_window = yes
+    is_triggered_only = yes
+	
+	trigger = {
+		FROM = { 
+			OR = {
+				wonder_stage = 9
+				wonder_stage = 10
+			}
+			NOT = { has_wonder_flag = restored_cow_ancient_city }
+		}
+	}
+
+    immediate = {
+		FROM = { 
+			if = { # Athens
+				limit = { 
+					AND = { 
+						has_wonder = wonder_city_of_wonders_athens
+						NOT = { has_wonder_flag = restored_cow_ancient_city }
+					}
+				}
+				set_description = wonder_city_of_wonders_athens_restored_desc
+				set_wonder_flag = restored_cow_ancient_city
+			}
+			else_if = { # Persepolis (Shiraz)
+				limit = { 
+					AND = { 
+						has_wonder = wonder_city_of_wonders_parsa
+						NOT = { has_wonder_flag = restored_cow_ancient_city }
+					}
+				}
+				set_description = wonder_city_of_wonders_parsa_restored_desc
+				set_wonder_flag = restored_cow_ancient_city
+			}
+			else_if = { # Carthage (Tunis)
+				limit = { 
+					AND = { 
+						has_wonder = wonder_city_of_wonders_carth
+						NOT = { has_wonder_flag = restored_cow_ancient_city }
+					}
+				}
+				set_description = wonder_city_of_wonders_carth_restored_desc
+				set_wonder_flag = restored_cow_ancient_city
+			}
+			else_if = { # Syracuse (Siracusa)
+				limit = { 
+					AND = { 
+						has_wonder = wonder_city_of_wonders_syra
+						NOT = { has_wonder_flag = restored_cow_ancient_city }
+					}
+				}
+				set_description = wonder_city_of_wonders_syra_restored_desc
+				set_wonder_flag = restored_cow_ancient_city
+			}
+			else_if = { # Cordoba
+				limit = { 
+					AND = { 
+						has_wonder = wonder_city_of_wonders_cord
+						NOT = { has_wonder_flag = restored_cow_ancient_city }
+					}
+				}
+				set_description = wonder_city_of_wonders_cord_completed_desc
+				set_wonder_flag = restored_cow_ancient_city
+			}
+		}
+	}
+}
