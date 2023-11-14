@@ -1,13 +1,13 @@
 # -*- ck2.scripted_effects -*-
 
 
-emf_cb_faction_on_add_effect = {
+emf_cb_faction_on_add = {
 	FROM = { pf_log_state_effect = yes }
 	emf_cb_dynlevy_begin = yes
 }
 
 
-emf_cb_faction_on_success_start_effect = {
+emf_cb_faction_on_success_start = {
 	# the defender loses 10 Imperial Decay ("out with the old, in with the new")
 	emf_cb_imperial_decay_overthrow = yes
 	# apply immediate effects to the revolters
@@ -40,32 +40,33 @@ emf_cb_faction_on_success_start_effect = {
 	}
 	# apply revolt effects to the defender
 	FROM = {
+		show_scope_change = no
 		prestige = -500
 		# always lower CA/TO, even if it wasn't a revolt demand
 		pf_lower_CA_effect = yes # lower Crown Authority (all titles)
 		pf_lower_TO_effect = yes # lower Tribal Organization
 		# enforce any rebel demands that prompted the civil war (excludes succession-related demands)
 		if = {
-			limit = { ROOT = { has_character_flag = demands_lower_feudal_obligations } }
+			limit = { ROOT = { has_flag = demands_lower_feudal_obligations } }
 			pf_lower_feudal_obligations_effect = yes
 		}
 		if = {
-			limit = { ROOT = { has_character_flag = demands_lower_tribal_obligations } }
+			limit = { ROOT = { has_flag = demands_lower_tribal_obligations } }
 			pf_lower_tribal_obligations_effect = yes
 		}
 		if = {
-			limit = { ROOT = { has_character_flag = demands_lower_city_obligations } }
+			limit = { ROOT = { has_flag = demands_lower_city_obligations } }
 			pf_lower_city_obligations_effect = yes
 		}
 		if = {
-			limit = { ROOT = { has_character_flag = demands_lower_temple_obligations } }
+			limit = { ROOT = { has_flag = demands_lower_temple_obligations } }
 			pf_lower_temple_obligations_effect = yes
 		}
 	}
 }
 
 
-emf_cb_faction_on_success_end_effect = {
+emf_cb_faction_on_success_end = {
 	FROM = {
 		save_event_target_as = current_holder
 		primary_title = { save_event_target_as = former_primary_title }
@@ -220,7 +221,7 @@ emf_cb_faction_on_success_end_effect = {
 							}
 						}
 						set_defacto_vassal = PREVPREVPREV
-						emf_dynlevy_update_effect = yes
+						emf_dynlevy_update = yes
 					}
 				}
 			}
@@ -264,7 +265,7 @@ emf_cb_faction_on_success_end_effect = {
 							}
 						}
 						set_defacto_vassal = PREVPREVPREV
-						emf_dynlevy_update_effect = yes
+						emf_dynlevy_update = yes
 					}
 				}
 			}
@@ -306,13 +307,13 @@ emf_cb_faction_on_success_end_effect = {
 		if = {
 			limit = {
 				# this is not a succession law revolt
-				NOT = { has_character_flag = faction_succession_war }
+				NOT = { has_flag = faction_succession_war }
 				OR = {
 					# or the current ruler is not an adult
 					is_adult = no
 					# or this is the original liege and the current heir is not an adult
 					AND = {
-						ROOT = { has_character_flag = original_war_liege }
+						ROOT = { has_flag = original_war_liege }
 						current_heir = { is_adult = no }
 					}
 					# or a rebel has a claim on the primary title or is a pretender/heir
@@ -374,7 +375,7 @@ emf_cb_faction_on_success_end_effect = {
 								target = PREVPREV
 								type = faction_demand
 							}
-							emf_dynlevy_update_effect = yes
+							emf_dynlevy_update = yes
 						}
 						if = {
 							limit = { event_target:current_liege = { always = yes } }
@@ -418,7 +419,7 @@ emf_cb_faction_on_success_end_effect = {
 								target = PREVPREV
 								type = faction_demand
 							}
-							emf_dynlevy_update_effect = yes
+							emf_dynlevy_update = yes
 						}
 						if = {
 							limit = { event_target:current_liege = { always = yes } }
@@ -608,13 +609,13 @@ emf_cb_faction_on_success_end_effect = {
 				}
 				NAND = {
 					# this is not a succession law revolt
-					NOT = { has_character_flag = faction_succession_war }
+					NOT = { has_flag = faction_succession_war }
 					OR = {
 						# or the current ruler is not an adult
 						is_adult = no
 						# or this is the original liege and the current heir is not an adult
 						AND = {
-							ROOT = { has_character_flag = original_war_liege }
+							ROOT = { has_flag = original_war_liege }
 							current_heir = { is_adult = no }
 						}
 						# or a rebel has a claim on the primary title or is a pretender/heir
@@ -715,7 +716,7 @@ emf_cb_faction_on_success_end_effect = {
 		limit = { event_target:former_primary_title = { holder_scope = { NOT = { character = FROM } } } }
 		event_target:former_primary_title = {
 			holder_scope = {
-				emf_dynlevy_update_effect = yes
+				emf_dynlevy_update = yes
 				hidden_tooltip = { character_event = { id = PlusFaction.450 } }
 				pf_mood_refresh_effect = yes
 			}
@@ -726,7 +727,7 @@ emf_cb_faction_on_success_end_effect = {
 }
 
 
-emf_cb_faction_on_fail_effect = {
+emf_cb_faction_on_fail = {
 	emf_cb_dynlevy_end = yes
 	# clean up remaining civil war state
 	pf_civil_war_cleanup_effect = yes
@@ -737,10 +738,10 @@ emf_cb_faction_on_fail_effect = {
 }
 
 
-emf_cb_faction_on_reverse_demand_effect = {
+emf_cb_faction_on_reverse_demand = {
 	emf_cb_obj_win_war_reverse = yes
 	emf_cb_dynlevy_end = yes
-	emf_imperial_decay_loss_effect = yes
+	emf_imperial_decay_loss = yes
 	FROM = { pf_civil_war_clear_old_opinions_effect = yes }
 	# apply immediate effects to the revolters
 	any_attacker = {
@@ -775,13 +776,24 @@ emf_cb_faction_on_reverse_demand_effect = {
 		limit = { NOT = { character = FROM } }
 		hidden_tooltip = { participation_scaled_prestige = 100 }
 	}
+	FROM = {
+		hidden_tooltip = { 
+			if = { 
+				limit = { NOT = { has_opinion_modifier = { modifier = opinion_traitor who = ROOT } } } #Allow free revocation of a title.
+				opinion = {
+					who = ROOT
+					modifier = opinion_traitor
+				}
+			}
+		}
+	}
 	# post-civil war event to reward allies
 	FROM = { hidden_tooltip = { character_event = { id = PlusFaction.450 } } }
-	FROM = { pf_mood_refresh_effect = yes }
+	FROM = { pf_mood_refresh_effect = yes}
 }
 
 
-emf_cb_faction_on_invalidation_effect = {
+emf_cb_faction_on_invalidation = {
 	emf_cb_dynlevy_end = yes
 	# clean up remaining civil war state
 	pf_civil_war_cleanup_effect = yes
