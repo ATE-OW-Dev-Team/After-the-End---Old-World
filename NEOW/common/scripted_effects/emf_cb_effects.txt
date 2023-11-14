@@ -3,18 +3,17 @@
 ## STANDARD GLOBAL CB EFFECTS ##
 
 emf_cb_on_success_posttitle = {
-	hidden_tooltip = {
+	hidden_effect = {
 		# Double-check Imperial Government status
 		FROM = { character_event = { id = emf_imperial.3299 } }
 		ROOT = { character_event = { id = emf_imperial.3299 } }
-		
 		# Top realm capital-contiguous province tracking (a hint for better accuracy post-war only, as this is also
 		# done on annual maintenance)
 		ROOT = {
 			# Only do anything if the CB hasn't told us that top realm province changes for both giver/receiver
 			# can't happen (skip_capconnect_chk_tmp set on ROOT by CB)
 			if = {
-				limit = { NOT = { has_character_flag = skip_capconnect_chk_tmp } }
+				limit = { NOT = { has_flag = skip_capconnect_chk_tmp } }
 				# Also skip recalculation if [still] part of a temp-independent revolt realm, but emf_core.65
 				# filters that in its trigger already ...
 				top_liege = { character_event = { id = emf_core.65 } }
@@ -30,7 +29,7 @@ emf_cb_on_success_posttitle = {
 					}
 				}
 			}
-			clr_character_flag = skip_capconnect_chk_tmp
+			clr_flag = skip_capconnect_chk_tmp
 		}
 	}
 }
@@ -44,14 +43,30 @@ emf_cb_thirdparty_on_success_posttitle = {
 
 emf_cb_victory = {
 	emf_cb_obj_win_war = yes
-	ROOT = { if = { limit = { rebel = no } pf_glory_plus2_effect = yes } }
-	FROM = { pf_glory_minus2_effect = yes }
+	ROOT = {
+		show_scope_change = no
+		if = {
+			limit = { rebel = no }
+			pf_glory_plus2_effect = yes
+		}
+	}
+	FROM = {
+		pf_glory_minus2_effect = yes
+	}
 }
 
 emf_cb_defeat = {
 	emf_cb_obj_win_war_reverse = yes
-	ROOT = { if = { limit = { rebel = no } pf_glory_minus2_effect = yes } }
-	FROM = { pf_glory_plus2_effect = yes }
+	ROOT = {
+		show_scope_change = no
+		if = {
+			limit = { rebel = no }
+			pf_glory_minus2_effect = yes
+		}
+	}
+	FROM = {
+		pf_glory_plus2_effect = yes
+	}
 }
 
 emf_cb_victory_other = { # 3rd-party (assumes enclosing scope is attacker)
@@ -70,28 +85,34 @@ emf_cb_holy_victory = {
 	emf_cb_obj_win_war = yes
 	emf_cb_obj_win_holy_war = yes
 	ROOT = {
+		show_scope_change = no
 		if = {
 			limit = { rebel = no }
 			pf_glory_plus2_effect = yes
 			pf_tradition_plus4_effect = yes
 		}
 	}
-	FROM = { pf_glory_minus2_effect = yes }
-	FROM = { pf_tradition_minus4_effect = yes }
+	FROM = {
+		pf_glory_minus2_effect = yes
+		pf_tradition_minus4_effect = yes
+	}
 }
 
 emf_cb_holy_defeat = {
 	emf_cb_obj_win_war_reverse = yes
 	emf_cb_obj_win_holy_war_reverse = yes
 	ROOT = {
+		show_scope_change = no
 		if = {
 			limit = { rebel = no }
 			pf_glory_minus2_effect = yes
 			pf_tradition_minus4_effect = yes
 		}
 	}
-	FROM = { pf_glory_plus2_effect = yes }
-	FROM = { pf_tradition_plus4_effect = yes }
+	FROM = {
+		pf_glory_plus2_effect = yes
+		pf_tradition_plus4_effect = yes
+	}
 }
 
 
@@ -99,32 +120,32 @@ emf_cb_holy_defeat = {
 
 # regular major_revolt CBs
 emf_cb_dynlevy_begin = {
-	hidden_tooltip = {
-		# ROOT = { primary_title = { emf_dynlevy_remove_effect = yes } }
-		FROM = { emf_dynlevy_update_effect = yes }
+	hidden_effect = {
+		# ROOT = { primary_title = { emf_dynlevy_remove = yes } }
+		FROM = { emf_dynlevy_update = yes }
 	}
 }
 
 emf_cb_dynlevy_end = {
-	hidden_tooltip = {
-		ROOT = { emf_dynlevy_update_effect = yes }
-		FROM = { emf_dynlevy_update_effect = yes }
+	hidden_effect = {
+		ROOT = { emf_dynlevy_update = yes }
+		FROM = { emf_dynlevy_update = yes }
 	}
 }
 
 # 3rd-party CBs: assumes enclosing scope is attacker
 emf_cb_dynlevy_other_begin = {
-	hidden_tooltip = {
-		FROM = { emf_dynlevy_update_effect = yes }
-		# primary_title = { emf_dynlevy_remove_effect = yes }
+	hidden_effect = {
+		FROM = { emf_dynlevy_update = yes }
+		# primary_title = { emf_dynlevy_remove = yes }
 	}
 }
 
 # 3rd-party CBs: assumes enclosing scope is attacker
 emf_cb_dynlevy_other_end = {
-	hidden_tooltip = {
-		FROM = { emf_dynlevy_update_effect = yes }
-		emf_dynlevy_update_effect = yes
+	hidden_effect = {
+		FROM = { emf_dynlevy_update = yes }
+		emf_dynlevy_update = yes
 	}
 }
 
@@ -233,7 +254,7 @@ emf_cb_latb_build = {
 
 ## WAR AMBITION EFFECT HELPERS (not used directly in CBs) ##
 emf_cb_obj_win_war = {
-	hidden_tooltip = {
+	hidden_effect = {
 		any_attacker = {
 			add_character_modifier = { name = emf_victory_timer duration = 1 hidden = yes }
 		}
@@ -244,7 +265,7 @@ emf_cb_obj_win_war = {
 	}
 }
 emf_cb_obj_win_war_reverse = {
-	hidden_tooltip = {
+	hidden_effect = {
 		any_defender = {
 			add_character_modifier = { name = emf_victory_timer duration = 1 hidden = yes }
 		}
@@ -255,7 +276,7 @@ emf_cb_obj_win_war_reverse = {
 	}
 }
 emf_cb_obj_win_holy_war = {
-	hidden_tooltip = {
+	hidden_effect = {
 		any_attacker = {
 			add_character_modifier = { name = emf_holy_victory_timer duration = 1 hidden = yes }
 		}
@@ -266,7 +287,7 @@ emf_cb_obj_win_holy_war = {
 	}
 }
 emf_cb_obj_win_holy_war_reverse = {
-	hidden_tooltip = {
+	hidden_effect = {
 		any_defender = {
 			add_character_modifier = { name = emf_holy_victory_timer duration = 1 hidden = yes }
 		}
@@ -281,12 +302,12 @@ emf_cb_obj_win_holy_war_reverse = {
 ## IMPERIAL DECAY ##
 emf_cb_imperial_decay_overthrow = {
 	if = {
-		limit = { FROM = { emf_uses_imperial_decay_trigger = yes } }
+		limit = { FROM = { emf_uses_imperial_decay = yes } }
 		FROM = {
 			custom_tooltip = { text = IMPERIAL_DECAY_MINUS_10 }
 			hidden_tooltip = {
 				primary_title = {
-					set_title_flag = emf_decay_overthrow
+					set_flag = emf_decay_overthrow
 				}
 			}
 		}
