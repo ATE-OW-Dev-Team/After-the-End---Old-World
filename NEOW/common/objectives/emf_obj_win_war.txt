@@ -1,0 +1,117 @@
+# -*- ck2.objectives -*-
+
+obj_win_war = {
+	type = character
+
+	allow = {
+		prisoner = no
+		is_adult = yes
+		is_ruler = yes
+		is_incapable = no
+		war = no
+		NOR = {
+			has_character_modifier = emf_victory_timer
+			has_character_modifier = emf_obj_win_war_success
+		}
+	}
+	chance = {
+		factor = 100
+
+		modifier = {
+			factor = 100 # Don't discard objective if there is war
+			war = yes
+		}
+		modifier = {
+			factor = 0.2
+			independent = no
+		}
+		modifier = {
+			factor = 0
+			trait = content
+		}
+		modifier = {
+			factor = 2
+			trait = ambitious
+		}
+		modifier = {
+			factor = 0
+			trait = craven
+		}
+		modifier = {
+			factor = 2
+			trait = brave
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { martial = 8 }
+		}
+		modifier = {
+			factor = 0.25
+			NOT = { martial = 5 }
+		}
+		modifier = {
+			factor = 0
+			NOT = { martial = 3 }
+		}
+		modifier = {
+			factor = 1.25
+			martial = 10
+		}
+		modifier = {
+			factor = 1.25
+			martial = 13
+		}
+		modifier = {
+			factor = 1.25
+			martial = 16
+		}
+		modifier = {
+			factor = 1.25
+			martial = 19
+		}
+		modifier = {
+			factor = 1.25
+			martial = 22
+		}
+	}
+	creation_effect = {
+		if = {
+			limit = { ai = yes }
+			add_character_modifier = {
+				name = emf_objective_timer
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	success = {
+		custom_tooltip = {
+			text = emf_ctt_obj_win_war
+			has_character_modifier = emf_victory_timer
+		}
+	}
+	abort = {
+		OR = {
+			prisoner = yes
+			is_adult = no
+			is_ruler = no
+			is_incapable = yes
+			AND = {
+				ai = yes
+				NOT = { has_character_modifier = emf_objective_timer }
+			}
+		}
+	}
+	abort_effect = {
+		hidden_effect = {
+			remove_character_modifier = emf_objective_timer
+		}
+	}
+	effect = {
+		hidden_effect = {
+			remove_character_modifier = emf_victory_timer
+			remove_character_modifier = emf_objective_timer
+		}
+		add_character_modifier = { name = emf_obj_win_war_success duration = 3650 }
+	}
+}
