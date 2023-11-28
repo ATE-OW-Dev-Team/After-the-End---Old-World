@@ -1560,11 +1560,11 @@ NDisease = {
 
 NGraphics = {
 	PORT_SHIP_OFFSET = 3.0,
-	CITY_SPRAWL_SHRINK_DISTANCE = 150.0, -- Start shrinking at this distance
-	CITY_SPRAWL_DRAW_DISTANCE = 200.0, -- Remove at this distance
+	CITY_SPRAWL_SHRINK_DISTANCE = 100.0, -- Start shrinking at this distance
+	CITY_SPRAWL_DRAW_DISTANCE = 150.0, -- Remove at this distance
 	CITY_SPRAWL_AMOUNT = 1, -- Size of cities, higher gives larger cities
 	CITY_SPRAWL_NUDGE_TAX_VALUE = 50, -- Debug flag
-	PROVINCE_NAME_DRAW_DISTANCE = 500.0, -- Remove province names beyond this distance
+	PROVINCE_NAME_DRAW_DISTANCE = 400.0, -- Remove province names beyond this distance
 	MILD_WINTER_VALUE = 90,
 	NORMAL_WINTER_VALUE = 145,
 	SEVERE_WINTER_VALUE = 255,
@@ -1577,8 +1577,8 @@ NGraphics = {
 },
 
 NEngine = {
-	EVENT_PROCESS_OFFSET = 55, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
-	COURTIER_EVENT_PROCESS_OFFSET = 125, 	 -- Events are checked every X day for courtiers. Max value of 255
+	EVENT_PROCESS_OFFSET = 60, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
+	COURTIER_EVENT_PROCESS_OFFSET = 135, 	 -- Events are checked every X day for courtiers. Max value of 255
 	COURTIERS_MTTTH_EVENTS = 1,  -- Toggles if courtiers are allowed to run MTTH events or not
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_YEAR = 1066, -- The missing scripted successor error will not be shown before this date
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_MONTH = 8,
