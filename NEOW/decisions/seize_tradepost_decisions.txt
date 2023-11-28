@@ -1,0 +1,57 @@
+trade_post_decisions = {
+	change_tradepost = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = sub_realm_owned
+		ai_check_interval = 36
+
+		from_potential = {
+		}
+
+		potential = {
+			NOT={			
+				trade_post_owner = {
+					character = FROM
+				}
+			}
+			trade_post_owner = {
+				NOT = {
+					is_within_diplo_range = FROM
+				}
+			}
+		}
+		allow = {
+			FROM = {
+				prestige = 50
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -50
+				wealth = 150
+			}
+			if = {
+				limit = {
+					OR = {
+						FROM = {
+							government = merchant_republic_government
+						}
+						silk_road_trade_post_trigger = yes
+					}
+				}
+				seize_trade_post = FROM
+			}
+			else = {
+				trade_post_owner = {
+					embargo = FROM
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 0
+		}
+	}
+}
