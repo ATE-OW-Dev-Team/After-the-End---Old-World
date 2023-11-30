@@ -15,48 +15,129 @@
 # Institute Succession by Seniority in Liege Title
 faction_succ_seniority = {
 	type = liege_titles
-
+	
 	warning_level = 0.7 # At this level of faction power we give player an alert. Set to 0 for no alerts.
-
+	
 	# Plotter scope
 	potential = {
-		emf_faction_basic_potential = yes
-		liege = { is_feudal = yes }
-		NOR = {
-			religion_group = muslim
-			religion = sarvodaya
-			religion = jacobinist
-			religion = titoist
-			religion = stalinist
-			religion = trotskyite
-			religion_group = indian_group
-			in_faction = faction_succ_primogeniture
-			in_faction = faction_succ_feudal_elective
-			in_faction = faction_succ_gavelkind
-		}
+		prisoner = no
+		is_ruler = yes
+		independent = no
+		is_landed = yes
+		is_adult = yes
+		primary_title = { holy_order = no }
 		OR = {
-			emf_laws_no_crown_law_title = yes
-			# The Crown Law title holder is my liege
-			crownlaw_title = { holder_scope = { is_liege_of = ROOT } }
+			NOT = { has_dlc = "Zeus" }
+			is_voter = no
+			is_nomadic = yes
+			is_tribal = yes
+			liege = { 
+				OR = {
+					is_council_content = no
+					NOT = { primary_title = { has_law = war_voting_power_1 } }
+					#has_council = no
+				}
+			}
 		}
+		NOT = { trait = incapable }
+		liege = {
+			is_vice_royalty = no
+			is_feudal = yes 
+			OR = {
+				year = 1350
+				primary_title = { is_tribal_type_title = no }
+				NOT = { culture = ROOT }
+				NOT = { religion = ROOT }
+			}
+			NOT = {
+				any_demesne_title = {
+					temporary = yes
+				}
+			}
+		}
+		NOT = { religion_group = muslim }
+		primary_title = { higher_tier_than = BARON }
+		
+		NOT = { in_faction = faction_succ_primogeniture }
+		NOT = { in_faction = faction_succ_feudal_elective }
+		NOT = { in_faction = faction_succ_gavelkind }
+		NOT = { in_faction = faction_succ_byzantine_elective }
+		
+		OR = {
+			# Is not affected by a Crown Law title
+			NOT = {
+				crownlaw_title = {
+					always = yes
+				}
+			}
+			
+			# The Crown Law title holder is my liege
+			crownlaw_title = {
+				holder_scope = {
+					ROOT = {
+						liege = {
+							character = PREVPREV
+						}
+					}
+				}
+			}
+			
+			# The Crown Law title allows vassal infighting
+			crownlaw_title = {
+				NOT = {
+					OR = {
+						has_law = crown_authority_2
+						has_law = crown_authority_3
+						has_law = crown_authority_4
+					}
+				}
+			}
+		}
+		
+		NOT = { has_character_modifier = faction_succ_seniority_ultimatum_timer }
 	}
-
+	
 	# Target scope
 	allow = {
 		is_law_potential = succ_seniority
-		NOT = { has_law = succ_seniority }
+		is_law_allowed = succ_seniority
 		OR = {
 			is_primary_holder_title = yes
 			higher_tier_than = DUKE
 		}
-		holder_scope = {
-			NOT = {
-				any_war = { war_title = ROOT }
+		NOR = { 
+			has_law = succ_seniority
+			AND = {
+				has_law = succession_voting_power_1
+				has_law = succ_feudal_elective
+			}
+			AND = {
+				has_law = succession_voting_power_1
+				has_law = succ_hre_elective
+			}
+			AND = {
+				has_law = succession_voting_power_1
+				has_law = succ_confederation_elective
 			}
 		}
-		FROM = { primary_title = { is_primary_type_title = no } }
+		
+		holder_scope = {
+			NOT = {
+				any_war = {
+					war_title = ROOT
+					using_cb = change_seniority_succession_law
+				}
+			}
+			
+			NOT = {
+				reverse_has_opinion_modifier = {
+					who = FROM
+					modifier = opinion_coerced_into_leaving_faction
+				}
+			}
+		}
 	}
-
+	
 	# Faction member scope (ROOT = joiner, FROM = target)
 	allow_join = {
 		ROOT = {
