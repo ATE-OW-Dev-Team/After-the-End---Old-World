@@ -1,0 +1,549 @@
+# -*- ck2.scripted_triggers -*-
+
+
+### CONVENIENCE TRIGGERS ###
+emf_laws_no_crown_law_title = {
+	custom_tooltip = {
+		text = emf_laws_ctt_no_crown_law_title
+		NOT = { crownlaw_title = { always = yes } }
+	}
+}
+emf_laws_crownlaw_title_limited_ca_plus = {
+	custom_tooltip = {
+		text = emf_laws_ctt_crownlaw_title_limited_ca_plus
+		crownlaw_title = {
+			OR = {
+				has_law = crown_authority_1
+				has_law = crown_authority_2
+				has_law = crown_authority_3
+				has_law = crown_authority_4
+			}
+		}
+	}
+}
+emf_laws_crownlaw_title_medium_ca_plus = {
+	custom_tooltip = {
+		text = emf_laws_ctt_crownlaw_title_medium_ca_plus
+		crownlaw_title = {
+			OR = {
+				has_law = crown_authority_2
+				has_law = crown_authority_3
+				has_law = crown_authority_4
+			}
+		}
+	}
+}
+emf_laws_crownlaw_title_high_ca_plus = {
+	custom_tooltip = {
+		text = emf_laws_ctt_crownlaw_title_high_ca_plus
+		crownlaw_title = {
+			OR = {
+				has_law = crown_authority_3
+				has_law = crown_authority_4
+			}
+		}
+	}
+}
+emf_laws_crownlaw_title_not_high_ca_plus = { # AKA internal vassal military plots aren't disabled
+	custom_tooltip = {
+		text = emf_laws_ctt_crownlaw_title_not_high_ca_plus
+		crownlaw_title = {
+			NOR = {
+				has_law = crown_authority_3
+				has_law = crown_authority_4
+			}
+		}
+	}
+}
+emf_laws_has_limited_ca_plus = {
+	custom_tooltip = {
+		text = emf_laws_ctt_limited_ca_plus
+		OR = {
+			has_law = crown_authority_1
+			has_law = crown_authority_2
+			has_law = crown_authority_3
+			has_law = crown_authority_4
+		}
+	}
+}
+emf_laws_has_medium_ca_plus = {
+	custom_tooltip = {
+		text = emf_laws_ctt_medium_ca_plus
+		OR = {
+			has_law = crown_authority_2
+			has_law = crown_authority_3
+			has_law = crown_authority_4
+		}
+	}
+}
+emf_laws_has_high_ca_plus = {
+	custom_tooltip = {
+		text = emf_laws_ctt_high_ca_plus
+		OR = {
+			has_law = crown_authority_3
+			has_law = crown_authority_4
+		}
+	}
+}
+emf_laws_has_no_TO = {
+	custom_tooltip = {
+		text = HAS_NO_TRIBAL_ORGANIZATION_LAW_TT
+		NOR = {
+			has_law = tribal_organization_0
+			has_law = tribal_organization_1
+			has_law = tribal_organization_2
+			has_law = tribal_organization_3
+			has_law = tribal_organization_4
+		}
+	}
+}
+emf_laws_has_limited_TO_plus = {
+	custom_tooltip = {
+		text = emf_laws_ctt_limited_TO_plus
+		OR = {
+			has_law = tribal_organization_1
+			has_law = tribal_organization_2
+			has_law = tribal_organization_3
+			has_law = tribal_organization_4
+		}
+	}
+}
+emf_laws_has_medium_TO_plus = {
+	custom_tooltip = {
+		text = emf_laws_ctt_medium_TO_plus
+		OR = {
+			has_law = tribal_organization_2
+			has_law = tribal_organization_3
+			has_law = tribal_organization_4
+		}
+	}
+}
+emf_laws_has_high_TO_plus = {
+	custom_tooltip = {
+		text = emf_laws_ctt_high_TO_plus
+		OR = {
+			has_law = tribal_organization_3
+			has_law = tribal_organization_4
+		}
+	}
+}
+# emf_laws_holder_has_late_administration_plus = {
+	# custom_tooltip = {
+		# text = emf_laws_ctt_holder_has_late_administration_plus_raw
+		# owner = {
+			# primary_title = {
+				# OR = {
+					# has_law = administration_1
+					# has_law = administration_2
+				# }
+			# }
+		# }
+	# }
+# }
+# emf_laws_infidel_revocation = {
+	# custom_tooltip = {
+		# text = emf_laws_ctt_infidel_revocation
+		# OR = {
+			# has_law = revokation_2
+			# has_law = ze_revokation_2
+		# }
+	# }
+# }
+
+# emf_laws_penalty = {
+	# has_global_flag = EMF # game has made it through startup
+	# NOR = {
+		# has_global_flag = emf_no_law_penalties
+		# owner = { has_flag = emf_no_law_penalties }
+	# }
+# }
+
+# emf_laws_is_exempt_from_TO_penalties = {
+	# # Only the AI, because players have no problem at all raising TO law with the prestige costs in place:
+	# ai = yes
+	# OR = {
+		# # If our liege has become "civilized," then we're exempt from the prestige cost of raising TO law:
+		# liege = {
+			# OR = {
+				# is_feudal = yes
+				# is_republic = yes
+				# is_theocracy = yes
+			# }
+		# }
+		# # Or if any "civilized" ruler borders our independent realm directly or through 1 seazone
+		# top_liege = {
+			# any_realm_province = {
+				# any_neighbor_province = {
+					# OR = {
+						# owner = {
+							# OR = {
+								# is_feudal = yes
+								# is_republic = yes
+								# is_theocracy = yes
+							# }
+						# }
+						# AND = {
+							# is_land = no
+							# any_neighbor_province = {
+								# owner = {
+									# OR = {
+										# is_feudal = yes
+										# is_republic = yes
+										# is_theocracy = yes
+									# }
+								# }
+							# }
+						# }
+					# }
+				# }
+			# }
+		# }
+	# }
+# }
+
+# # Is this crown law title subject to the standard CA reductions that come at the end of virtually every
+# # revolt in EMF? [This doesn't happen in vanilla and our AI is having extreme trouble raising and maintaining
+# # CA, hence the breaks for purely AI realms / titles.]
+# emf_laws_is_title_subject_to_default_CA_reduction = {
+	# OR = {
+		# any_player = {
+			# crownlaw_title = { title = PREVPREV }
+		# }
+		# owner = {
+			# OR = {
+				# has_flag = emf_always_reduce_CA_tmp
+				# ai = no
+				# any_player = { is_liege_or_above = PREV }
+				# any_war = {
+					# defender = { character = PREVPREV }
+					# any_attacker = { ai = no }
+					# OR = { # Revolt CBs that lower CA:
+						# using_cb = claim_on_liege
+						# using_cb = claim_on_liege_plot
+						# using_cb = other_claim_on_liege
+						# using_cb = bid_for_independence
+						# using_cb = overthrow_ruler
+						# using_cb = overthrow_ruler_no_calls
+						# using_cb = cb_faction_independence
+						# using_cb = truebelievers_bid_for_independence
+						# using_cb = abrahamic_antihellenic_revolt
+						# using_cb = emf_faction_gender_succ_agnatic
+						# using_cb = emf_faction_gender_succ_cognatic
+						# using_cb = emf_faction_gender_succ_true_cognatic
+						# using_cb = emf_faction_gender_succ_enatic_cognatic
+						# using_cb = emf_faction_gender_succ_enatic
+						# using_cb = emf_faction_overthrow
+						# using_cb = emf_faction_overthrow_CA # This one always reduces CA (above flag exemption)
+						# using_cb = emf_faction_overthrow_TO
+						# using_cb = emf_faction_overthrow_obligations
+						# using_cb = emf_faction_succ_aztec_elective
+						# using_cb = emf_faction_succ_byzantine_elective
+						# using_cb = emf_faction_succ_dynastic_elective
+						# using_cb = emf_faction_succ_eldership
+						# using_cb = emf_faction_succ_elective_gavelkind
+						# using_cb = emf_faction_succ_feudal_elective
+						# using_cb = emf_faction_succ_gavelkind
+						# using_cb = emf_faction_succ_hre_elective
+						# using_cb = emf_faction_succ_mirath
+						# using_cb = emf_faction_succ_pictish_elective
+						# using_cb = emf_faction_succ_primogeniture
+						# using_cb = emf_faction_succ_seniority
+						# using_cb = emf_faction_succ_tanistry
+						# using_cb = emf_faction_succ_turkish_succession
+						# using_cb = emf_faction_succ_ultimogeniture
+						# using_cb = emf_resist_viceroy_revocation
+					# }
+				# }
+			# }
+		# }
+	# }
+# }
+
+# ### SUCCESSION LAWS ###
+
+# does_HF_bug_still_execute_law_effects_on_title_creation = {
+	# always = yes
+# }
+
+# # Used for most regular succession laws as PART of the potential. It's NOT common to every major succession type (e.g.,
+# # turkish succession doesn't use it); it's just a convenience to clarify the succession laws code.
+# emf_laws_succ_basic_potential = {
+	# owner = {
+		# NOT = { religion_group = muslim }
+		# OR = {
+			# independent = yes
+			# NOT = { any_liege = { holy_order = yes } }
+		# }
+	# }
+	# OR = {
+		# is_landless_type_title = no
+		# is_tribal_type_title = yes
+		# temporary = yes
+	# }
+	# is_primary_type_title = no
+# }
+
+# emf_laws_allow_switch_away_from_hre_elective = {
+	# trigger_if = {
+		# limit = { has_law = succ_hre_elective }
+		# trigger_if = {
+			# limit = { has_dlc = "Zeus" }
+			# has_law = law_voting_power_0
+			# emf_laws_has_high_ca_plus = yes
+		# }
+		# trigger_else = {
+			# has_law = crown_authority_4
+		# }
+	# }
+# }
+
+# emf_laws_potential_not_for_byzantium = {
+	# NAND = { 
+		# has_law = succ_byzantine_elective
+		# emf_is_roman_empire = yes
+	# }
+# }
+
+# # Following triggers all assume the player has Conclave. All of them will return False if they do not.
+
+# emf_laws_has_full_council_power = {
+	# has_dlc = "Zeus"
+	# NOR = {
+		# has_law = law_voting_power_0
+		# has_law = justice_voting_power_0
+		# has_law = titles_voting_power_0
+		# has_law = war_voting_power_0
+	# }
+# }
+
+# emf_laws_has_high_council_power = {
+	# has_dlc = "Zeus"
+	# NOT = {
+		# calc_true_if = {
+			# amount = 2
+			# has_law = law_voting_power_0
+			# has_law = justice_voting_power_0
+			# has_law = titles_voting_power_0
+			# has_law = war_voting_power_0
+		# }
+	# }
+# }
+
+# emf_laws_has_medium_council_power = {
+	# calc_true_if = {
+		# amount = 2
+		# has_law = law_voting_power_0
+		# has_law = justice_voting_power_0
+		# has_law = titles_voting_power_0
+		# has_law = war_voting_power_0
+	# }
+	# NAND = {
+		# has_law = law_voting_power_0
+		# has_law = justice_voting_power_0
+		# has_law = titles_voting_power_0
+		# has_law = war_voting_power_0
+	# }
+# }
+
+# emf_laws_has_no_council_power = {
+	# has_law = law_voting_power_0
+	# has_law = justice_voting_power_0
+	# has_law = titles_voting_power_0
+	# has_law = war_voting_power_0
+# }
+
+# ### SUCCESSION LAW CHANGES ###
+
+# # A lot nicer-looking to the user than the direct-coded version
+# emf_laws_change_succ_can_afford_prestige_cost = {
+	# #conditional_tooltip = {
+	# #	trigger = { tier = BARON }
+	# #	custom_tooltip = { text = NEEDS_125_PRESTIGE_COST hidden_tooltip = { owner = { prestige = 125 } } }
+	# #}
+	# #conditional_tooltip = {
+	# #	trigger = { tier = COUNT }
+	# #	custom_tooltip = { text = NEEDS_250_PRESTIGE_COST hidden_tooltip = { owner = { prestige = 250 } } }
+	# #}
+	# #conditional_tooltip = {
+	# #	trigger = { tier = DUKE }
+	# #	custom_tooltip = { text = NEEDS_500_PRESTIGE_COST hidden_tooltip = { owner = { prestige = 500 } } }
+	# #}
+	# #conditional_tooltip = {
+	# #	trigger = { tier = KING }
+	# #	custom_tooltip = { text = NEEDS_750_PRESTIGE_COST hidden_tooltip = { owner = { prestige = 750 } } }
+	# #}
+	# #conditional_tooltip = {
+	# #	trigger = { tier = EMPEROR }
+	# #	custom_tooltip = { text = NEEDS_1000_PRESTIGE_COST hidden_tooltip = { owner = { prestige = 1000 } } }
+	# #}
+# }
+
+# # Vassals are [almost] always upset by a succession law change; these are the ones that are affected:
+# emf_laws_change_succ_affected_vassal = {
+	# OR = {
+		# event_target:emf_succ_title = {
+			# OR = {
+				# is_primary_holder_title = yes
+				# is_de_jure_title = no
+			# }
+		# }
+		# primary_title = { de_jure_liege_or_above = event_target:emf_succ_title }
+	# }
+# }
+
+# # Additionally, as the succ_* effects hand-out blanket opinions, they do so in order of priority, and they mark each
+# # "already reacted to this succession law change" character as they go with flags.
+# #
+# # Note that we distinguish the types of succession change reaction so that we may know which opinion modifier we've added
+# # from the character to the succession law changer _for this law change only_ so that actual opinions may properly stack from
+# # past reactions to law changes (alternative would be to check for the modifiers themselves, but that would not allow
+# # coherent stacking across multiple law changes by the same ruler).
+# emf_laws_change_succ_reaction = {
+	# OR = {
+		# has_flag = emf_good_reaction
+		# has_flag = emf_mild_reaction
+		# has_flag = emf_bad_reaction
+		# has_flag = emf_bad2_reaction
+	# }
+# }
+
+# ##############################################################################################################
+
+# emf_laws_has_succ_flag = {
+	# OR = {
+		# has_flag = emf_gavelkind
+		# has_flag = emf_elective_gavelkind
+		# has_flag = emf_eldership
+		# has_flag = emf_seniority
+		# has_flag = emf_primogeniture
+		# has_flag = emf_feudal_elective
+		# has_flag = emf_hre_elective
+		# has_flag = emf_aztec_elective
+		# has_flag = emf_byzantine_elective
+		# has_flag = emf_tanistry
+		# has_flag = emf_pictish_elective
+		# has_flag = emf_dynastic_elective
+		# has_flag = emf_ultimogeniture
+		# has_flag = emf_turkish_succession
+	# }
+# }
+
+# # Meant for succession laws that are actually elective
+# emf_laws_has_elective_law_type = {
+	# OR = {
+		# emf_laws_has_true_elective_law_type = yes
+		# has_law = succ_papal_succession # Although uses hardcoded elector preferences, still elective
+		# #has_law = succ_open_elective # Not truly elective, just random
+		# #has_law = succ_patrician_elective # Nominally elective, but has no actual electors, so doesn't count
+	# }
+# }
+
+# emf_laws_has_true_elective_law_type = {
+	# OR = {
+		# has_law = succ_elective_gavelkind
+		# has_law = succ_eldership
+		# has_law = succ_feudal_elective
+		# has_law = succ_hre_elective
+		# has_law = succ_aztec_elective
+		# has_law = succ_byzantine_elective
+		# has_law = succ_tanistry
+		# has_law = succ_pictish_elective
+		# has_law = succ_dynastic_elective
+	# }
+# }
+
+# emf_laws_has_gender_succ_flag = {
+	# OR = {
+		# has_flag = emf_agnatic_succession
+		# has_flag = emf_cognatic_succession
+		# has_flag = emf_true_cognatic_succession
+		# has_flag = emf_enatic_cognatic_succession
+		# has_flag = emf_enatic_succession
+	# }
+# }
+
+# emf_laws_has_old_succ_flag = {
+	# OR = {
+		# AND = {
+			# has_flag = emf_gavelkind
+			# NOT = { has_law = succ_gavelkind }
+		# }
+		# AND = {
+			# has_flag = emf_elective_gavelkind
+			# NOT = { has_law = succ_elective_gavelkind }
+		# }
+		# AND = {
+			# has_flag = emf_eldership
+			# NOT = { has_law = succ_eldership }
+		# }
+		# AND = {
+			# has_flag = emf_seniority
+			# NOT = { has_law = succ_seniority }
+		# }
+		# AND = {
+			# has_flag = emf_primogeniture
+			# NOT = { has_law = succ_primogeniture }
+		# }
+		# AND = {
+			# has_flag = emf_feudal_elective
+			# NOT = { has_law = succ_feudal_elective }
+		# }
+		# AND = {
+			# has_flag = emf_hre_elective
+			# NOT = { has_law = succ_hre_elective }
+		# }
+		# AND = {
+			# has_flag = emf_aztec_elective
+			# NOT = { has_law = succ_aztec_elective }
+		# }
+		# AND = {
+			# has_flag = emf_byzantine_elective
+			# NOT = { has_law = succ_byzantine_elective }
+		# }
+		# AND = {
+			# has_flag = emf_tanistry
+			# NOT = { has_law = succ_tanistry }
+		# }
+		# AND = {
+			# has_flag = emf_pictish_elective
+			# NOT = { has_law = succ_pictish_elective }
+		# }
+		# AND = {
+			# has_flag = emf_dynastic_elective
+			# NOT = { has_law = succ_dynastic_elective }
+		# }
+		# AND = {
+			# has_flag = emf_ultimogeniture
+			# NOT = { has_law = succ_ultimogeniture }
+		# }
+		# AND = {
+			# has_flag = emf_turkish_succession
+			# NOT = { has_law = succ_turkish_succession }
+		# }
+	# }
+# }
+
+# emf_laws_has_old_gender_succ_flag = {
+	# OR = {
+		# AND = {
+			# has_flag = emf_agnatic_succession
+			# NOT = { has_law = agnatic_succession }
+		# }
+		# AND = {
+			# has_flag = emf_cognatic_succession
+			# NOT = { has_law = cognatic_succession }
+		# }
+		# AND = {
+			# has_flag = emf_true_cognatic_succession
+			# NOT = { has_law = true_cognatic_succession }
+		# }
+		# AND = {
+			# has_flag = emf_enatic_cognatic_succession
+			# NOT = { has_law = enatic_cognatic_succession }
+		# }
+		# AND = {
+			# has_flag = emf_enatic_succession
+			# NOT = { has_law = enatic_succession }
+		# }
+	# }
+# }
