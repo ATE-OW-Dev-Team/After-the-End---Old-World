@@ -60,40 +60,50 @@ faction_succ_seniority = {
 	# Faction member scope (ROOT = joiner, FROM = target)
 	allow_join = {
 		ROOT = {
-			is_ruler = yes
-			independent = no
-			is_landed = yes
-			is_adult = yes
-			NOT = { trait = incapable }
-			prisoner = no
+			emf_faction_basic_allow_join = yes
 			OR = {
-				NOT = { has_dlc = "Zeus"}
-				is_voter = no
-				is_nomadic = yes
-				is_tribal = yes
-				liege = { 
-					OR = {
-						is_council_content = no
-						NOT = { primary_title = { has_law = war_voting_power_1 } }
-						#has_council = no
-					}
+				NOR = {
+					in_faction = faction_succ_primogeniture
+					in_faction = faction_succ_feudal_elective
+					in_faction = faction_succ_gavelkind
 				}
+				has_flag = will_join_civil_war
 			}
-			
-			NOT = { religion_group = muslim }	
-			NOT = { in_faction = faction_succ_primogeniture }
-			NOT = { in_faction = faction_succ_feudal_elective }
-			NOT = { in_faction = faction_succ_gavelkind }
-			NOT = { in_faction = faction_succ_byzantine_elective }
-		}		
+			NOR = {
+				religion_group = muslim
+				religion = sarvodaya
+				religion = jacobinist
+				religion = titoist
+				religion = stalinist
+				religion = trotskyite
+				religion_group = indian_group
+			}
+		}
 	}
-	
-	# AI creation weight
+
+	# AI creation weight (ROOT = title, FROM = faction creator)
 	chance = {
 		factor = 1
-		
+
 		ATE_OW_factionalism_FROM_score = yes
 		
+		modifier = {
+			factor = 0.2
+			FROM = { emf_pacifist_true_religion = yes }
+		}
+		modifier = {
+			factor = 2
+			FROM = { emf_warlike_true_religion = yes }
+		}
+		modifier = {
+			factor = 0.5
+			holder_scope = {  
+				any_owned_bloodline = {
+					has_bloodline_flag = bloodline_less_factions
+					bloodline_is_active_for = PREV
+				}
+			}
+		}
 		modifier = {
 			factor = 0
 			FROM = {
@@ -358,95 +368,119 @@ faction_succ_seniority = {
 		
 		modifier = {
 			factor = 0
-			holder_scope = {
-				any_spouse = { character = FROM }
-			}
+			holder_scope = { is_married = FROM }
 		}
-		
+		modifier = {
+			factor = 0
+			current_heir = { character = FROM }
+		}
+		modifier = {
+			factor = 0
+			FROM = { primary_title = { is_primary_type_title = yes } }
+		}
 		modifier = {
 			factor = 0
 			current_heir = {
-				character = FROM
-			}
-		}
-		
-		modifier = {
-			factor = 0
-			NOT = { would_be_heir_under_law = { who = FROM law = seniority } }
-
-			#heir_under_seniority_law = {
-				#OR = {
-					#ROOT = { current_heir = { character = PREV } } 
-					#FROM = {
-						#opinion_diff = {
-							#first = LIEGE
-							#second = PREV
-							#value = -25 # I don't like the pretender enough
-							#as_if_liege = yes
-						#}
-					#}
-				#}
-			#}
-
-		}
-		
-		modifier = {
-			factor = 0
-			FROM = {
-				OR = {
-					AND = {
-						NOT = { leads_faction = faction_succ_seniority }
-						opinion = { who = LIEGE value = 50 } 
-					}
-					AND = {
-						leads_faction = faction_succ_seniority
-						opinion = { who = LIEGE value = 75 } 
+				ROOT = {
+					heir_under_seniority_law = {
+						character = PREVPREV
 					}
 				}
 			}
 		}
-		
+		modifier = {
+			factor = 0
+			NOR = {
+				has_flag = former_seniority
+				FROM = {
+					OR = {
+						culture_group = east_slavic
+						culture_group = west_slavic
+						culture_group = south_slavic
+						culture_group = central_slavic
+						culture_group = far_east_slavic
+						culture_group = magyar
+						culture_group = east_african
+					}
+				}
+				heir_under_seniority_law = {
+					OR = {
+						character = FROM
+						is_married = FROM
+						is_friend = FROM
+						is_lover = FROM
+						is_close_relative = FROM
+					}
+					ai_ambition = 40
+					diplomacy = 12
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			#either has to be the seniority heir or the seniority heir is a dynasty member/ally I like better than my liege
+			NOR = {
+				would_be_heir_under_law = { who = FROM law = seniority }
+				heir_under_seniority_law = {
+					OR = {
+						dynasty = FROM
+						is_married = FROM
+						is_friend = FROM
+						is_lover = FROM
+					}
+					FROM = { opinion_diff = { first = PREV second = LIEGE value = 25 as_if_liege = yes } }
+					reverse_opinion = { who = FROM value = 0 }
+				}
+			}
+		}
 		modifier = {
 			factor = 0
 			FROM = { preparing_invasion = yes }
 		}
-		
 		modifier = {
-			factor = 0
-			FROM = { 
-				opinion = { who = LIEGE value = 25 } 
-				NOT = {
+			factor = 0.1
+			FROM = {
+				opinion = { who = LIEGE value = 0 }
+				NOR = {
 					trait = deceitful
-					trait = ambitious
+					ai_ambition = 40
 					trait = envious
-				}			
+				}
 			}
-		}		
-		
+		}
 		modifier = {
 			factor = 0
 			FROM = {
-				opinion = { who = LIEGE value = 50 } 
+				opinion = { who = LIEGE value = 20 }
+				NOR = {
+					trait = deceitful
+					ai_ambition = 40
+					trait = envious
+				}
+			}
+		}
+		modifier = {
+			factor = 0.1
+			FROM = {
+				opinion = { who = LIEGE value = 20 }
 				OR = {
 					trait = deceitful
-					trait = ambitious
+					ai_ambition = 40
 					trait = envious
-				}				
+				}
 			}
 		}
-		
 		modifier = {
-			factor = 0.2
-			FROM = { pacifist = yes }
-		}
-
-		modifier = {
-			factor = 0.5
-			liege = {  
-				any_owned_bloodline = { has_bloodline_flag = bloodline_less_factions }
+			factor = 0
+			FROM = {
+				opinion = { who = LIEGE value = 40 }
+				OR = {
+					trait = deceitful
+					ai_ambition = 40
+					trait = envious
+				}
 			}
 		}
-		
 		modifier = {
 			factor = 1.5
 			NOT = { FROM = { opinion = { who = LIEGE value = 0 } } }
@@ -460,8 +494,12 @@ faction_succ_seniority = {
 			NOT = { FROM = { opinion = { who = LIEGE value = -75 } } }
 		}
 		modifier = {
-			factor = 0.01
-			FROM = { trait = content }
+			factor = 0.1
+			FROM = { NOT = { ai_ambition = -39 } }
+		}
+		modifier = {
+			factor = 0.1
+			FROM = { NOT = { ai_ambition = -19 } }
 		}
 		modifier = {
 			factor = 0.01
@@ -477,7 +515,7 @@ faction_succ_seniority = {
 		}
 		modifier = {
 			factor = 0.2
-			FROM = { 
+			FROM = {
 				OR = {
 					trait = slow
 					trait = dull
@@ -537,8 +575,12 @@ faction_succ_seniority = {
 			FROM = { trait = deceitful }
 		}
 		modifier = {
-			factor = 4.0
-			FROM = { trait = ambitious }
+			factor = 2.0
+			FROM = { ai_ambition = 20 }
+		}
+		modifier = {
+			factor = 2.0
+			FROM = { ai_ambition = 40 }
 		}
 	}
 	
