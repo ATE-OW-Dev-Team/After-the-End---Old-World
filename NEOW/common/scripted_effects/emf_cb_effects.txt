@@ -38,6 +38,31 @@ emf_cb_thirdparty_on_success_posttitle = {
 	emf_cb_on_success_posttitle = yes # Currently the same since we only care about giver/receiver
 }
 
+emf_cb_on_add = {
+	attacker = { emf_cb_reset_peace_years = yes }
+	defender = { emf_cb_reset_peace_years = yes }
+	hidden_effect = { fire_haruspicy_event_effect = yes }
+	if = {
+		limit = { defender = { is_offmap_governor = offmap_china } }
+		attacker = {
+			sound_effect = china_angered_emperor
+			detract_grace_super_huge_effect = yes 
+		}
+	}
+	# All CBs should automatically clear the can_use/can_use_title/can_use_gui bypass flag, emf_cb_pass_tmp, if it exists:
+	attacker = { clr_flag = emf_cb_pass_tmp }
+}
+
+emf_cb_reset_peace_years = {
+	hidden_effect = {
+		if = {
+			limit = {
+				check_variable = { which = emf_peace_years value > 0 }
+			}
+			set_variable = { which = emf_peace_years value = 0 }
+		}
+	}
+}
 
 ## STANDARD CB OUTCOME EFFECTS ##
 
