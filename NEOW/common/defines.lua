@@ -1735,7 +1735,7 @@ NFrontend =
 	CAMERA_END_Z = 200.0,
 	TIME_FROZEN = 1.0,  				-- Time before initial animation starts (some delay here so it should NOT be 0, then the animation starts before you can see it)
 	GUI_MOVE_SPEED = 800,				-- How fast sliding gui objects move ( pixels/s )
-	MAX_ZOOM_LEVEL = 2500,				-- How far out the player can zoom. Warning: At very high zoom levels, the ground will no longer render
+	MAX_ZOOM_LEVEL =3700,				-- How far out the player can zoom. Warning: At very high zoom levels, the ground will no longer render
 
 	FADE_IN_DONE_TIME = 1.0,
 	GUI_START_MOVE_TIME = 0.5,
