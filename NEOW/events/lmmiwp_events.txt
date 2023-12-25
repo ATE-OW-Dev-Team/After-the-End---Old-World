@@ -1,0 +1,650 @@
+namespace = lmmiwp
+
+# Reserved for any global setup at startup
+# character_event = {
+	# id = lmmiwp.1001
+	# hide_window = yes
+	# is_triggered_only = yes
+	
+	# only_playable = yes
+	# ai = no
+	
+	# trigger = {
+		# is_multiplayer_host_character = yes
+	# }
+	
+	# immediate = {
+		
+	# }
+# }
+
+# Cleanup on inviter's death
+character_event = {
+	id = lmmiwp.1002
+	hide_window = yes
+	is_triggered_only = yes
+	
+	only_playable = yes
+	ai = no
+	
+	immediate = {
+		any_demesne_title = {
+			clr_title_flag = lmmiwp_title_is_being_promised_by_@ROOT			
+		}
+		
+		any_landed_title = {
+			limit = {
+				has_title_flag = lmmiwp_title_used_for_invite_by_@ROOT
+			}
+			clr_title_flag = lmmiwp_title_used_for_invite_by_@ROOT
+			clear_flags_with_prefix = lmmiwp_title_promised_to_
+		}
+		
+		any_courtier = {
+			limit = {
+				has_character_flag = lmmiwp_character_invited_by_@ROOT
+			}
+			lmmiwp_cleanup_invitee_effect = yes
+		}
+		
+		any_realm_lord = {
+			limit = {
+				has_character_flag = lmmiwp_character_invited_by_@ROOT
+			}
+			lmmiwp_cleanup_invitee_effect = yes
+		}
+	}
+}
+
+# Cleanup on invitee moving to another court. FROM is the old employer
+character_event = {
+	id = lmmiwp.1003
+	hide_window = yes
+	is_triggered_only = yes
+	
+	has_character_flag = lmmiwp_invited_character	
+	
+	immediate = {
+		# set_character_flag = lmmiwp_fromfrom_is_@FROMFROM
+		# set_character_flag = lmmiwp_from_is_@FROM
+		# set_character_flag = lmmiwp_root_is_@ROOT
+		if = {
+			limit = {				
+				has_character_flag = lmmiwp_character_invited_by_@FROM
+				liege = {
+					NOT = { is_vassal_or_below_of = FROM }
+				}
+			}
+			ROOT = {
+				save_event_target_as = lmmiwp_invitee
+			}
+			FROM = {
+				save_event_target_as = lmmiwp_inviter
+			}
+			hidden_tooltip = {
+				generate_tooltip = no
+				lmmiwp_cleanup_titles_effect = yes
+				lmmiwp_cleanup_invitee_effect = yes
+			}
+		}
+	}
+}
+
+# Cleanup on invitee's death
+character_event = {
+	id = lmmiwp.1004
+	hide_window = yes
+	is_triggered_only = yes
+		
+	has_character_flag = lmmiwp_invited_character
+	
+	immediate = {
+		if = {
+			limit = {
+				persistent_event_target:lmmiwp_my_inviter = {
+					always = yes
+				}
+			}
+			save_event_target_as = lmmiwp_invitee
+			persistent_event_target:lmmiwp_my_inviter = {
+				save_event_target_as = lmmiwp_inviter
+			}
+			hidden_tooltip = {
+				generate_tooltip = no
+				lmmiwp_cleanup_titles_effect = yes				
+			}
+		}
+	}
+}
+
+# Effects and cleanup on imprison or fled imprison hostile action
+character_event = {
+	id = lmmiwp.1005
+	hide_window = yes
+	is_triggered_only = yes
+	
+	has_character_flag = lmmiwp_invited_character
+	
+	immediate = {
+		if = {
+			limit = {
+				has_character_flag = lmmiwp_character_invited_by_@FROM				
+			}
+			save_event_target_as = lmmiwp_invitee
+			FROM = {
+				save_event_target_as = lmmiwp_inviter
+				lmmiwp_add_broken_promises_trait_and_modifier_effect = yes
+				lmmiwp_add_backstabbed_trait_and_modifier_effect = yes
+			}
+			remove_opinion = { who = event_target:lmmiwp_inviter modifier = lmmiwp_invited_with_promises_opinion }
+			lmmiwp_add_broken_promises_opinion_effect = yes
+			lmmiwp_add_backstabbed_opinion_effect = yes
+			hidden_tooltip = {
+				generate_tooltip = no
+				lmmiwp_cleanup_titles_effect = yes
+				lmmiwp_cleanup_invitee_effect = yes
+			}
+		}
+	}
+}
+
+# Check every 30 days and remove title from promised list if it has been destroyed
+character_event = {
+	id = lmmiwp.1006
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		event_target:lmmiwp_title_to_clear_flags = {
+			if = {
+				limit = {
+					has_title_flag = lmmiwp_title_is_being_promised_by_@ROOT
+					NOT = {
+						holder_scope = {
+							character = ROOT
+						}
+					}
+				}
+				clr_title_flag = lmmiwp_title_is_being_promised_by_@ROOT
+				if = {
+					limit = {
+						ROOT = { is_alive = yes }
+					}
+					trigger_switch = {
+						on_trigger = real_tier
+						
+						baron = { ROOT = { change_variable = { which = lmmiwp_promised_baronies value = -1 } } }
+						count = { ROOT = { change_variable = { which = lmmiwp_promised_counties value = -1 } } }
+						duke = { ROOT = { change_variable = { which = lmmiwp_promised_duchies value = -1 } } }
+						king = { ROOT = { change_variable = { which = lmmiwp_promised_kingdoms value = -1 } } }
+						emperor = { ROOT = { change_variable = { which = lmmiwp_promised_empires value = -1 } } }
+					}
+				}				
+			}
+			else = {
+				ROOT = { repeat_event = { id = lmmiwp.1006 days = 15 } }
+			}
+		}
+	}
+}
+
+# View promises made
+character_event = {
+	id = lmmiwp.2001	
+	is_triggered_only = yes
+	
+	desc = EVTDESC_view_promises_made
+	
+	option = {
+		name = EVTOPT_view_promises_made
+		
+		if = {
+			limit = {
+				event_target:lmmiwp_invitee = {
+					persistent_event_target:lmmiwp_title_promised_to_press_claim_by_inviter = {
+						always = yes
+					}
+				}
+			}
+			custom_tooltip = {
+				text = lmmiwp_ctt_view_promises_press_claim
+			}
+		}
+		
+		if = {
+			limit = {
+				event_target:lmmiwp_invitee = {
+					has_character_flag = lmmiwp_promised_council_position_by_@event_target:lmmiwp_inviter
+				}
+			}
+			custom_tooltip = {
+				text = lmmiwp_ctt_view_promises_council_position
+			}
+		}
+		
+		if = {
+			limit = {
+				event_target:lmmiwp_invitee = {
+					has_character_flag = lmmiwp_promised_commander_by_@event_target:lmmiwp_inviter
+				}
+			}
+			custom_tooltip = {
+				text = lmmiwp_ctt_view_promises_commander
+			}
+		}
+		
+		custom_tooltip = {
+			text = lmmiwp_ctt_view_promises_grant_titles
+		}
+		any_landed_title = {
+			limit = {
+				has_title_flag = lmmiwp_title_used_for_invite_by_@event_target:lmmiwp_inviter
+				has_title_flag = lmmiwp_title_promised_to_@event_target:lmmiwp_invitee
+			}
+			custom_tooltip = {
+				text = lmmiwp_dot_string
+			}
+		}
+	}
+}
+
+# Adjust other promises
+character_event = {
+	id = lmmiwp.2002
+	is_triggered_only = yes
+	
+	desc = EVTDESC_adjust_other_promises
+	
+	# Council only
+	option = {
+		name = EVTOPT_adjust_promises_council_only		
+		clear_flags_with_prefix = lmmiwp_other_promises_
+		set_character_flag = lmmiwp_other_promises_council_position
+	}
+	
+	# # Commander only
+	# option = {
+		# name = EVTOPT_adjust_promises_commander_only
+		# clear_flags_with_prefix = lmmiwp_other_promises_
+		# set_character_flag = lmmiwp_other_promises_commander
+	# }
+	
+	# # Council and Commander
+	# option = {
+		# name = EVTOPT_adjust_promises_council_and_commander
+		# clear_flags_with_prefix = lmmiwp_other_promises_
+		# set_character_flag = lmmiwp_other_promises_council_position
+		# set_character_flag = lmmiwp_other_promises_commander
+	# }
+	
+	# None
+	option = {
+		name = EVTOPT_adjust_promises_none
+		clear_flags_with_prefix = lmmiwp_other_promises_
+	}
+}
+
+# Event received by target when invited
+letter_event = {
+	id = lmmiwp.3001
+	is_triggered_only = yes
+	desc = EVTDESC_invitation_received
+	
+	# Join court
+	option = {
+		set_character_flag = lmmiwp_invited_character
+		set_character_flag = lmmiwp_character_invited_by_@event_target:lmmiwp_inviter		
+		save_event_target_as = lmmiwp_invitee
+		save_persistent_event_target = { name = lmmiwp_my_inviter scope = event_target:lmmiwp_inviter }
+		set_variable = { which = local_lmmiwp_years_waited value = 0 }
+		
+		move_character = event_target:lmmiwp_inviter
+		opinion = { modifier = lmmiwp_invited_with_promises_opinion who = event_target:lmmiwp_inviter years = 10 }		
+		
+		event_target:lmmiwp_inviter = {
+			# Grant pardon
+			clear_prison_reasons = ROOT
+			clear_revoke_reasons = ROOT
+			clear_execute_reasons = ROOT
+			clear_banish_reasons = ROOT
+			
+			# Set council position flag
+			if = {
+				limit = {
+					has_character_flag = lmmiwp_other_promises_council_position
+				}
+				ROOT = {
+					set_character_flag = lmmiwp_promised_council_position_by_@event_target:lmmiwp_inviter
+				}
+			}
+			
+			if = {
+				limit = {
+					has_character_flag = lmmiwp_other_promises_commander					
+				}
+				ROOT = {
+					set_character_flag = lmmiwp_promised_commander_by_@event_target:lmmiwp_inviter
+				}
+			}
+			
+			if = {
+				limit = {
+					ROOT = { lmmiwp_can_be_granted_titles_trigger = yes }
+				}
+				# Clear and set flags
+				any_demesne_title = {
+					limit = { 
+						has_title_flag = lmmiwp_title_is_being_promised_by_@event_target:lmmiwp_inviter					
+					}
+					clr_title_flag = lmmiwp_title_is_being_promised_by_@event_target:lmmiwp_inviter
+					set_title_flag = lmmiwp_title_used_for_invite_by_@event_target:lmmiwp_inviter
+					set_title_flag = lmmiwp_title_promised_to_@ROOT		
+					save_persistent_event_target = { name = lmmiwp_this_title_is_promised_to scope = ROOT }
+				}
+				
+				# Reset variables			
+				set_variable = { which = lmmiwp_promised_baronies value = 0 }
+				set_variable = { which = lmmiwp_promised_counties value = 0 }
+				set_variable = { which = lmmiwp_promised_duchies value = 0 }
+				set_variable = { which = lmmiwp_promised_kingdoms value = 0 }
+				set_variable = { which = lmmiwp_promised_empires value = 0 }
+			}			
+			
+			if = {
+				limit = {
+					persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+						always = yes
+						claimed_by = ROOT	
+						lmmiwp_inviter_can_press_claim_trigger = yes
+					}					
+				}
+				persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+					save_event_target_as = lmmiwp_title_to_press_claim
+					holder_scope = {
+						opinion = { who = event_target:lmmiwp_inviter modifier = lmmiwp_promised_to_press_claim_against_me_opinion }
+					}
+					
+					ROOT = {
+						save_persistent_event_target = { name = lmmiwp_title_promised_to_press_claim_by_inviter scope = PREV }
+					}
+				}
+				clear_persistent_event_target = lmmiwp_promised_title_to_press_claim
+			}
+			else = {
+				ROOT = {
+					clear_persistent_event_target = lmmiwp_title_promised_to_press_claim_by_inviter
+				}
+			}
+			
+			ROOT = {
+				lmmiwp_check_if_inviter_can_fulfill_promises_effect = yes
+			}
+			
+			letter_event = { id = lmmiwp.4001 } # Notify of acceptance
+		}
+	}
+}
+
+
+
+# Inviter is notified of decision
+letter_event = {
+	id = lmmiwp.4001
+	is_triggered_only = yes
+	
+	desc = {
+		text = EVTDESC_already_fulfilled
+		trigger = {
+			FROM = { 			
+				has_character_flag = lmmiwp_all_promises_fulfilled 				
+			}
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_accepted_invitation
+		trigger = {		
+			FROM = {
+				NOT = { has_character_flag = lmmiwp_is_reminding }
+				NOR = {					
+					has_character_flag = lmmiwp_did_not_accept_to_be_patient
+					has_character_flag = lmmiwp_all_promises_fulfilled
+					lmmiwp_inviter_cannot_fulfill_promises_trigger = yes										
+				}				
+			}			
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_remind_about_promises
+		trigger = {
+			FROM = {
+				has_character_flag = lmmiwp_is_reminding				
+				NOR = {
+					has_character_flag = lmmiwp_did_not_accept_to_be_patient
+					has_character_flag = lmmiwp_all_promises_fulfilled
+					lmmiwp_inviter_cannot_fulfill_promises_trigger = yes					
+				}				
+			}
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_cannot_fulfill_promises
+		trigger = {
+			FROM = {
+				NOT = { has_character_flag = lmmiwp_all_promises_fulfilled }
+				lmmiwp_inviter_cannot_fulfill_promises_trigger = yes								
+			}
+		}
+	}
+	
+	desc = {
+		text = EVTDESC_did_not_accept_to_be_patient
+		trigger = {
+			FROM = { 
+				NOT = { has_character_flag = lmmiwp_all_promises_fulfilled }
+				has_character_flag = lmmiwp_did_not_accept_to_be_patient 
+			}
+			is_variable_equal = { which = local_lmmiwp_years_waited value = 0 }
+		}
+	}
+	
+	desc = { 
+		text = EVTDESC_will_not_wait_any_longer
+		trigger = {
+			FROM = { 
+				NOT = { has_character_flag = lmmiwp_all_promises_fulfilled }
+				has_character_flag = lmmiwp_did_not_accept_to_be_patient 
+			}
+			check_variable = { which = local_lmmiwp_years_waited value = 1 }
+		}
+	}
+	
+	# Fulfill promises
+	# Must check if the invitee has not already been imprisoned OR killed by the inviter
+	option = {
+		name = EVTOPT_fulfill_promises
+		
+		trigger = {			
+			FROM = {
+				NOT = { has_character_flag = lmmiwp_inviter_is_defending_against_press_claim_target }
+				NOT = { lmmiwp_inviter_cannot_fulfill_promises_trigger = yes }
+			}
+		}
+		# Check if the invitee has been imprisoned or killed by the inviter
+		if = {
+			limit = {
+				lmmiwp_has_taken_hostile_action_against_FROM_trigger = yes
+			}
+			# Do broken promises stuff
+			custom_tooltip = {
+				text = lmmiwp_ctt_already_broken_promise_so_cant_fulfill
+			}
+			lmmiwp_handle_broken_promises_effect = yes
+		}
+		else = {			
+			lmmiwp_handle_fulfill_promises_effect = yes
+			
+			# Clean up
+			FROM = {
+				lmmiwp_cleanup_invitee_effect = yes
+			}
+		}
+	}
+	
+	# Delayed fulfillment	
+	option = {
+		name = {
+			text = EVTOPT_delayed_fulfillment
+			trigger = {
+				NOT = { check_variable = { which = local_lmmiwp_years_waited value = 1 } }
+			}
+		}
+		
+		name = {
+			text = EVTOPT_delayed_fulfillment_repeat
+			trigger = {
+				check_variable = { which = local_lmmiwp_years_waited value = 1 }
+			}
+		}
+		
+		
+		trigger = {
+			NOT = { has_game_rule = { name = lmmiwp_rule_invitee_patience value = lmmiwp_rule_option_impatient } }
+			FROM = {
+				NOR = { 
+					has_character_flag = lmmiwp_all_promises_fulfilled
+					has_character_flag = lmmiwp_did_not_accept_to_be_patient 					
+					lmmiwp_inviter_cannot_fulfill_promises_trigger = yes
+				}
+			}						
+		}
+		
+		# Check if the invitee has been imprisoned or killed by the inviter
+		if = {
+			limit = {
+				lmmiwp_has_taken_hostile_action_against_FROM_trigger = yes
+			}
+			# Do broken promises stuff
+			custom_tooltip = {
+				text = lmmiwp_ctt_already_broken_promise_so_cant_fulfill				
+			}			
+			lmmiwp_handle_broken_promises_effect = yes
+		}
+		else = {			
+			lmmiwp_handle_request_for_delayed_fulfillment_effect = yes
+		}
+	}
+	
+	# Break promises
+	option = {
+		name = EVTOPT_break_promises
+		
+		trigger = {
+			FROM = {
+				NOT = { has_character_flag = lmmiwp_all_promises_fulfilled }
+			}
+		}
+		
+		lmmiwp_handle_broken_promises_effect = yes
+		
+		FROM = {
+			lmmiwp_cleanup_invitee_effect = yes
+		}		
+	}
+	
+	after = {		
+		FROM = {
+			clr_character_flag = lmmiwp_is_reminding			
+			clr_character_flag = lmmiwp_inviter_cannot_press_promised_claim
+			clr_character_flag = lmmiwp_inviter_cannot_grant_promised_titles
+			clr_character_flag = lmmiwp_inviter_is_defending_against_press_claim_target	
+			clr_character_flag = lmmiwp_inviter_is_already_pressing_my_claim
+			clr_character_flag = lmmiwp_will_not_wait_any_longer
+			clr_character_flag = lmmiwp_did_not_accept_to_be_patient
+			clr_character_flag = lmmiwp_inviter_cannot_make_me_councillor 
+			clr_character_flag = lmmiwp_inviter_cannot_make_me_commander
+			clr_character_flag = lmmiwp_all_promises_fulfilled
+		}
+	}
+}
+
+# Invitee receives event to remind inviter. In this event: ROOT is invitee, FROM is inviter
+# Will check if the promises can still be fulfilled and set flags accordingly
+character_event = {
+	id = lmmiwp.4002
+	hide_window = yes
+	is_triggered_only = yes
+	
+	trigger = {		
+		is_alive = yes
+		prisoner = no
+	}
+	
+	# Check if some promises can still be fulfilled. Then set appropriate flag.
+	option = {
+		if = {
+			limit = {
+				any_liege = {
+					character = FROM
+				}
+			}
+			change_variable = { which = local_lmmiwp_years_waited value = 1 }
+			set_character_flag = lmmiwp_is_reminding
+						
+			lmmiwp_check_if_inviter_can_fulfill_promises_effect = yes
+			
+			lmmiwp_check_if_all_promises_are_already_fulfilled_effect = yes
+						
+			FROM = {
+				letter_event = { id = lmmiwp.4001 } # Remind the inviter
+			}
+		}
+		else = {
+			hidden_tooltip = {
+				generate_tooltip = no
+				lmmiwp_cleanup_invitee_effect = yes
+				lmmiwp_cleanup_titles_effect = yes
+			}
+		}
+	}
+}
+
+# Ping event
+character_event = {
+	id = lmmiwp.4003
+	hide_window = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		set_character_flag = lmmiwp_did_not_accept_to_be_patient
+		FROM = {
+			letter_event = { id = lmmiwp.4001 } # Tell inviter that I didn't accept to be patient
+		}
+	}
+}
+
+# Debug event for testing stuff
+# character_event = {
+	# id = lmmiwp.9999
+	# #hide_window = yes
+	# is_triggered_only = yes
+	
+	# immediate = {
+		# # c_73679 = {
+			# # save_event_target_as = lmmiwp_target_court
+		# # }
+		# # c_200203 = {
+			# # move_character = event_target:lmmiwp_target_court
+		# # }
+		
+		# c_200203 = {
+			# death = { death_reason = death_natural }
+		# }
+	# }
+	
+	# option = {
+		# name = OK
+	# }
+# }

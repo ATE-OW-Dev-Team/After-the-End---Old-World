@@ -1,0 +1,892 @@
+# ROOT is the target, FROM is decision taker
+targetted_decisions = {
+	lmmiwp_toggle_other_promises = {
+		ai = no
+		only_playable = yes
+		
+		from_potential = {
+			
+		}
+		
+		potential = {
+			lmmiwp_show_invitation_decision_trigger = yes
+			lmmiwp_can_be_invited_with_promises_trigger = yes
+		}
+		
+		allow = {
+			
+		}
+		
+		effect = {
+			FROM = {
+				character_event = { id = lmmiwp.2002 }
+			}
+		}
+	}
+	
+	lmmiwp_view_promises_made = {
+		ai = no
+		only_playable = yes
+		
+		from_potential = {
+			
+		}
+		
+		potential = {
+			has_character_flag = lmmiwp_character_invited_by_@FROM
+		}
+		
+		allow = {
+			
+		}
+		
+		effect = {
+			ROOT = {
+				save_event_target_as = lmmiwp_invitee
+			}
+			FROM = {
+				save_event_target_as = lmmiwp_inviter
+				character_event = { id = lmmiwp.2001 }
+			}
+		}
+	}
+	
+	lmmiwp_invite_with_promises = {
+		ai = no
+		only_playable = yes		
+		
+		from_potential = {			
+			
+		}
+		
+		potential = {
+			lmmiwp_show_invitation_decision_trigger = yes			
+		}
+		
+		allow = {			
+			FROM = {
+				custom_tooltip = {
+					text = lmmiwp_ctt_is_offering_something_as_promise
+					lmmiwp_is_offering_something_as_promise_trigger = yes
+				}				
+				lmmiwp_can_invite_with_promises_trigger = yes
+			}
+			ROOT = {
+				lmmiwp_can_be_invited_with_promises_trigger = yes
+			}
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					FROM = {
+						persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+							has_holder = yes
+							claimed_by = ROOT							
+							lmmiwp_inviter_can_press_claim_trigger = yes
+						}					
+					}
+				}
+				custom_tooltip = {
+					text = lmmiwp_ctt_applicable_promise_press_claim
+				}
+			}
+			
+			if = {
+				limit = {
+					FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+				}
+				custom_tooltip = {
+					text = lmmiwp_ctt_applicable_promise_council_position
+				}
+			}
+			
+			# if = {
+				# limit = {
+					# FROM = { has_character_flag = lmmiwp_other_promises_commander }
+				# }
+				# custom_tooltip = {
+					# text = lmmiwp_ctt_applicable_promise_commander
+				# }
+			# }
+			
+			if = {
+				limit = {
+					FROM = {
+						OR = {
+							check_variable = { which = lmmiwp_promised_baronies value = 1 }
+							check_variable = { which = lmmiwp_promised_counties value = 1 }
+							check_variable = { which = lmmiwp_promised_duchies value = 1 }
+							check_variable = { which = lmmiwp_promised_kingdoms value = 1 }
+							check_variable = { which = lmmiwp_promised_empires value = 1 }
+						}
+					}
+					ROOT = {
+						lmmiwp_can_be_granted_titles_trigger = yes
+					}
+				}
+				custom_tooltip = {
+					text = lmmiwp_ctt_applicable_promise_grant_titles
+				}				
+			}
+			
+			hidden_tooltip = {
+				FROM = {
+					save_event_target_as = lmmiwp_inviter
+				}
+				letter_event = { id = lmmiwp.3001 } # Target is notified of the invite		
+			}
+		}
+		
+		ai_acceptance = {
+			factor = 0
+			yes_threshold = 1
+			
+			# Debug
+			# additive_modifier = {
+				# value = 9999
+				# always = yes
+			# }
+			
+			# Base reluctance
+			additive_modifier = {
+				value = -50				
+				localisation_key = lmmiwp_reason_base_reluctance
+				always = yes				
+			}
+			
+			# Misc
+			additive_modifier = {
+				value = -50
+				localisation_key = lmmiwp_reason_higher_tier
+				higher_real_tier_than = FROM				
+			}
+			
+			additive_modifier = {
+				value = -250
+				localisation_key = lmmiwp_reason_false_religion
+				NOT = { religion_group = FROM }				
+			}
+			
+			additive_modifier = {
+				value = -250
+				localisation_key = lmmiwp_reason_promise_breaker
+				FROM = {
+					has_character_modifier = lmmiwp_promise_breaker
+				}
+			}
+			
+			additive_modifier = {
+				value = -9999
+				localisation_key = lmmiwp_reason_backstabber
+				FROM = {
+					has_character_modifier = lmmiwp_backstabber
+				}
+			}
+
+			# additive_modifier = {
+				# value = 25
+				# localisation_key = lmmiwp_will_be_granted_pardon				
+			# }
+			
+			# Traits
+			additive_modifier = {
+				value = -10
+				localisation_key = lmmiwp_reason_slothful
+				trait = slothful				
+			}
+			
+			additive_modifier = {
+				value = -25
+				localisation_key = lmmiwp_reason_content
+				trait = content				
+			}
+			
+			additive_modifier = {
+				value = -25
+				localisation_key = lmmiwp_reason_paranoid
+				trait = paranoid				
+			}
+			
+			additive_modifier = {
+				value = 25
+				localisation_key = lmmiwp_reason_trusting
+				trait = trusting	
+				NOT = {
+					FROM = { trait = deceitful }
+				}
+			}
+			
+			additive_modifier = {
+				value = 15
+				localisation_key = lmmiwp_reason_inviter_is_honest
+				FROM = { trait = honest }
+			}
+			
+			additive_modifier = {
+				value = 25
+				localisation_key = lmmiwp_reason_envious
+				trait = envious
+				FROM = {
+					persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+						has_holder = yes
+						claimed_by = ROOT						
+					}
+				}
+			}
+			
+			additive_modifier = {
+				value = 50
+				localisation_key = lmmiwp_reason_ambitious
+				trait = ambitious
+				FROM = { 
+					OR = {
+						any_demesne_title = {
+							has_title_flag = lmmiwp_title_promised_by_@FROM
+						}
+						persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+							has_holder = yes
+							claimed_by = ROOT
+						}
+					}					
+				}				
+			}
+			
+			additive_modifier = {
+				value = 50
+				localisation_key = lmmiwp_reason_greedy
+				trait = greedy
+				FROM = { 
+					OR = {
+						any_demesne_title = {
+							has_title_flag = lmmiwp_title_promised_by_@FROM
+						}
+						persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+							has_holder = yes
+							claimed_by = ROOT
+						}
+					}					
+				}				
+			}
+			
+			
+			# Promised to press claim
+			additive_modifier = {
+				value = 25
+				localisation_key = lmmiwp_reason_promised_to_press_claim				
+				FROM = {
+					persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+						has_holder = yes
+						claimed_by = ROOT
+						real_tier = baron
+						lmmiwp_inviter_can_press_claim_trigger = yes
+					}					
+				}
+			}
+			
+			additive_modifier = {
+				value = 50
+				localisation_key = lmmiwp_reason_promised_to_press_claim				
+				FROM = {
+					persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+						has_holder = yes
+						claimed_by = ROOT
+						real_tier = count
+						lmmiwp_inviter_can_press_claim_trigger = yes
+					}					
+				}
+			}
+			
+			additive_modifier = {
+				value = 100
+				localisation_key = lmmiwp_reason_promised_to_press_claim				
+				FROM = {
+					persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+						has_holder = yes
+						claimed_by = ROOT
+						real_tier = duke
+						lmmiwp_inviter_can_press_claim_trigger = yes
+					}					
+				}
+			}
+			additive_modifier = {
+				value = 250
+				localisation_key = lmmiwp_reason_promised_to_press_claim				
+				FROM = {
+					persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+						has_holder = yes
+						claimed_by = ROOT
+						real_tier = king
+						lmmiwp_inviter_can_press_claim_trigger = yes
+					}					
+				}
+			}
+			
+			additive_modifier = {
+				value = 500
+				localisation_key = lmmiwp_reason_promised_to_press_claim				
+				FROM = {
+					persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+						has_holder = yes
+						claimed_by = ROOT
+						real_tier = emperor
+						lmmiwp_inviter_can_press_claim_trigger = yes
+					}					
+				}
+			}
+			
+			# additive_modifier = {
+				# value = -100
+				# localisation_key = lmmiwp_reason_too_weak_to_press_claim
+				# OR = {
+					# trait = shrewd
+					# trait = quick
+					# trait = genius
+				# }
+				# NOR = {
+					# trait = imbecile
+					# trait = slow
+					# trait = dull
+				# }
+				# FROM = {
+					# persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+						# has_holder = yes
+						# claimed_by = ROOT
+						# holder_scope = {							
+							# top_liege = {								
+								# relative_power_including_allies_defender = { who = FROM power = 1.1 }
+								# FROM = {
+									# NOT = { relative_power_including_allies_attacker = { who = PREV power = 1.1 } }
+								# }								
+							# }
+						# }		
+					# }					
+				# }
+			# }
+			
+			additive_modifier = {
+				value = -9999
+				localisation_key = lmmiwp_reason_non_aggression_pact_with_claim
+				FROM = {
+					persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+						has_holder = yes
+						claimed_by = ROOT						
+						holder_scope = {							
+							top_liege = {
+								has_non_aggression_pact_with = FROM
+							}
+						}						
+					}					
+				}
+			}
+			
+			# Opinion of inviter		
+			
+			additive_modifier = {
+				value = 10
+				localisation_key = lmmiwp_reason_opinion_of_inviter
+				opinion = { who = FROM value = 20 }
+				NOT = { opinion = { who = FROM value = 40 } }
+			}
+			
+			additive_modifier = {
+				value = 20
+				localisation_key = lmmiwp_reason_opinion_of_inviter
+				opinion = { who = FROM value = 40 }
+				NOT = { opinion = { who = FROM value = 60 } }
+			}
+			
+			additive_modifier = {
+				value = 30
+				localisation_key = lmmiwp_reason_opinion_of_inviter
+				opinion = { who = FROM value = 60 }
+				NOT = { opinion = { who = FROM value = 80 } }
+			}
+			
+			additive_modifier = {
+				value = 40
+				localisation_key = lmmiwp_reason_opinion_of_inviter
+				opinion = { who = FROM value = 80 }
+				NOT = { opinion = { who = FROM value = 100 } }
+			}
+			
+			additive_modifier = {
+				value = 50
+				localisation_key = lmmiwp_reason_opinion_of_inviter
+				opinion = { who = FROM value = 100 }				
+			}
+			
+			additive_modifier = {
+				value = -10
+				localisation_key = lmmiwp_reason_opinion_of_inviter
+				opinion = { who = FROM value = -40 }
+				NOT = { opinion = { who = FROM value = -19 } }				
+			}
+			
+			additive_modifier = {
+				value = -20
+				localisation_key = lmmiwp_reason_opinion_of_inviter
+				opinion = { who = FROM value = -60 }
+				NOT = { opinion = { who = FROM value = -39 } }				
+			}
+			
+			additive_modifier = {
+				value = -30
+				localisation_key = lmmiwp_reason_opinion_of_inviter
+				opinion = { who = FROM value = -80 }
+				NOT = { opinion = { who = FROM value = -59 } }				
+			}
+			
+			additive_modifier = {
+				value = -40
+				localisation_key = lmmiwp_reason_opinion_of_inviter
+				opinion = { who = FROM value = -100 }
+				NOT = { opinion = { who = FROM value = -79 } }				
+			}
+			
+			additive_modifier = {
+				value = -50
+				localisation_key = lmmiwp_reason_opinion_of_inviter
+				NOT = { opinion = { who = FROM value = -99 } }
+			}
+			
+			# Opinion of liege
+			
+			additive_modifier = {
+				value = -10
+				localisation_key = lmmiwp_reason_opinion_of_liege
+				opinion = { who = LIEGE value = 20 }
+				NOT = { opinion = { who = LIEGE value = 40 } }
+			}
+			
+			additive_modifier = {
+				value = -20
+				localisation_key = lmmiwp_reason_opinion_of_liege
+				opinion = { who = LIEGE value = 40 }
+				NOT = { opinion = { who = LIEGE value = 60 } }
+			}
+			
+			additive_modifier = {
+				value = -30
+				localisation_key = lmmiwp_reason_opinion_of_liege
+				opinion = { who = LIEGE value = 60 }
+				NOT = { opinion = { who = LIEGE value = 80 } }
+			}
+			
+			additive_modifier = {
+				value = -40
+				localisation_key = lmmiwp_reason_opinion_of_liege
+				opinion = { who = LIEGE value = 80 }
+				NOT = { opinion = { who = LIEGE value = 100 } }
+			}
+			
+			additive_modifier = {
+				value = -50
+				localisation_key = lmmiwp_reason_opinion_of_liege
+				opinion = { who = LIEGE value = 100 }				
+			}
+			
+			additive_modifier = {
+				value = 10
+				localisation_key = lmmiwp_reason_opinion_of_liege
+				opinion = { who = LIEGE value = -40 }
+				NOT = { opinion = { who = LIEGE value = -19 } }				
+			}
+			
+			additive_modifier = {
+				value = 20
+				localisation_key = lmmiwp_reason_opinion_of_liege
+				opinion = { who = LIEGE value = -60 }
+				NOT = { opinion = { who = LIEGE value = -39 } }				
+			}
+			
+			additive_modifier = {
+				value = 30
+				localisation_key = lmmiwp_reason_opinion_of_liege
+				opinion = { who = LIEGE value = -80 }
+				NOT = { opinion = { who = LIEGE value = -59 } }				
+			}
+			
+			additive_modifier = {
+				value = 40
+				localisation_key = lmmiwp_reason_opinion_of_liege
+				opinion = { who = LIEGE value = -100 }
+				NOT = { opinion = { who = LIEGE value = -79 } }				
+			}
+			
+			additive_modifier = {
+				value = 50
+				localisation_key = lmmiwp_reason_opinion_of_liege				
+				NOT = { opinion = { who = LIEGE value = -99 } }
+			}		
+			
+			
+			# Other promises
+			
+			additive_modifier = {
+				value = 50
+				localisation_key = lmmiwp_reason_promised_council_position
+				is_councillor = no
+				FROM = { real_tier = count }
+				FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+			}
+			
+			additive_modifier = {
+				value = 75
+				localisation_key = lmmiwp_reason_promised_council_position
+				is_councillor = no
+				FROM = { real_tier = duke }
+				FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+			}
+			
+			additive_modifier = {
+				value = 100
+				localisation_key = lmmiwp_reason_promised_council_position
+				is_councillor = no
+				FROM = { real_tier = king }
+				FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+			}			
+			
+			additive_modifier = {
+				value = 125
+				localisation_key = lmmiwp_reason_promised_council_position
+				is_councillor = no
+				FROM = { real_tier = emperor }
+				FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+			}
+			
+			additive_modifier = {
+				value = 25
+				localisation_key = lmmiwp_reason_promised_council_position_higher_tier
+				is_councillor = yes
+				liege = { real_tier = baron }
+				FROM = { real_tier = count }
+				FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+			}
+			
+			additive_modifier = {
+				value = 50
+				localisation_key = lmmiwp_reason_promised_council_position_higher_tier
+				is_councillor = yes
+				liege = { real_tier = baron }
+				FROM = { real_tier = duke }
+				FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+			}
+			
+			additive_modifier = {
+				value = 75
+				localisation_key = lmmiwp_reason_promised_council_position_higher_tier
+				is_councillor = yes
+				liege = { real_tier = baron }
+				FROM = { real_tier = king }
+				FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+			}
+			
+			additive_modifier = {
+				value = 100
+				localisation_key = lmmiwp_reason_promised_council_position_higher_tier
+				is_councillor = yes
+				liege = { real_tier = baron }
+				FROM = { real_tier = emperor }
+				FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+			}
+			
+			additive_modifier = {
+				value = 25
+				localisation_key = lmmiwp_reason_promised_council_position_higher_tier
+				is_councillor = yes
+				liege = { real_tier = count }
+				FROM = { real_tier = duke }
+				FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+			}
+			
+			additive_modifier = {
+				value = 50
+				localisation_key = lmmiwp_reason_promised_council_position_higher_tier
+				is_councillor = yes
+				liege = { real_tier = count }
+				FROM = { real_tier = king }
+				FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+			}
+			
+			additive_modifier = {
+				value = 75
+				localisation_key = lmmiwp_reason_promised_council_position_higher_tier
+				is_councillor = yes
+				liege = { real_tier = count }
+				FROM = { real_tier = emperor }
+				FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+			}
+			
+			additive_modifier = {
+				value = 25
+				localisation_key = lmmiwp_reason_promised_council_position_higher_tier
+				is_councillor = yes
+				liege = { real_tier = duke }
+				FROM = { real_tier = king }
+				FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+			}
+			
+			additive_modifier = {
+				value = 50
+				localisation_key = lmmiwp_reason_promised_council_position_higher_tier
+				is_councillor = yes
+				liege = { real_tier = duke }
+				FROM = { real_tier = emperor }
+				FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+			}
+			
+			additive_modifier = {
+				value = 25
+				localisation_key = lmmiwp_reason_promised_council_position_higher_tier
+				is_councillor = yes
+				liege = { real_tier = king }
+				FROM = { real_tier = emperor }
+				FROM = { has_character_flag = lmmiwp_other_promises_council_position }
+			}
+			
+			
+			additive_modifier = {
+				value = 25
+				localisation_key = lmmiwp_reason_wants_to_be_commander
+				FROM = { has_character_flag = lmmiwp_other_promises_commander }
+				NOT = { has_minor_title = title_commander }
+				can_hold_title = title_commander
+				has_education_martial_trigger = yes
+			}
+			
+			additive_modifier = {
+				value = 25
+				localisation_key = lmmiwp_reason_promised_commander
+				FROM = { has_character_flag = lmmiwp_other_promises_commander }
+				NOT = { has_minor_title = title_commander }
+				can_hold_title = title_commander
+			}
+			
+			# Promised titles
+			
+			# Give me something better than what I am already heir to!
+			additive_modifier = {
+				value = -100
+				localisation_key = lmmiwp_reason_already_heir
+				OR = {
+					AND = {
+						any_heir_title = {
+							real_tier = count
+						}
+						FROM = {
+							is_variable_equal = { which = lmmiwp_promised_counties value = 0 }
+							is_variable_equal = { which = lmmiwp_promised_duchies value = 0 }
+							is_variable_equal = { which = lmmiwp_promised_kingdoms value = 0 }
+							is_variable_equal = { which = lmmiwp_promised_empires value = 0 }								
+						}
+					}
+					AND = {
+						any_heir_title = {
+							real_tier = duke
+						}
+						FROM = {
+							is_variable_equal = { which = lmmiwp_promised_duchies value = 0 }
+							is_variable_equal = { which = lmmiwp_promised_kingdoms value = 0 }
+							is_variable_equal = { which = lmmiwp_promised_empires value = 0 }
+						}
+					}
+					AND = {
+						any_heir_title = {
+							real_tier = king
+						}
+						FROM = {
+							is_variable_equal = { which = lmmiwp_promised_kingdoms value = 0 }
+							is_variable_equal = { which = lmmiwp_promised_empires value = 0 }
+						}
+					}
+				}		
+			}
+			
+			# Counties			
+			additive_modifier = {
+				value = 20
+				localisation_key = lmmiwp_reason_promised_counties
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_counties value = 1 }
+				}
+				lmmiwp_can_be_granted_titles_trigger = yes				
+			}
+			additive_modifier = {
+				localisation_key = lmmiwp_reason_promised_counties
+				value = 40
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_counties value = 2 }
+				}				
+			}
+			additive_modifier = {
+				value = 60
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_counties value = 3 }
+				}
+				localisation_key = lmmiwp_reason_promised_counties
+			}
+			additive_modifier = {
+				value = 80
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_counties value = 4 }
+				}
+				localisation_key = lmmiwp_reason_promised_counties
+			}
+			additive_modifier = {
+				value = 100
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_counties value = 5 }
+				}
+				localisation_key = lmmiwp_reason_promised_counties
+			}
+			additive_modifier = {
+				value = 120
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_counties value = 6 }
+				}
+				localisation_key = lmmiwp_reason_promised_counties
+			}
+			additive_modifier = {
+				value = 140
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_counties value = 7 }
+				}
+				localisation_key = lmmiwp_reason_promised_counties
+			}
+			additive_modifier = {
+				value = 160
+				FROM = { 
+					check_variable = { which = lmmiwp_promised_counties value = 8 }
+				}
+				localisation_key = lmmiwp_reason_promised_counties
+			}
+			additive_modifier = {
+				value = 180
+				FROM = { 
+					check_variable = { which = lmmiwp_promised_counties value = 9 }
+				}
+				localisation_key = lmmiwp_reason_promised_counties
+			}
+			additive_modifier = {
+				value = 200
+				FROM = { 
+					check_variable = { which = lmmiwp_promised_counties value = 10 }
+				}
+				localisation_key = lmmiwp_reason_promised_counties
+			}
+			
+			# Duchies
+			additive_modifier = {
+				value = 40
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_duchies value = 1 }
+				}
+				localisation_key = lmmiwp_reason_promised_duchies
+			}
+			additive_modifier = {
+				value = 80
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_duchies value = 2 }
+				}
+				localisation_key = lmmiwp_reason_promised_duchies
+			}
+			additive_modifier = {
+				value = 140
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_duchies value = 3 }
+				}
+				localisation_key = lmmiwp_reason_promised_duchies
+			}
+			additive_modifier = {
+				value = 180
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_duchies value = 4 }
+				}
+				localisation_key = lmmiwp_reason_promised_duchies
+			}
+			additive_modifier = {
+				value = 220
+				FROM = { 
+					check_variable = { which = lmmiwp_promised_duchies value = 5 }
+				}
+				localisation_key = lmmiwp_reason_promised_duchies
+			}
+			
+			# Kingdoms
+			additive_modifier = {
+				value = 100
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_kingdoms value = 1 }
+				}
+				localisation_key = lmmiwp_reason_promised_kingdoms
+			}
+			additive_modifier = {
+				value = 200
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_kingdoms value = 2 }
+				}
+				localisation_key = lmmiwp_reason_promised_kingdoms
+			}
+			additive_modifier = {
+				value = 300
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_kingdoms value = 3 }
+				}
+				localisation_key = lmmiwp_reason_promised_kingdoms
+			}
+			additive_modifier = {
+				value = 400
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_kingdoms value = 4 }
+				}
+				localisation_key = lmmiwp_reason_promised_kingdoms
+			}
+			additive_modifier = {
+				value = 500
+				FROM = { 
+					check_variable = { which = lmmiwp_promised_kingdoms value = 5 }
+				}
+				localisation_key = lmmiwp_reason_promised_kingdoms
+			}
+			
+			# Empires
+			additive_modifier = {
+				value = 500
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_empires value = 1 }
+				}
+				localisation_key = lmmiwp_reason_promised_empires
+			}
+			additive_modifier = {
+				value = 1000
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_empires value = 2 }
+				}
+				localisation_key = lmmiwp_reason_promised_empires
+			}
+			additive_modifier = {
+				value = 1500
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_empires value = 3 }
+				}
+				localisation_key = lmmiwp_reason_promised_empires
+			}
+			additive_modifier = {
+				value = 2000
+				FROM = { 
+					is_variable_equal = { which = lmmiwp_promised_empires value = 4 }
+				}
+				localisation_key = lmmiwp_reason_promised_empires
+			}
+			additive_modifier = {
+				value = 2500
+				FROM = { 
+					check_variable = { which = lmmiwp_promised_empires value = 5 }
+				}
+				localisation_key = lmmiwp_reason_promised_empires
+			}
+		}
+	}
+}
+
