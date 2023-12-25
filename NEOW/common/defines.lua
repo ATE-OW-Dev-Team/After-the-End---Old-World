@@ -1590,7 +1590,7 @@ NEngine = {
 
 NAI =
 {
-	INTERACTION_THRESHOLD_FOR_NO = 25,						-- Interactions with chance below this will always be declined
+	INTERACTION_THRESHOLD_FOR_NO = 15,						-- Interactions with chance below this will always be declined
 	INTERACTION_THRESHOLD_FOR_YES = 25,						-- Interactions with chance above this will always be accepted
 	INTERACTION_MIN_DAYS_REJECTED = 365,					-- AI will remember a rejection at least this time
 	INTERACTION_DAYS_REJECTED_RANDOM = 730,					-- Max random extra days AI will reject offer
