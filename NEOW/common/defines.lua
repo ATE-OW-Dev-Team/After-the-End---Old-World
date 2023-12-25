@@ -941,9 +941,9 @@ NTitle = {
 -- Monthly prestige LOSS from each unlanded adult son
 	BARON_LANDLESS_SON_PRESTIGE = 0.025,
 	COUNT_LANDLESS_SON_PRESTIGE = 0.1,
-	DUKE_LANDLESS_SON_PRESTIGE = 0.4,
-	KING_LANDLESS_SON_PRESTIGE = 0.8,
-	EMPEROR_LANDLESS_SON_PRESTIGE = 1.0,
+	DUKE_LANDLESS_SON_PRESTIGE = 0.2,
+	KING_LANDLESS_SON_PRESTIGE = 0.4,
+	EMPEROR_LANDLESS_SON_PRESTIGE = 0.8,
 
 -- Dynasty Prestige is the sum of current and previous holdings of all living and dead members of a dynasty
 	BARON_TITLE_DYNASTY_PRESTIGE = 1,
