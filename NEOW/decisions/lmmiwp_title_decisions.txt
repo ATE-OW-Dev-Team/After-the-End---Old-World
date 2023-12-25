@@ -1,0 +1,225 @@
+title_decisions = {
+	lmmiwp_add_promise_title_grant = {
+		ai = no
+		only_playable = yes
+		filter = owned
+		ai_target_filter = primary_title
+		
+		from_potential = {						
+			lmmiwp_can_invite_with_promises_trigger = yes	
+		}
+		
+		potential = {
+			can_be_given_away = yes
+			temporary = no
+			NOT = { has_title_flag = lmmiwp_title_is_being_promised_by_@FROM }
+			holder_scope = {
+				character = FROM
+			}			
+		}
+		
+		allow = {
+			ROOT = {
+				is_titular = no
+				custom_tooltip = {
+					text = lmmiwp_ctt_must_not_be_capital_county
+					FROM = {						
+						capital_scope = {					
+							county = {								
+								NOT = { title = ROOT }
+							}
+						}
+					}
+				}			
+				custom_tooltip = {
+					text = lmmiwp_ctt_title_already_promised_to_someone
+					NOT = {	has_title_flag = lmmiwp_title_used_for_invite_by_@FROM }			
+				}
+			}
+			
+			# Cannot promise titles higher than count before promising a county first.
+			conditional_tooltip = {				
+				trigger = {
+					higher_tier_than = count
+				}
+				custom_tooltip = {
+					text = lmmiwp_cannot_promise_higher_tier_before_count
+					higher_tier_than = count
+					NOT = {						
+						FROM = { is_variable_equal = { which = lmmiwp_promised_counties value = 0 } }
+					}
+				}			
+			}
+		}
+		
+		effect = {
+			hidden_tooltip = {
+				trigger_switch = {
+					on_trigger = tier
+					
+					baron = { FROM = { change_variable = { which = lmmiwp_promised_baronies value = 1 } } }
+					count = { FROM = { change_variable = { which = lmmiwp_promised_counties value = 1 } } }
+					duke = { FROM = { change_variable = { which = lmmiwp_promised_duchies value = 1 } } }
+					king = { FROM = { change_variable = { which = lmmiwp_promised_kingdoms value = 1 } } }
+					emperor = { FROM = { change_variable = { which = lmmiwp_promised_empires value = 1 } } }
+				}
+				set_title_flag = lmmiwp_title_is_being_promised_by_@FROM
+				save_event_target_as = lmmiwp_title_to_clear_flags
+				FROM = {
+					character_event = { id = lmmiwp.1006 days = 30 } # Clear flags from the title after 1 month
+				}			
+			}			
+		}
+	}
+	
+	lmmiwp_remove_promise_title_grant = {
+		ai = no
+		only_playable = yes
+		filter = owned
+		ai_target_filter = primary_title
+		
+		from_potential = {						
+				
+		}
+		
+		potential = {			
+			ROOT = {
+				has_title_flag = lmmiwp_title_is_being_promised_by_@FROM
+			}
+		}
+		
+		allow = {
+			custom_tooltip = {
+				text = lmmiwp_ctt_title_is_being_promised
+				ROOT = {
+					has_title_flag = lmmiwp_title_is_being_promised_by_@FROM
+				}
+			}
+			conditional_tooltip = {				
+				trigger = {
+					tier = count
+				}
+				custom_tooltip = {
+					text = lmmiwp_cannot_remove_promise_of_last_county_if_higher_tier_is_promised
+					OR = {
+						higher_tier_than = count
+						AND = {
+							tier = count
+							NOT = {
+								FROM = {
+									is_variable_equal = { which = lmmiwp_promised_counties value = 1 }
+									OR = {
+										check_variable = { which = lmmiwp_promised_duchies value = 1 }
+										check_variable = { which = lmmiwp_promised_kingdoms value = 1 }
+										check_variable = { which = lmmiwp_promised_empires value = 1 }
+									}
+								}						
+							}
+						}
+					}
+				}								
+			}
+		}
+		
+		effect = {
+			hidden_tooltip = {
+				trigger_switch = {
+					on_trigger = tier
+					
+					baron = { FROM = { change_variable = { which = lmmiwp_promised_baronies value = -1 } } }
+					count = { FROM = { change_variable = { which = lmmiwp_promised_counties value = -1 } } }
+					duke = { FROM = { change_variable = { which = lmmiwp_promised_duchies value = -1 } } }
+					king = { FROM = { change_variable = { which = lmmiwp_promised_kingdoms value = -1 } } }
+					emperor = { FROM = { change_variable = { which = lmmiwp_promised_empires value = -1 } } }
+				}
+				
+				ROOT = {	
+					clr_title_flag = lmmiwp_title_is_being_promised_by_@FROM
+				}
+			}			
+		}
+	}
+	
+	lmmiwp_add_promise_press_claim = {
+		ai = no
+		
+		from_potential = {
+			lmmiwp_can_invite_with_promises_trigger = yes
+			
+		}
+		
+		potential = {			
+			has_holder = yes
+			any_claimant = {
+				count = 1
+			}
+			FROM = {
+				NOT = {
+					persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+						title = ROOT
+					}
+				}
+			}			
+		}
+		
+		allow = {
+			ROOT = {
+				temporary = no
+				holder_scope = {
+					NOR = {
+						character = FROM
+						is_vassal_or_below_of = FROM
+					}
+				}
+			}
+		}
+		
+		effect = {
+			hidden_tooltip = {
+				FROM = {
+					save_persistent_event_target = { name = lmmiwp_promised_title_to_press_claim scope = ROOT }
+				}
+				ROOT = {
+					trigger_switch = {
+						on_trigger = tier
+						
+						baron = { FROM = { set_variable = { which = lmmiwp_press_claim_tier value = 1 } } }
+						count = { FROM = { set_variable = { which = lmmiwp_press_claim_tier value = 2 } }}
+						duke = { FROM = { set_variable = { which = lmmiwp_press_claim_tier value = 3 } } }
+						king = { FROM = { set_variable = { which = lmmiwp_press_claim_tier value = 4 } } }
+						emperor = { FROM = { set_variable = { which = lmmiwp_press_claim_tier value = 5 } } }
+					}
+				}
+			}			
+		}		
+	}
+	
+	lmmiwp_remove_promise_press_claim = {
+		ai = no
+		
+		from_potential = {
+			
+		}
+		
+		potential = {
+			FROM = {
+				persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+					title = ROOT
+				}
+			}
+		}
+		
+		allow = {			
+			
+		}
+		
+		effect = {
+			hidden_tooltip = {
+				FROM = {
+					clear_persistent_event_target = lmmiwp_promised_title_to_press_claim
+					set_variable = { which = lmmiwp_press_claim_tier value = 0 }
+				}
+			}			
+		}		
+	}
+}
