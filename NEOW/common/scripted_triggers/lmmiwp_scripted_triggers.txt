@@ -1,0 +1,271 @@
+lmmiwp_can_invite_with_promises_trigger = {
+	is_adult = yes
+	is_incapable = no
+	NOT = { is_rival = ROOT	}
+}
+
+lmmiwp_show_invitation_decision_trigger = {
+	is_adult = yes
+	is_ruler = no
+	NOT = { host = { character = FROM } }
+}
+
+lmmiwp_is_offering_something_as_promise_trigger = {
+	OR = {
+		has_character_flag = lmmiwp_other_promises_council_position
+		has_character_flag = lmmiwp_other_promises_commander
+		persistent_event_target:lmmiwp_promised_title_to_press_claim = {
+			always = yes
+			has_holder = yes
+			claimed_by = ROOT
+		}
+		check_variable = { which = lmmiwp_promised_baronies value = 1 }
+		check_variable = { which = lmmiwp_promised_counties value = 1 }
+		check_variable = { which = lmmiwp_promised_duchies value = 1 }
+		check_variable = { which = lmmiwp_promised_kingdoms value = 1 }
+		check_variable = { which = lmmiwp_promised_empires value = 1 }		
+	}	
+}
+
+lmmiwp_can_be_invited_with_promises_trigger = {
+	is_adult = yes
+	custom_tooltip = {
+		text = lmmiwp_ctt_already_invited_by_someone
+		NOT = { has_opinion_modifier = { who = liege modifier = lmmiwp_invited_with_promises_opinion } }
+	}	
+	is_inaccessible_trigger = no
+	NOR = {
+		prisoner = yes		
+		is_incapable = yes
+	}
+	#Is not the in a lesser union and in the same court as spouse
+	custom_tooltip = {
+		text = lmmiwp_must_not_be_in_lesser_union
+		NOT = {
+			AND = {
+				OR = {
+					AND = {
+						is_female = yes
+						is_married = yes
+					}
+					AND = {
+						is_female = no
+						is_married_matrilineally = yes
+					}
+				}
+				spouse = {
+					OR = {
+						is_liege_of = PREV
+						liege = {
+							is_liege_of = PREVPREV
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+lmmiwp_can_be_granted_titles_trigger = {
+	NOR = {
+		has_inheritance_blocker = yes
+		can_marry = no
+	}
+}
+
+lmmiwp_has_taken_hostile_action_against_FROM_trigger = {
+	FROM = {
+		OR = {
+			lmmiwp_is_prisoner_of_inviter_trigger = yes
+			lmmiwp_has_been_killed_by_inviter_trigger = yes
+		}
+	}
+}
+
+lmmiwp_is_prisoner_of_inviter_trigger = {
+	host = { character = event_target:lmmiwp_inviter }
+	prisoner = yes
+}
+
+lmmiwp_has_been_killed_by_inviter_trigger = {
+	is_alive = no
+	killer = { character = event_target:lmmiwp_inviter }
+}
+
+lmmiwp_inviter_cannot_fulfill_promises_trigger = {
+	OR = {
+		has_character_flag = lmmiwp_inviter_cannot_grant_promised_titles
+		has_character_flag = lmmiwp_inviter_cannot_press_promised_claim
+		has_character_flag = lmmiwp_inviter_cannot_make_me_councillor
+		has_character_flag = lmmiwp_inviter_cannot_make_me_commander
+	}
+	NOT = {
+		AND = {
+			has_character_flag = lmmiwp_inviter_is_defending_against_press_claim_target 
+			has_character_flag = lmmiwp_inviter_cannot_press_promised_claim	
+		}
+	}
+}
+
+# ROOT is the claimant, FROM is inviter/presser
+lmmiwp_inviter_can_press_claim_trigger = {	
+	OR = {
+		# Conditions with HIP
+		AND = {
+			has_global_flag = EMF
+			# Conditions with HIP
+			# FROMFROM = {
+				# NOT = { character = ROOT }
+				# mercenary = no
+			# }
+			#owner_under_FROM = yes
+			trigger_if = {
+				limit = { ROOT = { is_female = yes } }
+				ROOT = { emf_antifeminist_religion = no }
+				NOT = { succ_law_title = { has_law = agnatic_succession } }
+			}
+			trigger_else = {
+				ROOT = { NOT = { has_religion_feature = religion_matriarchal } }
+				NOT = { succ_law_title = { has_law = enatic_succession } }
+			}
+			FROM = {
+				OR = {
+					religion_group = ROOT
+					ROOT = { emf_syncretized_religion_with_PREV = yes }
+				}
+				OR = {
+					ai = no
+					ROOT_FROM = { ai = no }
+					lower_tier_than = EMPEROR
+					is_close_relative = ROOT
+					has_non_aggression_pact_with = ROOT
+					is_allied_with = ROOT
+					is_friend = ROOT
+					dynasty = ROOT
+					is_married = ROOT
+				}
+			}
+			ROOT = {
+				in_revolt = no
+				OR = {
+					AND = {
+						is_ruler = yes
+						is_merchant_republic = yes
+					}
+					is_patrician = no
+				}
+			}
+			# OR = { # AI will only press something that will gain it territory, unless target is player
+				# FROMFROM = { ai = no } # Player pressers can do whatever they want
+				# # AI can always press an anti-pope's claim...
+				# title = k_papal_state
+				# title = d_fraticelli
+				# emf_cb_other_claimant_will_be_attacker_vassal = yes # We'll gain territory out of it
+				# # Don't care if we'll gain territory if the target is a player...
+				# FROM = { ai = no }
+				# holder_scope = { ai = no }
+			# }
+			NOT = {
+				any_war = { # when used in title scope, checks all wars for that title
+					attacker = { character = FROM }
+				}
+			}
+			OR = {
+				multiplayer = no
+				FROM = { ai = yes }
+				has_game_rule = {
+					name = multiplayer_third_party_claims
+					value = on
+				}
+				AND = {
+					has_game_rule = {
+						name = multiplayer_third_party_claims
+						value = limited
+					}
+					lower_tier_than = KING
+				}
+			}
+			emf_cb_can_press_claim = yes
+			emf_cb_thirdparty_can_use_title = yes
+		}
+		# Conditions without HIP (for vanilla)
+		AND = {
+			OR = {
+				ROOT = { is_female = no }
+				AND = {
+					NOT = { ROOT = { religion_group = muslim } }
+					NOT = { ROOT = { has_religion_feature = religion_patriarchal } }
+					NOT = { succ_law_title = { has_law = agnatic_succession } }
+				}
+			}
+			OR = {
+				ROOT = { is_female = yes }
+				AND = {
+					NOT = { ROOT = { has_religion_feature = religion_matriarchal } }
+					NOT = { succ_law_title = { has_law = enatic_succession } }
+				}
+			}
+			# OR = {
+				# FROM = {
+					# has_landed_title = PREV
+				# }
+				# holder_scope = {
+					# is_liege_or_above = FROM
+				# }
+			# }
+			
+			ROOT = {
+				OR = {
+					is_ruler = no
+					primary_title = {
+						OR = {
+							is_primary_type_title = no # Static Mercs, the Pope, Holy Orders, etc
+							higher_tier_than = PREVPREV
+							tier = PREVPREV
+						}
+					}
+				}
+			}
+			
+			# NOT = {			
+				# any_war = { # when used in title scope, checks all wars for that title
+					# attacker = {
+						# character = FROM
+					# }
+				# }
+			# }
+			
+			OR = { 
+				ROOT = { has_strong_claim = PREV }
+				AND = {
+					ROOT = { has_weak_claim = PREV }
+					OR = {
+						is_pretender = yes # Checks vs ROOT character
+						holder_scope = { has_regent = yes }
+						AND = {
+							ROOT = { OR = { is_female = no  has_law = status_of_women_4 } }
+							holder_scope ={ AND = { is_female = yes NOR = { has_law = status_of_women_4 has_game_rule = { name = gender value = all } } } }
+						}
+						is_contested = yes # Is already being contested in some form of Claim or Succession War
+					}
+				}
+			}
+			
+			OR = {
+				multiplayer = no
+				FROM = { ai = yes }
+				has_game_rule = {
+					name = multiplayer_third_party_claims
+					value = on
+				}
+				AND = {
+					has_game_rule = {
+						name = multiplayer_third_party_claims
+						value = limited
+					}
+					lower_tier_than = KING
+				}
+			}
+		}
+	}
+}

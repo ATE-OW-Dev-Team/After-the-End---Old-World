@@ -1,0 +1,928 @@
+# Fired from on_new_holder type on_actions
+lmmiwp_clear_flags_on_new_holder_effect = {	
+	if = {
+		limit = {
+			FROM = {
+				has_title_flag = lmmiwp_title_is_being_promised_by_@FROMFROM
+			}
+		}
+		FROMFROM = {
+			save_event_target_as = lmmiwp_old_holder
+		}
+		FROM = {
+			clr_title_flag = lmmiwp_title_is_being_promised_by_@FROMFROM			
+		}
+	}
+	
+	if = {
+		limit = {
+			FROM = {
+				has_title_flag = lmmiwp_title_promised_to_@ROOT
+			}
+		}
+		FROM = {
+			clr_title_flag = lmmiwp_title_promised_to_@ROOT
+			clr_title_flag = lmmiwp_title_used_for_invite_by_@FROMFROM
+		}
+	}
+	
+	if = {
+		limit = {
+			persistent_event_target:lmmiwp_my_inviter = {
+				always = yes
+			}
+			NOT = { is_vassal_or_below_of = persistent_event_target:lmmiwp_my_inviter }
+		}
+		save_event_target_as = lmmiwp_invitee
+		persistent_event_target:lmmiwp_my_inviter = {
+			save_event_target_as = lmmiwp_inviter
+		}
+		hidden_tooltip = {
+			generate_tooltip = no
+			lmmiwp_cleanup_titles_effect = yes
+			lmmiwp_cleanup_invitee_effect = yes
+		}
+	}
+}
+
+lmmiwp_add_deceitful_effect = {
+	if = {
+		limit = { trait = honest }
+		remove_trait = honest
+	}
+	if = {
+		limit = { NOT = { trait = deceitful } }
+		add_trait = deceitful
+	}
+}
+
+lmmiwp_remove_just_effect = {
+	if = {
+		limit = { trait = just }
+		remove_trait = just
+	}
+}
+
+lmmiwp_add_backstabbed_opinion_effect = {
+	if = {
+		limit = { 			
+			NOT = { has_opinion_modifier = { who = event_target:lmmiwp_inviter modifier = lmmiwp_backstabbed_opinion } }
+		}
+		opinion = { who = event_target:lmmiwp_inviter modifier = lmmiwp_backstabbed_opinion }
+	}
+}
+
+lmmiwp_add_broken_promises_opinion_effect = {
+	if = {
+		limit = {
+			NOT = { has_opinion_modifier = { who = event_target:lmmiwp_inviter modifier = lmmiwp_broken_promises_opinion } }
+		}
+		opinion = { who = event_target:lmmiwp_inviter modifier = lmmiwp_broken_promises_opinion }
+	}
+}
+
+lmmiwp_cleanup_invitee_effect = {
+	clr_character_flag = lmmiwp_character_invited_by_@event_target:lmmiwp_inviter
+	clr_character_flag = lmmiwp_promised_council_position_by_@event_target:lmmiwp_inviter
+	clr_character_flag = lmmiwp_promised_commander_by_@event_target:lmmiwp_inviter
+	clear_persistent_event_target = lmmiwp_my_inviter
+	clear_persistent_event_target = lmmiwp_title_promised_to_press_claim_by_inviter
+}
+
+lmmiwp_give_council_position_to_invitee_effect = {
+	event_target:lmmiwp_invitee = {
+		export_to_variable = { which = local_lmmiwp_diplomacy value = diplomacy }
+		export_to_variable = { which = local_lmmiwp_martial value = martial }
+		export_to_variable = { which = local_lmmiwp_stewardship value = stewardship }
+		export_to_variable = { which = local_lmmiwp_intrigue value = intrigue }
+		export_to_variable = { which = local_lmmiwp_learning value = learning }
+		
+		if = {
+			limit = {				
+				can_hold_title = job_chancellor								
+			}
+			set_variable = { which = local_lmmiwp_preferred_council_position value = 1 }
+		}
+		if = {
+			limit = {
+				can_hold_title = job_marshal
+				NOT = { has_character_flag = lmmiwp_promised_commander_by_@event_target:lmmiwp_inviter }				
+				check_variable = { which = local_lmmiwp_martial which = local_lmmiwp_diplomacy }
+				
+			}
+			set_variable = { which = local_lmmiwp_preferred_council_position value = 2 }
+		}
+		if = {
+			limit = {				
+				can_hold_title = job_treasurer
+				check_variable = { which = local_lmmiwp_stewardship which = local_lmmiwp_diplomacy }
+				check_variable = { which = local_lmmiwp_stewardship which = local_lmmiwp_martial }				
+			}
+			set_variable = { which = local_lmmiwp_preferred_council_position value = 3 }
+		}
+		if = {
+			limit = {				
+				can_hold_title = job_spymaster
+				check_variable = { which = local_lmmiwp_intrigue which = local_lmmiwp_diplomacy }
+				check_variable = { which = local_lmmiwp_intrigue which = local_lmmiwp_martial }
+				check_variable = { which = local_lmmiwp_intrigue which = local_lmmiwp_stewardship }				
+			}
+			set_variable = { which = local_lmmiwp_preferred_council_position value = 4 }
+		}
+		if = {
+			limit = {
+				can_hold_title = job_spiritual						
+				check_variable = { which = local_lmmiwp_learning which = local_lmmiwp_diplomacy }
+				check_variable = { which = local_lmmiwp_learning which = local_lmmiwp_martial }
+				check_variable = { which = local_lmmiwp_learning which = local_lmmiwp_stewardship }
+				check_variable = { which = local_lmmiwp_learning which = local_lmmiwp_intrigue }				
+			}
+			set_variable = { which = local_lmmiwp_preferred_council_position value = 5 }
+		}
+
+		if = {
+			limit = {
+				is_variable_equal = { which = local_lmmiwp_preferred_council_position value = 1 }
+			}
+			event_target:lmmiwp_inviter = {
+				job_chancellor = {
+					remove_title = job_chancellor
+				}
+			}
+			give_job_title = job_chancellor
+		}
+		else_if = {
+			limit = {
+				is_variable_equal = { which = local_lmmiwp_preferred_council_position value = 2 }
+			}
+			event_target:lmmiwp_inviter = {
+				job_marshal = {
+					remove_title = job_marshal
+				}
+			}			
+			give_job_title = job_marshal
+		}
+		else_if = {
+			limit = {
+				is_variable_equal = { which = local_lmmiwp_preferred_council_position value = 3 }
+			}
+			event_target:lmmiwp_inviter = {
+				job_treasurer = {
+					remove_title = job_treasurer
+				}
+			}			
+			give_job_title = job_treasurer
+		}
+		else_if = {
+			limit = {
+				is_variable_equal = { which = local_lmmiwp_preferred_council_position value = 4 }
+			}
+			event_target:lmmiwp_inviter = {
+				job_spymaster = {
+					remove_title = job_spymaster
+				}
+			}			
+			give_job_title = job_spymaster
+		}
+		else_if = {
+			limit = {
+				is_variable_equal = { which = local_lmmiwp_preferred_council_position value = 5 }
+			}
+			event_target:lmmiwp_inviter = {
+				job_spiritual = {
+					remove_title = job_spiritual
+				}
+			}			
+			give_job_title = job_spiritual
+		}
+	}
+}
+
+lmmiwp_cleanup_titles_effect = {
+	any_landed_title = {
+		limit = {
+			has_title_flag = lmmiwp_title_promised_to_@event_target:lmmiwp_invitee
+			has_title_flag = lmmiwp_title_used_for_invite_by_@event_target:lmmiwp_inviter
+		}
+		clr_title_flag = lmmiwp_title_promised_to_@event_target:lmmiwp_invitee
+		clr_title_flag = lmmiwp_title_used_for_invite_by_@event_target:lmmiwp_inviter
+		clear_persistent_event_target = lmmiwp_this_title_is_promised_to
+	}	
+}
+
+lmmiwp_add_broken_promises_trait_and_modifier_effect = {
+	random = {
+		chance = 50		
+		lmmiwp_add_deceitful_effect = yes				
+	}
+	add_character_modifier = { modifier = lmmiwp_promise_breaker duration = 1825 }	
+}
+
+lmmiwp_add_backstabbed_trait_and_modifier_effect = {
+	lmmiwp_remove_just_effect = yes
+	lmmiwp_add_deceitful_effect = yes
+	add_character_modifier = { modifier = lmmiwp_backstabber duration = 3650 }
+}
+
+lmmiwp_handle_broken_promises_effect = {
+	FROM = {
+		show_scope_change = no	
+		clr_character_flag = lmmiwp_promised_council_position_by_@ROOT
+		if = {
+			limit = { is_alive = yes }
+			hidden_tooltip = {
+				remove_opinion = { who = ROOT modifier = lmmiwp_invited_with_promises_opinion }
+			}
+			if = {
+				limit = {
+					NOT = { has_opinion_modifier = { who = ROOT modifier = lmmiwp_backstabbed_opinion } }
+				}
+				lmmiwp_add_broken_promises_opinion_effect = yes
+				ROOT = { 
+					show_scope_change = no
+					lmmiwp_add_broken_promises_trait_and_modifier_effect = yes 
+				}
+			}
+		}
+		hidden_tooltip = {
+			generate_tooltip = no
+			lmmiwp_cleanup_invitee_effect = yes
+		}
+	}
+	hidden_tooltip = {
+		generate_tooltip = no
+		lmmiwp_cleanup_titles_effect = yes
+	}
+	
+}
+
+lmmiwp_check_if_inviter_can_fulfill_promises_effect = {
+	if = {
+		limit = {
+			# Not cannot grant promised titles
+			NOT = {
+				any_landed_title = {
+					has_title_flag = lmmiwp_title_promised_to_@event_target:lmmiwp_invitee
+					has_title_flag = lmmiwp_title_used_for_invite_by_@event_target:lmmiwp_inviter
+					OR = {								
+						holder_scope = { NOT = { character = event_target:lmmiwp_inviter } }
+						has_holder = no
+					}
+				}
+			}
+		}
+	}
+	else = {
+		set_character_flag = lmmiwp_inviter_cannot_grant_promised_titles
+	}
+	
+	if = {
+		limit = {
+			event_target:lmmiwp_title_to_press_claim = {
+				always = yes
+			}
+		}
+		if = {
+			limit = {
+				# Defending against target
+				event_target:lmmiwp_title_to_press_claim = {
+					has_holder = yes
+					holder_scope = {
+						top_liege = {
+							any_war = {									
+								attacker = { character = PREVPREV }
+								defender = { character = event_target:lmmiwp_inviter }									
+							}
+						}
+					}
+				}
+			}
+			set_character_flag = lmmiwp_inviter_is_defending_against_press_claim_target
+		}
+		
+		if = {
+			limit = {
+				# Already pressing claim
+				event_target:lmmiwp_title_to_press_claim = {
+					has_holder = yes
+					holder_scope = {
+						top_liege = {
+							any_war = {
+								attacker = { character = event_target:lmmiwp_inviter }
+								defender = { character = PREVPREV }
+								using_cb = other_claim
+								war_title = PREVPREVPREV
+							}
+						}
+					}
+				}
+			}
+			set_character_flag = lmmiwp_inviter_is_already_pressing_my_claim
+		}
+		
+		if = {
+			limit = {
+				# Can press promised claim		
+				event_target:lmmiwp_title_to_press_claim = {
+					has_holder = yes
+					NOT = {
+						ROOT = { has_character_flag = lmmiwp_inviter_is_defending_against_press_claim_target }
+					}
+					# Check if inviter is able to declare war on the target
+					holder_scope = {
+						NOR = {
+							is_vassal_or_below_of = event_target:lmmiwp_inviter 
+							is_liege_or_above_of = event_target:lmmiwp_inviter
+						}
+						top_liege = {
+							NOR = {
+								is_liege_or_above_of = event_target:lmmiwp_inviter
+								is_tributary = { suzerain = event_target:lmmiwp_inviter }				
+								event_target:lmmiwp_inviter = {					
+									is_tributary = { suzerain = PREV }					
+								}
+							}
+						}
+					}	
+					# Make sure the inviter is not a prisoner
+					NOT = {
+						AND = {
+							event_target:lmmiwp_inviter = {	prisoner = yes	}
+							NOR = {
+								ROOT = {
+									has_character_flag = lmmiwp_inviter_is_already_pressing_my_claim
+									has_character_flag = lmmiwp_inviter_is_defending_against_press_claim_target
+								}
+							}
+						}
+					}
+					OR = {
+						ROOT = {
+							has_character_flag = lmmiwp_inviter_is_already_pressing_my_claim									
+						}					
+						# Already held by inviter or invitee
+						holder_scope = {
+							OR = {
+								character = event_target:lmmiwp_inviter
+								AND = {
+									character = ROOT
+									is_vassal_or_below_of = event_target:lmmiwp_inviter
+								}
+							}								
+						}	
+						# Would be able to press the claim ( is CB valid )
+						lmmiwp_inviter_can_press_claim_trigger = yes
+					}				
+				}
+			}
+		}
+		else = {
+			set_character_flag = lmmiwp_inviter_cannot_press_promised_claim
+		}
+	}			
+	
+	if = {
+		limit = {
+			has_character_flag = lmmiwp_promised_council_position_by_@event_target:lmmiwp_inviter
+			NOR = {
+				is_councillor = yes
+				can_hold_title = job_chancellor
+				can_hold_title = job_marshal
+				can_hold_title = job_treasurer
+				can_hold_title = job_spymaster
+				can_hold_title = job_spiritual
+			}
+		}
+		set_character_flag = lmmiwp_inviter_cannot_make_me_councillor
+	}
+
+	if = {
+		limit = {
+			has_character_flag = lmmiwp_promised_commander_by_@event_target:lmmiwp_inviter
+			NOT = { can_hold_title = title_commander }
+		}
+		set_character_flag = lmmiwp_inviter_cannot_make_me_commander
+	}
+}
+
+lmmiwp_check_if_all_promises_are_already_fulfilled_effect = {
+	if = {
+		limit = {
+			NOT = { lmmiwp_inviter_cannot_fulfill_promises_trigger = yes }
+		}
+		if = {
+			limit = {
+				event_target:lmmiwp_inviter = {
+					NOT = {
+						any_demesne_title = {						
+							has_title_flag = lmmiwp_title_promised_to_@event_target:lmmiwp_invitee
+							has_title_flag = lmmiwp_title_used_for_invite_by_@event_target:lmmiwp_inviter
+						}
+					}					
+				}
+			}			
+			# If passed then not pending
+		}
+		else = {
+			set_character_flag = lmmiwp_some_promise_still_pending
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_character_flag = lmmiwp_promised_council_position_by_@event_target:lmmiwp_inviter }
+					AND = {
+						has_character_flag = lmmiwp_promised_council_position_by_@event_target:lmmiwp_inviter
+						is_councillor = yes
+					}
+				}
+				
+			}			
+			# If passed then not pending
+		}
+		else = {
+			set_character_flag = lmmiwp_some_promise_still_pending
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					NOT = {	has_character_flag = lmmiwp_promised_commander_by_@event_target:lmmiwp_inviter }
+					AND = {
+						has_character_flag = lmmiwp_promised_commander_by_@event_target:lmmiwp_inviter
+						has_minor_title = title_commander
+					}
+				}				
+			}						
+			# If passed then not pending
+		}
+		else = {
+			set_character_flag = lmmiwp_some_promise_still_pending
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					NOT = { event_target:lmmiwp_title_to_press_claim = { always = yes } }
+					has_character_flag = lmmiwp_inviter_is_already_pressing_my_claim
+					event_target:lmmiwp_title_to_press_claim = {					
+						has_holder = yes
+						holder_scope = {
+							OR = {
+								character = event_target:lmmiwp_invitee
+								character = event_target:lmmiwp_inviter
+							}
+						}
+					}
+				}			
+			}
+			# If passed then not pending
+		}
+		else = {
+			set_character_flag = lmmiwp_some_promise_still_pending
+		}
+		
+		if = {
+			limit = {
+				NOT = { has_character_flag = lmmiwp_some_promise_still_pending }
+			}			
+			set_character_flag = lmmiwp_all_promises_fulfilled
+		}
+		
+		clr_character_flag = lmmiwp_some_promise_still_pending
+	}
+}
+
+lmmiwp_handle_fulfill_promises_effect = {
+	if = {
+		limit = {
+			FROM = {
+				has_character_flag = lmmiwp_inviter_is_already_pressing_my_claim
+			}
+		}
+		custom_tooltip = {
+			text = lmmiwp_ctt_we_are_already_pressing_claim
+		}				
+	}
+	else = {
+		# Press Claim
+		FROM = {
+			show_scope_change = no
+			event_target:lmmiwp_title_to_press_claim = {
+				show_scope_change = no
+				if = {
+					limit = {
+						holder_scope = {
+							character = ROOT								
+						}
+					}
+					grant_title = PREV
+				}
+				else_if = {
+					limit = {
+						holder_scope = {
+							character = FROM
+						}
+					}
+					# Do nothing
+				}
+				else_if = {
+					limit = { 
+						FROM = {
+							has_character_flag = lmmiwp_inviter_is_already_pressing_my_claim
+						}
+					}
+					# If already pressing claim then do nothing
+				}
+				else = {		
+					# If attacking target in any other war, end it inconclusively
+					if = {
+						limit = {
+							holder_scope = {
+								top_liege = {
+									any_war = {
+										attacker = { character = ROOT }
+										defender = { character = PREVPREV }
+										NAND = {
+											using_cb = other_claim
+											war_title = PREVPREVPREV
+										}
+									}
+								}
+							}
+						}
+						custom_tooltip = {
+							text = lmmiwp_ctt_current_war_will_end
+							hidden_tooltip = {
+								generate_tooltip = no
+								holder_scope = {
+									top_liege = {										
+										any_war = {
+											limit = {
+												attacker = { character = ROOT }
+												defender = { character = PREVPREV }
+											}								
+											end_war = invalid
+										}
+									}
+								}
+							}							
+						}																				
+					}	
+					# If not defending in a war against target, declare claim war
+					if = {
+						limit = {
+							NOT = {
+								event_target:lmmiwp_title_to_press_claim = {
+									holder_scope = {
+										top_liege = {
+											any_war = {
+												attacker = { character = PREVPREV }
+												defender = { character = event_target:lmmiwp_inviter }
+											}
+										}
+									}
+								}
+							}							
+						}
+						custom_tooltip = {
+							text = lmmiwp_ctt_will_declare_claim_war
+							#ROOT = { character_event = { id = lmmiwp.4003 } } # Declare claim war
+							event_target:lmmiwp_title_to_press_claim = {
+								holder_scope = {
+									show_scope_change = no
+									top_liege = {
+										show_scope_change = no
+										reverse_war = {
+											target = event_target:lmmiwp_invitee
+											casus_belli = other_claim
+											thirdparty = event_target:lmmiwp_inviter
+											thirdparty_title = PREVPREV						
+										}
+									}
+								}
+							}
+						}
+					}						
+				}
+			}
+		}
+	}
+	
+	if = {
+		limit = {
+			any_demesne_title = {
+				has_title_flag = lmmiwp_title_promised_to_@FROM
+				has_title_flag = lmmiwp_title_used_for_invite_by_@ROOT
+			}
+		}
+		# Grant titles
+		any_demesne_title = {
+			show_scope_change = no
+			limit = {
+				has_title_flag = lmmiwp_title_promised_to_@FROM
+				has_title_flag = lmmiwp_title_used_for_invite_by_@ROOT
+			}				
+			grant_title = FROM
+		}
+		
+		# Transfer all de jure vassals
+		custom_tooltip = {
+			text = lmmiwp_ctt_all_de_jure_vassals_will_be_transferred
+			# FROM = {
+				# any_de_jure_vassal = {
+					# limit = { liege = { character = ROOT } }
+					# set_defacto_liege = PREV
+				# }
+			# }
+		}
+	}
+	
+	# Grant council position
+	if = {
+		limit = {		
+			is_liege_of = FROM
+			FROM = {
+				has_character_flag = lmmiwp_promised_council_position_by_@ROOT
+				is_councillor = no
+			}
+		}
+		custom_tooltip = {
+			text = lmmiwp_ctt_will_be_granted_council_position
+			FROM = { clr_character_flag = lmmiwp_promised_council_position_by_@ROOT }			
+			lmmiwp_give_council_position_to_invitee_effect = yes
+		}
+	}
+	
+	# Make Commander
+	if = {
+		limit = {
+			is_liege_of = FROM
+			FROM = {
+				has_character_flag = lmmiwp_promised_commander_by_@ROOT
+				NOT = { has_minor_title = title_commander }				
+			}
+		}
+		custom_tooltip = {
+			text = lmmiwp_ctt_will_be_made_commander
+			if = {
+				limit = {
+					FROM = { has_job_title = job_marshal }
+				}
+				lmmiwp_give_council_position_to_invitee_effect = yes
+			}
+			random_courtier_or_vassal = {
+				limit = { has_minor_title = title_commander }
+				remove_title = title_commander
+			}
+			FROM = { give_minor_title = title_commander }
+		}		
+	}
+	
+	# Give opinion modifiers		
+	FROM = {
+		show_scope_change = no
+		if = {
+			limit = { has_character_flag = lmmiwp_is_reminding }
+			opinion = { who = ROOT modifier = lmmiwp_fulfilled_promises_opinion }
+		}
+		else = {
+			opinion = { who = ROOT modifier = lmmiwp_fulfilled_promises_immediately_opinion }
+		}				
+	}
+	
+	# Give traits to Inviter
+	ROOT = {
+		show_scope_change = no
+		random = {
+			chance = 25
+			
+			modifier = {
+				factor = 2
+				FROM = {
+					NOT = { has_character_flag = lmmiwp_is_reminding }
+				}
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = deceitful
+			}					
+			
+			if = {
+				limit = { trait = deceitful }
+				remove_trait = deceitful
+			}
+			add_trait = honest
+		}
+		if = {
+			limit = {
+				is_variable_equal = { which = local_lmmiwp_years_waited value = 0 }
+			}
+			add_character_modifier = { modifier = lmmiwp_quick_to_fulfill_promises duration = 1825 }
+		}
+	}
+}
+
+lmmiwp_handle_request_for_delayed_fulfillment_effect = {
+	if = {
+		limit = {
+			FROM = {
+				has_character_flag = lmmiwp_inviter_is_defending_against_press_claim_target
+			}
+		}
+		custom_tooltip = {
+			text = lmmiwp_ctt_we_are_defending_against_press_claim_target
+		}
+	}
+	if = {
+		limit = {
+			has_game_rule = { name = lmmiwp_rule_invitee_patience value = lmmiwp_rule_option_patient }
+		}
+		custom_tooltip = {
+			text = lmmiwp_ctt_accepts_to_be_patient
+			FROM = {
+				set_character_flag = lmmiwp_accepted_to_be_patient					
+			}					
+		}
+	}
+	else = {
+		random = {			
+			chance = 50
+			
+			# Debug
+			# modifier = {
+				# factor = 10
+				# always = yes
+			# }
+			
+			modifier = {
+				factor = 2
+				FROM = { trait = patient }
+			}
+			
+			modifier = {
+				factor = 0.5
+				FROM = { trait = wroth }
+			}
+			
+			modifier = {
+				factor = 2
+				FROM = { trait = content }
+			}
+			
+			modifier = {
+				factor = 1.5
+				FROM = { trait = ambitious }
+			}
+			
+			modifier = {
+				factor = 3
+				FROM = { trait = trusting }
+			}
+			
+			modifier = {
+				factor = 0.25
+				FROM = { trait = paranoid }
+			}
+			
+			modifier = {
+				factor = 0.75
+				FROM = { trait = stubborn }
+			}
+			
+			modifier = {
+				factor = 2
+				trait = honest
+			}
+			
+			modifier = {
+				factor = 0.5
+				trait = deceitful
+			}
+			
+			modifier = {
+				factor = 1.5
+				trait = just
+			}
+			
+			modifier = {
+				factor = 0.75
+				trait = arbitrary
+			}
+			
+			modifier = {
+				factor = 2
+				trait = gregarious
+			}
+			
+			modifier = {
+				factor = 1.5
+				trait = kind
+			}
+			
+			modifier = {
+				factor = 1.5
+				trait = charitable
+			}
+			
+			modifier = {
+				factor = 2
+				diplomacy = 12
+			}
+			
+			modifier = {
+				factor = 0.75
+				diplomacy = 4
+				NOT = { diplomacy = 8 }
+			}
+			
+			modifier = {
+				factor = 0.5
+				NOT = { diplomacy = 4 }
+			}
+			
+			modifier = {
+				factor = 5
+				FROM = { has_character_flag = lmmiwp_inviter_is_defending_against_press_claim_target }
+			}
+			
+			modifier = {
+				factor = 2
+				is_variable_equal = { which = local_lmmiwp_years_waited value = 0 }
+			}
+			
+			# modifier = {
+				# factor = 1
+				# is_variable_equal = { which = local_lmmiwp_years_waited value = 1 }
+			# }
+			
+			modifier = {
+				factor = 0.9
+				is_variable_equal = { which = local_lmmiwp_years_waited value = 2 }
+			}
+			
+			modifier = {
+				factor = 0.8
+				is_variable_equal = { which = local_lmmiwp_years_waited value = 3 }
+			}
+			
+			modifier = {
+				factor = 0.7
+				is_variable_equal = { which = local_lmmiwp_years_waited value = 4 }
+			}
+			
+			modifier = {
+				factor = 0.6
+				is_variable_equal = { which = local_lmmiwp_years_waited value = 5 }
+			}
+			
+			modifier = {
+				factor = 0.4
+				is_variable_equal = { which = local_lmmiwp_years_waited value = 6 }
+			}
+			
+			modifier = {
+				factor = 0.2
+				is_variable_equal = { which = local_lmmiwp_years_waited value = 7 }
+			}
+			
+			modifier = {
+				factor = 0.1
+				is_variable_equal = { which = local_lmmiwp_years_waited value = 8 }
+			}
+			
+			modifier = {
+				factor = 0.05
+				is_variable_equal = { which = local_lmmiwp_years_waited value = 9 }
+			}
+			
+			modifier = {
+				factor = 0.01
+				check_variable = { which = local_lmmiwp_years_waited value = 10 }
+			}
+			
+			custom_tooltip = {
+				text = lmmiwp_ctt_accepts_to_be_patient
+				FROM = {
+					set_character_flag = lmmiwp_accepted_to_be_patient					
+				}					
+			}
+		}
+	}
+	
+	hidden_tooltip = {
+		if = {
+			limit = {
+				FROM = { has_character_flag = lmmiwp_accepted_to_be_patient }
+			}
+			FROM = {
+				clr_character_flag = lmmiwp_accepted_to_be_patient				
+				character_event = { id = lmmiwp.4002 days = 365 } # Invitee receives event to remind inviter
+			}
+		}
+		else = {							
+			FROM = { character_event = { id = lmmiwp.4003 } } # Ping event which also sets the appropriate flag for not accepting
+		}
+	}
+}
