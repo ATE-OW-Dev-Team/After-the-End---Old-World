@@ -1055,6 +1055,136 @@ targeted_decisions = {
 		}
 	}	
 
+	warrior_lodge_norse_go_berserk = {
+		
+		filter = self
+		ai_target_filter = self
+		ai_check_interval = 36
+		
+		potential = {
+			character = FROM
+			is_playable = yes
+			is_adult = yes
+			OR = {
+				trait = wroth
+				trait = duelist
+				trait = robust
+				trait = sturdy
+				trait = strong
+				trait = cruel
+				trait = arbitrary
+				trait = brave
+				trait = stubborn
+				trait = proud
+			}
+			OR = {
+				trait = misguided_warrior
+				trait = tough_soldier
+			}
+			NOR = {
+				trait = skilled_tactician
+				trait = brilliant_strategist
+			}
+			NOR = {
+				trait = berserker
+				trait = patient
+				trait = strategist
+				trait = kind
+				trait = temperate
+				trait = content
+				trait = shy
+				trait = gregarious
+				trait = erudite
+				trait = paranoid
+				trait = paranoid
+				trait = paranoid
+			}
+			religion = aurorean
+			NOT = { has_character_flag = going_berserk } #to stop you spamming the button
+			prestige = 300
+		}
+		
+		allow = {
+			prestige = 350
+			custom_tooltip = {
+				text = not_already_going_berserk_tt
+				NOT = { has_character_flag = going_berserk }
+			}
+			OR = {
+				NOT = { trait = berserker }
+				prisoner = yes
+			}
+		}
+		
+		effect = {
+			prestige = -350
+			if = {
+				limit = { NOT = { trait = berserker } }
+				custom_tooltip = {
+					text = gain_berserker_tt #Specifies what the trait gives: must be updated if trait is
+					#tooltip = { add_trait = berserker } #no longer needed
+				}
+			}
+			set_character_flag = special_berserker # Will last for at least 10 years
+			hidden_effect = {
+	    		if = {
+	    			limit = {
+	    				NOT = { trait = wroth }
+	    				NOT = { trait = patient }
+	    			}
+    				add_trait = wroth
+	    		}
+				if = {
+					limit = { trait = patient }
+					remove_trait = patient
+				}
+				if = {
+					limit = { trait = defensive_leader }
+					remove_trait = defensive_leader
+				}
+				if = {
+					limit = {
+						NOT = { leader_traits = 1 }
+						NOT = { trait = aggressive_leader }
+					}
+					add_trait = aggressive_leader
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = { prisoner = no }
+					character_event = { id = HF.10056 } #Fires event to handle outcome...
+				}
+				else = { #Might break you out of prison or have something bonkers happen...
+					character_event = { id = HF.10070 } #Fires event to handle outcome...
+				}
+			}
+			set_character_flag = going_berserk
+			detract_society_currency_minor_effect = yes
+		}
+		
+		revoke_allowed = { always = no }
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1
+				trait = shy
+			}
+			modifier = {
+				factor = 0.1
+				trait = craven
+			}
+			modifier = {
+				factor = 0.1
+				trait = patient
+			}
+			modifier = {
+				factor = 0.1
+				trait = defensive_leader
+			}
+		}
+	}
 	#Power, rank 4: Call to Glory
 	warrior_lodge_call_to_glory = {
 		only_playable = yes
