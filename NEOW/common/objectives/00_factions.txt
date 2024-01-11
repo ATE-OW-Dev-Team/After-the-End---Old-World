@@ -1210,9 +1210,21 @@ faction_succ_primogeniture = {
 		
 		modifier = {
 			factor = 0.2
-			FROM = { pacifist = yes }
-		}		
-		
+			FROM = { emf_pacifist_true_religion = yes }
+		}
+		modifier = {
+			factor = 2
+			FROM = { emf_warlike_true_religion = yes }
+		}
+		modifier = {
+			factor = 0.5
+			holder_scope = {  
+				any_owned_bloodline = {
+					has_bloodline_flag = bloodline_less_factions
+					bloodline_is_active_for = PREV
+				}
+			}
+		}
 		modifier = {
 			factor = 0
 			FROM = {
@@ -1221,6 +1233,18 @@ faction_succ_primogeniture = {
 					has_character_modifier = in_seclusion
 				}
 			}
+		}
+		modifier = {
+			factor = 0
+			holder_scope = { is_married = FROM }
+		}
+		modifier = {
+			factor = 0
+			current_heir = { character = FROM }
+		}
+		modifier = {
+			factor = 0
+			FROM = { primary_title = { is_primary_type_title = yes } }
 		}
 		modifier = {
 			factor = 0.95
@@ -1494,28 +1518,50 @@ faction_succ_primogeniture = {
 		
 		modifier = {
 			factor = 0
-			holder_scope = {
-				any_spouse = { character = FROM }
-			}
-		}
-		
-		modifier = {
-			factor = 0
 			current_heir = {
-				character = FROM
+				ROOT = {
+					heir_under_primogeniture_law = {
+						character = PREVPREV
+					}
+				}
 			}
 		}
-		
+		modifier = {
+			factor = 2
+			has_flag = former_primogeniture
+		}
 		modifier = {
 			factor = 0
-			NOT = { would_be_heir_under_law = { who = FROM law = primogeniture } }
+			#either has to be the primogeniture heir or the primogeniture heir is a dynasty member/ally I like better than my liege
+			NOR = {
+				would_be_heir_under_law = { who = FROM law = primogeniture }
+				heir_under_primogeniture_law = {
+					OR = {
+						dynasty = FROM
+						is_married = FROM
+						is_friend = FROM
+						is_lover = FROM
+					}
+					FROM = { opinion_diff = { first = PREV second = LIEGE value = 25 as_if_liege = yes } }
+					reverse_opinion = { who = FROM value = 0 }
+				}
+				heir_under_primogeniture_law = {
+					OR = {
+						character = FROM
+						is_married = FROM
+						is_friend = FROM
+						is_lover = FROM
+						is_close_relative = FROM
+					}
+					ai_ambition = 40
+					diplomacy = 12
+				}
+			}
 		}
-		
 		modifier = {
 			factor = 0
 			FROM = { preparing_invasion = yes }
 		}
-		
 		modifier = {
 			factor = 0
 			FROM = {
@@ -9205,252 +9251,6 @@ faction_independence = {
 			}
 		}
 		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_1
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_1
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_1
-				}
-			}
-			is_theocracy = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_2
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_2
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_2
-				}
-			}
-			is_theocracy = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_3
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_3
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_3
-				}
-			}
-			is_theocracy = yes
-		}
-		##
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_1
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_1
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_1
-				}
-			}
-			is_theocracy = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_2
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_2
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_2
-				}
-			}
-			is_theocracy = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_3
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_3
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_3
-				}
-			}
-			is_theocracy = yes
-		}
-		##
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_1
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_1
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_1
-				}
-			}
-			is_theocracy = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_2
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_2
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_2
-				}
-			}
-			is_theocracy = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_3
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_3
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_3
-				}
-			}
-			is_theocracy = yes
-		}
-		##
-		modifier = {
 			factor = 0.9
 			OR = {
 				has_character_modifier = mandate_taxes_norm
@@ -10351,252 +10151,6 @@ faction_independence = {
 				}
 			}
 		}
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_1
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_1
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_1
-				}
-			}
-			is_theocracy = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_2
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_2
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_2
-				}
-			}
-			is_theocracy = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_3
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_3
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = common_land_laws_3
-				}
-			}
-			is_theocracy = yes
-		}
-		##
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_1
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_1
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_1
-				}
-			}
-			is_theocracy = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_2
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_2
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_2
-				}
-			}
-			is_theocracy = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_3
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_3
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = forestry_laws_3
-				}
-			}
-			is_theocracy = yes
-		}
-		##
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_1
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_1
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_1
-				}
-			}
-			is_theocracy = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_2
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_2
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_2
-				}
-			}
-			is_theocracy = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_3
-				}
-			}
-			is_republic = yes
-		}
-		modifier = {
-			factor = 1.03
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_3
-				}
-			}
-			is_feudal = yes
-		}
-		modifier = {
-			factor = 0.95
-			liege = {
-				primary_title = {
-					has_law = judiciary_laws_3
-				}
-			}
-			is_theocracy = yes
-		}
-		##
 		modifier = {
 			factor = 0.9
 			OR = {
