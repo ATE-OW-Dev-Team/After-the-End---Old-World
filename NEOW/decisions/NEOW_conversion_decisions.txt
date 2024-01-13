@@ -4228,4 +4228,274 @@ decisions = {
 			}
 		}
 	}
+	indonesian_renaissance = {
+		ai_check_interval = 120 #check only once every 120 months.
+		only_playable = yes
+		is_high_prio = yes
+		
+		potential = {
+			is_playable = yes
+			has_dlc = "Holy Fury"
+			has_landed_title = e_indonesia
+			NOT = { government = chinese_imperial_government }
+			NOT = { has_global_flag = flag_started_indon_renaissance }
+			NOT = {
+				has_alternate_start_parameter = { key = culture_names value = random }
+			}
+		}
+		allow = {
+			show_only_failed_conditions = yes
+			religion = pancasila
+			ruled_years = 10
+			war = no
+		}
+		effect = {
+			set_global_flag = flag_started_indon_renaissance
+			culture = indonesian
+			hidden_tooltip = {
+				any_courtier_or_vassal = { 
+					limit = { lower_tier_than = COUNT }
+					culture = indonesian
+				}
+			}
+			capital_scope = { culture = indonesian }
+			custom_tooltip = {
+				text = tooltip_indonesian_culture_starts_spreading
+				hidden_tooltip = {
+					any_realm_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							culture = indonesian
+						}
+						if = {
+							limit = {
+								culture = javanese
+								NOT = { distance = { where = 333 distance = 100 } } 
+							}
+							random = { 
+								chance = 40 
+								culture = indonesian 
+							}
+						}
+						if = {
+							limit = { 
+								OR = {
+									culture_group = malay_group
+									culture_group = bali_sumbawa
+									culture_group = iban_dayakic
+									culture_group = borneonic
+									}
+								NOT = { distance = { where = 333 distance = 200 } } 
+							}
+							random = {
+								chance = 20 
+								culture = indonesian 
+							}
+						}
+						if = {
+							limit = { 
+								OR = {
+									culture_group = malay_group
+									culture_group = bali_sumbawa
+									culture_group = iban_dayakic
+									culture_group = borneonic
+									}
+								NOT = { distance = { where = 333 distance = 400 } } 
+							}
+							random = { 
+								chance = 5
+								culture = indonesian 
+							}
+						}
+					}
+				}
+			}
+			hidden_tooltip = {
+				if = { #Pancasila Emperor gets chance to spread Pancasila law a bit alongside the culture.
+					limit = { religion = pancasila }
+					any_realm_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							religion = ROOT
+						}
+						if = {
+							limit = { 
+								culture = indonesian
+								NOT = { distance = { where = 333 distance = 100 } } 
+							}
+							random = { 
+								chance = 10 
+								religion = ROOT
+							}
+						}
+						if = {
+							limit = { 
+								culture = indonesian
+								NOT = { distance = { where = 333 distance = 200 } } 
+							}
+							random = { 
+								chance = 5 
+								religion = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 3
+				religion = pancasila
+			}
+			modifier = {
+				factor = 0.01 #Would consider it a step down.
+				culture = malay
+			}
+		}
+	}
+	embrace_indonesian_culture = {
+		ai_check_interval = 120 #check only once every 120 months.
+		only_playable = yes
+		
+		potential = {
+			is_playable = yes
+			NOT = { culture = indonesian }
+			OR = {
+				culture_group = malay_group
+				culture_group = bali_sumbawa
+				culture_group = iban_dayakic
+				culture_group = borneonic
+			}
+			has_dlc = "Holy Fury"
+			NOT = { government = chinese_imperial_government }
+			has_global_flag = flag_started_indonesian_renaissance
+			NOT = {
+				has_alternate_start_parameter = { key = culture_names value = random }
+			}
+			top_liege = { has_landed_title = e_indonesia }
+		}
+		allow = {
+			show_only_failed_conditions = yes
+			OR = {
+				culture_group = malay_group
+				culture_group = bali_sumbawa
+				culture_group = iban_dayakic
+				culture_group = borneonic
+			}
+		}
+		effect = {
+			culture = indonesian
+			hidden_tooltip = {
+				any_courtier_or_vassal = { 
+					limit = { lower_tier_than = COUNT }
+					culture = indonesian
+				}
+			}
+			capital_scope = { culture = indonesian }
+			custom_tooltip = {
+				text = tooltip_indonesian_culture_spreads
+				hidden_tooltip = {
+					any_demesne_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							culture = indonesian
+						}
+						if = {
+							limit = { 
+								culture = javanese
+								capital_scope = { NOT = { distance = { where = PREV distance = 100 } } } 
+							}
+							random = { 
+								chance = 40 
+								culture = indonesian
+							}
+						}
+						if = {
+							limit = { 
+								OR = {
+									culture_group = malay_group
+									culture_group = bali_sumbawa
+									culture_group = iban_dayakic
+									culture_group = borneonic
+									}
+								capital_scope = { NOT = { distance = { where = PREV distance = 200 } } } 
+							}
+							random = { 
+								chance = 20 
+								culture = indonesian 
+							}
+						}
+						if = {
+							limit = { 
+								OR = {
+									culture_group = malay_group
+									culture_group = bali_sumbawa
+									culture_group = iban_dayakic
+									culture_group = borneonic
+									}
+								capital_scope = { NOT = { distance = { where = PREV distance = 400 } } } 
+							}
+							random = { 
+								chance = 5
+								culture = indonesian 
+							}
+						}
+					}
+				}
+			}
+			if = { #Pancasila Emperor gets chance to spread Pancasila law a bit alongside the culture.
+				limit = { religion = pancasila }
+				hidden_tooltip = {
+					any_demesne_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							religion = ROOT
+						}
+						if = {
+							limit = { 
+								culture = indonesian
+								capital_scope = { NOT = { distance = { where = PREV distance = 100 } } } 
+							}
+							random = { 
+								chance = 10 
+								religion = ROOT
+							}
+						}
+						if = {
+							limit = { 
+								culture = indonesian
+								capital_scope = { NOT = { distance = { where = PREV distance = 200 } } } 
+							}
+							random = { 
+								chance = 5 
+								religion = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 3
+				religion = pancasila
+			}
+			modifier = {
+				factor = 3
+				capital_scope = { culture = indonesian } 
+			}
+			modifier = {
+				factor = 0.01 #Would consider it a step down.
+				culture = malay
+			}
+		}
+	}
 }
