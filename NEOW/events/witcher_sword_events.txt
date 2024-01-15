@@ -1,0 +1,160 @@
+namespace = witcher
+
+# Merchant arrives
+narrative_event = {
+    id = witcher.10
+
+	picture = GFX_evt_busy_trading_dock
+	desc = witcher10desc
+	title = witcher10title
+
+	only_playable = yes
+	only_capable = yes
+	religion_group = pagan_group
+	trigger = {
+		religion_openly_folklorist_or_reformed_trigger = yes
+		is_inaccessible_trigger = no
+		NOT = { has_character_flag = do_not_disturb }
+		NOT = { has_global_flag = witcher_steel_sword_found }
+        any_realm_province = {
+            province_id = 411 # Petersburg
+        }
+	}
+	mean_time_to_happen = {
+		months = 600
+	}
+
+    option = { # Give him a chance
+        name = EVTOPTA_witcher10
+        random_list = {
+            10 = {
+                narrative_event = { id = witcher.11 } days = 3
+            }
+            30 = {
+                narrative_event = { id = witcher.12 } days = 3
+            }
+            60 = {
+                narrative_event = { id = witcher.13 } days = 3
+            }
+        }
+    }
+    option = { # Send him away!
+        name = EVTOPTB_witcher10
+        random = {
+            chance = 20
+            add_trait = cynical
+        }
+    }
+}
+
+# It's real
+narrative_event = {
+    id = witcher.11
+
+	picture = GFX_evt_council_speaker
+    desc = witcher11desc
+    title = witcher11title
+
+    is_triggered_only = yes
+
+    option = { # Buy it
+        name = EVTOPTA_witcher11
+        trigger = {
+            wealth = 1000
+        }
+        set_global_flag = witcher_steel_sword_found
+        add_artifact = sword_witcher_titanium
+        wealth = -1000
+    }
+    option = { # Poor lol
+        name = EVTOPTB_witcher11
+        prestige = -100
+    }
+}
+
+# It's fake, but you think it's real
+narrative_event = {
+    id = witcher.12
+
+	picture = GFX_evt_council_speaker
+    desc = witcher12desc
+    title = witcher12title
+    
+    is_triggered_only = yes
+
+    option = { # Buy it
+        name = EVTOPTA_witcher12
+        trigger = {
+            wealth = 300
+        }
+        random = {
+            chance = 10
+            add_trait = trusting
+        }
+        set_global_flag = witcher_steel_sword_found
+        add_artifact = sword_witcher_titanium
+        wealth = -300
+        narrative_event = {
+            id = witcher.121 days = 15
+        }
+    }
+    option = { # Poor lol
+        trigger = {
+            NOT = { wealth = 300 }
+        }
+        name = EVTOPTB_witcher12
+        prestige = -50
+    }
+    option = { # Not convinced
+        name = EVTOPTC_witcher12
+        random = {
+            chance = 10
+            add_trait = cynical
+        }
+    }
+}
+
+narrative_event = {
+    id = witcher.121
+
+	picture = GFX_evt_family_feud_republic
+    desc = witcher121desc
+    title = witcher121title
+    
+    is_triggered_only = yes
+    
+    option = {
+        name = EVTOPTA_witcher121
+        prestige = -300
+    }
+}
+
+# It's clearly fake
+narrative_event = {
+    id = witcher.13
+
+	picture = GFX_evt_council_speaker
+    desc = witcher13desc
+    title = witcher13title
+    
+    is_triggered_only = yes
+
+    option = { # execution
+        name = EVTOPTA_witcher13
+        random = {
+            chance = 10
+            add_trait = wroth
+        }
+    }
+    option = { # dungeon
+        name = EVTOPTB_witcher13
+        wealth = 50
+    }
+    option = { # Let him off 
+        name = EVTOPTC_witcher13
+        random = {
+            chance = 10
+            add_trait = patient
+        }
+    }
+}
