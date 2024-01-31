@@ -876,14 +876,14 @@ NCharacter = {
 	DYNASTY_CONTROLS_HOLY_ORDER_PIETY = 1,			-- Monthly Piety from a dynasty member as head of a Holy Order (only for counts+ and if the same religion)
 	DYNASTY_CONTROLS_RELIGIOUS_HEAD_PRESTIGE = 2,	-- Monthly Prestige from a dynasty member as head of a religion (only for counts+ and if the same religion)
 	DYNASTY_CONTROLS_RELIGIOUS_HEAD_PIETY = 1,		-- Monthly Piety from a dynasty member as head of a religion (only for counts+ and if the same religion)
-	NATURAL_DEATH_CHANCE_AGE_0 = 20,					-- Natural deaths per decade out of 10000 people: Age 0-9
+	NATURAL_DEATH_CHANCE_AGE_0 = 25,					-- Natural deaths per decade out of 10000 people: Age 0-9
 	NATURAL_DEATH_CHANCE_AGE_10 = 5,				-- Natural deaths per decade out of 10000 people: Age 10-19
 	NATURAL_DEATH_CHANCE_AGE_20 = 10,				-- Natural deaths per decade out of 10000 people: Age 20-29
 	NATURAL_DEATH_CHANCE_AGE_30 = 20,				-- Natural deaths per decade out of 10000 people: Age 30-39
 	NATURAL_DEATH_CHANCE_AGE_40 = 31,				-- Natural deaths per decade out of 10000 people: Age 40-49
 	NATURAL_DEATH_CHANCE_AGE_50 = 100,				-- Natural deaths per decade out of 10000 people: Age 50-59
 	NATURAL_DEATH_CHANCE_AGE_60 = 400,				-- Natural deaths per decade out of 10000 people: Age 60-69
-	NATURAL_DEATH_CHANCE_AGE_70 = 1400,				-- Natural deaths per decade out of 10000 people: Age 70-79
+	NATURAL_DEATH_CHANCE_AGE_70 = 1800,				-- Natural deaths per decade out of 10000 people: Age 70-79
 	NATURAL_DEATH_CHANCE_AGE_80 = 3500,				-- Natural deaths per decade out of 10000 people: Age 80-90
 	NATURAL_DEATH_CHANCE_AGE_90 = 7000,				-- Natural deaths per decade out of 10000 people: Age 90-99
 	NATURAL_DEATH_CHANCE_AGE_100 = 9000,			-- Natural deaths per decade out of 10000 people: Age 100+
@@ -1577,7 +1577,7 @@ NGraphics = {
 },
 
 NEngine = {
-	EVENT_PROCESS_OFFSET = 75, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
+	EVENT_PROCESS_OFFSET = 85, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
 	COURTIER_EVENT_PROCESS_OFFSET = 145, 	 -- Events are checked every X day for courtiers. Max value of 255
 	COURTIERS_MTTTH_EVENTS = 1,  -- Toggles if courtiers are allowed to run MTTH events or not
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_YEAR = 1066, -- The missing scripted successor error will not be shown before this date
