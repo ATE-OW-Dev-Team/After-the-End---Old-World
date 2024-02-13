@@ -316,6 +316,7 @@ character_event = {
 			religion = ainushinto
 			religion = shinko
 			religion = amidism
+			religion = jun_kokoro_ha
 		}
 		OR = {
 			trait = japanese_bad_honour
@@ -3343,6 +3344,7 @@ character_event = {
 			religion = buddhoshinto
 			religion = ainushinto
 			religion = amidism
+			religion = jun_kokoro_ha
 		}
 		culture_group = japan_group
 	}
@@ -3393,6 +3395,17 @@ character_event = {
 			}
 		}
 		amidism = {
+			set_character_modifier = {
+				castle_tax_modifier = 0.05
+				castle_levy_size = 0.05
+				temple_tax_modifier = 0
+				temple_levy_size = 0
+				city_tax_modifier = 0
+				city_levy_size = 0
+				martial = 2
+			}
+		}
+		jun_kokoro_ha = {
 			set_character_modifier = {
 				castle_tax_modifier = 0.05
 				castle_levy_size = 0.05
@@ -6837,6 +6850,57 @@ character_event = {
 					set_description = "bloodline_desc_numenor_restorer"
 				}
 			}
+	}
+}
+province_event = {
+	id = cleanup.226
+	hide_window = yes	
+	
+	trigger = {
+		religion = jun_kokoro_ha
+		owner = {
+			NOT = {
+				OR = {
+					religion = jun_kokoro_ha
+					religion = amidism
+				}
+			}
+		}
+		NOT = {
+			has_province_modifier = jun_kokoro_ha_peasant_unrest
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	immediate={
+		add_province_modifier = {
+			name = jun_kokoro_ha_peasant_unrest
+			duration = -1
+		}
+	}
+}
+province_event = {
+	id = cleanup.227
+	hide_window = yes	
+	
+	trigger = {
+		OR = {
+			owner = {
+				OR = {
+					religion = jun_kokoro_ha
+					religion = amidism
+				}
+			}
+			NOT = { religion = jun_kokoro_ha }
+		}
+		has_province_modifier = jun_kokoro_ha_peasant_unrest
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	immediate={
+		remove_province_modifier = jun_kokoro_ha_peasant_unrest
 	}
 }
 province_event = {
