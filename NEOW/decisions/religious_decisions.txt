@@ -6150,9 +6150,184 @@ targeted_decisions = {
 	}
 }
 title_decisions = {
+	remove_religious_leaders = {
+		only_playable = yes
+		filter = owned		
+	    diplomacy_icon = GFX_priory_icon
+		ai_target_filter = owned
+		ai_check_interval = 60
+		
+		from_potential = {
+			is_ruler = yes
+			wealth = 50
+			independent = yes
+			OR = {
+				religion = sevillian
+				religion = wahhabi
+				religion = gnostic
+				religion = penitente
+				religion = marblists
+				religion = deobandi
+				religion = white_lotus
+				religion = red_cult
+				religion = juche
+			}
+			NOT = {
+				has_character_modifier = hidden_timer_modif
+			}
+		}
+		
+		potential = {
+			tier = COUNT
+			location = { 
+				NOT = {
+					has_province_modifier = religious_leaders_removed
+				} 
+				num_of_settlements = 1
+				NOT = {
+					religion = FROM
+				}
+			}
+			holder_scope = {
+				OR = {
+					is_liege_or_above = FROM
+					character = FROM
+				}
+			}
+		}
+		
+		allow = {
+			location = {
+				NOT = {
+					has_province_modifier = religious_leaders_removed
+				} 
+				num_of_settlements = 1
+			}
+			FROM = {
+				trigger_if = {
+					limit = { ROOT = { num_of_settlements == 1 } }
+					wealth = 50
+				}
+				trigger_if = {
+					limit = { ROOT = { num_of_settlements == 2 } }
+					wealth = 100
+				}
+				trigger_if = {
+					limit = { ROOT = { num_of_settlements == 3 } }
+					wealth = 150
+				}
+				trigger_if = {
+					limit = { ROOT = { num_of_settlements == 4 } }
+					wealth = 200
+				}
+				trigger_if = {
+					limit = { ROOT = { num_of_settlements == 5 } }
+					wealth = 250
+				}
+				trigger_if = {
+					limit = { ROOT = { num_of_settlements == 6 } }
+					wealth = 300
+				}
+				trigger_if = {
+					limit = { ROOT = { num_of_settlements == 7 } }
+					wealth = 350
+				}
+			}
+		}
+		
+		effect = {
+			FROM = {
+				hidden_tooltip = { 
+					add_character_modifier = { name = hidden_timer_modif duration = 183 hidden = yes} 
+				}		
+				if = {
+					limit = {
+						ROOT = {
+							num_of_settlements == 1
+						}
+					}
+					wealth = -50
+				}
+				if = {
+					limit = {
+						ROOT = {
+							num_of_settlements == 2
+						}
+					}
+					wealth = -100
+				}
+				if = {
+					limit = {
+						ROOT = {
+							num_of_settlements == 3
+						}
+					}
+					wealth = -150
+				}
+				if = {
+					limit = {
+						ROOT = {
+							num_of_settlements == 4
+						}
+					}
+					wealth = -200
+				}
+				if = {
+					limit = {
+						ROOT = {
+							num_of_settlements == 5
+						}
+					}
+					wealth = -250
+				}
+				if = {
+					limit = {
+						ROOT = {
+							num_of_settlements == 6
+						}
+					}
+					wealth = -300
+				}
+				if = {
+					limit = {
+						ROOT = {
+							num_of_settlements == 7
+						}
+					}
+					wealth = -350
+				}
+			}
+			location = {
+				add_province_modifier = {
+					name = religious_leaders_removed
+					duration = 30
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.6
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {trait = cynical}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {trait = greedy}
+			}
+			modifier = {
+				factor = 1.5
+				FROM={trait = zealous}
+			}
+		}
+	}
 	ease_depopulation_issues = {
 		only_playable = yes
 		filter = owned		
+	    diplomacy_icon = GFX_wheat_icon
 		ai_target_filter = owned
 		ai_check_interval = 48
 		
