@@ -4607,7 +4607,7 @@ decisions = {
 			has_dlc = "Holy Fury"
 			has_landed_title = e_indonesia
 			NOT = { government = chinese_imperial_government }
-			NOT = { has_global_flag = flag_started_indon_renaissance }
+			NOT = { has_global_flag = flag_started_indonesian_renaissance }
 			NOT = {
 				has_alternate_start_parameter = { key = culture_names value = random }
 			}
@@ -4619,7 +4619,7 @@ decisions = {
 			war = no
 		}
 		effect = {
-			set_global_flag = flag_started_indon_renaissance
+			set_global_flag = flag_started_indonesian_renaissance
 			culture = indonesian
 			hidden_tooltip = {
 				any_courtier_or_vassal = { 
@@ -4887,6 +4887,308 @@ decisions = {
 				factor = 0.01 #Historically stubborn.
 				OR = {
 				culture = malay
+				culture = brunei
+				culture = aceh
+				}
+			}
+		}
+	}
+	malay_renaissance = {
+		ai_check_interval = 120 #check only once every 120 months.
+		only_playable = yes
+		is_high_prio = yes
+		
+		potential = {
+			is_playable = yes
+			has_dlc = "Holy Fury"
+			OR = {
+				has_landed_title = e_nusantara
+				has_landed_title = e_dvipantara
+				}
+			NOT = { government = chinese_imperial_government }
+			NOT = { has_global_flag = flag_started_malay_renaissance }
+			NOT = {
+				has_alternate_start_parameter = { key = culture_names value = random }
+			}
+		}
+		allow = {
+			show_only_failed_conditions = yes
+			ruled_years = 10
+			war = no
+		}
+		effect = {
+			set_global_flag = flag_started_malay_renaissance
+			culture = malay
+			hidden_tooltip = {
+				any_courtier_or_vassal = { 
+					limit = { lower_tier_than = COUNT }
+					culture = malay
+				}
+			}
+			capital_scope = { culture = malay }
+			custom_tooltip = {
+				text = tooltip_malay_culture_starts_spreading
+				hidden_tooltip = {
+					any_realm_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							culture = malay
+						}
+						if = {
+							limit = {
+								OR = { 
+									culture = melaka_malay
+									culture = johor_riau
+									}
+								NOT = { distance = { where = 333 distance = 100 } } 
+							}
+							random = { 
+								chance = 40 
+								culture = malay 
+							}
+						}
+						if = {
+							limit = { 
+								OR = {
+									culture_group = malay_group
+									culture_group = bali_sumbawa
+									culture_group = iban_dayakic
+									culture_group = borneonic
+									culture_group = sumatric
+									culture = aceh
+									}
+								NOT = { distance = { where = 333 distance = 200 } } 
+							}
+							random = {
+								chance = 20 
+								culture = malay
+							}
+						}
+						if = {
+							limit = { 
+								OR = {
+									culture_group = malay_group
+									culture_group = bali_sumbawa
+									culture_group = iban_dayakic
+									culture_group = borneonic
+									culture_group = sumatric
+									culture = aceh
+									}
+								NOT = { distance = { where = 333 distance = 400 } } 
+							}
+							random = { 
+								chance = 5
+								culture = malay 
+							}
+						}
+					}
+				}
+			}
+			hidden_tooltip = {
+				if = { #Nusantaran Emperor gets a chance to spread their faith a bit alongside the culture.
+					limit = { OR = { religion = syafi religion = pusaka religion = agamatirta } }
+					any_realm_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							religion = ROOT
+						}
+						if = {
+							limit = { 
+								culture = malay
+								NOT = { distance = { where = 333 distance = 100 } } 
+							}
+							random = { 
+								chance = 10 
+								religion = ROOT
+							}
+						}
+						if = {
+							limit = { 
+								culture = malay
+								NOT = { distance = { where = 333 distance = 200 } } 
+							}
+							random = { 
+								chance = 5 
+								religion = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 3
+				OR = {
+				culture_group = malay_group
+				}
+			}
+			modifier = {
+				factor = 0.01 #Historically stubborn.
+				OR = {
+				culture = indonesian
+				culture = brunei
+				culture = aceh
+				}
+			}
+		}
+	}
+	embrace_malay_culture = {
+		ai_check_interval = 120 #check only once every 120 months.
+		only_playable = yes
+		
+		potential = {
+			is_playable = yes
+			NOT = { culture = malay }
+			OR = {
+				culture_group = malay_group
+				culture_group = bali_sumbawa
+				culture_group = iban_dayakic
+				culture_group = borneonic
+				culture_group = sumatric
+				culture = aceh
+			}
+			has_dlc = "Holy Fury"
+			NOT = { government = chinese_imperial_government }
+			has_global_flag = flag_started_malay_renaissance
+			NOT = {
+				has_alternate_start_parameter = { key = culture_names value = random }
+			}
+			top_liege = { OR = { has_landed_title = e_nusantara has_landed_title = e_dvipantara} }
+		}
+		allow = {
+			show_only_failed_conditions = yes
+			OR = {
+				culture_group = malay_group
+				culture_group = bali_sumbawa
+				culture_group = iban_dayakic
+				culture_group = borneonic
+				culture_group = sumatric
+				culture = aceh
+			}
+		}
+		effect = {
+			culture = malay
+			hidden_tooltip = {
+				any_courtier_or_vassal = { 
+					limit = { lower_tier_than = COUNT }
+					culture = malay
+				}
+			}
+			capital_scope = { culture = malay }
+			custom_tooltip = {
+				text = tooltip_malay_culture_spreads
+				hidden_tooltip = {
+					any_demesne_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							culture = malay
+						}
+						if = {
+							limit = { 
+								OR = { 
+									culture = johor_riau
+									culture = melaka_malay
+									}
+								capital_scope = { NOT = { distance = { where = PREV distance = 100 } } } 
+							}
+							random = { 
+								chance = 40 
+								culture = malay
+							}
+						}
+						if = {
+							limit = { 
+								OR = {
+									culture_group = malay_group
+									culture_group = bali_sumbawa
+									culture_group = iban_dayakic
+									culture_group = borneonic
+									culture_group = sumatric
+									culture = aceh
+									}
+								capital_scope = { NOT = { distance = { where = PREV distance = 200 } } } 
+							}
+							random = { 
+								chance = 20 
+								culture = malay
+							}
+						}
+						if = {
+							limit = { 
+								OR = {
+									culture_group = malay_group
+									culture_group = bali_sumbawa
+									culture_group = iban_dayakic
+									culture_group = borneonic
+									culture_group = sumatric
+									culture = aceh
+									}
+								capital_scope = { NOT = { distance = { where = PREV distance = 400 } } } 
+							}
+							random = { 
+								chance = 5
+								culture = malay
+							}
+						}
+					}
+				}
+			}
+			if = { #Nusantaran Emperor gets a chance to spread their faith a bit alongside the culture.
+				limit = { OR = { religion = syafi religion = pusaka religion = agamatirta } }
+				hidden_tooltip = {
+					any_demesne_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							religion = ROOT
+						}
+						if = {
+							limit = { 
+								culture = malay
+								capital_scope = { NOT = { distance = { where = PREV distance = 100 } } } 
+							}
+							random = { 
+								chance = 10 
+								religion = ROOT
+							}
+						}
+						if = {
+							limit = { 
+								culture = malay
+								capital_scope = { NOT = { distance = { where = PREV distance = 200 } } } 
+							}
+							random = { 
+								chance = 5 
+								religion = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 3
+				OR = {
+				culture_group = malay_group
+				}
+			}
+			modifier = {
+				factor = 3
+				capital_scope = { culture = malay } 
+			}
+			modifier = {
+				factor = 0.01 #Historically stubborn.
+				OR = {
+				culture = indonesian
 				culture = brunei
 				culture = aceh
 				}
