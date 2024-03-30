@@ -1,0 +1,2042 @@
+namespace = GOVLEGIT
+
+####
+character_event = {
+	id = GOVLEGIT.999 
+	
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		primary_title = {
+			OR = {
+				tier = EMPEROR
+				tier = KING
+			}
+			temporary = no
+			is_tribal = no
+			is_nomadic = no
+		}
+		is_nomadic = no
+		is_tribal = no
+		OR = {
+			government = eastern_feudal
+			government = mandate_heaven
+			government = bhutanese_decayed_government
+			government = bhutanese_restored_government
+		}
+		has_game_rule = {
+			name = fitna_fracture
+			value = on
+		} 
+		independent = yes
+	}
+	
+	immediate = {
+		primary_title = { save_event_target_as = government_legitimacy_title }
+		
+		character_event = { id = GOVLEGIT.1001 days = 1 }
+		
+		# remove the corruption modifier from the former owner, if alive
+	}
+}
+
+# Main corruption event upon an imperial title being inherited/usurped
+# ROOT is the character, FROM is the title, FROMFROM is the old holder
+character_event = {
+	id = GOVLEGIT.1000 
+	
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		AND = {
+			FROMFROM = { always = yes } #If there is a FROMFROM
+			FROM = {
+				OR = {
+					tier = EMPEROR
+					tier = KING
+				}
+				independent = yes
+				temporary = no
+				is_tribal = no
+				is_nomadic = no
+				is_primary_holder_title = yes
+				OR = {
+					government = eastern_feudal
+					government = mandate_heaven
+					government = bhutanese_decayed_government
+					government = bhutanese_restored_government
+				}
+			}
+			is_nomadic = no
+			is_tribal = no
+		}
+		has_game_rule = {
+			name = fitna_fracture
+			value = on
+		} 
+	}
+	
+	immediate = {
+		FROM = { save_event_target_as = government_legitimacy_title }
+		
+		character_event = { id = GOVLEGIT.1001 days = 1 }
+		
+		# remove the corruption modifier from the former owner, if alive
+		FROMFROM = {
+			if = {
+				limit = {
+					is_alive = yes
+					lower_tier_than = KING
+				}
+				remove_character_modifier = government_legitimacy_0
+				remove_character_modifier = government_legitimacy_1
+				remove_character_modifier = government_legitimacy_2
+				remove_character_modifier = government_legitimacy_3
+				remove_character_modifier = government_legitimacy_4
+				remove_character_modifier = government_legitimacy_5
+				remove_character_modifier = government_legitimacy_6
+				remove_character_modifier = government_legitimacy_7
+				remove_character_modifier = government_legitimacy_8
+				remove_character_modifier = government_legitimacy_9
+				remove_character_modifier = government_legitimacy_10
+			}
+		}
+	}
+}
+
+# ROOT/FROM is the character, FROMFROM is the title, FROMFROMFROM is the old holder
+character_event = {
+	id = GOVLEGIT.1001
+	
+	hide_window = yes
+	is_triggered_only = yes
+	only_rulers = yes
+	
+	trigger = {
+		has_landed_title = event_target:government_legitimacy_title
+		is_nomadic = no
+		is_tribal = no
+		has_game_rule = {
+			name = fitna_fracture
+			value = on
+		} 
+	}
+	
+	immediate = {
+		event_target:government_legitimacy_title = {
+			
+			# reset the corruption value to 0, in case it's negative
+			if = {
+				limit = { NOT = { check_variable = { which = "government_legitimacy" value = 0.5 } } }
+				set_variable = { which = "government_legitimacy" value = 0 }
+			}
+			
+			# set new ruler corruption to 0
+			set_variable = { which = "government_legitimacy" value = 0 }
+			
+			#determine how much the realm size should change it
+			if = {
+				limit = { ROOT = { real_tier = KING } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 10 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_NOBLE_CUSTOMS == 2 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 4 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 8 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 12 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 16 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 20 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 24 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 28 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 32 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_NOBLE_CUSTOMS == 3 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 4 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_NOBLE_CUSTOMS == 4 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 6 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_NOBLE_CUSTOMS == 5 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 8 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_NOBLE_CUSTOMS == 6 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 10 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_NOBLE_CUSTOMS == 7 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 12 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_NOBLE_CUSTOMS == 8 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 14 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_POPULAR_CUSTOMS == 2 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_POPULAR_CUSTOMS == 3 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 4 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_POPULAR_CUSTOMS == 4 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 6 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_POPULAR_CUSTOMS == 5 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 8 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_POPULAR_CUSTOMS == 6 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 10 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_POPULAR_CUSTOMS == 7 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 12 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_POPULAR_CUSTOMS == 8 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 14 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_LEGALISM == 2 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 4 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_LEGALISM == 3 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 8 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_LEGALISM == 4 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 12 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_LEGALISM == 5 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 16 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_LEGALISM == 6 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 20 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_LEGALISM == 7 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 24 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_LEGALISM == 8 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 28 } #5
+			}
+			if = {
+				limit = { ROOT = { NOT = { prestige = 500 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { NOT = { prestige = 1000 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { NOT = { prestige = 1500 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { NOT = { prestige = 2000 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 2500 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 3 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 3000 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 3 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 3500 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 3 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 4000 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 3 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 4500 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 3 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 5000 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 3 } #5
+			}
+			if = {
+				limit = { ROOT = { realm_size = 12 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { realm_size = 12 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { realm_size = 12 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { realm_size = 12 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { realm_size = 23 } } #8 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #10
+			}
+			if = {
+				limit = { ROOT = { realm_size = 45 } } #15 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #15
+			}
+			if = {
+				limit = { ROOT = { realm_size = 90 } } #30 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #20
+			}
+			if = {
+				limit = { ROOT = { realm_size = 180 } } #60 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #25
+			}
+			if = {
+				limit = { ROOT = { realm_size = 270 } } #90 counties
+				change_variable = { which = "government_legitimacy" value = -2 } #30
+			}
+			if = {
+				limit = { ROOT = { realm_size = 450 } } #150 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #35
+			}
+			if = {
+				limit = { ROOT = { realm_size = 600 } } #200 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #40
+			}
+			if = {
+				limit = { ROOT = { realm_size = 750 } } #250 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #45
+			}
+			if = {
+				limit = { ROOT = { realm_size = 900 } } #300 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #50
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1050 } } #350 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #55
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1200 } } #400 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #60
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1350 } } #450 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #65
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1500 } } #500 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #70
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1650 } } #550 counties 
+				change_variable = { which = "government_legitimacy" value = 2 } #75
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1800 } } #600 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #80
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2100 } } #700 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #85
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2400 } } #800 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #90
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2700 } } #900 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #95
+			}
+			if = {
+				limit = { ROOT = { realm_size = 3000 } } #1000 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #98
+			}
+			
+			#Check realm stewardship
+			if = {
+				limit = { NOT = { ROOT = { realm_stewardship = 10 } } }
+				change_variable = { which = "government_legitimacy" value = -10 }
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_stewardship = 20 } } }
+				change_variable = { which = "government_legitimacy" value = -7 }
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_stewardship = 30 } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_intrigue = 10 } } }
+				change_variable = { which = "government_legitimacy" value = -10 }
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_intrigue = 20 } } }
+				change_variable = { which = "government_legitimacy" value = -7 }
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_intrigue = 30 } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = hedonist } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = inbred } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = slow } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = imbecile } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = gluttonous } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = greedy } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = slothful } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = wroth } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = envious } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = proud } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = arbitrary } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = cruel } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = kinslayer } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = familial_kinslayer } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = dynastic_kinslayer } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = hedonist } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = inbred } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = slow } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = imbecile } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = gluttonous } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = greedy } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = slothful } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = wroth } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = envious } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = proud } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = arbitrary } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = cruel } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = familial_kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = dynastic_kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = hedonist } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = inbred } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = slow } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = imbecile } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = gluttonous } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = greedy } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = slothful } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = wroth } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = envious } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = proud } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = arbitrary } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = cruel } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = familial_kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = dynastic_kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = hedonist } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = inbred } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = slow } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = imbecile } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = gluttonous } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = greedy } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = slothful } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = wroth } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = envious } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = proud } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = arbitrary } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = cruel } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = familial_kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = dynastic_kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { realm_stewardship = 40 } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { realm_stewardship = 50 } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { primary_title = { has_law = currency_laws_0 } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { primary_title = { has_law = currency_laws_1 } } }
+				change_variable = { which = "government_legitimacy" value = 1 }
+			}
+			if = {
+				limit = { ROOT = { primary_title = { has_law = currency_laws_2 } } }
+				change_variable = { which = "government_legitimacy" value = 3 }
+			}
+			if = {
+				limit = { ROOT = { primary_title = { has_law = currency_laws_3 } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { has_character_modifier = accepted_intrigue_corruption } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { has_character_modifier = accepted_stewardship_corruption } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { has_character_modifier = accepted_martial_corruption } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { realm_stewardship = 60 } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { realm_intrigue = 40 } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { realm_intrigue = 50 } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { realm_intrigue = 60 } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = administrator } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { government = mandate_heaven } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = schemer } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = ambitious } }
+				change_variable = { which = "government_legitimacy" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { trait = genius } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = quick } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = shrewd } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = temperate } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = charitable } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = diligent } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = patient } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = kind } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = humble } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = just } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = administrator } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = schemer } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = ambitious } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = genius } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = quick } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = shrewd } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = temperate } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = charitable } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = diligent } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = patient } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = kind } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = humble } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = just } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = administrator } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = schemer } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = ambitious } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = genius } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = quick } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = shrewd } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = temperate } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = charitable } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = diligent } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = patient } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = kind } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = humble } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = just } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = administrator } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = schemer } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = ambitious } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = genius } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = quick } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = shrewd } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = temperate } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = charitable } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = diligent } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = patient } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = kind } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = humble } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = just } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { check_variable = { which = "government_legitimacy" value = 100.5 } }
+				set_variable = { which = "government_legitimacy" value = 100 }
+			}
+			if = {
+				limit = { NOT = { check_variable = { which = "government_legitimacy" value = 0.5 } } }
+				set_variable = { which = "government_legitimacy" value = 0 }
+			}
+		}
+		
+		# change the corruption modifier
+		character_event = { id = GOVLEGIT.1002 }
+		clear_event_target = government_legitimacy_title
+	}
+}
+
+# Notification of corruption change and adding the proper corruption modifier
+character_event = {
+	id = GOVLEGIT.1002
+	desc = EVTDESC_GOVLEGIT.1002
+	picture = "GFX_evt_diplomat_hf"
+	
+	is_triggered_only = yes
+	notification = yes
+	
+	immediate = {
+		# remove old corruption modifier and add the new one
+		remove_character_modifier = government_legitimacy_0
+		remove_character_modifier = government_legitimacy_1
+		remove_character_modifier = government_legitimacy_2
+		remove_character_modifier = government_legitimacy_3
+		remove_character_modifier = government_legitimacy_4
+		remove_character_modifier = government_legitimacy_5
+		remove_character_modifier = government_legitimacy_6
+		remove_character_modifier = government_legitimacy_7
+		remove_character_modifier = government_legitimacy_8
+		remove_character_modifier = government_legitimacy_9
+		remove_character_modifier = government_legitimacy_10
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_legitimacy" value = 0 }
+					NOT = { check_variable = { which = "government_legitimacy" value = 5 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_legitimacy_0
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_legitimacy" value = 5 }
+					NOT = { check_variable = { which = "government_legitimacy" value = 15 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_legitimacy_1
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_legitimacy" value = 15 }
+					NOT = { check_variable = { which = "government_legitimacy" value = 25 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_legitimacy_2
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_legitimacy" value = 25 }
+					NOT = { check_variable = { which = "government_legitimacy" value = 35 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_legitimacy_3
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_legitimacy" value = 35 }
+					NOT = { check_variable = { which = "government_legitimacy" value = 45 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_legitimacy_4
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_legitimacy" value = 45 }
+					NOT = { check_variable = { which = "government_legitimacy" value = 55 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_legitimacy_5
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_legitimacy" value = 55 }
+					NOT = { check_variable = { which = "government_legitimacy" value = 65 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_legitimacy_6
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_legitimacy" value = 65 }
+					NOT = { check_variable = { which = "government_legitimacy" value = 75 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_legitimacy_7
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_legitimacy" value = 75 }
+					NOT = { check_variable = { which = "government_legitimacy" value = 85 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_legitimacy_8
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_legitimacy" value = 85 }
+					NOT = { check_variable = { which = "government_legitimacy" value = 95 } }
+				}
+			}
+			add_character_modifier = {
+				name = government_legitimacy_9
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "government_legitimacy" value = 95 }
+				}
+			}
+			add_character_modifier = {
+				name = government_legitimacy_10
+				duration = -1
+			}
+		} 
+	}
+	
+	option = {
+		name = "OK"
+	}
+}
+
+###Setup corruption at startup
+character_event = {
+	id = GOVLEGIT.1003
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		OR = {
+			ROOT = {
+				primary_title = {
+					OR = {
+						tier = EMPEROR
+						tier = KING
+					}
+					temporary = no
+				}
+				independent = yes
+				is_nomadic = no
+				is_tribal = no
+				OR = {
+					government = eastern_feudal
+					government = mandate_heaven
+					government = chinese_imperial_government
+					government = bhutanese_decayed_government
+					government = confucian_bureaucracy
+					government = bhutanese_restored_government
+					government = roman_imperial_government
+					government = neoziamet_government
+					government = oligarchic_republic
+					government = merchant_republic_government
+					government = mandala_government
+				}
+			}
+			FROM = {
+				primary_title = {
+					OR = {
+						tier = EMPEROR
+						tier = KING
+					}
+					temporary = no
+				}
+				independent = yes
+				is_nomadic = no
+				is_tribal = no
+				OR = {
+					government = eastern_feudal
+					government = mandate_heaven
+					government = chinese_imperial_government
+					government = bhutanese_decayed_government
+					government = confucian_bureaucracy
+					government = bhutanese_restored_government
+					government = roman_imperial_government
+					government = neoziamet_government
+					government = oligarchic_republic
+					government = merchant_republic_government
+					government = mandala_government
+				}
+			}
+		}
+		has_game_rule = {
+			name = fitna_fracture
+			value = on
+		} 
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				primary_title = {
+					OR = {
+						tier = EMPEROR
+						tier = KING
+					}
+					temporary = no
+				}
+				is_nomadic = no
+				is_tribal = no
+				independent = yes
+				OR = {
+					government = eastern_feudal
+					government = mandate_heaven
+					government = bhutanese_decayed_government
+					government = bhutanese_restored_government
+				}
+			}
+			primary_title = { save_event_target_as = government_legitimacy_title }
+			character_event = { id = GOVLEGIT.1004 days = 1 }
+		}
+		if = {
+			limit = {
+				FROM = {
+					primary_title = {
+						OR = {
+							tier = EMPEROR
+							tier = KING
+						}
+						temporary = no
+					}
+					is_nomadic = no
+					is_tribal = no
+					independent = yes
+					OR = {
+						government = eastern_feudal
+						government = mandate_heaven
+						government = bhutanese_decayed_government
+						government = bhutanese_restored_government
+					}
+				}
+			}
+			FROM = {
+				primary_title = { save_event_target_as = government_legitimacy_title }
+				character_event = { id = GOVLEGIT.1004 days = 1 }
+			}
+		}
+	}
+}
+
+
+character_event = {
+	id = GOVLEGIT.1004
+	
+	hide_window = yes
+	is_triggered_only = yes
+	only_rulers = yes
+	
+	trigger = {
+		has_landed_title = event_target:government_legitimacy_title
+		is_nomadic = no
+		is_tribal = no
+		has_game_rule = {
+			name = fitna_fracture
+			value = on
+		} 
+	}
+	
+	immediate = {
+		event_target:government_legitimacy_title = {
+			
+			# reset the corruption value to 0, in case it's negative
+			if = {
+				limit = { NOT = { check_variable = { which = "government_legitimacy" value = 0.5 } } }
+				set_variable = { which = "government_legitimacy" value = 0 }
+			}
+			
+			# set new ruler corruption to 0
+			set_variable = { which = "government_legitimacy" value = 0 }
+			
+			#determine how much the realm size should change it
+			if = {
+				limit = { ROOT = { real_tier = KING } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 10 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_NOBLE_CUSTOMS == 2 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 4 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 8 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 12 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 16 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 20 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 24 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 28 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 32 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_NOBLE_CUSTOMS == 3 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 4 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_NOBLE_CUSTOMS == 4 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 6 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_NOBLE_CUSTOMS == 5 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 8 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_NOBLE_CUSTOMS == 6 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 10 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_NOBLE_CUSTOMS == 7 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 12 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_NOBLE_CUSTOMS == 8 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 14 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_POPULAR_CUSTOMS == 2 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_POPULAR_CUSTOMS == 3 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 4 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_POPULAR_CUSTOMS == 4 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 6 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_POPULAR_CUSTOMS == 5 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 8 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_POPULAR_CUSTOMS == 6 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 10 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_POPULAR_CUSTOMS == 7 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 12 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_POPULAR_CUSTOMS == 8 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 14 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_LEGALISM == 2 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 4 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_LEGALISM == 3 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 8 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_LEGALISM == 4 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 12 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_LEGALISM == 5 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 16 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_LEGALISM == 6 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 20 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_LEGALISM == 7 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 24 } #5
+			}
+			if = {
+				limit = { ROOT = { capital_scope = { TECH_LEGALISM == 8 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 28 } #5
+			}
+			if = {
+				limit = { ROOT = { NOT = { prestige = 500 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { NOT = { prestige = 1000 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { NOT = { prestige = 1500 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { NOT = { prestige = 2000 } } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 2500 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 3 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 3000 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 3 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 3500 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 3 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 4000 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 3 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 4500 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 3 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 5000 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = 3 } #5
+			}
+			if = {
+				limit = { ROOT = { realm_size = 12 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { realm_size = 12 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { realm_size = 12 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { realm_size = 12 } } #4 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #5
+			}
+			if = {
+				limit = { ROOT = { realm_size = 23 } } #8 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #10
+			}
+			if = {
+				limit = { ROOT = { realm_size = 45 } } #15 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #15
+			}
+			if = {
+				limit = { ROOT = { realm_size = 90 } } #30 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #20
+			}
+			if = {
+				limit = { ROOT = { realm_size = 180 } } #60 counties
+				change_variable = { which = "government_legitimacy" value = -3 } #25
+			}
+			if = {
+				limit = { ROOT = { realm_size = 270 } } #90 counties
+				change_variable = { which = "government_legitimacy" value = -2 } #30
+			}
+			if = {
+				limit = { ROOT = { realm_size = 450 } } #150 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #35
+			}
+			if = {
+				limit = { ROOT = { realm_size = 600 } } #200 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #40
+			}
+			if = {
+				limit = { ROOT = { realm_size = 750 } } #250 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #45
+			}
+			if = {
+				limit = { ROOT = { realm_size = 900 } } #300 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #50
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1050 } } #350 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #55
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1200 } } #400 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #60
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1350 } } #450 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #65
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1500 } } #500 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #70
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1650 } } #550 counties 
+				change_variable = { which = "government_legitimacy" value = 2 } #75
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1800 } } #600 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #80
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2100 } } #700 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #85
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2400 } } #800 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #90
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2700 } } #900 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #95
+			}
+			if = {
+				limit = { ROOT = { realm_size = 3000 } } #1000 counties
+				change_variable = { which = "government_legitimacy" value = 2 } #98
+			}
+			
+			#Check realm stewardship
+			if = {
+				limit = { NOT = { ROOT = { realm_stewardship = 10 } } }
+				change_variable = { which = "government_legitimacy" value = -10 }
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_stewardship = 20 } } }
+				change_variable = { which = "government_legitimacy" value = -7 }
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_stewardship = 30 } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_intrigue = 10 } } }
+				change_variable = { which = "government_legitimacy" value = -10 }
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_intrigue = 20 } } }
+				change_variable = { which = "government_legitimacy" value = -7 }
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_intrigue = 30 } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = hedonist } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = inbred } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = slow } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = imbecile } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { trait = gluttonous } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = greedy } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = slothful } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = wroth } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = envious } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = proud } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = arbitrary } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = cruel } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = kinslayer } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = familial_kinslayer } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { trait = dynastic_kinslayer } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = hedonist } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = inbred } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = slow } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = imbecile } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = gluttonous } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = greedy } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = slothful } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = wroth } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = envious } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = proud } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = arbitrary } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = cruel } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = familial_kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = dynastic_kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = hedonist } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = inbred } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = slow } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = imbecile } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = gluttonous } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = greedy } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = slothful } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = wroth } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = envious } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = proud } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = arbitrary } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = cruel } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = familial_kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = dynastic_kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = hedonist } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = inbred } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = slow } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = imbecile } } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = gluttonous } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = greedy } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = slothful } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = wroth } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = envious } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = proud } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = arbitrary } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = cruel } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = familial_kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = dynastic_kinslayer } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { realm_stewardship = 40 } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { realm_stewardship = 50 } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { primary_title = { has_law = currency_laws_0 } } }
+				change_variable = { which = "government_legitimacy" value = -2 }
+			}
+			if = {
+				limit = { ROOT = { primary_title = { has_law = currency_laws_1 } } }
+				change_variable = { which = "government_legitimacy" value = 1 }
+			}
+			if = {
+				limit = { ROOT = { primary_title = { has_law = currency_laws_2 } } }
+				change_variable = { which = "government_legitimacy" value = 3 }
+			}
+			if = {
+				limit = { ROOT = { primary_title = { has_law = currency_laws_3 } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { has_character_modifier = accepted_intrigue_corruption } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { has_character_modifier = accepted_stewardship_corruption } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { has_character_modifier = accepted_martial_corruption } }
+				change_variable = { which = "government_legitimacy" value = -5 }
+			}
+			if = {
+				limit = { ROOT = { realm_stewardship = 60 } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { realm_intrigue = 40 } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { realm_intrigue = 50 } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { realm_intrigue = 60 } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = administrator } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { government = mandate_heaven } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = schemer } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = ambitious } }
+				change_variable = { which = "government_legitimacy" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { trait = genius } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = quick } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = shrewd } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = temperate } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = charitable } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = diligent } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = patient } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = kind } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = humble } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { trait = just } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = administrator } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = schemer } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = ambitious } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = genius } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = quick } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = shrewd } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = temperate } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = charitable } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = diligent } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = patient } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = kind } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = humble } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_treasurer = { trait = just } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = administrator } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = schemer } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = ambitious } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = genius } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = quick } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = shrewd } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = temperate } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = charitable } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = diligent } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = patient } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = kind } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = humble } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_spymaster = { trait = just } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = administrator } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = schemer } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = ambitious } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = genius } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = quick } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = shrewd } } }
+				change_variable = { which = "government_legitimacy" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = temperate } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = charitable } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = diligent } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = patient } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = kind } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = humble } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { ROOT = { job_marshal = { trait = just } } }
+				change_variable = { which = "government_legitimacy" value = 2 }
+			}
+			if = {
+				limit = { check_variable = { which = "government_legitimacy" value = 100.5 } }
+				set_variable = { which = "government_legitimacy" value = 100 }
+			}
+			if = {
+				limit = { NOT = { check_variable = { which = "government_legitimacy" value = 0.5 } } }
+				set_variable = { which = "government_legitimacy" value = 0 }
+			}
+		}
+		
+		# change the corruption modifier
+		character_event = { id = GOVLEGIT.1002 }
+		clear_event_target = government_legitimacy_title
+	}
+}
