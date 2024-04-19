@@ -4730,6 +4730,7 @@ decisions = {
 			modifier = {
 				factor = 0.01 #Historically stubborn.
 				OR = {
+				culture = high_bali
 				culture = malay
 				culture = brunei
 				culture = aceh
@@ -4886,6 +4887,7 @@ decisions = {
 			modifier = {
 				factor = 0.01 #Historically stubborn.
 				OR = {
+				culture = high_bali
 				culture = malay
 				culture = brunei
 				culture = aceh
@@ -4901,10 +4903,7 @@ decisions = {
 		potential = {
 			is_playable = yes
 			has_dlc = "Holy Fury"
-			OR = {
-				has_landed_title = e_nusantara
-				has_landed_title = e_dvipantara
-				}
+			has_landed_title = e_nusantara
 			NOT = { government = chinese_imperial_government }
 			NOT = { has_global_flag = flag_started_malay_renaissance }
 			NOT = {
@@ -4986,7 +4985,7 @@ decisions = {
 			}
 			hidden_tooltip = {
 				if = { #Nusantaran Emperor gets a chance to spread their faith a bit alongside the culture.
-					limit = { OR = { religion = syafi religion = pusaka religion = agamatirta } }
+					limit = { OR = { religion = syafi religion = pusaka religion = ramadi } }
 					any_realm_province = {
 						if = {
 							limit = { any_neighbor_province = { province = 333 } }
@@ -5030,6 +5029,7 @@ decisions = {
 			modifier = {
 				factor = 0.01 #Historically stubborn.
 				OR = {
+				culture = high_bali
 				culture = indonesian
 				culture = brunei
 				culture = aceh
@@ -5058,7 +5058,7 @@ decisions = {
 			NOT = {
 				has_alternate_start_parameter = { key = culture_names value = random }
 			}
-			top_liege = { OR = { has_landed_title = e_nusantara has_landed_title = e_dvipantara} }
+			top_liege = { has_landed_title = e_nusantara }
 		}
 		allow = {
 			show_only_failed_conditions = yes
@@ -5139,7 +5139,7 @@ decisions = {
 				}
 			}
 			if = { #Nusantaran Emperor gets a chance to spread their faith a bit alongside the culture.
-				limit = { OR = { religion = syafi religion = pusaka religion = agamatirta } }
+				limit = { OR = { religion = syafi religion = pusaka religion = ramadi } }
 				hidden_tooltip = {
 					any_demesne_province = {
 						if = {
@@ -5188,6 +5188,322 @@ decisions = {
 			modifier = {
 				factor = 0.01 #Historically stubborn.
 				OR = {
+				culture = high_bali
+				culture = indonesian
+				culture = brunei
+				culture = aceh
+				}
+			}
+		}
+	}
+	high_bali_renaissance = {
+		ai_check_interval = 120 #check only once every 120 months.
+		only_playable = yes
+		is_high_prio = yes
+		
+		potential = {
+			is_playable = yes
+			has_dlc = "Holy Fury"
+			has_landed_title = e_dvipantara
+			NOT = { government = chinese_imperial_government }
+			NOT = { has_global_flag = flag_started_high_bali_renaissance }
+			NOT = {
+				has_alternate_start_parameter = { key = culture_names value = random }
+			}
+		}
+		allow = {
+			show_only_failed_conditions = yes
+			ruled_years = 10
+			war = no
+		}
+		effect = {
+			set_global_flag = flag_started_high_bali_renaissance
+			culture = high_bali
+			hidden_tooltip = {
+				any_courtier_or_vassal = { 
+					limit = { lower_tier_than = COUNT }
+					culture = high_bali
+				}
+			}
+			capital_scope = { culture = high_bali }
+			custom_tooltip = {
+				text = tooltip_high_bali_culture_starts_spreading
+				hidden_tooltip = {
+					any_realm_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							culture = high_bali
+						}
+						if = {
+							limit = {
+								OR = { 
+									culture = bali
+									culture = sasak
+									}
+								NOT = { distance = { where = 333 distance = 100 } } 
+							}
+							random = { 
+								chance = 40 
+								culture = high_bali
+							}
+						}
+						if = {
+							limit = { 
+								OR = {
+									culture_group = malay_group
+									culture_group = bali_sumbawa
+									culture_group = iban_dayakic
+									culture_group = borneonic
+									culture_group = sumatric
+									culture = aceh
+									}
+								NOT = { distance = { where = 333 distance = 200 } } 
+							}
+							random = {
+								chance = 20 
+								culture = high_bali
+							}
+						}
+						if = {
+							limit = { 
+								OR = {
+									culture_group = malay_group
+									culture_group = bali_sumbawa
+									culture_group = iban_dayakic
+									culture_group = borneonic
+									culture_group = sumatric
+									culture = aceh
+									}
+								NOT = { distance = { where = 333 distance = 400 } } 
+							}
+							random = { 
+								chance = 5
+								culture = high_bali
+							}
+						}
+					}
+				}
+			}
+			hidden_tooltip = {
+				if = { #Nusantaran Emperor gets a chance to spread their faith a bit alongside the culture.
+					limit = { OR = { religion = agamatirta } }
+					any_realm_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							religion = ROOT
+						}
+						if = {
+							limit = { 
+								culture = high_bali
+								NOT = { distance = { where = 333 distance = 100 } } 
+							}
+							random = { 
+								chance = 10 
+								religion = ROOT
+							}
+						}
+						if = {
+							limit = { 
+								culture = high_bali
+								NOT = { distance = { where = 333 distance = 200 } } 
+							}
+							random = { 
+								chance = 5 
+								religion = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 5
+				OR = {
+				culture = bali
+				culture = sasak
+				}
+			}
+			modifier = {
+				factor = 3
+				OR = {
+				culture_group = bali_sumbawa
+				}
+			}
+			modifier = {
+				factor = 0.01 #Historically stubborn.
+				OR = {
+				culture = malay
+				culture = indonesian
+				culture = brunei
+				culture = aceh #As the first Muslims, this is expected
+				}
+			}
+		}
+	}
+	embrace_high_bali_culture = {
+		ai_check_interval = 120 #check only once every 120 months.
+		only_playable = yes
+		
+		potential = {
+			is_playable = yes
+			NOT = { culture = high_bali }
+			OR = {
+				culture_group = malay_group
+				culture_group = bali_sumbawa
+				culture_group = iban_dayakic
+				culture_group = borneonic
+				culture_group = sumatric
+				culture = aceh
+			}
+			has_dlc = "Holy Fury"
+			NOT = { government = chinese_imperial_government }
+			has_global_flag = flag_started_high_bali_renaissance
+			NOT = {
+				has_alternate_start_parameter = { key = culture_names value = random }
+			}
+			top_liege = { has_landed_title = e_dvipantara }
+		}
+		allow = {
+			show_only_failed_conditions = yes
+			OR = {
+				culture_group = malay_group
+				culture_group = bali_sumbawa
+				culture_group = iban_dayakic
+				culture_group = borneonic
+				culture_group = sumatric
+				culture = aceh
+			}
+		}
+		effect = {
+			culture = high_bali
+			hidden_tooltip = {
+				any_courtier_or_vassal = { 
+					limit = { lower_tier_than = COUNT }
+					culture = high_bali
+				}
+			}
+			capital_scope = { culture = high_bali }
+			custom_tooltip = {
+				text = tooltip_high_bali_culture_spreads
+				hidden_tooltip = {
+					any_demesne_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							culture = high_bali
+						}
+						if = {
+							limit = { 
+								OR = { 
+									culture = bali
+									culture = sasak
+									}
+								capital_scope = { NOT = { distance = { where = PREV distance = 100 } } } 
+							}
+							random = { 
+								chance = 40 
+								culture = high_bali
+							}
+						}
+						if = {
+							limit = { 
+								OR = {
+									culture_group = malay_group
+									culture_group = bali_sumbawa
+									culture_group = iban_dayakic
+									culture_group = borneonic
+									culture_group = sumatric
+									culture = aceh
+									}
+								capital_scope = { NOT = { distance = { where = PREV distance = 200 } } } 
+							}
+							random = { 
+								chance = 20 
+								culture = high_bali
+							}
+						}
+						if = {
+							limit = { 
+								OR = {
+									culture_group = malay_group
+									culture_group = bali_sumbawa
+									culture_group = iban_dayakic
+									culture_group = borneonic
+									culture_group = sumatric
+									culture = aceh
+									}
+								capital_scope = { NOT = { distance = { where = PREV distance = 400 } } } 
+							}
+							random = { 
+								chance = 5
+								culture = high_bali
+							}
+						}
+					}
+				}
+			}
+			if = { #Nusantaran Emperor gets a chance to spread their faith a bit alongside the culture.
+				limit = { OR = { religion = agamatirta } }
+				hidden_tooltip = {
+					any_demesne_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							religion = ROOT
+						}
+						if = {
+							limit = { 
+								culture = high_bali
+								capital_scope = { NOT = { distance = { where = PREV distance = 100 } } } 
+							}
+							random = { 
+								chance = 10 
+								religion = ROOT
+							}
+						}
+						if = {
+							limit = { 
+								culture = high_bali
+								capital_scope = { NOT = { distance = { where = PREV distance = 200 } } } 
+							}
+							random = { 
+								chance = 5 
+								religion = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 5
+				OR = {
+				culture = bali
+				culture = sasak
+				}
+			}
+			modifier = {
+				factor = 3
+				OR = {
+				culture_group = bali_sumbawa
+				}
+			}
+			modifier = {
+				factor = 3
+				capital_scope = { culture = high_bali } 
+			}
+			modifier = {
+				factor = 0.01 #Historically stubborn.
+				OR = {
+				culture = malay
 				culture = indonesian
 				culture = brunei
 				culture = aceh
