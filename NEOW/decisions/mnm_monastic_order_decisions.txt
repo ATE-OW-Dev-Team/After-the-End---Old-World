@@ -453,6 +453,70 @@ targetted_decisions = {
 
 title_decisions = {
 	# Monastic Order Rank 4 Power - Convert County
+	nobelian_convert_county = {
+		only_playable = yes
+		ai_check_interval = 6
+	    diplomacy_icon = GFX_spiritual_icon
+		filter = owned
+		ai_target_filter = owned
+		
+		from_potential = {
+			has_dlc = "Mystics"
+			is_ruler = yes
+			society_member_of = hermetics
+			society_rank == 4
+			religion = nobelian
+		}
+		
+		potential = {
+			tier = COUNT
+			location = { NOT = { religion = nobelian } }
+			holder_scope = {
+				OR = {
+					is_liege_or_above = FROM
+					character = FROM
+				}
+			}
+		}
+		
+		allow = {
+			FROM = {
+				society_currency >= 1000
+				piety = 200
+			}
+			location = {
+				NOT = { religion = FROM }
+				owner = { NOT = { religion = PREV } } # Cannot convert counties of owners who has that religion
+			}
+		}
+		
+		effect = {
+			FROM = {
+				change_society_currency = -1000
+				piety = -200
+			}
+			location = {
+				religion = FROM
+				add_province_modifier = {
+					name = religious_tension
+					years = 2
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.5
+			}
+			modifier = {
+				factor = 2
+				FROM = {
+					trait = zealous
+				}
+			}
+		}
+	}
 	monastic_order_convert_county = {
 		only_playable = yes
 		ai_check_interval = 3
