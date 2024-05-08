@@ -1863,48 +1863,55 @@ character_event = {
 
 ##################################################################
 ##################################################################
-# Forge Bloodline Ambition events
+### Forge Bloodline Ambition events
 
-#Hidden checks and counters first:
+## Hidden checks and counters first:
 
-#On_death: check for murders.
+# on_death: Check for murders
 character_event = {
 	id = HF.24017
+
+	is_triggered_only = yes
 	hide_window = yes
-	trigger = { 
-		has_dlc = "Holy Fury"
-		OR = { 
+
+	has_dlc = "Holy Fury"
+
+	trigger = {
+		OR = {
 			death_murder_unknown_trigger = yes
 			death_murder_known_trigger = yes
 			death_execution_trigger = yes
 		}
-		killer = { #Not necessary to have the ambition to stack up the variable, but necessary to unlock the bloodline.
+
+		# Not necessary to have the ambition to stack up the variable, but necessary to unlock the bloodline.
+		killer = {
 			is_playable = yes
 			is_landed = yes
-			NOT = { trait = incapable }
-			NOT = { 
-				has_character_flag = flag_about_to_murder_bloodline
-			}
+			is_incapable = no
+			NOT = { has_character_flag = flag_about_to_murder_bloodline }
 		}
 	}
-	
-	is_triggered_only = yes
 
-	immediate = { 
-		killer = { 
+	immediate = {
+		killer = {
 			murder_bloodline_check_effect = yes
 		}
 	}
 }
 
-#on_war_ended_victory: check for war variable.
-# From = Attacker, Root = Defender
+# on_war_ended_victory: check for war variable
+# FROM is attacker
+# ROOT is defender
 character_event = {
 	id = HF.24018
+
+	is_triggered_only = yes
 	hide_window = yes
-	trigger = { 
-		has_dlc = "Holy Fury"
-		FROM = { 
+
+	has_dlc = "Holy Fury"
+
+	trigger = {
+		FROM = {
 			NOR = {
 				trait = heresiarch
 				trait = peasant_leader
@@ -1912,7 +1919,8 @@ character_event = {
 				has_character_flag = flag_about_to_war_bloodline
 			}
 		}
-		ROOT = { 
+
+		ROOT = {
 			NOR = {
 				trait = heresiarch
 				trait = peasant_leader
@@ -1920,371 +1928,514 @@ character_event = {
 			}
 		}
 	}
-	
-	is_triggered_only = yes
 
-	immediate = { 
-		FROM = { 
-			hidden_tooltip = { change_variable = { which = bloodline_won_wars value = 1 } }
-			if = { #Pure War Bloodline.
-				limit = { 
-					check_variable = { which = bloodline_won_wars value = 15 } 
-					has_ambition = obj_forge_bloodline
+
+	immediate = {
+		FROM = {
+			change_variable = {
+				which = bloodline_won_wars
+				value = 1
+			}
+
+			if = { # Pure War Bloodline
+				limit = { has_ambition = obj_forge_bloodline }
+
+				if = {
+					limit = {
+						check_variable = {
+							which = bloodline_won_wars
+							value >= 15
+						}
+					}
+
+					set_character_flag = flag_about_to_war_bloodline
+
+					character_event = {
+						id = HF.24031
+						days = 25
+						random = 25
+					}
 				}
-				set_character_flag = flag_about_to_war_bloodline
-				character_event = { id = HF.24031 days = 25 random = 25 }
-			}
-			else_if = { # Murder War Hybrid.
-				limit = { 
-					check_variable = { which = bloodline_murdered_people value = 20 } 
-					check_variable = { which = bloodline_won_wars value = 10 }
-					has_ambition = obj_forge_bloodline
-				}
-				set_character_flag = flag_about_to_war_bloodline
-				narrative_event = { id = HF.24045 days = 25 random = 25 }
-			}
-		}
-	}
-}
+				else_if = { # Murder War Hybrid
+					limit = {
+						check_variable = { which = bloodline_murdered_people value >= 20 }
+						check_variable = { which = bloodline_won_wars value >= 10 }
+					}
 
-#on_war_ended_defeat: check for war variable.
-# From = Attacker, Root = Defender
-character_event = {
-	id = HF.24019
-	hide_window = yes
-	trigger = { 
-		has_dlc = "Holy Fury"
-		FROM = { 
-			NOR = {
-				trait = heresiarch
-				trait = peasant_leader
-				trait = adventurer
-			}
-		}
-		ROOT = { 
-			NOR = {
-				trait = heresiarch
-				trait = peasant_leader
-				trait = adventurer
-				has_character_flag = flag_about_to_war_bloodline
-			}
-		}
-	}
-	
-	is_triggered_only = yes
+					set_character_flag = flag_about_to_war_bloodline
 
-	immediate = { 
-		ROOT = { 
-			hidden_tooltip = { change_variable = { which = bloodline_won_wars value = 1 } }
-			if = { #Pure War Bloodline.
-				limit = { 
-					check_variable = { which = bloodline_won_wars value = 15 } 
-					has_ambition = obj_forge_bloodline
-				}
-				set_character_flag = flag_about_to_war_bloodline
-				character_event = { id = HF.24031 days = 25 random = 25 }
-			}
-			else_if = { # Murder War Hybrid.
-				limit = { 
-					check_variable = { which = bloodline_murdered_people value = 20 } 
-					check_variable = { which = bloodline_won_wars value = 10 }
-					has_ambition = obj_forge_bloodline
-				}
-				set_character_flag = flag_about_to_war_bloodline
-				narrative_event = { id = HF.24045 days = 25 random = 25 }
-			}
-		}
-	}
-}
-
-#Fired from ambition: check years at peace.
-character_event = {
-	id = HF.24020
-	hide_window = yes
-	trigger = { 
-		has_dlc = "Holy Fury"
-		has_ambition = obj_forge_bloodline
-		NOT = { check_variable = { which = bloodline_peaceful_years value = 30 } }
-	}
-	
-	is_triggered_only = yes
-
-	immediate = { 
-		hidden_tooltip = { change_variable = { which = bloodline_peaceful_years value = 1 } }
-		if = { #Pure Peace Bloodline.
-			limit = { 
-				check_variable = { which = bloodline_peaceful_years value = 30 } 
-				has_ambition = obj_forge_bloodline
-			}
-			character_event = { id = HF.24037 days = 25 random = 25 }
-		}
-		else_if = { #Murder Peace Hybrid.
-			limit = { 
-				check_variable = { which = bloodline_peaceful_years value = 15 } 
-				check_variable = { which = bloodline_murdered_people value = 20 } 
-				has_ambition = obj_forge_bloodline
-			}
-			narrative_event = { id = HF.24046 days = 25 random = 25 }
-		}
-		else_if = { #Peace Architect Hybrid.
-			limit = { 
-				check_variable = { which = bloodline_peaceful_years value = 15 } 
-				check_variable = { which = bloodline_built_cities value = 5 } 
-				has_ambition = obj_forge_bloodline
-			}
-			narrative_event = { id = HF.24049 days = 25 random = 25 }
-		}
-		else_if = { #Peace Castellan Hybrid.
-			limit = { 
-				check_variable = { which = bloodline_peaceful_years value = 15 } 
-				check_variable = { which = bloodline_built_castles value = 5 } 
-				has_ambition = obj_forge_bloodline
-			}
-			narrative_event = { id = HF.24050 days = 25 random = 25 }
-		}
-		else_if = { #Peace Monumental Hybrid.
-			limit = { 
-				check_variable = { which = bloodline_peaceful_years value = 15 } 
-				check_variable = { which = bloodline_built_temples value = 5 } 
-				has_ambition = obj_forge_bloodline
-			}
-			narrative_event = { id = HF.24051 days = 25 random = 25 }
-		}
-		else = { # Fire again, with yearly delay.
-			character_event = { id = HF.24020 days = 365 }
-		}
-	}
-}
-
-#on_war_started: reset peaceful_years variable.
-character_event = {
-	id = HF.24021
-	hide_window = yes
-	trigger = { 
-		has_dlc = "Holy Fury"
-		has_ambition = obj_forge_bloodline
-	}
-	
-	is_triggered_only = yes
-
-	immediate = { 
-		if = { 
-			limit = { 
-				ROOT = { check_variable = { which = bloodline_peaceful_years value = 1 } } 	
-			}
-			ROOT = { set_variable = { which = bloodline_peaceful_years value = 0 } }
-		}
-		if = { 
-			limit = { 
-				FROM = { check_variable = { which = bloodline_peaceful_years value = 1 } } 	
-			}
-			FROM = { set_variable = { which = bloodline_peaceful_years value = 0 } }
-		}
-	}
-}
-
-#on_settlement_construction_completed: check the Architect Bloodline.
-character_event = {
-	id = HF.24022
-	hide_window = yes
-	trigger = { 
-		has_dlc = "Holy Fury"
-		FROM = { holding_type = CITY }
-		NOT = {
-			has_character_flag = flag_about_to_builder_bloodline
-		}
-	}
-	
-	is_triggered_only = yes
-
-	immediate = { 
-		change_variable = { which = bloodline_built_cities value = 1 }
-		change_variable = { which = bloodline_built_holdings value = 1 }
-		if = { #First check for pure Architect Bloodline.
-			limit = {
-				check_variable = { which = bloodline_built_cities value = 10 }
-				has_ambition = obj_forge_bloodline
-			}
-			set_character_flag = flag_about_to_builder_bloodline
-			narrative_event = { id = HF.24042 days = 25 random = 25 } 
-		}
-		else_if = { # Then check for Builder Hybrid.
-			limit = {
-				check_variable = { which = bloodline_built_holdings value = 24 }
-				has_ambition = obj_forge_bloodline
-			}
-			set_character_flag = flag_about_to_builder_bloodline
-			narrative_event = { id = HF.24047 days = 25 random = 25 } 
-		}
-		else_if = { #Then check for Murder Builder Hybrid.
-			limit = {
-				killer = { 
-					check_variable = { which = bloodline_murdered_people value = 20 } 
-					check_variable = { which = bloodline_built_holdings value = 15 } 
-					has_ambition = obj_forge_bloodline
-				}
-			}
-			set_character_flag = flag_about_to_builder_bloodline
-			narrative_event = { id = HF.24048 days = 25 random = 25 }
-		}
-		else_if = { #Peace Architect Hybrid.
-			limit = { 
-				check_variable = { which = bloodline_peaceful_years value = 15 } 
-				check_variable = { which = bloodline_built_cities value = 5 } 
-				has_ambition = obj_forge_bloodline
-			}
-			set_character_flag = flag_about_to_builder_bloodline
-			narrative_event = { id = HF.24049 days = 25 random = 25 }
-		}
-	}
-}
-
-#on_settlement_construction_completed: check the Castellan Bloodline.
-character_event = {
-	id = HF.24023
-	hide_window = yes
-	trigger = { 
-		has_dlc = "Holy Fury"
-		FROM = { holding_type = CASTLE }
-		NOT = {
-			has_character_flag = flag_about_to_builder_bloodline
-		}
-	}
-	
-	is_triggered_only = yes
-
-	immediate = { 
-		change_variable = { which = bloodline_built_castles value = 1 }
-		change_variable = { which = bloodline_built_holdings value = 1 }
-		if = { #First check for pure Castellan Bloodline.
-			limit = {
-				check_variable = { which = bloodline_built_castles value = 10 }
-				has_ambition = obj_forge_bloodline
-			}
-			set_character_flag = flag_about_to_builder_bloodline
-			narrative_event = { id = HF.24043 days = 25 random = 25 } 
-		}
-		else_if = { # Then check for Builder Hybrid.
-			limit = {
-				check_variable = { which = bloodline_built_holdings value = 24 }
-				has_ambition = obj_forge_bloodline
-			}
-			set_character_flag = flag_about_to_builder_bloodline
-			narrative_event = { id = HF.24047 days = 25 random = 25 } 
-		}
-		else_if = { #Then check for Murder Builder Hybrid.
-			limit = {
-				killer = { 
-					check_variable = { which = bloodline_murdered_people value = 20 } 
-					check_variable = { which = bloodline_built_holdings value = 15 } 
-					has_ambition = obj_forge_bloodline
-				}
-			}
-			set_character_flag = flag_about_to_builder_bloodline
-			narrative_event = { id = HF.24048 days = 25 random = 25 }
-		}
-		else_if = { #Peace Castellan Hybrid.
-			limit = { 
-				check_variable = { which = bloodline_peaceful_years value = 15 } 
-				check_variable = { which = bloodline_built_castles value = 5 } 
-				has_ambition = obj_forge_bloodline
-			}
-			set_character_flag = flag_about_to_builder_bloodline
-			narrative_event = { id = HF.24050 days = 25 random = 25 }
-		}
-	}
-}
-
-#on_settlement_construction_completed: check the Monumental Bloodline.
-character_event = {
-	id = HF.24024
-	hide_window = yes
-	trigger = { 
-		has_dlc = "Holy Fury"
-		FROM = { holding_type = TEMPLE }
-		NOT = {
-			has_character_flag = flag_about_to_builder_bloodline
-		}
-	}
-	
-	is_triggered_only = yes
-
-	immediate = { 
-		change_variable = { which = bloodline_built_temples value = 1 }
-		change_variable = { which = bloodline_built_holdings value = 1 }
-		if = { #First check for pure Monumental Bloodline.
-			limit = {
-				check_variable = { which = bloodline_built_temples value = 10 }
-				has_ambition = obj_forge_bloodline
-			}
-			set_character_flag = flag_about_to_builder_bloodline
-			narrative_event = { id = HF.24044 days = 25 random = 25 } 
-		}
-		else_if = { # Then check for Builder Hybrid.
-			limit = {
-				check_variable = { which = bloodline_built_holdings value = 24 }
-				has_ambition = obj_forge_bloodline
-			}
-			set_character_flag = flag_about_to_builder_bloodline
-			narrative_event = { id = HF.24047 days = 25 random = 25 } 
-		}
-		else_if = { #Then check for Murder Builder Hybrid.
-			limit = {
-				killer = { 
-					check_variable = { which = bloodline_murdered_people value = 20 } 
-					check_variable = { which = bloodline_built_holdings value = 15 } 
-					has_ambition = obj_forge_bloodline
-				}
-			}
-			set_character_flag = flag_about_to_builder_bloodline
-			narrative_event = { id = HF.24048 days = 25 random = 25 }
-		}
-		else_if = { #Peace Monumental Hybrid.
-			limit = { 
-				check_variable = { which = bloodline_peaceful_years value = 15 } 
-				check_variable = { which = bloodline_built_temples value = 5 } 
-				has_ambition = obj_forge_bloodline
-			}
-			set_character_flag = flag_about_to_builder_bloodline
-			narrative_event = { id = HF.24051 days = 25 random = 25 }
-		}
-	}
-}
-
-#Bloodline notification events for chosen path:
-
-#Pure Murder Bloodline crossroad.
-character_event = {
-	id = HF.24025
-	hide_window = yes
-
-	trigger = { 
-		has_dlc = "Holy Fury"
-		NOT = {
-			any_owned_bloodline = { 
-				has_bloodline_flag = created_bloodline
-			}
-		}
-		has_ambition = obj_forge_bloodline
-	}
-	
-	is_triggered_only = yes
-
-	immediate = { 
-		if = { #First check if qualifies for Death little helper flavor.
-			limit = { 
-				OR = { 
-					NOT = { age = 16 }
-					AND = { 
-						has_character_flag = flag_forge_bloodline_was_child 
-						NOT = { age = 35 } #Should still be somewhat young.
+					narrative_event = {
+						id = HF.24045
+						days = 25
+						random = 25
 					}
 				}
 			}
-			narrative_event = { id = HF.24026 }
 		}
-		else = { 
-			character_event = { id = HF.24027 } #Otherwise let player decide the flavor.
+	}
+}
+
+# on_war_ended_defeat: check for war variable.
+# From = Attacker, Root = Defender
+character_event = {
+	id = HF.24019
+
+	hide_window = yes
+
+	has_dlc = "Holy Fury"
+
+	trigger = {
+		FROM = {
+			NOR = {
+				trait = heresiarch
+				trait = peasant_leader
+				trait = adventurer
+			}
+		}
+
+		ROOT = {
+			NOR = {
+				trait = heresiarch
+				trait = peasant_leader
+				trait = adventurer
+				has_character_flag = flag_about_to_war_bloodline
+			}
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		ROOT = {
+			change_variable = {
+				which = bloodline_won_wars
+				value = 1
+			}
+
+			if = { # Pure War Bloodline
+				limit = { has_ambition = obj_forge_bloodline }
+
+				if = {
+					limit = {
+						check_variable = {
+							which = bloodline_won_wars
+							value >= 15
+						}
+					}
+
+					set_character_flag = flag_about_to_war_bloodline
+
+					character_event = {
+						id = HF.24031
+						days = 25
+						random = 25
+					}
+				}
+				else_if = { # Murder War Hybrid
+					limit = {
+						check_variable = { which = bloodline_murdered_people value >= 20 }
+						check_variable = { which = bloodline_won_wars value >= 10 }
+					}
+
+					set_character_flag = flag_about_to_war_bloodline
+
+					narrative_event = {
+						id = HF.24045
+						days = 25
+						random = 25
+					}
+				}
+			}
+		}
+	}
+}
+
+# Fired from ambition: Check years at peace
+character_event = {
+	id = HF.24020
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	has_dlc = "Holy Fury"
+
+	trigger = {
+		has_ambition = obj_forge_bloodline
+
+		check_variable = {
+			which = bloodline_peaceful_years
+			value < 30
+		}
+	}
+
+
+	immediate = {
+		change_variable = {
+			which = bloodline_peaceful_years
+			value = 1
+		}
+
+		if = {
+			limit = {
+				check_variable = {
+					which = bloodline_peaceful_years
+					value >= 30
+				}
+			}
+
+			character_event = {
+				id = HF.24037 # Pure Peace Bloodline
+				days = 25
+				random = 25
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = bloodline_peaceful_years
+					value >= 15
+				}
+			}
+
+			if = {
+				limit = {
+					check_variable = {
+						which = bloodline_murdered_people
+						value >= 20
+					}
+				}
+
+				narrative_event = {
+					id = HF.24046 # Murder Peace Hybrid
+					days = 25
+					random = 25
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = bloodline_built_cities
+						value >= 5
+					}
+				}
+
+				narrative_event = {
+					id = HF.24049 # Peace Architect Hybrid
+					days = 25
+					random = 25
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = bloodline_built_castles
+						value >= 5
+					}
+				}
+
+				narrative_event = {
+					id = HF.24050 # Peace Castellan Hybrid
+					days = 25
+					random = 25
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = bloodline_built_temples
+						value >= 5
+					}
+				}
+
+				narrative_event = {
+					id = HF.24051 # Peace Monumental Hybrid
+					days = 25
+					random = 25
+				}
+			}
+		}
+
+		# Fire again, with yearly delay
+		repeat_event = {
+			id = HF.24020
+			years = 1
+		}
+	}
+}
+
+# on_war_started: Reset peaceful_years variable.
+character_event = {
+	id = HF.24021
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	has_dlc = "Holy Fury"
+
+	trigger = {
+		OR = {
+			has_ambition = obj_forge_bloodline
+			FROM = { has_ambition = obj_forge_bloodline }
+		}
+	}
+
+	immediate = {
+		set_variable = { which = bloodline_peaceful_years value = 0 }
+		FROM = { set_variable = { which = bloodline_peaceful_years value = 0 } }
+	}
+}
+
+# on_settlement_construction_completed: check the Architect Bloodline.
+character_event = {
+	id = HF.24022
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	has_dlc = "Holy Fury"
+
+	trigger = {
+		FROM = { holding_type = city }
+		NOT = { has_character_flag = flag_about_to_builder_bloodline }
+	}
+
+	immediate = {
+		change_variable = { which = bloodline_built_cities value = 1 }
+		change_variable = { which = bloodline_built_holdings value = 1 }
+
+		if = {
+			limit = { has_ambition = obj_forge_bloodline }
+
+			if = {
+				limit = {
+					check_variable = {
+						which = bloodline_built_cities
+						value >= 10
+					}
+				}
+
+				set_character_flag = flag_about_to_builder_bloodline
+
+				narrative_event = {
+					id = HF.24042 # Pure Architect bloodline
+					days = 25
+					random = 25
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = bloodline_built_holdings
+						value >= 24
+					}
+				}
+
+				set_character_flag = flag_about_to_builder_bloodline
+
+				narrative_event = {
+					id = HF.24047 # Builder Hybrid bloodline
+					days = 25
+					random = 25
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = { which = bloodline_murdered_people value >= 20 }
+					check_variable = { which = bloodline_built_holdings value >= 15 }
+				}
+
+				set_character_flag = flag_about_to_builder_bloodline
+
+				narrative_event = {
+					id = HF.24048 # Murder Builder Hybrid bloodline
+					days = 25
+					random = 25
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = { which = bloodline_peaceful_years value >= 15 }
+					check_variable = { which = bloodline_built_cities value >= 5 }
+				}
+
+				set_character_flag = flag_about_to_builder_bloodline
+
+				narrative_event = {
+					id = HF.24049 # Peace Architect Hybrid bloodline
+					days = 25
+					random = 25
+				}
+			}
+		}
+	}
+}
+
+# on_settlement_construction_completed: check the Castellan Bloodline.
+character_event = {
+	id = HF.24023
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	has_dlc = "Holy Fury"
+
+	trigger = {
+		FROM = { holding_type = castle }
+		NOT = { has_character_flag = flag_about_to_builder_bloodline }
+	}
+
+	immediate = {
+		change_variable = { which = bloodline_built_castles value = 1 }
+		change_variable = { which = bloodline_built_holdings value = 1 }
+
+		if = {
+			limit = { has_ambition = obj_forge_bloodline }
+
+			if = {
+				limit = {
+					check_variable = {
+						which = bloodline_built_castles
+						value >= 10
+					}
+				}
+
+				set_character_flag = flag_about_to_builder_bloodline
+
+				narrative_event = {
+					id = HF.24043 # Pure Castellan Bloodline
+					days = 25
+					random = 25
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = bloodline_built_holdings
+						value >= 24
+					}
+				}
+
+				set_character_flag = flag_about_to_builder_bloodline
+
+				narrative_event = {
+					id = HF.24047 # Builder Hybrid bloodline
+					days = 25
+					random = 25
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = { which = bloodline_murdered_people value >= 20 }
+					check_variable = { which = bloodline_built_holdings value >= 15 }
+				}
+
+				set_character_flag = flag_about_to_builder_bloodline
+
+				narrative_event = {
+					id = HF.24048 # Murder Builder Hybrid bloodline
+					days = 25
+					random = 25
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = { which = bloodline_peaceful_years value >= 15 }
+					check_variable = { which = bloodline_built_castles value >= 5 }
+				}
+
+				set_character_flag = flag_about_to_builder_bloodline
+
+				narrative_event = {
+					id = HF.24050 # Peace Castellan Hybrid bloodline
+					days = 25
+					random = 25
+				}
+			}
+		}
+	}
+}
+
+# on_settlement_construction_completed: check the Monumental Bloodline.
+character_event = {
+	id = HF.24024
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	has_dlc = "Holy Fury"
+
+	trigger = {
+		FROM = { holding_type = temple }
+		NOT = { has_character_flag = flag_about_to_builder_bloodline }
+	}
+
+	immediate = {
+		change_variable = { which = bloodline_built_temples value = 1 }
+		change_variable = { which = bloodline_built_holdings value = 1 }
+
+		if = {
+			limit = { has_ambition = obj_forge_bloodline }
+
+			if = {
+				limit = {
+					check_variable = {
+						which = bloodline_built_temples
+						value >= 10
+					}
+				}
+
+				set_character_flag = flag_about_to_builder_bloodline
+
+				narrative_event = {
+					id = HF.24044 # Pure Monumental Bloodline
+					days = 25
+					random = 25
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+						which = bloodline_built_holdings
+						value >= 24
+					}
+				}
+
+				set_character_flag = flag_about_to_builder_bloodline
+
+				narrative_event = {
+					id = HF.24047 # Builder Hybrid bloodline
+					days = 25
+					random = 25
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = { which = bloodline_murdered_people value >= 20 }
+					check_variable = { which = bloodline_built_holdings value >= 15 }
+				}
+
+				set_character_flag = flag_about_to_builder_bloodline
+
+				narrative_event = {
+					id = HF.24048 # Murder Builder Hybrid bloodline
+					days = 25
+					random = 25
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = { which = bloodline_peaceful_years value >= 15 }
+					check_variable = { which = bloodline_built_temples value >= 5 }
+				}
+
+				set_character_flag = flag_about_to_builder_bloodline
+
+				narrative_event = {
+					id = HF.24051 # Peace Monumental Hybrid bloodline
+					days = 25
+					random = 25
+				}
+			}
 		}
 	}
 }
