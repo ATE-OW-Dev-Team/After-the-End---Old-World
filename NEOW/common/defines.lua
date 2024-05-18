@@ -1455,16 +1455,16 @@ NMilitary = {
 	SHATTERED_RETREAT_ENABLED_COMBAT = 1,		-- Enables shattered retreat for combat if set to 1
 	SHATTERED_RETREAT_ENABLED_SIEGE = 0,		-- Enables shattered retreat for sieges if set to 1
 	SIMPLE_RETREAT_ENABLED_SIEGE = 0,			-- Enables simple retreat for sieges if set to 1
-	SHATTERED_RETREAT_HOSTILE_ATTRITION = 10,	-- Attrition taken when traversing hostile territory durring a shattered retreat (as a percentage)
-	SHATTERED_RETREAT_NEUTRAL_ATTRITION = 5,	-- Attrition taken when traversing neutral territory durring a shattered retreat (as a percentage)
-	SHATTERED_RETREAT_FRIENDLY_ATTRITION = 0,	-- Attrition taken when traversing friendly territory durring a shattered retreat (as a percentage)
+	SHATTERED_RETREAT_HOSTILE_ATTRITION = 10,	-- Attrition taken when traversing hostile territory during a shattered retreat (as a percentage)
+	SHATTERED_RETREAT_NEUTRAL_ATTRITION = 5,	-- Attrition taken when traversing neutral territory during a shattered retreat (as a percentage)
+	SHATTERED_RETREAT_FRIENDLY_ATTRITION = 0,	-- Attrition taken when traversing friendly territory during a shattered retreat (as a percentage)
 
 	SHATTERED_RETREAT_MOVEMENT_MULTIPLIER = 1.3,-- Multiplier of unit movement speed when shattered
 	SHATTERED_RETREAT_MORALE_MULTIPLIER = 1.5,	-- Multiplier of morale regain when shattered
 
 	SHATTERED_RETREAT_PREFERRED_PROVINCES = 4,				-- Units will try to move at least this many provinces away in shattered retreat
 	SHATTERED_RETREAT_MAX_PROVINCES = 10,					-- Units can not move longer than this many provinces during a shattered retreat
-	SHATTERED_RETREAT_DISTANCE_MULTIPLIER = -20,			-- Value added for each province away from the prefered distance (whether too close or too far)
+	SHATTERED_RETREAT_DISTANCE_MULTIPLIER = -20,			-- Value added for each province away from the preferred distance (whether too close or too far)
 	SHATTERED_RETREAT_OWN_UNIT_MULTIPLIER = 0.1, 			-- Multiplier of own units in province when evaluating retreat provinces
 	SHATTERED_RETREAT_WAR_FRIEND_UNIT_MULTIPLIER = 0.025, 	-- Multiplier of war friend units in province when evaluating retreat provinces
 	SHATTERED_RETREAT_ENEMY_UNIT_MULTIPLIER = -0.3, 		-- Multiplier of war friend units in province when evaluating retreat provinces
@@ -1477,7 +1477,7 @@ NMilitary = {
 	SHATTERED_RETREAT_SAME_RELIGION	= 30,		            -- Added for same religion controlled provinces when evaluating retreat provinces
 	SHATTERED_RETREAT_SAME_CULTURE = 10,		            -- Added for same culture controlled provinces when evaluating retreat provinces
 	SHATTERED_RETREAT_SAME_GOVERNMENT = 15,		            -- Added for same government controlled provinces when evaluating retreat provinces
-	SHATTERED_RETREAT_MAX_DISTANCE_DIVIDER = 4,				-- The previous values are now divided by distance away from the prefered distance, but won't be divided by more than this
+	SHATTERED_RETREAT_MAX_DISTANCE_DIVIDER = 4,				-- The previous values are now divided by distance away from the preferred distance, but won't be divided by more than this
 	SHATTERED_RETREAT_RANDOM = 10,				            -- Added random factor when evaluating shattered retreat provinces
 	SHATTERED_RETREAT_BOAT_ADJACENCY_COASTAL_BONUS = 20, 	-- Bonus added to coastal provinces adjacent to boats the unit can board
 	MERCENARY_CREATE_LEVY_RATIO = 0.25,						-- Amount of max levies used to calculate the maximum size of non-nomadic dynamic mercenaries.
@@ -1542,7 +1542,7 @@ NDisease = {
 	INFECTION_CHANCE_MODIFIER_FORT = 0.05,
 	INFECTION_CHANCE_MODIFIER_UNITS = 0.05,
 	INFECTION_CHANCE_MODIFIER_TRADEROUTE = 0.5,
-	INFECTION_CHANCE_MODIFIER_TAXES = 0.01,				-- Multiplied by the province total taxes and added to contagiousness to dermine where to spread
+	INFECTION_CHANCE_MODIFIER_TAXES = 0.01,				-- Multiplied by the province total taxes and added to contagiousness to determine where to spread
 	INFECTION_CHANCE_ORIGINAL_PROVINCE_MODIFIER = 0.5,	-- How much the original province of infection impacts the chances of a new province being infected
 	INFECTION_CHANCE_NEIGHBOURS_MODIFIER = 0.2,		-- How much the number of already infected neighbours affects the chances of infection
 
@@ -1650,8 +1650,8 @@ NAI =
 
 	NOMAD_DESIRED_UNUSED_MANPOWER = 0.2,					-- The ratio of total manpower nomads want to keep for reinforcing their hordes
 	AI_MIN_CLAN_SIZE_MULTIPLIER = 0.75,						-- Used to calculate the minimum clan size that the AI prefers from the desired clan size
-	NOMAD_HIGH_MANPOWER_AGRESSION_MULTIPLIER = 1.5,			-- Nomad agression multiplier for having high manpower
-	NOMAD_LOW_MANPOWER_AGRESSION_MULTIPLIER = 0.5,			-- Nomad agression multiplier for having low manpower
+	NOMAD_HIGH_MANPOWER_AGRESSION_MULTIPLIER = 1.5,			-- Nomad aggression multiplier for having high manpower
+	NOMAD_LOW_MANPOWER_AGRESSION_MULTIPLIER = 0.5,			-- Nomad aggression multiplier for having low manpower
 	NOMAD_KEEPS_BARON_TRIBAL_SETTLEMENTS = 1,				-- If set to 1, Independent AI Nomads will never give away baron tribal settlements in owned provinces (they will instead use the decision to pillage these holdings)
 	NOMAD_BUILDS_TEMPLES = 0,								-- If set to 1, AI Nomads will build temples like any other government would (when at 0 they will only build them in holy sites lacking a temple province)
 
