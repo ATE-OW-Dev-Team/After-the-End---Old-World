@@ -3726,17 +3726,23 @@ monastic_elective = {
 				} 
 				is_ruler = no
 				ROOT_FROMFROM = { holder_scope = { independent = yes } }
-				NOR = { 
-					ROOT_FROMFROM = { has_law = out_of_realm_inheritance_law_1 } 
-					ROOT_FROMFROM = { has_law = crown_authority_3 } 
-					ROOT_FROMFROM = { has_law = crown_authority_4 } 
-				} 
 			}
 			#Either the candidate is in the realm, or is a landless member of the current Grandmaster's dynasty
 			OR = {
-				AND = {#Landless dynasty members can be suggested
-					dynasty = ROOT # I think this is how it works, the thing I copied from uses ROOT = { dynasty = FROM }, meaning that the Grandmaster is of the candidate's dynasty
-					is_ruler = no
+				OR = {
+					AND = {#Landless dynasty members can be suggested
+						dynasty = ROOT # I think this is how it works, the thing I copied from uses ROOT = { dynasty = FROM }, meaning that the Grandmaster is of the candidate's dynasty
+						ROOT = {
+							NOT = { government = order_government }
+						}
+					}
+					AND = {
+						dynasty = ROOT # I think this is how it works, the thing I copied from uses ROOT = { dynasty = FROM }, meaning that the Grandmaster is of the candidate's dynasty
+						is_ruler = no
+						ROOT = {
+							government = order_government
+						}
+					}
 				}
 				any_liege = {#is in the Order already
 					character = ROOT
