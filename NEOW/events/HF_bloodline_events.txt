@@ -2440,7 +2440,50 @@ character_event = {
 	}
 }
 
-#Child gains Pure Murder Bloodline.
+## Bloodline notification events for chosen path
+
+# Pure Murder Bloodline crossroad
+character_event = {
+	id = HF.24025
+
+	is_triggered_only = yes
+	hide_window = yes
+
+	has_dlc = "Holy Fury"
+
+	trigger = {
+		has_ambition = obj_forge_bloodline
+
+		NOT = {
+			any_owned_bloodline = {
+				has_bloodline_flag = created_bloodline
+				bloodline_is_active_for = PREV
+			}
+		}
+	}
+
+	immediate = {
+		# First check if qualifies for Death little helper flavor.
+		if = {
+			limit = {
+				trigger_if = {
+					limit = { has_character_flag = flag_forge_bloodline_was_child }
+					practical_age < 35 # Should still be somewhat young
+				}
+				trigger_else = {
+					is_adult = no
+				}
+			}
+
+			narrative_event = { id = HF.24026 }
+		}
+		else = {
+			character_event = { id = HF.24027 } # Otherwise let player decide the flavor.
+		}
+	}
+}
+
+# Child gains Pure Murder Bloodline.
 narrative_event = {
 	id = HF.24026
 	title = EVTTITLEHF24026
