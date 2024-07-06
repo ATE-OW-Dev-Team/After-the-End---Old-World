@@ -1252,6 +1252,7 @@ character_event = {
 # - camp_fever
 # - smallpox
 # - aztec_disease
+# - red death
 # - flu
 # - cancer
 character_event = {
@@ -1318,6 +1319,34 @@ character_event = {
 					}
 				}
 
+				1 = { # Rare when not an epidemic
+					trigger = {
+						trigger_if = {
+							limit = { has_character_flag = developing_illness }
+							has_character_flag = got_bubonic_plague
+						}
+
+						NOR = {
+							has_character_flag = disease_not_serious
+							has_character_flag = immune_bubonic_plague
+						}
+					}
+
+					if = {
+						limit = {
+							NOT = { has_character_flag = developing_illness }
+						}
+
+						set_character_flag = got_bubonic_plague
+						set_character_flag = developing_illness
+					}
+
+					character_event = {
+						id = RIP.5012 # Disease develops
+						days = 14
+						random = 14
+					}
+				}
 				1 = { # Rare when not an epidemic
 					trigger = {
 						trigger_if = {
@@ -2170,6 +2199,7 @@ character_event = {
 # - consumption
 # - camp_fever
 # - flu
+# - red death
 # - gout
 # - rabies
 # - cancer
@@ -2252,7 +2282,35 @@ character_event = {
 						random = 14
 					}
 				}
+				
+				1 = { # Rare when not an epidemic
+					trigger = {
+						trigger_if = {
+							limit = { has_character_flag = developing_illness }
+							has_character_flag = got_bubonic_plague
+						}
 
+						NOR = {
+							has_character_flag = disease_not_serious
+							has_character_flag = immune_bubonic_plague
+						}
+					}
+
+					if = {
+						limit = {
+							NOT = { has_character_flag = developing_illness }
+						}
+
+						set_character_flag = got_bubonic_plague
+						set_character_flag = developing_illness
+					}
+
+					character_event = {
+						id = RIP.5012 # Disease develops
+						days = 14
+						random = 14
+					}
+				}
 				100 = {
 					trigger = {
 						trigger_if = {
@@ -2486,35 +2544,6 @@ character_event = {
 
 					character_event = {
 						id = RIP.5016 # Disease develops
-						days = 14
-						random = 14
-					}
-				}
-
-				1 = { # Rare when not an epidemic
-					trigger = {
-						trigger_if = {
-							limit = { has_character_flag = developing_illness }
-							has_character_flag = got_bubonic_plague
-						}
-
-						NOR = {
-							has_character_flag = disease_not_serious
-							has_character_flag = immune_bubonic_plague
-						}
-					}
-
-					if = {
-						limit = {
-							NOT = { has_character_flag = developing_illness }
-						}
-
-						set_character_flag = got_bubonic_plague
-						set_character_flag = developing_illness
-					}
-
-					character_event = {
-						id = RIP.5012 # Disease develops
 						days = 14
 						random = 14
 					}
@@ -2972,9 +3001,10 @@ character_event = {
 					calc_true_if = {
 						amount < 3
 
-						trait = malaise
+						trait = fatigue
 						trait = fever
 						trait = cramps
+						trait = headache
 					}
 				}
 
@@ -2984,9 +3014,10 @@ character_event = {
 			50 = {
 				trigger = {
 					OR = {
-						trait = malaise
+						trait = fatigue
 						trait = fever
 						trait = cramps
+						trait = headache
 					}
 				}
 
@@ -3845,8 +3876,13 @@ character_event = {
 		}
 
 		if = {
-			limit = { trait = malaise }
-			remove_trait = malaise
+			limit = { trait = headache }
+			remove_trait = headache
+		}
+		
+		if = {
+			limit = { trait = fatigue }
+			remove_trait = fatigue
 		}
 
 		hidden_effect = {
