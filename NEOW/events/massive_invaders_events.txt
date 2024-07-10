@@ -1,1136 +1,1136 @@
-namespace = invaders
-
-narrative_event = {#Rumours of War in the East
-	id = invaders.1
-	title = "EVTNAMEINVADERS1"
-	desc = "EVTDESCINVADERS1"
-	picture = GFX_evt_china_civil_war
-	border = "GFX_event_narrative_frame_war"
-	major = yes
-	
-	only_playable = yes
-	religion = catholic
-	min_age = 16
-	show_root = no
-	hide_from = yes
-	
-	trigger = {
-		OR = {
-			year = 2705 #About 150 years after game start
-			AND = {
-				has_game_rule = {
-					name = eastern_invasion
-					value = random
-				}
-				total_years_played = 50
-			}
-			AND = {
-				has_game_rule = {
-					name = eastern_invasion
-					value = delayed_random
-				}
-				total_years_played = 100
-			}
-		}
-		NOR = { 
-			year = 2723
-			has_game_rule = {
-				name = eastern_invasion
-				value = off
-			}
-		}
-		controls_religion = yes # Let it happen for the Pope. He's always around.
-		NOR = {
-			has_global_flag = siberia_will_invade
-			has_global_flag = china_will_invade
-			is_alternate_start = yes
-		}
-	}
-	mean_time_to_happen = {
-		days = 1
-		modifier = {
-			factor = 1.5
-			year = 2708
-		}
-		modifier = {
-			factor = 5
-			year = 2710
-		}
-		modifier = {
-			factor = 100 #If game has historical rule, ensure that the Mongol Invasion WILL happen when the time comes.
-			has_game_rule = {
-				name = eastern_invasion
-				value = historical
-			}
-		}
-		modifier = {
-			factor = 0.5
-			has_game_rule = {
-				name = eastern_invasion
-				value = random
-			}
-			NOT = { total_years_played = 100 }
-		}
-		modifier = {
-			factor = 0.5
-			has_game_rule = {
-				name = eastern_invasion
-				value = random
-			}
-		}
-		modifier = {
-			factor = 0.6
-			has_game_rule = {
-				name = eastern_invasion
-				value = delayed_random
-			}
-		}
-	}
-	
-	immediate = {
-		random_list = {
-			50 = {
-				set_global_flag = siberia_will_invade
-			}#Siberia loses the war and will invade
-			50 = {
-				set_global_flag = china_will_invade
-			}#China loses the war and will invade
-		}
-	}
-	
-	option = {
-		name = "EVTOPTA_INVADERS1"
-	}
-	option = {
-		name = "EVTOPTB_INVADERS1"
-		trigger = {
-			can_choose_invader_trigger = yes
-		}
-		tooltip_info = yes
-		custom_tooltip = {
-			text = PLAYER_CHOOSING_INVADER_TT
-			set_global_flag = siberia_will_invade
-			clr_global_flag = china_will_invade
-		}
-	}
-	option = {
-		name = "EVTOPTC_INVADERS1"
-		trigger = {
-			can_choose_invader_trigger = yes
-		}
-		tooltip_info = yes
-		custom_tooltip = {
-			text = PLAYER_CHOOSING_INVADER_TT
-			clr_global_flag = siberia_will_invade
-			set_global_flag = china_will_invade
-		}
-	}
-}
-
-narrative_event = {#Notification that the Siberians have lost and are beginning to move west
-	id = invaders.2
-	title = "EVTNAMEINVADERS2"
-	desc = "EVTDESCINVADERS2"
-	picture = GFX_evt_china_civil_war
-	border = "GFX_event_narrative_frame_war"
-	major = yes
-	
-	only_playable = yes
-	religion = catholic
-	min_age = 16
-	has_global_flag = siberia_will_invade
-	portrait = event_target:eastern_invasion_leader
-	show_root = no
-	hide_from = yes
-	
-	trigger = {
-		controls_religion = yes
-		NOR = {
-			has_global_flag = siberian_arrival
-			has_global_flag = china_will_invade
-		}
-	}
-	mean_time_to_happen = {
-		years = 5
-	}
-	
-	immediate = {
-		if = {
-			limit = {#I'm aware this is technically redundant, but eh, if it works
-				NOT = { has_global_flag = siberian_arrival }
-			}
-			set_global_flag = siberian_arrival
-			activate_title = { title = e_siberian_invaders status = yes }
-				
-				create_character = {
-					dynasty = random
-					religion = nousthreskeia
-					culture = novorusskiy
-					female = no
-					age = 46
-					health = 6.5
-					fertility = 0.6
-					random_traits = yes
-					attributes = {
-						learning = 7
-						diplomacy = 7
-						martial = 9
-						stewardship = 7
-						intrigue = 7
-					}
-				}
-				#give him a random boost
-				new_character = {
-					
-					wealth = 12000
-					prestige = 10000
-					set_character_flag = horde_invader
-					save_global_event_target_as = eastern_invasion_leader
-						
-					remove_trait = slow
-					remove_trait = imbecile
-					remove_trait = dull
-					remove_lifestyle_trait_effect = yes
-					remove_trait = craven
-					remove_trait = ugly
-					remove_trait = uncouth
-					remove_trait = feeble
-					remove_trait = dwarf
-					remove_trait = giant
-					remove_trait = clubfooted
-					remove_trait = harelip
-					remove_trait = hunchback
-					remove_trait = lisp
-					remove_trait = weak
-					remove_trait = lunatic
-					remove_trait = shrewd
-					remove_trait = quick
-					remove_trait = genius
-					remove_trait = strong
-					remove_trait = cynical
-					remove_trait = content
-					remove_trait = fair
-					random_list = {
-						1 = { change_learning = 2 }
-						1 = { change_diplomacy = 2 }
-						1 = { change_stewardship = 2 }
-						1 = { change_intrigue = 2 }
-						1 = { change_martial = 2 }
-					}
-					random_list = {
-						1 = { change_learning = 3 }
-						1 = { change_diplomacy = 3 }
-						1 = { change_stewardship = 3 }
-						1 = { change_intrigue = 3 }
-						1 = { change_martial = 3 }
-					}
-					random_list = {
-						5 = { }
-						15 = { add_trait = strong }
-						30 = { add_trait = fair }
-						3 = { add_trait = strong add_trait = fair }
-					}
-					random_list = {
-						5 = { }
-						15 = { add_trait = shrewd }
-						30 = { add_trait = quick }
-						3 = { add_trait = genius }
-					}
-					remove_education_effect = yes
-					random_list = {
-						10 = { add_trait = skilled_tactician }
-						20 = { add_trait = brilliant_strategist }
-					}
-					random_list = {
-						10 = { change_martial = 2 }
-						10 = { add_trait = hunter }
-						10 = { add_trait = duelist }
-						20 = { add_trait = strategist }
-					}				
-				e_siberian_invaders = {
-					grant_title = PREV
-				}
-				1925 = { # 
-					kingdom = {
-						e_siberian_invaders = {
-							holder_scope = {
-								war = {
-									casus_belli = tribal_invasion
-									target = PREVPREVPREV # The top liege of the owner of the province
-									thirdparty_title = PREVPREV # The de jure kingdom
-								}
-							}
-						}
-					}
-				}					
-				e_siberian_invaders = {
-					holder_scope = {
-						character_event = { id = invaders.3 } # Spawn courtiers
-						character_event = { id = invaders.4 } # Spawn troops					
-					}
-				}
-			}
-
-		}		
-	}
-	option = {
-		name = "EVTOPTA_INVADERS2"
-	}
-	option = {
-		name = "EVTOPTB_INVADERS2"
-		tooltip_info = yes
-		trigger = {
-			can_plays_as_invader_trigger = yes
-		}
-		play_as_eastern_invasion_leader_effect = yes
-	}
-}
-character_event = {#Invader gets their generals - why have two such events when one will do?
-	id = invaders.3
-	title = "EVTNAMEINVADERS3"
-	desc = "EVTDESCINVADERS3"
-	picture = GFX_evt_china_civil_war
-
-	is_triggered_only = yes
-	trigger = {
-		OR = {
-			primary_title = {title = e_siberian_invaders }
-			primary_title = {title = e_chinese_invaders }
-		}
-	}	
-	immediate = {
-		if = {
-			limit = {
-				has_global_flag = siberian_arrival
-			}
-
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = novorusskiy
-			female = no
-			age = 16
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = novorusskiy
-			female = no
-			age = 18
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = novorusskiy
-			female = no
-			age = 18
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = klynian
-			female = no
-			age = 20
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = klynian
-			female = no
-			age = 25
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = novorusskiy
-			female = no
-			age = 26
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = novorusskiy
-			female = no
-			age = 28
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = novorusskiy
-			female = yes
-			age = 16
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = klynian
-			female = yes
-			age = 17
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = novorusskiy
-			female = yes
-			age = 18
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = novorusskiy
-			female = yes
-			age = 18
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = klynian
-			female = yes
-			age = 20
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = novorusskiy
-			female = no
-			age = 27
-			attributes = {
-				martial = 12
-			}
-			trait = brilliant_strategist
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = novorusskiy
-			female = no
-			age = 51
-			attributes = {
-				martial = 12
-			}
-			trait = brilliant_strategist
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = klynian
-			female = no
-			age = 44
-			attributes = {
-				martial = 12
-			}
-			trait = brilliant_strategist
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = nousthreskeia
-			culture = novorusskiy
-			female = no
-			age = 24
-			attributes = {
-				martial = 12
-			}
-			trait = brilliant_strategist
-		}
-		}
-	else_if = {
-		limit = {
-			has_global_flag = chinese_arrival
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = no
-			age = 16
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = no
-			age = 18
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = no
-			age = 18
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = no
-			age = 20
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = no
-			age = 25
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = no
-			age = 26
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = no
-			age = 28
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = yes
-			age = 16
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = yes
-			age = 17
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = yes
-			age = 18
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = yes
-			age = 18
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = yes
-			age = 20
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = no
-			age = 27
-			attributes = {
-				martial = 12
-			}
-			trait = brilliant_strategist
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = no
-			age = 51
-			attributes = {
-				martial = 12
-			}
-			trait = brilliant_strategist
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = no
-			age = 44
-			attributes = {
-				martial = 12
-			}
-			trait = brilliant_strategist
-		}
-		create_character = {
-			random_traits = yes
-			dynasty = none
-			religion = maoist
-			culture = han
-			female = no
-			age = 24
-			attributes = {
-				martial = 12
-			}
-			trait = brilliant_strategist
-			}
-		
-	}		
-  }
-	option = {
-		name = "EVTOPTA_INVADERS3"
-	}
-}
-	
-character_event = {#Invader gets their troops - why have two such events when one will do?
-	id = invaders.4
-	title = "EVTNAMEINVADERS4"
-	desc = "EVTDESCINVADERS4"
-	picture = GFX_evt_china_civil_war
-
-	is_triggered_only = yes
-	trigger = {
-		OR = {
-			primary_title = {title = e_siberian_invaders}
-			primary_title = {title = e_chinese_invaders}
-		}
-	}
-	
-	immediate = {
-		if = {
-			limit = {
-				has_global_flag = siberian_arrival
-			}
-			spawn_unit = {
-				province = 1923 # Khilok
-				troops =
-				{
-					light_cavalry = { 1500 1500 }
-					light_infantry = { 4000 4000 }
-					heavy_infantry = { 2000 2000 }
-					archers = { 1500 1500 }
-					knights = { 500 500 }
-				}
-			}
-			spawn_unit = {
-				province = 1923 # Khilok
-				troops =
-				{
-					light_cavalry = { 1500 1500 }
-					light_infantry = { 4000 4000 }
-					heavy_infantry = { 2000 2000 }
-					archers = { 1500 1500 }
-					knights = { 500 500 }
-				}
-			}
-			spawn_unit = {
-				province = 1924 # Chikoi
-				troops =
-				{
-					light_cavalry = { 1500 1500 }
-					light_infantry = { 4000 4000 }
-					heavy_infantry = { 2000 2000 }
-					archers = { 1500 1500 }
-					knights = { 500 500 }
-				}
-			}
-			spawn_unit = {
-				province = 1924 # Chikoi
-				troops =
-				{
-					light_cavalry = { 1500 1500 }
-					light_infantry = { 4000 4000 }
-					heavy_infantry = { 2000 2000 }
-					archers = { 1500 1500 }
-					knights = { 500 500 }
-				}
-			}
-			spawn_unit = {
-				province = 1925 # Tuul
-				troops =
-				{
-					light_cavalry = { 1500 1500 }
-					light_infantry = { 4000 4000 }
-					heavy_infantry = { 2000 2000 }
-					archers = { 1500 1500 }
-					knights = { 500 500 }
-				}
-			}
-			spawn_unit = {
-				province = 1925 # Tuul
-				troops =
-				{
-					light_cavalry = { 1500 1500 }
-					light_infantry = { 4000 4000 }
-					heavy_infantry = { 2000 2000 }
-					archers = { 1500 1500 }
-					knights = { 500 500 }
-				}
-			}			
-		}
-		else_if = {
-			limit = {
-				has_global_flag = chinese_arrival
-			}
-			spawn_unit = {
-				province = 1513 # Jiuquan
-				troops =
-				{
-					light_cavalry = { 1000 1000 }
-					light_infantry = { 2500 2500 }
-					heavy_infantry = { 1500 1500 }
-					pikemen = { 1500 1500 }
-					archers = { 3000 3000 }
-				}
-			}
-			spawn_unit = {
-				province = 1513 # Jiuquan
-				troops =
-				{
-					light_cavalry = { 1000 1000 }
-					light_infantry = { 2500 2500 }
-					heavy_infantry = { 1500 1500 }
-					pikemen = { 1500 1500 }
-					archers = { 3000 3000 }
-				}
-			}
-			spawn_unit = {
-				province = 1502 # Fuqi
-				troops =
-				{
-					light_cavalry = { 1000 1000 }
-					light_infantry = { 2500 2500 }
-					heavy_infantry = { 1500 1500 }
-					pikemen = { 1500 1500 }
-					archers = { 3000 3000 }
-				}
-			}
-			spawn_unit = {
-				province = 1502 # Fuqi
-				troops =
-				{
-					light_cavalry = { 1000 1000 }
-					light_infantry = { 2500 2500 }
-					heavy_infantry = { 1500 1500 }
-					pikemen = { 1500 1500 }
-					archers = { 3000 3000 }
-				}
-			}
-			spawn_unit = {
-				province = 1569 # Delingha
-				troops =
-				{
-					light_cavalry = { 1000 1000 }
-					light_infantry = { 2500 2500 }
-					heavy_infantry = { 1500 1500 }
-					pikemen = { 1500 1500 }
-					archers = { 3000 3000 }
-				}
-			}
-			spawn_unit = {
-				province = 1569 # Delingha
-				troops =
-				{
-					light_cavalry = { 1000 1000 }
-					light_infantry = { 2500 2500 }
-					heavy_infantry = { 1500 1500 }
-					pikemen = { 1500 1500 }
-					archers = { 3000 3000 }
-				}
-			}			
-		}		
-	}
-	option = {
-		name = "EVTOPTA_INVADERS4"
-	}	
-}
-
-narrative_event = {#Notification that the Chinese have lost and are beginning to move west
-	id = invaders.5
-	title = "EVTNAMEINVADERS5"
-	desc = "EVTDESCINVADERS5"
-	picture = GFX_evt_china_civil_war
-	border = "GFX_event_narrative_frame_war"
-	major = yes
-	
-	only_playable = yes
-	religion = catholic
-	min_age = 16
-	has_global_flag = china_will_invade
-	portrait = event_target:eastern_invasion_leader
-	show_root = no
-	hide_from = yes
-	
-	trigger = {
-		controls_religion = yes
-		NOR = {
-			has_global_flag = chinese_arrival
-			has_global_flag = siberia_will_invade
-		}
-	}
-	mean_time_to_happen = {
-		years = 5
-	}
-	
-	immediate = {
-		if = {
-			limit = {
-				NOT = { has_global_flag = chinese_arrival }
-			}
-			set_global_flag = chinese_arrival
-			activate_title = { title = e_chinese_invaders status = yes }
-				
-				create_character = {
-					dynasty = random
-					religion = maoist
-					culture = han
-					female = no
-					age = 53
-					health = 6.5
-					fertility = 0.6
-					random_traits = yes
-					attributes = {
-						learning = 7
-						diplomacy = 7
-						martial = 9
-						stewardship = 7
-						intrigue = 7
-					}
-				}
-				#give him a random boost
-				new_character = {
-					
-					wealth = 12000
-					prestige = 10000
-					set_character_flag = horde_invader
-					character_event = { id = invaders.3 } # Spawn courtiers
-					character_event = { id = invaders.4 } # Spawn troops
-					save_global_event_target_as = eastern_invasion_leader
-						
-					remove_trait = slow
-					remove_trait = imbecile
-					remove_trait = dull
-					remove_lifestyle_trait_effect = yes
-					remove_trait = craven
-					remove_trait = ugly
-					remove_trait = uncouth
-					remove_trait = feeble
-					remove_trait = dwarf
-					remove_trait = giant
-					remove_trait = clubfooted
-					remove_trait = harelip
-					remove_trait = hunchback
-					remove_trait = lisp
-					remove_trait = weak
-					remove_trait = lunatic
-					remove_trait = shrewd
-					remove_trait = quick
-					remove_trait = genius
-					remove_trait = strong
-					remove_trait = cynical
-					remove_trait = content
-					remove_trait = fair
-					random_list = {
-						1 = { change_learning = 2 }
-						1 = { change_diplomacy = 2 }
-						1 = { change_stewardship = 2 }
-						1 = { change_intrigue = 2 }
-						1 = { change_martial = 2 }
-					}
-					random_list = {
-						1 = { change_learning = 3 }
-						1 = { change_diplomacy = 3 }
-						1 = { change_stewardship = 3 }
-						1 = { change_intrigue = 3 }
-						1 = { change_martial = 3 }
-					}
-					random_list = {
-						5 = { }
-						15 = { add_trait = strong }
-						30 = { add_trait = fair }
-						3 = { add_trait = strong add_trait = fair }
-					}
-					random_list = {
-						5 = { }
-						15 = { add_trait = shrewd }
-						30 = { add_trait = quick }
-						3 = { add_trait = genius }
-					}
-					remove_education_effect = yes
-					random_list = {
-						10 = { add_trait = skilled_tactician }
-						20 = { add_trait = brilliant_strategist }
-					}
-					random_list = {
-						10 = { change_martial = 2 }
-						10 = { add_trait = hunter }
-						10 = { add_trait = duelist }
-						20 = { add_trait = strategist }
-					}				
-					e_chinese_invaders = {
-						grant_title = PREV
-					}
-					1569 = { # Delingha
-						kingdom = {
-							e_chinese_invaders = {
-								holder_scope = {
-									war = {
-										casus_belli = tribal_invasion
-										target = PREVPREVPREV # The top liege of the owner of the province
-										thirdparty_title = PREVPREV # The de jure kingdom
-									}
-								}
-							}
-						}
-					}					
-					#e_chinese_invaders = {
-						#holder_scope = {
-							event_target:eastern_invasion_leader = {
-							character_event = { id = invaders.3 } # Spawn courtiers
-							character_event = { id = invaders.4 } # Spawn troops					
-							}
-						#}
-					#}					
-				}
-
-		}		
-	}
-	option = {
-		name = "EVTOPTA_INVADERS2"
-	}
-	option = {
-		name = "EVTOPTB_INVADERS2"
-		tooltip_info = yes
-		trigger = {
-			can_plays_as_invader_trigger = yes
-		}
-		play_as_eastern_invasion_leader_effect = yes
-	}
-
-}
-
-narrative_event = {#Notification that mass settlement is taking place
-	id = invaders.6
-	title = "EVTNAMEINVADERS6"
-	desc = "EVTDESCINVADERS6"
-	picture = GFX_evt_construction_site_wol
-	border = "GFX_event_narrative_frame_war"
-	major = yes
-	
-	trigger = {
-		OR = {
-			primary_title = { title = e_chinese_invaders }
-			primary_title = { title = e_siberian_invaders }
-		}
-		demesne_size = 1#they need to have conquered at least one county for this to happen
-		NOT = {
-			has_global_flag = invader_settlement_begun
-		}
-	}
-	mean_time_to_happen = {
-		months = 1
-	}
-	immediate = {
-		set_global_flag = invader_settlement_begun
-		set_variable = { which = global_numsettlements value = 1 }	
-	}
-	option = {#Cool bruh
-		name = "EVTOPTA_INVADERS6"
-		trigger = {
-			OR = {
-				primary_title = { title = e_chinese_invaders }
-				primary_title = { title = e_siberian_invaders }
-			}
-		}
-		if = {
-			limit = {
-				primary_title = { title = e_chinese_invaders }
-			}
-			capital_scope = {
-				culture = han
-				religion = maoist
-				any_province_holding = { 
-					limit = { holding_type = tribal } 
-					convert_to = CASTLE#since there can only ever be one tribe in an area this is fine
-				}
-				set_province_flag = eastern_settlers				
-				build_holding = {
-					type = city
-					holder = ROOT
-					}
-				build_holding = {
-					type = temple
-					holder = ROOT
-				}					
-			}
-		}
-		else_if = {
-			limit = {
-				primary_title = { title = e_siberian_invaders }
-			}
-			capital_scope = {
-				culture = novorusskiy
-				religion = nousthreskeia
-				set_province_flag = eastern_settlers
-				any_province_holding = { 
-					limit = { holding_type = tribal } 
-					convert_to = CASTLE#since there can only ever be one tribe in an area this is fine
-				}
-				build_holding = {
-					type = city
-					holder = ROOT
-				}
-				build_holding = {
-					type = temple
-					holder = ROOT
-				}				
-			}
-		}
-		if = {#helping the Siberians to settle down as they should
-			limit = {
-				is_tribal = yes
-			}
-			set_government_type = feudal_government			
-		}
-		
-	}
-	option = {#Everyone else
-		name = "EVTOPTB_INVADERS6"
-		trigger = {
-			NOR = {
-				primary_title = { title = e_chinese_invaders }
-				primary_title = { title = e_siberian_invaders }
-			}
-		}		
-	}
-}
-
-province_event = {#Private events for the invaders to settle some lands, establishing a decent base for themselves. This converts a few provinces to their culture and religion, and (if in a province with very few holdings) adds holdings. 
-				##This should only last for a short while, enough to give them a basic beginning
-	id = invaders.7
-	desc = "EVTDESCINVADERS7"
-	picture = GFX_evt_construction_site_wol
-	
-	only_playable = yes
-	min_age = 16
-	
-	trigger = {
-		NOR = {
-			check_variable = { which = global_numsettlements value = 5}#This is a kinda clunky way of doing it but I think this should mean "as long as this variable is less than 5"
-			has_province_flag = eastern_settlers
-			num_of_settlements = 4#it's meant to buff up weak provinces, not overpower moderate provinces
-			}
-		has_global_flag = invader_settlement_begun
-		OR = {#only fires for the invaders or their vassals
-			primary_title = { title = e_chinese_invaders }
-			primary_title = { title = e_siberian_invaders }
-			top_liege = {
-				primary_title = {
-					title = e_chinese_invaders
-				}
-			}
-			top_liege = {
-				primary_title = {
-					title = e_siberian_invaders
-				}
-			}			
-		}
-	}
-	mean_time_to_happen = {
-		months = 3
-	}
-	immediate = {
-		#WE MIGHT NEED TO ADD A 'ROOT' TO THIS ONE, I'M NOT EXPERIENCED WITH PROVINCE EVENTS
-		ROOT = {
-		any_province_holding = { 
-				limit = { holding_type = tribal } 
-				convert_to = CASTLE#since there can only ever be one tribe in an area this is fine
-		}
-		}
-		change_variable = { which = global_numsettlements value = 1 }
-		set_province_flag = eastern_settlers
-	}
-	option = {
-		name = "EVTOPTA_INVADER7"
-		if = {
-			limit = {
-				has_global_flag = chinese_arrival
-			}
-			ROOT = {
-			religion = maoist
-			culture = han
-			}
-		}
-		else_if = {
-			limit = {
-				has_global_flag = siberian_arrival
-			}
-			ROOT = {
-			religion = nousthreskeia
-			culture = novorusskiy
-			}
-		}
-		if = {
-			limit = {
-				num_of_settlements = 0#should never be true but hey, why take the chance
-			}
-			build_holding = {
-				type = castle
-				holder = FROM
-			}
-			build_holding = {
-				type = city
-				holder = FROM
-			}
-			build_holding = {
-				type = temple
-				holder = FROM
-			}			
-		}
-		else_if = {
-			limit = {
-				num_of_settlements = 1
-			}
-			build_holding = {
-				type = city
-				holder = FROM
-			}
-			build_holding = {
-				type = temple
-				holder = FROM
-			}			
-		}
-		else_if = {
-			limit = {
-				num_of_settlements = 2
-			}
-			build_holding = {#Tribal provinces can have temples but not cities, so it's a safe bet that, if a province has 2 holdings already, they're a Tribe/Castle and a Temple
-				type = city
-				holder = FROM
-			}		
-		}		
-	}
-}
+#namespace = invaders
+#
+#narrative_event = {#Rumours of War in the East
+#	id = invaders.1
+#	title = "EVTNAMEINVADERS1"
+#	desc = "EVTDESCINVADERS1"
+#	picture = GFX_evt_china_civil_war
+#	border = "GFX_event_narrative_frame_war"
+#	major = yes
+#	
+#	only_playable = yes
+#	religion = catholic
+#	min_age = 16
+#	show_root = no
+#	hide_from = yes
+#	
+#	trigger = {
+#		OR = {
+#			year = 2705 #About 150 years after game start
+#			AND = {
+#				has_game_rule = {
+#					name = eastern_invasion
+#					value = random
+#				}
+#				total_years_played = 50
+#			}
+#			AND = {
+#				has_game_rule = {
+#					name = eastern_invasion
+#					value = delayed_random
+#				}
+#				total_years_played = 100
+#			}
+#		}
+#		NOR = { 
+#			year = 2723
+#			has_game_rule = {
+#				name = eastern_invasion
+#				value = off
+#			}
+#		}
+#		controls_religion = yes # Let it happen for the Pope. He's always around.
+#		NOR = {
+#			has_global_flag = siberia_will_invade
+#			has_global_flag = china_will_invade
+#			is_alternate_start = yes
+#		}
+#	}
+#	mean_time_to_happen = {
+#		days = 1
+#		modifier = {
+#			factor = 1.5
+#			year = 2708
+#		}
+#		modifier = {
+#			factor = 5
+#			year = 2710
+#		}
+#		modifier = {
+#			factor = 100 #If game has historical rule, ensure that the Mongol Invasion WILL happen when the time comes.
+#			has_game_rule = {
+#				name = eastern_invasion
+#				value = historical
+#			}
+#		}
+#		modifier = {
+#			factor = 0.5
+#			has_game_rule = {
+#				name = eastern_invasion
+#				value = random
+#			}
+#			NOT = { total_years_played = 100 }
+#		}
+#		modifier = {
+#			factor = 0.5
+#			has_game_rule = {
+#				name = eastern_invasion
+#				value = random
+#			}
+#		}
+#		modifier = {
+#			factor = 0.6
+#			has_game_rule = {
+#				name = eastern_invasion
+#				value = delayed_random
+#			}
+#		}
+#	}
+#	
+#	immediate = {
+#		random_list = {
+#			50 = {
+#				set_global_flag = siberia_will_invade
+#			}#Siberia loses the war and will invade
+#			50 = {
+#				set_global_flag = china_will_invade
+#			}#China loses the war and will invade
+#		}
+#	}
+#	
+#	option = {
+#		name = "EVTOPTA_INVADERS1"
+#	}
+#	option = {
+#		name = "EVTOPTB_INVADERS1"
+#		trigger = {
+#			can_choose_invader_trigger = yes
+#		}
+#		tooltip_info = yes
+#		custom_tooltip = {
+#			text = PLAYER_CHOOSING_INVADER_TT
+#			set_global_flag = siberia_will_invade
+#			clr_global_flag = china_will_invade
+#		}
+#	}
+#	option = {
+#		name = "EVTOPTC_INVADERS1"
+#		trigger = {
+#			can_choose_invader_trigger = yes
+#		}
+#		tooltip_info = yes
+#		custom_tooltip = {
+#			text = PLAYER_CHOOSING_INVADER_TT
+#			clr_global_flag = siberia_will_invade
+#			set_global_flag = china_will_invade
+#		}
+#	}
+#}
+#
+#narrative_event = {#Notification that the Siberians have lost and are beginning to move west
+#	id = invaders.2
+#	title = "EVTNAMEINVADERS2"
+#	desc = "EVTDESCINVADERS2"
+#	picture = GFX_evt_china_civil_war
+#	border = "GFX_event_narrative_frame_war"
+#	major = yes
+#	
+#	only_playable = yes
+#	religion = catholic
+#	min_age = 16
+#	has_global_flag = siberia_will_invade
+#	portrait = event_target:eastern_invasion_leader
+#	show_root = no
+#	hide_from = yes
+#	
+#	trigger = {
+#		controls_religion = yes
+#		NOR = {
+#			has_global_flag = siberian_arrival
+#			has_global_flag = china_will_invade
+#		}
+#	}
+#	mean_time_to_happen = {
+#		years = 5
+#	}
+#	
+#	immediate = {
+#		if = {
+#			limit = {#I'm aware this is technically redundant, but eh, if it works
+#				NOT = { has_global_flag = siberian_arrival }
+#			}
+#			set_global_flag = siberian_arrival
+#			activate_title = { title = e_siberian_invaders status = yes }
+#				
+#				create_character = {
+#					dynasty = random
+#					religion = nousthreskeia
+#					culture = novorusskiy
+#					female = no
+#					age = 46
+#					health = 6.5
+#					fertility = 0.6
+#					random_traits = yes
+#					attributes = {
+#						learning = 7
+#						diplomacy = 7
+#						martial = 9
+#						stewardship = 7
+#						intrigue = 7
+#					}
+#				}
+#				#give him a random boost
+#				new_character = {
+#					
+#					wealth = 12000
+#					prestige = 10000
+#					set_character_flag = horde_invader
+#					save_global_event_target_as = eastern_invasion_leader
+#						
+#					remove_trait = slow
+#					remove_trait = imbecile
+#					remove_trait = dull
+#					remove_lifestyle_trait_effect = yes
+#					remove_trait = craven
+#					remove_trait = ugly
+#					remove_trait = uncouth
+#					remove_trait = feeble
+#					remove_trait = dwarf
+#					remove_trait = giant
+#					remove_trait = clubfooted
+#					remove_trait = harelip
+#					remove_trait = hunchback
+#					remove_trait = lisp
+#					remove_trait = weak
+#					remove_trait = lunatic
+#					remove_trait = shrewd
+#					remove_trait = quick
+#					remove_trait = genius
+#					remove_trait = strong
+#					remove_trait = cynical
+#					remove_trait = content
+#					remove_trait = fair
+#					random_list = {
+#						1 = { change_learning = 2 }
+#						1 = { change_diplomacy = 2 }
+#						1 = { change_stewardship = 2 }
+#						1 = { change_intrigue = 2 }
+#						1 = { change_martial = 2 }
+#					}
+#					random_list = {
+#						1 = { change_learning = 3 }
+#						1 = { change_diplomacy = 3 }
+#						1 = { change_stewardship = 3 }
+#						1 = { change_intrigue = 3 }
+#						1 = { change_martial = 3 }
+#					}
+#					random_list = {
+#						5 = { }
+#						15 = { add_trait = strong }
+#						30 = { add_trait = fair }
+#						3 = { add_trait = strong add_trait = fair }
+#					}
+#					random_list = {
+#						5 = { }
+#						15 = { add_trait = shrewd }
+#						30 = { add_trait = quick }
+#						3 = { add_trait = genius }
+#					}
+#					remove_education_effect = yes
+#					random_list = {
+#						10 = { add_trait = skilled_tactician }
+#						20 = { add_trait = brilliant_strategist }
+#					}
+#					random_list = {
+#						10 = { change_martial = 2 }
+#						10 = { add_trait = hunter }
+#						10 = { add_trait = duelist }
+#						20 = { add_trait = strategist }
+#					}				
+#				e_siberian_invaders = {
+#					grant_title = PREV
+#				}
+#				1925 = { # 
+#					kingdom = {
+#						e_siberian_invaders = {
+#							holder_scope = {
+#								war = {
+#									casus_belli = tribal_invasion
+#									target = PREVPREVPREV # The top liege of the owner of the province
+#									thirdparty_title = PREVPREV # The de jure kingdom
+#								}
+#							}
+#						}
+#					}
+#				}					
+#				e_siberian_invaders = {
+#					holder_scope = {
+#						character_event = { id = invaders.3 } # Spawn courtiers
+#						character_event = { id = invaders.4 } # Spawn troops					
+#					}
+#				}
+#			}
+#
+#		}		
+#	}
+#	option = {
+#		name = "EVTOPTA_INVADERS2"
+#	}
+#	option = {
+#		name = "EVTOPTB_INVADERS2"
+#		tooltip_info = yes
+#		trigger = {
+#			can_plays_as_invader_trigger = yes
+#		}
+#		play_as_eastern_invasion_leader_effect = yes
+#	}
+#}
+#character_event = {#Invader gets their generals - why have two such events when one will do?
+#	id = invaders.3
+#	title = "EVTNAMEINVADERS3"
+#	desc = "EVTDESCINVADERS3"
+#	picture = GFX_evt_china_civil_war
+#
+#	is_triggered_only = yes
+#	trigger = {
+#		OR = {
+#			primary_title = {title = e_siberian_invaders }
+#			primary_title = {title = e_chinese_invaders }
+#		}
+#	}	
+#	immediate = {
+#		if = {
+#			limit = {
+#				has_global_flag = siberian_arrival
+#			}
+#
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = novorusskiy
+#			female = no
+#			age = 16
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = novorusskiy
+#			female = no
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = novorusskiy
+#			female = no
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = klynian
+#			female = no
+#			age = 20
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = klynian
+#			female = no
+#			age = 25
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = novorusskiy
+#			female = no
+#			age = 26
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = novorusskiy
+#			female = no
+#			age = 28
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = novorusskiy
+#			female = yes
+#			age = 16
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = klynian
+#			female = yes
+#			age = 17
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = novorusskiy
+#			female = yes
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = novorusskiy
+#			female = yes
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = klynian
+#			female = yes
+#			age = 20
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = novorusskiy
+#			female = no
+#			age = 27
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = novorusskiy
+#			female = no
+#			age = 51
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = klynian
+#			female = no
+#			age = 44
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = nousthreskeia
+#			culture = novorusskiy
+#			female = no
+#			age = 24
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		}
+#	else_if = {
+#		limit = {
+#			has_global_flag = chinese_arrival
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = no
+#			age = 16
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = no
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = no
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = no
+#			age = 20
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = no
+#			age = 25
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = no
+#			age = 26
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = no
+#			age = 28
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = yes
+#			age = 16
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = yes
+#			age = 17
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = yes
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = yes
+#			age = 18
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = yes
+#			age = 20
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = no
+#			age = 27
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = no
+#			age = 51
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = no
+#			age = 44
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#		}
+#		create_character = {
+#			random_traits = yes
+#			dynasty = none
+#			religion = maoist
+#			culture = han
+#			female = no
+#			age = 24
+#			attributes = {
+#				martial = 12
+#			}
+#			trait = brilliant_strategist
+#			}
+#		
+#	}		
+#  }
+#	option = {
+#		name = "EVTOPTA_INVADERS3"
+#	}
+#}
+#	
+#character_event = {#Invader gets their troops - why have two such events when one will do?
+#	id = invaders.4
+#	title = "EVTNAMEINVADERS4"
+#	desc = "EVTDESCINVADERS4"
+#	picture = GFX_evt_china_civil_war
+#
+#	is_triggered_only = yes
+#	trigger = {
+#		OR = {
+#			primary_title = {title = e_siberian_invaders}
+#			primary_title = {title = e_chinese_invaders}
+#		}
+#	}
+#	
+#	immediate = {
+#		if = {
+#			limit = {
+#				has_global_flag = siberian_arrival
+#			}
+#			spawn_unit = {
+#				province = 1923 # Khilok
+#				troops =
+#				{
+#					light_cavalry = { 1500 1500 }
+#					light_infantry = { 4000 4000 }
+#					heavy_infantry = { 2000 2000 }
+#					archers = { 1500 1500 }
+#					knights = { 500 500 }
+#				}
+#			}
+#			spawn_unit = {
+#				province = 1923 # Khilok
+#				troops =
+#				{
+#					light_cavalry = { 1500 1500 }
+#					light_infantry = { 4000 4000 }
+#					heavy_infantry = { 2000 2000 }
+#					archers = { 1500 1500 }
+#					knights = { 500 500 }
+#				}
+#			}
+#			spawn_unit = {
+#				province = 1924 # Chikoi
+#				troops =
+#				{
+#					light_cavalry = { 1500 1500 }
+#					light_infantry = { 4000 4000 }
+#					heavy_infantry = { 2000 2000 }
+#					archers = { 1500 1500 }
+#					knights = { 500 500 }
+#				}
+#			}
+#			spawn_unit = {
+#				province = 1924 # Chikoi
+#				troops =
+#				{
+#					light_cavalry = { 1500 1500 }
+#					light_infantry = { 4000 4000 }
+#					heavy_infantry = { 2000 2000 }
+#					archers = { 1500 1500 }
+#					knights = { 500 500 }
+#				}
+#			}
+#			spawn_unit = {
+#				province = 1925 # Tuul
+#				troops =
+#				{
+#					light_cavalry = { 1500 1500 }
+#					light_infantry = { 4000 4000 }
+#					heavy_infantry = { 2000 2000 }
+#					archers = { 1500 1500 }
+#					knights = { 500 500 }
+#				}
+#			}
+#			spawn_unit = {
+#				province = 1925 # Tuul
+#				troops =
+#				{
+#					light_cavalry = { 1500 1500 }
+#					light_infantry = { 4000 4000 }
+#					heavy_infantry = { 2000 2000 }
+#					archers = { 1500 1500 }
+#					knights = { 500 500 }
+#				}
+#			}			
+#		}
+#		else_if = {
+#			limit = {
+#				has_global_flag = chinese_arrival
+#			}
+#			spawn_unit = {
+#				province = 1513 # Jiuquan
+#				troops =
+#				{
+#					light_cavalry = { 1000 1000 }
+#					light_infantry = { 2500 2500 }
+#					heavy_infantry = { 1500 1500 }
+#					pikemen = { 1500 1500 }
+#					archers = { 3000 3000 }
+#				}
+#			}
+#			spawn_unit = {
+#				province = 1513 # Jiuquan
+#				troops =
+#				{
+#					light_cavalry = { 1000 1000 }
+#					light_infantry = { 2500 2500 }
+#					heavy_infantry = { 1500 1500 }
+#					pikemen = { 1500 1500 }
+#					archers = { 3000 3000 }
+#				}
+#			}
+#			spawn_unit = {
+#				province = 1502 # Fuqi
+#				troops =
+#				{
+#					light_cavalry = { 1000 1000 }
+#					light_infantry = { 2500 2500 }
+#					heavy_infantry = { 1500 1500 }
+#					pikemen = { 1500 1500 }
+#					archers = { 3000 3000 }
+#				}
+#			}
+#			spawn_unit = {
+#				province = 1502 # Fuqi
+#				troops =
+#				{
+#					light_cavalry = { 1000 1000 }
+#					light_infantry = { 2500 2500 }
+#					heavy_infantry = { 1500 1500 }
+#					pikemen = { 1500 1500 }
+#					archers = { 3000 3000 }
+#				}
+#			}
+#			spawn_unit = {
+#				province = 1569 # Delingha
+#				troops =
+#				{
+#					light_cavalry = { 1000 1000 }
+#					light_infantry = { 2500 2500 }
+#					heavy_infantry = { 1500 1500 }
+#					pikemen = { 1500 1500 }
+#					archers = { 3000 3000 }
+#				}
+#			}
+#			spawn_unit = {
+#				province = 1569 # Delingha
+#				troops =
+#				{
+#					light_cavalry = { 1000 1000 }
+#					light_infantry = { 2500 2500 }
+#					heavy_infantry = { 1500 1500 }
+#					pikemen = { 1500 1500 }
+#					archers = { 3000 3000 }
+#				}
+#			}			
+#		}		
+#	}
+#	option = {
+#		name = "EVTOPTA_INVADERS4"
+#	}	
+#}
+#
+#narrative_event = {#Notification that the Chinese have lost and are beginning to move west
+#	id = invaders.5
+#	title = "EVTNAMEINVADERS5"
+#	desc = "EVTDESCINVADERS5"
+#	picture = GFX_evt_china_civil_war
+#	border = "GFX_event_narrative_frame_war"
+#	major = yes
+#	
+#	only_playable = yes
+#	religion = catholic
+#	min_age = 16
+#	has_global_flag = china_will_invade
+#	portrait = event_target:eastern_invasion_leader
+#	show_root = no
+#	hide_from = yes
+#	
+#	trigger = {
+#		controls_religion = yes
+#		NOR = {
+#			has_global_flag = chinese_arrival
+#			has_global_flag = siberia_will_invade
+#		}
+#	}
+#	mean_time_to_happen = {
+#		years = 5
+#	}
+#	
+#	immediate = {
+#		if = {
+#			limit = {
+#				NOT = { has_global_flag = chinese_arrival }
+#			}
+#			set_global_flag = chinese_arrival
+#			activate_title = { title = e_chinese_invaders status = yes }
+#				
+#				create_character = {
+#					dynasty = random
+#					religion = maoist
+#					culture = han
+#					female = no
+#					age = 53
+#					health = 6.5
+#					fertility = 0.6
+#					random_traits = yes
+#					attributes = {
+#						learning = 7
+#						diplomacy = 7
+#						martial = 9
+#						stewardship = 7
+#						intrigue = 7
+#					}
+#				}
+#				#give him a random boost
+#				new_character = {
+#					
+#					wealth = 12000
+#					prestige = 10000
+#					set_character_flag = horde_invader
+#					character_event = { id = invaders.3 } # Spawn courtiers
+#					character_event = { id = invaders.4 } # Spawn troops
+#					save_global_event_target_as = eastern_invasion_leader
+#						
+#					remove_trait = slow
+#					remove_trait = imbecile
+#					remove_trait = dull
+#					remove_lifestyle_trait_effect = yes
+#					remove_trait = craven
+#					remove_trait = ugly
+#					remove_trait = uncouth
+#					remove_trait = feeble
+#					remove_trait = dwarf
+#					remove_trait = giant
+#					remove_trait = clubfooted
+#					remove_trait = harelip
+#					remove_trait = hunchback
+#					remove_trait = lisp
+#					remove_trait = weak
+#					remove_trait = lunatic
+#					remove_trait = shrewd
+#					remove_trait = quick
+#					remove_trait = genius
+#					remove_trait = strong
+#					remove_trait = cynical
+#					remove_trait = content
+#					remove_trait = fair
+#					random_list = {
+#						1 = { change_learning = 2 }
+#						1 = { change_diplomacy = 2 }
+#						1 = { change_stewardship = 2 }
+#						1 = { change_intrigue = 2 }
+#						1 = { change_martial = 2 }
+#					}
+#					random_list = {
+#						1 = { change_learning = 3 }
+#						1 = { change_diplomacy = 3 }
+#						1 = { change_stewardship = 3 }
+#						1 = { change_intrigue = 3 }
+#						1 = { change_martial = 3 }
+#					}
+#					random_list = {
+#						5 = { }
+#						15 = { add_trait = strong }
+#						30 = { add_trait = fair }
+#						3 = { add_trait = strong add_trait = fair }
+#					}
+#					random_list = {
+#						5 = { }
+#						15 = { add_trait = shrewd }
+#						30 = { add_trait = quick }
+#						3 = { add_trait = genius }
+#					}
+#					remove_education_effect = yes
+#					random_list = {
+#						10 = { add_trait = skilled_tactician }
+#						20 = { add_trait = brilliant_strategist }
+#					}
+#					random_list = {
+#						10 = { change_martial = 2 }
+#						10 = { add_trait = hunter }
+#						10 = { add_trait = duelist }
+#						20 = { add_trait = strategist }
+#					}				
+#					e_chinese_invaders = {
+#						grant_title = PREV
+#					}
+#					1569 = { # Delingha
+#						kingdom = {
+#							e_chinese_invaders = {
+#								holder_scope = {
+#									war = {
+#										casus_belli = tribal_invasion
+#										target = PREVPREVPREV # The top liege of the owner of the province
+#										thirdparty_title = PREVPREV # The de jure kingdom
+#									}
+#								}
+#							}
+#						}
+#					}					
+#					#e_chinese_invaders = {
+#						#holder_scope = {
+#							event_target:eastern_invasion_leader = {
+#							character_event = { id = invaders.3 } # Spawn courtiers
+#							character_event = { id = invaders.4 } # Spawn troops					
+#							}
+#						#}
+#					#}					
+#				}
+#
+#		}		
+#	}
+#	option = {
+#		name = "EVTOPTA_INVADERS2"
+#	}
+#	option = {
+#		name = "EVTOPTB_INVADERS2"
+#		tooltip_info = yes
+#		trigger = {
+#			can_plays_as_invader_trigger = yes
+#		}
+#		play_as_eastern_invasion_leader_effect = yes
+#	}
+#
+#}
+#
+#narrative_event = {#Notification that mass settlement is taking place
+#	id = invaders.6
+#	title = "EVTNAMEINVADERS6"
+#	desc = "EVTDESCINVADERS6"
+#	picture = GFX_evt_construction_site_wol
+#	border = "GFX_event_narrative_frame_war"
+#	major = yes
+#	
+#	trigger = {
+#		OR = {
+#			primary_title = { title = e_chinese_invaders }
+#			primary_title = { title = e_siberian_invaders }
+#		}
+#		demesne_size = 1#they need to have conquered at least one county for this to happen
+#		NOT = {
+#			has_global_flag = invader_settlement_begun
+#		}
+#	}
+#	mean_time_to_happen = {
+#		months = 1
+#	}
+#	immediate = {
+#		set_global_flag = invader_settlement_begun
+#		set_variable = { which = global_numsettlements value = 1 }	
+#	}
+#	option = {#Cool bruh
+#		name = "EVTOPTA_INVADERS6"
+#		trigger = {
+#			OR = {
+#				primary_title = { title = e_chinese_invaders }
+#				primary_title = { title = e_siberian_invaders }
+#			}
+#		}
+#		if = {
+#			limit = {
+#				primary_title = { title = e_chinese_invaders }
+#			}
+#			capital_scope = {
+#				culture = han
+#				religion = maoist
+#				any_province_holding = { 
+#					limit = { holding_type = tribal } 
+#					convert_to = CASTLE#since there can only ever be one tribe in an area this is fine
+#				}
+#				set_province_flag = eastern_settlers				
+#				build_holding = {
+#					type = city
+#					holder = ROOT
+#					}
+#				build_holding = {
+#					type = temple
+#					holder = ROOT
+#				}					
+#			}
+#		}
+#		else_if = {
+#			limit = {
+#				primary_title = { title = e_siberian_invaders }
+#			}
+#			capital_scope = {
+#				culture = novorusskiy
+#				religion = nousthreskeia
+#				set_province_flag = eastern_settlers
+#				any_province_holding = { 
+#					limit = { holding_type = tribal } 
+#					convert_to = CASTLE#since there can only ever be one tribe in an area this is fine
+#				}
+#				build_holding = {
+#					type = city
+#					holder = ROOT
+#				}
+#				build_holding = {
+#					type = temple
+#					holder = ROOT
+#				}				
+#			}
+#		}
+#		if = {#helping the Siberians to settle down as they should
+#			limit = {
+#				is_tribal = yes
+#			}
+#			set_government_type = feudal_government			
+#		}
+#		
+#	}
+#	option = {#Everyone else
+#		name = "EVTOPTB_INVADERS6"
+#		trigger = {
+#			NOR = {
+#				primary_title = { title = e_chinese_invaders }
+#				primary_title = { title = e_siberian_invaders }
+#			}
+#		}		
+#	}
+#}
+#
+#province_event = {#Private events for the invaders to settle some lands, establishing a decent base for themselves. This converts a few provinces to their culture and religion, and (if in a province with very few holdings) adds holdings. 
+#				##This should only last for a short while, enough to give them a basic beginning
+#	id = invaders.7
+#	desc = "EVTDESCINVADERS7"
+#	picture = GFX_evt_construction_site_wol
+#	
+#	only_playable = yes
+#	min_age = 16
+#	
+#	trigger = {
+#		NOR = {
+#			check_variable = { which = global_numsettlements value = 5}#This is a kinda clunky way of doing it but I think this should mean "as long as this variable is less than 5"
+#			has_province_flag = eastern_settlers
+#			num_of_settlements = 4#it's meant to buff up weak provinces, not overpower moderate provinces
+#			}
+#		has_global_flag = invader_settlement_begun
+#		OR = {#only fires for the invaders or their vassals
+#			primary_title = { title = e_chinese_invaders }
+#			primary_title = { title = e_siberian_invaders }
+#			top_liege = {
+#				primary_title = {
+#					title = e_chinese_invaders
+#				}
+#			}
+#			top_liege = {
+#				primary_title = {
+#					title = e_siberian_invaders
+#				}
+#			}			
+#		}
+#	}
+#	mean_time_to_happen = {
+#		months = 3
+#	}
+#	immediate = {
+#		#WE MIGHT NEED TO ADD A 'ROOT' TO THIS ONE, I'M NOT EXPERIENCED WITH PROVINCE EVENTS
+#		ROOT = {
+#		any_province_holding = { 
+#				limit = { holding_type = tribal } 
+#				convert_to = CASTLE#since there can only ever be one tribe in an area this is fine
+#		}
+#		}
+#		change_variable = { which = global_numsettlements value = 1 }
+#		set_province_flag = eastern_settlers
+#	}
+#	option = {
+#		name = "EVTOPTA_INVADER7"
+#		if = {
+#			limit = {
+#				has_global_flag = chinese_arrival
+#			}
+#			ROOT = {
+#			religion = maoist
+#			culture = han
+#			}
+#		}
+#		else_if = {
+#			limit = {
+#				has_global_flag = siberian_arrival
+#			}
+#			ROOT = {
+#			religion = nousthreskeia
+#			culture = novorusskiy
+#			}
+#		}
+#		if = {
+#			limit = {
+#				num_of_settlements = 0#should never be true but hey, why take the chance
+#			}
+#			build_holding = {
+#				type = castle
+#				holder = FROM
+#			}
+#			build_holding = {
+#				type = city
+#				holder = FROM
+#			}
+#			build_holding = {
+#				type = temple
+#				holder = FROM
+#			}			
+#		}
+#		else_if = {
+#			limit = {
+#				num_of_settlements = 1
+#			}
+#			build_holding = {
+#				type = city
+#				holder = FROM
+#			}
+#			build_holding = {
+#				type = temple
+#				holder = FROM
+#			}			
+#		}
+#		else_if = {
+#			limit = {
+#				num_of_settlements = 2
+#			}
+#			build_holding = {#Tribal provinces can have temples but not cities, so it's a safe bet that, if a province has 2 holdings already, they're a Tribe/Castle and a Temple
+#				type = city
+#				holder = FROM
+#			}		
+#		}		
+#	}
+#}

@@ -1,0 +1,460 @@
+namespace = eacr
+namespace = legalism
+namespace = chinesenewyear
+character_event = {#fires for the vassal under investigation, then fires the lord's version of the event
+	id = legalism.1
+	is_triggered_only = yes
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	hide_from = yes
+
+	desc = {
+		text = legalism.1.d
+
+	}
+	
+	option = {#
+		name = EVTOPTA_legalism1
+		FROMFROM = {
+			character_event = { id = legalism.2 }
+		}
+	}
+}
+character_event = {#the lord gets the event giving them imprisonment justification
+	id = legalism.2
+	is_triggered_only = yes
+	picture = GFX_evt_melee
+	border = GFX_event_normal_frame_war
+
+	hide_from = yes
+
+	desc = {
+		text = legalism.2.d
+	}
+
+	
+	option = {#
+		name = EVTOPTA_legalism2
+		opinion = {
+			who = FROM
+			modifier = opinion_trumped_up_charges
+			months = 24
+		}
+	}
+}
+character_event = {
+	id = legalism.3
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = legalism3desc
+	}
+
+	
+	option = {#
+		name = EVTOPTA_legalism3
+		add_trait = trained_imperial_law
+		remove_trait = travelling
+	}
+	option = {#
+		name = EVTOPTB_legalism3
+		add_trait = trained_republican_law
+		remove_trait = travelling
+	}
+	option = {#
+		name = EVTOPTC_legalism3
+		add_trait = trained_ccp_law
+		remove_trait = travelling
+	}
+}
+character_event = {#get flu
+	id = legalism.4
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = legalism4desc
+	}
+	option = {#
+		name = EVTOPTA_legalism4
+		trigger = {
+			wealth = 50
+		}
+		wealth = -50
+	}
+	option = {#
+		name = EVTOPTB_legalism4
+		random = {
+			chance = 60
+			character_event = { id = RIP.5020 days = 14 random = 14 }
+			set_character_flag = got_flu
+		}
+	}
+}
+character_event = {#meet scholar
+	id = legalism.5
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = legalism5desc
+	}
+	option = {#
+		name = EVTOPTA_legalism5
+		trigger = {
+			wealth = 50
+		}
+		wealth = -50
+		random_list = {
+			60 = {
+				change_learning = 1
+			}
+			25 = {
+				change_learning = 2
+			}
+			10 = {
+				change_learning = 4
+			}
+			5 = {
+				change_learning = 5
+			}
+		}
+	}
+	option = {#
+		name = EVTOPTB_legalism5
+	}
+}
+character_event = {#rare book
+	id = legalism.6
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+
+	desc = {
+		text = legalism6desc
+	}
+	option = {#
+		name = EVTOPTA_legalism6
+		piety = -200
+		random = {
+			chance = 25
+			add_trait = greedy
+		}
+		random_list = {
+			25 = {
+				add_artifact = tchinese_book_health
+			}
+			25 = {
+				add_artifact = tchinese_book_law
+			}
+			25 = {
+				add_artifact = tchinese_book_history
+			}
+			25 = {
+				add_artifact = tchinese_book_economy
+			}
+		}
+	}
+	option = {#
+		name = EVTOPTB_legalism6
+		piety = 50
+	}
+}
+#########################################
+#
+#	generic religious events
+#
+#########################################
+# Gain a bonus
+character_event = {
+	id = eacr.1
+	desc = "eacr1Desc"
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+	is_triggered_only = yes
+	religion = caodai
+
+	trigger = {
+		has_character_flag = picking_caodai_way
+		religion = caodai
+	}
+	
+	option = {#Christian and "saints" worshipper
+		name = EVTOPTA_eacr1
+		add_trait = way_saint
+	}
+	
+	option = {#Taoist
+		name = EVTOPTB_eacr1
+		add_trait = way_tao
+	}
+	
+	option = {#Confucius and Legalist
+		name = EVTOPTC_eacr1
+		add_trait = way_confucius
+	}
+	
+	option = {#Buddhist
+		name = EVTOPTD_eacr1
+		add_trait = way_buddha
+	}
+	
+	after = {
+		clr_character_flag = picking_caodai_way
+	}
+}
+
+character_event = {
+	id = eacr.2
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		if = {
+			limit = { ai = no }
+			character_event = { id = eacr.101 }
+		}
+		else = {
+			letter_event = { id = eacr.108 }
+		}
+	}
+}
+
+character_event = {
+	id = eacr.5
+	desc = "standinDesc"
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+	religion = pancasila
+	hide_window = yes
+
+	trigger = {
+		religion = pancasila
+		NOT = {
+			trait = pancasila_tolerations
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	immediate = {
+		add_trait = pancasila_tolerations
+	}
+}
+
+
+### Chunjie(Chinese New Year)
+
+# Invitation Sent
+character_event = {
+	id = chinesenewyear.1
+	desc = EVTDESC_chinesenewyear1
+	picture = GFX_evt_chinesenewyear
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes # celebrate_chinesenewyear, minor_decisions.txt
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_chinesenewyear1
+
+		custom_tooltip = {
+			text = chinesenewyear_invitations_sent
+
+			any_vassal = {
+				show_scope_change = no
+
+				limit = {
+					OR = {
+				culture = sinotai
+				culture = cina
+			}
+					is_adult = yes
+					prisoner = no
+					war = no
+					is_incapable = no
+					is_inaccessible_trigger = no
+				}
+
+				character_event = {
+					id = chinesenewyear.2
+					days = 2
+				#	tooltip = EVTTOOLTIP_SoA_501
+				}
+			}
+
+			character_event = { id = chinesenewyear.4 days = 10 }
+			character_event = { id = chinesenewyear.5 days = 12 }
+		}
+	}
+}
+
+# Invitation Received
+character_event = {
+	id = chinesenewyear.2
+	desc = EVTDESC_chinesenewyear2
+	picture = GFX_evt_chinesenewyear
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_chinesenewyear2
+
+		custom_tooltip = {
+			text = chinesenewyear_accepted
+
+			set_character_flag = attending_chinesenewyear
+			set_character_flag = do_not_disturb
+
+			character_event = { id = chinesenewyear.4 days = 8 }
+			character_event = { id = chinesenewyear.69 days = 20 } # Safety catch flag clearing
+		}
+
+		ai_chance = {
+			factor = 80
+
+			trigger = {
+				opinion = {
+					who = ROOT
+					value >= -20
+				}
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB_chinesenewyear2
+
+		FROM = {
+			show_scope_change = no
+
+			opinion = {
+				name = opinion_refused_chinesenewyear
+				who = ROOT
+			}
+
+			character_event = {
+				id = chinesenewyear.3
+				tooltip = chinesenewyear_declined
+			}
+		}
+
+		ai_chance = { factor = 20 }
+	}
+}
+
+# Invitation Refused
+character_event = {
+	id = chinesenewyear.3
+	desc = EVTDESC_chinesenewyear3
+	picture = GFX_evt_chinesenewyear
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	ai = no
+
+	option = {
+		name = I_SEE
+
+		tooltip = {
+			opinion = {
+				name = opinion_refused_chinesenewyear
+				who = FROM
+			}
+		}
+	}
+}
+
+# Chunjie Begins
+character_event = {
+	id = chinesenewyear.4
+	desc = EVTDESC_chinesenewyear4
+	picture = GFX_evt_chinesenewyear
+	border = GFX_event_normal_frame_religion
+
+	hide_from = yes
+	is_triggered_only = yes
+
+	ai = no
+
+	option = {
+		name = EVTOPTA_chinesenewyear4
+	}
+}
+
+# Chunjie Ends (Host)
+character_event = {
+	id = chinesenewyear.5
+	desc = EVTDESC_chinesenewyear5
+	picture = GFX_evt_chinesenewyear
+	border = GFX_event_normal_frame_religion
+
+	hide_from = yes
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTA_chinesenewyear5
+
+		any_vassal = {
+			show_scope_change = no
+
+			limit = { has_character_flag = attending_chinesenewyear }
+
+			opinion = {
+				name = opinion_chinesenewyear
+				who = ROOT
+			}
+
+			character_event = { id = chinesenewyear.6 }
+			clr_character_flag = attending_chinesenewyear
+			clr_character_flag = do_not_disturb
+		}
+
+		add_character_modifier = {
+			name = held_chinesenewyear_timer
+			years = 5
+			hidden = yes
+		}
+
+		prestige = 100
+		piety = 100
+		clr_character_flag = holding_chinesenewyear
+		clr_character_flag = do_not_disturb
+	}
+}
+
+# Chinese New Year Ends (Guest)
+character_event = {
+	id = chinesenewyear.6
+	desc = EVTDESC_chinesenewyear6
+	picture = GFX_evt_chinesenewyear
+	border = GFX_event_normal_frame_religion
+
+	is_triggered_only = yes
+
+	ai = no
+
+	option = {
+		name = EVTOPTA_chinesenewyear6
+	}
+}
+
+# Safety catch - clears character flags and modifiers
+character_event = {
+	id = chinesenewyear.69
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		clr_character_flag = do_not_disturb
+		clr_character_flag = holding_chinesenewyear
+		clr_character_flag = attending_chinesenewyear
+	}
+}

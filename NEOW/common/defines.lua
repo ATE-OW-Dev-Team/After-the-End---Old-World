@@ -886,7 +886,7 @@ NCharacter = {
 	NATURAL_DEATH_CHANCE_AGE_70 = 1800,				-- Natural deaths per decade out of 10000 people: Age 70-79
 	NATURAL_DEATH_CHANCE_AGE_80 = 3500,				-- Natural deaths per decade out of 10000 people: Age 80-90
 	NATURAL_DEATH_CHANCE_AGE_90 = 7000,				-- Natural deaths per decade out of 10000 people: Age 90-99
-	NATURAL_DEATH_CHANCE_AGE_100 = 9000,	
+	NATURAL_DEATH_CHANCE_AGE_100 = 9000,			-- Natural deaths per decade out of 10000 people: Age 100+
 	FERTILITY_BASE_MULT = 0.45,						-- Base fertility multiplier to adjust the base chance of impregnation
 	SECONDARY_SPOUSE_FERTILITY_MULT = 0.35,			-- Applied to fertility of secondary spouses and concubines
 	NOT_SPOUSE_FERTILITY_MULT = 0.40,				-- Applied to fertility when two lovers are not married
@@ -1560,11 +1560,11 @@ NDisease = {
 
 NGraphics = {
 	PORT_SHIP_OFFSET = 3.0,
-	CITY_SPRAWL_SHRINK_DISTANCE = 150.0, -- Start shrinking at this distance
-	CITY_SPRAWL_DRAW_DISTANCE = 200.0, -- Remove at this distance
+	CITY_SPRAWL_SHRINK_DISTANCE = 100.0, -- Start shrinking at this distance
+	CITY_SPRAWL_DRAW_DISTANCE = 150.0, -- Remove at this distance
 	CITY_SPRAWL_AMOUNT = 1, -- Size of cities, higher gives larger cities
 	CITY_SPRAWL_NUDGE_TAX_VALUE = 50, -- Debug flag
-	PROVINCE_NAME_DRAW_DISTANCE = 500.0, -- Remove province names beyond this distance
+	PROVINCE_NAME_DRAW_DISTANCE = 400.0, -- Remove province names beyond this distance
 	MILD_WINTER_VALUE = 90,
 	NORMAL_WINTER_VALUE = 145,
 	SEVERE_WINTER_VALUE = 255,
@@ -1577,15 +1577,15 @@ NGraphics = {
 },
 
 NEngine = {
-	EVENT_PROCESS_OFFSET = 90, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
+	EVENT_PROCESS_OFFSET = 110, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
 	COURTIER_EVENT_PROCESS_OFFSET = 250, 	 -- Events are checked every X day for courtiers. Max value of 255
 	COURTIERS_MTTTH_EVENTS = 1,  -- Toggles if courtiers are allowed to run MTTH events or not
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_YEAR = 1066, -- The missing scripted successor error will not be shown before this date
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_MONTH = 8,
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_DAY = 16,
 	COURT_PRUNE_SIZE = 1, 				-- Courts larger than this will be checked for pruning each month
-	PRUNE_MINIMAL_AGE = 25,				-- Minimum age for a courtier to be prunable if considered irrelevant
-	HEALTH_IMMUNITY_TO_PRUNING = 6,		-- If a character has that much health, they won't be pruned
+	PRUNE_MINIMAL_AGE = 23,				-- Minimum age for a courtier to be prunable if considered irrelevant
+	HEALTH_IMMUNITY_TO_PRUNING = 6.5,		-- If a character has that much health, they won't be pruned
 },
 
 NAI =

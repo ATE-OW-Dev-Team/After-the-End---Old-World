@@ -4278,6 +4278,7 @@ character_event = {
 
 				NOR = {
 					religion = tengri_pagan
+					religion = raven_tales
 
 					any_neighbor_independent_ruler = {
 						NAND = {
@@ -6239,24 +6240,24 @@ character_event = {
 		remove_character_modifier = patron_sangpo_bumtri
 	}
 }
-# character_event = {
-	# id = 39806
+character_event = {
+	id = 39806
 
-	# is_triggered_only = yes
-	# hide_window = yes
+	is_triggered_only = yes
+	hide_window = yes
 
-	# trigger = {
-		# NOT = {
-			# religion = taoist
-		# }
-	# }
+	trigger = {
+		NOT = {
+			religion = taoist
+		}
+	}
 
-	# immediate = {
-		# remove_character_modifier = school_quanzhen
-		# remove_character_modifier = school_shangqing
-		# remove_character_modifier = school_zhengyi
-	# }
-# }
+	immediate = {
+		remove_character_modifier = school_quanzhen
+		remove_character_modifier = school_shangqing
+		remove_character_modifier = school_zhengyi
+	}
+}
 
 
 # The birth of the Order of St Anthony (Alternate)
@@ -6382,7 +6383,182 @@ narrative_event = {
 }
 
 
-### Bema festival - removed for NEOW
+### Bema festival
+
+# Invitation Sent
+character_event = {
+	id = 39812
+	desc = EVTDESC39812
+	
+	picture = GFX_evt_religious_exultation
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA39812
+		any_vassal = {
+			limit = {
+				religion = manichean
+				age = 16
+				prisoner = no
+				war = no
+				NOT = { trait = incapable }
+			}
+			character_event = { id = 39813 days = 2 tooltip = EVTTOOLTIP_39813 }
+		}
+		custom_tooltip = { text = bema_invitations_sent }
+		hidden_tooltip = { character_event = { id = 39815 days = 10 } }
+		hidden_tooltip = { character_event = { id = 39816 days = 12 } }
+	}
+}
+
+# Invitation Received
+character_event = {
+	id = 39813
+	desc = EVTDESC39813
+	picture = GFX_evt_religious_exultation
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+
+	trigger = { NOT = { is_inaccessible_trigger = yes } }
+	
+	option = {
+		name = EVTOPTA39813
+		ai_chance = {
+			factor = 80
+			modifier = {
+				factor = 0
+				NOT = {	opinion = { who = ROOT value = -20 } }
+			}
+		}
+		custom_tooltip = { text = passover_accepted }
+		set_character_flag = attending_bema
+		set_character_flag = do_not_disturb
+		hidden_tooltip = { character_event = { id = 39815 days = 8 } }
+		hidden_tooltip = { character_event = { id = 39818 days = 20 } } # Safety catch flag clearing
+	}
+	option = {
+		name = EVTOPTB39813
+		ai_chance = {
+			factor = 20
+		}
+		FROM = {
+			opinion = {
+				modifier = opinion_refused_bema
+				who = ROOT
+			}
+		}
+		custom_tooltip = { text = passover_declined }
+		hidden_tooltip = {
+			FROM = { character_event = { id = 39814 } }
+		}
+	}
+}
+
+# Invitation Refused
+character_event = {
+	id = 39814
+	desc = EVTDESC39814
+	picture = GFX_evt_religious_exultation
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA39814
+		opinion = {
+			modifier = opinion_refused_bema
+			who = FROM
+		}
+	}
+}
+
+# Bema Begins
+character_event = {
+	id = 39815
+	desc = EVTDESC39815
+	picture = GFX_evt_religious_exultation
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA39815
+	}
+}
+
+# Bema Ends (Host)
+character_event = {
+	id = 39816
+	desc = EVTDESC39816
+	picture = GFX_evt_religious_exultation
+	border = GFX_event_normal_frame_religion
+	
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA39816
+		any_vassal = {
+			limit = { has_character_flag = attending_bema }
+			opinion = {
+				modifier = opinion_held_bema
+				who = ROOT
+			}
+		}
+		hidden_tooltip = {
+			any_vassal = {
+				limit = { has_character_flag = attending_bema }
+				character_event = { id = 39817 }
+			}
+		}
+		add_character_modifier = {
+			name = held_bema_timer
+			duration = 1825
+			hidden = yes
+		}
+		prestige = 100
+		piety = 100
+		clr_character_flag = holding_bema
+		clr_character_flag = do_not_disturb
+	}
+}
+
+# Bema Ends (Guest)
+character_event = {
+	id = 39817
+	desc = EVTDESC39817
+	picture = GFX_evt_religious_exultation
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA39816
+		clr_character_flag = attending_bema
+		clr_character_flag = do_not_disturb
+	}
+}
+
+# Safety catch - clears character flags and modifiers
+character_event = {
+	id = 39818
+
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		clr_character_flag = do_not_disturb
+		clr_character_flag = holding_bema
+		clr_character_flag = attending_bema
+	}
+}
 
 ### Zoroastrian Jashan-e Sadah
 
@@ -6424,7 +6600,10 @@ character_event = {
 	option = {
 		name = EVTOPTA39821
 		trigger = {
-			religion_group = zoroastrian_group
+			OR = {
+				religion_group = zoroastrian_group
+				not = { religion = manichean }
+			}
 		}
 		set_character_flag = attending_sadah
 		set_character_flag = do_not_disturb
@@ -6443,6 +6622,7 @@ character_event = {
 		name = EVTOPTB39821
 		trigger = {
 			NOT = { religion_group = zoroastrian_group }
+				not = { religion = manichean }
 		}
 		FROM = {
 			character_event = { id = 39822 days = 5 tooltip = DIPLOWINDOW_REJECT }

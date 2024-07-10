@@ -1,0 +1,1312 @@
+################################################
+#
+# Events for Songkhran
+#
+#
+#
+#
+# 
+#
+#################################################
+#
+# Designed by Arunn Chandrawong
+# Written by Google Translates
+
+namespace = sk
+
+# Songkhran Festival begins
+character_event = {
+	id = sk.1
+	desc = EVTDESCSK1
+	title = sk_1_title
+	picture = GFX_evt_songkhran
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = songkhran_begin
+	}
+
+	option = {
+		name = EVTOPTASK1
+
+		character_event = {
+			id = sk.2
+			days = 3
+			random = 7
+		}
+	}
+}
+
+# Random BS goes
+character_event = {
+	id = sk.2
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	only_capable = yes
+	prisoner = no
+
+	trigger = {
+		has_character_modifier = holding_songkhran
+	}
+
+	fail_trigger_effect = {
+		if = {
+			limit = { has_character_modifier = holding_songkhran }
+
+			repeat_event = {
+				id = sk.2
+				days = 7
+				random = 14
+			}
+		}
+	}
+
+	immediate = {
+		random_list = {
+			60 = { # Nothing
+				mult_modifier = {
+					factor = 1.5
+					NOT = { has_character_flag = fair_event_happened }
+				}
+				mult_modifier = {
+					factor = 0.33
+					has_character_flag = fair_event_happened
+				}
+			}
+			10 = { # Dancing Monkey
+				trigger = {
+					NOR = {
+						has_character_flag = sk_event_3
+						capital_scope = { has_province_modifier = peasants_upset }
+					}
+				}
+
+				mult_modifier = {
+					factor = 2
+					trait = greedy
+				}
+				mult_modifier = {
+					factor = 0.5
+					trait = charitable
+				}
+
+				character_event = { id = sk.3 }
+			}
+			10 = { # Archery
+				trigger = {
+					NOR = {
+						has_character_flag = sk_event_4
+						trait = paranoid
+						capital_scope = { has_province_modifier = peasants_upset }
+					}
+
+					any_vassal = {
+						block_general_event_trigger = no
+					}
+				}
+
+				mult_modifier = {
+					factor = 2.5
+					trait = gregarious
+				}
+				mult_modifier = {
+					factor = 0.75
+					trait = arbitrary
+				}
+
+				character_event = { id = sk.4 }
+			}
+			10 = { # Actors
+				trigger = {
+					NOR = {
+						has_character_flag = sk_event_5
+						capital_scope = { has_province_modifier = peasants_upset }
+					}
+				}
+
+				mult_modifier = {
+					factor = 3
+					trait = wroth
+				}
+				mult_modifier = {
+					factor = 0.8
+					trait = kind
+				}
+				mult_modifier = {
+					factor = 0.75
+					trait = gregarious
+				}
+
+				character_event = { id = sk.5 }
+			}
+			10 = { # Jakata Storyteller
+				trigger = {
+					NOR = {
+						has_character_flag = sk_event_6
+						capital_scope = { has_province_modifier = peasants_upset }
+					}
+
+					any_vassal = {
+						block_general_event_trigger = no
+
+						reverse_opinion = {
+							who = ROOT
+							value >= 10
+						}
+					}
+				}
+
+				mult_modifier = {
+					factor = 5
+					trait = cynical
+				}
+				mult_modifier = {
+					factor = 3
+					trait = wroth
+				}
+				mult_modifier = {
+					factor = 0.8
+					trait = kind
+				}
+				mult_modifier = {
+					factor = 0.75
+					trait = gregarious
+				}
+
+				character_event = { id = sk.6 }
+			}
+			 4 = { # Summer Fair
+				trigger = {
+					NOR = {
+						has_character_flag = sk_event_7
+						capital_scope = { has_province_modifier = peasants_upset }
+					}
+
+					any_vassal = {
+						is_priest = no
+						block_general_event_trigger = no
+					}
+				}
+
+				character_event = { id = sk.7 }
+			}
+			 6 = { # Fortune Teller
+				trigger = {
+					NOR = {
+						has_character_flag = sk_event_8
+						capital_scope = { has_province_modifier = peasants_upset }
+					}
+
+					learning >= 10
+
+					any_vassal = {
+						learning >= 10
+						block_general_event_trigger = no
+					}
+				}
+
+				mult_modifier = {
+					factor = 2.5
+					trait = charitable
+				}
+				mult_modifier = {
+					factor = 0.75
+					trait = gregarious
+				}
+
+				character_event = { id = sk.8 }
+			}
+			 4 = { # Drunken rambler
+				trigger = {
+					NOT = { has_character_flag = sk_event_9 }
+
+					any_vassal = {
+						is_priest = yes
+						block_general_event_trigger = no
+					}
+				}
+
+				mult_modifier = {
+					factor = 5
+					trait = honest
+				}
+				mult_modifier = {
+					factor = 0.75
+					trait = cynical
+				}
+
+				character_event = { id = sk.9 }
+			}
+			 3 = { # Biker legends
+				trigger = {
+					NOR = {
+						has_character_flag = sk_event_10
+						capital_scope = { has_province_modifier = peasants_upset }
+					}
+
+
+					any_vassal = {
+						trait = gregarious
+						block_general_event_trigger = no
+					}
+				}
+
+				mult_modifier = {
+					factor = 1.5
+					trait = shy
+				}
+				mult_modifier = {
+					factor = 0.5
+					trait = gregarious
+				}
+
+				character_event = { id = sk.10 }
+			}
+			 3 = { # Hermit and Yogi visits the fair
+				trigger = {
+					NOR = {
+						has_character_flag = sk_event_11
+						capital_scope = { has_province_modifier = peasants_upset }
+					}
+
+					any_vassal = {
+						is_priest = yes
+						block_general_event_trigger = no
+					}
+				}
+
+				character_event = { id = sk.11 }
+			}
+			 2 = { # Errant monk disturbing the fair
+				trigger = {
+					NOR = {
+						has_character_flag = sk_event_12
+						capital_scope = { has_province_modifier = peasants_upset }
+					}
+
+					any_vassal = {
+						is_priest = yes
+						block_general_event_trigger = no
+					}
+				}
+
+				character_event = { id = sk.12 }
+			}
+			 3 = { # Peddler are arrested by Marshal for selling stolen goods
+				trigger = {
+					NOR = {
+						has_character_flag = sk_event_13
+						capital_scope = { has_province_modifier = public_execution }
+					}
+
+					job_marshal = { martial >= 12 }
+				}
+
+				character_event = { id = sk.13 }
+			}
+			 2 = { # Too many Peasants enter the city
+				trigger = {
+					NOR = {
+						has_character_flag = sk_event_14
+						capital_scope = { has_province_modifier = restricted_peasant_access }
+					}
+
+					any_vassal = {
+						real_tier = BARON
+						block_general_event_trigger = no
+					}
+				}
+
+				character_event = { id = sk.14 }
+			}
+			 3 = { # Satirical Political Speech
+				trigger = {
+					NOT = { has_character_flag = sk_event_15 }
+
+					any_vassal = {
+						block_general_event_trigger = no
+
+						reverse_opinion = {
+							who = ROOT
+							value >= 20
+						}
+					}
+				}
+
+
+				character_event = { id = sk.15 }
+			}
+			 3 = { # Performing Elephants
+				trigger = {
+					NOT = { has_character_flag = sk_event_16 }
+
+					any_courtier = {
+						is_female = no
+						block_general_event_trigger = no
+					}
+				}
+
+				character_event = { id = sk.16 }
+			}
+		}
+
+		repeat_event = {
+			id = sk.2
+			days = 7
+			random = 14
+		}
+	}
+}
+
+# Dancing Monkey
+character_event = {
+	id = sk.3
+	desc = EVTDESCSK3
+	picture = GFX_evt_songkhran
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = sk_event_3
+	}
+
+	option = {
+		name = EVTOPTASK3 #Distressed at animal cruelty
+
+		trigger = {
+			NOR = {
+				trait = kind
+				trait = charitable
+				trait = honest
+			}
+		}
+
+		random = {
+			chance = 10
+			add_trait_stressed_effect = yes
+		}
+	}
+
+	option = {
+		name = EVTOPTBSK3 #Save the monkey
+
+		trigger = {
+			OR = {
+				trait = kind
+				trait = charitable
+				trait = honest
+			}
+
+			any_vassal = {
+				OR = {
+					trait = kind
+					trait = charitable
+					trait = honest
+				}
+
+				block_general_event_trigger = no
+			}
+		}
+
+		random_vassal = {
+			show_scope_change = no
+
+			limit = {
+				OR = {
+					trait = kind
+					trait = charitable
+					trait = honest
+				}
+
+				block_general_event_trigger = no
+			}
+
+			opinion = {
+				name = honest_pos
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTCSK3 #Openly endorse the beating
+
+		trigger = { trait = arbitrary }
+
+		capital_scope = {
+			show_scope_change = no
+
+			add_province_modifier = {
+				name = peasants_upset
+				years = 1
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTDSK3 #Buy the monkey
+
+		prestige = 5
+		wealth = -5
+	}
+}
+
+# Archery
+character_event = {
+	id = sk.4
+	desc = EVTDESCSK4
+	picture = GFX_evt_songkhran
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = sk_event_4
+	}
+
+	option = {
+		name = EVTOPTASK4 #Get scared
+
+		trigger = {
+			NOR = {
+				trait = trusting
+				trait = paranoid
+			}
+		}
+
+		add_trait = paranoid
+	}
+
+	option = {
+		name = EVTOPTBSK4 #Give nothing
+
+		trigger = {
+			NOT = { trait = charitable }
+		}
+
+		capital_scope = {
+			show_scope_change = no
+
+			add_province_modifier = {
+				name = peasants_upset
+				years = 1
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTCSK4 #Awards them
+
+		trigger = {
+			NOT = { trait = greedy }
+		}
+
+		random_vassal = {
+			show_scope_change = no
+
+			limit = { block_general_event_trigger = no }
+
+			opinion = {
+				name = charitable_pos
+				who = ROOT
+				years = 5
+			}
+		}
+
+		wealth = -5
+	}
+}
+
+# Entertainers
+character_event = {
+	id = sk.5
+	desc = EVTDESCSK5
+	picture = GFX_evt_songkhran_actor
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = sk_event_5
+	}
+
+	option = {
+		name = EVTOPTASK5 #Praise their play
+
+		trigger = {
+			NOR = {
+				trait = wroth
+				trait = cruel
+			}
+		}
+
+		prestige = 5
+	}
+
+	option = {
+		name = EVTOPTBSK5 #Kick them out
+
+		trigger = {
+			OR = {
+				trait = wroth
+				trait = cruel
+			}
+		}
+
+		capital_scope = {
+			show_scope_change = no
+
+			add_province_modifier = {
+				name = peasants_upset
+				years = 1
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTCSK5 #Give them coins
+		trigger = {
+			trait = charitable
+
+			NOR = {
+				trait = wroth
+				trait = cruel
+			}
+		}
+
+		wealth = -10
+		prestige = 10
+	}
+}
+
+# Jakata Storyteller
+character_event = {
+	id = sk.6
+	desc = EVTDESCSK6
+	picture = GFX_evt_songkhran
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = sk_event_6
+	}
+
+	option = {
+		name = EVTOPTASK6 #Kick them out
+
+		trigger = {
+			NOT = { trait = gregarious }
+		}
+
+		capital_scope = {
+			show_scope_change = no
+
+			add_province_modifier = {
+				name = peasants_upset
+				years = 1
+			}
+		}
+		piety = 25
+	}
+
+	option = {
+		name = EVTOPTBSK6 #Listen to their tales
+
+		piety = -10
+
+		random_vassal = {
+			show_scope_change = no
+
+			limit = {
+				block_general_event_trigger = no
+
+				reverse_opinion = {
+					who = ROOT
+					value >= 10
+				}
+			}
+
+			opinion = {
+				name = gregarious_neg
+				who = ROOT
+				years = 2
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTCSK6 #Let them in
+		
+		wealth = -10
+		piety = -25
+
+		trigger = {
+			NOR = {
+				trait = gregarious
+				trait = shy
+			}
+		}
+
+		random = {
+			chance = 25
+			add_trait_gregarious_effect = yes
+		}
+	}
+}
+
+# Summer Fair
+character_event = {
+	id = sk.7
+	desc = EVTDESCSK7
+	picture = GFX_evt_market
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = sk_event_7
+	}
+
+	option = {
+		name = EVTOPTASK7 #Let them set up shop
+
+		random_vassal = {
+			show_scope_change = no
+
+			limit = {
+				is_priest = no
+				block_general_event_trigger = no
+			}
+
+			opinion = {
+				name = opinion_angry
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTBSK7 #Kick them out of the temple
+
+		capital_scope = {
+			show_scope_change = no
+
+			add_province_modifier = {
+				name = peasants_upset
+				years = 1
+			}
+		}
+	}
+}
+
+# Fortune Teller
+character_event = {
+	id = sk.8
+	desc = EVTDESCSK8
+	picture = GFX_evt_songkhran
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = sk_event_8
+	}
+
+	option = {
+		name = EVTOPTASK8 #Random courtier like your desicion/Let them in
+
+		random_vassal = {
+			show_scope_change = no
+
+			limit = {
+				learning >= 10
+				block_general_event_trigger = no
+			}
+
+			opinion = {
+				name = opinion_approves
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTBSK8 #Your luck is good
+
+		trigger = {
+			NOT = { has_character_flag = learning_boost_fair }
+		}
+
+		change_learning = 1
+		set_character_flag = learning_boost_fair
+	}
+
+	option = {
+		name = EVTOPTCSK8 #Your marriage will be smooth sailing
+
+		trigger = { is_married = yes }
+
+		spouse = {
+			show_scope_change = no
+
+			opinion = {
+				name = opinion_delighted
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+	option = {
+		name = EVTOPTDSK8 #You will be showered with riches
+		trigger = { wealth = -500 }
+		wealth = 500
+	}
+}
+
+# Drunken Rambler
+character_event = {
+	id = sk.9
+	desc = EVTDESCSK9
+	picture = GFX_evt_songkhran
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = sk_event_9
+	}
+
+	option = {
+		name = EVTOPTASK9 #The drunk dance for you
+
+		prestige = 10
+		piety = -5
+	}
+
+	option = {
+		name = EVTOPTBSK9 #The monk caught the drunkard
+
+		random_vassal = {
+			show_scope_change = no
+
+			limit = {
+				is_priest = yes
+				block_general_event_trigger = no
+			}
+
+			opinion = {
+				name = opinion_disapprove
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTCSK9 #You kicked the drunkard from the temple
+
+		prestige = -5
+		piety = 10
+
+		random_vassal = {
+			show_scope_change = no
+
+			limit = {
+				is_priest = yes
+				block_general_event_trigger = no
+			}
+
+			opinion = {
+				name = opinion_approves
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+# Biker
+character_event = {
+	id = sk.10
+	desc = EVTDESCSK10
+	picture = GFX_evt_songkhran
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = sk_event_10
+	}
+
+	option = {
+		name = EVTOPTASK10 #Let them stays for a fee, courtier dont like this
+
+		trigger = {
+			NOT = { trait = gregarious }
+		}
+
+		wealth = 5
+
+		random_vassal = {
+			show_scope_change = no
+
+			limit = {
+				trait = gregarious
+				block_general_event_trigger = no
+			}
+
+			opinion = {
+				name = opinion_disgruntled
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTBSK10 #Hide in mansion while they harass the peasants
+
+		trigger = {
+			OR = {
+				trait = wroth
+				trait = cruel
+			}
+
+			NOT = { trait = gregarious }
+		}
+
+		capital_scope = {
+			show_scope_change = no
+
+			add_province_modifier = {
+				name = peasants_upset
+				years = 1
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTCSK10 #They just want to stays
+
+		random = {
+			chance = 25
+			add_trait_fully_gregarious_effect = yes
+		}
+
+		random_vassal = {
+			show_scope_change = no
+
+			limit = {
+				trait = gregarious
+				block_general_event_trigger = no
+			}
+
+			opinion = {
+				name = opinion_approves
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+# Yogi visits the fair
+character_event = {
+	id = sk.11
+	desc = EVTDESCSK11
+	picture = GFX_evt_songkhran
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = sk_event_11
+	}
+
+	option = {
+		name = EVTOPTASK11 # Allow them
+
+		piety = -5
+
+		random_vassal = {
+			show_scope_change = no
+
+			limit = {
+				is_priest = yes
+				block_general_event_trigger = no
+			}
+
+			opinion = {
+				name = opinion_irritated
+				who = ROOT
+				years = 5
+			}
+		}
+
+		add_trait_fully_silently_zealous_effect = yes
+
+		ai_chance = {
+			factor = 1
+
+			trigger = {
+				NOT = { trait = zealous }
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTBSK11 # Banish them
+
+		piety = 10
+
+		capital_scope = {
+			show_scope_change = no
+
+			add_province_modifier = {
+				name = peasants_upset
+				years = 1
+			}
+		}
+	}
+}
+
+# Errant monk disturbing the fair
+character_event = {
+	id = sk.12
+	desc = EVTDESCSK12
+	picture = GFX_evt_songkhran
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = sk_event_12
+	}
+
+	option = {
+		name = EVTOPTASK12 # Allow him
+
+		trigger = {
+			NOT = { trait = zealous }
+		}
+
+		piety = -5
+
+		random_vassal = {
+			show_scope_change = no
+
+			limit = {
+				is_priest = yes
+				block_general_event_trigger = no
+			}
+
+			opinion = {
+				name = opinion_irritated
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTBSK12 # Banish him
+
+		piety = 10
+
+		capital_scope = {
+			show_scope_change = no
+
+			add_province_modifier = {
+				name = peasants_upset
+				years = 1
+			}
+		}
+	}
+}
+
+# Peddler are arrested by Marshal for selling stolen goods
+character_event = {
+	id = sk.13
+	desc = EVTDESCSK13
+	picture = GFX_evt_market
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = sk_event_13
+	}
+
+	option = {
+		name = EVTOPTASK13
+
+		capital_scope = {
+			show_scope_change = no
+
+			add_province_modifier = {
+				name = public_execution
+				years = 5
+			}
+		}
+
+		random = {
+			chance = 25
+
+			add_trait_fully_cruel_effect = yes
+		}
+	}
+
+	option = {
+		name = EVTOPTBSK13
+
+		wealth = 5
+	}
+}
+
+# Too many Peasants enter the city
+character_event = {
+	id = sk.14
+	desc = EVTDESCSK14
+	picture = GFX_evt_songkhran
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = sk_event_14
+	}
+
+	option = {
+		name = EVTOPTASK14 # Tell him to accept the peasants
+
+		ai_chance = { factor = 100 }
+
+		random_vassal = {
+			show_scope_change = no
+
+			limit = {
+				real_tier = BARON
+				block_general_event_trigger = no
+			}
+
+			opinion = {
+				name = opinion_angry
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTBSK14 # Restrict peasant access
+
+		ai_chance = { factor = 5 }
+
+		capital_scope = {
+			show_scope_change = no
+
+			add_province_modifier = {
+				name = restricted_peasant_access
+				years = 2
+			}
+		}
+	}
+}
+
+# Satirical Puppet Show
+character_event = {
+	id = sk.15
+	desc = EVTDESCSK15
+	picture = GFX_evt_songkhran
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = sk_event_15
+	}
+
+	option = {
+		name = EVTOPTASK15 #Courtier hate you
+
+		trigger = {
+			NOR = {
+				trait = kind
+				trait = gregarious
+			}
+		}
+
+		random_vassal = {
+			show_scope_change = no
+
+			limit = {
+				block_general_event_trigger = no
+
+				reverse_opinion = {
+					who = ROOT
+					value >= 20
+				}
+			}
+
+			opinion = {
+				name = opinion_disgruntled
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+
+	option = {
+		name = EVTOPTBSK15 #You don't care
+
+		trigger = { trait = gregarious }
+
+		random_vassal = {
+			show_scope_change = no
+
+			limit = {
+				block_general_event_trigger = no
+
+				reverse_opinion = {
+					who = ROOT
+					value >= 20
+				}
+			}
+
+			opinion = {
+				name = gregarious_pos
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+}
+
+# Performing Elephants
+character_event = {
+	id = sk.16
+	desc = EVTDESCSK16
+	picture = GFX_evt_songkhran
+
+	is_triggered_only = yes
+
+	immediate = {
+		set_character_flag = fair_event_happened
+		set_character_flag = sk_event_16
+	}
+
+	option = {
+		name = EVTOPTASK16 #Courtier enjoy the show
+
+		trigger = {
+			NOR = {
+				trait = proud
+				trait = craven
+				trait = brave
+			}
+		}
+
+		random_courtier = {
+			show_scope_change = no
+
+			limit = {
+				is_female = no
+				block_general_event_trigger = no
+			}
+
+			opinion = {
+				name = opinion_approves
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTBSK16 #You got scared
+
+		trigger = { trait = craven }
+
+		prestige = -5
+	}
+
+	option = {
+		name = EVTOPTCSK16 #Courtier dont like the show
+
+		trigger = {
+			trait = proud
+
+			NOR = {
+				trait = craven
+				trait = brave
+			}
+		}
+
+		random_courtier = {
+			show_scope_change = no
+
+			limit = {
+				is_female = no
+				block_general_event_trigger = no
+			}
+
+			opinion = {
+				name = opinion_disappointed
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTDSK16 #You plays with elephant
+
+		trigger = { trait = brave }
+
+		prestige = 10
+	}
+}
+
+# Songkhran is over
+character_event = {
+	id = sk.17
+	desc = EVTDESCSK17
+	title = sk_17_title
+	picture = GFX_evt_market
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTASK17
+
+		remove_character_modifier = holding_songkhran
+		set_character_flag = recent_songkhran
+		clr_character_flag = do_not_disturb
+		clr_character_flag = fair_event_happened
+		clr_character_flag = songkhran_begin
+		clr_character_flag = sk_event_3
+		clr_character_flag = sk_event_4
+		clr_character_flag = sk_event_5
+		clr_character_flag = sk_event_6
+		clr_character_flag = sk_event_7
+		clr_character_flag = sk_event_8
+		clr_character_flag = sk_event_9
+		clr_character_flag = sk_event_10
+		clr_character_flag = sk_event_11
+		clr_character_flag = sk_event_12
+		clr_character_flag = sk_event_13
+		clr_character_flag = sk_event_14
+		clr_character_flag = sk_event_15
+		clr_character_flag = sk_event_16
+		prestige = 10
+	}
+}

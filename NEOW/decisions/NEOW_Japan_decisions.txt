@@ -1,0 +1,4271 @@
+decisions = {
+	destroy_shogunate = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 24
+		potential = {
+			NOT = { religion = east_brethren }
+			k_bakufu = {
+				has_holder = yes
+			}
+			NOR = {
+				has_landed_title = k_bakufu
+				has_landed_title = k_pretender_bakufu
+			}
+			trait = japanese_emperor_trait
+			OR = {
+				has_landed_title = e_tokyo
+				has_landed_title = e_japan
+			}
+			prisoner = no
+			has_regent = no
+			is_adult = yes
+			war = no
+			in_command = no
+			is_incapable = no
+		}
+
+		allow = {
+			war = no
+			prestige = 2000
+			piety = 1000
+			realm_size = 100
+		}
+
+		effect = {
+			prestige = -2000
+			piety = -1000
+			k_bakufu = {
+				holder_scope = {
+					narrative_event = { id = japan.4 }
+					any_tributary = {
+						remove_tributary = PREV
+					}
+				}
+			}
+			set_global_flag = shogunate_destroyed_emperor
+			destroy_landed_title = k_pretender_bakufu
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	claim_pretender_shogunate = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 24
+		potential = {
+			culture_group = japan_group
+			NOT = { trait = japanese_emperor_killer_trait }
+			NOT = { religion = east_brethren }
+			capital_scope = {
+				OR = {
+					region = world_south_japan
+					region = world_north_japan
+				}
+			}
+			NOT = { is_tributary = yes }
+			OR = {
+				AND = {
+					k_bakufu = {
+						has_holder = yes
+					}
+					k_pretender_bakufu= {
+						has_holder = no
+					}
+				}
+				AND = {
+					k_bakufu = {
+						has_holder = no
+					}
+					k_pretender_bakufu= {
+						has_holder = no
+					}
+				}
+			}
+			NOT = {
+				has_global_flag = imperial_japanese_restoration
+			}
+			e_japan = {
+				has_holder = no
+			}
+			NOR = {
+				has_landed_title = k_bakufu
+				has_landed_title = k_pretender_bakufu
+				has_landed_title = e_tokyo
+			}
+			prisoner = no
+			has_regent = no
+			is_adult = yes
+			war = no
+			in_command = no
+			is_incapable = no
+		}
+
+		allow = {
+			war = no
+			prestige = 2000
+			higher_real_tier_than = DUKE
+		}
+
+		effect = {
+			prestige = -2000
+			grant_title_no_opinion = k_pretender_bakufu
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	claim_shogunate = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 24
+		potential = {
+			culture_group = japan_group
+			NOT = { trait = japanese_emperor_killer_trait }
+			has_landed_title = k_pretender_bakufu
+			NOT = { religion = east_brethren }
+			capital_scope = {
+				OR = {
+					region = world_south_japan
+					region = world_north_japan
+				}
+			}
+			e_japan = {
+				has_holder = no
+			}
+			NOT = {
+				has_global_flag = imperial_japanese_restoration
+			}
+			NOT = { is_tributary = yes }
+			prisoner = no
+			has_regent = no
+			is_adult = yes
+			war = no
+			in_command = no
+			is_incapable = no
+		}
+
+		allow = {
+			war = no
+			prestige = 2500
+			k_bakufu= {
+				has_holder = no
+			}
+			has_landed_title = k_pretender_bakufu
+			higher_real_tier_than = DUKE
+		}
+
+		effect = {
+			prestige = -2500
+			grant_title_no_opinion = k_bakufu
+			destroy_landed_title = k_pretender_bakufu
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}
+targeted_decisions = {
+	submit_to_shogun = {
+		filter = self
+		ai_target_filter = self
+		ai_check_interval = 6
+	    diplomacy_icon = GFX_shogun_icon
+	
+		potential = {
+			independent = yes
+			culture_group = japan_group
+			NOR = {
+				culture = weeb
+				culture = ryukyuan
+			}
+			NOR = {
+				has_landed_title = k_bakufu
+				has_landed_title = k_pretender_bakufu
+				has_landed_title = e_tokyo
+			}
+			k_bakufu = {
+				has_holder = yes
+			}
+			k_bakufu = {
+				holder_scope = {
+					NOT = { trait = japanese_emperor_killer_trait }
+				}
+			}
+			NOT = { religion = east_brethren }
+			capital_scope = {
+				OR = {
+					region = world_south_japan
+					region = world_north_japan
+				}
+			}
+			NOR = {
+				real_tier = EMPEROR
+				real_tier = KING
+			}
+			higher_tier_than = baron
+			piety = 50
+			prestige = 50
+			war = no
+			in_command = no
+			prisoner = no
+			is_incapable = no
+			OR = {
+				NOT = { is_tributary = yes }
+				AND = {
+					is_tributary = {
+						type = shogun_kashin
+					}
+					suzerain = {
+						NOT = { has_landed_title = k_bakufu }
+					}
+					k_bakufu = {
+						has_holder = yes
+					}
+				}
+				AND = {
+					is_tributary = {
+						type = anti_shogun_kashin
+					}
+					suzerain = {
+						has_landed_title = k_bakufu
+					}
+					k_bakufu = {
+						has_holder = yes
+					}
+				}
+			}
+		}
+		allow = {
+			piety = 100
+			prestige = 100
+		}
+		effect = {
+			k_bakufu = {
+				holder_scope = {
+					make_tributary = { 
+						who = ROOT
+						tributary_type = shogun_kashin
+					}
+				}
+			}
+			wealth = 50
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = { 
+				factor = 0.5
+			}
+			modifier = { 
+				factor = 0.5
+				k_pretender_bakufu = {
+					has_holder = no
+				}
+			}
+			modifier = { 
+				factor = 1.75
+				k_bakufu = {
+					holder_scope = {
+						culture = ROOT
+					}
+				}
+			}
+			modifier = { 
+				factor = 6
+				AND = {
+					is_tributary = {
+						type = shogun_kashin
+					}
+					suzerain = {
+						NOT = { has_landed_title = k_bakufu }
+					}
+				}
+				k_bakufu = {
+					has_holder = yes
+				}
+			}
+			modifier = { 
+				factor = 15
+				AND = {
+					is_tributary = {
+						type = anti_shogun_kashin
+					}
+					suzerain = {
+						has_landed_title = k_bakufu
+					}
+					k_bakufu = {
+						has_holder = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = humble
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = content
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = dull
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = craven
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = deceitful
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = trusting
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					martial < 5
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					diplomacy < 5
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					trait = proud
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					trait = ambitious
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					trait = brave
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					trait = arbitrary
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					trait = stubborn
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					trait = paranoid
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					martial = 15
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					diplomacy = 15
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					prestige = 1500
+				}
+			}
+		}
+	}
+	submit_to_pretender_shogun = {
+		filter = self
+		ai_target_filter = self
+		ai_check_interval = 6
+	    diplomacy_icon = GFX_pretender_shogun_icon
+	
+		potential = {
+			independent = yes
+			culture_group = japan_group
+			NOR = {
+				culture = weeb
+				culture = ryukyuan
+			}
+			NOR = {
+				has_landed_title = k_bakufu
+				has_landed_title = k_pretender_bakufu
+				has_landed_title = e_tokyo
+			}
+			k_pretender_bakufu = {
+				holder_scope = {
+					NOT = { trait = japanese_emperor_killer_trait }
+				}
+			}
+			k_pretender_bakufu = {
+				has_holder = yes
+			}
+			NOT = { religion = east_brethren }
+			capital_scope = {
+				OR = {
+					region = world_south_japan
+					region = world_north_japan
+				}
+			}
+			NOR = {
+				real_tier = EMPEROR
+				real_tier = KING
+			}
+			higher_tier_than = baron
+			piety = 50
+			prestige = 50
+			war = no
+			in_command = no
+			prisoner = no
+			is_incapable = no
+			OR = {
+				NOT = { is_tributary = yes }
+				AND = {
+					is_tributary = {
+						type = anti_shogun_kashin
+					}
+					suzerain = {
+						NOT = { has_landed_title = k_pretender_bakufu }
+					}
+					k_pretender_bakufu = {
+						has_holder = yes
+					}
+				}
+			}
+		}
+		allow = {
+			piety = 100
+			prestige = 100
+		}
+		effect = {
+			k_pretender_bakufu = {
+				holder_scope = {
+					make_tributary = { 
+						who = ROOT
+						tributary_type = anti_shogun_kashin
+					}
+				}
+			}
+			wealth = 50
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = { 
+				factor = 0.25
+				k_bakufu = {
+					has_holder = no
+				}
+			}
+			modifier = { 
+				factor = 1.75
+				k_pretender_bakufu = {
+					holder_scope = {
+						culture = ROOT
+					}
+				}
+			}
+			modifier = { 
+				factor = 6
+				AND = {
+					is_tributary = {
+						type = anti_shogun_kashin
+					}
+					suzerain = {
+						NOT = { has_landed_title = k_pretender_bakufu }
+					}
+				}
+				k_pretender_bakufu = {
+					has_holder = yes
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = humble
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = content
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = dull
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = craven
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = deceitful
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = trusting
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					martial < 5
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					diplomacy < 5
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					trait = proud
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					trait = ambitious
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					trait = brave
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					trait = arbitrary
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					trait = stubborn
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					trait = paranoid
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					martial = 15
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					diplomacy = 15
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					prestige = 1500
+				}
+			}
+		}
+	}
+	return_emperor_to_shogunate = {
+		
+		ai_check_interval = 12
+		filter = independent_rulers
+		ai_target_filter = independent_rulers
+		
+	    diplomacy_icon = GFX_shogun_icon
+		
+		from_potential = { 
+			has_landed_title = k_bakufu
+			war = no
+			in_command = no
+			prisoner = no
+			is_incapable = no
+			NOT = {
+				trait = japanese_emperor_killer_trait
+			}
+			NOT = {
+				has_global_flag = imperial_japanese_restoration
+			}
+		}
+		potential = {
+			NOT = {
+				is_tributary = {
+					type = emperor_japan
+					suzerain = FROM
+				}
+			}
+			has_landed_title = e_tokyo
+			NOT = {
+				has_global_flag = imperial_japanese_restoration
+			}
+		}
+
+		allow = {
+			FROM = {
+				is_adult = yes
+				is_inaccessible_or_incapable_trigger = no
+				has_regent = no
+				war = no
+				prestige = 500
+			}
+		}
+		effect = {
+			k_bakufu = {
+				holder_scope = {
+					make_tributary = { 
+						who = ROOT
+						tributary_type = emperor_japan
+					}
+					prestige = -500
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	annex_march_mandala_count = {
+		
+		ai_check_interval = 36
+		filter = independent_rulers
+		ai_target_filter = independent_rulers
+		
+	    diplomacy_icon = GFX_mandala_icon
+		
+		from_potential = { 
+			OR = {
+				government = mandala_government
+				has_landed_title = e_utsmaniyah
+				has_landed_title = e_tang
+			}
+			war = no
+			in_command = no
+			prisoner = no
+			is_incapable = no
+			prestige = 500
+			OR = {
+				real_tier = KING
+				real_tier = EMPEROR
+			}
+		}
+		potential = {
+			real_tier = COUNT
+			is_tributary = {
+				type = march
+				suzerain = FROM
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 500
+				wealth = 50
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -500
+				wealth = -50
+			}
+			ROOT = {
+				set_defacto_liege = FROM
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	annex_march_mandala_duke = {
+		
+		ai_check_interval = 36
+		filter = independent_rulers
+		ai_target_filter = independent_rulers
+		
+	    diplomacy_icon = GFX_mandala_icon
+		
+		from_potential = { 
+			OR = {
+				government = mandala_government
+				has_landed_title = e_utsmaniyah
+				has_landed_title = e_tang
+			}
+			war = no
+			in_command = no
+			prisoner = no
+			is_incapable = no
+			prestige = 500
+			OR = {
+				real_tier = KING
+				real_tier = EMPEROR
+			}
+		}
+		potential = {
+			real_tier = DUKE
+			is_tributary = {
+				type = march
+				suzerain = FROM
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 1000
+				wealth = 150
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -1000
+				wealth = -150
+			}
+			ROOT = {
+				set_defacto_liege = FROM
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	annex_march_mandala_king = {
+		
+		ai_check_interval = 36
+		filter = independent_rulers
+		ai_target_filter = independent_rulers
+		
+	    diplomacy_icon = GFX_mandala_icon
+		
+		from_potential = { 
+			OR = {
+				government = mandala_government
+				has_landed_title = e_utsmaniyah
+				has_landed_title = e_tang
+			}
+			war = no
+			in_command = no
+			prisoner = no
+			is_incapable = no
+			prestige = 500
+			real_tier = EMPEROR
+		}
+		potential = {
+			real_tier = KING
+			is_tributary = {
+				type = march
+				suzerain = FROM
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 3000
+				wealth = 250
+			}
+		}	
+		effect = {
+			FROM = {
+				prestige = -3000
+				wealth = -250
+			}
+			ROOT = {
+				set_defacto_liege = FROM
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	subsume_kashin_shogunate = {
+		
+		ai_check_interval = 18
+		filter = independent_rulers
+		ai_target_filter = independent_rulers
+		
+	    diplomacy_icon = GFX_shogun_icon
+		
+		from_potential = { 
+			has_landed_title = k_bakufu
+			NOT = {
+				trait = japanese_emperor_killer_trait
+			}
+		}
+		potential = {
+			is_tributary = {
+				type = shogun_kashin
+				suzerain = FROM
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 750
+				piety = 250
+				wealth = 250
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -750
+				piety = -250
+				wealth = -250
+			}
+			ROOT = {
+				any_vassal = {
+					limit = {
+						OR = {
+							tier = DUKE
+							tier = COUNT
+						}
+					}
+					set_defacto_liege = FROM
+				}
+				any_title = {
+					limit = {
+						holder = ROOT
+						tier = KING
+					}
+					destroy_landed_title = THIS
+				}
+				set_defacto_liege = FROM
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	force_seppuku = {
+		
+		ai_check_interval = 24
+		filter = independent_rulers
+		ai_target_filter = independent_rulers
+		
+	    diplomacy_icon = GFX_japanese_icon
+		
+		from_potential = { 
+			OR = {
+				has_landed_title = e_tokyo
+				has_landed_title = e_japan
+			}
+			trait = japanese_emperor_trait
+			war = no
+			in_command = no
+			prisoner = no
+			is_incapable = no
+		}
+		potential = {
+			ROOT = {
+				OR = {
+					religion = shinto
+					religion = bushinto
+					religion = buddhoshinto
+					religion = ainushinto
+					religion = amidism
+					religion = jun_kokoro_ha
+				}
+				trait = japanese_bad_honour
+				NOR = {
+					trait = japanese_emperor_trait
+					trait = japanese_shogun
+					trait = japanese_pretender_shogun
+					trait = japanese_emperor_killer_trait
+				}
+				war = no
+				in_command = no
+				prisoner = no
+				is_incapable = no
+				age = 16
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 200
+				piety = 100
+				wealth = 100
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -200
+				piety = -100
+				wealth = -100
+			}
+			ROOT = {
+				character_event = { id = cleanup.9023 }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = fair
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = genius
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = quick
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = strong
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = groomed
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = shrewd
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = robust
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = sturdy
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = administrator
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = architect
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = duelist
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = gardener
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = scholar
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = strategist
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = hunter
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = theologian
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = falconer
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = poet
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = patient
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = humble
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = diligent
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = temperate
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = gregarious
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = lustful
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gluttonous
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = wroth
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = envious
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = uncouth
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = clubfooted
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = dwarf
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = harelip
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = hunchback
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = imbecile
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = inbred
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = lisp
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = slow
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = giant
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = stutter
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = cruel
+				}
+			}
+		}
+	}
+	grant_japanese_courtier = {
+		
+		ai_check_interval = 24
+		filter = independent_rulers
+		ai_target_filter = independent_rulers
+		
+	    diplomacy_icon = GFX_japanese_icon
+		
+		from_potential = { 
+			OR = {
+				has_landed_title = e_tokyo
+				has_landed_title = e_japan
+			}
+			trait = japanese_emperor_trait
+			war = no
+			in_command = no
+			prisoner = no
+			is_incapable = no
+		}
+		potential = {
+			ROOT = {
+				OR = {
+					religion = shinto
+					religion = bushinto
+					religion = buddhoshinto
+					religion = ainushinto
+					religion = amidism
+					religion = jun_kokoro_ha
+				}
+				NOR = {
+					trait = japanese_shogun
+					trait = japanese_pretender_shogun
+					trait = japanese_emperor_trait
+					trait = japanese_courtier_3
+					trait = japanese_bad_honour
+				}
+				war = no
+				in_command = no
+				prisoner = no
+				is_incapable = no
+				age = 25
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 200
+				piety = 100
+				wealth = 100
+			}
+			ROOT = {
+				OR = {
+					martial = 14
+					diplomacy = 14
+					stewardship = 14
+					intrigue = 14
+					learning = 14
+				}
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -200
+				piety = -100
+				wealth = -100
+			}
+			ROOT = {
+				if = {
+					limit = {
+						NOR = {
+							trait = japanese_courtier_1
+							trait = japanese_courtier_2
+							trait = japanese_courtier_3
+						}
+					}
+					add_trait = japanese_courtier_1
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							trait = japanese_courtier_2
+							trait = japanese_courtier_3
+						}
+						trait = japanese_courtier_1
+					}
+					remove_trait = japanese_courtier_1
+					add_trait = japanese_courtier_2
+				}
+				else_if = {
+					limit = {
+						NOR = {
+							trait = japanese_courtier_1
+							trait = japanese_courtier_3
+						}
+						trait = japanese_courtier_2
+					}
+					remove_trait = japanese_courtier_2
+					add_trait = japanese_courtier_3
+				}
+				character_event = { id = cleanup.9022 }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = fair
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = genius
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = quick
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strong
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = groomed
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = shrewd
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = robust
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = sturdy
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = administrator
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = architect
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = duelist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gardener
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = scholar
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strategist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = hunter
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = theologian
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = falconer
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = poet
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = patient
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = humble
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = diligent
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = temperate
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gregarious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lustful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = gluttonous
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = wroth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = envious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = uncouth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = clubfooted
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = dwarf
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = harelip
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = hunchback
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = imbecile
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = inbred
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lisp
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slow
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = giant
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = stutter
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = cruel
+				}
+			}
+		}
+	}
+	
+	grant_mandate_taxes = {
+		
+		ai_check_interval = 12
+		filter = independent_rulers
+		ai_target_filter = independent_rulers
+		
+	    diplomacy_icon = GFX_japanese_icon
+		
+		from_potential = { 
+			OR = {
+				has_landed_title = e_tokyo
+				has_landed_title = e_japan
+			}
+			trait = japanese_emperor_trait
+			prisoner = no
+			is_incapable = no
+		}
+		potential = {
+			ROOT = {
+				OR = {
+					religion = shinto
+					religion = bushinto
+					religion = buddhoshinto
+					religion = ainushinto
+					religion = amidism
+					religion = jun_kokoro_ha
+				}
+				NOR = {
+					has_character_modifier = mandate_taxes
+					has_character_modifier = mandate_levies
+					has_character_modifier = mandate_garrisons
+					has_character_modifier = mandate_construction
+				}
+				prisoner = no
+				is_incapable = no
+				age = 18
+				independent = yes
+				liege = { NOT = {character = FROM } }
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 150
+				wealth = 25
+			}
+			ROOT = {
+				OR = {
+					martial = 12
+					diplomacy = 12
+					stewardship = 12
+					intrigue = 12
+					learning = 12
+				}
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -150
+				wealth = -25
+			}
+			ROOT = {
+				add_character_modifier = { modifier = mandate_taxes months = 18 }
+				character_event = { id = cleanup.9021 }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = fair
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = genius
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = quick
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strong
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = groomed
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = shrewd
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = robust
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = sturdy
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = administrator
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = architect
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = duelist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gardener
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = scholar
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strategist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = hunter
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = theologian
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = falconer
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = poet
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = patient
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = humble
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = diligent
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = temperate
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gregarious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lustful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = gluttonous
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = wroth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = envious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = uncouth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = clubfooted
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = dwarf
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = harelip
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = hunchback
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = imbecile
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = inbred
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lisp
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slow
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = giant
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = stutter
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = cruel
+				}
+			}
+		}
+	}
+	
+	grant_mandate_levies = {
+		
+		ai_check_interval = 12
+		filter = independent_rulers
+		ai_target_filter = independent_rulers
+		
+	    diplomacy_icon = GFX_japanese_icon
+		
+		from_potential = { 
+			OR = {
+				has_landed_title = e_tokyo
+				has_landed_title = e_japan
+			}
+			trait = japanese_emperor_trait
+			prisoner = no
+			is_incapable = no
+		}
+		potential = {
+			ROOT = {
+				OR = {
+					religion = shinto
+					religion = bushinto
+					religion = buddhoshinto
+					religion = ainushinto
+					religion = amidism
+					religion = jun_kokoro_ha
+				}
+				NOR = {
+					has_character_modifier = mandate_taxes
+					has_character_modifier = mandate_levies
+					has_character_modifier = mandate_garrisons
+					has_character_modifier = mandate_construction
+				}
+				prisoner = no
+				is_incapable = no
+				age = 18
+				independent = yes
+				liege = { NOT = {character = FROM } }
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 150
+				wealth = 25
+			}
+			ROOT = {
+				OR = {
+					martial = 12
+					diplomacy = 12
+					stewardship = 12
+					intrigue = 12
+					learning = 12
+				}
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -250
+			}
+			ROOT = {
+				add_character_modifier = { modifier = mandate_levies months = 18 }
+				character_event = { id =  cleanup.9024 }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = fair
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = genius
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = quick
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strong
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = groomed
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = shrewd
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = robust
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = sturdy
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = administrator
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = architect
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = duelist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gardener
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = scholar
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strategist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = hunter
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = theologian
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = falconer
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = poet
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = patient
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = humble
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = diligent
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = temperate
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gregarious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lustful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = gluttonous
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = wroth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = envious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = uncouth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = clubfooted
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = dwarf
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = harelip
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = hunchback
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = imbecile
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = inbred
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lisp
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slow
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = giant
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = stutter
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = cruel
+				}
+			}
+		}
+	}
+	grant_mandate_garrisons = {
+		
+		ai_check_interval = 12
+		filter = independent_rulers
+		ai_target_filter = independent_rulers
+		
+	    diplomacy_icon = GFX_japanese_icon
+		
+		from_potential = { 
+			OR = {
+				has_landed_title = e_tokyo
+				has_landed_title = e_japan
+			}
+			trait = japanese_emperor_trait
+			prisoner = no
+			is_incapable = no
+		}
+		potential = {
+			ROOT = {
+				OR = {
+					religion = shinto
+					religion = bushinto
+					religion = buddhoshinto
+					religion = ainushinto
+					religion = amidism
+					religion = jun_kokoro_ha
+				}
+				NOR = {
+					has_character_modifier = mandate_taxes
+					has_character_modifier = mandate_levies
+					has_character_modifier = mandate_garrisons
+					has_character_modifier = mandate_construction
+				}
+				prisoner = no
+				is_incapable = no
+				age = 18
+				independent = yes
+				liege = { NOT = {character = FROM } }
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 150
+				wealth = 25
+			}
+			ROOT = {
+				OR = {
+					martial = 12
+					diplomacy = 12
+					stewardship = 12
+					intrigue = 12
+					learning = 12
+				}
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -150
+				wealth = -25
+			}
+			ROOT = {
+				add_character_modifier = { modifier = mandate_garrisons months = 18 }
+				character_event = { id =  cleanup.9025 }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = fair
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = genius
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = quick
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strong
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = groomed
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = shrewd
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = robust
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = sturdy
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = administrator
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = architect
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = duelist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gardener
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = scholar
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strategist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = hunter
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = theologian
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = falconer
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = poet
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = patient
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = humble
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = diligent
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = temperate
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gregarious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lustful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = gluttonous
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = wroth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = envious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = uncouth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = clubfooted
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = dwarf
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = harelip
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = hunchback
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = imbecile
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = inbred
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lisp
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slow
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = giant
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = stutter
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = cruel
+				}
+			}
+		}
+	}
+	
+	grant_mandate_construction = {
+		
+		ai_check_interval = 12
+		filter = independent_rulers
+		ai_target_filter = independent_rulers
+		
+	    diplomacy_icon = GFX_japanese_icon
+		
+		from_potential = { 
+			OR = {
+				has_landed_title = e_tokyo
+				has_landed_title = e_japan
+			}
+			trait = japanese_emperor_trait
+			prisoner = no
+			is_incapable = no
+		}
+		potential = {
+			ROOT = {
+				OR = {
+					religion = shinto
+					religion = bushinto
+					religion = buddhoshinto
+					religion = ainushinto
+					religion = amidism
+					religion = jun_kokoro_ha
+				}
+				NOR = {
+					has_character_modifier = mandate_taxes
+					has_character_modifier = mandate_levies
+					has_character_modifier = mandate_garrisons
+					has_character_modifier = mandate_construction
+				}
+				prisoner = no
+				is_incapable = no
+				age = 18
+				independent = yes
+				liege = { NOT = {character = FROM } }
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 150
+				wealth = 25
+			}
+			ROOT = {
+				OR = {
+					martial = 12
+					diplomacy = 12
+					stewardship = 12
+					intrigue = 12
+					learning = 12
+				}
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -150
+				wealth = -25
+			}
+			ROOT = {
+				add_character_modifier = { modifier = mandate_construction months = 18 }
+				character_event = { id =  cleanup.9026 }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = fair
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = genius
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = quick
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strong
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = groomed
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = shrewd
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = robust
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = sturdy
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = administrator
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = architect
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = duelist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gardener
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = scholar
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strategist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = hunter
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = theologian
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = falconer
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = poet
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = patient
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = humble
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = diligent
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = temperate
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gregarious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lustful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = gluttonous
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = wroth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = envious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = uncouth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = clubfooted
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = dwarf
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = harelip
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = hunchback
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = imbecile
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = inbred
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lisp
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slow
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = giant
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = stutter
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = cruel
+				}
+			}
+		}
+	}
+	
+	grant_mandate_taxes_vassal = {
+		
+		ai_check_interval = 12
+		filter = vassals
+		ai_target_filter = vassals
+		
+	    diplomacy_icon = GFX_japanese_icon
+		
+		from_potential = { 
+			OR = {
+				has_landed_title = e_tokyo
+				has_landed_title = e_japan
+			}
+			trait = japanese_emperor_trait
+			prisoner = no
+			is_incapable = no
+		}
+		potential = {
+			ROOT = {
+				OR = {
+					religion = shinto
+					religion = bushinto
+					religion = buddhoshinto
+					religion = ainushinto
+					religion = amidism
+					religion = jun_kokoro_ha
+				}
+				NOR = {
+					has_character_modifier = mandate_taxes
+					has_character_modifier = mandate_levies
+					has_character_modifier = mandate_garrisons
+					has_character_modifier = mandate_construction
+				}
+				prisoner = no
+				is_incapable = no
+				age = 18
+				independent = no
+				liege = { character = FROM }
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 150
+				wealth = 25
+			}
+			ROOT = {
+				OR = {
+					martial = 12
+					diplomacy = 12
+					stewardship = 12
+					intrigue = 12
+					learning = 12
+				}
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -150
+				wealth = -25
+			}
+			ROOT = {
+				add_character_modifier = { modifier = mandate_taxes months = 18 }
+				character_event = { id = cleanup.9021 }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = fair
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = genius
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = quick
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strong
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = groomed
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = shrewd
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = robust
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = sturdy
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = administrator
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = architect
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = duelist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gardener
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = scholar
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strategist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = hunter
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = theologian
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = falconer
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = poet
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = patient
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = humble
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = diligent
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = temperate
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gregarious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lustful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = gluttonous
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = wroth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = envious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = uncouth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = clubfooted
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = dwarf
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = harelip
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = hunchback
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = imbecile
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = inbred
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lisp
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slow
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = giant
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = stutter
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = cruel
+				}
+			}
+		}
+	}
+	
+	grant_mandate_levies_vassal = {
+		
+		ai_check_interval = 12
+		filter = vassals
+		ai_target_filter = vassals
+		
+	    diplomacy_icon = GFX_japanese_icon
+		
+		from_potential = { 
+			OR = {
+				has_landed_title = e_tokyo
+				has_landed_title = e_japan
+			}
+			trait = japanese_emperor_trait
+			prisoner = no
+			is_incapable = no
+		}
+		potential = {
+			ROOT = {
+				OR = {
+					religion = shinto
+					religion = bushinto
+					religion = buddhoshinto
+					religion = ainushinto
+					religion = amidism
+					religion = jun_kokoro_ha
+				}
+				NOR = {
+					has_character_modifier = mandate_taxes
+					has_character_modifier = mandate_levies
+					has_character_modifier = mandate_garrisons
+					has_character_modifier = mandate_construction
+				}
+				prisoner = no
+				is_incapable = no
+				age = 18
+				independent = no
+				liege = { character = FROM }
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 150
+				wealth = 25
+			}
+			ROOT = {
+				OR = {
+					martial = 12
+					diplomacy = 12
+					stewardship = 12
+					intrigue = 12
+					learning = 12
+				}
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -150
+				wealth = -25
+			}
+			ROOT = {
+				add_character_modifier = { modifier = mandate_levies months = 18 }
+				character_event = { id =  cleanup.9024 }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.5
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = fair
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = genius
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = quick
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strong
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = groomed
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = shrewd
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = robust
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = sturdy
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = administrator
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = architect
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = duelist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gardener
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = scholar
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strategist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = hunter
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = theologian
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = falconer
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = poet
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = patient
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = humble
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = diligent
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = temperate
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gregarious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lustful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = gluttonous
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = wroth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = envious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = uncouth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = clubfooted
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = dwarf
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = harelip
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = hunchback
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = imbecile
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = inbred
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lisp
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slow
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = giant
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = stutter
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = cruel
+				}
+			}
+		}
+	}
+	grant_mandate_garrisons_vassal = {
+		
+		ai_check_interval = 12
+		filter = vassals
+		ai_target_filter = vassals
+		
+	    diplomacy_icon = GFX_japanese_icon
+		
+		from_potential = { 
+			OR = {
+				has_landed_title = e_tokyo
+				has_landed_title = e_japan
+			}
+			trait = japanese_emperor_trait
+			prisoner = no
+			is_incapable = no
+		}
+		potential = {
+			ROOT = {
+				OR = {
+					religion = shinto
+					religion = bushinto
+					religion = buddhoshinto
+					religion = ainushinto
+					religion = amidism
+					religion = jun_kokoro_ha
+				}
+				NOR = {
+					has_character_modifier = mandate_taxes
+					has_character_modifier = mandate_levies
+					has_character_modifier = mandate_garrisons
+					has_character_modifier = mandate_construction
+				}
+				prisoner = no
+				is_incapable = no
+				age = 18
+				independent = no
+				liege = { character = FROM }
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 150
+				wealth = 25
+			}
+			ROOT = {
+				OR = {
+					martial = 12
+					diplomacy = 12
+					stewardship = 12
+					intrigue = 12
+					learning = 12
+				}
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -150
+				wealth = -25
+			}
+			ROOT = {
+				add_character_modifier = { modifier = mandate_garrisons months = 18 }
+				character_event = { id =  cleanup.9025 }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = fair
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = genius
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = quick
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strong
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = groomed
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = shrewd
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = robust
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = sturdy
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = administrator
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = architect
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = duelist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gardener
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = scholar
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strategist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = hunter
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = theologian
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = falconer
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = poet
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = patient
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = humble
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = diligent
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = temperate
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gregarious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lustful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = gluttonous
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = wroth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = envious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = uncouth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = clubfooted
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = dwarf
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = harelip
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = hunchback
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = imbecile
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = inbred
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lisp
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slow
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = giant
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = stutter
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = cruel
+				}
+			}
+		}
+	}
+	
+	grant_mandate_construction_vassal = {
+		
+		ai_check_interval = 12
+		filter = vassals
+		ai_target_filter = vassals
+		
+	    diplomacy_icon = GFX_japanese_icon
+		
+		from_potential = { 
+			OR = {
+				has_landed_title = e_tokyo
+				has_landed_title = e_japan
+			}
+			trait = japanese_emperor_trait
+			prisoner = no
+			is_incapable = no
+		}
+		potential = {
+			ROOT = {
+				OR = {
+					religion = shinto
+					religion = bushinto
+					religion = buddhoshinto
+					religion = ainushinto
+					religion = amidism
+					religion = jun_kokoro_ha
+				}
+				NOR = {
+					has_character_modifier = mandate_taxes
+					has_character_modifier = mandate_levies
+					has_character_modifier = mandate_garrisons
+					has_character_modifier = mandate_construction
+				}
+				prisoner = no
+				is_incapable = no
+				age = 18
+				independent = no
+				liege = { character = FROM }
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 150
+				wealth = 25
+			}
+			ROOT = {
+				OR = {
+					martial = 12
+					diplomacy = 12
+					stewardship = 12
+					intrigue = 12
+					learning = 12
+				}
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -150
+				wealth = -25
+			}
+			ROOT = {
+				add_character_modifier = { modifier = mandate_construction months = 18 }
+				character_event = { id =  cleanup.9026 }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = fair
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = genius
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = quick
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strong
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = groomed
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = shrewd
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = robust
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = sturdy
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = administrator
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = architect
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = duelist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gardener
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = scholar
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = strategist
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = hunter
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = theologian
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = falconer
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = poet
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = patient
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = humble
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = diligent
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = temperate
+				}
+			}
+			modifier = {
+				factor = 1.25
+				ROOT = {
+					trait = gregarious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lustful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = gluttonous
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = wroth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = envious
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = uncouth
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = clubfooted
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = dwarf
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = harelip
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = hunchback
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = imbecile
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = inbred
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = lisp
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = slow
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = giant
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = stutter
+				}
+			}
+			modifier = {
+				factor = 0.75
+				ROOT = {
+					trait = cruel
+				}
+			}
+		}
+	}
+	subsume_kashin_pretender_shogunate = {
+		
+		ai_check_interval = 18
+		filter = independent_rulers
+		ai_target_filter = independent_rulers
+		
+	    diplomacy_icon = GFX_pretender_shogun_icon
+		
+		from_potential = { 
+			has_landed_title = k_pretender_bakufu
+			NOT = {
+				trait = japanese_emperor_killer_trait
+			}
+		}
+		potential = {
+			is_tributary = {
+				type = anti_shogun_kashin
+				suzerain = FROM
+			}
+		}
+
+		allow = {
+			FROM = {
+				prestige = 750
+				piety = 250
+				wealth = 250
+			}
+		}
+		effect = {
+			FROM = {
+				prestige = -750
+				piety = -250
+				wealth = -250
+			}
+			ROOT = {
+				any_vassal = {
+					limit = {
+						OR = {
+							tier = DUKE
+							tier = COUNT
+						}
+					}
+					set_defacto_liege = FROM
+				}
+				any_title = {
+					limit = {
+						holder = ROOT
+						tier = KING
+					}
+					destroy_landed_title = THIS
+				}
+				set_defacto_liege = FROM
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}
+title_decisions = {
+	claim_county_for_imperial_domain = {
+		only_playable = yes
+		filter = all
+		ai_target_filter = all
+		ai_check_interval = 48
+	    diplomacy_icon = GFX_japanese_icon
+		
+		from_potential = { 
+			OR = {
+				has_landed_title = e_tokyo
+				has_landed_title = e_japan
+			}
+			trait = japanese_emperor_trait
+			war = no
+			in_command = no
+			prisoner = no
+			is_incapable = no
+			prestige = 500
+			wealth = 25
+		}
+		potential = {
+			location = {
+				OR = {
+					religion = shinto
+					religion = bushinto
+					religion = buddhoshinto
+					religion = ainushinto
+					religion = amidism
+					religion = jun_kokoro_ha
+				}
+				culture_group = japan_group
+				NOR = {
+					holding_type = nomad
+					holding_type = tribal
+				}
+			}
+			real_tier = count
+		}
+		
+		allow = {
+			FROM = {
+				prestige = 1000
+				wealth = 100
+			}
+		}
+		
+		effect = {
+			FROM = {
+				add_pressed_claim = ROOT
+				prestige = -1000
+				wealth = -100
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.5
+			}
+		}
+	}
+}
