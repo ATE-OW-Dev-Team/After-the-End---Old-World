@@ -1,0 +1,139 @@
+#######################################
+#
+# MES Schism Events
+#
+# Event ID ID LoR.200 - LoR.399 reserved
+#
+#######################################
+
+namespace = EACS
+
+### The Pentarchy
+
+### Schism Mended
+
+# Thammayut > Theravada = Thammayut becomes parent
+narrative_event = {
+	id = EACS.1
+	title = EVTNAMEEACS.1
+	desc = EVTDESCEACS.1
+	
+	picture = GFX_evt_throne_room_thai
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.200
+
+		if = {
+			limit = { religion = ROOT }
+			set_parent_religion = { religion = theravada parent = ROOT }
+		}
+
+		set_global_flag = thaislam_schism_mended
+		give_nickname = nick_the_saint
+		hidden_tooltip = {
+			any_playable_ruler = {
+				limit = {
+					religion = theravada
+					controls_religion = no
+				}
+				narrative_event = { id = EACS.11 }
+			}
+		}
+	}
+}
+
+# Convert or Not?
+narrative_event = {
+	id = EACS.11
+	title = EVTNAMEEACS.1
+	desc = EVTDESCEACS.11
+	
+	picture = GFX_evt_throne_room_thai
+	
+	is_triggered_only = yes
+	
+	option = { # Yes
+		name = EVTOPTALoR.211
+		ai_chance = { factor = 60 }
+		religion = FROM
+		any_courtier = {
+			limit = {
+				religion = theravada
+				liege = { character = ROOT }
+			}
+			religion = FROM
+		}
+		capital_scope = {
+			religion = FROM
+		}
+	}
+	option = { # No
+		name = EVTOPTBLoR.211
+		ai_chance = { factor = 40 }
+	}
+}
+
+# Theravada > Thammayut Theravada becomes parent
+narrative_event = {
+	id = EACS.2
+	title = EVTNAMEEACS.2
+	desc = EVTDESCEACS.2
+	
+	picture = GFX_evt_bishop_buddhist_group
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.200
+
+		if = {
+			limit = { religion = ROOT }
+			set_parent_religion = { religion = thaislam parent = ROOT }
+		}
+
+		set_global_flag = theravada_thaislam_schism_mended
+		give_nickname = nick_the_saint
+		hidden_tooltip = {
+			any_playable_ruler = {
+				limit = {
+					religion = thaislam
+					controls_religion = no
+				}
+				narrative_event = { id = EACS.21 }
+			}
+		}
+	}
+}
+
+# Convert or Not?
+narrative_event = {
+	id = EACS.21
+	title = EVTNAMEEACS.2
+	desc = EVTDESCEACS.21
+	
+	picture = GFX_evt_bishop_buddhist_group
+	
+	is_triggered_only = yes
+	
+	option = { # Yes
+		name = EVTOPTALoR.211
+		ai_chance = { factor = 60 }
+		religion = FROM
+		any_courtier = {
+			limit = {
+				religion = thaislam
+				liege = { character = ROOT }
+			}
+			religion = FROM
+		}
+		capital_scope = {
+			religion = FROM
+		}
+	}
+	option = { # No
+		name = EVTOPTBLoR.211
+		ai_chance = { factor = 40 }
+	}
+}

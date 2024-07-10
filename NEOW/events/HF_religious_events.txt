@@ -392,6 +392,8 @@ character_event = {
 						trait = sympathy_zoroastrianism
 						trait = sympathy_indian
 						trait = sympathy_buddhism
+						trait = sympathy_chinese
+						trait = sympathy_shinto
 					}
 				}
 			}
@@ -402,6 +404,8 @@ character_event = {
 						trait = sympathy_zoroastrianism
 						trait = sympathy_indian
 						trait = sympathy_buddhism
+						trait = sympathy_chinese
+						trait = sympathy_shinto
 					}
 				}
 			}
@@ -412,6 +416,8 @@ character_event = {
 						trait = sympathy_zoroastrianism
 						trait = sympathy_indian
 						trait = sympathy_buddhism
+						trait = sympathy_chinese
+						trait = sympathy_shinto
 					}
 				}
 			}
@@ -449,6 +455,30 @@ character_event = {
 				factor = 1.5
 				any_courtier_or_vassal = { 
 					religion_group = buddhist_group
+				}
+			}
+			modifier = { 
+				factor = 1.5
+				any_demesne_province = { 
+					religion_group = chinese_traditional_group
+				}
+			}
+			modifier = { 
+				factor = 1.5
+				any_courtier_or_vassal = { 
+					religion_group = chinese_traditional_group
+				}
+			}
+			modifier = { 
+				factor = 1.5
+				any_demesne_province = { 
+					religion_group = shintoist_group
+				}
+			}
+			modifier = { 
+				factor = 1.5
+				any_courtier_or_vassal = { 
+					religion_group = shintoist_group
 				}
 			}
 		}
@@ -1160,6 +1190,24 @@ character_event = {
 				}
 			}
 			modifier = { 
+				factor = 0 
+				liege = { 
+					trait = sympathy_old_world_cultist 
+				}
+			}
+			modifier = { 
+				factor = 0 
+				top_liege = { 
+					trait = sympathy_old_world_cultist 
+				}
+			}
+			modifier = { 
+				factor = 0.25
+				spouse = { 
+					trait = sympathy_old_world_cultist 
+				}
+			}
+			modifier = { 
 				factor = 1.5
 				any_demesne_province = { 
 					religion_group = old_world_cultist_group
@@ -1350,9 +1398,18 @@ character_event = {
 			has_religion_feature = religion_feature_lakefolk_pagan
 			has_religion_feature = religion_feature_celtic
 			has_religion_feature = religion_feature_sarna
+			has_religion_feature = religion_feature_wuist
+			has_religion_feature = religion_feature_shindo
 			religion = hellenic_pagan
 			religion = hellenic_pagan_reformed
 			religion = poseidonian
+			religion = shinto
+			religion = bushinto
+			religion = buddhoshinto
+			religion = ainushinto
+			religion = shindo
+			religion = shindo_reformed
+			religion = shinko
 		} 
 		NOR = {
 			has_character_modifier = divination_crit_success
@@ -1431,9 +1488,18 @@ character_event = {
 			has_religion_feature = religion_feature_lakefolk_pagan			
 			has_religion_feature = religion_feature_celtic		
 			has_religion_feature = religion_feature_sarna
+			has_religion_feature = religion_feature_wuist
+			has_religion_feature = religion_feature_shindo
 			religion = hellenic_pagan
 			religion = hellenic_pagan_reformed
 			religion = poseidonian
+			religion = shinto
+			religion = bushinto
+			religion = buddhoshinto
+			religion = ainushinto
+			religion = shindo
+			religion = shindo_reformed
+			religion = shinko
 		} 
 		NOR = {
 			has_character_modifier = divination_crit_success
@@ -1482,9 +1548,18 @@ character_event = {
 			has_religion_feature = religion_feature_lakefolk_pagan		
 			has_religion_feature = religion_feature_celtic	
 			has_religion_feature = religion_feature_sarna
+			has_religion_feature = religion_feature_wuist
+			has_religion_feature = religion_feature_shindo
 			religion = hellenic_pagan
 			religion = hellenic_pagan_reformed
 			religion = poseidonian
+			religion = shinto
+			religion = bushinto
+			religion = buddhoshinto
+			religion = ainushinto
+			religion = shindo
+			religion = shindo_reformed
+			religion = shinko
 		} 
 		NOR = {
 			has_character_modifier = divination_crit_success
@@ -1506,7 +1581,7 @@ character_event = {
 			set_character_flag = flag_cheap_diviner #Prevents crit success, increases crit failure.
 		}
 		if = { 
-			limit = { has_religion_feature = religion_ritual_sacrifice }
+			limit = { OR = { has_religion_feature = religion_ritual_sacrifice has_religion_feature = religion_feature_satsana_phi } }
 			random_courtier = { 
 				limit = {
 					NOR = {
@@ -1540,7 +1615,10 @@ character_event = {
 	option = { #Human - Ensure no Critical Fail - Unlocks Critical success - Only if also Bloodthirsty Gods.
 		name = EVTOPTZHF23007
 		trigger = { 
-			has_religion_feature = religion_ritual_sacrifice 
+			OR = {
+				has_religion_feature = religion_ritual_sacrifice
+				has_religion_feature = religion_feature_satsana_phi
+			}
 			event_target:potential_victim = { is_alive = yes } 
 		}
 		if = { 
@@ -1577,7 +1655,7 @@ character_event = {
 	}
 	option = { #Great bull - Ensure no Critical Fail - Unlocks Critical success
 		name = EVTOPTAHF23007
-		trigger = { NOT = { has_religion_feature = religion_ritual_sacrifice } }
+		trigger = { NOR = { has_religion_feature = religion_ritual_sacrifice has_religion_feature = religion_feature_satsana_phi } }
 		if = { 
 			limit = { ai = no }
 			scaled_wealth = { value = -0.9 min = -100 max = -200 } 
@@ -2600,6 +2678,7 @@ character_event = {
 			religion = orange_king
 			religion = nousthreskeia_reformed
 			religion = nousthreskeia
+			religion = vostokist
 			religion = druze
 			religion = alawite
 			religion = hellenic_pagan
@@ -4631,20 +4710,20 @@ character_event = {
 				apply_cosmopolian_on_start_effect = yes
 			}
 		}
-		# if = {
-			# limit = { miaphysite = { has_religion_feature = religion_cosmopolitan } }
-			# random_playable_ruler = {
-				# limit = { religion = miaphysite }
-				# apply_cosmopolian_on_start_effect = yes
-			# }
-		# }
-		# if = {
-			# limit = { nestorian = { has_religion_feature = religion_cosmopolitan } }
-			# random_playable_ruler = {
-				# limit = { religion = nestorian }
-				# apply_cosmopolian_on_start_effect = yes
-			# }
-		# }
+		if = {
+			limit = { miaphysite = { has_religion_feature = religion_cosmopolitan } }
+			random_playable_ruler = {
+				limit = { religion = miaphysite }
+				apply_cosmopolian_on_start_effect = yes
+			}
+		}
+		if = {
+			limit = { nestorian = { has_religion_feature = religion_cosmopolitan } }
+			random_playable_ruler = {
+				limit = { religion = nestorian }
+				apply_cosmopolian_on_start_effect = yes
+			}
+		}
 		if = {
 			limit = { sunni = { has_religion_feature = religion_cosmopolitan } }
 			random_playable_ruler = {
@@ -4694,13 +4773,13 @@ character_event = {
 				apply_cosmopolian_on_start_effect = yes
 			}
 		}
-		# if = {
-			# limit = { taoist = { has_religion_feature = religion_cosmopolitan } }
-			# random_playable_ruler = {
-				# limit = { religion = taoist }
-				# apply_cosmopolian_on_start_effect = yes
-			# }
-		# }
+		if = {
+			limit = { taoist = { has_religion_feature = religion_cosmopolitan } }
+			random_playable_ruler = {
+				limit = { religion = taoist }
+				apply_cosmopolian_on_start_effect = yes
+			}
+		}
 		if = {
 			limit = { zoroastrian = { has_religion_feature = religion_cosmopolitan } }
 			random_playable_ruler = {
@@ -4729,13 +4808,20 @@ character_event = {
 				apply_cosmopolian_on_start_effect = yes
 			}
 		}
-		# if = {
-			# limit = { tengri_pagan = { has_religion_feature = religion_cosmopolitan } }
-			# random_playable_ruler = {
-				# limit = { religion = tengri_pagan }
-				# apply_cosmopolian_on_start_effect = yes
-			# }
-		# }
+		if = {
+			limit = { tengri_pagan = { has_religion_feature = religion_cosmopolitan } }
+			random_playable_ruler = {
+				limit = { religion = tengri_pagan }
+				apply_cosmopolian_on_start_effect = yes
+			}
+		}
+		if = {
+			limit = { raven_tales = { has_religion_feature = religion_cosmopolitan } }
+			random_playable_ruler = {
+				limit = { religion = raven_tales }
+				apply_cosmopolian_on_start_effect = yes
+			}
+		}
 		if = {
 			limit = { finnish_pagan = { has_religion_feature = religion_cosmopolitan } }
 			random_playable_ruler = {
@@ -4764,20 +4850,20 @@ character_event = {
 				apply_dogmatic_on_start_effect = yes
 			}
 		}
-		# if = {
-			# limit = { miaphysite = { has_religion_feature = religion_dogmatic } }
-			# random_playable_ruler = {
-				# limit = { religion = miaphysite }
-				# apply_dogmatic_on_start_effect = yes
-			# }
-		# }
-		# if = {
-			# limit = { nestorian = { has_religion_feature = religion_dogmatic } }
-			# random_playable_ruler = {
-				# limit = { religion = nestorian }
-				# apply_dogmatic_on_start_effect = yes
-			# }
-		# }
+		if = {
+			limit = { miaphysite = { has_religion_feature = religion_dogmatic } }
+			random_playable_ruler = {
+				limit = { religion = miaphysite }
+				apply_dogmatic_on_start_effect = yes
+			}
+		}
+		if = {
+			limit = { nestorian = { has_religion_feature = religion_dogmatic } }
+			random_playable_ruler = {
+				limit = { religion = nestorian }
+				apply_dogmatic_on_start_effect = yes
+			}
+		}
 		if = {
 			limit = { sunni = { has_religion_feature = religion_dogmatic } }
 			random_playable_ruler = {
@@ -4806,20 +4892,20 @@ character_event = {
 				apply_dogmatic_on_start_effect = yes
 			}
 		}
-		# if = {
-			# limit = { samaritan = { has_religion_feature = religion_dogmatic } }
-			# random_playable_ruler = {
-				# limit = { religion = samaritan }
-				# apply_dogmatic_on_start_effect = yes
-			# }
-		# }
-		# if = {
-			# limit = { karaite = { has_religion_feature = religion_dogmatic } }
-			# random_playable_ruler = {
-				# limit = { religion = karaite }
-				# apply_dogmatic_on_start_effect = yes
-			# }
-		# }
+		if = {
+			limit = { samaritan = { has_religion_feature = religion_dogmatic } }
+			random_playable_ruler = {
+				limit = { religion = samaritan }
+				apply_dogmatic_on_start_effect = yes
+			}
+		}
+		if = {
+			limit = { karaite = { has_religion_feature = religion_dogmatic } }
+			random_playable_ruler = {
+				limit = { religion = karaite }
+				apply_dogmatic_on_start_effect = yes
+			}
+		}
 		if = {
 			limit = { hindu = { has_religion_feature = religion_dogmatic } }
 			random_playable_ruler = {
@@ -4841,13 +4927,13 @@ character_event = {
 				apply_dogmatic_on_start_effect = yes
 			}
 		}
-		# if = {
-			# limit = { taoist = { has_religion_feature = religion_dogmatic } }
-			# random_playable_ruler = {
-				# limit = { religion = taoist }
-				# apply_dogmatic_on_start_effect = yes
-			# }
-		# }
+		if = {
+			limit = { taoist = { has_religion_feature = religion_dogmatic } }
+			random_playable_ruler = {
+				limit = { religion = taoist }
+				apply_dogmatic_on_start_effect = yes
+			}
+		}
 		if = {
 			limit = { zoroastrian = { has_religion_feature = religion_dogmatic } }
 			random_playable_ruler = {
@@ -4891,6 +4977,13 @@ character_event = {
 			}
 		}
 		if = {
+			limit = { aztec = { has_religion_feature = religion_dogmatic } }
+			random_playable_ruler = {
+				limit = { religion = aztec }
+				apply_dogmatic_on_start_effect = yes
+			}
+		}
+		if = {
 			limit = { zun_pagan = { has_religion_feature = religion_dogmatic } }
 			random_playable_ruler = {
 				limit = { religion = zun_pagan }
@@ -4898,9 +4991,37 @@ character_event = {
 			}
 		}
 		if = {
+			limit = { slavic_pagan = { has_religion_feature = religion_dogmatic } }
+			random_playable_ruler = {
+				limit = { religion = slavic_pagan }
+				apply_dogmatic_on_start_effect = yes
+			}
+		}
+		if = {
 			limit = { baltic_pagan = { has_religion_feature = religion_dogmatic } }
 			random_playable_ruler = {
 				limit = { religion = baltic_pagan }
+				apply_dogmatic_on_start_effect = yes
+			}
+		}
+		if = {
+			limit = { west_african_pagan = { has_religion_feature = religion_dogmatic } }
+			random_playable_ruler = {
+				limit = { religion = west_african_pagan }
+				apply_dogmatic_on_start_effect = yes
+			}
+		}
+		if = {
+			limit = { tengri_pagan = { has_religion_feature = religion_dogmatic } }
+			random_playable_ruler = {
+				limit = { religion = tengri_pagan }
+				apply_dogmatic_on_start_effect = yes
+			}
+		}
+		if = {
+			limit = { raven_tales = { has_religion_feature = religion_dogmatic } }
+			random_playable_ruler = {
+				limit = { religion = raven_tales }
 				apply_dogmatic_on_start_effect = yes
 			}
 		}
@@ -4962,7 +5083,7 @@ character_event = {
 	option = {
 		name = EVTOPTAHF23207
 		trigger = { 
-			OR = { religion = stalinist religion = trotskyite religion = titoist has_religion_feature = religion_ritual_sacrifice } 
+			OR = { religion = stalinist religion = trotskyite religion = titoist religion = red_cult has_religion_feature = religion_ritual_sacrifice has_religion_feature = religion_feature_satsana_phi } 
 			FROM = { location = { NOT = { religion = ROOT } } } #Only if province is of some other religion.
 		}
 		hidden_tooltip = { FROM = { owner = { character_event = { id = HF.23208 } } } } #Notify owner
@@ -7766,11 +7887,18 @@ character_event = {
 			NOT = { trait = incapable }
 			OR = { 
 				has_religion_feature = religion_ritual_sacrifice
+				has_religion_feature = religion_feature_satsana_phi
+				religion = aztec
+				religion = aztec_reformed
+			}
+			OR = {
 				has_religion_feature = religion_feature_folklorist_2
 				religion = sanamahist
 				has_religion_feature = religion_feature_lakefolk_pagan			
 				has_religion_feature = religion_feature_celtic			
 				has_religion_feature = religion_haruspicy
+				has_religion_feature = religion_feature_wuist
+				has_religion_feature = religion_feature_shindo
 				has_religion_feature = religion_feature_sarna
 				religion = hellenic_pagan
 				religion = hellenic_pagan_reformed
@@ -7790,26 +7918,26 @@ character_event = {
 	id = HF.23411
 	title = EVTTITLEAHF23411
 	desc = EVTDESCAHF23411
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -8212,26 +8340,26 @@ character_event = {
 character_event = {
 	id = HF.23416
 	desc = EVTDESCAHF23416
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -8250,26 +8378,26 @@ character_event = {
 character_event = {
 	id = HF.23417
 	desc = EVTDESCAHF23417
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -8288,26 +8416,26 @@ character_event = {
 character_event = {
 	id = HF.23418
 	desc = EVTDESCAHF23418
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -8326,26 +8454,26 @@ character_event = {
 character_event = {
 	id = HF.23419
 	desc = EVTDESCAHF23419
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -8364,26 +8492,26 @@ character_event = {
 character_event = {
 	id = HF.23420
 	desc = EVTDESCAHF23420
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -8398,26 +8526,26 @@ character_event = {
 character_event = {
 	id = HF.23421
 	desc = EVTDESCAHF23421
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -8436,26 +8564,26 @@ character_event = {
 character_event = {
 	id = HF.23422
 	desc = EVTDESCAHF23422
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -8492,9 +8620,11 @@ character_event = {
 			NOT = { trait = incapable }
 			OR = { 
 				has_religion_feature = religion_ritual_sacrifice
+				has_religion_feature = religion_feature_satsana_phi
 				religion = stalinist
 				religion = trotskyite
 				religion = titoist
+				religion = red_cult
 			}
 		}
 	}
@@ -8562,26 +8692,26 @@ character_event = {
 character_event = {
 	id = HF.23431
 	desc = EVTDESCAHF23431
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -8592,9 +8722,11 @@ character_event = {
 		NOT = { trait = bloodthirsty_gods_1 }
 		OR = { 
 			has_religion_feature = religion_ritual_sacrifice
+			has_religion_feature = religion_feature_satsana_phi
 			religion = stalinist
 			religion = trotskyite
 			religion = titoist
+			religion = red_cult
 		}
 	}
 
@@ -8632,26 +8764,26 @@ character_event = {
 character_event = {
 	id = HF.23432
 	desc = EVTDESCAHF23432
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -8661,9 +8793,11 @@ character_event = {
 	trigger = {
 		OR = { 
 			has_religion_feature = religion_ritual_sacrifice
+			has_religion_feature = religion_feature_satsana_phi
 			religion = stalinist
 			religion = trotskyite
 			religion = titoist
+			religion = red_cult
 		}
 		NOR = { 
 			trait = bloodthirsty_gods_2 
@@ -8712,26 +8846,26 @@ character_event = {
 character_event = {
 	id = HF.23433
 	desc = EVTDESCAHF23433
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -8741,9 +8875,11 @@ character_event = {
 	trigger = {
 		OR = { 
 			has_religion_feature = religion_ritual_sacrifice
+			has_religion_feature = religion_feature_satsana_phi
 			religion = stalinist
 			religion = trotskyite
 			religion = titoist
+			religion = red_cult
 		}
 		NOT = { 
 			trait = bloodthirsty_gods_3
@@ -8788,26 +8924,26 @@ narrative_event = {
 	id = HF.23434
 	title = EVTTITLE23434
 	desc = EVTDESCAHF23434
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_narrative_frame_religion
@@ -8818,9 +8954,11 @@ narrative_event = {
 	trigger = {
 		OR = {
 			has_religion_feature = religion_ritual_sacrifice
+			has_religion_feature = religion_feature_satsana_phi
 			religion = stalinist
 			religion = trotskyite
 			religion = titoist
+			religion = red_cult
 		}
 		NOT = {
 			any_owned_bloodline = { # Not already has a Bloodthirsty bloodline.
@@ -8936,9 +9074,11 @@ narrative_event = {
 			OR = {
 				religion = FROM
 				has_religion_feature = religion_ritual_sacrifice
+				has_religion_feature = religion_feature_satsana_phi
 				religion = stalinist
 				religion = trotskyite
 				religion = titoist
+				religion = red_cult
 			}
 		}
 		text = EVTDESCAHF23435
@@ -8948,33 +9088,35 @@ narrative_event = {
 			NOR = {
 				religion = FROM
 				has_religion_feature = religion_ritual_sacrifice
+				has_religion_feature = religion_feature_satsana_phi
 				religion = stalinist
 				religion = trotskyite
 				religion = titoist
+				religion = red_cult
 			}
 		}
 		text = EVTDESCBHF23435
 	}
-	# picture = { 
-		# trigger = { 
-			# FROM = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# FROM = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			FROM = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			FROM = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_narrative_frame_religion
@@ -8987,9 +9129,11 @@ narrative_event = {
 			OR = {
 				religion = FROM
 				has_religion_feature = religion_ritual_sacrifice
+				has_religion_feature = religion_feature_satsana_phi
 				religion = stalinist
 				religion = trotskyite
 				religion = titoist
+				religion = red_cult
 			}
 		}
 	}
@@ -8999,9 +9143,11 @@ narrative_event = {
 			NOR = {
 				religion = FROM
 				has_religion_feature = religion_ritual_sacrifice
+				has_religion_feature = religion_feature_satsana_phi
 				religion = stalinist
 				religion = trotskyite
 				religion = titoist
+				religion = red_cult
 			}
 		}
 	}
@@ -10619,26 +10765,26 @@ character_event = {
 	id = HF.23456
 	title = EVTTITLEAHF23455
 	desc = EVTDESCAHF23456
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -10677,26 +10823,26 @@ character_event = {
 		} 
 		text = EVTDESCBHF23460 #Your guy lost.
 	}
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -10771,26 +10917,26 @@ character_event = {
 		} 
 		text = EVTDESCBHF23457 #Your guy lost.
 	}
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -10843,26 +10989,26 @@ character_event = {
 character_event = {
 	id = HF.23458
 	desc = EVTDESCAHF23458
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -10875,9 +11021,11 @@ character_event = {
 	trigger = {
 		NOR = {
 			has_religion_feature = religion_ritual_sacrifice
+			has_religion_feature = religion_feature_satsana_phi
 			religion = stalinist
 			religion = trotskyite
 			religion = titoist
+			religion = red_cult
 		}
 	}
 	immediate = {
@@ -10905,26 +11053,26 @@ character_event = {
 character_event = {
 	id = HF.23459
 	desc = EVTDESCAHF23459
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -10937,9 +11085,11 @@ character_event = {
 		trigger  = {  
 			OR = {
 				has_religion_feature = religion_ritual_sacrifice
+				has_religion_feature = religion_feature_satsana_phi
 				religion = stalinist
 				religion = trotskyite
 				religion = titoist
+				religion = red_cult
 			}
 		}
 		hidden_tooltip  = {  
@@ -10951,9 +11101,11 @@ character_event = {
 		trigger  = {  
 			NOR = {
 				has_religion_feature = religion_ritual_sacrifice
+				has_religion_feature = religion_feature_satsana_phi
 				religion = stalinist
 				religion = trotskyite
 				religion = titoist
+				religion = red_cult
 			}
 		}
 		hidden_tooltip  = {  
@@ -11023,26 +11175,26 @@ character_event = {
 character_event = {
 	id = HF.23462
 	desc = EVTDESCAHF23462
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -11098,7 +11250,9 @@ character_event = {
 						religion = stalinist
 						religion = trotskyite
 						religion = titoist
+						religion = red_cult
 						has_religion_feature = religion_ritual_sacrifice
+						has_religion_feature = religion_feature_satsana_phi
 					}
 				} 
 				character_event = { id = HF.23464 } 
@@ -11201,7 +11355,9 @@ character_event = {
 						religion = stalinist
 						religion = trotskyite
 						religion = titoist
+						religion = red_cult
 						has_religion_feature = religion_ritual_sacrifice
+						has_religion_feature = religion_feature_satsana_phi
 					}
 				} 
 				character_event = { id = HF.23464 } 
@@ -11259,11 +11415,20 @@ character_event = {
 					higher_tier_than = BARON 
 					NOR = { 
 						religion = ROOT  
-						NOT = { has_religion_feature = religion_peaceful }
+						AND = { 
+							religion = aztec
+							NOT = { has_religion_feature = religion_peaceful }
+						}
+						AND = { 
+							religion = aztec_reformed
+							NOT = { has_religion_feature = religion_peaceful }
+						}
 						has_religion_feature = religion_ritual_sacrifice
+						has_religion_feature = religion_feature_satsana_phi
 						religion = stalinist
 						religion = trotskyite
 						religion = titoist
+						religion = red_cult
 					}
 				} 
 				character_event = { id = HF.23464 } 
@@ -11290,26 +11455,26 @@ character_event = {
 character_event = {
 	id = HF.23463
 	desc = EVTDESCAHF23463
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -11329,26 +11494,26 @@ character_event = {
 character_event = {
 	id = HF.23464
 	desc = EVTDESCAHF23464
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -11368,26 +11533,26 @@ character_event = {
 character_event = {
 	id = HF.23465
 	desc = EVTDESCAHF23465
-	# picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# OR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
-		# picture = GFX_evt_bishop_aztec
-	# }
 	picture = { 
-		# trigger = { 
-			# ROOT = { 
-				# NOR = {  
-					# religion = aztec
-					# religion = aztec_reformed
-				# }
-			# } 
-		# } 
+		trigger = { 
+			ROOT = { 
+				OR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
+		picture = GFX_evt_bishop_aztec
+	}
+	picture = { 
+		trigger = { 
+			ROOT = { 
+				NOR = {  
+					religion = aztec
+					religion = aztec_reformed
+				}
+			} 
+		} 
 		picture = GFX_evt_pagan_blood_sacrifice
 	}
 	border = GFX_event_normal_frame_religion
@@ -11401,7 +11566,9 @@ character_event = {
 				religion = stalinist
 				religion = trotskyite
 				religion = titoist
+				religion = red_cult
 				has_religion_feature = religion_ritual_sacrifice
+				has_religion_feature = religion_feature_satsana_phi
 			}
 		}
 		if = { 
@@ -11423,7 +11590,9 @@ character_event = {
 				religion = stalinist
 				religion = trotskyite
 				religion = titoist
+				religion = red_cult
 				has_religion_feature = religion_ritual_sacrifice
+				has_religion_feature = religion_feature_satsana_phi
 			}
 		}
 	}
@@ -11437,24 +11606,24 @@ character_event = {
 character_event = {
 	id = HF.23470
 	title = EVTTITLEHF23470
-	# desc = { 
-		# trigger = { 
-			# religion = norse_pagan
-		# } 
-		# text = EVTDESCAHF23470
-	# }
-	# desc = { 
-		# trigger = { 
-			# religion = tengri_pagan
-		# } 
-		# text = EVTDESCBHF23470
-	# }
-	# desc = { 
-		# trigger = { 
-			# religion = slavic_pagan
-		# } 
-		# text = EVTDESCCHF23470
-	# }
+	desc = { 
+		trigger = { 
+			religion = norse_pagan
+		} 
+		text = EVTDESCAHF23470
+	}
+	desc = { 
+		trigger = { 
+			religion = tengri_pagan
+		} 
+		text = EVTDESCBHF23470
+	}
+	desc = { 
+		trigger = { 
+			religion = slavic_pagan
+		} 
+		text = EVTDESCCHF23470
+	}
 	desc = { 
 		trigger = { 
 			religion = baltic_pagan
@@ -11467,18 +11636,18 @@ character_event = {
 		} 
 		text = EVTDESCEHF23470
 	}
-	# desc = { 
-		# trigger = { 
-			# religion = west_african_pagan
-		# } 
-		# text = EVTDESCFHF23470
-	# }
-	# desc = { 
-		# trigger = { 
-			# religion = aztec
-		# } 
-		# text = EVTDESCGHF23470
-	# }
+	desc = { 
+		trigger = { 
+			religion = west_african_pagan
+		} 
+		text = EVTDESCFHF23470
+	}
+	desc = { 
+		trigger = { 
+			religion = aztec
+		} 
+		text = EVTDESCGHF23470
+	}
 	desc = { 
 		trigger = { 
 			religion = bon
@@ -14373,18 +14542,22 @@ character_event = {
 character_event = {
 	id = HF.23773
 	desc = EVTDESCAHF23773
-	# picture = { 
-		# trigger = { 
-			# OR = { 
-				# religion = west_african_pagan
-				# religion = west_african_pagan_reformed
-			# } 
-		# } 
-		# picture = GFX_evt_west_african_ruler
-	# }
+	picture = { 
+		trigger = { 
+			OR = { 
+				religion = west_african_pagan
+				religion = west_african_pagan_reformed
+			} 
+		} 
+		picture = GFX_evt_west_african_ruler
+	}
 	picture = { 
 		trigger = { 
 			has_dlc = "Mystics"
+			NOR = { 
+				religion = west_african_pagan
+				religion = west_african_pagan_reformed
+			}
 			OR = { 
 				has_religion_feature = religion_animistic
 				religion = kiratist
@@ -14393,6 +14566,7 @@ character_event = {
 				has_religion_feature = religion_feature_inuit_pagan
 				has_religion_feature = religion_feature_celtic
 				has_religion_feature = religion_feature_sarna
+				has_religion_feature = religion_feature_neoncult
 			}
 		} 
 		picture = GFX_evt_magic_ritual
@@ -14408,6 +14582,7 @@ character_event = {
 				has_religion_feature = religion_feature_inuit_pagan
 				has_religion_feature = religion_feature_celtic
 				has_religion_feature = religion_feature_sarna
+				has_religion_feature = religion_feature_neoncult
 			}
 		} 
 		picture = GFX_evt_tribal_shrine
@@ -14423,13 +14598,16 @@ character_event = {
 			dynasty = none
 		}
 		OR = {
+			religion = west_african_pagan
+			religion = west_african_pagan_reformed
 			has_religion_feature = religion_animistic 
 			religion = kiratist
-			religion = koyapunem
+				religion = koyapunem
 			has_religion_feature = religion_feature_maunaxite
 			has_religion_feature = religion_feature_inuit_pagan
 			has_religion_feature = religion_feature_celtic
 			has_religion_feature = religion_feature_sarna
+			has_religion_feature = religion_feature_neoncult
 		}
 	}
 	
@@ -14576,18 +14754,22 @@ character_event = {
 		text = EVTDESCCHF23774
 	}
 
-	# picture = { 
-		# trigger = { 
-			# OR = { 
-				# religion = west_african_pagan
-				# religion = west_african_pagan_reformed
-			# } 
-		# } 
-		# picture = GFX_evt_west_african_ruler
-	# }
+	picture = { 
+		trigger = { 
+			OR = { 
+				religion = west_african_pagan
+				religion = west_african_pagan_reformed
+			} 
+		} 
+		picture = GFX_evt_west_african_ruler
+	}
 	picture = { 
 		trigger = { 
 			has_dlc = "Mystics"
+			NOR = { 
+				religion = west_african_pagan
+				religion = west_african_pagan_reformed
+			} 
 			OR = { 
 				has_religion_feature = religion_animistic
 				religion = kiratist
@@ -14596,6 +14778,7 @@ character_event = {
 				has_religion_feature = religion_feature_inuit_pagan
 				has_religion_feature = religion_feature_celtic
 				has_religion_feature = religion_feature_sarna
+				has_religion_feature = religion_feature_neoncult
 			}
 		} 
 		picture = GFX_evt_magic_ritual
@@ -14611,6 +14794,7 @@ character_event = {
 				has_religion_feature = religion_feature_inuit_pagan
 				has_religion_feature = religion_feature_celtic
 				has_religion_feature = religion_feature_sarna
+				has_religion_feature = religion_feature_neoncult
 			}
 		} 
 		picture = GFX_evt_tribal_shrine
@@ -14665,6 +14849,12 @@ character_event = {
 		hidden_tooltip = { #Tattoos
 			random_list = { 
 				10 = { 
+					trigger = { 
+						NOR = {
+							religion = west_african_pagan
+							religion = west_african_pagan_reformed
+						}
+					}
 					add_trait = slavic_tattoo_6
 				}
 				25 = { 
@@ -14744,6 +14934,12 @@ character_event = {
 		hidden_tooltip = { #Tattoos
 			random_list = { 
 				10 = { 
+					trigger = { 
+						NOR = {
+							religion = west_african_pagan
+							religion = west_african_pagan_reformed
+						}
+					}
 					add_trait = norse_tattoo_6
 				}
 				25 = { 
@@ -14823,6 +15019,12 @@ character_event = {
 		hidden_tooltip = { #Tattoos
 			random_list = { 
 				10 = { 
+					trigger = { 
+						NOR = {
+							religion = west_african_pagan
+							religion = west_african_pagan_reformed
+						}
+					}
 					add_trait = norse_tattoo_3
 				}
 				25 = { 
@@ -14902,6 +15104,12 @@ character_event = {
 		hidden_tooltip = { #Tattoos
 			random_list = { 
 				10 = { 
+					trigger = { 
+						NOR = {
+							religion = west_african_pagan
+							religion = west_african_pagan_reformed
+						}
+					}
 					add_trait = norse_tattoo_4
 				}
 				25 = { 
@@ -14958,13 +15166,16 @@ character_event = {
 			dynasty = none
 		}
 		OR = {
+			religion = west_african_pagan
+			religion = west_african_pagan_reformed
 			has_religion_feature = religion_animistic 
 			religion = kiratist
-			religion = koyapunem
+				religion = koyapunem
 			has_religion_feature = religion_feature_maunaxite
 			has_religion_feature = religion_feature_inuit_pagan
 			has_religion_feature = religion_feature_celtic
 			has_religion_feature = religion_feature_sarna
+			has_religion_feature = religion_feature_neoncult
 		}
 	}
 	
@@ -14988,13 +15199,16 @@ character_event = {
 		ai = yes
 		is_save_game = no
 		OR = { 
+			religion = west_african_pagan
+			religion = west_african_pagan_reformed
 			has_religion_feature = religion_animistic
 			religion = kiratist
-			religion = koyapunem
+				religion = koyapunem
 			has_religion_feature = religion_feature_maunaxite
 			has_religion_feature = religion_feature_inuit_pagan
 			has_religion_feature = religion_feature_celtic
 			has_religion_feature = religion_feature_sarna
+			has_religion_feature = religion_feature_neoncult
 		}
 	}
 	immediate = { 

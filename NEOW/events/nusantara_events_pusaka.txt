@@ -1,0 +1,459 @@
+namespace = pusaka
+
+character_event = {
+	id = pusaka.1
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+	title = EVTNAME_pusaka_1
+	desc = EVTDESC_pusaka_1
+
+	hide_from = yes
+
+	immediate = {
+		set_character_flag = pusaka_choice #Heirlooms are to be taken seriously
+	}
+	
+	option = {#Warrior saka contract
+		name = EVTOPTA_pusaka1
+		hidden_tooltip = { character_event = { id = pusaka.2 } }
+		ai_chance = {
+			factor = 10
+            modifier = { factor = 5 trait = misguided_warrior }
+            modifier = { factor = 4 trait = tough_soldier }
+            modifier = { factor = 2 trait = skilled_tactician }
+            modifier = { factor = 2 trait = brilliant_strategist }
+            modifier = { factor = 4 trait = duelist }
+            modifier = { factor = 4 trait = hunter }
+            modifier = { factor = 4 trait = strategist }
+            modifier = { factor = 1 trait = diligent }
+            modifier = { factor = 1 trait = wroth }
+			modifier = { factor = 1 trait = brave }
+		}
+	}
+	
+	option = {#Benevolent saka contract
+		name = EVTOPTB_pusaka1
+		hidden_tooltip = { character_event = { id = pusaka.3 } }
+		ai_chance = {
+			factor = 10
+            modifier = { factor = 5 trait = naive_appeaser  }
+            modifier = { factor = 4 trait = underhanded_rogue }
+            modifier = { factor = 2 trait = charismatic_negotiator }
+            modifier = { factor = 2 trait = grey_eminence }
+            modifier = { factor = 4 trait = socializer }
+            modifier = { factor = 4 trait = hedonist }
+            modifier = { factor = 4 trait = poet }
+            modifier = { factor = 1 trait = kind }
+            modifier = { factor = 1 trait = charitable }
+			modifier = { factor = 1 trait = honest }
+		}
+	}
+	
+	option = {#Wealth saka contract
+		name = EVTOPTC_pusaka1
+		hidden_tooltip = { character_event = { id = pusaka.4 } }
+		ai_chance = {
+			factor = 10
+            modifier = { factor = 5 trait = indulgent_wastrel  }
+            modifier = { factor = 4 trait = thrifty_clerk }
+            modifier = { factor = 2 trait = fortune_builder }
+            modifier = { factor = 2 trait = midas_touched }
+            modifier = { factor = 4 trait = greedy }
+			modifier = { factor = 4 trait = architect }
+            modifier = { factor = 4 trait = administrator }
+            modifier = { factor = 4 trait = gardener }
+            modifier = { factor = 1 trait = just }
+            modifier = { factor = 2 trait = diligent }
+			modifier = { factor = 1 trait = fisher }
+		}
+	}
+
+	option = {#Nah, I'd win
+		name = EVTOPTD_pusaka1
+		ai_chance = { factor = 1 }
+	}
+	
+	after = {
+		clr_character_flag = pusaka_choice
+	}
+}
+
+character_event = {
+	id = pusaka.2
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+	title = EVTNAME_pusaka_2
+	desc = EVTDESC_pusaka_2
+
+	hide_from = yes
+
+	immediate = {
+		set_character_flag = pusaka_choice #Heirlooms are to be taken seriously
+	}
+	
+    option = { #Minor warrior saka bind
+        name = EVTOPTA_pusaka2
+        trigger = { 
+		wealth = 100
+		piety = 100
+        }
+        scaled_wealth = { value = -1.25 min = -50 max = -250 }
+		scaled_piety = { value = -1.25 min = -50 max = -150 }
+		add_artifact = martial_pusaka_minor
+		ai_chance = {
+    		factor = 33
+    		modifier = {
+    			tier = COUNT
+    			factor = 10
+    		}
+    		modifier = {
+    			OR = {
+    				tier = KING	
+    				tier = DUKE
+    			}
+    			factor = 3
+    		}
+    		modifier = {
+    			NAND = {
+    				wealth = 75
+    				yearly_income = 7.5
+    				religion_group = pagan_group
+    			}
+    			factor = 0
+    		}
+    	}
+    }
+
+	option = {#Average warrior saka bind
+		name = EVTOPTB_pusaka2
+		trigger = { 
+		wealth = 250
+		piety = 250
+        }
+		add_artifact = martial_pusaka_average
+		scaled_wealth = { value = -2.5 min = -100 max = -500 }
+		scaled_piety = { value = -2.5 min = -100 max = -300 }
+		ai_chance = {
+    		factor = 33
+    		modifier = {
+    			OR = {
+    				tier = KING	
+    				tier = DUKE
+    			}
+    			factor = 10
+    		}
+    		modifier = {
+    			lower_tier_than = DUKE
+    			factor = 3
+    		}
+    		modifier = {
+    			tier = EMPEROR
+    			factor = 3
+    		}
+    		modifier = {
+    			NAND = {
+    				wealth = 180
+    				yearly_income = 18
+    			}
+    			factor = 0
+    		}
+    	}
+	}
+	
+	option = {#Great warrior saka bind (great sacrifice)
+		name = EVTOPTC_pusaka2
+		trigger = { 
+		wealth = 500
+		piety = 500
+        }
+		add_artifact = martial_pusaka_great
+		scaled_wealth = { value = -3.25 min = -400 max = -1000 }
+		scaled_piety = { value = -3.25 min = -400 max = -750 }
+		ai_chance = {
+    		factor = 33
+    		modifier = {
+    			tier = EMPEROR
+    			factor = 10
+    		}
+    		modifier = {
+    			OR = {
+    				tier = KING	
+    				tier = DUKE
+    			}
+    			factor = 3
+    		}
+    		modifier = {
+    			NAND = {
+    				wealth = 400
+    				yearly_income = 40
+    			}
+    			factor = 0
+    		}
+    	}
+	}
+	
+	option = {#Are you the weakest because you can't use heirlooms, or you can't use heirlooms because you are the weakest?
+		name = EVTOPTD_pusaka1
+		hidden_tooltip = { character_event = { id = pusaka.1 } }
+		ai_chance = { factor = 1 }
+	}
+	
+	after = {
+		clr_character_flag = pusaka_choice
+	}
+}
+
+character_event = {
+	id = pusaka.3
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+	title = EVTNAME_pusaka_3
+	desc = EVTDESC_pusaka_3
+
+	hide_from = yes
+
+	immediate = {
+		set_character_flag = pusaka_choice #Heirlooms are to be taken seriously
+	}
+	
+	option = { #Minor benevolent saka bind
+        name = EVTOPTA_pusaka3
+        trigger = { 
+		wealth = 100
+		piety = 100
+        }
+        scaled_wealth = { value = -1.25 min = -50 max = -250 }
+		scaled_piety = { value = -1.25 min = -50 max = -150 }
+		add_artifact = diplomacy_pusaka_minor
+		ai_chance = {
+    		factor = 33
+    		modifier = {
+    			tier = COUNT
+    			factor = 10
+    		}
+    		modifier = {
+    			OR = {
+    				tier = KING	
+    				tier = DUKE
+    			}
+    			factor = 3
+    		}
+    		modifier = {
+    			NAND = {
+    				wealth = 75
+    				yearly_income = 7.5
+    				religion_group = pagan_group
+    			}
+    			factor = 0
+    		}
+    	}
+    }
+
+	option = {#Average benevolent saka bind
+		name = EVTOPTB_pusaka3
+		trigger = { 
+		wealth = 250
+		piety = 250
+        }
+		add_artifact = diplomacy_pusaka_average
+		scaled_wealth = { value = -2.5 min = -100 max = -500 }
+		scaled_piety = { value = -2.5 min = -100 max = -300 }
+		ai_chance = {
+    		factor = 33
+    		modifier = {
+    			OR = {
+    				tier = KING	
+    				tier = DUKE
+    			}
+    			factor = 10
+    		}
+    		modifier = {
+    			lower_tier_than = DUKE
+    			factor = 3
+    		}
+    		modifier = {
+    			tier = EMPEROR
+    			factor = 3
+    		}
+    		modifier = {
+    			NAND = {
+    				wealth = 180
+    				yearly_income = 18
+    			}
+    			factor = 0
+    		}
+    	}
+	}
+	
+	option = {#Great benevolent saka bind (great sacrifice)
+		name = EVTOPTC_pusaka3
+		trigger = { 
+		wealth = 500
+		piety = 500
+        }
+		add_artifact = diplomacy_pusaka_great
+		scaled_wealth = { value = -3.25 min = -400 max = -1000 }
+		scaled_piety = { value = -3.25 min = -400 max = -750 }
+		ai_chance = {
+    		factor = 33
+    		modifier = {
+    			tier = EMPEROR
+    			factor = 10
+    		}
+    		modifier = {
+    			OR = {
+    				tier = KING	
+    				tier = DUKE
+    			}
+    			factor = 3
+    		}
+    		modifier = {
+    			NAND = {
+    				wealth = 400
+    				yearly_income = 40
+    			}
+    			factor = 0
+    		}
+    	}
+	}
+
+	option = {#Throughout Heaven and Earth, I Alone Am The Dishonored One
+		name = EVTOPTD_pusaka1
+		hidden_tooltip = { character_event = { id = pusaka.1 } }
+		ai_chance = { factor = 1 }
+	}
+	
+	after = {
+		clr_character_flag = pusaka_choice
+	}
+}
+
+character_event = {
+	id = pusaka.4
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+	title = EVTNAME_pusaka_4
+	desc = EVTDESC_pusaka_4
+
+	hide_from = yes
+
+	immediate = {
+		set_character_flag = pusaka_choice #Heirlooms are to be taken seriously
+	}
+	
+	option = { #Minor wealth saka bind
+        name = EVTOPTA_pusaka4
+        trigger = { 
+		wealth = 100
+		piety = 100
+        }
+        scaled_wealth = { value = -1.25 min = -50 max = -250 }
+		scaled_piety = { value = -1.25 min = -50 max = -150 }
+		add_artifact = stewardship_pusaka_minor
+		ai_chance = {
+    		factor = 33
+    		modifier = {
+    			tier = COUNT
+    			factor = 10
+    		}
+    		modifier = {
+    			OR = {
+    				tier = KING	
+    				tier = DUKE
+    			}
+    			factor = 3
+    		}
+    		modifier = {
+    			NAND = {
+    				wealth = 75
+    				yearly_income = 7.5
+    				religion_group = pagan_group
+    			}
+    			factor = 0
+    		}
+    	}
+    }
+
+	option = {#Average wealth saka bind
+		name = EVTOPTB_pusaka4
+		trigger = { 
+		wealth = 250
+		piety = 250
+        }
+		add_artifact = stewardship_pusaka_average
+		scaled_wealth = { value = -2.5 min = -100 max = -500 }
+		scaled_piety = { value = -2.5 min = -100 max = -300 }
+		ai_chance = {
+    		factor = 33
+    		modifier = {
+    			OR = {
+    				tier = KING	
+    				tier = DUKE
+    			}
+    			factor = 10
+    		}
+    		modifier = {
+    			lower_tier_than = DUKE
+    			factor = 3
+    		}
+    		modifier = {
+    			tier = EMPEROR
+    			factor = 3
+    		}
+    		modifier = {
+    			NAND = {
+    				wealth = 180
+    				yearly_income = 18
+    			}
+    			factor = 0
+    		}
+    	}
+	}
+	
+	option = {#Great wealth saka bind (great sacrifice)
+		name = EVTOPTC_pusaka3
+		trigger = { 
+		wealth = 500
+		piety = 500
+        }
+		add_artifact = stewardship_pusaka_great
+		scaled_wealth = { value = -3.5 min = -400 max = -1000 }
+		scaled_piety = { value = -3.5 min = -400 max = -750 }
+		ai_chance = {
+    		factor = 33
+    		modifier = {
+    			tier = EMPEROR
+    			factor = 10
+    		}
+    		modifier = {
+    			OR = {
+    				tier = KING	
+    				tier = DUKE
+    			}
+    			factor = 3
+    		}
+    		modifier = {
+    			NAND = {
+    				wealth = 400
+    				yearly_income = 40
+    			}
+    			factor = 0
+    		}
+    	}
+	}
+
+
+	option = {#Nah, I'd be broke
+		name = EVTOPTD_pusaka1
+		hidden_tooltip = { character_event = { id = pusaka.1 } }
+		ai_chance = { factor = 1 }
+	}
+	
+	after = {
+		clr_character_flag = pusaka_choice
+	}
+}

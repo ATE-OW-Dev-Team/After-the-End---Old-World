@@ -1,0 +1,287 @@
+namespace=ariyamaitre
+
+#########################################
+#
+#	ariyamaitre religious events
+#
+#########################################
+character_event = {
+	id = ariyamaitre.300
+	is_triggered_only = yes
+	picture = GFX_evt_book_carolingian_script
+	border = GFX_event_normal_frame_religion
+	title = EVTNAME_ariyamaitre_300
+	desc = EVTDESC_ariyamaitre_300
+
+	trigger = {
+		religion = combuddhist
+		is_adult = yes
+		ai = no
+		NOR = {
+			trait = kammathan
+			trait = phi_bun
+			trait = phloeng_padevat
+		}
+	}
+	
+	option = {#Nicholas
+		name = EVTOPTA_ariyamaitre_300
+		add_trait = kammathan
+	}
+	
+	option = {#Olga
+		name = EVTOPTB_ariyamaitre_300
+		add_trait = phi_bun
+	}
+	
+	option = {#Ivan
+		name = EVTOPTC_ariyamaitre_300
+		add_trait = phloeng_padevat
+	}
+}
+
+letter_event = {
+	id = ariyamaitre.302
+	is_triggered_only = yes
+	border = GFX_event_letter_frame_religion
+	desc = ariyamaitre302Desc
+	trigger = {
+		religion = combuddhist
+		is_adult = yes
+		ai = yes
+		NOR = {
+			trait = kammathan
+			trait = phi_bun
+			trait = phloeng_padevat
+		}
+	}
+	option = {
+		name = EVTOPTA_israelstuff8A
+		random_list = {
+			10 = {
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = phloeng_padevat
+						}
+						mother_even_if_dead = {
+							trait = phloeng_padevat
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = phloeng_padevat
+								}
+								mother_even_if_dead = {
+									trait = phloeng_padevat
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = phloeng_padevat
+								}
+								mother_even_if_dead = {
+									trait = phloeng_padevat
+								}
+							}
+						}
+					}
+				}
+				job_event_mtth_modifier_inverted_martial_score = yes
+				add_trait = phloeng_padevat
+			}
+			10 = {
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = kammathan
+						}
+						mother_even_if_dead = {
+							trait = kammathan
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = kammathan
+								}
+								mother_even_if_dead = {
+									trait = kammathan
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = kammathan
+								}
+								mother_even_if_dead = {
+									trait = kammathan
+								}
+							}
+						}
+					}
+				}
+				job_event_mtth_modifier_inverted_stewardship_score = yes
+				add_trait = kammathan
+			}
+			10 = {
+				modifier = {
+					factor = 2
+					OR = {
+						father_even_if_dead = {
+							trait = phi_bun
+						}
+						mother_even_if_dead = {
+							trait = phi_bun
+						}
+					}
+				}
+				modifier = {
+					factor = 1.5
+					OR = {
+						father_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = phi_bun
+								}
+								mother_even_if_dead = {
+									trait = phi_bun
+								}
+							}
+						}
+						mother_even_if_dead = {
+							OR = {
+								father_even_if_dead = {
+									trait = phi_bun
+								}
+								mother_even_if_dead = {
+									trait = phi_bun
+								}
+							}
+						}
+					}
+				}
+				job_event_mtth_modifier_inverted_diplomacy_score = yes
+				add_trait = phi_bun
+			}
+		}
+	}
+}
+
+# The Meitreiya
+narrative_event = {
+	id = ariyamaitre.6000
+	title = EVTNAME_ariyamaitre_6000
+	desc = EVTDESC_ariyamaitre_6000
+	picture = GFX_evt_imam
+	border = GFX_event_narrative_frame_religion
+
+	is_triggered_only = yes # become_meitreiya, realm_decisions.txt
+	hide_from = yes
+
+	option = {
+		name = EVTOPTA_ariyamaitre_6000
+
+		any_player = {
+			limit = { NOT = { character = ROOT } }
+			narrative_event = { id = ariyamaitre.6003 }
+		}
+	}
+}
+
+# Children gains Meitreiya Descendant trait from Meitreiya
+character_event = {
+	id = ariyamaitre.6001
+
+	is_triggered_only = yes # on_birth, become_meitreiya, ariyamaitre.6001, RIP.21991 (rip_eternal_life_events)
+	hide_window = yes
+
+	has_dlc = "The Old Gods"
+	has_global_flag = dhammaraja_appears
+
+	trigger = {
+		any_close_relative = {
+			is_parent_of = ROOT
+
+			OR = {
+				trait = meitreiya
+				trait = meitreiya_descendant
+			}
+		}
+
+		NOT = { trait = meitreiya_descendant }
+	}
+
+	immediate = {
+		add_trait = meitreiya_descendant
+
+		any_child = {
+			character_event = { id = ariyamaitre.6001 }
+		}
+
+		sunni = {
+			religion_authority = {
+				name = zoroastrian_rebirth
+				years = 100
+			}
+		}
+
+		shiite = {
+			religion_authority = {
+				name = zoroastrian_rebirth
+				years = 100
+			}
+		}
+	}
+}
+
+# The Meitreiya Major
+narrative_event = {
+	id = ariyamaitre.6003
+	title = EVTNAME_ariyamaitre_6000
+	desc = EVTDESC_ariyamaitre_6003
+	picture = GFX_evt_imam
+	border = GFX_event_narrative_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = {
+			text = EVTOPTA_ariyamaitre_6003
+			trigger = { religion = combuddhist }
+		}
+		name = {
+			text = EVTOPTB_ariyamaitre_6003 #Literally everyone else
+		}
+
+		if = {
+			limit = {
+				OR = {
+					religion = theravada
+					religion = thaislam #Owned
+				}
+			}
+
+			tooltip = {
+				religion_authority = {
+					name = zoroastrian_rebirth
+					years = 100
+				}
+			}
+		}
+	}
+}

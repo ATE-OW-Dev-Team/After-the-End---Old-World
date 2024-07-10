@@ -14,9 +14,11 @@ targetted_decisions = {
 			is_playable = yes
 			OR = {
 				has_religion_feature = religion_ritual_sacrifice
+				has_religion_feature = religion_feature_satsana_phi
 				religion = stalinist
 				religion = trotskyite
 				religion = titoist
+				religion = red_cult
 			}
 		}
 	
@@ -226,11 +228,26 @@ targetted_decisions = {
 				religion = espiritista
 				has_religion_feature = religion_feature_finnish
 				has_religion_feature = religion_feature_nousthreskeia
+				has_religion_feature = religion_feature_moism
 				religion = nasrini
 				religion = sisukkuus
+				religion = marapu
 				religion = rastafari
 				religion = malikite
 				religion = navayana
+				religion = white_lotus
+				religion = jingjiao
+				religion = memorialist
+				religion = gidoggyo
+				religion = tridemism
+				religion = qingzhen
+				religion = taoist
+				religion = wuxia
+				religion = xianxia
+				religion = amidism
+				religion = jun_kokoro_ha
+				religion = mahayana
+				religion = hmongism
 			}
 			has_dlc = "Holy Fury"
 		}
@@ -481,11 +498,26 @@ targetted_decisions = {
 				religion = espiritista
 				has_religion_feature = religion_feature_finnish
 				has_religion_feature = religion_feature_nousthreskeia
+				has_religion_feature = religion_feature_moism
 				religion = nasrini
 				religion = sisukkuus
 				religion = rastafari
 				religion = malikite
 				religion = navayana
+				religion = white_lotus
+				religion = jingjiao
+				religion = memorialist
+				religion = marapu
+				religion = tridemism
+				religion = gidoggyo
+				religion = qingzhen
+				religion = taoist
+				religion = wuxia
+				religion = xianxia
+				religion = amidism
+				religion = jun_kokoro_ha
+				religion = mahayana
+				religion = hmongism
 			}
 			has_dlc = "Holy Fury"
 		}
@@ -605,6 +637,8 @@ decisions = {
 				trait = sympathy_esoteric
 				trait = sympathy_syncratic
 				trait = sympathy_oceanic
+				trait = sympathy_chinese
+				trait = sympathy_shinto
 				}
 				has_character_modifier = sympathy_timer
 				has_character_flag = flag_picking_sympathy
@@ -618,9 +652,13 @@ decisions = {
 				has_religion_feature = religion_feature_hellenic
 				has_religion_feature = religion_feature_folklorist
 				has_religion_feature = religion_feature_nousthreskeia
+				has_religion_feature = religion_feature_bungan
+				has_religion_feature = religion_feature_kaharingan
+				has_religion_feature = religion_feature_thuyhoa
 				religion = celtic_pagan
 				religion = akjang
 				religion = espiritista
+				religion = marapu
 				religion = celtic_pagan_reformed
 				religion = alevi
 				religion = nasrini
@@ -631,11 +669,17 @@ decisions = {
 				religion = kalikula
 				religion = koyapunem
 				religion = maunaxite_reformed
+				religion = vostokist
+				religion = qingzhen
 				religion = jain
+				religion = aurorean
 				religion = inuit_pagan
 				religion = inuit_pagan_reformed
 				religion = mormon
 				religion = catholic
+				religion = katoliko
+				religion = taoist
+				religion = white_lotus
 				religion = voodun
 				religion = islamity
 				religion = muwahidunna
@@ -644,7 +688,11 @@ decisions = {
 				religion = vagarna
 				religion = bushism
 				religion = malikite
+				religion = hmongism
+				religion = caodai
+				religion = pancasila
 			}
+			piety = 200
 		}
 		
 		allow = {
@@ -654,8 +702,12 @@ decisions = {
 				has_religion_feature = religion_feature_hellenic 
 				has_religion_feature = religion_feature_folklorist
 				has_religion_feature = religion_feature_nousthreskeia
+				has_religion_feature = religion_feature_bungan
+				has_religion_feature = religion_feature_kaharingan
+				has_religion_feature = religion_feature_thuyhoa
 				religion = celtic_pagan
 				religion = akjang
+				religion = marapu
 				religion = celtic_pagan_reformed
 				religion = alevi
 				religion = nasrini
@@ -666,11 +718,17 @@ decisions = {
 				religion = kalikula
 				religion = koyapunem
 				religion = maunaxite_reformed
+				religion = vostokist
+				religion = qingzhen
 				religion = jain
+				religion = aurorean
 				religion = inuit_pagan
 				religion = inuit_pagan_reformed
 				religion = mormon
 				religion = catholic
+				religion = katoliko
+				religion = taoist
+				religion = white_lotus
 				religion = voodun
 				religion = islamity
 				religion = muwahidunna
@@ -679,6 +737,9 @@ decisions = {
 				religion = vagarna
 				religion = bushism
 				religion = malikite
+				religion = hmongism
+				religion = caodai
+				religion = pancasila
 			}
 			piety = 300
 		}
@@ -1086,6 +1147,136 @@ decisions = {
 									}
 									any_demesne_province = {
 										religion_group = jewish_group
+									}
+								}
+							}
+						}
+						100 = {
+							add_trait = sympathy_shinto
+							
+							modifier = {
+								factor = 0
+								religion_group = shintoist_group
+							}
+							modifier = { # Prioritize getting a sympathy trait that is useful
+								factor = 100
+								OR = {
+									any_demesne_province = {
+										religion_group = shintoist_group
+									}
+									any_vassal = {
+										religion_group = shintoist_group
+									}
+								}
+							}
+							modifier = { # Otherwise try to emulate your liege
+								factor = 5
+								NOR = {
+									any_demesne_province = {
+										NOT = { religion_group = shintoist_group }
+									}
+									any_vassal = {
+										NOT = { religion_group = shintoist_group }
+									}
+								}
+								any_liege = {
+									OR = {
+										AND = {
+											trait = sympathy_shinto
+											religion = ROOT
+										}
+										religion_group = shintoist_group
+									}
+								}	
+							}
+							modifier = {
+								factor = 0
+								NOR = {
+									any_liege = {
+										OR = {
+											AND = {
+												trait = sympathy_shinto
+												religion = ROOT
+											}
+											religion_group = shintoist_group
+										}
+									}
+									spouse = {
+										religion_group = shintoist_group
+									}
+									any_courtier_or_vassal = {
+										religion_group = shintoist_group
+									}
+									any_neighbor_independent_ruler = {
+										religion_group = shintoist_group
+									}
+									any_demesne_province = {
+										religion_group = shintoist_group
+									}
+								}
+							}
+						}
+						100 = {
+							add_trait = sympathy_chinese
+							
+							modifier = {
+								factor = 0
+								religion_group = chinese_traditional_group
+							}
+							modifier = { # Prioritize getting a sympathy trait that is useful
+								factor = 100
+								OR = {
+									any_demesne_province = {
+										religion_group = chinese_traditional_group
+									}
+									any_vassal = {
+										religion_group = chinese_traditional_group
+									}
+								}
+							}
+							modifier = { # Otherwise try to emulate your liege
+								factor = 5
+								NOR = {
+									any_demesne_province = {
+										NOT = { religion_group = chinese_traditional_group }
+									}
+									any_vassal = {
+										NOT = { religion_group = chinese_traditional_group }
+									}
+								}
+								any_liege = {
+									OR = {
+										AND = {
+											trait = sympathy_chinese
+											religion = ROOT
+										}
+										religion_group = chinese_traditional_group
+									}
+								}	
+							}
+							modifier = {
+								factor = 0
+								NOR = {
+									any_liege = {
+										OR = {
+											AND = {
+												trait = sympathy_chinese
+												religion = ROOT
+											}
+											religion_group = chinese_traditional_group
+										}
+									}
+									spouse = {
+										religion_group = chinese_traditional_group
+									}
+									any_courtier_or_vassal = {
+										religion_group = chinese_traditional_group
+									}
+									any_neighbor_independent_ruler = {
+										religion_group = chinese_traditional_group
+									}
+									any_demesne_province = {
+										religion_group = chinese_traditional_group
 									}
 								}
 							}
@@ -1698,10 +1889,12 @@ decisions = {
 			NOT = { has_any_opinion_modifier = opinion_blood_games_guest }
 			NOT = { has_religion_feature = religion_peaceful }
 			OR = {
-			has_religion_feature = religion_ritual_sacrifice
-			religion = stalinist
-			religion = trotskyite
-			religion = titoist
+				has_religion_feature = religion_ritual_sacrifice
+				has_religion_feature = religion_feature_satsana_phi
+				religion = stalinist
+				religion = trotskyite
+				religion = titoist
+				religion = red_cult
 			}
 		}
 		
@@ -1799,10 +1992,12 @@ decisions = {
 			independent = yes
 			NOT = { has_religion_feature = religion_peaceful } #Aztecs could reform as Peaceful.
 			OR = {
-			has_religion_feature = religion_ritual_sacrifice
-			religion = stalinist
-			religion = trotskyite
-			religion = titoist
+				has_religion_feature = religion_ritual_sacrifice
+				has_religion_feature = religion_feature_satsana_phi
+				religion = stalinist
+				religion = trotskyite
+				religion = titoist
+				religion = red_cult
 			}
 		}
 		
@@ -1983,6 +2178,10 @@ settlement_decisions = {
 					NOT = { any_realm_province = { has_province_flag = flag_great_pillar_baltic } }
 				}
 				AND = { 
+					religion = tengri_pagan
+					NOT = { any_realm_province = { has_province_flag = flag_great_pillar_tengri } }
+				}
+				AND = { 
 					religion = finnish_pagan
 					NOT = { any_realm_province = { has_province_flag = flag_great_pillar_finnish } }
 				}
@@ -2035,6 +2234,7 @@ settlement_decisions = {
 							has_province_flag = flag_great_pillar_folklorist
 							has_province_flag = flag_great_pillar_maunaxite
 							has_province_flag = flag_great_pillar_nousthreskeia
+							has_province_flag = flag_great_pillar_tengri
 							has_province_flag = flag_great_pillar_baltic
 							has_province_flag = flag_great_pillar_finnish
 							has_province_flag = flag_great_pillar_hellenic
@@ -2149,6 +2349,18 @@ settlement_decisions = {
 					if = { 
 						limit = { NOT = { has_building = tb_great_pillar_nousthreskeia } } 
 						add_building = tb_great_pillar_nousthreskeia
+					}
+				}
+				if = {  
+					limit = { FROM = { religion = tengri_pagan } }
+					hidden_tooltip = {
+						location = {
+							set_province_flag = flag_great_pillar_tengri
+						}
+					}
+					if = { 
+						limit = { NOT = { has_building = tb_great_pillar_tengri } } 
+						add_building = tb_great_pillar_tengri
 					}
 				}
 				if = {  
@@ -2269,6 +2481,7 @@ settlement_decisions = {
 					has_province_flag = flag_great_pillar_folklorist
 					has_province_flag = flag_great_pillar_maunaxite
 					has_province_flag = flag_great_pillar_nousthreskeia
+					has_province_flag = flag_great_pillar_tengri
 					has_province_flag = flag_great_pillar_baltic
 					has_province_flag = flag_great_pillar_finnish
 					has_province_flag = flag_great_pillar_hellenic
@@ -2380,6 +2593,24 @@ settlement_decisions = {
 					}
 				}
 				nousthreskeia = {
+					religion_authority = {
+						modifier = destroyed_great_pillar
+						years = 10
+					}
+				}
+			}
+			if = {  
+				limit = { location = { has_province_flag = flag_great_pillar_tengri } }
+				hidden_tooltip = {
+					location = {
+						clr_province_flag = flag_great_pillar_tengri
+					}
+					any_realm_character = {
+						limit = { religion = tengri_pagan }
+						character_event = { id = HF.23477 }
+					}
+				}
+				tengri_pagan = {
 					religion_authority = {
 						modifier = destroyed_great_pillar
 						years = 10
