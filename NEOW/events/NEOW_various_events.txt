@@ -211,6 +211,26 @@ character_event = {
 	}
 }
 character_event = {
+	id = ATV.69868
+	hide_window = yes
+	trigger = {
+		NOT = { has_character_flag = dontcheckthisantidiversity2 }
+		graphical_culture = westerngfx
+		NOR = {
+			real_father_even_if_dead = { graphical_culture = westerngfx }
+			mother_even_if_dead = { graphical_culture = westerngfx }
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		set_character_flag = dontcheckthisantidiversity2
+		culture_scope = { set_graphical_culture = PREV }
+	}
+}
+character_event = {
 	id = ATV.4
 	hide_window = yes
 	is_triggered_only = yes
@@ -228,31 +248,6 @@ character_event = {
 	}
 }
 
-character_event = {
-	id = ATV.6969#halting filipino dream impregnation
-	hide_window = yes
-	trigger = {
-		NOT = { has_character_flag = dontcheckthisantidiversity }
-		gfx_culture_scope = { graphical_culture = filipinogfx }
-		NOR = {
-			culture_group = hispano_austronesian
-			culture_group = austronesian
-			culture_group = asian_anglophone
-		}
-		NOR = {
-			real_father_even_if_dead = { gfx_culture_scope = {graphical_culture = filipinogfx } }
-			mother_even_if_dead = { gfx_culture_scope = {graphical_culture = filipinogfx } }
-		}
-	}
-	mean_time_to_happen = {
-		days = 14
-	}
-	
-	immediate = {
-		set_character_flag = dontcheckthisantidiversity
-		culture_scope = { set_graphical_culture = PREV }
-	}
-}
 character_event = {
 	id = ATV.5
 	hide_window = yes
@@ -1567,52 +1562,6 @@ character_event = {
 		}
 	}
 }
-character_event = {
-	id = ATV.271
-	hide_window = yes
-	trigger = {
-		mother_even_if_dead = {
-			any_owned_bloodline = {
-				has_bloodline_flag = japanese_imperial_blood
-			}
-			mother_even_if_dead = {
-				any_owned_bloodline = {
-					has_bloodline_flag = japanese_imperial_blood
-				}
-			}
-		}
-		father_even_if_dead = {
-			NOT = {
-				any_owned_bloodline = {
-					has_bloodline_flag = japanese_imperial_blood
-				}
-			}
-		}
-		father_even_if_dead = {
-			father_even_if_dead = {
-				NOT = {
-					any_owned_bloodline = {
-						has_bloodline_flag = japanese_imperial_blood
-					}
-				}
-			}
-		}
-		any_owned_bloodline = {
-			has_bloodline_flag = japanese_imperial_blood
-		}
-	}
-	mean_time_to_happen = {
-		days = 1
-	}
-	immediate = {
-		random_owned_bloodline = {
-			limit = { 
-				has_bloodline_flag = japanese_imperial_blood
-			}
-			remove_bloodline_member = ROOT
-		}
-	}
-}
 character_event = {#Limit the spread
 	id = ATV.28
 	hide_window = yes
@@ -1622,6 +1571,7 @@ character_event = {#Limit the spread
 			father_even_if_dead = {
 				NOR = {
 					dynasty = 25551120 #Joestar dynasty
+					dynasty = 255516934 #Di Dio dynasty
 					dynasty = ROOT #Player dynasty
 				}
 			}
@@ -1808,11 +1758,9 @@ province_event = {
 			religion = mandaeanism
 			religion = sikh
 			religion = zoroastrian
-			religion = amaitist
 			religion = neo_zorvanite
 			religion = jain
 			religion = bahai
-			religion = white_lotus
 		}
 		NOT = {
 			has_province_modifier = clean_religious_practices
@@ -1834,11 +1782,9 @@ province_event = {
 			religion = mandaeanism
 			religion = sikh
 			religion = zoroastrian
-			religion = amaitist
 			religion = neo_zorvanite
 			religion = jain
 			religion = bahai
-			religion = white_lotus
 		}
 		has_province_modifier = clean_religious_practices
 	}
@@ -2030,16 +1976,7 @@ character_event = {
 			culture = koryo_saram
 			culture = cypriote
 			culture = armyan
-			culture = siamese
-			culture = old_thai
-			culture = south_thai
-			culture = singapura
 			culture = romani
-			culture = sinotai
-			culture = cina
-			culture = serani
-			culture = cocos_malay
-			culture = langkapuri
 		}
 	}
 	
@@ -2574,9 +2511,6 @@ character_event = {
 				has_province_modifier = stone_roads_modifier
 			}
 		}
-		NOT = {
-			has_province_modifier = stone_roads_modifier
-		}
 	}
 	mean_time_to_happen = {
 		days = 1
@@ -2608,9 +2542,6 @@ character_event = {
 				has_province_modifier = stone_highways_modifier
 			}
 		}
-		NOT = {
-			has_province_modifier = stone_highways_modifier
-		}
 	}
 	mean_time_to_happen = {
 		days = 1
@@ -2628,6 +2559,50 @@ character_event = {
 				name = stone_highways_modifier 
 				duration = 730 
 				hidden = yes
+			}
+		}
+	}
+}
+#Poseidonian Warrior Lodge has been recreated.
+#Players notified.
+narrative_event = {
+	id = ATV.69
+	title = EVTTITLEATV25026
+	desc = EVTDESCATV25026
+	hide_new = yes
+
+	picture = GFX_evt_hippodrome_byzantine
+	
+	only_playable = yes
+	hide_from = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTAATV25026
+		trigger = {
+			OR = { 
+				society_member_of = warrior_lodge_poseidonian
+				religion = poseidonian
+				secret_religion = poseidonian
+				can_join_society = warrior_lodge_poseidonian
+			}
+		}
+		if = {
+			limit = { 
+				NOT = { society_member_of = warrior_lodge_poseidonian }
+				can_join_society = warrior_lodge_poseidonian
+			}
+			join_society = warrior_lodge_poseidonian
+		}
+	}
+	option = {
+		name = EVTOPTBATV25026
+		trigger = {
+			NOR = { 
+				society_member_of = warrior_lodge_poseidonian
+				religion = poseidonian
+				secret_religion = poseidonian
 			}
 		}
 	}
@@ -2796,534 +2771,6 @@ character_event = {
 			any_child_even_if_dead = {
 				character_event = { id = LENIN.1000 }
 			}
-		}
-	}
-}
-##Imperial Thai Diversity
-character_event = {
-	id = ATV.67
-	hide_window = yes
-	trigger = {
-		NOT = { has_character_flag = diversity }
-		OR = {
-			culture = siamese
-			culture = old_thai
-			culture = south_thai
-		}
-	}
-	mean_time_to_happen = {
-		days = 1
-	}
-	
-	immediate = {
-		set_character_flag = diversity
-		if = {
-			limit = {
-				NOR = {
-					father_even_if_dead = { always = yes }
-					mother_even_if_dead = { always = yes }
-				}
-			}
-			random_list = {
-				80 = {
-					set_graphical_culture = siamese
-				}
-				10 = {
-					set_graphical_culture = han
-				}
-				5 = {
-					set_graphical_culture = levantine_arabic
-				}
-				4 = {
-					set_graphical_culture = weeb
-				}
-				1 = {
-					set_graphical_culture = nigerian
-				}
-			}
-		}
-		any_child_even_if_dead = {
-			character_event = { id = ATV.68 }
-		}
-	}
-}
-character_event = {
-	id = ATV.68
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		OR = {
-			culture = siamese
-			culture = old_thai
-			culture = south_thai
-		}
-	}
-	
-	immediate = {
-		set_character_flag = diversity
-		set_graphical_culture = FROM
-		any_child_even_if_dead = {
-			character_event = { id = ATV.68 }
-		}
-	}
-}
-#Poseidonian Warrior Lodge has been recreated.
-#Players notified.
-narrative_event = {
-	id = ATV.69
-	title = EVTTITLEATV25026
-	desc = EVTDESCATV25026
-	hide_new = yes
-
-	picture = GFX_evt_hippodrome_byzantine
-	
-	only_playable = yes
-	hide_from = yes
-	
-	is_triggered_only = yes
-	
-	option = {
-		name = EVTOPTAATV25026
-		trigger = {
-			OR = { 
-				society_member_of = warrior_lodge_poseidonian
-				religion = poseidonian
-				secret_religion = poseidonian
-				can_join_society = warrior_lodge_poseidonian
-			}
-		}
-		if = {
-			limit = { 
-				NOT = { society_member_of = warrior_lodge_poseidonian }
-				can_join_society = warrior_lodge_poseidonian
-			}
-			join_society = warrior_lodge_poseidonian
-		}
-	}
-	option = {
-		name = EVTOPTBATV25026
-		trigger = {
-			NOR = { 
-				society_member_of = warrior_lodge_poseidonian
-				religion = poseidonian
-				secret_religion = poseidonian
-			}
-		}
-	}
-}
-##Singapore
-character_event = {
-	id = ATV.70
-	hide_window = yes
-	trigger = {
-		NOT = { has_character_flag = diversity }
-		culture = singapura
-	}
-	mean_time_to_happen = {
-		days = 1
-	}
-	
-	immediate = {
-		set_character_flag = diversity
-		if = {
-			limit = {
-				NOR = {
-					father_even_if_dead = { always = yes }
-					mother_even_if_dead = { always = yes }
-				}
-			}
-			random_list = {
-				70 = {
-					set_graphical_culture = han
-				}
-				15 = {
-					set_graphical_culture = malay
-				}
-				9 = {
-					set_graphical_culture = tamil
-				}
-				5 = {
-					set_graphical_culture = levantine_arabic
-				}
-				1 = {
-					set_graphical_culture = weeb
-				}
-			}
-		}
-		any_child_even_if_dead = {
-			character_event = { id = ATV.71 }
-		}
-	}
-}
-character_event = {
-	id = ATV.71
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		culture = singapura
-	}
-	
-	immediate = {
-		set_character_flag = diversity
-		set_graphical_culture = FROM
-		any_child_even_if_dead = {
-			character_event = { id = ATV.70 }
-		}
-	}
-}
-character_event = {
-	id = ATV.74
-	hide_window = yes
-	trigger = {
-		NOT = { has_character_flag = diversity }
-		OR = {
-			culture = sinotai
-			culture = cina
-		}
-	}
-	mean_time_to_happen = {
-		days = 1
-	}
-	
-	immediate = {
-		set_character_flag = diversity
-		if = {
-			limit = {
-				NOR = {
-					father_even_if_dead = { always = yes }
-					mother_even_if_dead = { always = yes }
-				}
-			}
-			random_list = {
-				85 = {
-					set_graphical_culture = han
-				}
-				15 = {
-					set_graphical_culture = malay
-				}
-			}
-		}
-		any_child_even_if_dead = {
-			character_event = { id = ATV.75 }
-		}
-	}
-}
-character_event = {
-	id = ATV.75
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		OR = {
-			culture = sinotai
-			culture = cina
-		}
-	}
-	
-	immediate = {
-		set_character_flag = diversity
-		set_graphical_culture = FROM
-		any_child_even_if_dead = {
-			character_event = { id = ATV.75 }
-		}
-	}
-}
-character_event = {
-	id = ATV.76
-	hide_window = yes
-	trigger = {
-		OR = {
-			AND = {
-				culture_group = japan_group
-				has_landed_title = e_japan
-			}
-			has_landed_title = e_tokyo
-		}
-		NOT = {
-			trait = japanese_emperor_trait
-		}
-	}
-	mean_time_to_happen = {
-		days = 1
-	}
-	immediate = {
-		add_trait = japanese_emperor_trait
-	}
-}
-character_event = {
-	id = ATV.77
-	hide_window = yes
-	trigger = {
-		NOT = {
-			trait = japanese_emperor_killer_trait
-		}
-		any_kill_list_character = {
-			trait = japanese_emperor_trait
-		}
-	}
-	mean_time_to_happen = {
-		days = 30
-	}
-	immediate = {
-		add_trait = japanese_emperor_killer_trait
-	}
-}
-character_event = {
-	id = ATV.78
-	hide_window = yes
-	trigger = {
-		has_landed_title = k_bakufu
-		NOT = {
-			trait = japanese_shogun
-		}
-	}
-	mean_time_to_happen = {
-		days = 1
-	}
-	immediate = {
-		remove_trait = japanese_pretender_shogun
-		add_trait = japanese_shogun
-	}
-}
-character_event = {
-	id = ATV.79
-	hide_window = yes
-	trigger = {
-		has_landed_title = k_pretender_bakufu
-		NOT = {
-			trait = japanese_pretender_shogun
-		}
-	}
-	mean_time_to_happen = {
-		days = 1
-	}
-	immediate = {
-		remove_trait = japanese_shogun
-		add_trait = japanese_pretender_shogun
-	}
-}
-character_event = {
-	id = ATV.80
-	hide_window = yes
-	trigger = {
-		NOT = { has_landed_title = k_pretender_bakufu }
-		trait = japanese_pretender_shogun
-	}
-	mean_time_to_happen = {
-		days = 1
-	}
-	immediate = {
-		remove_trait = japanese_pretender_shogun
-	}
-}
-character_event = {
-	id = ATV.81
-	hide_window = yes
-	trigger = {
-		NOT = { has_landed_title = k_bakufu }
-		trait = japanese_shogun
-	}
-	mean_time_to_happen = {
-		days = 1
-	}
-	immediate = {
-		remove_trait = japanese_shogun
-	}
-}
-character_event = {
-	id = ATV.82
-	desc = "EVTDESCATV.82"
-	picture = GFX_evt_emissary
-	trigger = {
-		has_landed_title = k_sarawak 
-		culture_group = australian
-		has_global_flag = brooke_sarawak
-		NOT = {
-			year = 2560
-		}
-	}
-	mean_time_to_happen = {
-		months = 36
-		modifier = {
-			factor = 1.5
-			war = yes
-		}
-		modifier = {
-			factor = 0.5
-			war = yes
-		}
-	}
-	option = {
-		name = EVTOPTAATV.82
-		set_global_flag = brooke_sarawak
-		k_sarawak = {
-			holder_scope = {
-				c_serian = {
-					grant_title = PREV
-				}
-			}
-		}
-		3832 = {
-			culture = maglish
-			religion = memorialist
-		}
-		3836 = {
-			culture = tiwi
-			religion = katoliko
-		}
-		3840 = {
-			culture = tiwi
-			religion = katoliko
-		}
-			create_character = {
-				random_traits = yes
-				dynasty = random
-				religion = katoliko
-				culture = tiwi
-				female = no
-				age = 32
-				attributes = {
-					martial = 6
-				}
-				trait = tough_soldier
-			}
-			new_character = {
-				c_sibu = {
-					grant_title = PREV
-				}
-				c_mukah = {
-					grant_title = PREV
-				}
-				set_defacto_liege = k_sarawak
-			}
-		d_darwinia = {
-			holder_scope = {
-				c_hotham = {
-					grant_title = PREV 
-				}
-			}
-		}
-		c_yermalner = {
-			holder_scope = {
-				grant_title = d_tiwi
-				set_defacto_liege = THIS
-			}
-		}
-		c_nguyu = {
-			holder_scope = {
-				set_defacto_liege = THIS
-			}
-		}
-	}
-}
-character_event = {
-	id = ATV.83
-	hide_window = yes
-	trigger = {
-		NOT = { has_character_flag = diversity }
-		culture = serani
-	}
-	mean_time_to_happen = {
-		days = 1
-	}
-	
-	immediate = {
-		set_character_flag = diversity
-		if = {
-			limit = {
-				NOR = {
-					father_even_if_dead = { always = yes }
-					mother_even_if_dead = { always = yes }
-				}
-			}
-			random_list = {
-				70 = {
-					set_graphical_culture = portuguese
-				}
-				15 = {
-					set_graphical_culture = malay
-				}
-				9 = {
-					set_graphical_culture = dutch
-				}
-				5 = {
-					set_graphical_culture = ashkenazi
-				}
-				1 = {
-					set_graphical_culture = levantine_arabic
-				}
-			}
-		}
-		any_child_even_if_dead = {
-			character_event = { id = ATV.84 }
-		}
-	}
-}
-character_event = {
-	id = ATV.84
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		culture = serani
-	}
-	
-	immediate = {
-		set_character_flag = diversity
-		set_graphical_culture = FROM
-		any_child_even_if_dead = {
-			character_event = { id = ATV.83 }
-		}
-	}
-}
-character_event = {
-	id = ATV.87
-	hide_window = yes
-	trigger = {
-		NOT = { has_character_flag = diversity }
-		culture = langkapuri
-	}
-	mean_time_to_happen = {
-		days = 1
-	}
-	
-	immediate = {
-		set_character_flag = diversity
-		if = {
-			limit = {
-				NOR = {
-					father_even_if_dead = { always = yes }
-					mother_even_if_dead = { always = yes }
-				}
-			}
-			random_list = {
-				70 = {
-					set_graphical_culture = malay
-				}
-				20 = {
-					set_graphical_culture = sinhala
-				}
-				10 = {
-					set_graphical_culture = levantine_arabic
-				}
-			}
-		}
-		any_child_even_if_dead = {
-			character_event = { id = ATV.84 }
-		}
-	}
-}
-character_event = {
-	id = ATV.88
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		culture = langkapuri
-	}
-	
-	immediate = {
-		set_character_flag = diversity
-		set_graphical_culture = FROM
-		any_child_even_if_dead = {
-			character_event = { id = ATV.85 }
 		}
 	}
 }
