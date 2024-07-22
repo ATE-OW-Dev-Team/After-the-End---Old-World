@@ -1764,6 +1764,7 @@ decisions = {
 				k_galicia_y_asturias = { de_jure_liege = e_roman_empire }
 				k_portugal = { de_jure_liege = e_roman_empire }
 				k_luxemburg = { de_jure_liege = e_roman_empire }
+				k_alsace_lorraine = { de_jure_liege = e_roman_empire }
 				k_belgium = { de_jure_liege = e_roman_empire }
 				k_rhineland = { de_jure_liege = e_roman_empire }
 				k_istromania = { set_de_jure_if_controls_effect = yes }
@@ -4741,6 +4742,10 @@ decisions = {
 				k_luxemburg = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_rhonie = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_brittany = { show_scope_change = no province_completely_controls_trigger = yes }
+				conditional_tooltip = {
+						trigger = { k_alsace_lorraine = { is_titular = no } }
+						k_alsace_lorraine = { show_scope_change = no province_completely_controls_trigger = yes }
+					}	
 		}
 
 		effect = {
@@ -4751,6 +4756,8 @@ decisions = {
 				k_luxemburg = { de_jure_liege = e_france }
 				k_rhonie = { de_jure_liege = e_france }
 				k_brittany = { de_jure_liege = e_france }
+				d_new_luxemburg = { de_jure_liege = k_alsace_lorraine }
+				d_alsace = { de_jure_liege = k_alsace_lorraine }
 			}
 		}
 		revoke_allowed = {
@@ -4788,6 +4795,10 @@ decisions = {
 				k_rhonie = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_brittany = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_rhineland = { show_scope_change = no province_completely_controls_trigger = yes }
+				conditional_tooltip = {
+						trigger = { k_alsace_lorraine = { is_titular = no } }
+						k_alsace_lorraine = { show_scope_change = no province_completely_controls_trigger = yes }
+					}	
 		}
 
 		effect = {
@@ -4799,6 +4810,55 @@ decisions = {
 				k_luxemburg = { de_jure_liege = e_france }
 				k_rhonie = { de_jure_liege = e_france }
 				k_brittany = { de_jure_liege = e_france }
+				d_new_luxemburg = { de_jure_liege = k_alsace_lorraine }
+				d_alsace = { de_jure_liege = k_alsace_lorraine }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	restore_modern_france = {
+		is_high_prio = yes
+		only_playable = no
+		ai_check_interval = 24
+		potential = {
+			has_landed_title = e_france
+			NOR = {
+				religion = novelist
+				religion = novelist_reformed
+			}
+			NOT = {
+				has_global_flag = restored_modern_france
+			}
+			prisoner = no
+			has_regent = no
+		}
+
+		allow = {
+			custom_tooltip = {
+				text = all_relevant_titles_must_be_owned_or_owned_by_vassals_tt
+			}
+			prestige = 1000
+			k_rhonie = { show_scope_change = no province_completely_controls_trigger = yes }
+			k_brittany = { show_scope_change = no province_completely_controls_trigger = yes }
+			d_alsace = { show_scope_change = no province_completely_controls_trigger = yes }
+			d_new_luxemburg = { show_scope_change = no province_completely_controls_trigger = yes }
+			d_pas-de-calais = { show_scope_change = no province_completely_controls_trigger = yes }
+		}
+
+		effect = {
+			set_global_flag = restored_modern_france
+			hidden_tooltip = {
+				k_rhonie = { de_jure_liege = e_france }
+				k_brittany = { de_jure_liege = e_france }
+				d_alsace = { de_jure_liege = k_alsace_lorraine }
+				d_new_luxemburg = { de_jure_liege = k_alsace_lorraine }
+				d_pas-de-calais = { de_jure_liege = k_france }
 			}
 		}
 		revoke_allowed = {
@@ -11261,7 +11321,7 @@ decisions = {
 		potential = {
 			form_empire_potential = yes
 			OR = {
-				culture_group = germanic
+				OR = { culture_group = germanic culture_group = low_germanic culture_group = high_german }
 				culture_group = alpinian
 				culture_group = west_german
 				culture_group = francophone
@@ -11308,6 +11368,10 @@ decisions = {
 				conditional_tooltip = {
 					trigger = { k_luxemburg = { is_titular = no } }
 					k_luxemburg = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
+				conditional_tooltip = {
+					trigger = { k_alsace_lorraine = { is_titular = no } }
+					k_alsace_lorraine = { show_scope_change = no province_completely_controls_trigger = yes }
 				}
 				conditional_tooltip = {
 					trigger = { k_saxon = { is_titular = no } }
@@ -11411,6 +11475,7 @@ decisions = {
 				k_holland = { de_jure_liege = e_hre }
 				k_belgium = { de_jure_liege = e_hre }
 				k_luxemburg = { de_jure_liege = e_hre }
+				k_alsace_lorraine = { de_jure_liege = e_hre }
 				k_saxon = { de_jure_liege = e_hre }
 				k_rhineland = { de_jure_liege = e_hre }
 				k_austria = { de_jure_liege = e_hre }
@@ -13226,6 +13291,52 @@ decisions = {
 		}
 	}
 	
+	form_alsace_lorraine = {
+		is_high_prio = yes
+		only_playable = no
+		ai_check_interval = 24
+		potential = {
+			form_kingdom_potential = yes
+			OR = { culture = lorraine culture = rheinlander }
+			k_alsace_lorraine= {
+				is_titular = yes
+				has_holder = no
+			}
+			prisoner = no
+			has_regent = no
+		}
+
+		allow = {
+			custom_tooltip = {
+				text = all_relevant_titles_must_be_owned_or_owned_by_vassals_tt
+			}
+			form_kingdom_allow = yes
+			
+			d_new_luxemburg = { show_scope_change = no province_completely_controls_trigger = yes }
+			d_alsace = { show_scope_change = no province_completely_controls_trigger = yes }
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = form_alsace_lorraine_tt 
+				k_alsace_lorraine = {
+					gain_title_effect = yes
+				}
+			}
+			
+
+			hidden_tooltip = {
+				d_new_luxemburg = { de_jure_liege = k_alsace_lorraine }
+				d_alsace = { de_jure_liege = k_alsace_lorraine }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
 	claim_constantinople = {
 		only_independent = yes
 		is_high_prio = yes
