@@ -5,107 +5,98 @@
 # AMBITIONS
 ###############
 
-#Create a treasury
+# Create a treasury
 obj_create_treasury = {
 	type = character
-	
-	
+
 	potential = {
+		has_dlc = "Holy Fury"
+		is_playable = yes
+		is_adult = yes
+		is_incapable = no
+		is_inaccessible_trigger = no
+
 		NOR = {
 			has_character_flag = created_treasury
-			any_artifact = { 
-				quality = 2
+
+			any_artifact = {
+				quality >= 2
 			}
-			trait = incapable
 		}
-		is_landed = yes
-		higher_tier_than = BARON
-		has_dlc = "Holy Fury"
 	}
-	
-	allow = {
-		NOT = {
-			is_inaccessible_trigger = yes
-		}
-		is_adult = yes
-	}
-	
+
 	success = {
 		custom_tooltip = {
 			text = create_treasury_condition_tooltip
-			any_artifact = { 
-				count = 3 
-				quality = 2
-			}
-		} 
-	}	
-	
-	abort = {
-		trait = incapable
-	}
-	
-	abort_effect = {
 
+			any_artifact = {
+				count >= 3
+				quality >= 2
+			}
+		}
 	}
-	
+
 	effect = {
 		change_stewardship = 1
 		set_character_flag = created_treasury
+
 		add_character_modifier = {
 			name = impressive_treasury
 			years = 5
 		}
 	}
+
+	abort = {
+		is_incapable = yes
+	}
+
+	chance = {
+		factor = 1
+	}
 }
 
-#Make a friend
 obj_make_friends = {
 	type = character
-	
+
 	potential = {
+		has_dlc = "Holy Fury"
+		is_playable = yes
+		is_adult = yes
+		num_of_friends < 1
+		is_incapable = no
+		is_inaccessible_trigger = no
+
 		NOR = {
-			num_of_friends = 1
 			has_character_flag = made_friends
 			trait = shy
-			trait = incapable
 		}
-		is_landed = yes
-		higher_tier_than = BARON
-		has_dlc = "Holy Fury"
 	}
-	
-	allow = {
-		NOT = {
-			is_inaccessible_trigger = yes
-		}
-		is_adult = yes
-	}
-	
+
 	success = {
 		custom_tooltip = {
 			text = obj_make_friends_condition_tooltip
-			num_of_friends = 1
-		} 
-	}	
-	
-	abort = {
-		trait = incapable
+			num_of_friends >= 1
+		}
 	}
-	
-	abort_effect = {
 
-	}
-	
 	effect = {
 		change_diplomacy = 1
 		set_character_flag = made_friends
+
 		add_character_modifier = {
 			name = popular_modifier
 			years = 5
 		}
 	}
-}
 
+	abort = {
+		is_incapable = yes
+	}
+
+	chance = {
+		factor = 1
+	}
+}
 
 obj_forge_bloodline = {
 	type = character
@@ -409,8 +400,8 @@ obj_forge_bloodline = {
 			}
 
 			# Possible Bloodlines specifically tied to this ambition:
-			# Murder Bloodline (assassinate 30 people) 	---> 	(Little Killer/Dreaded/Feast Macabre/Silent)
-			# War Bloodline (win 15 wars) 				---> 	(Young Warrior/Knight/Warlord/Warrior Philosopher)
+			# Murder Bloodline (assassinate 30 people)	--->	(Little Killer/Dreaded/Feast Macabre/Silent)
+			# War Bloodline (win 15 wars)				--->	(Young Warrior/Knight/Warlord/Warrior Philosopher)
 			# Peace Bloodline (ruled 30 years at peace)	--->	(protector/munificent/angel)
 			# Architect Bloodline (built 10 cities)
 			# Castellan Bloodline (built 10 castles)
@@ -443,6 +434,11 @@ obj_forge_bloodline = {
 
 	abort = {
 		is_incapable = yes
+		NOT = {
+			any_owned_bloodline = { # You created a custom bloodline, abort this ambition
+				has_bloodline_flag = created_bloodline
+			}
+		}
 	}
 
 	abort_effect = {

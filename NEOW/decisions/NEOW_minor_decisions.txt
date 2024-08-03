@@ -49,6 +49,7 @@ decisions = {
 				trait = tough_soldier
 				trait = skilled_tactician
 				trait = brilliant_strategist
+				trait = exalted_warlord
 			}
 			NOT = {
 				trait = mountain_terrain_leader
@@ -91,6 +92,7 @@ decisions = {
 			OR = {
 				trait = skilled_tactician
 				trait = brilliant_strategist
+				trait = exalted_warlord
 			}
 		}
 		
@@ -116,6 +118,7 @@ decisions = {
 				trait = tough_soldier
 				trait = skilled_tactician
 				trait = brilliant_strategist
+				trait = exalted_warlord
 			}
 			NOT = {
 				trait = desert_terrain_leader
@@ -158,6 +161,7 @@ decisions = {
 			OR = {
 				trait = skilled_tactician
 				trait = brilliant_strategist
+				trait = exalted_warlord
 			}
 		}
 		
@@ -183,6 +187,7 @@ decisions = {
 				trait = tough_soldier
 				trait = skilled_tactician
 				trait = brilliant_strategist
+				trait = exalted_warlord
 			}
 			NOT = {
 				trait = jungle_terrain_leader
@@ -217,6 +222,7 @@ decisions = {
 			OR = {
 				trait = skilled_tactician
 				trait = brilliant_strategist
+				trait = exalted_warlord
 			}
 		}
 		
@@ -821,7 +827,7 @@ decisions = {
 				culture = yoruba
 				culture = hausa	
 				culture = westlander
-				culture = kuhjung
+				#culture = kuhjung
 				culture = scouse
 				culture = northlander
 				culture = british
@@ -846,7 +852,7 @@ decisions = {
 					culture = yoruba
 					culture = hausa	
 					culture = westlander
-					culture = kuhjung
+					#culture = kuhjung
 					culture = scouse
 					culture = northlander
 					culture = british
@@ -955,6 +961,7 @@ decisions = {
 				trait = flamboyant_schemer
 				trait = intricate_webweaver
 				trait = elusive_shadow
+				trait = conniving_puppetmaster
 				trait = schemer
 			}
 			intrigue = 15
@@ -1633,8 +1640,10 @@ targeted_decisions = {
 				trait = flamboyant_schemer
 				trait = intricate_webweaver
 				trait = elusive_shadow
+				trait = conniving_puppetmaster
 				trait = charismatic_negotiator
 				trait = grey_eminence
+				trait = virtuoso_arbitrator
 				trait = schemer
 				trait = deceitful
 				trait = proud
@@ -1682,7 +1691,9 @@ targeted_decisions = {
 					trait = flamboyant_schemer
 					trait = intricate_webweaver
 					trait = elusive_shadow
+					trait = conniving_puppetmaster
 					trait = grey_eminence
+					trait = virtuoso_arbitrator
 					trait = schemer
 					trait = deceitful
 				}
@@ -2097,7 +2108,7 @@ targeted_decisions = {
 		ai_check_interval = 18
 		filter = independent_rulers
 		ai_target_filter = independent_rulers
-		capable_only = yes
+		
 	    diplomacy_icon = GFX_bhutan_icon
 		
 		from_potential = { 
@@ -2200,7 +2211,7 @@ targeted_decisions = {
 		ai_check_interval = 18
 		filter = independent_rulers
 		ai_target_filter = independent_rulers
-		capable_only = yes
+		
 	    diplomacy_icon = GFX_bhutan_icon
 		
 		from_potential = { 
@@ -2322,7 +2333,7 @@ targeted_decisions = {
 		ai_check_interval = 18
 		filter = independent_rulers
 		ai_target_filter = independent_rulers
-		capable_only = yes
+		
 	    diplomacy_icon = GFX_bhutan_icon
 		
 		from_potential = { 
@@ -2429,7 +2440,7 @@ targeted_decisions = {
 		ai_check_interval = 18
 		filter = independent_rulers
 		ai_target_filter = independent_rulers
-		capable_only = yes
+		
 	    diplomacy_icon = GFX_bhutan_icon
 		
 		from_potential = { 
@@ -2578,6 +2589,7 @@ targeted_decisions = {
 								trait = tough_soldier
 								trait = skilled_tactician
 								trait = brilliant_strategist
+								trait = exalted_warlord
 								martial = 10
 							}
 						}
@@ -2599,6 +2611,7 @@ targeted_decisions = {
 								trait = tough_soldier
 								trait = skilled_tactician
 								trait = brilliant_strategist
+								trait = exalted_warlord
 								martial = 10
 							}
 						}
@@ -2764,6 +2777,164 @@ targeted_decisions = {
 				FROM = {
 					trait = humble
 				}
+			}
+		}
+	}
+}
+title_decisions = {
+	hire_contracted_servants = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = owned
+		ai_check_interval = 12
+		from_potential = {
+			OR = {
+				AND = {
+					ai = yes
+					wealth = 600
+					higher_tier_than = baron
+					war = no
+					OR = {
+						is_feudal = yes
+						is_republic = yes
+						is_theocracy = yes
+					}
+				}
+				AND = {
+					ai = no 
+					wealth = 250
+					higher_tier_than = baron
+					war = no
+					OR = {
+						is_feudal = yes
+						is_republic = yes
+						is_theocracy = yes
+					}
+				}
+			}
+		}
+		potential = {
+			tier = COUNT
+			holder_scope = {
+				character = FROM
+			}
+		}
+		
+		allow = {
+			OR = {
+				AND = {
+					location = {
+						has_province_modifier = prosperity_modifier_1 
+					}
+					FROM = {
+						ai = yes
+						wealth = 400
+					}
+				}
+				AND = {
+					FROM ={
+						ai = no 
+						wealth = 400
+					}
+				}
+			}
+			location = {
+				NOT = {
+					has_province_modifier = contracted_servants_modifier
+				}
+			}
+		}
+		
+		effect = {
+			location = {
+				add_province_modifier = {
+					name = contracted_servants_modifier
+					duration = 270
+				}
+			}
+			FROM = {
+				wealth = -400
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = { 
+				factor = 0.15
+			}
+			modifier = {
+				factor = 2
+				FROM = {
+					trait = diligent
+				}
+			}
+			modifier = {
+				factor = 0.95
+				FROM = {
+					trait = patient
+				}
+			}
+			modifier = {
+				factor = 1.5
+				FROM = {
+					trait = charitable
+				}
+			}
+			modifier = {
+				factor = 0.25
+				FROM = {
+					trait = kind
+				}
+			}
+			modifier = {
+				factor = 0.1
+				FROM = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {
+					trait = humble
+				}
+			}
+			modifier = {
+				factor = 2
+				FROM = {
+					trait = proud
+				}
+			}
+			modifier = {
+				factor = 0.05
+				FROM = {
+					trait = greedy
+				}
+			}
+			modifier = {
+				factor = 2
+				FROM = {
+					trait = ambitious
+				}
+			}
+			modifier = {
+				factor = 0.1
+				FROM = {
+					trait = content
+				}
+			}
+			modifier = {
+				factor = 2
+				has_province_modifier = prosperity_modifier_1 
+			}
+			modifier = {
+				factor = 2.25
+				has_province_modifier = prosperity_modifier_2
+			}
+			modifier = {
+				factor = 2.5
+				has_province_modifier = prosperity_modifier_3
 			}
 		}
 	}

@@ -147,6 +147,8 @@ character_event = {
 			ROOT = {
 				random_realm_province = {
 					limit = {
+						held_under_PREV = yes
+
 						distance = {
 							where = PREVPREV
 							distance < 500
@@ -460,25 +462,15 @@ character_event = {
 			}
 		}
 
-		remove_trait_silently_kind_effect = yes
+		add_trait_fully_silently_cruel_effect = yes
 
 		if = {
-			limit = {
-				NOT = { trait = cruel }
-			}
-
-			add_trait = cruel
+			limit = { trait = paranoid }
+			add_trait_fully_silently_envious_effect = yes
 		}
-
-		if = {
-			limit = {
-				NOT = { trait = envious }
-			}
-
-			add_trait = envious
+		else = {
+			add_trait_fully_silently_paranoid_effect = yes
 		}
-
-		add_trait_fully_silently_paranoid_effect = yes
 	}
 
 	after = {
@@ -1458,18 +1450,62 @@ character_event = {
 			name = pet_hunting_dog
 			duration = -1
 		}
-
+		hidden_tooltip = { 
+			random_list = {
+				90 = { set_character_flag = good_dog }
+				10 = { set_character_flag = bad_dog }
+			}
+			character_event = {
+				id = WoL.5204
+				months = 5
+			}
+		}
+		random_list = { # Flavor Randomization
+					50 = { 
+						create_character = {
+							random_traits = no
+							dynasty = actually_culture
+							culture = dog_culture
+							female = no
+							age = 1
+							attributes = {
+								diplomacy = 2
+								learning = 2
+								stewardship = 2
+								intrigue = 2
+								martial = 2
+							}
+							trait = dog
+						}
+					}
+					50 = { 
+						create_character = {
+							random_traits = no
+							dynasty = actually_culture
+							culture = dog_culture
+							female = yes
+							age = 1
+							attributes = {
+								diplomacy = 2
+								learning = 2
+								stewardship = 2
+								intrigue = 2
+								martial = 2
+							}
+							trait = dog
+						}
+					}
+				}
+			
+			new_character = {
+				add_friend = ROOT
+			}
 		character_event = {
 			id = WoL.5290 # Dog dies
 			days = 4500
 			random = 2000
 		}
 
-		character_event = {
-			id = 77861 # Cat & dog
-			days = 30
-			random = 100
-		}
 		ai_chance = {
 			factor = 1
 			modifier = {
@@ -1551,303 +1587,6 @@ character_event = {
 	}
 }
 
-# Name puppy
-character_event = {
-	id = WoL.5203
-	desc = EVTDESC_WoL_5203
-	picture = GFX_evt_hunting_scene
-	border = GFX_event_normal_frame_war
-
-	is_triggered_only = yes
-
-	immediate = {
-		# Decide dog's personality...
-		random_list = {
-			90 = { set_character_flag = good_dog }
-			10 = { set_character_flag = bad_dog }
-		}
-	}
-
-	option = { # Faithful
-		name = EVTOPTA_WoL_5203
-
-		set_character_flag = dog_name_faithful
-	}
-
-	option = { # Hunter
-		name = EVTOPTB_WoL_5203
-
-		set_character_flag = dog_name_hunter
-	}
-
-	option = { # Tricky
-		name = EVTOPTC_WoL_5203
-
-		set_character_flag = dog_name_tricky
-	}
-
-	# TODO: Merge actions, with custom loc?
-	option = { # Lucifer
-		name = EVTOPTD_WoL_5203
-
-		trigger = {
-			religion_group = christian
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_lucifer
-	}
-
-	option = { # Shaytan
-		name = EVTOPTE_WoL_5203
-
-		trigger = {
-			religion_group = muslim
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_shaytan
-	}
-
-	option = { # Fenrir
-		name = EVTOPTF_WoL_5203
-
-		trigger = {
-			religion = pagan
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_fenrir
-	}
-
-	option = { # Erlik
-		name = EVTOPTG_WoL_5203
-
-		trigger = {
-			OR = {
-				religion = ironist
-				religion = khanist
-				religion = akjang
-				religion_openly_tengri_or_reformed_trigger = yes
-			}
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_erlik
-	}
-
-	option = { # Velnias
-		name = EVTOPTH_WoL_5203
-
-		trigger = {
-			religion_openly_baltic_or_reformed_trigger = yes
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_velnias
-	}
-
-	option = { # Tuoni
-		name = EVTOPTI_WoL_5203
-
-		trigger = {
-			religion_openly_finnish_or_reformed_trigger = yes
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_tuoni
-	}
-
-	option = { # Xolotl
-		name = EVTOPTJ_WoL_5203
-
-		trigger = {
-			religion = pagan
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_xolotl
-	}
-
-	option = { # Veles
-		name = EVTOPTK_WoL_5203
-
-		trigger = {
-			religion = pagan
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_veles
-	}
-
-	option = { # Guruhi
-		name = EVTOPTL_WoL_5203
-
-		trigger = {
-			religion = pagan
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_guruhi
-	}
-
-	option = { # Darkness
-		name = EVTOPTM_WoL_5203
-
-		trigger = {
-			religion = pagan
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_darkness
-	}
-
-	option = { # Ahriman
-		name = EVTOPTN_WoL_5203
-
-		trigger = {
-			religion_group = zoroastrian_group
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_ahriman
-	}
-
-	option = { # Satan
-		name = EVTOPTO_WoL_5203
-
-		trigger = {
-			religion_group = jewish_group
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_satan
-	}
-
-	option = { # Vinayaka
-		name = EVTOPTP_WoL_5203
-
-		trigger = {
-			OR = {
-				religion = old_hindu
-				religion = parabrahmanist
-				religion = kalikula
-				religion = shaivasiddhanta
-				religion = jain
-				religion = koyapunem
-				religion = maunaxite_reformed
-				religion = maunaxite
-			}
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_vinayaka
-	}
-
-	option = { # Mara
-		name = EVTOPTQ_WoL_5203
-
-		trigger = {
-			religion_group = buddhist_group
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_mara
-	}
-
-	option = { # Punisher
-		name = EVTOPTR_WoL_5203
-
-		trigger = {
-			religion = jain
-
-			OR = {
-				trait = cynical
-				trait = possessed
-				is_devil_worshiper_trigger = yes
-			}
-		}
-
-		set_character_flag = dog_name_punisher
-	}
-
-	after = {
-		character_event = {
-			id = WoL.5204
-			months = 5
-		}
-	}
-}
 
 # Puppy is growing and starts showing personality
 character_event = {
@@ -2262,6 +2001,12 @@ character_event = {
 
 	after = {
 		remove_character_modifier = pet_hunting_dog
+		random_friend = {
+			limit = {
+				trait = dog
+			}	
+			death = yes
+		}
 
 		character_event = { id = WoL.5291 } # Clean-up
 

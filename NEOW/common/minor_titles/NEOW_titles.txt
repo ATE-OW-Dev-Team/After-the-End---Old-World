@@ -5,6 +5,64 @@ title_achivements = {
 	dignity = 1000 				# this should always be higher than 0, or it won't be applied in all cases
 }
 
+title_family_head = {
+	dignity = 15
+	grant_limit = 4
+	is_voter = yes
+	is_high_prio = yes
+	counts_as_purple_born = yes
+	
+	monthly_prestige = 1.5
+	
+
+	
+	allowed_to_hold = {
+		OR = {
+			male_can_hold_minor_title_trigger = yes
+			female_can_hold_minor_title_trigger = yes
+			has_law = true_cognatic_succession
+		}
+		NOT = { 
+			primary_title = { temporary = yes } 
+		}
+		higher_tier_than = COUNT
+		is_landed = yes
+		is_adult = yes
+		NOT = { trait = monk }
+		NOT = { trait = nun }
+		is_theocracy = no
+		is_republic = no
+	}
+	
+	allowed_to_grant = {
+		has_landed_title = e_transnistria
+		is_feudal = yes
+		is_landed = yes
+		is_theocracy = no
+		is_republic = no
+	}
+	revoke_trigger = {
+		always = no
+	}
+	
+	gain_effect = {
+	}
+	lose_effect = {
+		if = {
+			limit = {
+				FROM = {
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+			}
+			opinion = { who = FROM modifier = opinion_fired_from_council }
+			opinion = { who = FROM modifier = opinion_recently_fired }
+		}
+	}
+
+	message = yes
+}
 title_guilottine_sharpener = {
 	dignity = 0.05
 	realm_in_name = yes
@@ -333,7 +391,6 @@ title_court_cat = {
 	}
 
 	allowed_to_grant = {
-		is_esoteric_religion_trigger = yes
 	}
 	
 	gain_effect = {
@@ -344,6 +401,34 @@ title_court_cat = {
 	message = yes
 }
 
+title_court_dog = {
+	dignity = 0.1
+	realm_in_name = yes
+	grant_limit = 1
+	opinion_effect = 15
+	
+	monthly_salary = 0.01
+	monthly_prestige  = 0.80
+	
+	is_unique = yes
+	
+	allowed_to_hold = {
+		NOT = {
+			primary_title = { temporary = yes } 
+		}
+		trait = dog
+	}
+
+	allowed_to_grant = {
+	}
+	
+	gain_effect = {
+	}
+	lose_effect = {
+	}
+
+	message = yes
+}
 
 title_royal_driver = {
 	dignity = 0.4
@@ -844,6 +929,69 @@ title_yellow_druk = {
 				opinion = { who = ROOT modifier = opinion_resigned_from_council }
 			}
 		}
+	}
+	revoke_trigger = {
+		is_foe = FROM
+	}
+
+	message = yes
+}
+title_je_khenpo = {
+	dignity = 5
+	realm_in_name = yes
+	show_as_title = yes
+	grant_limit = 1
+	opinion_effect = 5
+	is_voter = yes
+	is_high_prio = yes
+	
+	monthly_salary = 0.1
+	monthly_prestige = 0.75
+	
+	
+	is_unique = yes
+	
+	allowed_to_hold = {
+		OR = {
+			male_can_hold_minor_title_trigger = yes
+			female_can_hold_minor_title_trigger = yes
+			has_law = true_cognatic_succession
+		}
+		is_adult = yes
+		prisoner = no
+		is_incapable = no
+		has_regent = no
+		is_landed = yes
+		has_landed_title = d_drukpa_kargyu
+		NOT = { trait = monk }
+		NOT = { trait = nun }
+		is_theocracy = yes
+	}
+	
+	allowed_to_grant = {
+		is_feudal = yes
+		has_landed_title = e_bhutan
+		religion = drukpa_kargyu 
+		primary_title = { 
+			OR = {
+				has_law = parliament_laws_bhutan_1
+				has_law = parliament_laws_bhutan_2
+				has_law = parliament_laws_bhutan_3
+			}
+			NOT = { 
+				has_law = parliament_laws_bhutan_0
+			}
+		}
+	}
+	
+	gain_effect = {
+		character_event = { id = DRUK.1 }
+	}
+	lose_effect = {
+		character_event = { id = DRUK.2 }
+	}
+	retire_effect = {
+		character_event = { id = DRUK.2 }
 	}
 	revoke_trigger = {
 		is_foe = FROM
