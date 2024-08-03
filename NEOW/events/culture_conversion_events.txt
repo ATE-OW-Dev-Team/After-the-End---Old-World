@@ -362,6 +362,161 @@ province_event = {
 
 # Bring in some settlers
 province_event = {
+	id = 55551
+	desc = EVTDESC55551
+	picture = GFX_evt_culture_change
+	hide_window = yes
+	trigger = {
+		any_neighbor_province = {
+			limit = {
+				has_province_modifier = depopulated_3
+				NOT = {
+					culture = ROOT
+				}
+			}
+			has_province_modifier = depopulated_3
+		}
+		ROOT = {
+			NOR = {
+				has_province_modifier = depopulated_3
+				has_province_modifier = depopulated_2
+				has_province_modifier = depopulated_1
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+
+		years = 50
+
+		mult_modifier = {
+			factor = 1.25#intolerance
+			owner = { 
+				primary_title = {
+					has_law = tolerance_laws_0
+				}
+			}
+		}
+		mult_modifier = {
+			factor = 0.75#tolerance
+			owner = { 
+				primary_title = {
+					has_law = tolerance_laws_2
+				}
+			}
+		}
+
+		mult_modifier = { 
+			factor = 1.25
+			location = { terrain = mountain }
+		}
+		mult_modifier = { 
+			factor = 1.15
+			location = { terrain = hills }
+		}
+		mult_modifier = { 
+			factor = 1.15
+			location = { terrain = tells }
+		}
+		mult_modifier = { 
+			factor = 1.1
+			location = { terrain = desert }
+		}
+		mult_modifier = { 
+			factor = 1.15
+			location = { terrain = marsh }
+		}
+		mult_modifier = { 
+			factor = 1.15
+			location = { terrain = jungle }
+		}
+		mult_modifier = { 
+			factor = 1.15
+			location = { terrain = karst }
+		}
+		mult_modifier = { 
+			factor = 1.1
+			location = { terrain = forest }
+		}
+		mult_modifier = { 
+			factor = 1.05
+			location = { terrain = woods }
+		}
+		mult_modifier = { 
+			factor = 0.95
+			location = { terrain = coastal_desert }
+		}
+		mult_modifier = { 
+			factor = 1.1
+			location = { terrain = arctic }
+		}
+		mult_modifier = { 
+			factor = 0.9
+			location = { terrain = steppe }
+		}
+		mult_modifier = { 
+			factor = 0.9
+			location = { terrain = plains }
+		}
+		mult_modifier = { 
+			factor = 0.8
+			location = { terrain = farmlands }
+		}
+	}
+
+	option = {
+		name = "EVTOPTA55551"
+		random_province = {
+			limit = {
+				NOT = { province = PREV }
+				any_neighbor_province = { province = PREVPREV }
+				is_land = yes 
+				NOT = {
+					culture = ROOT
+				}
+				has_province_modifier = depopulated_3
+			}
+			save_global_event_target_as = province_culture_flipping
+			culture = PREV
+			religion = PREV
+			decrease_depopulation_effect = yes
+			owner = {
+				limit = {
+					ai = no
+				}
+				character_event = { id = 55552 }
+			}
+		}
+		ROOT = {
+			owner = {
+				limit = {
+					ai = no
+				}
+				character_event = { id = 55553 }
+			}
+		}
+	}
+}
+
+character_event = {
+	id = 55552
+	desc = 55552Desc
+	picture = GFX_evt_culture_change
+	option = {
+		name = EVTOPTA_55552
+	}
+}
+character_event = {
+	id = 55553
+	desc = 55553Desc
+	picture = GFX_evt_culture_change
+	option = {
+		name = EVTOPTA_55553
+	}
+}
+
+# Bring in some settlers
+province_event = {
 	id = 55001
 	desc = EVTDESC55001
 	picture = GFX_evt_culture_change
@@ -526,97 +681,6 @@ province_event = {
 			}
 		}
 
-		mult_modifier = {
-			factor = 0.75
-			has_province_flag = recent_depopulation_1
-		}
-
-		mult_modifier = {
-			factor = 0.5
-			has_province_flag = recent_depopulation_2
-		}
-
-		mult_modifier = {
-			factor = 0.25
-			has_province_flag = recent_depopulation_3
-		}
-		mult_modifier = {
-			factor = 0.5 # Altaic nomad steppe bonus vs non-Altaics
-			owner = {
-				OR = {
-				culture = turkmen
-				culture = azerbaijani
-				culture = soitoskan
-				culture_group = kipchak
-				culture_group = karluk
-				culture_group = mongolic
-				}
-			}
-			OR = {
-				owner = {
-					is_capital = ROOT
-				}
-				AND = {
-					NOR = {
-						culture = turkmen
-						culture = azerbaijani
-						culture = soitoskan
-						culture_group = kipchak
-						culture_group = karluk
-						culture_group = mongolic
-					}
-					terrain = steppe
-				}
-			}
-		}
-		mult_modifier = {
-			factor = 3
-			OR = {
-				has_game_rule = {
-					name = culture_conversion
-					value = slower_normal
-				}
-				has_game_rule = {
-					name = culture_conversion
-					value = faster_melting_pots_and_slower_normal
-				}
-			}
-		}
-		# mult_modifier = {
-			# factor = 0.25
-			# OR = {
-				# culture = zhangzhung
-				# culture = sumpa
-			# }
-			# owner = {
-				# culture = bodpa
-				# OR = {
-					# any_owned_bloodline = {
-						# has_bloodline_flag = bloodline_songtsen_gampo
-					# }
-					# top_liege = {
-						# any_owned_bloodline = {
-							# has_bloodline_flag = bloodline_songtsen_gampo
-						# }
-					# }
-				# }
-			# }
-		# }
-		mult_modifier = { #Roman Renaissance.
-			factor = 0.5
-			has_global_flag = flag_started_roman_renaissance
-			liege = { culture = roman }
-			location = { county = { culture_group = apeninian } }
-		}
-		mult_modifier = { #Greek culture is more impervious to Romanization.
-			factor = 2
-			liege = { culture = roman }
-			location = { county = { culture = greek } }
-		}
-		mult_modifier = { 
-			factor = 1.5
-			owner = { location = { county = { culture_group = PREVPREV } } }
-		}
 		mult_modifier = { 
 			factor = 1.25
 			location = { terrain = mountain }
