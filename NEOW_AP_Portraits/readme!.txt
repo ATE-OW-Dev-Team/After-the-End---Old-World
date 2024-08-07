@@ -1,1 +1,1 @@
-Use this submod if you dont have the conclave content pack.
+Use this submod if you dont have the african portrait pack.
