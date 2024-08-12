@@ -7,7 +7,7 @@ NDiplomacy = {
 	ATTACKING_SOMEONE_DEFENDING_AGAINST_OTHER_RELIGIOUS_GROUP_PIETY_COST = 100,		-- Piety hit for attacking someone who is defending against other religious group
 	ATTACKER_CALL_DECLINE_COST = 25, 			-- Prestige cost for refusing to join an offensive war
 	DEFENDER_CALL_DECLINE_COST = 100, 			-- Prestige cost for refusing to join a defensive war
-	SUZERAIN_DEFENDER_CALL_DECLINE_COST = 150,	-- Prestige cost for a suzerain refusing to join a defensive war, when they are supposed to alway accept
+	SUZERAIN_DEFENDER_CALL_DECLINE_COST = 150,	-- Prestige cost for a suzerain refusing to join a defensive war, when they are supposed to always accept
 	ALLIED_CALL_DECLINE_COST = 200,
 
 	TRIBAL_VASSAL_CALL_DECLINE_COST_FACTOR = 2.0, -- Prestige cost multiplier for tribal vassals
@@ -255,7 +255,7 @@ NDiplomacy = {
 	SEND_GIFT_INTERACTION_ENABLED = 1,						-- Should this action be used at all?
 
 	SEND_GIFT_DIPLOMACY_MULT = 0.5,							-- Diplomacy affects the opinion bonus multiplied with this
-	SEND_GIFT_NOT_LIEGE_BONUS = 7,							-- Not being the liege of the receiver affects the opinon bonus by this much
+	SEND_GIFT_NOT_LIEGE_BONUS = 7,							-- Not being the liege of the receiver affects the opinion bonus by this much
 	SEND_GIFT_GREED_MULT = 0.15,							-- Changes how much greed affects the opinion
 	SEND_ARTIFACT_GREED_MULT = 0.05,						-- Changes how much greed affects the opinion
 
@@ -756,7 +756,7 @@ NDiplomacy = {
 	BANISH_TAKE_WEALTH_PERCENTAGE_COURTIER = 1,
 	BANISH_REALM_SIZE_CHANCE_RATIO_MODIFIER = 2,
 
-	DEFENSIVE_PACT_THREAT_LIMIT = 0.05,							-- The amount of provinces in a realm that is needed for beeing a valid target of a defensive pact
+	DEFENSIVE_PACT_THREAT_LIMIT = 0.05,							-- The amount of provinces in a realm that is needed for being a valid target of a defensive pact
 	DEFENSIVE_PACT_SIZE_RATIO = 1.0,							-- Relative size requirement is this at 100% threat
 	DEFENSIVE_PACT_MAX_RANGE = 400,								-- At 100% threat characters are able to join defensive pacts against targets of this distance
 	DEFENSIVE_PACT_MAX_RANGE_SAME_GROUP = 300,					-- At 100% threat characters are able to join defensive pacts against targets of this distance
@@ -777,7 +777,7 @@ NDiplomacy = {
 	LAW_CHANGE_PRESTIGE_COST_ABSOLUTISM = 100,				-- Prestige cost for Nomadic government when changing normal demesne laws with no council
 	CROWN_LAW_CHANGE_PRESTIGE_COST_ABSOLUTISM = 100,		-- Prestige cost for Nomadic government when changing Crown laws with no council
 
-	FAVOR_THRESHOLD_TO_FORCE_HUMANS = 250,					-- Mininum importance of issue for us to consider forcing a human to do it by using the favor they owe us
+	FAVOR_THRESHOLD_TO_FORCE_HUMANS = 250,					-- Minimum importance of issue for us to consider forcing a human to do it by using the favor they owe us
 	CHANCES_TO_USE_FAVOR = 75,								-- Chance to use favor to change the outcome of a diplomatic request (as a percentage)
 
 	NON_AGGRESSION_PACT_REJECTED_COOLDOWN = 1,				-- Number of years before a character can ask to form a non-aggression pact again
@@ -994,7 +994,7 @@ NTitle = {
 	KING_CLAIM_PRESTIGE_COST = 1200, -- Unused, impossible
 	EMPEROR_CLAIM_PRESTIGE_COST = 2400, -- Unused, impossible
 
--- Title Revokation Prestige Cost
+-- Title Revocation Prestige Cost
 	BARON_REVOKE_PRESTIGE_COST = 25,
 	COUNT_REVOKE_PRESTIGE_COST = 50,
 	DUKE_REVOKE_PRESTIGE_COST = 100,
@@ -1083,7 +1083,7 @@ NReligion = {
 	HERESY_TAKEOVER_PROVINCES = 10,					-- The number of provinces a heresy needs MORE than the current norm for it to become the new Orthodoxy
 	PAPAL_SUCCESSION_PASS_ON_HOLDINGS = 1,			-- Set to zero if holdings shouldn't be passed on
 	PAPAL_SUCCESSION_LOSE_MINOR_TITLES = 1,			-- Set to zero if minor religious titles should be lost
-	AUTHORITY_FROM_PIETY_CAP = 0.25,				-- Maxmimum boost to religious authority due to head's piety
+	AUTHORITY_FROM_PIETY_CAP = 0.25,				-- Maximum boost to religious authority due to head's piety
 },
 
 NEconomy = {
@@ -1186,7 +1186,7 @@ NNomad = {
 	CLAN_SAME_FAITH_BONUS = 10,						-- How much clan sentiment you get from having the same faith
 
 	CAPITAL_AT_TRADE_POST_MODIFIER = 0.1,			-- Trade post income modifier with the presence of a nomad capital
-	CAPITAL_ADJACADENT_TO_TRADE_POST_MODIFIER = 0.05, -- Trade post income modifier with a adjacadent nomad capital
+	CAPITAL_ADJACADENT_TO_TRADE_POST_MODIFIER = 0.05, -- Trade post income modifier with a adjacent nomad capital
 	CAPITAL_AT_OWN_HOLY_SITE_PIETY = 1,				-- Monthly Piety for having the capital in the holy site of your own religion
 	CAPITAL_AT_OTHER_HOLY_SITE_PRESTIGE = 1,		-- Monthly Prestige for having the capital in the holy site of other religions
 
@@ -1692,7 +1692,7 @@ NAI =
 
 	EXPANDING_HORDE_TRESHOLD = 10000,						-- How many event spawned troops needed for AI to think it is still expanding
 
-	CONTINUE_WAR_TRESHOLD = 5, 								-- How much warscore needed for the AI to consider using a favor to sto pthe liege enforce peace
+	CONTINUE_WAR_TRESHOLD = 5, 								-- How much warscore needed for the AI to consider using a favor to stop the liege enforce peace
 	STOP_WAR_THRESHOLD = -50,								-- How much warscore needed for the AI to consider using a favor to force the liege to start enforcing peace
 	TROOP_STRENGTH_PER_TIER_ENFORCE_PEACE = 2500,			-- For AI to consider how powerful a vassal is
 
@@ -1890,7 +1890,7 @@ NLearningScenario =
 NWonders =
 {
 	MIN_LOOTABLE_STAGE = 2, -- The stage set here will be lootable, but looting will automagically stop after it has been looted and no looting will be possible below this stage.
-	CONVERTER_IGNORE_HISTORICAL_WONDERS = 1, -- If set to one then the historical wonders will not be transfered through the EU4 converter even if they have finished the final stage of construction.
+	CONVERTER_IGNORE_HISTORICAL_WONDERS = 1, -- If set to one then the historical wonders will not be transferred through the EU4 converter even if they have finished the final stage of construction.
 	NON_CONCLAVE_COST_MULTIPLIER = 0.6 -- Without the Conclave tax laws the independent rulers will have significantly less income.
 }
 
