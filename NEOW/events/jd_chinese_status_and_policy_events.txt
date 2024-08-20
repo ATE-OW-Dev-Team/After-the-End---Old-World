@@ -1174,201 +1174,403 @@ character_event = {
 						}
 					}
 				}
-				modifier = { # The Borjigins are more likely to win
-					factor = 5
-					NOT = {
-						has_global_flag = borjigin_china
-					}
-					any_independent_ruler = {
-						OR = {
-							dynasty = 11100
-							dynasty = 1051210
-						}
-						has_landed_title = e_mongol_empire
-						ai = yes
-					}
-				}
-				
-				FROM = {
-					set_offmap_flag = no_status_news
-					set_status = china_unrest
-					set_offmap_flag = china_had_unrest
-					clr_offmap_flag = no_status_news
-				
-					set_offmap_flag = china_expansionist_trend # Likely for the new ruler to pick Expansionist policy
-					clr_offmap_flag = china_badly_beaten_3
-					clr_offmap_flag = china_badly_beaten_2
-					clr_offmap_flag = china_badly_beaten_1
-					
-					if = {
-						limit = {
-							has_offmap_flag = china_mongols_won_2
-						}
-						set_offmap_flag = china_mongols_won_3
-						clr_offmap_flag = china_mongols_won_2
-					}
-					
-					if = {
-						limit = {
-							has_offmap_flag = china_mongols_won_1
-						}
-						set_offmap_flag = china_mongols_won_2
-						clr_offmap_flag = china_mongols_won_1
-					}
-					
-					if = {
-						limit = {
-							NOR = {
-								has_offmap_flag = china_mongols_won_1
-								has_offmap_flag = china_mongols_won_2
-								has_offmap_flag = china_mongols_won_3
-							}
-						}
-						set_offmap_flag = china_mongols_won_1
-					}
-					
-					set_offmap_flag = no_succession_news
-				}
-				
-				if = { # If the Borjigin's are around, it's guaranteed to be a Borjigin emperor
-					limit = {
-						NOT = {
-							has_global_flag = borjigin_china
-						}
-						any_independent_ruler = {
-							OR = {
-								dynasty = 11100
-								dynasty = 1051210
-							}
-							has_landed_title = e_mongol_empire
-							ai = yes
-						}
-					}
-					random_independent_ruler = {
-						limit = {
-							OR = {
-								dynasty = 11100
-								dynasty = 1051210
-							}
-							has_landed_title = e_mongol_empire
-							ai = yes
-						}
-						save_event_target_as = mongol_china_invader
-					}
-				}
-				
-				# A new ruler ascends to the Dragon Throne. The fallout is handled by JD.10005 and JD.50000 (from 'on_offmap_ruler_changed')
-				create_character = { #The father
-					age = 60
-					random_traits = yes
-					female = no
-					religion = THIS
-					culture = congolese
-					dynasty = THIS
-				}
-				new_character = {
-					PREV = { set_father = PREV }
-					death = { death_reason = death_in_china_historic }
-				}
 				random_list = {
-					0 = {
-						additive_modifier = {
-							value = 50
-							has_game_rule = {
-								name = gender
-								value = all
-							}
-						}
-						create_character = {
-							age = 30
-							random_traits = yes
-							female = yes
-							religion = islamity #strange, but required to make it work according to the notes, they're religion converted later on
-							culture = congolese 
-							dynasty = actually_culture
-							trait = brilliant_strategist
-							martial = 10
-						}
-					}
 					50 = {
-						create_character = {
-							age = 30
+						FROM = {
+							set_offmap_flag = no_status_news
+							set_status = china_unrest
+							set_offmap_flag = china_had_unrest
+							clr_offmap_flag = no_status_news
+						
+							set_offmap_flag = china_expansionist_trend # Likely for the new ruler to pick Expansionist policy
+							clr_offmap_flag = china_badly_beaten_3
+							clr_offmap_flag = china_badly_beaten_2
+							clr_offmap_flag = china_badly_beaten_1
+							
+							if = {
+								limit = {
+									has_offmap_flag = china_mongols_won_2
+								}
+								set_offmap_flag = china_mongols_won_3
+								clr_offmap_flag = china_mongols_won_2
+							}
+							
+							if = {
+								limit = {
+									has_offmap_flag = china_mongols_won_1
+								}
+								set_offmap_flag = china_mongols_won_2
+								clr_offmap_flag = china_mongols_won_1
+							}
+							
+							if = {
+								limit = {
+									NOR = {
+										has_offmap_flag = china_mongols_won_1
+										has_offmap_flag = china_mongols_won_2
+										has_offmap_flag = china_mongols_won_3
+									}
+								}
+								set_offmap_flag = china_mongols_won_1
+							}
+							
+							set_offmap_flag = no_succession_news
+						}
+						
+						
+						# A new ruler ascends to the Dragon Throne. The fallout is handled by JD.10005 and JD.50000 (from 'on_offmap_ruler_changed')
+						create_character = { #The father
+							age = 60
 							random_traits = yes
 							female = no
-							religion = islamity #strange, but required to make it work according to the notes, they're religion converted later on
-							culture = congolese
-							dynasty = actually_culture
-							trait = brilliant_strategist
-							martial = 10
+							religion = THIS
+							culture = nigerian
+							dynasty = THIS
 						}
-					}
-				}
-				new_character = {
-					create_character = {
-						age = 60
-						random_traits = yes
-						female = no
-						religion = THIS
-						culture = THIS
-						dynasty = THIS
-					}
-					new_character = {
-						death = { death_reason = death_in_china_historic }
-						save_event_target_as = new_china_ruler_father
-					}
-					set_father = event_target:new_china_ruler_father
-					FROM = {
-						set_offmap_holder = PREV
-					}
-					random_list = {
-						100 = {
-							religion = highchurch
+						new_character = {
+							PREV = { set_father = PREV }
+							death = { death_reason = death_in_china_historic }
 						}
-						10 = {
-							religion = highchurch
-						}
-						5 = {
-							religion = baptist
-						}
-					}
-				}				
-				
-				any_player = {
-					limit = {
-						has_offmap_news_enabled = FROM
-						is_within_diplo_range = ROOT
-					}
-					narrative_event = { id = JD.50162 }
-				}
-
-				random_list = {
-					50 = {
-						modifier = {
-							factor = 0
-							has_game_rule = {
-								name = chinese_invasions
-								value = none
+						random_list = {
+							0 = {
+								additive_modifier = {
+									value = 50
+									has_game_rule = {
+										name = gender
+										value = all
+									}
+								}
+								create_character = {
+									age = 30
+									random_traits = yes
+									female = yes
+									religion = islamity #strange, but required to make it work according to the notes, they're religion converted later on
+									culture = nigerian 
+									dynasty = actually_culture
+									trait = brilliant_strategist
+									martial = 10
+								}
+							}
+							50 = {
+								create_character = {
+									age = 30
+									random_traits = yes
+									female = no
+									religion = islamity #strange, but required to make it work according to the notes, they're religion converted later on
+									culture = nigerian
+									dynasty = actually_culture
+									trait = brilliant_strategist
+									martial = 10
+								}
 							}
 						}
+						new_character = {
+							create_character = {
+								age = 60
+								random_traits = yes
+								female = no
+								religion = THIS
+								culture = THIS
+								dynasty = THIS
+							}
+							new_character = {
+								death = { death_reason = death_in_china_historic }
+								save_event_target_as = new_china_ruler_father
+							}
+							set_father = event_target:new_china_ruler_father
+							FROM = {
+								set_offmap_holder = PREV
+							}
+							random_list = {
+								100 = {
+									religion = islamity
+								}
+								10 = {
+									religion = highchurch
+								}
+								5 = {
+									religion = baptist
+								}
+							}
+						}				
+						
+						any_player = {
+							limit = {
+								has_offmap_news_enabled = FROM
+								is_within_diplo_range = ROOT
+							}
+							narrative_event = { id = JD.50162 }
+						}
+
 						character_event = { id = JD.10113 days = 15 } #Spawns a Displaced Prince adventurer...
 						set_character_flag = spawning_a_displaced_royal
 						log = "China Logging:"
 						log = "Attempting to spawn a Displaced Prince, as aftermath to event JD.50160 (end of Being Invaded by Mongols). Character should spawn in 15 days."
 					}
-					50 = {
-						modifier = {
-							factor = 0
-							has_game_rule = {
-								name = chinese_invasions
-								value = none
+				}	
+				50 = {
+						FROM = {
+							set_offmap_flag = no_status_news
+							set_status = china_unrest
+							set_offmap_flag = china_had_unrest
+							clr_offmap_flag = no_status_news
+						
+							set_offmap_flag = china_expansionist_trend # Likely for the new ruler to pick Expansionist policy
+							clr_offmap_flag = china_badly_beaten_3
+							clr_offmap_flag = china_badly_beaten_2
+							clr_offmap_flag = china_badly_beaten_1
+							
+							if = {
+								limit = {
+									has_offmap_flag = china_mongols_won_2
+								}
+								set_offmap_flag = china_mongols_won_3
+								clr_offmap_flag = china_mongols_won_2
+							}
+							
+							if = {
+								limit = {
+									has_offmap_flag = china_mongols_won_1
+								}
+								set_offmap_flag = china_mongols_won_2
+								clr_offmap_flag = china_mongols_won_1
+							}
+							
+							if = {
+								limit = {
+									NOR = {
+										has_offmap_flag = china_mongols_won_1
+										has_offmap_flag = china_mongols_won_2
+										has_offmap_flag = china_mongols_won_3
+									}
+								}
+								set_offmap_flag = china_mongols_won_1
+							}
+							
+							set_offmap_flag = no_succession_news
+						}
+						
+						
+						# A new ruler ascends to the Dragon Throne. The fallout is handled by JD.10005 and JD.50000 (from 'on_offmap_ruler_changed')
+						create_character = { #The father
+							age = 60
+							random_traits = yes
+							female = no
+							religion = THIS
+							culture = igbo
+							dynasty = THIS
+						}
+						new_character = {
+							PREV = { set_father = PREV }
+							death = { death_reason = death_in_china_historic }
+						}
+						random_list = {
+							0 = {
+								additive_modifier = {
+									value = 50
+									has_game_rule = {
+										name = gender
+										value = all
+									}
+								}
+								create_character = {
+									age = 30
+									random_traits = yes
+									female = yes
+									religion = highchurch #strange, but required to make it work according to the notes, they're religion converted later on
+									culture = igbo 
+									dynasty = actually_culture
+									trait = brilliant_strategist
+									martial = 10
+								}
+							}
+							50 = {
+								create_character = {
+									age = 30
+									random_traits = yes
+									female = no
+									religion = highchurch #strange, but required to make it work according to the notes, they're religion converted later on
+									culture = igbo
+									dynasty = actually_culture
+									trait = brilliant_strategist
+									martial = 10
+								}
 							}
 						}
-						character_event = { id =  JD.10109 days = 15 } #Spawns a Jurchen tribe leader...
-						set_character_flag = spawning_a_jurchen_invader
+						new_character = {
+							create_character = {
+								age = 60
+								random_traits = yes
+								female = no
+								religion = THIS
+								culture = THIS
+								dynasty = THIS
+							}
+							new_character = {
+								death = { death_reason = death_in_china_historic }
+								save_event_target_as = new_china_ruler_father
+							}
+							set_father = event_target:new_china_ruler_father
+							FROM = {
+								set_offmap_holder = PREV
+							}
+							random_list = {
+								100 = {
+									religion = highchurch
+								}
+								10 = {
+									religion = islamity
+								}
+								5 = {
+									religion = baptist
+								}
+							}
+						}				
+						
+						any_player = {
+							limit = {
+								has_offmap_news_enabled = FROM
+								is_within_diplo_range = ROOT
+							}
+							narrative_event = { id = JD.50162 }
+						}
+
+						character_event = { id = JD.10113 days = 15 } #Spawns a Displaced Prince adventurer...
+						set_character_flag = spawning_a_displaced_royal
 						log = "China Logging:"
-						log = "Attempting to spawn a Jurchen Invader, as aftermath to event JD.50160 (end of Being Invaded by Mongols). Character should spawn in 15 days."
+						log = "Attempting to spawn a Displaced Prince, as aftermath to event JD.50160 (end of Being Invaded by Mongols). Character should spawn in 15 days."
 					}
-				}
+				}	
+				50 = {
+						FROM = {
+							set_offmap_flag = no_status_news
+							set_status = china_unrest
+							set_offmap_flag = china_had_unrest
+							clr_offmap_flag = no_status_news
+						
+							set_offmap_flag = china_expansionist_trend # Likely for the new ruler to pick Expansionist policy
+							clr_offmap_flag = china_badly_beaten_3
+							clr_offmap_flag = china_badly_beaten_2
+							clr_offmap_flag = china_badly_beaten_1
+							
+							if = {
+								limit = {
+									has_offmap_flag = china_mongols_won_2
+								}
+								set_offmap_flag = china_mongols_won_3
+								clr_offmap_flag = china_mongols_won_2
+							}
+							
+							if = {
+								limit = {
+									has_offmap_flag = china_mongols_won_1
+								}
+								set_offmap_flag = china_mongols_won_2
+								clr_offmap_flag = china_mongols_won_1
+							}
+							
+							if = {
+								limit = {
+									NOR = {
+										has_offmap_flag = china_mongols_won_1
+										has_offmap_flag = china_mongols_won_2
+										has_offmap_flag = china_mongols_won_3
+									}
+								}
+								set_offmap_flag = china_mongols_won_1
+							}
+							
+							set_offmap_flag = no_succession_news
+						}
+						
+						
+						# A new ruler ascends to the Dragon Throne. The fallout is handled by JD.10005 and JD.50000 (from 'on_offmap_ruler_changed')
+						create_character = { #The father
+							age = 60
+							random_traits = yes
+							female = no
+							religion = THIS
+							culture = hausa
+							dynasty = THIS
+						}
+						new_character = {
+							PREV = { set_father = PREV }
+							death = { death_reason = death_in_china_historic }
+						}
+						random_list = {
+							0 = {
+								additive_modifier = {
+									value = 50
+									has_game_rule = {
+										name = gender
+										value = all
+									}
+								}
+								create_character = {
+									age = 30
+									random_traits = yes
+									female = yes
+									religion = sufi #strange, but required to make it work according to the notes, they're religion converted later on
+									culture = hausa 
+									dynasty = actually_culture
+									trait = brilliant_strategist
+									martial = 10
+								}
+							}
+							50 = {
+								create_character = {
+									age = 30
+									random_traits = yes
+									female = no
+									religion = sufi #strange, but required to make it work according to the notes, they're religion converted later on
+									culture = hausa
+									dynasty = actually_culture
+									trait = brilliant_strategist
+									martial = 10
+								}
+							}
+						}
+						new_character = {
+							create_character = {
+								age = 60
+								random_traits = yes
+								female = no
+								religion = THIS
+								culture = THIS
+								dynasty = THIS
+							}
+							new_character = {
+								death = { death_reason = death_in_china_historic }
+								save_event_target_as = new_china_ruler_father
+							}
+							set_father = event_target:new_china_ruler_father
+							FROM = {
+								set_offmap_holder = PREV
+							}
+							random_list = {
+								100 = {
+									religion = sufi
+								}
+								10 = {
+									religion = islamity
+								}
+							}
+						}				
+						
+						any_player = {
+							limit = {
+								has_offmap_news_enabled = FROM
+								is_within_diplo_range = ROOT
+							}
+							narrative_event = { id = JD.50162 }
+						}
+
+						character_event = { id = JD.10113 days = 15 } #Spawns a Displaced Prince adventurer...
+						set_character_flag = spawning_a_displaced_royal
+						log = "China Logging:"
+						log = "Attempting to spawn a Displaced Prince, as aftermath to event JD.50160 (end of Being Invaded by Mongols). Character should spawn in 15 days."
+					}
+				}	
 			}
 		}
 	}
@@ -1805,123 +2007,199 @@ character_event = {
 					
 					set_offmap_flag = no_succession_news
 				}
-				
-				# A new ruler ascends to the Dragon Throne. The fallout is handled by JD.10005 and JD.50000 (from 'on_offmap_ruler_changed')
-				create_character = { #The father
-					age = 60
-					random_traits = yes
-					female = no
-					religion = THIS
-					culture = liberian
-					dynasty = THIS
-				}
-				new_character = {
-					PREV = { set_father = PREV }
-					death = { death_reason = death_in_china_historic }
-				}
-				random_list = {
-					0 = {
-						additive_modifier = {
-							value = 50
-							has_game_rule = {
-								name = gender
-								value = all
-							}
-						}
-						create_character = {
-							age = 30
-							random_traits = yes
-							female = yes
-							religion = bushism # A bit strange, but necessary - we want to change this to Americanist if possible
-							culture = liberian
-							dynasty = actually_culture
-							trait = brilliant_strategist
-							martial = 10
-						}
-					}
+			
+			random_list = {	
 					50 = {
-						create_character = {
-							age = 30
-							random_traits = yes
-							female = no
-							religion = bushism # A bit strange, but necessary
-							culture = liberian
-							dynasty = actually_culture
-							trait = brilliant_strategist
-							martial = 10
-						}
-					}
-				}
-				new_character = {
-					create_character = {
-						age = 60
-						random_traits = yes
-						female = no
-						religion = THIS
-						culture = THIS
-						dynasty = THIS
-					}
-					new_character = {
-						death = { death_reason = death_in_china_historic }
-						save_event_target_as = new_china_ruler_father
-					}
-					set_father = event_target:new_china_ruler_father
-					FROM = {
-						set_offmap_holder = PREV
-					}
-					random_list = {
-						100 = {
-							religion = bushism
-						}
-						10 = {
+							# A new ruler ascends to the Dragon Throne. The fallout is handled by JD.10005 and JD.50000 (from 'on_offmap_ruler_changed')
+							create_character = { #The father
+								age = 60
+								random_traits = yes
+								female = no
+								religion = THIS
+								culture = congolese
+								dynasty = THIS
+							}
+							new_character = {
+								PREV = { set_father = PREV }
+								death = { death_reason = death_in_china_historic }
+							}
+							random_list = {
+								0 = {
+									additive_modifier = {
+										value = 50
+										has_game_rule = {
+											name = gender
+											value = all
+										}
+									}
+									create_character = {
+										age = 30
+										random_traits = yes
+										female = yes
+										religion = islamity 
+										culture = congolese
+										dynasty = actually_culture
+										trait = brilliant_strategist
+										martial = 10
+									}
+								}
+								50 = {
+									create_character = {
+										age = 30
+										random_traits = yes
+										female = no
+										religion = islamity 
+										culture = congolese
+										dynasty = actually_culture
+										trait = brilliant_strategist
+										martial = 10
+									}
+								}
+							}
+							new_character = {
+								create_character = {
+									age = 60
+									random_traits = yes
+									female = no
+									religion = THIS
+									culture = THIS
+									dynasty = THIS
+								}
+								new_character = {
+									death = { death_reason = death_in_china_historic }
+									save_event_target_as = new_china_ruler_father
+								}
+								set_father = event_target:new_china_ruler_father
+								FROM = {
+									set_offmap_holder = PREV
+								}
+								random_list = {
+									100 = {
+										religion = islamity
+									}
+									10 = {
+										religion = bushism
+									}
+									10 = {
+										religion = baptist
+									}
+									5 = {
+										religion = highchurch
+									}
+									5 = {
+										religion = sufi
+									}
+								}
+							}
 						
-						}
-						10 = {
-							religion = baptist
-						}
-						5 = {
-							religion = highchurch
-						}
-						5 = {
-							religion = sufi
-						}
-					}
-				}
-  			
-				any_player = {
-					limit = {
-						has_offmap_news_enabled = FROM
-						is_within_diplo_range = ROOT
-					}
-					narrative_event = { id = JD.50202 }
-				}
-				
-				random_list = {
-					50 = {
-						modifier = {
-							factor = 0
-							has_game_rule = {
-								name = chinese_invasions
-								value = none
+							any_player = {
+								limit = {
+									has_offmap_news_enabled = FROM
+									is_within_diplo_range = ROOT
+								}
+								narrative_event = { id = JD.50202 }
 							}
+							
+							character_event = { id = JD.10113 days = 15 } #Spawns a Displaced Prince adventurer...
+							set_character_flag = spawning_a_displaced_royal
+							log = "China Logging:"
+							log = "Attempting to spawn a Displaced Prince, as aftermath to event JD.50200 (end of Being Invaded by Jurchens). Character should spawn in 15 days."
 						}
-						character_event = { id = JD.10113 days = 15 } #Spawns a Displaced Prince adventurer...
-						set_character_flag = spawning_a_displaced_royal
-						log = "China Logging:"
-						log = "Attempting to spawn a Displaced Prince, as aftermath to event JD.50200 (end of Being Invaded by Jurchens). Character should spawn in 15 days."
-					}
-					50 = {
-						modifier = {
-							factor = 0
-							has_game_rule = {
-								name = chinese_invasions
-								value = none
+						50 = {
+							# A new ruler ascends to the Dragon Throne. The fallout is handled by JD.10005 and JD.50000 (from 'on_offmap_ruler_changed')
+							create_character = { #The father
+								age = 60
+								random_traits = yes
+								female = no
+								religion = THIS
+								culture = liberian
+								dynasty = THIS
 							}
+							new_character = {
+								PREV = { set_father = PREV }
+								death = { death_reason = death_in_china_historic }
+							}
+							random_list = {
+								0 = {
+									additive_modifier = {
+										value = 50
+										has_game_rule = {
+											name = gender
+											value = all
+										}
+									}
+									create_character = {
+										age = 30
+										random_traits = yes
+										female = yes
+										religion = bushism 
+										culture = liberian
+										dynasty = actually_culture
+										trait = brilliant_strategist
+										martial = 10
+									}
+								}
+								50 = {
+									create_character = {
+										age = 30
+										random_traits = yes
+										female = no
+										religion = bushism 
+										culture = liberian
+										dynasty = actually_culture
+										trait = brilliant_strategist
+										martial = 10
+									}
+								}
+							}
+							new_character = {
+								create_character = {
+									age = 60
+									random_traits = yes
+									female = no
+									religion = THIS
+									culture = THIS
+									dynasty = THIS
+								}
+								new_character = {
+									death = { death_reason = death_in_china_historic }
+									save_event_target_as = new_china_ruler_father
+								}
+								set_father = event_target:new_china_ruler_father
+								FROM = {
+									set_offmap_holder = PREV
+								}
+								random_list = {
+									100 = {
+										religion = bushism
+									}
+									10 = {
+										religion = islamity
+									}
+									10 = {
+										religion = baptist
+									}
+									5 = {
+										religion = highchurch
+									}
+									5 = {
+										religion = sufi
+									}
+								}
+							}
+						
+							any_player = {
+								limit = {
+									has_offmap_news_enabled = FROM
+									is_within_diplo_range = ROOT
+								}
+								narrative_event = { id = JD.50202 }
+							}
+							character_event = { id = JD.10113 days = 15 } #Spawns a Displaced Prince adventurer...
+							set_character_flag = spawning_a_displaced_royal
+							log = "China Logging:"
+							log = "Attempting to spawn a Displaced Prince, as aftermath to event JD.50200 (end of Being Invaded by Jurchens). Character should spawn in 15 days."
 						}
-						character_event = { id =  JD.10109 days = 15 } #Spawns a Jurchen tribe leader...
-						set_character_flag = spawning_a_jurchen_invader
-						log = "China Logging:"
-						log = "Attempting to spawn a Jurchen Invader, as aftermath to event JD.50200 (end of Being Invaded by Mongols). Character should spawn in 15 days."
 					}
 				}
 			}
