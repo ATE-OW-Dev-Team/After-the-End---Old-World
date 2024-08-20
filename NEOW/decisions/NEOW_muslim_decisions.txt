@@ -7,7 +7,11 @@ decisions = {
 			independent = yes
 			rebel = no
 			religion_head = { always = yes }
-			religion_group = muslim
+			OR = {
+				religion = sunni
+				religion = wahhabi
+				religion = deobandi
+			}
 			NOR = {
 				has_regent = yes
 				controls_religion = yes
@@ -26,7 +30,6 @@ decisions = {
 					}
 				}
 			}
-			religion = sunni
 		}
 		allow = {
 			OR = {
@@ -107,8 +110,36 @@ decisions = {
 			set_character_flag = newly_founded_caliphate
 			caliphate_gain_effect = yes
 			if = {
-				limit = { religion = sunni }
+				limit = { 
+					religion = sunni 
+					d_sunni = {
+						has_holder = yes
+					}
+				}
 				d_sunni = { add_claim = ROOT }
+			}
+			if = {
+				limit = { 
+					religion = sunni 
+					d_sunni = {
+						has_holder = no
+					}
+				}
+				set_global_flag = sunni_caliphate_restored
+				d_sunni = { 
+					activate_title = { title = THIS status = yes }
+				}
+				set_religion_head = d_sunni
+				sunni = {
+					make_reformer_head_of_religion = yes
+				}
+				k_sunni = {
+					unsafe_destroy_landed_title = THIS
+					activate_title = { title = THIS status = no }
+				}
+				d_sunni = { 
+					grant_title = ROOT 
+				}
 			}
 			if = {
 				limit = { religion = wahhabi }
