@@ -887,8 +887,8 @@ NCharacter = {
 	NATURAL_DEATH_CHANCE_AGE_80 = 3500,				-- Natural deaths per decade out of 10000 people: Age 80-90
 	NATURAL_DEATH_CHANCE_AGE_90 = 7000,				-- Natural deaths per decade out of 10000 people: Age 90-99
 	NATURAL_DEATH_CHANCE_AGE_100 = 9000,			-- Natural deaths per decade out of 10000 people: Age 100+
-	FERTILITY_BASE_MULT = 0.45,						-- Base fertility multiplier to adjust the base chance of impregnation
-	SECONDARY_SPOUSE_FERTILITY_MULT = 0.35,			-- Applied to fertility of secondary spouses and concubines
+	FERTILITY_BASE_MULT = 0.4,						-- Base fertility multiplier to adjust the base chance of impregnation
+	SECONDARY_SPOUSE_FERTILITY_MULT = 0.25,			-- Applied to fertility of secondary spouses and concubines
 	NOT_SPOUSE_FERTILITY_MULT = 0.40,				-- Applied to fertility when two lovers are not married
 	MARRIED_LOVERS_FERTILITY_MULT = 1.3,			-- Applied to fertility when lovers are married
 	INFANT_DEATH_CHANCE = 0.02,						-- Chance of stillbirth / death at birth
@@ -1577,15 +1577,15 @@ NGraphics = {
 },
 
 NEngine = {
-	EVENT_PROCESS_OFFSET = 110, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
-	COURTIER_EVENT_PROCESS_OFFSET = 230, 	 -- Events are checked every X day for courtiers. Max value of 255
+	EVENT_PROCESS_OFFSET = 140, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
+	COURTIER_EVENT_PROCESS_OFFSET = 254, 	 -- Events are checked every X day for courtiers. Max value of 255
 	COURTIERS_MTTTH_EVENTS = 1,  -- Toggles if courtiers are allowed to run MTTH events or not
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_YEAR = 1066, -- The missing scripted successor error will not be shown before this date
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_MONTH = 8,
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_DAY = 16,
 	COURT_PRUNE_SIZE = 1, 				-- Courts larger than this will be checked for pruning each month
-	PRUNE_MINIMAL_AGE = 23,				-- Minimum age for a courtier to be prunable if considered irrelevant
-	HEALTH_IMMUNITY_TO_PRUNING = 6.5,		-- If a character has that much health, they won't be pruned
+	PRUNE_MINIMAL_AGE = 20,				-- Minimum age for a courtier to be prunable if considered irrelevant
+	HEALTH_IMMUNITY_TO_PRUNING = 5.5,		-- If a character has that much health, they won't be pruned
 },
 
 NAI =
