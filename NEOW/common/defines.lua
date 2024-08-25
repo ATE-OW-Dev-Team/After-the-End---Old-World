@@ -1585,7 +1585,7 @@ NEngine = {
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_DAY = 16,
 	COURT_PRUNE_SIZE = 1, 				-- Courts larger than this will be checked for pruning each month
 	PRUNE_MINIMAL_AGE = 20,				-- Minimum age for a courtier to be prunable if considered irrelevant
-	HEALTH_IMMUNITY_TO_PRUNING = 5.5,		-- If a character has that much health, they won't be pruned
+	HEALTH_IMMUNITY_TO_PRUNING = 5,		-- If a character has that much health, they won't be pruned
 },
 
 NAI =
