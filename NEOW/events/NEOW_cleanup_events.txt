@@ -7035,15 +7035,29 @@ character_event = {
 	
 	trigger = {
 		has_landed_title = k_papacy
-		any_province = {
-			limit = {
-				owner = {
-					NOT = {
-						is_alive = yes
+		OR = {
+			any_province = {
+				limit = {
+					OR = {
+						owner = {
+							OR = {
+								NOT = {
+									is_alive = yes
+								}
+								government = nogovernment
+							}
+						}
 					}
 				}
+				always = yes
 			}
-			always = yes
+			any_title = {
+				limit = {
+					tier = COUNT
+					has_holder = no
+				}
+				always = yes
+			}
 		}
 	}
 	mean_time_to_happen = {
@@ -7053,10 +7067,29 @@ character_event = {
 		random_province = {
 			limit = {
 				owner = {
-					NOT = {
-						is_alive = yes
+					OR = {
+						NOT = {
+							is_alive = yes
+						}
+						has_government = nogovernment
 					}
-				}
+				}	
+			}
+			create_random_soldier = {
+				random_traits = yes
+				religion = PREV
+				culture = PREV
+				female = no
+				age = 25
+			}
+			new_character = {
+				gain_title = PREV
+			}
+		}
+		any_title = {
+			limit = {
+				tier = COUNT
+				has_holder = no
 			}
 			create_random_soldier = {
 				random_traits = yes
