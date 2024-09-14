@@ -2,6 +2,380 @@ namespace = israelstuff
 namespace = maaravi
 namespace = britjews
 
+narrative_event = {
+	id = israelstuff.1
+	title = EVTNAME_israelstuff_1
+	desc = EVTDESC_israelstuff_1
+	picture = GFX_evt_burning_castle_hf
+	border = GFX_event_narrative_frame_religion
+	portrait = c_acre
+	major = yes
+	trigger = {
+			c_acre  = { 
+				holder_scope = {
+					religion = jewish 
+				} 
+			}
+		NOR = {
+			has_global_flag = acre_reclaimed
+			is_alternate_start = yes
+		}
+	}
+	mean_time_to_happen = {
+		days = 3
+	}
+		
+	immediate = {
+		set_global_flag = acre_reclaimed
+		if = {
+			limit = {
+				c_acre = {
+					holder_scope = { 
+						religion = jewish
+					}
+				}
+			}
+			jewish = {
+				religion_authority = {
+                    modifier = acre_reclaimed
+					years = 1
+                }
+			}
+		}
+	}
+	option = {
+		name = israelstuff_1A
+		trigger = {
+			religion = jewish
+		}
+	}
+	option = {
+		name = israelstuff_1B
+		trigger = {
+		NOT = {
+			religion = jewish
+			}
+		}
+	}
+}
+
+narrative_event = {
+	id = israelstuff.2
+	title = EVTNAME_israelstuff_2
+	desc = EVTDESC_israelstuff_2
+	picture = GFX_evt_burning_castle_hf
+	border = GFX_event_narrative_frame_religion
+	major = yes
+	
+	portrait = c_jerusalem
+	trigger = {
+		c_jerusalem  = { 
+			holder_scope = {
+				NOR = {
+					religion_group = jewish_group
+					top_liege = {
+						has_landed_title = k_israel
+					}
+					has_landed_title = k_israel
+				}
+			}
+		}
+		NOR = {
+			has_global_flag = shattered_star
+			is_alternate_start = yes
+		}
+	}
+	mean_time_to_happen = {
+		days = 3
+	}
+	
+	immediate = {
+		set_global_flag = shattered_star
+		k_israel = {
+			destroy_landed_title = THIS
+		}
+		if = {
+			limit = {
+				c_jerusalem = {
+					holder_scope = {
+						NOT = {
+							religion = jewish
+						}
+					}
+				}
+			}
+			jewish = {
+				religion_authority = {
+                    modifier = jerusalem_fallen_jewish
+					years = 50
+                }
+			}
+		}
+	}
+	option = {
+		name = israelstuff_2A
+		trigger = {
+			religion = jewish
+		}
+	}
+	option = {
+		name = israelstuff_2B
+		trigger = {
+		NOT = {
+			religion = jewish
+			}
+		}
+	}
+}
+
+character_event = {
+	id = israelstuff.3
+	title = EVTNAME_israelstuff_3
+	desc = EVTDESC_israelstuff_3
+	picture = GFX_evt_bad_news
+	portrait = c_jerusalem
+	trigger = {
+		NOT = { tier = BARON }
+		is_ruler = yes
+		religion = jewish
+		has_global_flag = shattered_star
+		NOR = {
+			has_global_flag = crisis_of_faith
+			is_alternate_start = yes
+		}
+	}
+	mean_time_to_happen = {
+		days = 9
+	}
+	immediate = {
+		set_global_flag = crisis_of_faith
+	}
+	option = { ###Become Mikraist
+		name = israelstuff_3A
+		religion = mikraist
+		any_courtier = {
+			limit = {
+				religion = jewish
+				employer = { character = ROOT }
+				dynasty = ROOT
+			}
+			religion = mikraist
+		}
+		any_vassal = {
+			limit = {
+				religion = jewish
+				tier = BARON
+			}
+			religion = mikraist
+		}		
+		any_demesne_province = {
+			if = {
+				limit = {
+					religion = jewish
+				}
+				religion = mikraist
+			}
+		}
+		ai_chance = {
+			factor = 60
+			}
+		}
+	option = { ###Become Christian
+		name = israelstuff_3B
+		character_event = { id = israelstuff.4 days = 1 }
+		ai_chance = {
+			factor = 10
+			}
+		}
+	option = { ###Become Muslim
+		name = israelstuff_3C
+		character_event = { id = israelstuff.5 days = 1 }
+		ai_chance = {
+			factor = 5
+			}
+		}
+	option = { ###Stay Jewish
+		name = israelstuff_3D
+		add_trait = zealous
+		ai_chance = {
+			factor = 25
+			}
+		}	
+	}
+
+character_event = {
+	id = israelstuff.4
+	title = EVTNAME_israelstuff_4
+	desc = EVTDESC_israelstuff_4
+	picture = GFX_evt_bad_news
+	is_triggered_only = yes
+	portrait = c_jerusalem
+	option = { ###Begom Gadolig
+		name = israelstuff_4A
+		religion = catholic
+		any_courtier = {
+			limit = {
+				religion = jewish
+				employer = { character = ROOT }
+				dynasty = ROOT
+			}
+			religion = catholic
+		}
+		any_vassal = {
+			limit = {
+				religion = jewish
+				tier = BARON
+			}
+			religion = catholic
+		}		
+		any_demesne_province = {
+			if = {
+				limit = {
+					religion = jewish
+				}
+				religion = catholic
+			}
+		}
+		ai_chance = {
+			factor = 45
+			}
+		}
+	option = { ###Become Orthodox Christian please
+		name = israelstuff_4B
+		religion = orthodox
+		any_courtier = {
+			limit = {
+				religion = jewish
+				employer = { character = ROOT }
+				dynasty = ROOT
+			}
+			religion = orthodox
+		}
+		any_vassal = {
+			limit = {
+				religion = jewish
+				tier = BARON
+			}
+			religion = orthodox
+		}		
+		any_demesne_province = {
+			if = {
+				limit = {
+					religion = jewish
+				}
+				religion = orthodox
+			}
+		}
+		ai_chance = {
+			factor = 45
+			}
+		}
+	option = { ###Become Syriac-Chaldean
+		name = israelstuff_4C
+		trigger = {
+		NOT = {
+			has_global_flag = chaldean_catholic_reunion_flag
+		}
+	}
+		religion = chaldean
+		any_courtier = {
+			limit = {
+				religion = jewish
+				employer = { character = ROOT }
+				dynasty = ROOT
+			}
+			religion = chaldean
+		}
+		any_vassal = {
+			limit = {
+				religion = jewish
+				tier = BARON
+			}
+			religion = chaldean
+		}		
+		any_demesne_province = {
+			if = {
+				limit = {
+					religion = jewish
+				}
+				religion = chaldean
+			}
+		}
+		ai_chance = {
+			factor = 10
+			}
+		}
+	}
+
+character_event = {
+	id = israelstuff.5
+	title = EVTNAME_israelstuff_5
+	desc = EVTDESC_israelstuff_5
+	picture = GFX_evt_bad_news
+	is_triggered_only = yes
+	portrait = c_jerusalem
+	option = { ###Sunni
+		name = israelstuff_5A
+		religion = sunni
+		any_courtier = {
+			limit = {
+				religion = jewish
+				employer = { character = ROOT }
+				dynasty = ROOT
+			}
+			religion = sunni
+		}
+		any_vassal = {
+			limit = {
+				religion = jewish
+				tier = BARON
+			}
+			religion = sunni
+		}		
+		any_demesne_province = {
+			if = {
+				limit = {
+					religion = jewish
+				}
+				religion = sunni
+			}
+		}
+		ai_chance = {
+			factor = 70
+			}
+		}
+	option = { ###Shia
+		name = israelstuff_5B
+		religion = shiite
+		any_courtier = {
+			limit = {
+				religion = jewish
+				employer = { character = ROOT }
+				dynasty = ROOT
+			}
+			religion = shiite
+		}
+		any_vassal = {
+			limit = {
+				religion = jewish
+				tier = BARON
+			}
+			religion = shiite
+		}		
+		any_demesne_province = {
+			if = {
+				limit = {
+					religion = jewish
+				}
+				religion = shiite
+			}
+		}
+		ai_chance = {
+			factor = 30
+			}
+		}
+	}
+
 character_event = {
 	id = israelstuff.6
 	is_triggered_only = yes
@@ -309,7 +683,7 @@ character_event = {
 		has_global_flag = shattered_star
 	}
 	mean_time_to_happen = {
-		days = 1
+		days = 3
 	}
 	
 	immediate = {
@@ -362,7 +736,7 @@ character_event = {
 		}
 	}
 	mean_time_to_happen = {
-		days = 7
+		days = 9
 	}
 
 	option = {
