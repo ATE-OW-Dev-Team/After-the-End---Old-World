@@ -3831,17 +3831,19 @@ letter_event = {
 # Demand accepted - seniority
 letter_event = {
 	id = 8055
-	desc = "EVTDESC8055"
-	
+	desc = EVTDESC8055
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EXCELLENT"
+		name = EXCELLENT
+
 		clr_character_flag = faction_succ_seniority_ultimatum_taken
+
 		add_character_modifier = {
 			name = faction_succ_seniority_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -3849,60 +3851,83 @@ letter_event = {
 # Demand accepted - primogeniture
 letter_event = {
 	id = 8060
-	desc = "EVTDESC8060"
-	
+	desc = EVTDESC8060
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EXCELLENT"
+		name = EXCELLENT
+
 		clr_character_flag = faction_succ_primogeniture_ultimatum_taken
+
 		add_character_modifier = {
 			name = faction_succ_primogeniture_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
-	}	
+	}
 }
 
 # Demand accepted - Install Claimant
 letter_event = {
 	id = 8061
-	desc = "EVTDESC8061"
-	
+	desc = EVTDESC8061
+
 	is_triggered_only = yes
-	
+
 	immediate = {
 		supported_claimant = {
 			opinion = {
-				modifier = opinion_very_grateful
+				name = opinion_very_grateful
 				who = ROOT
 				years = 10
 			}
+
 			reverse_opinion = {
-				modifier = opinion_fought_for_claimant
+				name = opinion_fought_for_claimant
 				who = ROOT
 				years = 20
 			}
 		}
 	}
-	
+
 	option = {
-		name = "EXCELLENT"
+		name = EXCELLENT
+
 		clr_character_flag = faction_claimant_ultimatum_taken
+
 		supported_claimant = {
+			show_scope_change = no
+
 			if = {
 				limit = {
 					prisoner = yes
-					host = { character = FROM  }
+					host = { character = FROM }
 				}
-				prisoner = no
+				imprison = no
 			}
+
 			ROOT = {
+				show_scope_change = no
+
 				supported_claimant_title = {
+					show_scope_change = no
+
 					# If the claimant has the wrong government type, take care of that first.
 					if = {
 						limit = {
-							higher_tier_than = PREVPREV
+							ROOT = {
+								supported_claimant = {
+									is_ruler = yes
+									lower_real_tier_than = PREVPREV
+
+									OR = {
+										is_theocracy = yes
+										is_republic = yes
+									}
+								}
+							}
+
 							holder_scope = {
 								OR = {
 									is_feudal = yes
@@ -3910,36 +3935,25 @@ letter_event = {
 									is_nomadic = yes
 								}
 							}
-							ROOT = {
-								supported_claimant = {
-									is_ruler = yes
-									OR = {
-										is_theocracy = yes
-										is_republic = yes
-									}
-								}
-							}
 						}
-						ROOT = { 
+
+						ROOT = {
+							show_scope_change = no
+
 							supported_claimant = {
+								show_scope_change = no
+
 								abdicate = { move = no }
 							}
 						}
 					}
-				
-					usurp_title_plus_barony_if_unlanded_and_vassals_no_adj = { target = PREVPREV type = faction_demand }
-				}
-			}
-		}
-		if = {
-			limit = {
-				supported_claimant = {
-					NOT = {
-						age = 16
+
+					usurp_title_plus_barony_if_unlanded_and_vassals_no_adj = {
+						target = PREVPREV
+						type = faction_demand
 					}
 				}
 			}
-			give_minor_title = title_regent
 		}
 	}
 }
@@ -3947,17 +3961,19 @@ letter_event = {
 # Demand accepted - feudal elective
 letter_event = {
 	id = 8065
-	desc = "EVTDESC8065"
-	
+	desc = EVTDESC8065
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EXCELLENT"
+		name = EXCELLENT
+
 		clr_character_flag = faction_succ_feudal_elective_ultimatum_taken
+
 		add_character_modifier = {
 			name = faction_succ_feudal_elective_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -3965,17 +3981,19 @@ letter_event = {
 # Demand accepted - byzantine elective
 letter_event = {
 	id = BYZ.8065
-	desc = "EVTDESC8065"
+	desc = EVTDESC8065
 	
 	is_triggered_only = yes
 	
 	option = {
-		name = "EXCELLENT"
+		name = EXCELLENT
+
 		clr_character_flag = faction_succ_byzantine_elective_ultimatum_taken
+
 		add_character_modifier = {
 			name = faction_succ_feudal_byzantine_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -3983,18 +4001,19 @@ letter_event = {
 # Demand accepted - gavelkind
 letter_event = {
 	id = 8066
-	desc = "EVTDESC8066"
-	
+	desc = EVTDESC8066
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EXCELLENT"
+		name = EXCELLENT
+
 		clr_character_flag = faction_succ_gavelkind_ultimatum_taken
-		
+
 		add_character_modifier = {
 			name = faction_succ_gavelkind_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -4002,18 +4021,19 @@ letter_event = {
 # Demand accepted - crown authority
 letter_event = {
 	id = 8067
-	desc = "EVTDESC8067"
-	
+	desc = EVTDESC8067
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EXCELLENT"
+		name = EXCELLENT
+
 		clr_character_flag = faction_lower_CA_ultimatum_taken
-		
+
 		add_character_modifier = {
 			name = faction_lower_CA_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -4021,73 +4041,80 @@ letter_event = {
 # Demand accepted - gain a vassal title
 letter_event = {
 	id = 8068
-	desc = "EVTDESC8068"
-	
+	desc = EVTDESC8068
+
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "EVTOPTA8068"
-	}	
+		name = EXCELLENT
+	}
 }
 
 # Demand accepted - Independence
 letter_event = {
 	id = 8069
-	desc = "EVTDESC8069"
-	
+	desc = EVTDESC8069
+
 	is_triggered_only = yes
-	
+
 	immediate = {
 		any_demesne_title = {
 			limit = {
 				controls_religion = no
-				higher_tier_than = BARON
+				higher_real_tier_than = BARON
+
 				FROM = {
-					OR = { # If the old liege can use the subjugation CB, give no claims
-						NOT = { religion_group = pagan_group }
-						NOT = { culture_group = ROOT }
+					NAND = { # If the old liege can use the subjugation CB, give no claims
+						religion_group = pagan_group
+						culture_group = ROOT
 					}
 				}
 			}
+
 			add_weak_pressed_claim = FROM
 		}
 	}
-	
+
 	option = {
-		name = "EXCELLENT"
+		name = EXCELLENT
+
 		clr_character_flag = faction_independence_ultimatum_taken
 	}
 }
 
 # Inform vassal - gain a title
-letter_event = {
-	id = 8070
-	desc = "EVTDESC8070"
-	
-	show_from_from = yes
-	
-	is_triggered_only = yes
-	
-	option = {
-		name = "EVTOPTA8070"
-	}
-}
+# letter_event = {
+#	id = 8070
+#	desc = EVTDESC8070
+#
+#	show_from_from = yes
+#	is_triggered_only = yes
+#
+#	ai = no
+#
+#	option = {
+#		name = GOOD
+#	}
+# }
 
 # Demand accepted - tribal organization
 letter_event = {
 	id = 8071
-	desc = "EVTDESC8071"
-	
+	desc = EVTDESC8071
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EXCELLENT"
+		name = EXCELLENT
+
 		clr_character_flag = faction_lower_TO_ultimatum_taken
-		
+
 		add_character_modifier = {
 			name = faction_lower_TO_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -4095,23 +4122,24 @@ letter_event = {
 # Inform faction backer - Seniority
 letter_event = {
 	id = 8075
-	desc = "EVTDESC8075"
-	
+	desc = EVTDESC8075
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "GOOD"
+		name = GOOD
+
 		reverse_opinion = {
-			modifier = opinion_grateful
+			name = opinion_grateful
 			who = FROMFROM
 			years = 5
 		}
+
 		add_character_modifier = {
 			name = faction_succ_seniority_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -4120,42 +4148,41 @@ letter_event = {
 character_event = {
 	id = 8076
 	desc = EVTDESC8076
-	
-	notification = yes
-	
 	picture = GFX_evt_council
 	border = GFX_event_normal_frame_intrigue
-	
+
+	notification = yes
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "I_SEE"
+		name = I_SEE
 	}
 }
 
 # Inform faction backer - Primogeniture
 letter_event = {
 	id = 8080
-	desc = "EVTDESC8080"
-	
+	desc = EVTDESC8080
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "GOOD"
+		name = GOOD
+
 		reverse_opinion = {
-			modifier = opinion_grateful
+			name = opinion_grateful
 			who = FROMFROM
 			years = 5
 		}
-		
+
 		add_character_modifier = {
 			name = faction_succ_primogeniture_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -4164,42 +4191,41 @@ letter_event = {
 character_event = {
 	id = 8081
 	desc = EVTDESC8081
-	
-	notification = yes
-	
 	picture = GFX_evt_council
 	border = GFX_event_normal_frame_intrigue
-	
+
+	notification = yes
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "I_SEE"
+		name = I_SEE
 	}
 }
 
 # Inform faction backer - feudal elective
 letter_event = {
 	id = 8085
-	desc = "EVTDESC8085"
-	
+	desc = EVTDESC8085
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "GOOD"
+		name = GOOD
+
 		reverse_opinion = {
-			modifier = opinion_grateful
+			name = opinion_grateful
 			who = FROMFROM
 			years = 5
 		}
-		
+
 		add_character_modifier = {
 			name = faction_succ_feudal_elective_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -4208,42 +4234,41 @@ letter_event = {
 character_event = {
 	id = 8086
 	desc = EVTDESC8086
-	
-	notification = yes
-	
 	picture = GFX_evt_council
 	border = GFX_event_normal_frame_intrigue
-	
+
+	notification = yes
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "I_SEE"
+		name = I_SEE
 	}
 }
 
 # Inform faction backer - byzantine elective
 letter_event = {
 	id = BYZ.8085
-	desc = "EVTDESCBYZ.8085"
-	
+	desc = EVTDESCBYZ.8085
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "GOOD"
+		name = GOOD
+
 		reverse_opinion = {
-			modifier = opinion_grateful
+			name = opinion_grateful
 			who = FROMFROM
 			years = 5
 		}
-		
+
 		add_character_modifier = {
 			name = faction_succ_byzantine_elective_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -4252,42 +4277,41 @@ letter_event = {
 character_event = {
 	id = BYZ.8086
 	desc = EVTDESCBYZ.8086
-	
-	notification = yes
-	
 	picture = GFX_evt_council
 	border = GFX_event_normal_frame_intrigue
-	
+
+	notification = yes
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "I_SEE"
+		name = I_SEE
 	}
 }
 
 # Inform faction backer - gavelkind
 letter_event = {
 	id = 8090
-	desc = "EVTDESC8090"
-	
+	desc = EVTDESC8090
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "GOOD"
+		name = GOOD
+
 		reverse_opinion = {
-			modifier = opinion_grateful
+			name = opinion_grateful
 			who = FROMFROM
 			years = 5
 		}
-		
+
 		add_character_modifier = {
 			name = faction_succ_gavelkind_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -4296,42 +4320,41 @@ letter_event = {
 character_event = {
 	id = 8091
 	desc = EVTDESC8091
-	
-	notification = yes
-	
 	picture = GFX_evt_council
 	border = GFX_event_normal_frame_intrigue
-	
+
+	notification = yes
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "I_SEE"
+		name = I_SEE
 	}
 }
 
 # Inform faction backer - crown authority
 letter_event = {
 	id = 8095
-	desc = "EVTDESC8095"
-	
+	desc = EVTDESC8095
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "GOOD"
+		name = GOOD
+
 		reverse_opinion = {
-			modifier = opinion_grateful
+			name = opinion_grateful
 			who = FROMFROM
 			years = 5
 		}
-		
+
 		add_character_modifier = {
 			name = faction_lower_CA_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -4340,71 +4363,74 @@ letter_event = {
 character_event = {
 	id = 8094
 	desc = EVTDESC8094
-	
-	notification = yes
-	
 	picture = GFX_evt_council
 	border = GFX_event_normal_frame_intrigue
-	
+
+	notification = yes
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "I_SEE"
+		name = I_SEE
 	}
 }
 
 # Inform vassal - gain a vassal title
 letter_event = {
 	id = 8096
-	desc = "EVTDESC8096"
-	
+	desc = EVTDESC8096
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "EVTOPTA8096"
+		name = GOOD
 	}
 }
 
 # Inform faction backer - Independence
 letter_event = {
 	id = 8097
-	desc = "EVTDESC8097"
-	
+	desc = EVTDESC8097
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
 	immediate = {
 		any_demesne_title = {
 			limit = {
 				controls_religion = no
 				higher_tier_than = BARON
+
 				FROM = {
-					OR = { # If the old liege can use the subjugation CB, give no claims
-						NOT = { religion_group = pagan_group }
-						NOT = { culture_group = ROOT }
+					NAND = { # If the old liege can use the subjugation CB, give no claims
+						religion_group = pagan_group
+						culture_group = ROOT
 					}
 				}
 			}
+
 			add_weak_pressed_claim = FROM
 		}
 	}
-	
+
 	option = {
-		name = "GOOD"
+		name = GOOD
+
 		reverse_opinion = {
-			modifier = opinion_grateful
+			name = opinion_grateful
 			who = FROMFROM
 			years = 5
 		}
+
 		opinion = {
-			modifier = opinion_granted_independence
+			name = opinion_granted_independence
 			who = FROM
-			months = 120
+			years = 10
 		}
 	}
 }
@@ -4412,117 +4438,130 @@ letter_event = {
 # Inform other vassals - Independence
 character_event = {
 	id = 8093
-	desc = "EVTDESC8093"
-	
+	desc = EVTDESC8093
 	picture = GFX_evt_council
 	border = GFX_event_normal_frame_intrigue
-	
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "I_SEE"
+		name = I_SEE
 	}
 }
 
 # Inform faction backer - Claimant Installed
 letter_event = {
 	id = 8098
-	desc = "EVTDESC8098"
-	
+	desc = EVTDESC8098
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
 	immediate = {
 		supported_claimant = {
 			opinion = {
-				modifier = opinion_very_grateful
+				name = opinion_very_grateful
 				who = ROOT
 				years = 10
 			}
+
 			reverse_opinion = {
-				modifier = opinion_fought_for_claimant
+				name = opinion_fought_for_claimant
 				who = ROOT
 				years = 20
 			}
 		}
 	}
-	
+
 	option = {
-		name = "GOOD"
+		name = GOOD
 	}
 }
 
 # Inform other vassals - Claimant Installed
 character_event = {
 	id = 8099
-	desc = "EVTDESC8099"
-	
+	desc = EVTDESC8099
 	picture = GFX_evt_emissary
 	border = GFX_event_normal_frame_intrigue
-	
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "I_SEE"
+		name = I_SEE
 	}
 }
 
 ### Demand rejected events
 
 # Demand rejected - gain a title
-letter_event = {
-	id = 8100
-	desc = "EVTDESC8100"
-	
-	is_triggered_only = yes
-	
-	option = {
-		name = "EVTOPTA8100"
-		ai_chance = { factor = 100 }
-		hidden_tooltip = { reveal_plot = yes }
-		plot_target_title = {
-			reverse_war = {
-				target = ROOT
-				casus_belli = claim_on_liege_plot
-				plot_backers = yes
-			}
-		}
-	}
-	option = {
-		name = "EVTOPTB8100"
-		ai_chance = { factor = 0 }
-		prestige = -100
-		any_plot_backer = {
-			opinion = {
-				modifier = opinion_coward
-				who = ROOT
-				years = 5
-			}
-			hidden_tooltip = {
-				letter_event = { id = 8120 }
-			}
-		}
-		cancel_plot = plot_gain_title
-	}
-}
+# letter_event = {
+#	id = 8100
+#	desc = EVTDESC8100
+#
+#	is_triggered_only = yes
+#
+#	option = {
+#		name = EVTOPTA8100
+#
+#		hidden_effect = {
+#			reveal_plot = yes
+#		}
+#
+#		plot_target_title = {
+#			show_scope_change = no
+#
+#			reverse_war = {
+#				target = ROOT
+#				casus_belli = claim_on_liege_plot
+#				plot_backers = yes
+#			}
+#		}
+#	}
+#
+#	option = {
+#		name = EVTOPTB8100
+#
+#		prestige = -100
+#		cancel_plot = plot_gain_title
+#
+#		any_plot_backer = {
+#			show_scope_change = no
+#
+#			letter_event = { id = 8120 }
+#
+#			opinion = {
+#				name = opinion_coward
+#				who = ROOT
+#				years = 5
+#			}
+#		}
+#
+#		ai_chance = { factor = 0 }
+#	}
+# }
 
 # Demand rejected - seniority
 letter_event = {
 	id = 8105
-	desc = "EVTDESC8100"
-	
+	desc = EVTDESC8100
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8100"
-		
+		name = EVTOPTA8100
+
 		clr_character_flag = faction_succ_seniority_ultimatum_taken
+
 		faction_succ_seniority = { # The target (title) of the faction
+			show_scope_change = no
+
 			reverse_war = {
 				target = ROOT
 				casus_belli = change_seniority_succession_law
@@ -4535,16 +4574,18 @@ letter_event = {
 # Demand rejected - primogeniture
 letter_event = {
 	id = 8110
-	desc = "EVTDESC8100"
-	
+	desc = EVTDESC8100
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8100"
-		
+		name = EVTOPTA8100
+
 		clr_character_flag = faction_succ_primogeniture_ultimatum_taken
-		
+
 		faction_succ_primogeniture = { # The target (title) of the faction
+			show_scope_change = no
+
 			reverse_war = {
 				target = ROOT
 				casus_belli = change_primogeniture_succession_law
@@ -4557,40 +4598,41 @@ letter_event = {
 # Demand rejected - Install Claimant
 letter_event = {
 	id = 8111
-	desc = "EVTDESC8100"
-	
+	desc = EVTDESC8100
+
 	is_triggered_only = yes
-	
+
 	immediate = {
 		supported_claimant = {
 			reverse_opinion = {
-				modifier = opinion_fought_for_claimant
+				name = opinion_fought_for_claimant
 				who = ROOT
 				years = 20
 			}
 		}
+
 		any_faction_backer = {
 			faction = faction_claimant
+
 			supported_claimant = {
 				reverse_opinion = {
-					modifier = opinion_fought_for_claimant
+					name = opinion_fought_for_claimant
 					who = PREV
 					years = 20
 				}
 			}
 		}
 	}
-	
+
 	option = {
-		name = "EVTOPTA8100"
-		
+		name = EVTOPTA8100
+
 		if = {
-			limit = {
-				supported_claimant = {
-					character = ROOT
-				}
-			}
+			limit = { character = supported_claimant }
+
 			faction_claimant = { # The target (title) of the faction
+				show_scope_change = no
+
 				reverse_war = {
 					target = ROOT
 					casus_belli = claim_on_liege
@@ -4598,16 +4640,10 @@ letter_event = {
 				}
 			}
 		}
-		
-		if = {
-			limit = {
-				NOT = { 
-					supported_claimant = {
-						character = ROOT
-					}
-				}
-			}
+		else = {
 			faction_claimant = { # The target (title) of the faction
+				show_scope_change = no
+
 				reverse_war = {
 					target = ROOT
 					casus_belli = other_claim_on_liege
@@ -4615,25 +4651,26 @@ letter_event = {
 				}
 			}
 		}
-		
+
 		clr_character_flag = faction_claimant_ultimatum_taken
-		
 	}
 }
 
 # Demand rejected - tribal organization
 letter_event = {
 	id = 8114
-	desc = "EVTDESC8100"
-	
+	desc = EVTDESC8100
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8100"
-		
+		name = EVTOPTA8100
+
 		clr_character_flag = faction_lower_TO_ultimatum_taken
-		
+
 		faction_lower_tribal_organization = { # The target (title) of the faction
+			show_scope_change = no
+
 			reverse_war = {
 				target = ROOT
 				casus_belli = lower_tribal_organization_law
@@ -4646,16 +4683,18 @@ letter_event = {
 # Demand rejected - feudal elective
 letter_event = {
 	id = 8115
-	desc = "EVTDESC8100"
-	
+	desc = EVTDESC8100
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8100"
-		
+		name = EVTOPTA8100
+
 		clr_character_flag = faction_succ_feudal_elective_ultimatum_taken
-		
+
 		faction_succ_feudal_elective = { # The target (title) of the faction
+			show_scope_change = no
+
 			reverse_war = {
 				target = ROOT
 				casus_belli = change_feudal_elective_succession_law
@@ -4668,16 +4707,18 @@ letter_event = {
 # Demand rejected - byzantine elective
 letter_event = {
 	id = 8121
-	desc = "EVTDESC8100"
-	
+	desc = EVTDESC8100
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8100"
-		
+		name = EVTOPTA8100
+
 		clr_character_flag = faction_succ_byzantine_elective_ultimatum_taken
 		
 		faction_succ_byzantine_elective = { # The target (title) of the faction
+			show_scope_change = no
+
 			reverse_war = {
 				target = ROOT
 				casus_belli = change_byzantine_elective_succession_law
@@ -4690,16 +4731,18 @@ letter_event = {
 # Demand rejected - gavelkind
 letter_event = {
 	id = 8116
-	desc = "EVTDESC8100"
-	
+	desc = EVTDESC8100
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8100"
-		
+		name = EVTOPTA8100
+
 		clr_character_flag = faction_succ_gavelkind_ultimatum_taken
-		
+
 		faction_succ_gavelkind = { # The target (title) of the faction
+			show_scope_change = no
+
 			reverse_war = {
 				target = ROOT
 				casus_belli = change_gavelkind_succession_law
@@ -4707,21 +4750,23 @@ letter_event = {
 			}
 		}
 	}
-}
+ }
 
 # Demand rejected - crown authority
 letter_event = {
 	id = 8117
-	desc = "EVTDESC8100"
-	
+	desc = EVTDESC8100
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8100"
-		
+		name = EVTOPTA8100
+
 		clr_character_flag = faction_lower_CA_ultimatum_taken
-		
+
 		faction_lower_crown_authority = { # The target (title) of the faction
+			show_scope_change = no
+
 			reverse_war = {
 				target = ROOT
 				casus_belli = lower_crown_authority_law
@@ -4734,51 +4779,61 @@ letter_event = {
 # Demand rejected - gain a vassal title
 letter_event = {
 	id = 8118
-	desc = "EVTDESC8118"
-	
+	desc = EVTDESC8118
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8118"
-		ai_chance = { factor = 100 }
-		hidden_tooltip = { reveal_plot = yes }
+		name = EVTOPTA8118
+
+		hidden_effect = {
+			reveal_plot = yes
+		}
+
 		plot_target_title = {
+			show_scope_change = no
+
 			reverse_war = {
 				target = ROOT
 				casus_belli = claim_on_vassal_plot
 			}
 		}
 	}
+
 	option = {
-		name = "EVTOPTB8118"
-		ai_chance = { factor = 0 }
+		name = EVTOPTB8118
+
 		prestige = -100
+		cancel_plot = plot_gain_vassal_title
+
 		any_plot_backer = {
+			show_scope_change = no
+
+			letter_event = { id = 8120 }
+
 			opinion = {
-				modifier = opinion_coward
+				name = opinion_coward
 				who = ROOT
 				years = 5
 			}
-			hidden_tooltip = {
-				letter_event = { id = 8120 }
-			}
 		}
-		cancel_plot = plot_gain_vassal_title
+
+		ai_chance = { factor = 0 }
 	}
 }
 
 # Demand rejected - Independence
 letter_event = {
 	id = 8119
-	desc = "EVTDESC8100"
-	
+	desc = EVTDESC8100
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8100"
-		
+		name = EVTOPTA8100
+
 		clr_character_flag = faction_independence_ultimatum_taken
-		
+
 		war = {
 			target = FROM
 			casus_belli = cb_faction_independence
@@ -4790,30 +4845,25 @@ letter_event = {
 # Inform vassal - plot is abandoned
 letter_event = {
 	id = 8120
-	desc = "EVTDESC8120"
-	
+	desc = EVTDESC8120
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
 
-	immediate = {
-		hidden_tooltip = {
-			remove_opinion = {
-				modifier = opinion_coward
+	ai = no
+
+	option = {
+		name = EVTOPTA8120
+
+		tooltip = {
+			opinion = {
+				name = opinion_coward
 				who = FROM
+				years = 5
 			}
 		}
 	}
-
-	option = {
-		name = "EVTOPTA8120"
-		opinion = {
-			modifier = opinion_coward
-			who = FROM
-			years = 5
-		}
-	}
-}
+ }
 
 ### Murder Plot Events ###
 #
@@ -4824,237 +4874,286 @@ letter_event = {
 # The plotter sees an opportunity - Poisoned Wine
 character_event = {
 	id = 8150
-	desc = "EVTDESC8150"
+	desc = EVTDESC8150
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
-	capable_only = yes
-	prisoner = no
+	portrait = event_target:plot_target
+
 	is_part_of_plot = yes
-	
+	only_capable = yes
+	prisoner = no
+
 	trigger = {
 		OR = {
 			has_plot = plot_kill_character
 			has_plot = plot_kill_spouse
 		}
+
+		is_plot_active = no
+
 		plot_target_char = {
-			NOT = { is_murder_quest_target_of_root_trigger = yes }
-			age = 16
-			prisoner = no
 			at_location = ROOT # The Plot Head needs to be at the target's location to get a chance
-			NOT = { trait = incapable }
-			NOT = { is_inaccessible_trigger = yes }
-			OR = {
-				NOT = { religion_group = muslim }
-				trait = decadent
-				trait = hedonist
-				trait = drunkard
+			block_general_event_trigger = no
+			is_murder_quest_target_of_root_trigger = no
+
+			trigger_if = {
+				limit = { religion_group = muslim }
+
+				OR = {
+					trait = decadent
+					trait = hedonist
+					trait = drunkard
+				}
 			}
 		}
-		OR = {
-			NOT = { has_character_flag = murder_in_motion }
-			had_character_flag = { flag = murder_in_motion days = 100 }
-		}
-		plot_power_contribution = 
-		{
+
+		plot_power_contribution = {
 			plotter = ROOT
-			power = 0.025
+			power >= 0.025
 		}
 	}
-	
+
 	mean_time_to_happen = {
-		months = 8400
-		
-		modifier = {
+		years = 700
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.10
+				power >= 0.10
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.20
+				power >= 0.20
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.30
+				power >= 0.30
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.40
+				power >= 0.40
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.50
+				power >= 0.50
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.60
+				power >= 0.60
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.70
+				power >= 0.70
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.80
+				power >= 0.80
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.90
+				power >= 0.90
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 1.5
+				power >= 1.5
 			}
 		}
-		
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
-			any_backed_character = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_power = 1.0
-			}
+			plot_power >= 1.0
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
-			any_backed_character = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_power = 1.5
-			}
+			plot_power >= 1.5
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
-			any_backed_character = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_power = 2.0
-			}
+			plot_power >= 2.0
 		}
 	}
-	
+
 	immediate = {
-		plot_target_char = { save_event_target_as = plot_target }
-	}
-	
-	option = {
-		name = "EVTOPTA8150" # The conspirators provide the poison
-		trigger = {
-			plot_power = 1.0
+		save_event_target_as = plot_leader
+
+		plot_target_char = {
+			save_event_target_as = plot_target
 		}
-		hidden_tooltip = {
-			any_plot_backer = {
-				character_event = { id = 8162 days = 1 }
+	}
+
+	option = {
+		name = EVTOPTA8150 # The conspirators provide the poison
+
+		trigger = { plot_power >= 1.0 }
+
+		any_plot_backer = {
+			character_event = {
+				id = 8162
+				days = 1
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 8155 days = 30 tooltip = "EVTTOOLTIP8155" } }
-	}
-	option = {
-		name = "EVTOPTB8150" # Buy the poison
-		trigger = {
-			NOT = { plot_power = 0.5 }
-			NOT = { learning = 10 }
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8155
+				days = 30
+				tooltip = EVTTOOLTIP8155
+			}
 		}
+	}
+
+	option = {
+		name = EVTOPTB8150 # Buy the poison
+
+		trigger = {
+			plot_power < 0.5
+			learning < 10
+		}
+
 		scaled_wealth = -1.0
-		
-		hidden_tooltip = {
-			any_plot_backer = {
-				character_event = { id = 8162 days = 1 }
+
+		any_plot_backer = {
+			character_event = {
+				id = 8162
+				days = 1
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 8155 days = 30 tooltip = "EVTTOOLTIP8155" } }
-	}
-	option = {
-		name = "EVTOPTB8150" # Buy the poison
-		trigger = {
-			plot_power = 0.5
-			NOT = { plot_power = 1.0 }
-			NOT = { learning = 10 }
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8155
+				days = 30
+				tooltip = EVTTOOLTIP8155
+			}
 		}
+	}
+
+	option = {
+		name = EVTOPTB8150 # Buy the poison
+
+		trigger = {
+			plot_power >= 0.5
+			plot_power < 1.0
+			learning < 10
+		}
+
 		scaled_wealth = -0.5
-		
-		hidden_tooltip = {
-			any_plot_backer = {
-				character_event = { id = 8162 days = 1 }
+
+		any_plot_backer = {
+			character_event = {
+				id = 8162
+				days = 1
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 8155 days = 30 tooltip = "EVTTOOLTIP8155" } }
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8155
+				days = 30
+				tooltip = EVTTOOLTIP8155
+			}
+		}
 	}
+
 	option = {
-		name = "EVTOPTC8150" # Hemlock goes well with the Red...
+		name = EVTOPTC8150 # Hemlock goes well with the Red...
 		tooltip_info = learning
+
 		trigger = {
-			plot_power = 0.5
-			learning = 10
+			plot_power >= 0.5
+			learning >= 10
 		}
-		
-		hidden_tooltip = {
-			any_plot_backer = {
-				character_event = { id = 8162 days = 1 }
+
+		any_plot_backer = {
+			character_event = {
+				id = 8162
+				days = 1
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 8155 days = 30 tooltip = "EVTTOOLTIP8155" } }
-	}
-	option = {
-		name = "EVTOPTD8150" # I cannot afford this
-		trigger = {
-			ai = no
-			NOT = { learning = 10 }
-			NOT = { plot_power = 1.0 }
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8155
+				days = 30
+				tooltip = EVTTOOLTIP8155
+			}
 		}
+	}
+
+	option = {
+		name = EVTOPTD8150 # I cannot afford this
+
+		trigger = {
+			learning < 10
+			plot_power < 1.0
+		}
+
+		ai_chance = { factor = 0 }
 	}
 }
 
@@ -5064,381 +5163,567 @@ character_event = {
 	desc = EVTDESC8151
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
-	capable_only = yes
-	prisoner = no
+	portrait = event_target:plot_target
+
 	is_part_of_plot = yes
-	
+	only_capable = yes
+	prisoner = no
+
 	trigger = {
 		any_backed_character = {
 			OR = {
 				has_plot = plot_kill_character
 				has_plot = plot_kill_spouse
 			}
-			plot_power = 0.5
+
+			is_plot_active = no
+			plot_power >= 0.5
+
 			plot_target_char = {
-				NOT = { is_murder_quest_target_of_root_trigger = yes }
-				age = 16
-				prisoner = no
-				NOT = { trait = incapable }
-				NOT = { is_inaccessible_trigger = yes }
+				block_general_event_trigger = no
+				is_murder_quest_target_of_prev_trigger = no
 			}
-			OR = {
-				NOT = { has_character_flag = murder_in_motion }
-				had_character_flag = { flag = murder_in_motion days = 100 }
-			}
+
 			ROOT = {
-				plot_power_contribution = 
-				{
+				plot_power_contribution = {
 					plotter = PREV
-					power = 0.025
+					power >= 0.025
 				}
 			}
 		}
 	}
-	
+
 	mean_time_to_happen = {
-		months = 4200
-		
-		modifier = {
+		years = 700
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.10
+						power >= 0.10
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.20
+						power >= 0.20
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.30
+						power >= 0.30
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.40
+						power >= 0.40
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.50
+						power >= 0.50
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.60
+						power >= 0.60
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.70
+						power >= 0.70
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.80
+						power >= 0.80
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.90
+						power >= 0.90
 					}
 				}
 			}
 		}
-		
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 1.0
+
+				is_plot_active = no
+				plot_power >= 1.0
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 1.5
+
+				is_plot_active = no
+				plot_power >= 1.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 2.0
+
+				is_plot_active = no
+				plot_power >= 2.0
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
 			}
 		}
 	}
 
 	immediate = {
+		save_event_target_as = plot_backer
+
 		random_backed_character = {
 			limit = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 0.5
+
+				is_plot_active = no
+				plot_power >= 0.5
+
 				plot_target_char = {
-					NOT = { is_murder_quest_target_of_root_trigger = yes }
-					age = 16
-					prisoner = no
-					NOT = { trait = incapable }
-					NOT = { is_inaccessible_trigger = yes }
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
 				}
-				OR = {
-					NOT = { has_character_flag = murder_in_motion }
-					had_character_flag = { flag = murder_in_motion days = 100 }
-				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.025
+						power >= 0.025
 					}
 				}
 			}
+
 			save_event_target_as = plot_leader
+
+			plot_target_char = {
+				save_event_target_as = plot_target
+			}
 		}
 	}
-	
+
 	option = {
-		name = "EVTOPTA8150" # The conspirators provide the poison
+		name = EVTOPTA8150 # The conspirators provide the poison
+
 		trigger = {
 			event_target:plot_leader = {
-				plot_power = 1.0
+				plot_power >= 1.0
 			}
 		}
+
 		event_target:plot_leader = {
-			character_event = { id = 8160 days = 3 tooltip = "EVTTOOLTIP8160" }
-			set_character_flag = murder_in_motion
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 8160
+				days = 3
+				tooltip = EVTTOOLTIP8160
+			}
 		}
 	}
+
 	option = {
-		name = "EVTOPTB8151" # Ask the Plotter for funds
+		name = EVTOPTB8151 # Ask the Plotter for funds
+
 		trigger = {
-			NOT = { learning = 10 }
-			NOT = {
-				event_target:plot_leader = {
-					plot_power = 1.0
-				}
+			learning < 10
+
+			event_target:plot_leader = {
+				plot_power < 1.0
 			}
 		}
+
 		event_target:plot_leader = {
-			character_event = { id = 8152 days = 3 tooltip = "EVTTOOLTIP8152" }
-			set_character_flag = murder_in_motion
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 8152
+				days = 3
+				tooltip = EVTTOOLTIP8152
+			}
 		}
 	}
-	
+
 	option = {
-		name = "EVTOPTB8150" # Buy the poison
+		name = EVTOPTB8150 # Buy the poison
+
 		trigger = {
-			NOT = { learning = 10 }
-			NOT = {
-				event_target:plot_leader = {
-					plot_power = 1.0
-				}
+			learning < 10
+
+			event_target:plot_leader = {
+				plot_power < 1.0
 			}
 		}
+
 		scaled_wealth = -0.5
+
 		event_target:plot_leader = {
-			character_event = { id = 8160 days = 3 tooltip = "EVTTOOLTIP8160" }
-			set_character_flag = murder_in_motion
-		}
-	}
-	option = {
-		name = "EVTOPTC8150" # Hemlock goes well with the Red...
-		tooltip_info = learning
-		trigger = {
-			learning = 10
-		}
-		
-		event_target:plot_leader = {
-			character_event = { id = 8160 days = 3 tooltip = "EVTTOOLTIP8160" }
-			set_character_flag = murder_in_motion
-		}
-	}
-	
-	option = {
-		name = "EVTOPTD8150" # I cannot afford this
-		trigger = {
-			ai = no
-			NOT = { learning = 10 }
-			NOT = {
-				event_target:plot_leader = {
-					plot_power = 1.0
-				}
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 8160
+				days = 3
+				tooltip = EVTTOOLTIP8160
 			}
 		}
+	}
+
+	option = {
+		name = EVTOPTC8150 # Hemlock goes well with the Red...
+		tooltip_info = learning
+
+		trigger = { learning >= 10 }
+
+		event_target:plot_leader = {
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 8160
+				days = 3
+				tooltip = EVTTOOLTIP8160
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTD8150 # I cannot afford this
+
+		trigger = {
+			learning < 10
+
+			event_target:plot_leader = {
+				plot_power < 1.0
+			}
+		}
+
+		ai_chance = { factor = 0 }
 	}
 }
 
 # Poisoned Wine - Plot backer requests funds
 character_event = {
 	id = 8152
-	desc = "EVTDESC8152"
+	desc = EVTDESC8152
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
-	immediate = {
-		plot_target_char = { save_event_target_as = plot_target }
-	}
-	
+
 	option = {
-		name = "EVTOPTA8152"
+		name = EVTOPTA8152
+
 		transfer_scaled_wealth = {
-			to = FROM
+			to = event_target:plot_leader
 			value = 1.0
 		}
-		FROM = { character_event = { id = 8153 tooltip = "EVTTOOLTIP8153" } }
+
+		event_target:plot_leader = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8153 # Give funds
+				tooltip = EVTTOOLTIP8153
+			}
+		}
 	}
-	
+
 	option = {
-		name = "EVTOPTB8152"
-		FROM = { character_event = { id = 8154 tooltip = "EVTTOOLTIP8154" } }
+		name = EVTOPTB8152
+
+		event_target:plot_leader = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8154 # No funding
+				tooltip = EVTTOOLTIP8154
+			}
+		}
 	}
 }
 
 # Poisoned Wine - plot backer receives funds
 character_event = {
 	id = 8153
-	desc = "EVTDESC8153"
+	desc = EVTDESC8153
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EXCELLENT"
-		event_target:plot_target = { character_event = { id = 8155 days = 27 tooltip = "EVTTOOLTIP8155" } }
+		name = EXCELLENT
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8155
+				days = 27
+				tooltip = EVTTOOLTIP8155
+			}
+		}
 	}
 }
 
 # Poisoned Wine - plot backer does NOT receive funds
 character_event = {
 	id = 8154
-	desc = "EVTDESC8154"
+	desc = EVTDESC8154
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8154" # Pay for it myself
+		name = EVTOPTA8154 # Pay for it myself
+
 		scaled_wealth = -1.0
-		event_target:plot_target = { character_event = { id = 8155 days = 27 tooltip = "EVTTOOLTIP8155" } }
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8155
+				days = 27
+				tooltip = EVTTOOLTIP8155
+			}
+		}
 	}
+
 	option = {
-		name = "EVTOPTB8154" # Screw this
-		FROM = { clr_character_flag = murder_in_motion }
+		name = EVTOPTB8154 # Screw this
+
+		event_target:plot_leader = {
+			activate_plot = no
+		}
 	}
 }
 
@@ -5448,125 +5733,115 @@ character_event = {
 	desc = EVTDESC8155
 	picture = GFX_evt_feast
 	border = GFX_event_normal_frame_intrigue
-	
+
 	hide_from = yes
-	
 	is_triggered_only = yes
-	
+
+	prisoner = no
+
 	trigger = {
-		prisoner = no
-		
 		# Is the plot still in motion?
-		OR = {
-			FROM = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_target_char = {
-					character = ROOT
-				}
-			}
-			FROMFROM = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_target_char = {
-					character = ROOT
-				}
-			}
+		event_target:plot_leader = {
+			is_plot_active = yes
 		}
 	}
-	
+
 	immediate = {
 		save_event_target_as = target_victim
 	}
-	
+
 	option = {
-		name = "EVTOPTA8155" # Drinks the wine
+		name = EVTOPTA8155 # Drinks the wine
+
 		trigger = {
-			NOT = {
-				OR = {
-					AND = {
-						trait = paranoid
-						random = 33
-					}
-					AND = {
-						trait = temperate
-						random = 50
-					}
-					AND = {
-						trait = gluttonous
-						random = 90
-					}
-					AND = {
-						NOT = { trait = temperate }
-						NOT = { trait = gluttonous }
-						NOT = { trait = paranoid }
-						random = 75
-					}
-				}
+			trigger_if = {
+				limit = { trait = paranoid }
+				random < 33
+			}
+			trigger_else_if = {
+				limit = { trait = temperate }
+				random < 50
+			}
+			trigger_else_if = {
+				limit = { trait = gluttonous }
+				random < 90
+			}
+			trigger_else = {
+				random < 75
 			}
 		}
-		hidden_tooltip = {
+
+		hidden_effect = {
 			random_list = {
 				25 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 8163 days = 1 } }
-						FROMFROM = { character_event = { id = 8163 days = 1 } }
+					character_event = {
+						id = 8156 # Dies, murderer discovered
+						days = 1
 					}
-					character_event = { id = 8156 days = 1 } # Dies, murderer discovered
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 8163 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 8163 days = 1 } }
 				}
+
 				75 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 8164 days = 1 } }
-						FROMFROM = { character_event = { id = 8164 days = 1 } }
+					character_event = {
+						id = 8157 # Dies, murderer unknown
+						days = 1
 					}
-					character_event = { id = 8157 days = 1 } # Dies, murderer unknown
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 8164 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 8164 days = 1 } }
 				}
 			}
 		}
 	}
+
 	option = {
-		name = "EVTOPTB8155" # Discovers the poison
+		name = EVTOPTB8155 # Discovers the poison
+
 		trigger = {
-			OR = {
-				AND = {
-					trait = paranoid
-					random = 33
-				}
-				AND = {
-					trait = temperate
-					random = 50
-				}
-				AND = {
-					trait = gluttonous
-					random = 90
-				}
-				AND = {
-					NOT = { trait = temperate }
-					NOT = { trait = gluttonous }
-					NOT = { trait = paranoid }
-					random = 75
-				}
+			trigger_if = {
+				limit = { trait = paranoid }
+				random >= 33
+			}
+			trigger_else_if = {
+				limit = { trait = temperate }
+				random >= 50
+			}
+			trigger_else_if = {
+				limit = { trait = gluttonous }
+				random >= 90
+			}
+			trigger_else = {
+				random >= 75
 			}
 		}
-		hidden_tooltip = {
+
+		hidden_effect = {
 			random_list = {
 				50 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 8165 days = 1 } }
-						FROMFROM = { character_event = { id = 8165 days = 1 } }
+					character_event = {
+						id = 8158 # Lives, murderer discovered
+						days = 1
 					}
-					character_event = { id = 8158 days = 1 } # Lives, murderer discovered
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 8165 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 8165 days = 1 } }
 				}
+
 				50 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 8166 days = 1 } }
-						FROMFROM = { character_event = { id = 8166 days = 1 } }
+					character_event = {
+						id = 8159 # Lives, murderer unknown
+						days = 1
 					}
-					character_event = { id = 8159 days = 1 } # Lives, murderer unknown
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 8166 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 8166 days = 1 } }
+
 				}
 			}
 		}
@@ -5579,36 +5854,18 @@ character_event = {
 	desc = EVTDESC8156
 	picture = GFX_evt_death
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
 		name = EVTOPTA8156
+
 		if = {
-			limit = {
-				FROMFROMFROM = {
-					OR = {
-						has_plot = plot_kill_character
-						has_plot = plot_kill_spouse
-					}
-					plot_target_char = {
-						character = ROOT
-					}
-				}
-			}
+			limit = { is_alive = yes }
+
 			death = {
 				death_reason = death_murder_poison
-				killer = FROMFROMFROM
-			}
-			break = yes
-		}
-		if = {
-			limit = {
-				is_alive = yes
-			}
-			death = {
-				death_reason = death_murder_poison
-				killer = FROMFROM
+				killer = event_target:plot_leader
 			}
 		}
 	}
@@ -5617,42 +5874,22 @@ character_event = {
 # Poisoned Wine - Dies, murderer NOT discovered
 character_event = {
 	id = 8157
-	desc = "EVTDESC8157"
+	desc = EVTDESC8157
 	picture = GFX_evt_death
 	border = GFX_event_normal_frame_intrigue
-	
+
 	hide_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8157"
-		
+		name = EVTOPTA8157
+
 		if = {
-			limit = {
-				FROMFROMFROM = {
-					OR = {
-						has_plot = plot_kill_character
-						has_plot = plot_kill_spouse
-					}
-					plot_target_char = {
-						character = ROOT
-					}
-				}
-			}
+			limit = { is_alive = yes }
+
 			death = {
 				death_reason = death_murder_unknown_poison
-				killer = FROMFROMFROM
-			}
-			break = yes
-		}
-		if = {
-			limit = {
-				is_alive = yes
-			}
-			death = {
-				death_reason = death_murder_unknown_poison
-				killer = FROMFROM
+				killer = event_target:plot_leader
 			}
 		}
 	}
@@ -5661,61 +5898,73 @@ character_event = {
 # Poisoned Wine - Lives, murderer discovered
 character_event = {
 	id = 8158
-	desc = "EVTDESC8158"
+	desc = EVTDESC8158
 	picture = GFX_evt_scandal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "EVTOPTA8158"
+		name = EVTOPTA8158
 	}
 }
 
 # Poisoned Wine - Lives, murderer NOT discovered
 character_event = {
 	id = 8159
-	desc = "EVTDESC8159"
+	desc = EVTDESC8159
 	picture = GFX_evt_scandal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	hide_from = yes
-	
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "EVTOPTA8159"
+		name = EVTOPTA8159
 	}
 }
 
 # Poisoned Wine - Backer informs Plotter of plan
 character_event = {
 	id = 8160
-	desc = "EVTDESC8160"
+	desc = EVTDESC8160
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	trigger = {
+		is_plot_active = yes
+
 		plot_target_char = {
 			is_alive = yes
 		}
 	}
-	
-	immediate = {
-		plot_target_char = { save_event_target_as = plot_target }
-	}
-	
+
 	option = {
-		name = "EVTOPTA8160"
-		FROM = { character_event = { id = 8161 tooltip = "EVTTOOLTIP8161" } }
-		hidden_tooltip = {
-			any_plot_backer = {
-				limit = {
-					NOT = { character = FROM }
-				}
-				character_event = { id = 8162 days = 1 }
+		name = EVTOPTA8160
+
+		event_target:plot_backer = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8161
+				tooltip = EVTTOOLTIP8161
+			}
+		}
+
+		any_plot_backer = {
+			limit = {
+				NOT = { character = event_target:plot_backer }
+			}
+
+			character_event = {
+				id = 8162
+				days = 1
 			}
 		}
 	}
@@ -5724,29 +5973,40 @@ character_event = {
 # Poisoned Wine - Plotter tells backer to go ahead
 character_event = {
 	id = 8161
-	desc = "EVTDESC8161"
+	desc = EVTDESC8161
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8161"
-		event_target:plot_target = { character_event = { id = 8155 days = 27 tooltip = "EVTTOOLTIP8155" } }
+		name = EVTOPTA8161
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8155
+				days = 27
+				tooltip = EVTTOOLTIP8155
+			}
+		}
 	}
 }
 
 # Poisoned Wine - Initiator informs other plotter
 character_event = {
 	id = 8162
-	desc = "EVTDESC8162"
+	desc = EVTDESC8162
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "EVTOPTA8162"
+		name = EVTOPTA8162
 	}
 }
 
@@ -5756,74 +6016,84 @@ character_event = {
 	desc = EVTDESC8163
 	picture = GFX_evt_shadowy_cabal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	immediate = {
 		character_event = { id = 10 } # Consequences of discovery
 		clear_event_target = target_victim
 	}
-	
+
 	option = {
-		name = "EVTOPTA8163"
+		name = EVTOPTA8163
 	}
 }
 
 # Poisoned Wine - Notification: Success, and NOT discovered
 character_event = {
 	id = 8164
-	desc = "EVTDESC8164"
+	desc = EVTDESC8164
 	picture = GFX_evt_shadowy_cabal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "EVTOPTA8164"
+		name = EVTOPTA8164
 	}
 }
 
 # Poisoned Wine - Notification: Failure, and discovered
 character_event = {
 	id = 8165
-	desc = "EVTDESC8165"
+	desc = EVTDESC8165
 	picture = GFX_evt_shadowy_cabal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	immediate = {
 		character_event = { id = 11 } # Consequences of discovery
 		clear_event_target = target_victim
-		
+
 		if = {
-			limit = { 
+			limit = {
 				plot_target_char = {
-					character = FROM
+					character = event_target:plot_target
 				}
+
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
 			}
+
 			reveal_plot = yes
 		}
 	}
-	
+
 	option = {
-		name = "EVTOPTA8165"
+		name = EVTOPTA8165
+
 		if = {
-			limit = { 
+			limit = {
 				plot_target_char = {
-					character = FROM
+					character = event_target:plot_target
 				}
+
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
 			}
-			clr_character_flag = murder_in_motion
-			tooltip = { reveal_plot = yes }
+
+			activate_plot = no
+
+			tooltip = {
+				reveal_plot = yes
+			}
 		}
 	}
 }
@@ -5831,766 +6101,1002 @@ character_event = {
 # Poisoned Wine - Notification: Failure, but NOT discovered
 character_event = {
 	id = 8166
-	desc = "EVTDESC8166"
+	desc = EVTDESC8166
 	picture = GFX_evt_shadowy_cabal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8166"
-		
+		name = EVTOPTA8166
+
 		if = {
-			limit = { 
+			limit = {
 				plot_target_char = {
-					character = FROM
+					character = event_target:plot_target
 				}
+
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
 			}
-			clr_character_flag = murder_in_motion
+
+			activate_plot = no
 		}
 	}
 }
-
 
 # FALLING ACCIDENT - CHILDREN ONLY
 
 # Falling accident - The plotter sees an opportunity
 character_event = {
 	id = 8170
-	desc = "EVTDESC8170"
+	desc = EVTDESC8170
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
-	capable_only = yes
-	prisoner = no
+	portrait = event_target:plot_target
+
 	is_part_of_plot = yes
-	
+	only_capable = yes
+	prisoner = no
+
 	trigger = {
 		OR = {
 			has_plot = plot_kill_character
 			has_plot = plot_kill_spouse
 		}
+
+		is_plot_active = no
+
 		plot_target_char = {
-			NOT = { is_murder_quest_target_of_root_trigger = yes }
-			age = 5
-			NOT = { age = 16 }
-			prisoner = no
-			NOT = { trait = incapable }
-			NOT = { is_inaccessible_trigger = yes }
+			is_adult = no
+			practical_age >= 5
 			at_location = ROOT # The Plot Head needs to be at the target's location to get a chance
+			is_inaccessible_or_incapable_trigger = no
+			is_murder_quest_target_of_root_trigger = no
 		}
-		OR = {
-			NOT = { has_character_flag = murder_in_motion }
-			had_character_flag = { flag = murder_in_motion days = 100 }
-		}
-		plot_power_contribution = 
-		{
+
+		plot_power_contribution = {
 			plotter = ROOT
-			power = 0.025
+			power >= 0.025
 		}
 	}
-	
+
 	mean_time_to_happen = {
-		months = 3600
-		
-		modifier = {
+		years = 300
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.10
+				power >= 0.10
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.20
+				power >= 0.20
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.30
+				power >= 0.30
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.40
+				power >= 0.40
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.50
+				power >= 0.50
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.60
+				power >= 0.60
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.70
+				power >= 0.70
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.80
+				power >= 0.80
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.90
+				power >= 0.90
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 1.5
+				power >= 1.5
 			}
 		}
-		
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
-			any_backed_character = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_power = 1.0
-			}
+			plot_power >= 1.0
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
-			any_backed_character = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_power = 1.5
-			}
+			plot_power >= 1.5
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
-			any_backed_character = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_power = 2.0
-			}
+			plot_power >= 2.0
 		}
 	}
-	
+
 	immediate = {
-		plot_target_char = { save_event_target_as = plot_target }
-	}
-	
-	option = {
-		name = "EVTOPTA8170" # The conspirators provide the poison
-		trigger = {
-			plot_power = 1.0
+		save_event_target_as = plot_leader
+
+		plot_target_char = {
+			save_event_target_as = plot_target
 		}
-		hidden_tooltip = {
-			any_plot_backer = {
-				character_event = { id = 8182 days = 1 }
+	}
+
+	option = {
+		name = EVTOPTA8170 # The conspirators know someone
+
+		trigger = { plot_power >= 1.0 }
+
+		any_plot_backer = {
+			character_event = { id = 8182 days = 1 }
+		}
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8175
+				days = 30
+				tooltip = EVTTOOLTIP8175
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 8175 days = 30 tooltip = "EVTTOOLTIP8175" } }
 	}
+
 	option = {
-		name = "EVTOPTB8170" # Bribe a Guard
+		name = EVTOPTB8170 # Bribe a Guard
+
 		trigger = {
-			NOT = { plot_power = 0.5 }
-			NOT = { intrigue = 10 }
+			plot_power < 0.5
+			intrigue < 10
 		}
+
 		scaled_wealth = -1.0
-		
-		hidden_tooltip = {
-			any_plot_backer = {
-				character_event = { id = 8182 days = 1 }
+
+		any_plot_backer = {
+			character_event = { id = 8182 days = 1 }
+		}
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8175
+				days = 30
+				tooltip = EVTTOOLTIP8175
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 8175 days = 30 tooltip = "EVTTOOLTIP8175" } }
 	}
+
 	option = {
-		name = "EVTOPTB8170" # Bribe a Guard
+		name = EVTOPTB8170 # Bribe a Guard
+
 		trigger = {
-			plot_power = 0.5
-			NOT = { plot_power = 1.0 }
-			NOT = { intrigue = 10 }
+			plot_power >= 0.5
+			plot_power < 1.0
+			intrigue < 10
 		}
+
 		scaled_wealth = -0.5
-		
-		hidden_tooltip = {
-			any_plot_backer = {
-				character_event = { id = 8182 days = 1 }
+
+		any_plot_backer = {
+			character_event = { id = 8182 days = 1 }
+		}
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8175
+				days = 30
+				tooltip = EVTTOOLTIP8175
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 8175 days = 30 tooltip = "EVTTOOLTIP8175" } }
 	}
+
 	option = {
-		name = "EVTOPTC8170" # I know just the person for the job...
+		name = EVTOPTC8170 # I know just the person for the job...
 		tooltip_info = intrigue
+
 		trigger = {
-			plot_power = 0.5
-			intrigue = 10
+			plot_power >= 0.5
+			intrigue >= 10
 		}
-		
-		hidden_tooltip = {
-			any_plot_backer = {
-				character_event = { id = 8182 days = 1 }
+
+		any_plot_backer = {
+			character_event = { id = 8182 days = 1 }
+		}
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8175
+				days = 30
+				tooltip = EVTTOOLTIP8175
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 8175 days = 30 tooltip = "EVTTOOLTIP8175" } }
 	}
+
 	option = {
-		name = "EVTOPTD8150" # I cannot afford this
+		name = EVTOPTD8150 # I cannot afford this
+
 		trigger = {
-			ai = no
-			NOT = { intrigue = 10 }
-			NOT = { plot_power = 1.0 }
+			intrigue < 10
+			plot_power < 1.0
 		}
+
+		ai_chance = { factor = 0 }
 	}
 }
 
 # Falling Accident - A plot backer sees an opportunity
 character_event = {
 	id = 8171
-	desc = "EVTDESC8171"
+	desc = EVTDESC8171
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
-	capable_only = yes
-	prisoner = no
+	portrait = event_target:plot_target
+
 	is_part_of_plot = yes
-	
+	only_capable = yes
+	prisoner = no
+
 	trigger = {
 		any_backed_character = {
 			OR = {
 				has_plot = plot_kill_character
 				has_plot = plot_kill_spouse
 			}
-			plot_power = 0.5
+
+			is_plot_active = no
+			plot_power >= 0.5
+
 			plot_target_char = {
-				NOT = { is_murder_quest_target_of_root_trigger = yes }
-				age = 5
-				NOT = { age = 16 }
-				prisoner = no
-				NOT = { trait = incapable }
-				NOT = { is_inaccessible_trigger = yes }
+				is_adult = no
+				practical_age >= 5
+				is_inaccessible_or_incapable_trigger = no
+				is_murder_quest_target_of_prev_trigger = no
 			}
-			OR = {
-				NOT = { has_character_flag = murder_in_motion }
-				had_character_flag = { flag = murder_in_motion days = 100 }
-			}
+
 			ROOT = {
-				plot_power_contribution = 
-				{
+				plot_power_contribution = {
 					plotter = PREV
-					power = 0.025
+					power >= 0.025
 				}
 			}
 		}
 	}
-	
+
 	mean_time_to_happen = {
-		months = 3600
-		
-		modifier = {
+		years = 300
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_adult = no
+					practical_age >= 5
+					is_inaccessible_or_incapable_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.10
+						power >= 0.10
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_adult = no
+					practical_age >= 5
+					is_inaccessible_or_incapable_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.20
+						power >= 0.20
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_adult = no
+					practical_age >= 5
+					is_inaccessible_or_incapable_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.30
+						power >= 0.30
 					}
 				}
 			}
 		}
-		modifier = {
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_adult = no
+					practical_age >= 5
+					is_inaccessible_or_incapable_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.40
+						power >= 0.40
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_adult = no
+					practical_age >= 5
+					is_inaccessible_or_incapable_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.50
+						power >= 0.50
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_adult = no
+					practical_age >= 5
+					is_inaccessible_or_incapable_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.60
+						power >= 0.60
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_adult = no
+					practical_age >= 5
+					is_inaccessible_or_incapable_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.70
+						power >= 0.70
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_adult = no
+					practical_age >= 5
+					is_inaccessible_or_incapable_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.80
+						power >= 0.80
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_adult = no
+					practical_age >= 5
+					is_inaccessible_or_incapable_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.90
+						power >= 0.90
 					}
 				}
 			}
 		}
-		
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 1.0
+
+				is_plot_active = no
+				plot_power >= 1.0
+
+				plot_target_char = {
+					is_adult = no
+					practical_age >= 5
+					is_inaccessible_or_incapable_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 1.5
+
+				is_plot_active = no
+				plot_power >= 1.5
+
+				plot_target_char = {
+					is_adult = no
+					practical_age >= 5
+					is_inaccessible_or_incapable_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 2.0
+
+				is_plot_active = no
+				plot_power >= 2.0
+
+				plot_target_char = {
+					is_adult = no
+					practical_age >= 5
+					is_inaccessible_or_incapable_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
 			}
 		}
 	}
 
 	immediate = {
+		save_event_target_as = plot_backer
+
 		random_backed_character = {
 			limit = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 0.5
+
+				is_plot_active = no
+				plot_power >= 0.5
+
 				plot_target_char = {
-					NOT = { is_murder_quest_target_of_root_trigger = yes }
-					age = 5
-					NOT = { age = 16 }
-					prisoner = no
-					NOT = { trait = incapable }
-					NOT = { is_inaccessible_trigger = yes }
+					is_adult = no
+					practical_age >= 5
+					is_inaccessible_or_incapable_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
 				}
-				OR = {
-					NOT = { has_character_flag = murder_in_motion }
-					had_character_flag = { flag = murder_in_motion days = 100 }
-				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.025
+						power >= 0.025
 					}
 				}
 			}
+
 			save_event_target_as = plot_leader
+
+			plot_target_char = {
+				save_event_target_as = plot_target
+			}
 		}
 	}
-	
+
 	option = {
-		name = "EVTOPTA8170" # The conspirators provide a killer
+		name = EVTOPTA8170 # The conspirators provide a killer
+
 		trigger = {
 			event_target:plot_leader = {
-				plot_power = 1.0
+				plot_power >= 1.0
 			}
 		}
+
 		event_target:plot_leader = {
-			character_event = { id = 8180 days = 3 tooltip = "EVTTOOLTIP8160" }
-			set_character_flag = murder_in_motion
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 8180
+				days = 3
+				tooltip = EVTTOOLTIP8160
+			}
 		}
 	}
+
 	option = {
-		name = "EVTOPTB8171" # Ask the Plotter for funds
+		name = EVTOPTB8171 # Ask the Plotter for funds
+
 		trigger = {
-			NOT = { intrigue = 10 }
-			NOT = {
-				event_target:plot_leader = {
-					plot_power = 1.0
-				}
+			intrigue < 10
+
+			event_target:plot_leader = {
+				plot_power < 1.0
 			}
 		}
+
 		event_target:plot_leader = {
-			character_event = { id = 8172 days = 3 tooltip = "EVTTOOLTIP8152" }
-			set_character_flag = murder_in_motion
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 8172
+				days = 3
+				tooltip = EVTTOOLTIP8152
+			}
 		}
 	}
-	
+
 	option = {
-		name = "EVTOPTB8170" # Bribe a Guard
+		name = EVTOPTB8170 # Bribe a Guard
+
 		trigger = {
-			NOT = { intrigue = 10 }
-			NOT = {
-				event_target:plot_leader = {
-					plot_power = 1.0
-				}
+			intrigue < 10
+
+			event_target:plot_leader = {
+				plot_power < 1.0
 			}
 		}
+
 		scaled_wealth = -0.5
+
 		event_target:plot_leader = {
-			character_event = { id = 8180 days = 3 tooltip = "EVTTOOLTIP8160" }
-			set_character_flag = murder_in_motion
-		}
-	}
-	option = {
-		name = "EVTOPTC8170" # I know just the person for the job...
-		tooltip_info = intrigue
-		trigger = {
-			intrigue = 10
-		}
-		
-		event_target:plot_leader = {
-			character_event = { id = 8180 days = 3 tooltip = "EVTTOOLTIP8160" }
-			set_character_flag = murder_in_motion
-		}
-	}
-	
-	option = {
-		name = "EVTOPTD8150" # I cannot afford this
-		trigger = {
-			ai = no
-			NOT = { intrigue = 10 }
-			NOT = {
-				event_target:plot_leader = {
-					plot_power = 1.0
-				}
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 8180
+				days = 3
+				tooltip = EVTTOOLTIP8160
 			}
 		}
+	}
+
+	option = {
+		name = EVTOPTC8170 # I know just the person for the job...
+		tooltip_info = intrigue
+
+		trigger = { intrigue >= 10 }
+
+		event_target:plot_leader = {
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 8180
+				days = 3
+				tooltip = EVTTOOLTIP8160
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTD8150 # I cannot afford this
+
+		trigger = {
+			intrigue < 10
+
+			event_target:plot_leader = {
+				plot_power < 1.0
+			}
+		}
+
+		ai_chance = { factor = 0 }
 	}
 }
 
 # Falling Accident - Plot backer requests funds
 character_event = {
 	id = 8172
-	desc = "EVTDESC8172"
+	desc = EVTDESC8172
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
-	immediate = {
-		plot_target_char = { save_event_target_as = plot_target }
-	}
-	
+
 	option = {
-		name = "EVTOPTA8172"
+		name = EVTOPTA8172
+
 		transfer_scaled_wealth = {
-			to = FROM
+			to = event_target:plot_backer
 			value = 1.0
 		}
-		FROM = { character_event = { id = 8173 tooltip = "EVTTOOLTIP8153" } }
+
+		event_target:plot_backer = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8173
+				tooltip = EVTTOOLTIP8153
+			}
+		}
 	}
-	
+
 	option = {
-		name = "EVTOPTB8152"
-		FROM = { character_event = { id = 8174 tooltip = "EVTTOOLTIP8154" } }
+		name = EVTOPTB8152
+
+		event_target:plot_backer = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8174
+				tooltip = EVTTOOLTIP8154
+			}
+		}
 	}
 }
 
 # Falling Accident - plot backer receives funds
 character_event = {
 	id = 8173
-	desc = "EVTDESC8173"
+	desc = EVTDESC8173
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EXCELLENT"
-		event_target:plot_target = { character_event = { id = 8175 days = 27 tooltip = "EVTTOOLTIP8175" } }
+		name = EXCELLENT
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8175
+				days = 27
+				tooltip = EVTTOOLTIP8175
+			}
+		}
 	}
 }
 
 # Falling Accident - plot backer does NOT receive funds
 character_event = {
 	id = 8174
-	desc = "EVTDESC8174"
+	desc = EVTDESC8174
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8154" # Pay for it myself
+		name = EVTOPTA8154 # Pay for it myself
+
 		scaled_wealth = -1.0
-		event_target:plot_target = { character_event = { id = 8175 days = 27 tooltip = "EVTTOOLTIP8175" } }
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8175
+				days = 27
+				tooltip = EVTTOOLTIP8175
+			}
+		}
 	}
+
 	option = {
-		name = "EVTOPTB8154" # Screw this
-		FROM = { clr_character_flag = murder_in_motion }
+		name = EVTOPTB8154 # Screw this
+
+		event_target:plot_leader = {
+			activate_plot = no
+		}
 	}
 }
 
 # Falling Accident - the murder attempt
 character_event = {
 	id = 8175
-	desc = "EVTDESC8175"
+	desc = EVTDESC8175
 	picture = GFX_evt_feast
 	border = GFX_event_normal_frame_intrigue
-	
+
 	hide_from = yes
-	
 	is_triggered_only = yes
-	
+
+	prisoner = no
+
+	trigger = {
+		# Is the plot still in motion?
+		event_target:plot_leader = {
+			is_plot_active = yes
+		}
+	}
+
 	immediate = {
 		save_event_target_as = target_victim
 	}
-	
-	trigger = {
-		prisoner = no
-		
-		# Is the plot still in motion?
-		OR = {
-			FROM = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_target_char = {
-					character = ROOT
-				}
-			}
-			FROMFROM = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_target_char = {
-					character = ROOT
-				}
-			}
-		}
-	}
-	
+
 	option = {
-		name = "EVTOPTA8175" # Falls
+		name = EVTOPTA8175 # Falls
+
 		trigger = {
-			NOT = {
-				OR = {
-					AND = {
-						trait = paranoid
-						random = 33
-					}
-					AND = {
-						trait = trusting
-						random = 90
-					}
-					AND = {
-						NOT = { trait = paranoid }
-						NOT = { trait = trusting }
-						random = 75
-					}
-				}
+			trigger_if = {
+				limit = { trait = paranoid }
+				random < 33
+			}
+			trigger_else_if = {
+				limit = { trait = trusting }
+				random < 90
+			}
+			trigger_else = {
+				random < 75
 			}
 		}
-		hidden_tooltip = {
+
+		hidden_effect = {
 			random_list = {
 				25 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 8183 days = 1 } }
-						FROMFROM = { character_event = { id = 8183 days = 1 } }
+					character_event = {
+						id = 8176 # Dies, murderer discovered
+						days = 1
 					}
-					character_event = { id = 8176 days = 1 } # Dies, murderer discovered
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 8183 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 8183 days = 1 } }
 				}
+
 				75 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 8184 days = 1 } }
-						FROMFROM = { character_event = { id = 8184 days = 1 } }
+					character_event = {
+						id = 8177 # Dies, murderer unknown
+						days = 1
 					}
-					character_event = { id = 8177 days = 1 } # Dies, murderer unknown
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 8184 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 8184 days = 1 } }
 				}
 			}
 		}
 	}
 	option = {
-		name = "EVTOPTB8175" # Dodges
+		name = EVTOPTB8175 # Dodges
+
 		trigger = {
-			OR = {
-				AND = {
-					trait = paranoid
-					random = 33
-				}
-				AND = {
-					trait = trusting
-					random = 90
-				}
-				AND = {
-					NOT = { trait = trusting }
-					NOT = { trait = paranoid }
-					random = 75
-				}
+			trigger_if = {
+				limit = { trait = paranoid }
+				random >= 33
+			}
+			trigger_else_if = {
+				limit = { trait = trusting }
+				random >= 90
+			}
+			trigger_else = {
+				random >= 75
 			}
 		}
-		hidden_tooltip = {
+
+		hidden_effect = {
 			random_list = {
 				50 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 8185 days = 1 } }
-						FROMFROM = { character_event = { id = 8185 days = 1 } }
+					character_event = {
+						id = 8178 # Lives, murderer discovered
+						days = 1
 					}
-					character_event = { id = 8178 days = 1 } # Lives, murderer discovered
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 8185 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 8185 days = 1 } }
 				}
+
 				50 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 8186 days = 1 } }
-						FROMFROM = { character_event = { id = 8186 days = 1 } }
+					character_event = {
+						id = 8179 # Lives, murderer unknown
+						days = 1
 					}
-					character_event = { id = 8179 days = 1 } # Lives, murderer unknown
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 8186 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 8186 days = 1 } }
 				}
 			}
 		}
@@ -6600,84 +7106,45 @@ character_event = {
 # Falling Accident - Dies, murderer(s) discovered
 character_event = {
 	id = 8176
-	desc = "EVTDESC8176"
+	desc = EVTDESC8176
 	picture = GFX_evt_death
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8176"
+		name = EVTOPTA8176
+
 		if = {
-			limit = {
-				FROMFROMFROM = {
-					OR = {
-						has_plot = plot_kill_character
-						has_plot = plot_kill_spouse
-					}
-					plot_target_char = {
-						character = ROOT
-					}
-				}
-			}
+			limit = { is_alive = yes }
+
 			death = {
 				death_reason = death_murder_fall
-				killer = FROMFROMFROM
-			}
-			break = yes
-		}
-		if = {
-			limit = {
-				is_alive = yes
-			}
-			death = {
-				death_reason = death_murder_fall
-				killer = FROMFROM
+				killer = event_target:plot_leader
 			}
 		}
 	}
-	
 }
 
 # Falling Accident - Dies, murderer NOT discovered
 character_event = {
 	id = 8177
-	desc = "EVTDESC8176"
+	desc = EVTDESC8176
 	picture = GFX_evt_death
 	border = GFX_event_normal_frame_intrigue
-	
+
 	hide_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8177"
-		
+		name = EVTOPTA8177
+
 		if = {
-			limit = {
-				FROMFROMFROM = {
-					OR = {
-						has_plot = plot_kill_character
-						has_plot = plot_kill_spouse
-					}
-					plot_target_char = {
-						character = ROOT
-					}
-				}
-			}
+			limit = { is_alive = yes }
+
 			death = {
 				death_reason = death_murder_unknown_fall
-				killer = FROMFROMFROM
-			}
-			break = yes
-		}
-		if = {
-			limit = {
-				is_alive = yes
-			}
-			death = {
-				death_reason = death_murder_unknown_fall
-				killer = FROMFROM
+				killer = event_target:plot_leader
 			}
 		}
 	}
@@ -6686,48 +7153,35 @@ character_event = {
 # Falling Accident - Lives, murderer discovered
 character_event = {
 	id = 8178
-	desc = "EVTDESC8178"
+	desc = EVTDESC8178
 	picture = GFX_evt_scandal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "EVTOPTA8178"
+		name = EVTOPTA8178
 	}
 }
 
 # Falling Accident - Lives, murderer NOT discovered
 character_event = {
 	id = 8179
-	desc = "EVTDESC8179"
+	desc = EVTDESC8179
 	picture = GFX_evt_scandal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	hide_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8179"
-		if = {
-			limit = {
-				NOT = { trait = paranoid }
-				NOT = { trait = trusting }
-			}
-			random = {
-				chance = 25
-				add_trait = paranoid
-			}
-		}
-		if = {
-			limit = {
-				trait = trusting
-			}
-			random = {
-				chance = 50
-				remove_trait = trusting
-			}
+		name = EVTOPTA8179
+
+		random = {
+			chance = 25
+			add_trait_partially_paranoid_effect = yes
 		}
 	}
 }
@@ -6735,32 +7189,42 @@ character_event = {
 # Falling Accident - Backer informs Plotter of plan
 character_event = {
 	id = 8180
-	desc = "EVTDESC8180"
+	desc = EVTDESC8180
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	trigger = {
+		is_plot_active = yes
+
 		plot_target_char = {
 			is_alive = yes
 		}
 	}
-	
-	immediate = {
-		plot_target_char = { save_event_target_as = plot_target }
-	}
-	
+
 	option = {
-		name = "EVTOPTA8180"
-		set_character_flag = murder_in_motion
-		FROM = { character_event = { id = 8181 tooltip = "EVTTOOLTIP8161" } }
-		hidden_tooltip = {
-			any_plot_backer = {
-				limit = {
-					NOT = { character = FROM }
-				}
-				character_event = { id = 8182 days = 1 }
+		name = EVTOPTA8180
+
+		activate_plot = yes
+
+		event_target:plot_backer = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8181
+				tooltip = EVTTOOLTIP8161
+			}
+		}
+
+		any_plot_backer = {
+			limit = {
+				NOT = { character = event_target:plot_backer }
+			}
+
+			character_event = {
+				id = 8182
+				days = 1
 			}
 		}
 	}
@@ -6769,106 +7233,127 @@ character_event = {
 # Falling Accident - Plotter tells backer to go ahead
 character_event = {
 	id = 8181
-	desc = "EVTDESC8181"
+	desc = EVTDESC8181
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8161"
-		event_target:plot_target = { character_event = { id = 8175 days = 27 tooltip = "EVTTOOLTIP8175" } }
+		name = EVTOPTA8161
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 8175
+				days = 27
+				tooltip = EVTTOOLTIP8175
+			}
+		}
 	}
 }
 
 # Falling Accident - Initiator informs other plotter
 character_event = {
 	id = 8182
-	desc = "EVTDESC8182"
+	desc = EVTDESC8182
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "EVTOPTA8180"
+		name = EVTOPTA8180
 	}
 }
 
 # Falling Accident - Notification: Success, but discovered
 character_event = {
 	id = 8183
-	desc = "EVTDESC8183"
+	desc = EVTDESC8183
 	picture = GFX_evt_shadowy_cabal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	immediate = {
 		character_event = { id = 10 } # Consequences of discovery
 		clear_event_target = target_victim
 	}
-	
+
 	option = {
-		name = "EVTOPTA8163"
+		name = EVTOPTA8163
 	}
 }
 
 # Falling Accident - Notification: Success, and NOT discovered
 character_event = {
 	id = 8184
-	desc = "EVTDESC8184"
+	desc = EVTDESC8184
 	picture = GFX_evt_shadowy_cabal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "EVTOPTA8184"
+		name = EVTOPTA8184
 	}
 }
 
 # Falling Accident - Notification: Failure, and discovered
 character_event = {
 	id = 8185
-	desc = "EVTDESC8185"
+	desc = EVTDESC8185
 	picture = GFX_evt_shadowy_cabal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	immediate = {
 		character_event = { id = 11 } # Consequences of discovery
 		clear_event_target = target_victim
-		
+
 		if = {
-			limit = { 
+			limit = {
 				plot_target_char = {
-					character = FROM
+					character = event_target:plot_target
 				}
+
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
 			}
+
 			reveal_plot = yes
 		}
 	}
-	
+
 	option = {
-		name = "EVTOPTA8185"
+		name = EVTOPTA8185
+
 		if = {
-			limit = { 
+			limit = {
 				plot_target_char = {
-					character = FROM
+					character = event_target:plot_target
 				}
+
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
 			}
-			clr_character_flag = murder_in_motion
-			tooltip = { reveal_plot = yes }
+
+			activate_plot = no
+
+			tooltip = {
+				reveal_plot = yes
+			}
 		}
 	}
 }
@@ -6876,461 +7361,483 @@ character_event = {
 # Falling Accident - Notification: Failure, but NOT discovered
 character_event = {
 	id = 8186
-	desc = "EVTDESC8186"
+	desc = EVTDESC8186
 	picture = GFX_evt_shadowy_cabal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8166"
-		
+		name = EVTOPTA8166
+
 		if = {
-			limit = { 
+			limit = {
 				plot_target_char = {
-					character = FROM
+					character = event_target:plot_target
 				}
+
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
 			}
-			clr_character_flag = murder_in_motion
+
+			activate_plot = no
 		}
 	}
 }
-
 
 ###########################################
 # Plot to cut down another vassal to size #
 ###########################################
 
-	
 # Top Liege is approached by Plotter
-letter_event = {
-	id = 7500
-	desc = "EVTDESC7500"
+# letter_event = {
+#	id = 7500
+#	desc = EVTDESC7500
+#
+#	is_triggered_only = yes
+#
+#	immediate = {
+#		save_event_target_as = plot_liege
+#
+#		FROM = {
+#			save_event_target_as = plot_leader
+#
+#			plot_target_char = {
+#				save_event_target_as = plot_target
+#			}
+#
+#			plot_target_title = {
+#				save_event_target_as = plot_title
+#			}
+#		}
+#	}
+#
+#	option = {
+#		name = EVTOPTA7500 # Yes
+#
+#		FROM = {
+#			show_scope_change = no
+#
+#			letter_event = {
+#				id = 7501
+#				days = 3
+#				tooltip = EVTTOOLTIP7501
+#			}
+#		}
+#	}
+#
+#	option = {
+#		name = EVTOPTB7500 # No
+#
+#		FROM = {
+#			show_scope_change = no
+#
+#			letter_event = {
+#				id = 7502
+#				days = 3
+#				tooltip = EVTTOOLTIP7502
+#			}
+#		}
+#	}
+# }
 
-	is_triggered_only = yes
-	
-	option = { #Yes
-		name = "EVTOPTA7500"
-		FROM = {
-			letter_event = { id = 7501 days = 3 tooltip = "EVTTOOLTIP7501" }
-		}
-	}
-	option = { #No
-		name = "EVTOPTB7500"
-		FROM = {
-			letter_event = { id = 7502 days = 3 tooltip = "EVTTOOLTIP7502" }
-		}
-	}
-}
-	
 # Plotter informed Top Liege agrees
-letter_event = {
-	id = 7501
-	desc = "EVTDESC7501"
+# letter_event = {
+#	id = 7501
+#	desc = EVTDESC7501
+#
+#	is_triggered_only = yes
+#
+#	trigger = {
+#		has_plot = plot_weaken_fellow_vassal
+#		vassal_of = event_target:plot_liege
+#	}
+#
+#	option = {
+#		name = EXCELLENT
+#
+#		save_event_target_as = plot_leader
+#
+#		plot_target_char = {
+#			show_scope_change = no
+#
+#			letter_event = {
+#				id = 7504
+#				tooltip = EVTTOOLTIP7504
+#			}
+#		}
+#
+#		reverse_opinion = {
+#			name = approves_of_my_behaviour
+#			who = FROM
+#			years = 2
+#		}
+#	}
+# }
 
-	is_triggered_only = yes
-	
-	option = {
-		name = "EVTOPTA7501"
-		ROOT = { set_character_flag = weaken_vassal_plotter }
-		plot_target_char = {
-			letter_event = { id = 7504 tooltip = "EVTTOOLTIP7504" }
-		}
-		FROM = {
-			opinion = {
-				modifier = approves_of_my_behaviour
-				who = ROOT
-				years = 2
-			}
-		}
-	}
-}
-	
 # Plotter informed Top Liege disagrees
-letter_event = {
-	id = 7502
-	desc = "EVTDESC7502"
-
-	is_triggered_only = yes
-	
-	option = {
-		name = "EVTOPTA7502"
-		reveal_plot = yes
-		FROM = {
-			opinion = {
-				modifier = resentful_of_my_behaviour
-				who = ROOT
-				years = 2
-			}
-		}
-	}
-}
+# letter_event = {
+#	id = 7502
+#	desc = EVTDESC7502
+#
+#	is_triggered_only = yes
+#
+#	trigger = {
+#		has_plot = plot_weaken_fellow_vassal
+#		vassal_of = event_target:plot_liege
+#	}
+#
+#	option = {
+#		name = I_SEE
+#
+#		reveal_plot = yes
+#
+#		reverse_opinion = {
+#			name = resentful_of_my_behaviour
+#			who = FROM
+#			years = 2
+#		}
+#	}
+# }
 
 # Duke receives ultimatum from Top Liege
-letter_event = {
-	id = 7504
-	desc = "EVTDESC7504"
-
-	is_triggered_only = yes
-	
-	option = { #Take it!
-		name = "EVTOPTA7504"
-		trigger = {
-			FROM = {
-				plot_target_title = {
-					ROOT = {
-						any_vassal = {
-							tier = count
-							any_demesne_title = {
-								tier = count
-								dejure_liege_title = {
-									FROM = {
-										plot_target_title = {
-											title = PREVPREV
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		FROM = {
-			plot_target_title = {
-				ROOT = {
-					random_vassal = {
-						limit = {
-							tier = count
-							any_demesne_title = {
-								tier = count
-								dejure_liege_title = {
-									FROM = {
-										plot_target_title = {
-											title = PREVPREV
-										}
-									}
-								}
-							}
-						}
-						usurp_title = PREVPREV
-					}
-				}
-			}
-		}
-		hidden_tooltip = {
-			liege = {
-				letter_event = { 
-					id = 7508
-				}
-			}
-		}
-	}
-	option = { #Never
-		name = "EVTOPTB7504"
-		liege = {
-			letter_event = { 
-				id = 7509
-				tooltip = "EVTTOOLTIP7509"
-			}
-		}
-	}
-}
+# letter_event = {
+#	id = 7504
+#	desc = EVTDESC7504
+#
+#	is_triggered_only = yes
+#
+#	trigger = {
+#		vassal_of = event_target:plot_liege
+#
+#		event_target:plot_leader = {
+#			has_plot = plot_weaken_fellow_vassal
+#			vassal_of = event_target:plot_liege
+#		}
+#	}
+#
+#	option = {
+#		name = EVTOPTA7504 # Take it!
+#
+#		trigger = {
+#			any_vassal = {
+#				real_tier = COUNT
+#
+#				any_demesne_title = {
+#					tier = COUNT
+#					de_jure_liege = event_target:plot_title
+#				}
+#			}
+#		}
+#
+#		random_vassal = {
+#			show_scope_change = no
+#
+#			limit = {
+#				real_tier = COUNT
+#
+#				any_demesne_title = {
+#					tier = COUNT
+#					de_jure_liege = event_target:plot_title
+#				}
+#			}
+#
+#			usurp_title = event_target:plot_title
+#		}
+#
+#		liege = {
+#			letter_event = { id = 7508 }
+#		}
+#	}
+#
+#	option = {
+#		name = EVTOPTB7504 # Never
+#
+#		liege = {
+#			show_scope_change = no
+#
+#			letter_event = {
+#				id = 7509
+#				tooltip = EVTTOOLTIP7509
+#			}
+#		}
+#	}
+# }
 
 # Duke receives ultimatum from Plotter
-letter_event = {
-	id = 7505
-	desc = "EVTDESC7505"
-
-	is_triggered_only = yes
-	
-	option = { #Take it!
-		name = "EVTOPTA7505"
-		trigger = {
-			FROM = {
-				plot_target_title = {
-					ROOT = {
-						any_vassal = {
-							tier = count
-							any_demesne_title = {
-								tier = count
-								dejure_liege_title = {
-									FROM = {
-										plot_target_title = {
-											title = PREVPREV
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		FROM = {
-			plot_target_title = {
-				ROOT = {
-					random_vassal = {
-						limit = {
-							tier = count
-							any_demesne_title = {
-								tier = count
-								dejure_liege_title = {
-									FROM = {
-										plot_target_title = {
-											title = PREVPREV
-										}
-									}
-								}
-							}
-						}
-						usurp_title = PREVPREV
-						hidden_tooltip = {
-							character_event = { id = 7515 }
-						}
-					}
-				}
-			}
-		}
-		hidden_tooltip = {
-			FROM = {
-				letter_event = { id = 7506 }
-			}
-		}
-	}
-	option = {
-		name = "EVTOPTC7505"
-		trigger = {
-			NOT = {
-				FROM = {
-					plot_target_title = {
-						ROOT = {
-							any_vassal = {
-								tier = count
-								any_demesne_title = {
-									tier = count
-									dejure_liege_title = {
-										FROM = {
-											plot_target_title = {
-												title = PREVPREV
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		# add effect...
-		FROM = {
-			plot_target_title = {
-				usurp_title = FROM
-			}
-			hidden_tooltip = {
-				character_event = { id = 7517 }
-			}
-		}
-	}
-	option = { #No!
-		name = "EVTOPTB7505"
-		FROM = {
-			letter_event = { id = 7507 tooltip = "EVTTOOLTIP7507" }
-		}
-	}
-}
+# letter_event = {
+#	id = 7505
+#	desc = EVTDESC7505
+#
+#	is_triggered_only = yes
+#
+#	trigger = {
+#		FROM = {
+#			has_plot = plot_weaken_fellow_vassal
+#			same_liege = ROOT
+#		}
+#	}
+#
+#	immediate = {
+#		save_event_target_as = plot_target
+#
+#		FROM = {
+#			save_event_target_as = plot_leader
+#
+#			plot_target_title = {
+#				save_event_target_as = plot_title
+#			}
+#		}
+#	}
+#
+#	option = {
+#		name = EVTOPTA7505 # Take it!
+#
+#		trigger = {
+#			any_vassal = {
+#				real_tier = COUNT
+#
+#				any_demesne_title = {
+#					tier = COUNT
+#					de_jure_liege = event_target:plot_title
+#				}
+#			}
+#		}
+#
+#		random_vassal = {
+#			show_scope_change = no
+#
+#			limit = {
+#				real_tier = COUNT
+#
+#				any_demesne_title = {
+#					tier = COUNT
+#					de_jure_liege = event_target:plot_title
+#				}
+#			}
+#
+#			usurp_title = event_target:plot_title
+#			character_event = { id = 7515 }
+#		}
+#
+#		event_target:plot_leader = {
+#			letter_event = { id = 7506 }
+#		}
+#	}
+#
+#	option = {
+#		name = EVTOPTC7505
+#
+#		trigger = {
+#			NOT = {
+#				any_vassal = {
+#					real_tier = COUNT
+#
+#					any_demesne_title = {
+#						tier = COUNT
+#						de_jure_liege = event_target:plot_title
+#					}
+#				}
+#			}
+#		}
+#
+#		event_target:plot_leader = {
+#			show_scope_change = no
+#
+#			usurp_title = event_target:plot_title
+#			character_event = { id = 7517 }
+#		}
+#	}
+#
+#	option = {
+#		name = EVTOPTB7505 # No!
+#
+#		event_target:plot_leader = {
+#			show_scope_change = no
+#
+#			letter_event = {
+#				id = 7507
+#				tooltip = EVTTOOLTIP7507
+#			}
+#		}
+#	}
+# }
 
 # Plotter informed ultimatum accepted
-letter_event = {
-	id = 7506
-	desc = "EVTDESC7506"
-
-	is_triggered_only = yes
-	
-	option = {
-		name = "EVTOPTA7506"
-		FROM = {
-			opinion = {
-				modifier = scheming_bastard
-				who = ROOT
-				years = 6
-			}
-		}	
-	}
-}
+# letter_event = {
+#	id = 7506
+#	desc = EVTDESC7506
+#
+#	is_triggered_only = yes
+#
+#	option = {
+#		name = EXCELLENT
+#
+#		reverse_opinion = {
+#			name = scheming_bastard
+#			who = event_target:plot_target
+#			years = 6
+#		}
+#	}
+# }
 
 # Plotter informed ultimatum rejected
-letter_event = {
-	id = 7507
-	desc = "EVTDESC7507"
-
-	is_triggered_only = yes
-	
-	option = {
-		name = "EVTOPTA7507"
-		ai_chance = { factor = 100 }
-		hidden_tooltip = { reveal_plot = yes }
-		plot_target_title = {
-			reverse_war = {
-				target = ROOT
-				casus_belli = weaken_vassal_plot
-				plot_backers = yes
-			}
-		}
-	}
-	option = {
-		name = "EVTOPTB7507"
-		ai_chance = { factor = 0 }
-		prestige = -100
-		any_plot_backer = {
-			opinion = {
-				modifier = opinion_coward
-				who = ROOT
-				years = 5
-			}
-			hidden_tooltip = {
-				letter_event = { id = 8120 }
-			}
-		}
-		cancel_plot = plot_weaken_fellow_vassal
-	}
-}
+# letter_event = {
+#	id = 7507
+#	desc = EVTDESC7507
+#
+#	is_triggered_only = yes
+#
+#	option = {
+#		name = EVTOPTA7507
+#
+#		hidden_effect = {
+#			reveal_plot = yes
+#		}
+#
+#		plot_target_title = {
+#			show_scope_change = no
+#
+#			reverse_war = {
+#				target = ROOT
+#				casus_belli = weaken_vassal_plot
+#				plot_backers = yes
+#			}
+#		}
+#	}
+#
+#	option = {
+#		name = EVTOPTB7507
+#
+#		prestige = -100
+#		cancel_plot = plot_weaken_fellow_vassal
+#
+#		any_plot_backer = {
+#			show_scope_change = no
+#
+#			opinion = {
+#				name = opinion_coward
+#				who = ROOT
+#				years = 5
+#			}
+#
+#			letter_event = { id = 8120 }
+#		}
+#
+#		ai_chance = { factor = 0 }
+#	}
+# }
 
 # Top Liege informed ultimatum accepted
-letter_event = {
-	id = 7508
-	desc = "EVTDESC7508"
-
-	is_triggered_only = yes
-	
-	option = {
-		name = "EVTOPTA7508"
-		hidden_tooltip = {
-			any_vassal = {
-				limit = { has_character_flag = weaken_vassal_plotter }
-				character_event = { id = 7510 }
-			}
-			any_vassal = {
-				limit = {
-					any_vassal = {
-						has_character_flag = weaken_vassal_plotter
-					}
-				}
-				any_vassal = {
-					limit = { has_character_flag = weaken_vassal_plotter }
-					character_event = { id = 7510 }
-				}
-			}
-		}
-		FROM = {
-			opinion = {
-				modifier = opinion_bitter
-				who = ROOT
-				years = 6
-			}
-		}
-	}
-}
+# letter_event = {
+#	id = 7508
+#	desc = EVTDESC7508
+#
+#	is_triggered_only = yes
+#
+#	option = {
+#		name = EVTOPTA7508
+#
+#		event_target:plot_leader = {
+#			character_event = { id = 7510 }
+#		}
+#
+#		reverse_opinion = {
+#			name = opinion_bitter
+#			who = event_target:plot_target
+#			years = 6
+#		}
+#	}
+# }
 
 # Top Liege informed ultimatum rejected
-letter_event = {
-	id = 7509
-	desc = "EVTDESC7509"
-
-	is_triggered_only = yes
-	
-	option = {
-		name = "EVTOPTA7509"
-		opinion = {
-			who = FROM
-			modifier = opinion_refused_abdicate_title
-		}
-		hidden_tooltip = {
-			any_vassal = {
-				limit = { has_character_flag = weaken_vassal_plotter }
-				character_event = { id = 7511 }
-			}
-			any_vassal = {
-				limit = {
-					any_vassal = {
-						has_character_flag = weaken_vassal_plotter
-					}
-				}
-				any_vassal = {
-					limit = { has_character_flag = weaken_vassal_plotter }
-					character_event = { id = 7511 }
-				}
-			}
-		}
-		FROM = {
-			opinion = {
-				modifier = opinion_bitter
-				who = ROOT
-				years = 6
-			}
-		}
-	}
-}
+# letter_event = {
+#	id = 7509
+#	desc = EVTDESC7509
+#
+#	is_triggered_only = yes
+#
+#	option = {
+#		name = EVTOPTA7509
+#
+#		opinion = {
+#			name = opinion_refused_abdicate_title
+#			who = FROM
+#		}
+#
+#		event_target:plot_leader = {
+#			character_event = { id = 7511 }
+#		}
+#
+#		reverse_opinion = {
+#			name = opinion_bitter
+#			who = event_target:plot_target
+#			years = 6
+#		}
+#	}
+# }
 
 # Plotter informed Top Liege's ultimatum accepted
-character_event = {
-	id = 7510
-	desc = "EVTDESC7510"
-	picture = GFX_evt_council
-
-	is_triggered_only = yes
-	
-	option = {
-		name = "EVTOPTA7510"
-		clr_character_flag = weaken_vassal_plotter
-	}
-}
+# character_event = {
+#	id = 7510
+#	desc = EVTDESC7510
+#	picture = GFX_evt_council
+#
+#	is_triggered_only = yes
+#
+#	ai = no
+#
+#	option = {
+#		name = GOOD
+#	}
+# }
 
 # Plotter informed Top Liege's ultimatum rejected
-character_event = {
-	id = 7511
-	desc = "EVTDESC7511"
-	picture = GFX_evt_council
-
-	is_triggered_only = yes
-	
-	option = {
-		name = "EVTOPTA7511"
-		clr_character_flag = weaken_vassal_plotter
-		cancel_plot = plot_weaken_fellow_vassal
-	}
-}
+# character_event = {
+#	id = 7511
+#	desc = EVTDESC7511
+#	picture = GFX_evt_council
+#
+#	is_triggered_only = yes
+#
+#	option = {
+#		name = EVTOPTA7511
+#
+#		cancel_plot = plot_weaken_fellow_vassal
+#	}
+# }
 
 # Duke's vassal informed he will be granted duchy.
-character_event = {
-	id = 7515
-	desc = "EVTDESC7515"
-	picture = GFX_evt_council
-
-	is_triggered_only = yes
-	
-	option = {
-		name = "EVTOPTA7515"
-	}
-}
+# character_event = {
+#	id = 7515
+#	desc = EVTDESC7515
+#	picture = GFX_evt_council
+#
+#	is_triggered_only = yes
+#
+#	ai = no
+#
+#	option = {
+#		name = EVTOPTA7515
+#	}
+# }
 
 # Plotter informed he has received the title instead, as there were no vassals to give it to.
-character_event = {
-	id = 7517
-	desc = "EVTDESC7517"
-	picture = GFX_evt_knight_kneeling
-	
-	is_triggered_only = yes
-	
-	option = {
-		name = "EVTOPTA7502"
-	}
-}
+# character_event = {
+#	id = 7517
+#	desc = EVTDESC7517
+#	picture = GFX_evt_knight_kneeling
+#
+#	is_triggered_only = yes
+#
+#	ai = no
+#
+#	option = {
+#		name = I_SEE
+#	}
+# }
 
 ############################
 # Plot to Fabricate Claims #
@@ -7341,14 +7848,17 @@ character_event = {
 # Plotter succeeds in fabricating claim
 character_event = {
 	id = 7600
-	desc = "EVTDESC7600"
+	desc = EVTDESC7600
 	picture = GFX_evt_council
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA7600"
+		name = EXCELLENT
+
 		plot_target_title = {
+			show_scope_change = no
+
 			add_pressed_claim = ROOT
 		}
 	}
@@ -7357,17 +7867,21 @@ character_event = {
 # Plotter fails in fabricating claim on liege
 character_event = {
 	id = 7601
-	desc = "EVTDESC7601"
+	desc = EVTDESC7601
 	picture = GFX_evt_council
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA7601"
+		name = EVTOPTA7601
+
 		cancel_plot = plot_gain_liege_title
+
 		plot_target_char = {
+			show_scope_change = no
+
 			opinion = {
-				modifier = scheming_bastard
+				name = scheming_bastard
 				who = ROOT
 				years = 6
 			}
@@ -7378,17 +7892,21 @@ character_event = {
 # Plotter fails in fabricating claim on fellow vassal
 character_event = {
 	id = 7602
-	desc = "EVTDESC7601"
+	desc = EVTDESC7601
 	picture = GFX_evt_council
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA7601"
+		name = EVTOPTA7601
+
 		cancel_plot = plot_gain_fellow_vassal_title
+
 		plot_target_char = {
+			show_scope_change = no
+
 			opinion = {
-				modifier = scheming_bastard
+				name = scheming_bastard
 				who = ROOT
 				years = 6
 			}
@@ -7400,744 +7918,978 @@ character_event = {
 # The plotter sees an opportunity - Archer Ambush
 character_event = {
 	id = 7700
-	desc = "EVTDESC7700"
+	desc = EVTDESC7700
 	picture = GFX_evt_longbowman
 	border = GFX_event_normal_frame_intrigue
-	
-	capable_only = yes
-	prisoner = no
+	portrait = event_target:plot_target
+
 	is_part_of_plot = yes
-	
+	only_capable = yes
+	prisoner = no
+
 	trigger = {
 		OR = {
 			has_plot = plot_kill_character
 			has_plot = plot_kill_spouse
 		}
+
+		is_plot_active = no
+
 		plot_target_char = {
-			NOT = { is_murder_quest_target_of_root_trigger = yes }
-			age = 16
 			is_ruler = yes
 			at_location = ROOT # The Plot Head needs to be at the target's location to get a chance
-			NOT = { trait = incapable }
-			NOT = { is_inaccessible_trigger = yes }
-			prisoner = no
+			block_general_event_trigger = no
+			is_murder_quest_target_of_root_trigger = no
 		}
-		OR = {
-			NOT = { has_character_flag = murder_in_motion }
-			had_character_flag = { flag = murder_in_motion days = 100 }
-		}
-		plot_power_contribution = 
-		{
+
+		plot_power_contribution = {
 			plotter = ROOT
-			power = 0.025
+			power >= 0.025
 		}
 	}
-	
+
 	mean_time_to_happen = {
-		months = 8400
-		
-		modifier = {
+		years = 700
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.10
+				power >= 0.10
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.20
+				power >= 0.20
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.30
+				power >= 0.30
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.40
+				power >= 0.40
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.50
+				power >= 0.50
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.60
+				power >= 0.60
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.70
+				power >= 0.70
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.80
+				power >= 0.80
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.90
+				power >= 0.90
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 1.5
+				power >= 1.5
 			}
 		}
-		
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
-			any_backed_character = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_power = 1.0
-			}
+			plot_power >= 1.0
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
-			any_backed_character = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_power = 1.5
-			}
+			plot_power >= 1.5
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
-			any_backed_character = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_power = 2.0
-			}
+			plot_power >= 2.0
 		}
 	}
-	
+
 	immediate = {
-		plot_target_char = { save_event_target_as = plot_target }
-	}
-	
-	option = {
-		name = "EVTOPTA7700" # The conspirators provide the archers
-		trigger = {
-			plot_power = 1.0
+		save_event_target_as = plot_leader
+
+		plot_target_char = {
+			save_event_target_as = plot_target
 		}
-		hidden_tooltip = {
-			any_plot_backer = {
-					character_event = { id = 7712 days = 1 }
+	}
+
+	option = {
+		name = EVTOPTA7700 # The conspirators provide the archers
+
+		trigger = { plot_power >= 1.0 }
+
+		any_plot_backer = {
+			character_event = {
+				id = 7712
+				days = 1
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 7705 days = 30 tooltip = "EVTTOOLTIP7705" } }
-	}
-	option = {
-		name = "EVTOPTB7700" # Hire archers
-		trigger = {
-			NOT = { plot_power = 0.5 }
-			NOT = { martial = 10 }
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7705
+				days = 30
+				tooltip = EVTTOOLTIP7705
+			}
 		}
+	}
+
+	option = {
+		name = EVTOPTB7700 # Hire archers
+
+		trigger = {
+			plot_power < 0.5
+			martial < 10
+		}
+
 		scaled_wealth = -1.0
-		
-		hidden_tooltip = {
-			any_plot_backer = {
-				character_event = { id = 7712 days = 1 }
+
+		any_plot_backer = {
+			character_event = {
+				id = 7712
+				days = 1
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 7705 days = 30 tooltip = "EVTTOOLTIP7705" } }
-	}
-	option = {
-		name = "EVTOPTB7700" # Hire archers
-		trigger = {
-			plot_power = 0.5
-			NOT = { plot_power = 1.0 }
-			NOT = { martial = 10 }
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7705
+				days = 30
+				tooltip = EVTTOOLTIP7705
+			}
 		}
+	}
+
+	option = {
+		name = EVTOPTB7700 # Hire archers
+
+		trigger = {
+			plot_power >= 0.5
+			plot_power < 1.0
+			martial < 10
+		}
+
 		scaled_wealth = -0.5
-		
-		hidden_tooltip = {
-			any_plot_backer = {
-				character_event = { id = 7712 days = 1 }
+
+		any_plot_backer = {
+			character_event = {
+				id = 7712
+				days = 1
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 7705 days = 30 tooltip = "EVTTOOLTIP7705" } }
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7705
+				days = 30
+				tooltip = EVTTOOLTIP7705
+			}
+		}
 	}
+
 	option = {
-		name = "EVTOPTC7700" # Knows good archers
+		name = EVTOPTC7700 # Knows good archers
 		tooltip_info = martial
+
 		trigger = {
-			plot_power = 0.5
-			martial = 10
+			plot_power >= 0.5
+			martial >= 10
 		}
-		
-		hidden_tooltip = {
-			any_plot_backer = {
-				character_event = { id = 7712 days = 1 }
+
+		any_plot_backer = {
+			character_event = {
+				id = 7712
+				days = 1
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 7705 days = 30 tooltip = "EVTTOOLTIP7705" } }
-	}
-	option = {
-		name = "EVTOPTD8150" # I cannot afford this
-		trigger = {
-			ai = no
-			NOT = { martial = 10 }
-			NOT = { plot_power = 1.0 }
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7705
+				days = 30
+				tooltip = EVTTOOLTIP7705
+			}
 		}
+	}
+
+	option = {
+		name = EVTOPTD8150 # I cannot afford this
+
+		trigger = {
+			martial < 10
+			plot_power < 1.0
+		}
+
+		ai_chance = { factor = 0 }
 	}
 }
 
 # A plot backer sees an opportunity - Archer Ambush
 character_event = {
 	id = 7701
-	desc = "EVTDESC7701"
+	desc = EVTDESC7701
 	picture = GFX_evt_longbowman
 	border = GFX_event_normal_frame_intrigue
-	
-	capable_only = yes
-	prisoner = no
+	portrait = event_target:plot_target
+
 	is_part_of_plot = yes
-	
+	only_capable = yes
+	prisoner = no
+
 	trigger = {
 		any_backed_character = {
 			OR = {
 				has_plot = plot_kill_character
 				has_plot = plot_kill_spouse
 			}
-			plot_power = 0.5
+
+			is_plot_active = no
+			plot_power >= 0.5
+
 			plot_target_char = {
-				NOT = { is_murder_quest_target_of_root_trigger = yes }
-				age = 16
 				is_ruler = yes
-				NOT = { trait = incapable }
-				NOT = { is_inaccessible_trigger = yes }
-				prisoner = no
+				block_general_event_trigger = no
+				is_murder_quest_target_of_prev_trigger = no
 			}
-			OR = {
-				NOT = { has_character_flag = murder_in_motion }
-				had_character_flag = { flag = murder_in_motion days = 100 }
-			}
+
 			ROOT = {
-				plot_power_contribution = 
-				{
+				plot_power_contribution = {
 					plotter = PREV
-					power = 0.025
+					power >= 0.025
 				}
 			}
 		}
 	}
-	
+
 	mean_time_to_happen = {
-		months = 8400
-		
-		modifier = {
+		years = 700
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_ruler = yes
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.10
+						power >= 0.10
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_ruler = yes
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.20
+						power >= 0.20
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_ruler = yes
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.30
+						power >= 0.30
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_ruler = yes
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.40
+						power >= 0.40
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_ruler = yes
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.50
+						power >= 0.50
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_ruler = yes
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.60
+						power >= 0.60
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_ruler = yes
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.70
+						power >= 0.70
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_ruler = yes
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.80
+						power >= 0.80
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					is_ruler = yes
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.90
+						power >= 0.90
 					}
 				}
 			}
 		}
-		
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 1.0
+
+				is_plot_active = no
+				plot_power >= 1.0
+
+				plot_target_char = {
+					is_ruler = yes
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 1.5
+
+				is_plot_active = no
+				plot_power >= 1.5
+
+				plot_target_char = {
+					is_ruler = yes
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 2.0
+
+				is_plot_active = no
+				plot_power >= 2.0
+
+				plot_target_char = {
+					is_ruler = yes
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
 			}
 		}
 	}
 
 	immediate = {
+		save_event_target_as = plot_backer
+
 		random_backed_character = {
 			limit = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 0.5
+
+				is_plot_active = no
+				plot_power >= 0.5
+
 				plot_target_char = {
-					NOT = { is_murder_quest_target_of_root_trigger = yes }
-					age = 16
 					is_ruler = yes
-					NOT = { trait = incapable }
-					NOT = { is_inaccessible_trigger = yes }
-					prisoner = no
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
 				}
-				OR = {
-					NOT = { has_character_flag = murder_in_motion }
-					had_character_flag = { flag = murder_in_motion days = 100 }
-				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.025
+						power >= 0.025
 					}
 				}
 			}
+
 			save_event_target_as = plot_leader
+
+			plot_target_char = {
+				save_event_target_as = plot_target
+			}
 		}
 	}
-	
+
 	option = {
-		name = "EVTOPTA7700" # The conspirators provide the archers
+		name = EVTOPTA7700 # The conspirators provide the archers
+
 		trigger = {
 			event_target:plot_leader = {
-				plot_power = 1.0
+				plot_power >= 1.0
 			}
 		}
+
 		event_target:plot_leader = {
-			character_event = { id = 7710 days = 3 tooltip = "EVTTOOLTIP8160" }
-			set_character_flag = murder_in_motion
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 7710
+				days = 3
+				tooltip = EVTTOOLTIP8160
+			}
 		}
 	}
+
 	option = {
-		name = "EVTOPTB8151" # Ask the Plotter for funds
+		name = EVTOPTB8151 # Ask the Plotter for funds
+
 		trigger = {
-			NOT = { martial = 10 }
-			NOT = {
-				event_target:plot_leader = {
-					plot_power = 1.0
-				}
+			martial < 10
+
+			event_target:plot_leader = {
+				plot_power < 1.0
 			}
 		}
+
 		event_target:plot_leader = {
-			character_event = { id = 7702 days = 3 tooltip = "EVTTOOLTIP8152" }
-			set_character_flag = murder_in_motion
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 7702
+				days = 3
+				tooltip = EVTTOOLTIP8152
+			}
 		}
 	}
-	
+
 	option = {
-		name = "EVTOPTB7700" # Hire archers
+		name = EVTOPTB7700 # Hire archers
+
 		trigger = {
-			NOT = { martial = 10 }
-			NOT = {
-				event_target:plot_leader = {
-					plot_power = 1.0
-				}
+			martial < 10
+
+			event_target:plot_leader = {
+				plot_power < 1.0
 			}
 		}
+
 		scaled_wealth = -0.5
+
 		event_target:plot_leader = {
-			character_event = { id = 7710 days = 3 tooltip = "EVTTOOLTIP8160" }
-			set_character_flag = murder_in_motion
-		}
-	}
-	option = {
-		name = "EVTOPTC7700" # Knows good archers
-		tooltip_info = martial
-		trigger = {
-			martial = 10
-		}
-		
-		event_target:plot_leader = {
-			character_event = { id = 7710 days = 3 tooltip = "EVTTOOLTIP8160" }
-			set_character_flag = murder_in_motion
-		}
-	}
-	
-	option = {
-		name = "EVTOPTD8150" # I cannot afford this
-		trigger = {
-			ai = no
-			NOT = { martial = 10 }
-			NOT = {
-				event_target:plot_leader = {
-					plot_power = 1.0
-				}
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 7710
+				days = 3
+				tooltip = EVTTOOLTIP8160
 			}
 		}
+	}
+
+	option = {
+		name = EVTOPTC7700 # Knows good archers
+		tooltip_info = martial
+
+		trigger = { martial >= 10 }
+
+		event_target:plot_leader = {
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 7710
+				days = 3
+				tooltip = EVTTOOLTIP8160
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTD8150 # I cannot afford this
+
+		trigger = {
+			martial < 10
+
+			event_target:plot_leader = {
+				plot_power < 1.0
+			}
+		}
+
+		ai_chance = { factor = 0 }
 	}
 }
 
 # Archer Ambush - Plot backer requests funds
 character_event = {
 	id = 7702
-	desc = "EVTDESC7702"
+	desc = EVTDESC7702
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
-	immediate = {
-		plot_target_char = { save_event_target_as = plot_target }
-	}
-	
+
 	option = {
-		name = "EVTOPTA7702"
+		name = EVTOPTA7702
+
 		transfer_scaled_wealth = {
-			to = FROM
+			to = event_target:plot_backer
 			value = 1.0
 		}
-		FROM = { character_event = { id = 7703 tooltip = "EVTTOOLTIP8153" } }
+
+		event_target:plot_backer = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7703
+				tooltip = EVTTOOLTIP8153
+			}
+		}
 	}
-	
+
 	option = {
-		name = "EVTOPTB8152"
-		FROM = { character_event = { id = 7704 tooltip = "EVTTOOLTIP8154" } }
+		name = EVTOPTB8152
+
+		event_target:plot_backer = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7704
+				tooltip = EVTTOOLTIP8154
+			}
+		}
 	}
 }
 
 # Archer Ambush - plot backer receives funds
 character_event = {
 	id = 7703
-	desc = "EVTDESC7703"
+	desc = EVTDESC7703
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EXCELLENT"
-		event_target:plot_target = { character_event = { id = 7705 days = 27 tooltip = "EVTTOOLTIP7705" } }
+		name = EXCELLENT
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7705
+				days = 27
+				tooltip = EVTTOOLTIP7705
+			}
+		}
 	}
 }
 
 # Archer Ambush - plot backer does NOT receive funds
 character_event = {
 	id = 7704
-	desc = "EVTDESC7704"
+	desc = EVTDESC7704
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8154" # Pay for it myself
+		name = EVTOPTA8154 # Pay for it myself
+
 		scaled_wealth = -1.0
-		event_target:plot_target = { character_event = { id = 7705 days = 27 tooltip = "EVTTOOLTIP7705" } }
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7705
+				days = 27
+				tooltip = EVTTOOLTIP7705
+			}
+		}
 	}
+
 	option = {
-		name = "EVTOPTB8154" # Screw this
-		FROM = { clr_character_flag = murder_in_motion }
+		name = EVTOPTB8154 # Screw this
+
+		event_target:plot_leader = {
+			activate_plot = no
+		}
 	}
 }
 
 # Archer Ambush - the murder attempt
 character_event = {
 	id = 7705
-	desc = "EVTDESC7705"
+	desc = EVTDESC7705
 	picture = GFX_evt_longbowman
 	border = GFX_event_normal_frame_intrigue
-	
+
 	hide_from = yes
-	
 	is_triggered_only = yes
-	
+
+	prisoner = no
+
+	trigger = {
+		# Is the plot still in motion?
+		event_target:plot_leader = {
+			is_plot_active = yes
+		}
+	}
+
 	immediate = {
 		save_event_target_as = target_victim
 	}
-	
-	trigger = {
-		# Is the plot still in motion?
-		OR = {
-			FROM = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_target_char = {
-					character = ROOT
-				}
-			}
-			FROMFROM = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_target_char = {
-					character = ROOT
-				}
-			}
-		}
-	}
-	
+
 	option = {
-		name = "EVTOPTA7705" # Hit by arrows
+		name = EVTOPTA7705 # Hit by arrows
+
 		trigger = {
-			NOT = {
-				OR = {
-					AND = {
-						trait = paranoid
-						random = 33
-					}
-					AND = {
-						trait = craven
-						random = 50
-					}
-					AND = {
-						trait = trusting
-						random = 90
-					}
-					AND = {
-						NOT = { trait = craven }
-						NOT = { trait = trusting }
-						NOT = { trait = paranoid }
-						random = 75
-					}
-				}
+			trigger_if = {
+				limit = { trait = paranoid }
+				random < 33
+			}
+			trigger_else_if = {
+				limit = { trait = craven }
+				random < 50
+			}
+			trigger_else_if = {
+				limit = { trait = trusting }
+				random < 90
+			}
+			trigger_else = {
+				random < 75
 			}
 		}
-		hidden_tooltip = {
+
+		hidden_effect = {
 			random_list = {
 				25 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 7713 days = 1 } }
-						FROMFROM = { character_event = { id = 7713 days = 1 } }
+					character_event = {
+						id = 7706 # Dies, murderer discovered
+						days = 1
 					}
-					character_event = { id = 7706 days = 1 } # Dies, murderer discovered
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 7713 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 7713 days = 1 } }
 				}
+
 				75 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 7714 days = 1 } }
-						FROMFROM = { character_event = { id = 7714 days = 1 } }
+					character_event = {
+						id = 7707 # Dies, murderer unknown
+						days = 1
 					}
-					character_event = { id = 7707 days = 1 } # Dies, murderer unknown
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 7714 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 7714 days = 1 } }
 				}
 			}
 		}
 	}
+
 	option = {
-		name = "EVTOPTB7705" # Avoids arrows
+		name = EVTOPTB7705 # Avoids arrows
+
 		trigger = {
-			OR = {
-				AND = {
-					trait = paranoid
-					random = 33
-				}
-				AND = {
-					trait = craven
-					random = 50
-				}
-				AND = {
-					trait = trusting
-					random = 90
-				}
-				AND = {
-					NOT = { trait = craven }
-					NOT = { trait = trusting }
-					NOT = { trait = paranoid }
-					random = 75
-				}
+			trigger_if = {
+				limit = { trait = paranoid }
+				random >= 33
+			}
+			trigger_else_if = {
+				limit = { trait = craven }
+				random >= 50
+			}
+			trigger_else_if = {
+				limit = { trait = trusting }
+				random >= 90
+			}
+			trigger_else = {
+				random >= 75
 			}
 		}
-		hidden_tooltip = {
+
+		hidden_effect = {
 			random_list = {
 				50 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 7715 days = 1 } }
-						FROMFROM = { character_event = { id = 7715 days = 1 } }
+					character_event = {
+						id = 7708 # Lives, murderer discovered
+						days = 1
 					}
-					character_event = { id = 7708 days = 1 } # Lives, murderer discovered
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 7715 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 7715 days = 1 } }
 				}
+
 				50 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 7716 days = 1 } }
-						FROMFROM = { character_event = { id = 7716 days = 1 } }
+					character_event = {
+						id = 7709 # Lives, murderer unknown
+						days = 1
 					}
-					character_event = { id = 7709 days = 1 } # Lives, murderer unknown
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 7716 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 7716 days = 1 } }
 				}
 			}
 		}
@@ -8147,84 +8899,46 @@ character_event = {
 # Archer Ambush - Dies, murderer(s) discovered
 character_event = {
 	id = 7706
-	desc = "EVTDESC7706"
+	desc = EVTDESC7706
 	picture = GFX_evt_death
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA7706"
+		name = EVTOPTA7706
+
 		if = {
-			limit = {
-				FROMFROMFROM = {
-					OR = {
-						has_plot = plot_kill_character
-						has_plot = plot_kill_spouse
-					}
-					plot_target_char = {
-						character = ROOT
-					}
-				}
-			}
+			limit = { is_alive = yes }
+
 			death = {
 				death_reason = death_murder_arrow
-				killer = FROMFROMFROM
-			}
-			break = yes
-		}
-		if = {
-			limit = {
-				is_alive = yes
-			}
-			death = {
-				death_reason = death_murder_arrow
-				killer = FROMFROM
+				killer = event_target:plot_leader
 			}
 		}
 	}
-	
 }
 
 # Archer Ambush - Dies, murderer NOT discovered
 character_event = {
 	id = 7707
-	desc = "EVTDESC7706"
+	desc = EVTDESC7706
 	picture = GFX_evt_death
 	border = GFX_event_normal_frame_intrigue
-	
+
 	hide_from = yes
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA7707"
-		
+		name = EVTOPTA7707
+
 		if = {
-			limit = {
-				FROMFROMFROM = {
-					OR = {
-						has_plot = plot_kill_character
-						has_plot = plot_kill_spouse
-					}
-					plot_target_char = {
-						character = ROOT
-					}
-				}
-			}
+			limit = { is_alive = yes }
+
 			death = {
 				death_reason = death_murder_unknown_arrow
-				killer = FROMFROMFROM
-			}
-			break = yes
-		}
-		if = {
-			limit = {
-				is_alive = yes
-			}
-			death = {
-				death_reason = death_murder_unknown_arrow
-				killer = FROMFROM
+				killer = event_target:plot_leader
 			}
 		}
 	}
@@ -8233,62 +8947,73 @@ character_event = {
 # Archer Ambush - Lives, murderer discovered
 character_event = {
 	id = 7708
-	desc = "EVTDESC7708"
+	desc = EVTDESC7708
 	picture = GFX_evt_scandal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "EVTOPTA7708"
+		name = EVTOPTA7708
 	}
 }
 
 # Archer Ambush - Lives, murderer NOT discovered
 character_event = {
 	id = 7709
-	desc = "EVTDESC7708"
+	desc = EVTDESC7708
 	picture = GFX_evt_scandal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	hide_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA7709"
+		name = EVTOPTA7709
 	}
 }
 
 # Archer Ambush - Backer informs Plotter of plan
 character_event = {
 	id = 7710
-	desc = "EVTDESC7710"
+	desc = EVTDESC7710
 	picture = GFX_evt_longbowman
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	trigger = {
+		is_plot_active = yes
+
 		plot_target_char = {
 			is_alive = yes
 		}
 	}
-	
-	immediate = {
-		plot_target_char = { save_event_target_as = plot_target }
-	}
-	
+
 	option = {
-		name = "EVTOPTA7710"
-		set_character_flag = murder_in_motion
-		FROM = { character_event = { id = 7711 tooltip = "EVTTOOLTIP8161" } }
-		hidden_tooltip = {
-			any_plot_backer = {
-				limit = {
-					NOT = { character = FROM }
-				}
-				character_event = { id = 7712 days = 1 }
+		name = EVTOPTA7710
+
+		activate_plot = yes
+
+		event_target:plot_backer = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7711
+				tooltip = EVTTOOLTIP8161
+			}
+		}
+
+		any_plot_backer = {
+			limit = {
+				NOT = { character = event_target:plot_backer }
+			}
+
+			character_event = {
+				id = 7712 # Notify
+				days = 1
 			}
 		}
 	}
@@ -8297,123 +9022,143 @@ character_event = {
 # Archer Ambush - Plotter tells backer to go ahead
 character_event = {
 	id = 7711
-	desc = "EVTDESC7711"
+	desc = EVTDESC7711
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8161"
-		event_target:plot_target = { character_event = { id = 7705 days = 27 tooltip = "EVTTOOLTIP7705" } }
+		name = EVTOPTA8161
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7705
+				days = 27
+				tooltip = EVTTOOLTIP7705
+			}
+		}
 	}
 }
 
 # Archer Ambush - Initiator informs other plotter
 character_event = {
 	id = 7712
+	picture = GFX_evt_longbowman
+	border = GFX_event_normal_frame_intrigue
+
 	desc = {
+		text = EVTDESC7712
 		trigger = {
 			event_target:plot_target = {
-				NOT = {
-					is_inaccessible_trigger = yes
-				}
+				is_inaccessible_trigger = no
 			}
 		}
-		text = EVTDESC7712
 	}
 	desc = {
+		text = EVTDESC7712_B
 		trigger = {
 			event_target:plot_target = {
 				is_inaccessible_trigger = yes
 			}
 		}
-		text = EVTDESC7712_B
 	}
-	picture = GFX_evt_longbowman
-	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "EVTOPTA8162"
+		name = EVTOPTA8162
 	}
 }
 
 # Archer Ambush - Notification: Success, but discovered
 character_event = {
 	id = 7713
-	desc = "EVTDESC7713"
+	desc = EVTDESC7713
 	picture = GFX_evt_longbowman
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	immediate = {
 		character_event = { id = 10 } # Consequences of discovery
 		clear_event_target = target_victim
 	}
-	
+
 	option = {
-		name = "EVTOPTA8163"
+		name = EVTOPTA8163
 	}
 }
 
 # Archer Ambush - Notification: Success, and NOT discovered
 character_event = {
 	id = 7714
-	desc = "EVTDESC7714"
+	desc = EVTDESC7714
 	picture = GFX_evt_longbowman
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "EVTOPTA7714"
+		name = EVTOPTA7714
 	}
 }
 
 # Archer Ambush - Notification: Failure, and discovered
 character_event = {
 	id = 7715
-	desc = "EVTDESC7715"
+	desc = EVTDESC7715
 	picture = GFX_evt_shadowy_cabal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	immediate = {
 		character_event = { id = 11 } # Consequences of discovery
 		clear_event_target = target_victim
-		
+
 		if = {
-			limit = { 
+			limit = {
 				plot_target_char = {
-					character = FROM
+					character = event_target:plot_target
 				}
+
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
 			}
+
 			reveal_plot = yes
 		}
 	}
-	
+
 	option = {
-		name = "EVTOPTA7715"
+		name = EVTOPTA7715
+
 		if = {
-			limit = { 
+			limit = {
 				plot_target_char = {
-					character = FROM
+					character = event_target:plot_target
 				}
+
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
 			}
-			clr_character_flag = murder_in_motion
-			tooltip = { reveal_plot = yes }
+
+			activate_plot = no
+
+			tooltip = {
+				reveal_plot = yes
+			}
 		}
 	}
 }
@@ -8421,26 +9166,28 @@ character_event = {
 # Archer Ambush - Notification: Failure, but NOT discovered
 character_event = {
 	id = 7716
-	desc = "EVTDESC7716"
+	desc = EVTDESC7716
 	picture = GFX_evt_shadowy_cabal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8166"
-		
+		name = EVTOPTA8166
+
 		if = {
-			limit = { 
+			limit = {
 				plot_target_char = {
-					character = FROM
+					character = event_target:plot_target
 				}
+
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
 			}
-			clr_character_flag = murder_in_motion
+
+			activate_plot = no
 		}
 	}
 }
@@ -8449,741 +9196,962 @@ character_event = {
 # The plotter sees an opportunity - Manure Explosion
 character_event = {
 	id = 7720
-	desc = "EVTDESC7720"
+	desc = EVTDESC7720
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
-	capable_only = yes
-	prisoner = no
+	portrait = event_target:plot_target
+
 	is_part_of_plot = yes
-	
+	only_capable = yes
+	prisoner = no
+
 	trigger = {
 		OR = {
 			has_plot = plot_kill_character
 			has_plot = plot_kill_spouse
 		}
+
+		is_plot_active = no
+
 		plot_target_char = {
-			NOT = { is_murder_quest_target_of_root_trigger = yes }
-			age = 16
 			at_location = ROOT # The Plot Head needs to be at the target's location to get a chance
-			NOT = { trait = incapable }
-			NOT = { is_inaccessible_trigger = yes }
-			prisoner = no
+			block_general_event_trigger = no
+			is_murder_quest_target_of_root_trigger = no
 		}
-		OR = {
-			NOT = { has_character_flag = murder_in_motion }
-			had_character_flag = { flag = murder_in_motion days = 100 }
-		}
-		plot_power_contribution = 
-		{
+
+		plot_power_contribution = {
 			plotter = ROOT
-			power = 0.025
+			power >= 0.025
 		}
 	}
-	
+
 	mean_time_to_happen = {
-		months = 8400
-		
-		modifier = {
+		years = 700
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.10
+				power >= 0.10
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.20
+				power >= 0.20
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.30
+				power >= 0.30
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.40
+				power >= 0.40
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.50
+				power >= 0.50
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.60
+				power >= 0.60
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.70
+				power >= 0.70
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.80
+				power >= 0.80
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 0.90
+				power >= 0.90
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.7
-			plot_power_contribution = 
-			{
+
+			plot_power_contribution = {
 				plotter = ROOT
-				power = 1.5
+				power >= 1.5
 			}
 		}
-		
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
-			any_backed_character = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_power = 1.0
-			}
+			plot_power >= 1.0
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
-			any_backed_character = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_power = 1.5
-			}
+			plot_power >= 1.5
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
-			any_backed_character = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_power = 2.0
-			}
+			plot_power >= 2.0
 		}
 	}
-	
+
 	immediate = {
-		plot_target_char = { save_event_target_as = plot_target }
-	}
-	
-	option = {
-		name = "EVTOPTA7720" # The conspirators provide the manure
-		trigger = {
-			plot_power = 1.0
+		save_event_target_as = plot_leader
+
+		plot_target_char = {
+			save_event_target_as = plot_target
 		}
-		hidden_tooltip = {
-			any_plot_backer = {
-					character_event = { id = 7732 days = 1 }
+	}
+
+	option = {
+		name = EVTOPTA7720 # The conspirators provide the manure
+
+		trigger = { plot_power >= 1.0 }
+
+		any_plot_backer = {
+			character_event = {
+				id = 7732 # Inform
+				days = 1
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 7725 days = 30 tooltip = "EVTTOOLTIP7725" } }
-	}
-	option = {
-		name = "EVTOPTB7720" # Buy the manure
-		trigger = {
-			NOT = { plot_power = 0.5 }
-			NOT = { stewardship = 10 }
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7725
+				days = 30
+				tooltip = EVTTOOLTIP7725
+			}
 		}
+	}
+
+	option = {
+		name = EVTOPTB7720 # Buy the manure
+
+		trigger = {
+			plot_power < 0.5
+			stewardship < 10
+		}
+
 		scaled_wealth = -1.0
-		
-		hidden_tooltip = {
-			any_plot_backer = {
-				character_event = { id = 7732 days = 1 }
+
+		any_plot_backer = {
+			character_event = {
+				id = 7732 # Inform
+				days = 1
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 7725 days = 30 tooltip = "EVTTOOLTIP7725" } }
-	}
-	option = {
-		name = "EVTOPTB7720" # Buy the manure
-		trigger = {
-			plot_power = 0.5
-			NOT = { plot_power = 1.0 }
-			NOT = { stewardship = 10 }
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7725
+				days = 30
+				tooltip = EVTTOOLTIP7725
+			}
 		}
+	}
+
+	option = {
+		name = EVTOPTB7720 # Buy the manure
+
+		trigger = {
+			plot_power >= 0.5
+			plot_power < 1.0
+			stewardship < 10
+		}
+
 		scaled_wealth = -0.5
-		
-		hidden_tooltip = {
-			any_plot_backer = {
-				character_event = { id = 7732 days = 1 }
+
+		any_plot_backer = {
+			character_event = {
+				id = 7732 # Inform
+				days = 1
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 7725 days = 30 tooltip = "EVTTOOLTIP7725" } }
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7725
+				days = 30
+				tooltip = EVTTOOLTIP7725
+			}
+		}
 	}
+
 	option = {
-		name = "EVTOPTC7720" # Knows farmer
+		name = EVTOPTC7720 # Knows farmer
 		tooltip_info = stewardship
+
 		trigger = {
-			plot_power = 0.5
-			stewardship = 10
+			plot_power >= 0.5
+			stewardship >= 10
 		}
-		
-		hidden_tooltip = {
-			any_plot_backer = {
-				character_event = { id = 7732 days = 1 }
+
+		any_plot_backer = {
+			character_event = {
+				id = 7732 # Inform
+				days = 1
 			}
 		}
-		
-		set_character_flag = murder_in_motion
-		event_target:plot_target = { character_event = { id = 7725 days = 30 tooltip = "EVTTOOLTIP7725" } }
-	}
-	option = {
-		name = "EVTOPTD8150" # I cannot afford this
-		trigger = {
-			ai = no
-			NOT = { stewardship = 10 }
-			NOT = { plot_power = 1.0 }
+
+		activate_plot = yes
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7725
+				days = 30
+				tooltip = EVTTOOLTIP7725
+			}
 		}
+	}
+
+	option = {
+		name = EVTOPTD8150 # I cannot afford this
+
+		trigger = {
+			stewardship < 10
+			plot_power < 1.0
+		}
+
+		ai_chance = { factor = 0 }
 	}
 }
 
 # A plot backer sees an opportunity - Manure Explosion
 character_event = {
 	id = 7721
-	desc = "EVTDESC7721"
+	desc = EVTDESC7721
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
-	capable_only = yes
-	prisoner = no
+
 	is_part_of_plot = yes
-	
+	only_capable = yes
+	prisoner = no
+
 	trigger = {
 		any_backed_character = {
 			OR = {
 				has_plot = plot_kill_character
 				has_plot = plot_kill_spouse
 			}
-			plot_power = 0.5
+
+			is_plot_active = no
+			plot_power >= 0.5
+
 			plot_target_char = {
-				NOT = { is_murder_quest_target_of_root_trigger = yes }
-				age = 16
-				prisoner = no
-				NOT = { trait = incapable }
-				NOT = { is_inaccessible_trigger = yes }
+				block_general_event_trigger = no
+				is_murder_quest_target_of_prev_trigger = no
 			}
-			OR = {
-				NOT = { has_character_flag = murder_in_motion }
-				had_character_flag = { flag = murder_in_motion days = 100 }
-			}
+
 			ROOT = {
-				plot_power_contribution = 
-				{
+				plot_power_contribution = {
 					plotter = PREV
-					power = 0.025
+					power >= 0.025
 				}
 			}
 		}
 	}
-	
+
 	mean_time_to_happen = {
-		months = 8400
-		
-		modifier = {
+		years = 700
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.10
+						power >= 0.10
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.20
+						power >= 0.20
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.30
+						power >= 0.30
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.40
+						power >= 0.40
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.50
+						power >= 0.50
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.60
+						power >= 0.60
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.70
+						power >= 0.70
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.80
+						power >= 0.80
 					}
 				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.6
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
+
+				is_plot_active = no
+				plot_power >= 0.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.90
+						power >= 0.90
 					}
 				}
 			}
 		}
-		
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 1.0
+
+				is_plot_active = no
+				plot_power >= 1.0
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 1.5
+
+				is_plot_active = no
+				plot_power >= 1.5
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
 			}
 		}
-		modifier = {
+
+		mult_modifier = {
 			factor = 0.33
+
 			any_backed_character = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 2.0
+
+				is_plot_active = no
+				plot_power >= 2.0
+
+				plot_target_char = {
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
+				}
 			}
 		}
 	}
 
 	immediate = {
+		save_event_target_as = plot_backer
+
 		random_backed_character = {
 			limit = {
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
-				plot_power = 0.5
+
+				is_plot_active = no
+				plot_power >= 0.5
+
 				plot_target_char = {
-					NOT = { is_murder_quest_target_of_root_trigger = yes }
-					age = 16
-					prisoner = no
-					NOT = { trait = incapable }
-					NOT = { is_inaccessible_trigger = yes }
+					block_general_event_trigger = no
+					is_murder_quest_target_of_prev_trigger = no
 				}
-				OR = {
-					NOT = { has_character_flag = murder_in_motion }
-					had_character_flag = { flag = murder_in_motion days = 100 }
-				}
+
 				ROOT = {
-					plot_power_contribution = 
-					{
+					plot_power_contribution = {
 						plotter = PREV
-						power = 0.025
+						power >= 0.025
 					}
 				}
 			}
+
 			save_event_target_as = plot_leader
+
+			plot_target_char = {
+				save_event_target_as = plot_target
+			}
 		}
 	}
-	
+
 	option = {
-		name = "EVTOPTA7720" # The conspirators provide the manure
+		name = EVTOPTA7720 # The conspirators provide the manure
+
 		trigger = {
 			event_target:plot_leader = {
-				plot_power = 1.0
+				plot_power >= 1.0
 			}
 		}
+
 		event_target:plot_leader = {
-			character_event = { id = 7730 days = 3 tooltip = "EVTTOOLTIP8160" }
-			set_character_flag = murder_in_motion
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 7730
+				days = 3
+				tooltip = EVTTOOLTIP8160
+			}
 		}
 	}
+
 	option = {
-		name = "EVTOPTB8151" # Ask the Plotter for funds
+		name = EVTOPTB8151 # Ask the Plotter for funds
+
 		trigger = {
-			NOT = { stewardship = 10 }
-			NOT = {
-				event_target:plot_leader = {
-					plot_power = 1.0
-				}
+			stewardship < 10
+
+			event_target:plot_leader = {
+				plot_power < 1.0
 			}
 		}
+
 		event_target:plot_leader = {
-			character_event = { id = 7722 days = 3 tooltip = "EVTTOOLTIP8152" }
-			set_character_flag = murder_in_motion
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 7722
+				days = 3
+				tooltip = EVTTOOLTIP8152
+			}
 		}
 	}
-	
+
 	option = {
-		name = "EVTOPTB7720" # Buy the manure
+		name = EVTOPTB7720 # Buy the manure
+
 		trigger = {
-			NOT = { stewardship = 10 }
-			NOT = {
-				event_target:plot_leader = {
-					plot_power = 1.0
-				}
+			stewardship < 10
+
+			event_target:plot_leader = {
+				plot_power < 1.0
 			}
 		}
+
 		scaled_wealth = -0.5
+
 		event_target:plot_leader = {
-			character_event = { id = 7730 days = 3 tooltip = "EVTTOOLTIP8160" }
-			set_character_flag = murder_in_motion
-		}
-	}
-	option = {
-		name = "EVTOPTC7720" # Knows farmer
-		tooltip_info = stewardship
-		trigger = {
-			stewardship = 10
-		}
-		
-		event_target:plot_leader = {
-			character_event = { id = 7730 days = 3 tooltip = "EVTTOOLTIP8160" }
-			set_character_flag = murder_in_motion
-		}
-	}
-	
-	option = {
-		name = "EVTOPTD8150" # I cannot afford this
-		trigger = {
-			ai = no
-			NOT = { stewardship = 10 }
-			NOT = {
-				event_target:plot_leader = {
-					plot_power = 1.0
-				}
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 7730
+				days = 3
+				tooltip = EVTTOOLTIP8160
 			}
 		}
+	}
+
+	option = {
+		name = EVTOPTC7720 # Knows farmer
+		tooltip_info = stewardship
+
+		trigger = { stewardship >= 10 }
+
+		event_target:plot_leader = {
+			show_scope_change = no
+
+			activate_plot = yes
+
+			character_event = {
+				id = 7730
+				days = 3
+				tooltip = EVTTOOLTIP8160
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTD8150 # I cannot afford this
+
+		trigger = {
+			stewardship < 10
+
+			event_target:plot_leader = {
+				plot_power < 1.0
+			}
+		}
+
+		ai_chance = { factor = 0 }
 	}
 }
 
 # Manure Explosion - Plot backer requests funds
 character_event = {
 	id = 7722
-	desc = "EVTDESC7722"
+	desc = EVTDESC7722
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
-	immediate = {
-		plot_target_char = { save_event_target_as = plot_target }
-	}
-	
+
 	option = {
-		name = "EVTOPTA7722"
+		name = EVTOPTA7722
+
 		transfer_scaled_wealth = {
-			to = FROM
+			to = event_target:plot_backer
 			value = 1.0
 		}
-		FROM = { character_event = { id = 7723 tooltip = "EVTTOOLTIP8153" } }
+
+		event_target:plot_backer = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7723
+				tooltip = EVTTOOLTIP8153
+			}
+		}
 	}
-	
+
 	option = {
-		name = "EVTOPTB8152"
-		FROM = { character_event = { id = 7724 tooltip = "EVTTOOLTIP8154" } }
+		name = EVTOPTB8152
+
+		event_target:plot_backer = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7724
+				tooltip = EVTTOOLTIP8154
+			}
+		}
 	}
 }
 
 # Manure Explosion - plot backer receives funds
 character_event = {
 	id = 7723
-	desc = "EVTDESC7723"
+	desc = EVTDESC7723
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EXCELLENT"
-		event_target:plot_target = { character_event = { id = 7725 days = 27 tooltip = "EVTTOOLTIP7725" } }
+		name = EXCELLENT
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7725
+				days = 27
+				tooltip = EVTTOOLTIP7725
+			}
+		}
 	}
 }
 
 # Manure Explosion - plot backer does NOT receive funds
 character_event = {
 	id = 7724
-	desc = "EVTDESC7724"
+	desc = EVTDESC7724
 	picture = GFX_evt_spymaster
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8154" # Pay for it myself
+		name = EVTOPTA8154 # Pay for it myself
+
 		scaled_wealth = -1.0
-		event_target:plot_target = { character_event = { id = 7725 days = 27 tooltip = "EVTTOOLTIP7725" } }
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7725
+				days = 27
+				tooltip = EVTTOOLTIP7725
+			}
+		}
 	}
+
 	option = {
-		name = "EVTOPTB8154" # Screw this
-		FROM = { clr_character_flag = murder_in_motion }
+		name = EVTOPTB8154 # Screw this
+
+		event_target:plot_leader = {
+			activate_plot = no
+		}
 	}
 }
 
 # Manure Explosion - the murder attempt
 character_event = {
 	id = 7725
-	desc = "EVTDESC7725"
+	desc = EVTDESC7725
 	picture = GFX_evt_council
 	border = GFX_event_normal_frame_intrigue
-	
+
 	hide_from = yes
-	
 	is_triggered_only = yes
-	
+
+	prisoner = no
+
+	trigger = {
+		# Is the plot still in motion?
+		event_target:plot_leader = {
+			is_plot_active = yes
+		}
+	}
+
 	immediate = {
 		save_event_target_as = target_victim
 	}
-	
-	trigger = {
-		# Is the plot still in motion?
-		OR = {
-			FROM = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_target_char = {
-					character = ROOT
-				}
-			}
-			FROMFROM = {
-				OR = {
-					has_plot = plot_kill_character
-					has_plot = plot_kill_spouse
-				}
-				plot_target_char = {
-					character = ROOT
-				}
-			}
-		}
-	}
-	
+
 	option = {
-		name = "EVTOPTA7725" # Blown up
+		name = EVTOPTA7725 # Blown up
+
 		trigger = {
-			NOT = {
-				OR = {
-					AND = {
-						trait = paranoid
-						random = 33
-					}
-					AND = {
-						trait = diligent
-						random = 50
-					}
-					AND = {
-						trait = trusting
-						random = 90
-					}
-					AND = {
-						NOT = { trait = diligent }
-						NOT = { trait = trusting }
-						NOT = { trait = paranoid }
-						random = 75
-					}
-				}
+			trigger_if = {
+				limit = { trait = paranoid }
+				random < 33
+			}
+			trigger_else_if = {
+				limit = { trait = diligent }
+				random < 50
+			}
+			trigger_else_if = {
+				limit = { trait = trusting }
+				random < 90
+			}
+			trigger_else = {
+				random < 75
 			}
 		}
-		hidden_tooltip = {
+
+		hidden_effect = {
 			random_list = {
 				25 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 7733 days = 1 } }
-						FROMFROM = { character_event = { id = 7733 days = 1 } }
+					character_event = {
+						id = 7726 # Dies, murderer discovered
+						days = 1
 					}
-					character_event = { id = 7726 days = 1 } # Dies, murderer discovered
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 7733 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 7733 days = 1 } }
 				}
+
 				75 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 7734 days = 1 } }
-						FROMFROM = { character_event = { id = 7734 days = 1 } }
+					character_event = {
+						id = 7727 # Dies, murderer unknown
+						days = 1
 					}
-					character_event = { id = 7727 days = 1 } # Dies, murderer unknown
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 7734 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 7734 days = 1 } }
 				}
 			}
 		}
 	}
+
 	option = {
-		name = "EVTOPTB7725" # Not blown up
+		name = EVTOPTB7725 # Not blown up
+
 		trigger = {
-			OR = {
-				AND = {
-					trait = paranoid
-					random = 33
-				}
-				AND = {
-					trait = diligent
-					random = 50
-				}
-				AND = {
-					trait = trusting
-					random = 90
-				}
-				AND = {
-					NOT = { trait = diligent }
-					NOT = { trait = trusting }
-					NOT = { trait = paranoid }
-					random = 75
-				}
+			trigger_if = {
+				limit = { trait = paranoid }
+				random >= 33
+			}
+			trigger_else_if = {
+				limit = { trait = diligent }
+				random >= 50
+			}
+			trigger_else_if = {
+				limit = { trait = trusting }
+				random >= 90
+			}
+			trigger_else = {
+				random >= 75
 			}
 		}
-		hidden_tooltip = {
+
+		hidden_effect = {
 			random_list = {
 				50 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 7735 days = 1 } }
-						FROMFROM = { character_event = { id = 7735 days = 1 } }
+					character_event = {
+						id = 7728 # Lives, murderer discovered
+						days = 1
 					}
-					character_event = { id = 7728 days = 1 } # Lives, murderer discovered
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 7735 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 7735 days = 1 } }
 				}
+
 				50 = {
-					hidden_tooltip = {
-						FROM = { character_event = { id = 7736 days = 1 } }
-						FROMFROM = { character_event = { id = 7736 days = 1 } }
+					character_event = {
+						id = 7729 # Lives, murderer unknown
+						days = 1
 					}
-					character_event = { id = 7729 days = 1 } # Lives, murderer unknown
+
+					# Notify
+					event_target:plot_leader = { character_event = { id = 7736 days = 1 } }
+					event_target:plot_backer = { character_event = { id = 7736 days = 1 } }
 				}
 			}
 		}
@@ -9193,39 +10161,21 @@ character_event = {
 # Manure Explosion - Dies, murderer(s) discovered
 character_event = {
 	id = 7726
-	desc = "EVTDESC7726"
+	desc = EVTDESC7726
 	picture = GFX_evt_burning_house
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA7726"
+		name = EVTOPTA7726
+
 		if = {
-			limit = {
-				FROMFROMFROM = {
-					OR = {
-						has_plot = plot_kill_character
-						has_plot = plot_kill_spouse
-					}
-					plot_target_char = {
-						character = ROOT
-					}
-				}
-			}
+			limit = { is_alive = yes }
+
 			death = {
 				death_reason = death_murder
-				killer = FROMFROMFROM
-			}
-			break = yes
-		}
-		if = {
-			limit = {
-				is_alive = yes
-			}
-			death = {
-				death_reason = death_murder
-				killer = FROMFROM
+				killer = event_target:plot_leader
 			}
 		}
 	}
@@ -9234,42 +10184,22 @@ character_event = {
 # Manure Explosion - Dies, murderer NOT discovered
 character_event = {
 	id = 7727
-	desc = "EVTDESC7726"
+	desc = EVTDESC7726
 	picture = GFX_evt_burning_house
 	border = GFX_event_normal_frame_intrigue
-	
+
 	hide_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA7727"
-		
+		name = EVTOPTA7727
+
 		if = {
-			limit = {
-				FROMFROMFROM = {
-					OR = {
-						has_plot = plot_kill_character
-						has_plot = plot_kill_spouse
-					}
-					plot_target_char = {
-						character = ROOT
-					}
-				}
-			}
+			limit = { is_alive = yes }
+
 			death = {
 				death_reason = death_murder_unknown
-				killer = FROMFROMFROM
-			}
-			break = yes
-		}
-		if = {
-			limit = {
-				is_alive = yes
-			}
-			death = {
-				death_reason = death_murder_unknown
-				killer = FROMFROM
+				killer = event_target:plot_leader
 			}
 		}
 	}
@@ -9278,62 +10208,71 @@ character_event = {
 # Manure Explosion - Lives, murderer discovered
 character_event = {
 	id = 7728
-	desc = "EVTDESC7728"
+	desc = EVTDESC7728
 	picture = GFX_evt_scandal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA7728"
+		name = EVTOPTA7728
 	}
 }
 
 # Manure Explosion - Lives, murderer NOT discovered
 character_event = {
 	id = 7729
-	desc = "EVTDESC7729"
+	desc = EVTDESC7729
 	picture = GFX_evt_scandal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	hide_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA7729"
+		name = EVTOPTA7729
 	}
 }
 
 # Manure Explosion - Backer informs Plotter of plan
 character_event = {
 	id = 7730
-	desc = "EVTDESC7730"
+	desc = EVTDESC7730
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	trigger = {
+		is_plot_active = yes
+
 		plot_target_char = {
 			is_alive = yes
 		}
 	}
-	
-	immediate = {
-		plot_target_char = { save_event_target_as = plot_target }
-	}
-	
+
 	option = {
-		name = "EVTOPTA7730"
-		set_character_flag = murder_in_motion
-		FROM = { character_event = { id = 7731 tooltip = "EVTTOOLTIP8161" } }
-		hidden_tooltip = {
-			any_plot_backer = {
-				limit = {
-					NOT = { character = FROM }
-				}
-				character_event = { id = 7732 days = 1 }
+		name = EVTOPTA7730
+
+		activate_plot = yes
+
+		event_target:plot_backer = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7731
+				tooltip = EVTTOOLTIP8161
+			}
+		}
+
+		any_plot_backer = {
+			limit = {
+				NOT = { character = event_target:plot_backer }
+			}
+
+			character_event = {
+				id = 7732 # Inform
+				days = 1
 			}
 		}
 	}
@@ -9342,106 +10281,127 @@ character_event = {
 # Manure Explosion - Plotter tells backer to go ahead
 character_event = {
 	id = 7731
-	desc = "EVTDESC7731"
+	desc = EVTDESC7731
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8161"
-		event_target:plot_target = { character_event = { id = 7725 days = 27 tooltip = "EVTTOOLTIP7725" } }
+		name = EVTOPTA8161
+
+		event_target:plot_target = {
+			show_scope_change = no
+
+			character_event = {
+				id = 7725
+				days = 27
+				tooltip = EVTTOOLTIP7725
+			}
+		}
 	}
 }
 
 # Manure Explosion - Initiator informs other plotter
 character_event = {
 	id = 7732
-	desc = "EVTDESC7732"
+	desc = EVTDESC7732
 	picture = GFX_evt_whispers
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "EVTOPTA8162"
+		name = EVTOPTA8162
 	}
 }
 
 # Manure Explosion - Notification: Success, but discovered
 character_event = {
 	id = 7733
-	desc = "EVTDESC7733"
+	desc = EVTDESC7733
 	picture = GFX_evt_burning_house
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	immediate = {
 		character_event = { id = 10 } # Consequences of discovery
 		clear_event_target = target_victim
 	}
-	
+
 	option = {
-		name = "EVTOPTA8163"
+		name = EVTOPTA8163
 	}
 }
 
 # Manure Explosion - Notification: Success, and NOT discovered
 character_event = {
 	id = 7734
-	desc = "EVTDESC7734"
+	desc = EVTDESC7734
 	picture = GFX_evt_burning_house
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "EVTOPTA7734"
+		name = EVTOPTA7734
 	}
 }
 
 # Manure Explosion - Notification: Failure, and discovered
 character_event = {
 	id = 7735
-	desc = "EVTDESC7735"
+	desc = EVTDESC7735
 	picture = GFX_evt_shadowy_cabal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	immediate = {
 		character_event = { id = 11 } # Consequences of discovery
 		clear_event_target = target_victim
-		
+
 		if = {
-			limit = { 
+			limit = {
 				plot_target_char = {
-					character = FROM
+					character = event_target:plot_target
 				}
+
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
 			}
+
 			reveal_plot = yes
 		}
 	}
-	
+
 	option = {
-		name = "EVTOPTA7735"
+		name = EVTOPTA7735
+
 		if = {
-			limit = { 
+			limit = {
 				plot_target_char = {
-					character = FROM
+					character = event_target:plot_target
 				}
+
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
 			}
-			clr_character_flag = murder_in_motion
-			tooltip = { reveal_plot = yes }
+
+			activate_plot = no
+
+			tooltip = {
+				reveal_plot = yes
+			}
 		}
 	}
 }
@@ -9449,26 +10409,28 @@ character_event = {
 # Manure Explosion - Notification: Failure, but NOT discovered
 character_event = {
 	id = 7736
-	desc = "EVTDESC7736"
+	desc = EVTDESC7736
 	picture = GFX_evt_shadowy_cabal
 	border = GFX_event_normal_frame_intrigue
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8166"
-		
+		name = EVTOPTA8166
+
 		if = {
-			limit = { 
+			limit = {
 				plot_target_char = {
-					character = FROM
+					character = event_target:plot_target
 				}
+
 				OR = {
 					has_plot = plot_kill_character
 					has_plot = plot_kill_spouse
 				}
 			}
-			clr_character_flag = murder_in_motion
+
+			activate_plot = no
 		}
 	}
 }
