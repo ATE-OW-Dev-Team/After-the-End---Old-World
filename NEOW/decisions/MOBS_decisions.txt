@@ -15,7 +15,6 @@ decisions = {
 			OR = {
 				religion = oldbeliever
 			}
-			num_of_emperor_titles = 1
 			is_heretic = no
 			NOT = { has_global_flag = oldbeliever_schism_mended }
 			NOT = { has_global_flag = orthodox_oldbeliever_schism_mended }
@@ -26,6 +25,7 @@ decisions = {
 			}
 		}
 		allow = {
+			real_tier = EMPEROR
 			piety = 2000
 			religion_authority = 0.75
 			completely_controls = c_belgorod
@@ -89,6 +89,7 @@ decisions = {
 			NOT = { has_global_flag = orthodox_oldbeliever_schism_mended }
 		}
 		allow = {
+			real_tier = EMPEROR
 			piety = 2000
 			religion_authority = 0.75
 			completely_controls = c_bezhetsky_verh
@@ -145,7 +146,6 @@ decisions = {
 			OR = {
 				religion = catholic
 			}
-			num_of_emperor_titles = 1
 			is_heretic = no
 			NOT = { has_global_flag = sevillian_schism_mended }
 			NOT = { has_global_flag = catholic_sevillian_schism_mended }
@@ -156,6 +156,7 @@ decisions = {
 			}
 		}
 		allow = {
+			real_tier = EMPEROR
 			piety = 2000
 			religion_authority = 0.75
 			completely_controls = c_jerusalem
@@ -213,7 +214,6 @@ decisions = {
 			OR = {
 				religion = sevillian
 			}
-			num_of_emperor_titles = 1
 			is_heretic = no
 			NOT = { has_global_flag = sevillian_schism_mended }
 			NOT = { has_global_flag = catholic_sevillian_schism_mended }
@@ -224,6 +224,7 @@ decisions = {
 			}
 		}
 		allow = {
+			real_tier = EMPEROR
 			piety = 2000
 			religion_authority = 0.75
 			completely_controls = c_jerusalem
@@ -284,6 +285,7 @@ decisions = {
 			NOT = { has_global_flag = vagarna_schism_mended }
 		}
 		allow = {
+			real_tier = EMPEROR
 			piety = 2000
 			religion_authority = 0.75
 			completely_controls = c_uppland
@@ -318,8 +320,201 @@ decisions = {
 		}
 		ai_will_do = {
 			factor = 1
-			}
 		}
 	}
-
-
+	
+	mend_great_schism = {
+		only_independent = yes
+		is_high_prio = yes
+		ai_check_interval = 24
+		
+		potential = {
+			is_playable = yes
+			is_adult = yes
+			prisoner = no
+			independent = yes
+			NOT = { trait = incapable }
+			religion = orthodox
+			is_heretic = no
+			NOT = { has_global_flag = great_schism_mended }
+			k_papacy = {
+				holder_scope = {
+					is_heretic = no # If the Pope (and thus Catholicism) is heretical, mending the schism is no longer possible
+				}
+			}
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		allow = {
+			real_tier = EMPEROR
+			piety = 2000
+			religion_authority = 0.9
+			completely_controls = c_byzantion
+			b_hagiasophia = {
+				custom_tooltip = { # Custom tooltip to shorten the in-game tooltip
+					text = mend_the_schism_holder_religion
+					hidden_tooltip = {
+						holder_scope = {
+								religion = orthodox
+							is_heretic = no
+						}
+					}
+				}
+			}
+			completely_controls = c_antiocheia
+			b_antiocheia = {
+				custom_tooltip = {
+					text = mend_the_schism_holder_religion
+					hidden_tooltip = {
+						holder_scope = {
+							religion = orthodox
+							is_heretic = no
+						}
+					}
+				}
+			}
+			completely_controls = c_jerusalem
+			b_jerusalem = {
+				custom_tooltip = {
+					text = mend_the_schism_holder_religion
+					hidden_tooltip = {
+						holder_scope = {
+							religion = orthodox
+							is_heretic = no
+						}
+					}
+				}
+			}
+			completely_controls = c_alexandria
+			b_alexandria = {
+				custom_tooltip = {
+					text = mend_the_schism_holder_religion
+					hidden_tooltip = {
+						holder_scope = {
+							religion = orthodox
+							is_heretic = no
+						}
+					}
+				}
+			}
+			completely_controls = c_roma
+			b_roma = {
+				custom_tooltip = {
+					text = mend_the_schism_holder_religion
+					hidden_tooltip = {
+						holder_scope = {
+							religion = orthodox
+							is_heretic = no
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			narrative_event = { id = LoR.210 tooltip = EVTTOOLTIPLoR.210}
+			set_global_flag = great_schism_mended
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	mend_great_schism_catholic = {
+		only_independent = yes
+		is_high_prio = yes
+		ai_check_interval = 24
+		
+		potential = {
+			is_playable = yes
+			is_adult = yes
+			prisoner = no
+			independent = yes
+			NOT = { trait = incapable }
+			religion = catholic
+			is_heretic = no
+			NOT = { has_global_flag = great_schism_mended }
+			k_orthodox = {
+				holder_scope = {
+					is_heretic = no # If the Pope (and thus Catholicism) is heretical, mending the schism is no longer possible
+				}
+			}
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		allow = {
+			real_tier = EMPEROR
+			piety = 2000
+			religion_authority = 0.9
+			completely_controls = c_byzantion
+			b_hagiasophia = {
+				custom_tooltip = { # Custom tooltip to shorten the in-game tooltip
+					text = mend_the_schism_holder_religion
+					hidden_tooltip = {
+						holder_scope = {
+							religion = catholic
+							is_heretic = no
+						}
+					}
+				}
+			}
+			completely_controls = c_antiocheia
+			b_antiocheia = {
+				custom_tooltip = {
+					text = mend_the_schism_holder_religion
+					hidden_tooltip = {
+						holder_scope = {
+							religion = catholic
+							is_heretic = no
+						}
+					}
+				}
+			}
+			completely_controls = c_jerusalem
+			b_jerusalem = {
+				custom_tooltip = {
+					text = mend_the_schism_holder_religion
+					hidden_tooltip = {
+						holder_scope = {
+							religion = catholic
+							is_heretic = no
+						}
+					}
+				}
+			}
+			completely_controls = c_alexandria
+			b_alexandria = {
+				custom_tooltip = {
+					text = mend_the_schism_holder_religion
+					hidden_tooltip = {
+						holder_scope = {
+							religion = catholic
+							is_heretic = no
+						}
+					}
+				}
+			}
+			completely_controls = c_belgorod
+			b_capriana = {
+				custom_tooltip = {
+					text = mend_the_schism_holder_religion
+					hidden_tooltip = {
+						holder_scope = {
+							religion = catholic
+							is_heretic = no
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			narrative_event = { id = LoR.1210 tooltip = EVTTOOLTIPLoR.210}
+			set_global_flag = great_schism_mended
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}
+	
