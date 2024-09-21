@@ -1252,7 +1252,13 @@ decisions = {
 		ai_check_interval = 60 #check only once every 60 months.
 		potential = {
 			religion = chaldean
-			religion_authority < 0.5
+			OR = {
+				NOT = { religion_authority = 0.5 }
+				AND = {
+					trait = cynical
+					NOT = { religion_authority = 0.6 }
+				}
+			}
 			OR = {
 				independent = yes
 				NOT = {
@@ -1269,32 +1275,32 @@ decisions = {
 				show_scope_change = no
 				holder_scope = {
 					show_scope_change = no
+					religion_authority = 0.5
 					ROOT = {
 						show_scope_change = no
 						PREV = {
-							religion_authority >= 0.5
 							opinion = {
 								who = ROOT
-								value >= 25
+								value = 10
 							}
 							reverse_opinion = {
 								who = ROOT
-								value >= 25
+								value = 10
 							}
 						}
 					}
 				}
 			}
-			prestige = 250
-			NOR = {
+			prestige = 500
+			piety = 750
+			NOT = {
 				trait = zealous
-				trait = cynical
 			}
 		}
 		effect = {
 			set_global_flag = chaldean_catholic_reunion_flag
-			prestige = -250
-			piety = 100
+			prestige = -500
+			piety = -750
 			religion_authority = {
 				modifier = ruler_converted_from
 				years = 20
@@ -1321,14 +1327,17 @@ decisions = {
 			always = no
 		}
 		ai_will_do = {
-			factor = 0.01
+			factor = 1
 			modifier = {
-				factor = 2
-				religion_authority < 30
+				factor = 0.5
 			}
 			modifier = {
 				factor = 2
-				religion_authority < 10
+				NOT = { religion_authority = 0.3 }
+			}
+			modifier = {
+				factor = 2
+				NOT = { religion_authority = 0.1 }
 			}
 		}
 	}
