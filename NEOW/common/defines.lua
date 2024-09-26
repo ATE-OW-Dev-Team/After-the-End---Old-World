@@ -1238,8 +1238,8 @@ NMilitary = {
 	SIEGE_MORALE_LOSS = 0.5,										-- Base monthly morale loss in a siege
 	PAGAN_HOME_SIEGE_MORALE_LOSS_MULT = 0.66,		-- "Defensive Pagan" bonus (multiplier on SIEGE_MORALE_LOSS)
 	FORT_LEVEL_MORALE_LOSS_REDUCTION_MULT = 2.0,	-- Fort Level effect on morale loss (a higher value slows down morale loss)
-	DAYS_BETWEEN_COMBAT_EVENTS = 10,				-- Combat events will happen every this many days
-	DAYS_BEFORE_FIRST_COMBAT_EVENT = 5,				-- First combat event can't fire before this many days
+	DAYS_BETWEEN_COMBAT_EVENTS = 14,				-- Combat events will happen every this many days
+	DAYS_BEFORE_FIRST_COMBAT_EVENT = 7,				-- First combat event can't fire before this many days
 	BATTLE_PRESTIGE_MULTIPLIER = 10,				-- Total prestige gained in the battle will be this * ( losers losses ) / 1000
 	BATTLE_TECH_MULTIPLIER = 0.5,					-- Military tech gain from battles multiplier.
 	MAINLEADER_PRESTIGE_PART = 0.35,				-- The % of the total prestige gained in the battle that the center flank leader will get
@@ -1577,7 +1577,7 @@ NGraphics = {
 },
 
 NEngine = {
-	EVENT_PROCESS_OFFSET = 145, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
+	EVENT_PROCESS_OFFSET = 155, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
 	COURTIER_EVENT_PROCESS_OFFSET = 254, 	 -- Events are checked every X day for courtiers. Max value of 255
 	COURTIERS_MTTTH_EVENTS = 1,  -- Toggles if courtiers are allowed to run MTTH events or not
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_YEAR = 1066, -- The missing scripted successor error will not be shown before this date
