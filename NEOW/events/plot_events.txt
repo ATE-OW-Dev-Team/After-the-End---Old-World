@@ -23112,270 +23112,326 @@ character_event = {
 letter_event = {
 	id = 8200
 	desc = EVTDESC8200
-	
+
 	is_triggered_only = yes
-	
+
 	trigger = {
 		FROM = { in_faction = faction_antiking }
 	}
-	
+
 	immediate = {
 		FROM = {
-			diplomatic_immunity = yes 
+			diplomatic_immunity = yes
+
 			any_faction_backer = {
 				faction = faction_antiking
+
 				diplomatic_immunity = yes
 			}
 		}
 	}
-	
+
 	option = {
 		name = EVTOPTA8000
-		ai_chance = {
-			factor = 5
-			modifier = {
-				factor = 0
-				NOT = {
-					FROM = {
-						faction_power = 
-						{
-							faction = faction_antiking
-							power = 1.0
-						}
-					}
+
+		any_player = {
+			limit = {
+				vassal_of = ROOT
+
+				NOR = {
+					in_faction = faction_antiking
+					character = ROOT
 				}
 			}
-			modifier = {
-				factor = 1.25
-				is_weak_trigger = yes
-			}
-			modifier = {
-				factor = 1.25
-				trait = craven
-			}
-			modifier = {
-				factor = 1.25
-				trait = humble
-			}
-			modifier = {
-				factor = 1.25
-				trait = kind
-			}
-			modifier = {
-				factor = 1.25
-				trait = charitable
-			}
-			modifier = {
-				factor = 1.25
-				trait = patient
-			}
-			modifier = {
-				factor = 1.25
-				trait = content
-			}
+
+			character_event = { id = 8202 }
 		}
-		
-		hidden_tooltip = {
-			any_vassal = {
-				limit = {
-					ai = no
-					NOT = { in_faction = faction_antiking }
-				}
-				character_event = { id = 8202 }
-			}
+
+		hidden_effect = {
 			FROM = {
 				letter_event = { id = 8203 }
+				diplomatic_immunity = no
+
 				any_faction_backer = {
 					faction = faction_antiking
+
 					letter_event = { id = 8201 }
 					diplomatic_immunity = no
 				}
-				diplomatic_immunity = no
 			}
 		}
+
 		FROM = {
+			show_scope_change = no
+
 			religion_authority = {
-				modifier = deposed_antipope
+				name = deposed_antipope
 				years = 50
 			}
+
 			faction_antiking = { # The target (title) of the faction
 				if = {
 					limit = { has_law = investiture_law_1 }
 					add_law_w_cooldown = investiture_law_0
 				}
 			}
-			hidden_tooltip = {
-				if = {
-					limit = {
-						religion = catholic
-					}
-					k_papacy = {
-						holder_scope = {
-							opinion = {
-								who = PREVPREV
-								modifier = opinion_deposed_antipope
-							}
-						}
-					}
-				}
-				if = {
-					limit = {
-						religion = fraticelli
-					}
-					d_fraticelli = {
-						holder_scope = {
-							opinion = {
-								who = PREVPREV
-								modifier = opinion_deposed_antipope
-							}
-						}
+
+			hidden_effect = {
+				religion_head = {
+					opinion = {
+						name = opinion_deposed_antipope
+						who = PREV
 					}
 				}
 			}
 		}
-		hidden_tooltip = {
+
+		hidden_effect = {
 			rightful_religious_head_scope = {
 				remove_claim = k_papacy
 				remove_claim = d_fraticelli
 			}
 		}
-		
+
 		primary_title = {
+			show_scope_change = no
+
 			usurp_title = FROM
 		}
-	}
-	
-	option = {
-		name = "EVTOPTB8000"
+
 		ai_chance = {
-			factor = 90
-			modifier = {
-				factor = 1.25
-				is_strong_trigger = yes
-			}
-			modifier = {
-				factor = 1.25
-				trait = brave
-			}
-			modifier = {
-				factor = 1.25
-				trait = proud
-			}
-			modifier = {
-				factor = 1.25
-				trait = envious
-			}
-			modifier = {
-				factor = 1.25
-				trait = greedy
-			}
-			modifier = {
-				factor = 1.25
-				trait = wroth
-			}
-			modifier = {
-				factor = 1.25
-				trait = ambitious
-			}
-			modifier = {
-				factor = 0.75
+			factor = 5
+
+			trigger = {
 				FROM = {
-					faction_power = 
-					{
+					faction_power = {
 						faction = faction_antiking
-						power = 1.5
+						power >= 1.0
 					}
 				}
 			}
-			modifier = {
-				factor = 0.5
+
+			mult_modifier = {
+				factor = 1.25
+				is_weak_trigger = yes
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = craven
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = humble
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = kind
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = charitable
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = patient
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = content
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTB8000
+
+		if = {
+			limit = {
 				FROM = {
-					faction_power = 
-					{
+					faction_power = {
 						faction = faction_antiking
-						power = 1.0
+						power >= 1.0
 					}
 				}
 			}
-			modifier = {
-				factor = 0.5
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_antiking
-						power = 2.0
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_antiking
-						power = 3.0
-					}
-				}
-			}	
-			modifier = {
-				factor = 0.5
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_antiking
-						power = 4.0
-					}
+
+			random = {
+				chance = 25
+
+				character_event = {
+					id = 45002 # Loyalists flock to the liege's banner
+					months = 4
 				}
 			}
 		}
-		hidden_tooltip = {
-			if = {
-				limit = {
-					FROM = { faction_power = { faction = faction_antiking power = 1.0 } }
-				}
-				random = {
-					chance = 25
-					character_event = { id = 45002 days = 120 } # Loyalists flock to the liege's banner
-				}
-			}
-		}
+
 		FROM = {
-			letter_event = { id = 8204 days = 3 tooltip = "EVTTOOLTIP8100" }
+			show_scope_change = no
+
+			letter_event = {
+				id = 8204
+				days = 3
+				tooltip = EVTTOOLTIP8100
+			}
+
 			tooltip = {
 				any_faction_backer = {
 					faction = faction_antiking
+					count = 10
 				}
 			}
-			hidden_tooltip = {
+
+			hidden_effect = {
 				if = {
 					limit = {
-						NOT = { faction_power = { faction = faction_antiking power = 0.75 } }
+						faction_power = {
+							faction = faction_antiking
+							power < 0.75
+						}
 					}
+
 					random_list = {
-						50 = {
-						}
+						50 = { }
+
 						30 = {
-							character_event = { id = 45000 days = 17 } # A great number of rebels flock to the revolter's banner
+							character_event = {
+								id = 45000 # A great number of rebels flock to the revolter's banner
+								days = 17
+							}
 						}
+
 						20 = {
-							character_event = { id = 45004 days = 17 } # Rebels flock to the revolter's banner
+							character_event = {
+								id = 45004 # Rebels flock to the revolter's banner
+								days = 17
+							}
 						}
 					}
 				}
-				if = {
+				else_if = {
 					limit = {
-						faction_power = { faction = faction_antiking power = 0.75 }
-						NOT = { faction_power = { faction = faction_antiking power = 1.5 } }
+						faction_power = {
+							faction = faction_antiking
+							power < 1.5
+						}
 					}
+
 					random_list = {
-						75 = {
-						}
+						75 = { }
+
 						5 = {
-							character_event = { id = 45000 days = 17 } # A great number of rebels flock to the revolter's banner
+							character_event = {
+								id = 45000 # A great number of rebels flock to the revolter's banner
+								days = 17
+							}
 						}
+
 						20 = {
-							character_event = { id = 45004 days = 17 } # Rebels flock to the revolter's banner
+							character_event = {
+								id = 45004 # Rebels flock to the revolter's banner
+								days = 17
+							}
 						}
+					}
+				}
+			}
+		}
+
+		ai_chance = {
+			factor = 90
+
+			mult_modifier = {
+				factor = 1.25
+				is_strong_trigger = yes
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = brave
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = proud
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = envious
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = greedy
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = wroth
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = ambitious
+			}
+
+			mult_modifier = {
+				factor = 0.75
+
+				FROM = {
+					faction_power = {
+						faction = faction_antiking
+						power >= 1.0
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.5
+
+				FROM = {
+					faction_power = {
+						faction = faction_antiking
+						power >= 1.5
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.5
+
+				FROM = {
+					faction_power = {
+						faction = faction_antiking
+						power >= 2.0
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.5
+
+				FROM = {
+					faction_power = {
+						faction = faction_antiking
+						power >= 3.0
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.5
+
+				FROM = {
+					faction_power = {
+						faction = faction_antiking
+						power >= 4.0
 					}
 				}
 			}
@@ -23387,41 +23443,42 @@ letter_event = {
 letter_event = {
 	id = 8201
 	desc = EVTDESC8201
-	
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "GOOD"
+		name = GOOD
+
 		reverse_opinion = {
-			modifier = opinion_grateful
+			name = opinion_grateful
 			who = FROMFROM
 			years = 5
 		}
-		
+
 		add_character_modifier = {
 			name = faction_antiking_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
-}
+ }
 
 # Inform other vassals - antiking
 character_event = {
 	id = 8202
 	desc = EVTDESC8202
-	
+
 	picture = GFX_evt_council
 	border = GFX_event_normal_frame_intrigue
-	
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "I_SEE"
+		name = I_SEE
 	}
 }
 
@@ -23429,17 +23486,18 @@ character_event = {
 letter_event = {
 	id = 8203
 	desc = EVTDESC8203
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EXCELLENT"
+		name = EXCELLENT
+
 		clr_character_flag = faction_install_antiking_ultimatum_taken
-		
+
 		add_character_modifier = {
 			name = faction_antiking_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -23448,15 +23506,17 @@ letter_event = {
 letter_event = {
 	id = 8204
 	desc = EVTDESC8100
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
 		name = EVTOPTA8100
-		
+
 		clr_character_flag = faction_install_antiking_ultimatum_taken
-		
+
 		faction_antiking = { # The target (title) of the faction
+			show_scope_change = no
+
 			reverse_war = {
 				target = ROOT
 				casus_belli = cb_install_antiking
@@ -23470,150 +23530,185 @@ letter_event = {
 letter_event = {
 	id = 8210
 	desc = EVTDESC8210
-	
+
 	is_triggered_only = yes
-	
+
 	trigger = {
 		FROM = { in_faction = faction_overthrow }
 	}
-	
+
 	immediate = {
 		FROM = {
-			diplomatic_immunity = yes 
+			diplomatic_immunity = yes
+
 			any_faction_backer = {
 				faction = faction_overthrow
+
 				diplomatic_immunity = yes
 			}
 		}
 	}
-	
+
 	option = {
 		name = EVTOPTA8000
+
+		custom_tooltip = {
+			text = khagan_overthrow_execution_warning_tooltip
+
+			any_player = {
+				limit = {
+					vassal_of = ROOT
+
+					NOR = {
+						in_faction = faction_overthrow
+						character = ROOT
+					}
+				}
+
+				character_event = { id = 8212 }
+			}
+
+			FROM = {
+				letter_event = { id = 8213 }
+				diplomatic_immunity = no
+
+				any_faction_backer = {
+					faction = faction_overthrow
+
+					letter_event = { id = 8211 }
+					diplomatic_immunity = no
+				}
+			}
+		}
+
+		primary_title = {
+			show_scope_change = no
+
+			gain_title = {
+				target = FROM
+				type = faction_demand
+			}
+		}
+
 		ai_chance = {
 			factor = 5
-			modifier = {
-				factor = 0
-				NOT = {
-					FROM = {
-						faction_power = 
-						{
-							faction = faction_overthrow
-							power = 1.0
-						}
+
+			trigger = {
+				FROM = {
+					faction_power = {
+						faction = faction_overthrow
+						power >= 1.0
 					}
 				}
 			}
-			modifier = {
+
+			mult_modifier = {
 				factor = 1.25
 				is_weak_trigger = yes
 			}
-			modifier = {
+
+			mult_modifier = {
 				factor = 1.25
 				trait = craven
 			}
 		}
-		
-		custom_tooltip = { text = khagan_overthrow_execution_warning_tooltip }
-		hidden_tooltip = {
-			any_vassal = {
-				limit = {
-					ai = no
-					NOT = { in_faction = faction_overthrow }
-				}
-				character_event = { id = 8212 }
-			}
-			FROM = {
-				letter_event = { id = 8213 }
-				any_faction_backer = {
-					faction = faction_overthrow
-					letter_event = { id = 8211 }
-					diplomatic_immunity = no
-				}
-				diplomatic_immunity = no
-			}
-		}
-		
-		primary_title = {
-			gain_title = { target = FROM type = faction_demand }
-		}
 	}
-	
+
 	option = {
-		name = "EVTOPTB8000"
-		ai_chance = {
-			factor = 90
-			modifier = {
-				factor = 1.25
-				is_strong_trigger = yes
-			}
-			modifier = {
-				factor = 1.25
-				trait = brave
-			}
-			modifier = {
-				factor = 1.25
-				trait = proud
-			}
-			modifier = {
-				factor = 1.25
-				trait = ambitious
-			}
-			modifier = {
-				factor = 0.75
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_overthrow
-						power = 1.5
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_overthrow
-						power = 1.0
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_overthrow
-						power = 2.0
-					}
-				}
-			}
-			modifier = {
-				factor = 0.5
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_overthrow
-						power = 3.0
-					}
-				}
-			}	
-			modifier = {
-				factor = 0.5
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_overthrow
-						power = 4.0
-					}
-				}
-			}
-		}
+		name = EVTOPTB8000
+
 		FROM = {
-			letter_event = { id = 8214 days = 3 tooltip = "EVTTOOLTIP8100" }
+			show_scope_change = no
+
+			letter_event = {
+				id = 8214
+				days = 3
+				tooltip = EVTTOOLTIP8100
+			}
+
 			tooltip = {
 				any_faction_backer = {
 					faction = faction_overthrow
+					count = 10
+				}
+			}
+		}
+
+		ai_chance = {
+			factor = 90
+
+			mult_modifier = {
+				factor = 1.25
+				is_strong_trigger = yes
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = brave
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = proud
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = ambitious
+			}
+
+			mult_modifier = {
+				factor = 0.75
+
+				FROM = {
+					faction_power = {
+						faction = faction_overthrow
+						power >= 1.0
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.5
+
+				FROM = {
+					faction_power = {
+						faction = faction_overthrow
+						power >= 1.5
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.5
+
+				FROM = {
+					faction_power = {
+						faction = faction_overthrow
+						power >= 2.0
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.5
+
+				FROM = {
+					faction_power = {
+						faction = faction_overthrow
+						power >= 3.0
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.5
+
+				FROM = {
+					faction_power = {
+						faction = faction_overthrow
+						power >= 4.0
+					}
 				}
 			}
 		}
@@ -23624,71 +23719,70 @@ letter_event = {
 letter_event = {
 	id = 8211
 	desc = EVTDESC8211
-	
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "GOOD"
+		name = GOOD
+
 		reverse_opinion = {
-			modifier = opinion_grateful
+			name = opinion_grateful
 			who = FROMFROM
 			years = 5
 		}
 	}
-}
+ }
 
 # Inform other vassals - overthrow
 character_event = {
 	id = 8212
 	desc = EVTDESC8212
-	
 	picture = GFX_evt_council
 	border = GFX_event_normal_frame_intrigue
-	
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "I_SEE"
+		name = I_SEE
 	}
-}
+ }
 
 # Demand accepted - overthrow
 letter_event = {
 	id = 8213
 	desc = EVTDESC8213
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8213"
+		name = EVTOPTA8213
+
 		clr_character_flag = faction_overthrow_ultimatum_taken
 	}
 
 	option = {
-		name = "EVTOPTB8213"
+		name = EVTOPTB8213
+
 		clr_character_flag = faction_overthrow_ultimatum_taken
-		if = {
-			limit = {
-				NOT = { has_dlc = "Reapers" }
-			}
-			FROM = {
+
+		FROM = {
+			show_scope_change = no
+
+			if = {
+				limit = { has_dlc = "Reapers" }
+
 				death = {
-					death_reason = death_execution
+					death_reason = death_execution_horses
 					killer = ROOT
 				}
 			}
-		}
-		if = {
-			limit = {
-				has_dlc = "Reapers"
-			}
-			FROM = {
+			else = {
 				death = {
-					death_reason = death_execution_horses
+					death_reason = death_execution
 					killer = ROOT
 				}
 			}
@@ -23700,15 +23794,17 @@ letter_event = {
 letter_event = {
 	id = 8214
 	desc = EVTDESC8100
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
 		name = EVTOPTA8100
-		
+
 		clr_character_flag = faction_overthrow_ultimatum_taken
-		
+
 		faction_overthrow = { # The target (title) of the faction
+			show_scope_change = no
+
 			reverse_war = {
 				target = ROOT
 				casus_belli = cb_install_khan
@@ -23716,272 +23812,344 @@ letter_event = {
 			}
 		}
 	}
-}
+ }
 
 # Ultimatum - increase council power
 letter_event = {
 	id = 8215
 	desc = EVTDESC8215
-	
+
 	is_triggered_only = yes
-	
+
 	trigger = {
 		FROM = { in_faction = faction_increase_council_power }
 	}
-	
+
 	immediate = {
-		FROM = { 
-			diplomatic_immunity = yes 
+		FROM = {
+			diplomatic_immunity = yes
+
 			any_faction_backer = {
 				faction = faction_increase_council_power
+
 				diplomatic_immunity = yes
 			}
 		}
 	}
-	
+
 	option = {
 		name = EVTOPTA8000
-		ai_chance = {
-			factor = 20
-			modifier = {
-				factor = 0.01	
-				NOT = {
-					FROM = {
-						faction_power = 
-						{
-							faction = faction_increase_council_power
-							power = 1.0
-						}
-					}
+
+		any_player = {
+			limit = {
+				vassal_of = ROOT
+
+				NOR = {
+					in_faction = faction_increase_council_power
+					character = ROOT
 				}
-			}			
-			modifier = {
-				factor = 1.25
-				is_weak_trigger = yes
 			}
-			modifier = {
-				factor = 1.25
-				trait = craven
-			}
-			modifier = {
-				factor = 1.25
-				trait = humble
-			}
-			modifier = {
-				factor = 1.25
-				trait = kind
-			}
-			modifier = {
-				factor = 1.25
-				trait = charitable
-			}
-			modifier = {
-				factor = 1.25
-				trait = patient
-			}
-			modifier = {
-				factor = 1.25
-				trait = content
-			}
+
+			character_event = { id = 8217 }
 		}
-		
-		hidden_tooltip = {
-			any_vassal = {
-				limit = {
-					ai = no
-					NOT = { in_faction = faction_increase_council_power }
-				}
-				character_event = { id = 8217 }
-			}
+
+		hidden_effect = {
 			FROM = {
 				letter_event = { id = 8218 }
+				diplomatic_immunity = no
+
 				any_faction_backer = {
 					faction = faction_increase_council_power
+
 					letter_event = { id = 8216 }
 					diplomatic_immunity = no
 				}
-				diplomatic_immunity = no
 			}
 		}
+
 		FROM = {
 			show_scope_change = no
+
 			opinion = {
-				modifier = opinion_increased_council_power
+				name = opinion_increased_council_power
 				who = ROOT
 				months = 12
 			}
-		}
-		FROM = {
-			show_scope_change = no
+
 			faction_increase_council_power = { # The target (title) of the faction
 				increase_council_power_effect = yes
 				increase_vassal_freedom_effect = yes
 			}
 		}
-	}
-	option = {
-		name = "EVTOPTB8000"
+
 		ai_chance = {
-			factor = 8
-			modifier = {
-				factor = 1.25
-				is_strong_trigger = yes
-			}
-			modifier = {
-				factor = 1.25
-				trait = proud
-			}
-			modifier = {
-				factor = 1.25
-				trait = envious
-			}
-			modifier = {
-				factor = 1.25
-				trait = greedy
-			}
-			modifier = {
-				factor = 1.25
-				trait = wroth
-			}
-			modifier = {
-				factor = 1.25
-				trait = ambitious
-			}
-			modifier = {
-				factor = 1.25
-				trait = stubborn
-			}
-			modifier = {
-				factor = 0.1
-				war = yes
-			}
-			modifier = {
-				factor = 0.5
+			factor = 20
+
+			mult_modifier = {
+				factor = 0.01
+
 				FROM = {
-					faction_power = 
-					{
+					faction_power = {
 						faction = faction_increase_council_power
-						power = 1.5
+						power < 1.0
 					}
 				}
 			}
-			modifier = {
-				factor = 0.5
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_increase_council_power
-						power = 1.0
-					}
-				}
+
+			mult_modifier = {
+				factor = 1.25
+				is_weak_trigger = yes
 			}
-			modifier = {
-				factor = 0.35
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_increase_council_power
-						power = 2.0
-					}
-				}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = craven
 			}
-			modifier = {
-				factor = 0.2
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_increase_council_power
-						power = 3.0
-					}
-				}
-			}	
-			modifier = {
-				factor = 0.2
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_increase_council_power
-						power = 4.0
-					}
-				}
-			}	
+
+			mult_modifier = {
+				factor = 1.25
+				trait = humble
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = kind
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = charitable
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = patient
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = content
+			}
 		}
-		hidden_tooltip = {
-			if = {
-				limit = {
-					FROM = { faction_power = { faction = faction_increase_council_power power = 1.0 } }
+	}
+
+	option = {
+		name = EVTOPTB8000
+
+		if = {
+			limit = {
+				FROM = {
+					faction_power = {
+						faction = faction_increase_council_power
+						power >= 1.0
+					}
 				}
-				random = {
-					chance = 25
-					character_event = { id = 45002 days = 120 } # Loyalists flock to the liege's banner
+			}
+
+			random = {
+				chance = 25
+
+				character_event = {
+					id = 45002 # Loyalists flock to the liege's banner
+					months = 4
 				}
 			}
 		}
+
 		FROM = {
-			letter_event = { id = 8219 days = 3 tooltip = "EVTTOOLTIP8100" }
+			show_scope_change = no
+
+			letter_event = {
+				id = 8219
+				days = 3
+				tooltip = EVTTOOLTIP8100
+			}
+
 			tooltip = {
 				any_faction_backer = {
 					faction = faction_increase_council_power
+					count = 10
 				}
 			}
-			hidden_tooltip = {
+
+			hidden_effect = {
 				if = {
 					limit = {
-						NOT = { faction_power = { faction = faction_increase_council_power power = 0.75 } }
+						faction_power = {
+							faction = faction_increase_council_power
+							power < 0.75
+						}
 					}
+
 					random_list = {
-						50 = {
-						}
+						50 = { }
+
 						30 = {
-							character_event = { id = 45000 days = 17 } # A great number of rebels flock to the revolter's banner
+							character_event = {
+								id = 45000 # A great number of rebels flock to the revolter's banner
+								days = 17
+							}
 						}
+
 						20 = {
-							character_event = { id = 45004 days = 17 } # Rebels flock to the revolter's banner
+							character_event = {
+								id = 45004 # Rebels flock to the revolter's banner
+								days = 17
+							}
 						}
 					}
 				}
-				if = {
+				else_if = {
 					limit = {
-						faction_power = { faction = faction_increase_council_power power = 0.75 }
-						NOT = { faction_power = { faction = faction_increase_council_power power = 1.5 } }
+						faction_power = {
+							faction = faction_increase_council_power
+							power < 1.5
+						}
 					}
+
 					random_list = {
-						75 = {
-						}
+						75 = { }
+
 						5 = {
-							character_event = { id = 45000 days = 17 } # A great number of rebels flock to the revolter's banner
+							character_event = {
+								id = 45000 # A great number of rebels flock to the revolter's banner
+								days = 17
+							}
 						}
+
 						20 = {
-							character_event = { id = 45004 days = 17 } # Rebels flock to the revolter's banner
+							character_event = {
+								id = 45004 # Rebels flock to the revolter's banner
+								days = 17
+							}
 						}
 					}
 				}
 			}
 		}
+
+		ai_chance = {
+			factor = 8
+
+			mult_modifier = {
+				factor = 1.25
+				is_strong_trigger = yes
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = proud
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = envious
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = greedy
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = wroth
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = ambitious
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = stubborn
+			}
+
+			mult_modifier = {
+				factor = 0.1
+				war = yes
+			}
+
+			mult_modifier = {
+				factor = 0.5
+
+				FROM = {
+					faction_power = {
+						faction = faction_increase_council_power
+						power >= 1.0
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.5
+
+				FROM = {
+					faction_power = {
+						faction = faction_increase_council_power
+						power >= 1.5
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.35
+
+				FROM = {
+					faction_power = {
+						faction = faction_increase_council_power
+						power >= 2.0
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.2
+
+				FROM = {
+					faction_power = {
+						faction = faction_increase_council_power
+						power >= 3.0
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.2
+
+				FROM = {
+					faction_power = {
+						faction = faction_increase_council_power
+						power >= 4.0
+					}
+				}
+			}
+		}
 	}
-}
+ }
 
 # Inform faction backer - increase council power
 letter_event = {
 	id = 8216
-	desc = "EVTDESC8216"
-	
+	desc = EVTDESC8216
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "GOOD"
+		name = GOOD
+
 		reverse_opinion = {
-			modifier = opinion_grateful
+			name = opinion_grateful
 			who = FROMFROM
 			years = 5
 		}
-		
+
 		add_character_modifier = {
 			name = faction_council_power_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -23990,36 +24158,36 @@ letter_event = {
 character_event = {
 	id = 8217
 	desc = EVTDESC8217
-	
-	notification = yes
-	
 	picture = GFX_evt_council
 	border = GFX_event_normal_frame_intrigue
-	
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+	notification = yes
+
+	ai = no
+
 	option = {
-		name = "I_SEE"
+		name = I_SEE
 	}
 }
 
 # Demand accepted - increase council power
 letter_event = {
 	id = 8218
-	desc = "EVTDESC8218"
-	
+	desc = EVTDESC8218
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EXCELLENT"
+		name = EXCELLENT
+
 		clr_character_flag = faction_council_power_ultimatum_taken
-		
+
 		add_character_modifier = {
 			name = faction_council_power_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
 }
@@ -24027,16 +24195,18 @@ letter_event = {
 # Demand rejected - increase council power
 letter_event = {
 	id = 8219
-	desc = "EVTDESC8100"
-	
+	desc = EVTDESC8100
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8100"
-		
+		name = EVTOPTA8100
+
 		clr_character_flag = faction_council_power_ultimatum_taken
-		
+
 		faction_increase_council_power = { # The target (title) of the faction
+			show_scope_change = no
+
 			reverse_war = {
 				target = ROOT
 				casus_belli = increase_council_power_war
@@ -24044,133 +24214,112 @@ letter_event = {
 			}
 		}
 	}
-}
+ }
 
 # Ultimatum - powerful vassal takeover
 letter_event = {
 	id = 8220
 	desc = EVTDESC8220
-	
+
 	is_triggered_only = yes
-	
+
 	trigger = {
 		FROM = { in_faction = faction_powerful_vassal_takeover }
 	}
-	
+
 	immediate = {
-		FROM = { 
-			diplomatic_immunity = yes 
+		FROM = {
+			diplomatic_immunity = yes
+
 			any_faction_backer = {
 				faction = faction_powerful_vassal_takeover
+
 				diplomatic_immunity = yes
 			}
 		}
+
 		most_popular_vassal = {
 			limit = {
-				higher_tier_than = BARON
+				higher_real_tier_than = BARON
 				is_feudal = yes
-				prisoner = no
-				NOR = {
-					is_inaccessible_trigger = yes
-					trait = incapable
-					trait = eunuch
+				block_general_event_trigger = no
+				has_inheritance_blocker = no
+
+				trigger_if = {
+					limit = { is_female = yes }
+
+					ROOT = {
+						OR = {
+							has_law = true_cognatic_succession
+							has_law = enatic_cognatic_succession
+							has_law = enatic_succession
+						}
+					}
 				}
-				age = 16
-				#can_hold_title = PREVPREV
-				OR = {
-					is_female = no
-					AND = {
-						is_female = yes
-						ROOT = { has_law = true_cognatic_succession }
+				trigger_else = {
+					ROOT = {
+						OR = {
+							has_law = true_cognatic_succession
+							has_law = cognatic_succession
+							has_law = agnatic_succession
+						}
 					}
 				}
 			}
-			set_character_flag = new_title_holder
+
 			save_event_target_as = new_title_holder
 		}
 	}
-	
+
 	option = {
 		name = EVTOPTA8000
-		ai_chance = {
-			factor = 10
-			modifier = {
-				factor = 0	
-				NOT = {
-					FROM = {
-						faction_power = 
-						{
-							faction = faction_powerful_vassal_takeover
-							power = 1.0
-						}
-					}
+
+		any_player = {
+			limit = {
+				vassal_of = ROOT
+
+				NOR = {
+					in_faction = faction_powerful_vassal_takeover
+					character = ROOT
 				}
-			}			
-			modifier = {
-				factor = 1.25
-				is_weak_trigger = yes
 			}
-			modifier = {
-				factor = 1.25
-				trait = craven
-			}
-			modifier = {
-				factor = 1.25
-				trait = humble
-			}
-			modifier = {
-				factor = 1.25
-				trait = kind
-			}
-			modifier = {
-				factor = 1.25
-				trait = charitable
-			}
-			modifier = {
-				factor = 1.25
-				trait = patient
-			}
-			modifier = {
-				factor = 1.25
-				trait = content
-			}
+
+			character_event = { id = 8222 }
 		}
-		
-		hidden_tooltip = {
-			any_vassal = {
-				limit = {
-					ai = no
-					NOT = { in_faction = faction_powerful_vassal_takeover }
-				}
-				character_event = { id = 8222 }
-			}
+
+		hidden_effect = {
 			FROM = {
 				letter_event = { id = 8223 }
+				diplomatic_immunity = no
+
 				any_faction_backer = {
 					faction = faction_powerful_vassal_takeover
+
 					letter_event = { id = 8221 }
 					diplomatic_immunity = no
 				}
-				diplomatic_immunity = no
 			}
 		}
+
 		FROM = {
+			show_scope_change = no
+
 			opinion = {
-				modifier = opinion_abdicated
+				name = opinion_abdicated
 				who = ROOT
-				months = 12
+				years = 1
 			}
-		}
-		FROM = {
+
 			faction_powerful_vassal_takeover = { # The target (title) of the faction
-				holder_scope = {
-					any_vassal = {
-						limit = { has_character_flag = new_title_holder }
-						usurp_title = {
-							target = PREVPREV
-							type = faction_demand
-						}
-						clr_character_flag = new_title_holder
+				event_target:new_title_holder = {
+					show_scope_change = no
+
+					usurp_title = {
+						target = PREV
+						type = faction_demand
+					}
+
+					hidden_effect = {
 						job_chancellor = { remove_title = job_chancellor }
 						job_marshal = { remove_title = job_marshal }
 						job_treasurer = { remove_title = job_treasurer }
@@ -24178,310 +24327,448 @@ letter_event = {
 						job_spiritual = { remove_title = job_spiritual }
 					}
 				}
+
 				increase_council_power_effect = yes
 				increase_vassal_freedom_effect = yes
 				increase_vassal_freedom_effect = yes
+
 				if = {
 					limit = { has_law = succession_voting_power_0 }
 					add_law_w_cooldown = succession_voting_power_1
 				}
+
 				if = {
-					limit = { NOT = { has_law = succ_byzantine_elective } }
+					limit = {
+						trigger_if = {
+							limit = {
+								has_law = law_voting_power_1
+								has_law = war_voting_power_1
+								has_law = grant_title_voting_power_1
+								has_law = revoke_title_voting_power_1
+								has_law = imprison_voting_power_1
+								has_law = banish_voting_power_1
+								has_law = execution_voting_power_1
+							}
+
+							NOR = {
+								has_law = succ_feudal_elective
+								has_law = succ_byzantine_elective
+								has_law = succ_hre_elective
+							}
+						}
+						trigger_else = {
+							NOT = { has_law = succ_gavelkind }
+						}
+					}
+
 					custom_tooltip = {
 						text = overthrow_text
-						hidden_tooltip = {
-							if = {
-								limit = { 
-									NOT = { has_law = succ_hre_elective }
-									NOT = { has_law = succ_feudal_elective }
-									has_law = law_voting_power_1
-									has_law = banish_voting_power_1
-									has_law = execution_voting_power_1
-									has_law = revoke_title_voting_power_1
-									has_law = grant_title_voting_power_1
-									has_law = imprison_voting_power_1
-									has_law = war_voting_power_1						
-								}
-								add_law_w_cooldown = succ_hre_elective
+
+						# Change to elective if possible, gavelkind otherwise
+						if = {
+							limit = {
+								has_law = law_voting_power_1
+								has_law = war_voting_power_1
+								has_law = grant_title_voting_power_1
+								has_law = revoke_title_voting_power_1
+								has_law = imprison_voting_power_1
+								has_law = banish_voting_power_1
+								has_law = execution_voting_power_1
 							}
-							if = {
-								limit = { 
-									NOT = { has_law = succ_hre_elective }
-									NOT = { has_law = succ_feudal_elective }
-									has_law = law_voting_power_1
-									has_law = banish_voting_power_1
-									has_law = execution_voting_power_1
-									has_law = revoke_title_voting_power_1
-									has_law = grant_title_voting_power_1
-									has_law = imprison_voting_power_1
-									has_law = war_voting_power_1						
-								}
-								add_law_w_cooldown = succ_feudal_elective
-							}
+
 							if = {
 								limit = {
-									NOT = { has_law = succ_gavelkind }
-									NOT = { has_law = succ_feudal_elective }
-									NOT = { has_law = succ_hre_elective }
-									NAND = {
-										has_law = succ_feudal_elective
-										has_law = law_voting_power_1
-										has_law = banish_voting_power_1
-										has_law = execution_voting_power_1
-										has_law = revoke_title_voting_power_1
-										has_law = grant_title_voting_power_1
-										has_law = imprison_voting_power_1
-										has_law = war_voting_power_1						
+									OR = {
+										title = e_byzantium
+										title = e_roman_empire
+										title = e_britannia
+										title = e_transnistria
+										title = e_western_transnistria
+										title = e_marblists
+										title = e_bengal
+										title = e_ruthenia
+										title = event_target:alternate_byz
 									}
 								}
-								add_law_w_cooldown = succ_gavelkind
+
+								add_law_w_cooldown = succ_byzantine_elective
 							}
+							else_if = {
+								limit = {
+									OR = {
+										title = event_target:alternate_hre
+									}
+								}
+
+								add_law_w_cooldown = succ_hre_elective
+							}
+							else = {
+								add_law_w_cooldown = succ_feudal_elective
+							}
+						}
+						else = {
+							add_law_w_cooldown = succ_gavelkind
 						}
 					}
 				}
 			}
 		}
-	}
-	option = {
-		name = "EVTOPTB8000"
+
 		ai_chance = {
-			factor = 90
-			modifier = {
-				factor = 1.25
-				is_strong_trigger = yes
-			}
-			modifier = {
-				factor = 1.25
-				trait = brave
-			}
-			modifier = {
-				factor = 1.25
-				trait = proud
-			}
-			modifier = {
-				factor = 1.25
-				trait = envious
-			}
-			modifier = {
-				factor = 1.25
-				trait = greedy
-			}
-			modifier = {
-				factor = 1.25
-				trait = wroth
-			}
-			modifier = {
-				factor = 1.25
-				trait = ambitious
-			}
-			modifier = {
-				factor = 1.25
-				trait = stubborn
-			}
-			modifier = {
-				factor = 0.75
+			factor = 10
+
+			trigger = {
 				FROM = {
-					faction_power = 
-					{
+					faction_power = {
 						faction = faction_powerful_vassal_takeover
-						power = 1.5
+						power >= 1.0
 					}
 				}
 			}
-			modifier = {
-				factor = 0.5
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_powerful_vassal_takeover
-						power = 1.0
-					}
-				}
+
+			mult_modifier = {
+				factor = 1.25
+				is_weak_trigger = yes
 			}
-			modifier = {
-				factor = 0.5
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_powerful_vassal_takeover
-						power = 2.0
-					}
-				}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = craven
 			}
-			modifier = {
-				factor = 0.5
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_powerful_vassal_takeover
-						power = 3.0
-					}
-				}
-			}	
-			modifier = {
-				factor = 0.5
-				FROM = {
-					faction_power = 
-					{
-						faction = faction_powerful_vassal_takeover
-						power = 4.0
-					}
-				}
-			}	
+
+			mult_modifier = {
+				factor = 1.25
+				trait = humble
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = kind
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = charitable
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = patient
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = content
+			}
 		}
-		hidden_tooltip = {
-			if = {
-				limit = {
-					FROM = { faction_power = { faction = faction_powerful_vassal_takeover power = 1.0 } }
+	}
+
+	option = {
+		name = EVTOPTB8000
+
+		if = {
+			limit = {
+				FROM = {
+					faction_power = {
+						faction = faction_powerful_vassal_takeover
+						power >= 1.0
+					}
 				}
-				random = {
-					chance = 25
-					character_event = { id = 45002 days = 120 } # Loyalists flock to the liege's banner
+			}
+
+			random = {
+				chance = 25
+
+				character_event = {
+					id = 45002 # Loyalists flock to the liege's banner
+					months = 4
 				}
 			}
 		}
+
 		FROM = {
-			letter_event = { id = 8224 days = 3 tooltip = "EVTTOOLTIP8100" }
+			show_scope_change = no
+
+			letter_event = {
+				id = 8224
+				days = 3
+				tooltip = EVTTOOLTIP8100
+			}
+
 			tooltip = {
 				any_faction_backer = {
 					faction = faction_powerful_vassal_takeover
+					count = 10
 				}
 			}
-			hidden_tooltip = {
+
+			hidden_effect = {
 				if = {
 					limit = {
-						NOT = { faction_power = { faction = faction_powerful_vassal_takeover power = 0.75 } }
+						faction_power = {
+							faction = faction_powerful_vassal_takeover
+							power < 0.75
+						}
 					}
+
 					random_list = {
-						50 = {
-						}
+						50 = { }
+
 						30 = {
-							character_event = { id = 45000 days = 17 } # A great number of rebels flock to the revolter's banner
+							character_event = {
+								id = 45000 # A great number of rebels flock to the revolter's banner
+								days = 17
+							}
 						}
+
 						20 = {
-							character_event = { id = 45004 days = 17 } # Rebels flock to the revolter's banner
+							character_event = {
+								id = 45004 # Rebels flock to the revolter's banner
+								days = 17
+							}
 						}
 					}
 				}
-				if = {
+				else_if = {
 					limit = {
-						faction_power = { faction = faction_powerful_vassal_takeover power = 0.75 }
-						NOT = { faction_power = { faction = faction_powerful_vassal_takeover power = 1.5 } }
+						faction_power = {
+							faction = faction_powerful_vassal_takeover
+							power < 1.5
+						}
 					}
+
 					random_list = {
-						75 = {
-						}
+						75 = { }
+
 						5 = {
-							character_event = { id = 45000 days = 17 } # A great number of rebels flock to the revolter's banner
+							character_event = {
+								id = 45000 # A great number of rebels flock to the revolter's banner
+								days = 17
+							}
 						}
+
 						20 = {
-							character_event = { id = 45004 days = 17 } # Rebels flock to the revolter's banner
+							character_event = {
+								id = 45004 # Rebels flock to the revolter's banner
+								days = 17
+							}
 						}
 					}
 				}
 			}
 		}
+
+		ai_chance = {
+			factor = 90
+
+			mult_modifier = {
+				factor = 1.25
+				is_strong_trigger = yes
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = brave
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = proud
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = envious
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = greedy
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = wroth
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = ambitious
+			}
+
+			mult_modifier = {
+				factor = 1.25
+				trait = stubborn
+			}
+
+			mult_modifier = {
+				factor = 0.75
+
+				FROM = {
+					faction_power = {
+						faction = faction_powerful_vassal_takeover
+						power >= 1.0
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.5
+
+				FROM = {
+					faction_power = {
+						faction = faction_powerful_vassal_takeover
+						power >= 1.5
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.5
+
+				FROM = {
+					faction_power = {
+						faction = faction_powerful_vassal_takeover
+						power >= 2.0
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.5
+
+				FROM = {
+					faction_power = {
+						faction = faction_powerful_vassal_takeover
+						power >= 3.0
+					}
+				}
+			}
+
+			mult_modifier = {
+				factor = 0.5
+
+				FROM = {
+					faction_power = {
+						faction = faction_powerful_vassal_takeover
+						power >= 4.0
+					}
+				}
+			}
+		}
 	}
-}
+ }
 
 # Inform faction backer - Powerful Vassal Takeover
 letter_event = {
 	id = 8221
-	desc = "EVTDESC8221"
-	
+	desc = EVTDESC8221
+
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "GOOD"
+		name = GOOD
+
 		reverse_opinion = {
-			modifier = opinion_grateful
+			name = opinion_grateful
 			who = FROMFROM
 			years = 5
 		}
 
 		if = {
-			limit = { event_target:new_title_holder = { NOT = { character = ROOT } } }
+			limit = {
+				NOT = { character = event_target:new_title_holder }
+			}
+
 			add_favor = event_target:new_title_holder
+
 			opinion = {
 				who = event_target:new_title_holder
-				modifier = opinion_favorite
+				name = opinion_favorite
 				years = 5
 			}
 		}
 
 		add_character_modifier = {
 			name = faction_powerful_vassal_takeover_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
-}
+ }
 
 # Inform other vassals - Powerful Vassal Takeover
 character_event = {
 	id = 8222
 	desc = EVTDESC8222
-	
-	notification = yes
-	
 	picture = GFX_evt_council
 	border = GFX_event_normal_frame_intrigue
-	
+
+	notification = yes
 	show_from_from = yes
-	
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = "I_SEE"
+		name = I_SEE
 	}
-}
+ }
 
 # Demand accepted - Powerful Vassal Takeover
 letter_event = {
 	id = 8223
-	desc = "EVTDESC8223"
-	
+	desc = EVTDESC8223
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EXCELLENT"
+		name = EXCELLENT
+
 		clr_character_flag = faction_powerful_vassal_takeover_ultimatum_taken
-		
+
 		if = {
-			limit = { event_target:new_title_holder = { NOT = { character = ROOT } } }
+			limit = {
+				NOT = { character = event_target:new_title_holder }
+			}
+
 			add_favor = event_target:new_title_holder
+
 			opinion = {
+				name = opinion_favorite
 				who = event_target:new_title_holder
-				modifier = opinion_favorite
 				years = 5
 			}
 		}
-		
+
 		add_character_modifier = {
 			name = faction_powerful_vassal_takeover_ultimatum_timer
+			years = 10
 			hidden = yes
-			duration = 3650
 		}
 	}
-}
+ }
 
 # Demand rejected - Powerful Vassal Takeover
 letter_event = {
 	id = 8224
-	desc = "EVTDESC8100"
-	
+	desc = EVTDESC8100
+
 	is_triggered_only = yes
-	
+
 	option = {
-		name = "EVTOPTA8100"
-		
+		name = EVTOPTA8100
+
 		clr_character_flag = faction_powerful_vassal_takeover_ultimatum_taken
 
-		FROM = { set_character_flag = powerful_vassal_takeover_target }
-		
+		FROM = {
+			set_character_flag = powerful_vassal_takeover_target
+		}
+
 		faction_powerful_vassal_takeover = { # The target (title) of the faction
+			show_scope_change = no
+
 			reverse_war = {
 				target = ROOT
 				casus_belli = powerful_vassal_takeover_war
@@ -24494,21 +24781,23 @@ letter_event = {
 # Winning war notification - Powerful Vassal Takeover
 letter_event = {
 	id = 8225
-	desc = "EVTDESC8225"
+	desc = EVTDESC8225
+
+	is_triggered_only = yes
 
 	immediate = {
 		clr_character_flag = helped_win_war
 	}
 
-	is_triggered_only = yes
-	
 	option = {
-		name = "EVTOPTA8225"
+		name = EVTOPTA8225
+
 		opinion = {
+			name = opinion_favorite
 			who = FROM
-			modifier = opinion_favorite
 			years = 5
 		}
+
 		add_favor = FROM
 	}
 }
@@ -24516,10 +24805,10 @@ letter_event = {
 # Winning war notification - New title holder
 character_event = {
 	id = 8226
-	desc = "EVTDESC8226"
+	desc = EVTDESC8226
 	picture = GFX_evt_coronation
 	border = GFX_event_normal_frame_diplomacy
-	
+
 	is_triggered_only = yes
 
 	immediate = {
@@ -24528,49 +24817,89 @@ character_event = {
 				limit = { has_law = succession_voting_power_0 }
 				add_law_w_cooldown = succession_voting_power_1
 			}
+
 			if = {
-				limit = { 
-					NOT =  { has_law = succ_byzantine_elective } 
-					OR =  { 
-						has_title_flag = alternate_hre
-					} 
-					NOT =  { has_law = succ_feudal_elective } 
-				}
-				add_law_w_cooldown = succ_hre_elective
-			}
-			if = {
-				limit = { 
-					NOR =  { 
-						has_title_flag = alternate_hre
-						has_law = succ_feudal_elective 
+				limit = {
+					NOR = {
+						has_law = succ_feudal_elective
 						has_law = succ_byzantine_elective
-					} 
+						has_law = succ_hre_elective
+					}
 				}
-				add_law_w_cooldown = succ_feudal_elective
+
+				if = {
+					limit = {
+						OR = {
+							title = e_byzantium
+							title = e_roman_empire
+							title = e_britannia
+							title = e_transnistria
+							title = e_western_transnistria
+							title = e_marblists
+							title = e_bengal
+							title = e_ruthenia
+							title = event_target:alternate_byz
+						}
+					}
+
+					add_law_w_cooldown = succ_byzantine_elective
+				}
+				else_if = {
+					limit = {
+						OR = {
+							title = event_target:alternate_hre
+						}
+					}
+
+					add_law_w_cooldown = succ_hre_elective
+				}
+				else = {
+					add_law_w_cooldown = succ_feudal_elective
+				}
 			}
 		}
-
 	}
-	
+
 	option = {
-		name = "EVTOPTA8226"
-		clr_character_flag = new_title_holder
-		job_chancellor = { remove_title = job_chancellor }
-		job_marshal = { remove_title = job_marshal }
-		job_treasurer = { remove_title = job_treasurer }
-		job_spymaster = { remove_title = job_spymaster }
-		job_spiritual = { remove_title = job_spiritual }
+		name = EVTOPTA8226
+
+		job_chancellor = {
+			show_scope_change = no
+			remove_title = job_chancellor
+		}
+
+		job_marshal = {
+			show_scope_change = no
+			remove_title = job_marshal
+		}
+
+		job_treasurer = {
+			show_scope_change = no
+			remove_title = job_treasurer
+		}
+
+		job_spymaster = {
+			show_scope_change = no
+			remove_title = job_spymaster
+		}
+
+		job_spiritual = {
+			show_scope_change = no
+			remove_title = job_spiritual
+		}
+
 		any_vassal = {
-			limit = {
-				has_character_flag = helped_win_war
-			}
-			character_event = { id = 8225 days = 1 }
+			limit = { has_character_flag = helped_win_war }
+
+			letter_event = { id = 8225 days = 1 }
+
 			tooltip = {
 				opinion = {
+					name = opinion_favorite
 					who = ROOT
-					modifier = opinion_favorite
 					years = 5
 				}
+
 				reverse_add_favor = ROOT
 			}
 		}
