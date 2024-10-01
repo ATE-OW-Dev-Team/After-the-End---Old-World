@@ -42,11 +42,11 @@ narrative_event = {##Recreating Ottoman Empire
             limit = {
                 is_female = yes
                 has_landed_title = e_ottoman
+				religion_group = muslim
             }
             create_bloodline = {
                 type = osman
                 inheritance = matrilineal
-				religion_group = muslim
             }
         }
         else_if = {
@@ -90,7 +90,6 @@ narrative_event = {##Recreating Ottoman Empire
                 type = osman_general
             }
         }
-		
 		set_global_flag = ottomans_refounded
 		prestige = 500
 		piety = 250
@@ -643,4 +642,207 @@ narrative_event = {
 			}
 		}
 	}
+}
+
+##Forming the Empire of Mann
+narrative_event = {
+	id = bloodlines.6
+	title = bloodlines6Title
+	desc = bloodlines6Desc
+	picture = GFX_event_Hagia_sofia_muslim
+
+	major = yes
+	show_ROOT = yes
+	hide_from = yes
+	
+	only_playable = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_global_flag = mann_forged
+		}
+		culture = manx
+		e_mann = {
+			title = FROM
+		}
+	}
+
+	immediate = {
+
+		give_nickname = nick_the_radiant
+        if = {
+            limit = {
+                has_landed_title = e_mann
+            }
+            create_bloodline = {
+                type = emperor_of_mann
+            }
+			sound_effect = bloodline_added
+        }
+		
+		set_global_flag = mann_forged
+		prestige = 1000
+	}
+	
+	weight_multiplier = {
+		factor = 1
+	}
+
+	option = {
+		name = bloodlines6A
+		trigger = {
+			culture = manx
+		}
+	}
+	option = {
+		name = bloodlines6B
+		trigger = {
+			NOT = {
+				culture = manx
+			}
+			culture_group = goidelic
+		}
+	}
+	option = {
+		name = bloodlines6C
+		trigger = {
+			OR = {
+				culture_group = brittanic
+				culture_group = anglo_frisian
+				}
+		}
+	}
+	option = {#None of the above
+		name = bloodlines6D
+		trigger = {
+			NOR = {
+				culture_group = goidelic
+				culture_group = brittanic
+				culture_group = anglo_frisian
+			}
+		}
+	}	
+
+}
+
+##Forming the Commonwealth
+narrative_event = {
+	id = bloodlines.7
+	title = bloodlines7Title
+	desc = bloodlines7Desc
+	picture = GFX_event_Hagia_sofia
+
+	major = yes
+	show_ROOT = yes
+	hide_from = yes
+	
+	only_playable = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_global_flag = plc_formed
+		}
+		OR = {
+			culture = ugricbaltic
+			culture_group = baltic
+			culture = lietuvininkai
+			culture_group = west_slavic
+			}
+		e_commonwealth = {
+			title = FROM
+		}
+	}
+
+	immediate = {
+
+		give_nickname = nick_the_great
+		if = {
+            limit = {
+                is_female = yes
+                has_landed_title = e_commonwealth
+            }
+            create_bloodline = {
+                type = commonwealth_female
+            }
+        }
+        else_if = {
+            limit = {
+                is_female = no
+                has_landed_title = e_commonwealth
+            }
+            create_bloodline = {
+                type = commonwealth_male
+            }
+        }
+		set_global_flag = plc_formed
+		prestige = 1000
+	}
+	
+	weight_multiplier = {
+		factor = 1
+	}
+
+	option = {
+		name = bloodlines7A
+		trigger = {
+			OR = {
+				primary_title = { title = e_commonwealth }
+				top_liege = {
+				primary_title = { title = e_commonwealth }
+				}
+			}	
+		}
+	}
+	option = {
+		name = bloodlines7B
+		trigger = {
+			NOR = {
+				primary_title = { title = e_commonwealth }
+				top_liege = {
+				primary_title = { title = e_commonwealth }
+				}
+			}	
+			OR = {
+				culture = ugricbaltic
+				culture_group = baltic
+				culture = lietuvininkai
+				culture_group = west_slavic
+			}
+			religion_group=christian
+		}
+	}
+	option = {
+		name = bloodlines7C
+		trigger = {
+			NOR = {
+				primary_title = { title = e_commonwealth }
+				top_liege = {
+				primary_title = { title = e_commonwealth }
+				}
+			}
+			OR = {
+				culture = ugricbaltic
+				culture_group = baltic
+				culture = lietuvininkai
+				culture_group = west_slavic
+			}
+			NOT = { religion_group=christian }
+		}
+	}
+	option = {#None of the above
+		name = bloodlines7D
+		trigger = {
+			NOR = {
+				culture = ugricbaltic
+				culture_group = baltic
+				culture = lietuvininkai
+				culture_group = west_slavic
+			}
+		}
+	}	
+
 }
