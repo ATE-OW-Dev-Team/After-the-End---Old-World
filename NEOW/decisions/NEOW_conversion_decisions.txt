@@ -4173,3 +4173,323 @@ targeted_decisions = {
 		}
 	}
 }
+
+decisions = {
+	turk_renaissance = {
+		ai_check_interval = 120 #check only once every 120 months.
+		only_playable = yes
+		is_high_prio = yes
+		
+		potential = {
+			is_playable = yes
+			has_dlc = "Holy Fury"
+			OR = {
+				has_landed_title = e_ottoman
+				has_landed_title = e_turkish_republic
+				AND = {
+					has_landed_title = e_turkey
+					has_law = ze_administration_laws_2
+				}
+			}
+			OR = { 
+				culture = turkish
+				culture = egeli
+				culture = kapadokyali
+				culture = karadenizci 
+				culture = elbistanli
+				culture = rumeli
+			}
+			NOT = { government = chinese_imperial_government }
+			NOT = { has_global_flag = flag_started_turk_renaissance }
+			NOT = {
+				has_alternate_start_parameter = { key = culture_names value = random }
+			}
+		}
+		allow = {
+			show_only_failed_conditions = yes
+			ruled_years = 10
+			war = no
+		}
+		effect = {
+			set_global_flag = flag_started_turk_renaissance
+			culture = turk
+			hidden_tooltip = {
+				any_courtier_or_vassal = { 
+					limit = { lower_tier_than = COUNT }
+					culture = turk
+				}
+			}
+			capital_scope = { culture = turk }
+			custom_tooltip = {
+				text = tooltip_turk_culture_starts_spreading
+				hidden_tooltip = {
+					any_realm_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							culture = turk
+						}
+						if = {
+							limit = {
+								OR = {
+									culture = turkish
+									culture = egeli
+								}
+								NOT = { distance = { where = 333 distance = 100 } } 
+							}
+							random = { 
+								chance = 40 
+								culture = turk 
+							}
+						}
+						if = {
+							limit = {
+								OR = {
+									culture = kapadokyali
+									culture = karadenizci
+									culture = elbistanli
+									culture = rumeli
+								}							
+								NOT = { distance = { where = 333 distance = 200 } } 
+							}
+							random = {
+								chance = 20 
+								culture = turk 
+							}
+						}
+						if = {
+							limit = {
+								OR = {
+									culture = kapadokyali
+									culture = karadenizci
+									culture = elbistanli
+									culture = rumeli
+									
+								}							
+								NOT = { distance = { where = 333 distance = 400 } } 
+							}
+							random = { 
+								chance = 5
+								culture = turk 
+							}
+						}
+					}
+				}
+			}
+			hidden_tooltip = {
+				if = { #Turkish Emperor gets chance to spread their faith a bit alongside the culture.
+					limit = { religion = ROOT }
+					any_realm_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							religion = ROOT
+						}
+						if = {
+							limit = { 
+								culture = turk
+								NOT = { distance = { where = 333 distance = 100 } } 
+							}
+							random = { 
+								chance = 10 
+								religion = ROOT
+							}
+						}
+						if = {
+							limit = { 
+								culture = turk
+								NOT = { distance = { where = 333 distance = 200 } } 
+							}
+							random = { 
+								chance = 5 
+								religion = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 3
+				OR = {
+					culture = turkish
+					culture = egeli
+				}
+			}
+			modifier = {
+				factor = 2 
+				OR = {
+					culture = kapadokyali
+					culture = karadenizci
+					culture = elbistanli
+					culture = rumeli	
+				}
+			}
+		}
+	}
+	embrace_turk_culture = {
+		ai_check_interval = 120 #check only once every 120 months.
+		only_playable = yes
+		
+		potential = {
+			is_playable = yes
+			NOT = { culture = turk }
+			OR = {
+				culture = turkish
+				culture = egeli 
+				culture = kapadokyali
+				culture = karadenizci
+				culture = elbistanli
+				culture = rumeli
+			}
+			has_dlc = "Holy Fury"
+			NOT = { government = chinese_imperial_government }
+			has_global_flag = flag_started_turk_renaissance
+			NOT = {
+				has_alternate_start_parameter = { key = culture_names value = random }
+			}
+			top_liege = { 
+				OR = {
+					has_landed_title = e_ottoman
+					has_landed_title = e_turkish_republic
+					has_landed_title = e_turkey
+				}
+			}
+		}
+		allow = {
+			show_only_failed_conditions = yes
+			OR = {
+				culture = turkish
+				culture = egeli 
+				culture = kapadokyali
+				culture = karadenizci
+				culture = elbistanli
+				culture = rumeli
+			}
+		}
+		effect = {
+			culture = turk
+			hidden_tooltip = {
+				any_courtier_or_vassal = { 
+					limit = { lower_tier_than = COUNT }
+					culture = turk
+				}
+			}
+			capital_scope = { culture = turk }
+			custom_tooltip = {
+				text = tooltip_turk_culture_spreads
+				hidden_tooltip = {
+					any_demesne_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							culture = turk
+						}
+						if = {
+							limit = { 
+								OR = { 
+									culture = turkish
+									culture = egeli 
+								}
+								capital_scope = { NOT = { distance = { where = PREV distance = 100 } } } 
+							}
+							random = { 
+								chance = 40 
+								culture = turk
+							}
+						}
+						if = {
+							limit = { 
+								OR = {
+									culture = kapadokyali
+									culture = karadenizci
+									culture = elbistanli
+									culture = rumeli
+									}
+								capital_scope = { NOT = { distance = { where = PREV distance = 200 } } } 
+							}
+							random = { 
+								chance = 20 
+								culture = turk
+							}
+						}
+						if = {
+							limit = { 
+								OR = {
+									culture = kapadokyali
+									culture = karadenizci
+									culture = elbistanli
+									culture = rumeli
+									}
+								capital_scope = { NOT = { distance = { where = PREV distance = 400 } } } 
+							}
+							random = { 
+								chance = 5
+								culture = turk
+							}
+						}
+					}
+				}
+			}
+			if = { #Turkish Emperor gets chance to spread their faith a bit alongside the culture.
+				limit = { religion = ROOT }
+				hidden_tooltip = {
+					any_demesne_province = {
+						if = {
+							limit = { any_neighbor_province = { province = 333 } }
+							religion = ROOT
+						}
+						if = {
+							limit = { 
+								culture = turk
+								capital_scope = { NOT = { distance = { where = PREV distance = 100 } } } 
+							}
+							random = { 
+								chance = 10 
+								religion = ROOT
+							}
+						}
+						if = {
+							limit = { 
+								culture = turk
+								capital_scope = { NOT = { distance = { where = PREV distance = 200 } } } 
+							}
+							random = { 
+								chance = 5 
+								religion = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 3
+				OR = {
+					culture = turkish
+					culture = egeli
+				}
+			}
+			modifier = {
+				factor = 3
+				capital_scope = { culture = turk } 
+			}
+			modifier = {
+				factor = 2 
+				OR = {
+					culture = kapadokyali
+					culture = karadenizci
+					culture = elbistanli
+					culture = rumeli
+				}
+			}
+		}
+	}
+}

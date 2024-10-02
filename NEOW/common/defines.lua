@@ -1231,8 +1231,8 @@ NMilitary = {
 	MAX_LEVY_RAISE_OPINION_THRESHOLD = 100,			-- Above this opinion value you'll get the max amount of troops possible
 	MIN_LEVIES_ABOVE_OPINION_THRESHOLD = 0,			-- The minimum percentage of levies that will be provided if opinion is above threshold
 	LEVY_PERCENT_BEFORE_CAN_RAISE = 1.1,			-- Needs at least this much % of full levy before we can raise it again, not used in vanilla anymore
-	ATTACKER_SIEGE_DAMAGE = 0.35,						-- damage done to attackers by defenders when not sallying
-	DEFENDER_SIEGE_DAMAGE = 0.02,						-- damage done to defenders by attackers when not sallying
+	ATTACKER_SIEGE_DAMAGE = 0.4,						-- damage done to attackers by defenders when not sallying
+	DEFENDER_SIEGE_DAMAGE = 0.04,						-- damage done to defenders by attackers when not sallying
 	PERCENT_OF_GARRISON_DETACHED = 0.1,				-- This percent of the garrison is detached from the winning unit of a siege
 	NUM_DAYS_BETWEEN_SIEGE_MORALE_LOSS = 12,		-- Number of days between morale loss for defender in a siege
 	SIEGE_MORALE_LOSS = 0.5,										-- Base monthly morale loss in a siege
@@ -1577,15 +1577,15 @@ NGraphics = {
 },
 
 NEngine = {
-	EVENT_PROCESS_OFFSET = 90, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
-	COURTIER_EVENT_PROCESS_OFFSET = 230, 	 -- Events are checked every X day for courtiers. Max value of 255
+	EVENT_PROCESS_OFFSET = 145, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
+	COURTIER_EVENT_PROCESS_OFFSET = 254, 	 -- Events are checked every X day for courtiers. Max value of 255
 	COURTIERS_MTTTH_EVENTS = 1,  -- Toggles if courtiers are allowed to run MTTH events or not
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_YEAR = 1066, -- The missing scripted successor error will not be shown before this date
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_MONTH = 8,
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_DAY = 16,
 	COURT_PRUNE_SIZE = 1, 				-- Courts larger than this will be checked for pruning each month
-	PRUNE_MINIMAL_AGE = 25,				-- Minimum age for a courtier to be prunable if considered irrelevant
-	HEALTH_IMMUNITY_TO_PRUNING = 6,		-- If a character has that much health, they won't be pruned
+	PRUNE_MINIMAL_AGE = 20,				-- Minimum age for a courtier to be prunable if considered irrelevant
+	HEALTH_IMMUNITY_TO_PRUNING = 5,		-- If a character has that much health, they won't be pruned
 },
 
 NAI =
