@@ -1,0 +1,1063 @@
+namespace = WARLORDISM
+
+####
+character_event = {
+	id = WARLORDISM.999 
+	
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		primary_title = {
+			higher_real_tier_than = BARON
+			temporary = no
+			is_nomadic = no
+		}
+		is_nomadic = no
+		NOR = {
+			government = oligarchic_republic
+			government = merchant_republic_government
+		}
+		OR = {
+			religion = zarist
+			religion = katerinist
+			religion = petrist
+			religion = stalinist
+			religion = leninist
+			religion = trotskyite
+			religion = titoist
+		}
+		independent = yes
+	}
+	
+	immediate = {
+		primary_title = { save_event_target_as = warlordpowerlevel_title }
+		
+		character_event = { id = WARLORDISM.1001 days = 1 }
+		
+		# remove the corruption modifier from the former owner, if alive
+	}
+}
+
+# Main corruption event upon an imperial title being inherited/usurped
+# ROOT is the character, FROM is the title, FROMFROM is the old holder
+character_event = {
+	id = WARLORDISM.1000 
+	
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		AND = {
+			FROMFROM = { always = yes } #If there is a FROMFROM
+			FROM = {
+				primary_title = {
+					higher_real_tier_than = BARON
+					temporary = no
+					is_nomadic = no
+				}
+				is_nomadic = no
+				NOR = {
+					government = oligarchic_republic
+					government = merchant_republic_government
+				}
+				OR = {
+					religion = zarist
+					religion = katerinist
+					religion = petrist
+					religion = stalinist
+					religion = leninist
+					religion = trotskyite
+					religion = titoist
+				}
+				independent = yes
+			}
+			is_nomadic = no
+		}
+	}
+	
+	immediate = {
+		FROM = { save_event_target_as = warlordpowerlevel_title }
+		
+		character_event = { id = WARLORDISM.1001 days = 1 }
+		
+		# remove the corruption modifier from the former owner, if alive
+		FROMFROM = {
+			if = {
+				limit = {
+					is_alive = yes
+					lower_tier_than = COUNT
+				}
+				remove_character_modifier = warlordpowerlevel_0
+				remove_character_modifier = warlordpowerlevel_1
+				remove_character_modifier = warlordpowerlevel_2
+				remove_character_modifier = warlordpowerlevel_3
+				remove_character_modifier = warlordpowerlevel_4
+				remove_character_modifier = warlordpowerlevel_5
+				remove_character_modifier = warlordpowerlevel_6
+				remove_character_modifier = warlordpowerlevel_7
+				remove_character_modifier = warlordpowerlevel_8
+				remove_character_modifier = warlordpowerlevel_9
+				remove_character_modifier = warlordpowerlevel_10
+			}
+		}
+	}
+}
+
+# ROOT/FROM is the character, FROMFROM is the title, FROMFROMFROM is the old holder
+character_event = {
+	id = WARLORDISM.1001
+	
+	hide_window = yes
+	is_triggered_only = yes
+	only_rulers = yes
+	
+	trigger = {
+		has_landed_title = event_target:warlordpowerlevel_title
+		is_nomadic = no
+	}
+	
+	immediate = {
+		event_target:warlordpowerlevel_title = {
+			
+			# reset the corruption value to 0, in case it's negative
+			if = {
+				limit = { NOT = { check_variable = { which = "warlordpowerlevel" value = 0.5 } } }
+				set_variable = { which = "warlordpowerlevel" value = 0 }
+			}
+			
+			# set new ruler corruption to 0
+			set_variable = { which = "warlordpowerlevel" value = 0 }
+			
+			#determine how much the realm size should change it
+			if = {
+				limit = { ROOT = { real_tier = COUNT } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { real_tier = DUKE } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 15 } #5
+			}
+			if = {
+				limit = { ROOT = { real_tier = KING } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 20 } #5
+			}
+			if = {
+				limit = { ROOT = { real_tier = EMPEROR } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 25 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 4 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 8 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 12 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 16 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 20 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 24 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 28 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 32 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 1000 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 1500 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 2000 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 2500 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 3000 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 3500 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 4000 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 4500 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 5000 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 5500 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 6000 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 6500 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 7000 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 7500 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_size = 15 } } } #15 counties
+				change_variable = { which = "warlordpowerlevel" value = -5 } #15
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_size = 30 } } } #15 counties
+				change_variable = { which = "warlordpowerlevel" value = -5 } #15
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_size = 45 } } } #15 counties
+				change_variable = { which = "warlordpowerlevel" value = -5 } #15
+			}
+			if = {
+				limit = { ROOT = { realm_size = 90 } } #30 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #20
+			}
+			if = {
+				limit = { ROOT = { realm_size = 180 } } #60 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #25
+			}
+			if = {
+				limit = { ROOT = { realm_size = 270 } } #90 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #30
+			}
+			if = {
+				limit = { ROOT = { realm_size = 450 } } #150 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #35
+			}
+			if = {
+				limit = { ROOT = { realm_size = 600 } } #200 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #40
+			}
+			if = {
+				limit = { ROOT = { realm_size = 750 } } #250 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #45
+			}
+			if = {
+				limit = { ROOT = { realm_size = 900 } } #300 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #50
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1050 } } #350 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #55
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1200 } } #400 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #60
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1350 } } #450 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #65
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1500 } } #500 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #70
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1650 } } #550 counties 
+				change_variable = { which = "warlordpowerlevel" value = 5 } #75
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1800 } } #600 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #80
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2100 } } #700 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #85
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2400 } } #800 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #90
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2700 } } #900 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #95
+			}
+			if = {
+				limit = { ROOT = { realm_size = 3000 } } #1000 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #98
+			}
+			
+			#Check realm Martial
+			if = {
+				limit = { ROOT = { realm_martial = 10 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { realm_martial = 15 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { realm_martial = 20 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { realm_martial = 25 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { realm_martial = 30 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			#Check realm Martial
+			if = {
+				limit = { ROOT = { combat_rating = 25 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { combat_rating = 50 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { combat_rating = 75 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { combat_rating = 100 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { combat_rating = 125 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { trait = ambitious } }
+				change_variable = { which = "warlordpowerlevel" value = 15 }
+			}
+			if = {
+				limit = { ROOT = { trait = genius } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { trait = quick } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { trait = shrewd } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { trait = patient } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = wroth } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = proud } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = diligent } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = brave } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = cruel } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = zealous } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = strategist } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = duelist } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = gamer } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = strong } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = robust } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = sturdy } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = craven } }
+				change_variable = { which = "warlordpowerlevel" value = -5 }
+			}
+			if = {
+				limit = { check_variable = { which = "warlordpowerlevel" value = 100.5 } }
+				set_variable = { which = "warlordpowerlevel" value = 100 }
+			}
+			if = {
+				limit = { NOT = { check_variable = { which = "warlordpowerlevel" value = 0.5 } } }
+				set_variable = { which = "warlordpowerlevel" value = 0 }
+			}
+		}
+		
+		# change the corruption modifier
+		character_event = { id = WARLORDISM.1002 }
+		clear_event_target = warlordpowerlevel_title
+	}
+}
+
+# Notification of corruption change and adding the proper corruption modifier
+character_event = {
+	id = WARLORDISM.1002
+	desc = EVTDESC_WARLORDISM.1002
+	picture = "GFX_evt_diplomat_hf"
+	
+	is_triggered_only = yes
+	notification = yes
+	
+	immediate = {
+		# remove old corruption modifier and add the new one
+		remove_character_modifier = warlordpowerlevel_0
+		remove_character_modifier = warlordpowerlevel_1
+		remove_character_modifier = warlordpowerlevel_2
+		remove_character_modifier = warlordpowerlevel_3
+		remove_character_modifier = warlordpowerlevel_4
+		remove_character_modifier = warlordpowerlevel_5
+		remove_character_modifier = warlordpowerlevel_6
+		remove_character_modifier = warlordpowerlevel_7
+		remove_character_modifier = warlordpowerlevel_8
+		remove_character_modifier = warlordpowerlevel_9
+		remove_character_modifier = warlordpowerlevel_10
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "warlordpowerlevel" value = 0 }
+					NOT = { check_variable = { which = "warlordpowerlevel" value = 5 } }
+				}
+			}
+			add_character_modifier = {
+				name = warlordpowerlevel_0
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "warlordpowerlevel" value = 5 }
+					NOT = { check_variable = { which = "warlordpowerlevel" value = 15 } }
+				}
+			}
+			add_character_modifier = {
+				name = warlordpowerlevel_1
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "warlordpowerlevel" value = 15 }
+					NOT = { check_variable = { which = "warlordpowerlevel" value = 25 } }
+				}
+			}
+			add_character_modifier = {
+				name = warlordpowerlevel_2
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "warlordpowerlevel" value = 25 }
+					NOT = { check_variable = { which = "warlordpowerlevel" value = 35 } }
+				}
+			}
+			add_character_modifier = {
+				name = warlordpowerlevel_3
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "warlordpowerlevel" value = 35 }
+					NOT = { check_variable = { which = "warlordpowerlevel" value = 45 } }
+				}
+			}
+			add_character_modifier = {
+				name = warlordpowerlevel_4
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "warlordpowerlevel" value = 45 }
+					NOT = { check_variable = { which = "warlordpowerlevel" value = 55 } }
+				}
+			}
+			add_character_modifier = {
+				name = warlordpowerlevel_5
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "warlordpowerlevel" value = 55 }
+					NOT = { check_variable = { which = "warlordpowerlevel" value = 65 } }
+				}
+			}
+			add_character_modifier = {
+				name = warlordpowerlevel_6
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "warlordpowerlevel" value = 65 }
+					NOT = { check_variable = { which = "warlordpowerlevel" value = 75 } }
+				}
+			}
+			add_character_modifier = {
+				name = warlordpowerlevel_7
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "warlordpowerlevel" value = 75 }
+					NOT = { check_variable = { which = "warlordpowerlevel" value = 85 } }
+				}
+			}
+			add_character_modifier = {
+				name = warlordpowerlevel_8
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "warlordpowerlevel" value = 85 }
+					NOT = { check_variable = { which = "warlordpowerlevel" value = 95 } }
+				}
+			}
+			add_character_modifier = {
+				name = warlordpowerlevel_9
+				duration = -1
+			}
+		} 
+		if = {
+			limit = {
+				primary_title = {
+					check_variable = { which = "warlordpowerlevel" value = 95 }
+				}
+			}
+			add_character_modifier = {
+				name = warlordpowerlevel_10
+				duration = -1
+			}
+		} 
+	}
+	
+	option = {
+		name = "OK"
+	}
+}
+
+###Setup corruption at startup
+character_event = {
+	id = WARLORDISM.1003
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		OR = {
+			ROOT = {
+				primary_title = {
+					higher_real_tier_than = BARON
+					temporary = no
+					is_nomadic = no
+				}
+				is_nomadic = no
+				NOR = {
+					government = oligarchic_republic
+					government = merchant_republic_government
+				}
+
+				OR = {
+					religion = zarist
+					religion = katerinist
+					religion = petrist
+					religion = stalinist
+					religion = leninist
+					religion = trotskyite
+					religion = titoist
+				}
+				independent = yes
+			}
+			FROM = {
+				primary_title = {
+					higher_real_tier_than = BARON
+					temporary = no
+					is_nomadic = no
+				}
+				is_nomadic = no
+				NOR = {
+					government = oligarchic_republic
+					government = merchant_republic_government
+				}
+				OR = {
+					religion = zarist
+					religion = katerinist
+					religion = petrist
+					religion = stalinist
+					religion = leninist
+					religion = trotskyite
+					religion = titoist
+				}
+				independent = yes
+			}
+		}
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				primary_title = {
+					higher_real_tier_than = BARON
+					temporary = no
+					is_nomadic = no
+				}
+				is_nomadic = no
+				NOR = {
+					government = oligarchic_republic
+					government = merchant_republic_government
+				}
+				OR = {
+					religion = zarist
+					religion = katerinist
+					religion = petrist
+					religion = stalinist
+					religion = leninist
+					religion = trotskyite
+					religion = titoist
+				}
+				independent = yes
+			}
+			primary_title = { save_event_target_as = warlordpowerlevel_title }
+			character_event = { id = WARLORDISM.1004 days = 1 }
+		}
+		if = {
+			limit = {
+				FROM = {
+					primary_title = {
+						higher_real_tier_than = BARON
+						temporary = no
+						is_nomadic = no
+					}
+					is_nomadic = no
+					NOR = {
+						government = oligarchic_republic
+						government = merchant_republic_government
+					}
+					OR = {
+						religion = zarist
+						religion = katerinist
+						religion = petrist
+						religion = stalinist
+						religion = leninist
+						religion = trotskyite
+						religion = titoist
+					}
+					independent = yes
+				}
+			}
+			FROM = {
+				primary_title = { save_event_target_as = warlordpowerlevel_title }
+				character_event = { id = WARLORDISM.1004 days = 1 }
+			}
+		}
+	}
+}
+
+
+character_event = {
+	id = WARLORDISM.1004
+	
+	hide_window = yes
+	is_triggered_only = yes
+	only_rulers = yes
+	
+	trigger = {
+		has_landed_title = event_target:warlordpowerlevel_title
+		is_nomadic = no
+	}
+	
+	immediate = {
+		event_target:warlordpowerlevel_title = {
+			
+			# reset the corruption value to 0, in case it's negative
+			if = {
+				limit = { NOT = { check_variable = { which = "warlordpowerlevel" value = 0.5 } } }
+				set_variable = { which = "warlordpowerlevel" value = 0 }
+			}
+			
+			# set new ruler corruption to 0
+			set_variable = { which = "warlordpowerlevel" value = 0 }
+			
+			#determine how much the realm size should change it
+			if = {
+				limit = { ROOT = { real_tier = COUNT } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { real_tier = DUKE } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 15 } #5
+			}
+			if = {
+				limit = { ROOT = { real_tier = KING } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 20 } #5
+			}
+			if = {
+				limit = { ROOT = { real_tier = EMPEROR } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 25 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 4 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 8 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 12 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 16 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 20 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 24 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 28 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { any_tributary = { count = 32 } } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 1000 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 1500 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 2000 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 2500 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 3000 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 3500 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 4000 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 4500 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 5000 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 5500 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 6000 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 6500 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 7000 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { ROOT = { prestige = 7500 } } #4 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #5
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_size = 15 } } } #15 counties
+				change_variable = { which = "warlordpowerlevel" value = -5 } #15
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_size = 30 } } } #15 counties
+				change_variable = { which = "warlordpowerlevel" value = -5 } #15
+			}
+			if = {
+				limit = { NOT = { ROOT = { realm_size = 45 } } } #15 counties
+				change_variable = { which = "warlordpowerlevel" value = -5 } #15
+			}
+			if = {
+				limit = { ROOT = { realm_size = 90 } } #30 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #20
+			}
+			if = {
+				limit = { ROOT = { realm_size = 180 } } #60 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #25
+			}
+			if = {
+				limit = { ROOT = { realm_size = 270 } } #90 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #30
+			}
+			if = {
+				limit = { ROOT = { realm_size = 450 } } #150 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #35
+			}
+			if = {
+				limit = { ROOT = { realm_size = 600 } } #200 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #40
+			}
+			if = {
+				limit = { ROOT = { realm_size = 750 } } #250 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #45
+			}
+			if = {
+				limit = { ROOT = { realm_size = 900 } } #300 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #50
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1050 } } #350 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #55
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1200 } } #400 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #60
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1350 } } #450 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #65
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1500 } } #500 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #70
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1650 } } #550 counties 
+				change_variable = { which = "warlordpowerlevel" value = 5 } #75
+			}
+			if = {
+				limit = { ROOT = { realm_size = 1800 } } #600 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #80
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2100 } } #700 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #85
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2400 } } #800 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #90
+			}
+			if = {
+				limit = { ROOT = { realm_size = 2700 } } #900 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #95
+			}
+			if = {
+				limit = { ROOT = { realm_size = 3000 } } #1000 counties
+				change_variable = { which = "warlordpowerlevel" value = 5 } #98
+			}
+			
+			#Check realm Martial
+			if = {
+				limit = { ROOT = { realm_martial = 10 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { realm_martial = 15 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { realm_martial = 20 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { realm_martial = 25 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { realm_martial = 30 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			#Check realm Martial
+			if = {
+				limit = { ROOT = { combat_rating = 25 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { combat_rating = 50 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { combat_rating = 75 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { combat_rating = 100 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { combat_rating = 125 } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { trait = ambitious } }
+				change_variable = { which = "warlordpowerlevel" value = 15 }
+			}
+			if = {
+				limit = { ROOT = { trait = genius } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { trait = quick } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { trait = shrewd } }
+				change_variable = { which = "warlordpowerlevel" value = 10 }
+			}
+			if = {
+				limit = { ROOT = { trait = patient } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = wroth } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = proud } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = diligent } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = brave } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = cruel } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = zealous } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = strategist } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = duelist } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = gamer } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = strong } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = robust } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = sturdy } }
+				change_variable = { which = "warlordpowerlevel" value = 5 }
+			}
+			if = {
+				limit = { ROOT = { trait = craven } }
+				change_variable = { which = "warlordpowerlevel" value = -5 }
+			}
+			if = {
+				limit = { check_variable = { which = "warlordpowerlevel" value = 100.5 } }
+				set_variable = { which = "warlordpowerlevel" value = 100 }
+			}
+			if = {
+				limit = { NOT = { check_variable = { which = "warlordpowerlevel" value = 0.5 } } }
+				set_variable = { which = "warlordpowerlevel" value = 0 }
+			}
+		}
+		
+		# change the corruption modifier
+		character_event = { id = WARLORDISM.1002 }
+		clear_event_target = warlordpowerlevel_title
+	}
+}
