@@ -583,7 +583,6 @@ character_event = {
 	id = cleanup.9990
 	hide_window = yes
 	only_rulers = yes
-	only_independent = yes
 	trigger = {
 		real_tier = KING
 		NOT = {
@@ -2077,7 +2076,10 @@ character_event = {
 	hide_window = yes
 	
 	trigger = {
-		has_job_title = job_marshal
+		OR = {
+			has_job_title = job_marshal
+			has_minor_title = title_commander
+		}
 		NOR = {
 			trait = marshal_4
 			trait = diplomat_1
@@ -2376,7 +2378,10 @@ character_event = {
 	hide_window = yes
 	
 	trigger = {
-		has_job_title = job_treasurer
+		OR = {
+			has_job_title = job_treasurer
+			has_minor_title = title_master_of_the_audit
+		}
 		NOR = {
 			trait = steward_4
 			trait = diplomat_1
@@ -6598,6 +6603,52 @@ province_event = {
 	}
 	immediate={
 		remove_province_modifier = thelemic_peasant_unrest
+	}
+}
+
+province_event = {
+	id = cleanup.46
+	hide_window = yes	
+	
+	trigger = {
+		religion = risala
+		owner = {
+			NOT = {
+				religion = muslim
+			}
+		}
+		NOT = {
+			has_province_modifier = risala_peasant_unrest
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	immediate={
+		add_province_modifier = {
+			name = risala_peasant_unrest
+			duration = -1
+		}
+	}
+}
+province_event = {
+	id = cleanup.47
+	hide_window = yes	
+	
+	trigger = {
+		OR = {
+			owner = {
+				religion = muslim
+			}
+			NOT = { religion = risala }
+		}
+		has_province_modifier = risala_peasant_unrest
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	immediate={
+		remove_province_modifier = risala_peasant_unrest
 	}
 }
 province_event = {
