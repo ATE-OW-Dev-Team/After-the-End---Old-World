@@ -1,0 +1,552 @@
+namespace = edu
+
+#Child learns trait from educator
+character_event = {
+    id = edu.1
+
+	capable_only = yes
+	prisoner = no
+    
+	hide_window = yes
+	is_triggered_only = yes
+
+
+    trigger = {
+        age = 14
+        educator = {
+            lifestyle_traits = 1
+        }
+		NOT = { is_inaccessible_trigger = yes }
+		is_ill = no
+		NOT = { has_character_flag = is_child_of_destiny }
+        has_dlc = "Way of Life"
+    }
+
+    immediate = {
+        random_list = {
+            #administrator
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = administrator } }
+                }
+                set_character_flag = learns_administrator
+            }
+            #architect
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = architect } }
+                }
+                set_character_flag = learns_architect
+            }
+            #duelist
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = duelist } }
+                }
+                set_character_flag = learns_duelist
+            }
+            #gamer
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = gamer } }
+                }
+                set_character_flag = learns_gamer
+            }
+            #gardener
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = gardener } }
+                }
+                set_character_flag = learns_gardener
+            }
+            #hedonist
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = hedonist } }
+                }
+                set_character_flag = learns_hedonist
+            }
+            #hunter
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = hunter } }
+                }
+                set_character_flag = learns_hunter
+            }
+            #impaler
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = impaler } }
+                }
+                set_character_flag = learns_impaler
+            }
+            #schemer
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = schemer } }
+                }
+                set_character_flag = learns_schemer
+            }
+            #seduction
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { 
+                        NOR = { 
+                            trait = seductress
+                            trait = seducer
+                        } 
+                    }
+                }
+                set_character_flag = learns_seduction
+            }
+            #mystic
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = mystic } }
+                }
+                set_character_flag = learns_mystic
+            }
+            #scholar
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = scholar } }
+                }
+                set_character_flag = learns_scholar
+            }
+            #socializer
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = socializer } }
+                }
+                set_character_flag = learns_socializer
+            }
+            #strategist
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = strategist } }
+                }
+                set_character_flag = learns_strategist
+            }
+            #theologian
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = theologian } }
+                }
+                set_character_flag = learns_theologian
+            }
+            #poet
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = poet } }
+                }
+                set_character_flag = learns_poet
+            }
+            #falconer
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = falconer } }
+                }
+                set_character_flag = learns_falconer
+            }
+            #drunkard
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = drunkard } }
+                }
+                set_character_flag = learns_drunkard
+            }
+            #vegetarian
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = vegetarian } }
+                }
+                set_character_flag = learns_vegetarian
+            }
+            #fisher
+            10 = {
+                modifier = {
+                    factor = 0
+                    educator = { NOT = { trait = fisher } }
+                }
+                set_character_flag = learns_fisher
+            }
+        }
+        if = {
+            limit = {
+                educator = { 
+                    NOR = { 
+                        trait = slothful 
+                        trait = content
+                    } 
+                }
+            }
+            educator = { character_event = { id = edu.2 } } # Educator may intervene
+            break = yes
+        }
+        character_event = { id = edu.3 } # Go straight to trait change
+    }
+}
+
+#Educator Intervention
+character_event = {
+    id = edu.2
+	picture = GFX_evt_courtiers_talking
+	desc = EVTDESCA_EDU_2
+    border = GFX_event_normal_frame_diplomacy
+
+    is_triggered_only = yes
+
+    option = { # No intervention
+        name = EVTOPTA_EDU_2
+        custom_tooltip = { text = child_lifestyle_no_intervention }
+        FROM = { character_event = { id = edu.3 days = 10 } }
+    }
+    option = { # Try to stop it
+        name = EVTOPTB_EDU_2
+        custom_tooltip = { text = child_lifestyle_intervention }
+        FROM = { character_event = { id = edu.4 days = 10 random = 5 } }
+    }
+}
+
+#Child gets trait
+character_event = {
+    id = edu.3
+    desc = EVTDESCA_EDU_3
+	picture = GFX_evt_courtiers_talking
+    border = GFX_event_normal_frame_diplomacy
+
+    is_triggered_only = yes
+
+    option = {
+        name = EVTOPTA_EDU_3
+        trigger = {
+            has_character_flag = learns_administrator
+        }
+        clr_character_flag = learns_administrator
+        add_trait = administrator
+    }
+    option = {
+        name = EVTOPTB_EDU_3
+        trigger = {
+            has_character_flag = learns_architect
+        }
+        clr_character_flag = learns_architect
+        add_trait = architect
+    }
+    option = {
+        name = EVTOPTC_EDU_3
+        trigger = {
+            has_character_flag = learns_duelist
+        }
+        clr_character_flag = learns_duelist
+        add_trait = duelist
+    }
+    option = {
+        name = EVTOPTD_EDU_3
+        trigger = {
+            has_character_flag = learns_gamer
+        }
+        clr_character_flag = learns_gamer
+        add_trait = gamer
+    }
+    option = {
+        name = EVTOPTE_EDU_3
+        trigger = {
+            has_character_flag = learns_gardener
+        }
+        clr_character_flag = learns_gardener
+        add_trait = gardener
+    }
+    option = {
+        name = EVTOPTF_EDU_3
+        trigger = {
+            has_character_flag = learns_hedonist
+        }
+        clr_character_flag = learns_hedonist
+        add_trait = hedonist
+    }
+    option = {
+        name = EVTOPTG_EDU_3
+        trigger = {
+            has_character_flag = learns_hunter
+        }
+        clr_character_flag = learns_hunter
+        add_trait = hunter
+    }
+    option = {
+        name = EVTOPTH_EDU_3
+        trigger = {
+            has_character_flag = learns_impaler
+        }
+        clr_character_flag = learns_impaler
+        add_trait = impaler
+    }
+    option = {
+        name = EVTOPTI_EDU_3
+        trigger = {
+            has_character_flag = learns_schemer
+        }
+        clr_character_flag = learns_schemer
+        add_trait = schemer
+    }
+    option = {
+        name = EVTOPTJ_EDU_3
+        trigger = {
+            has_character_flag = learns_mystic
+        }
+        clr_character_flag = learns_mystic
+        add_trait = mystic
+    }
+    option = {
+        name = EVTOPTK_EDU_3
+        trigger = {
+            has_character_flag = learns_scholar
+        }
+        clr_character_flag = learns_scholar
+        add_trait = scholar
+    }
+    option = {
+        name = EVTOPTL_EDU_3
+        trigger = {
+            has_character_flag = learns_socializer
+        }
+        clr_character_flag = learns_socializer
+        add_trait = socializer
+    }
+    option = {
+        name = EVTOPTM_EDU_3
+        trigger = {
+            has_character_flag = learns_strategist
+        }
+        clr_character_flag = learns_strategist
+        add_trait = strategist
+    }
+    option = {
+        name = EVTOPTN_EDU_3
+        trigger = {
+            has_character_flag = learns_theologian
+        }
+        clr_character_flag = learns_theologian
+        add_trait = theologian
+    }
+    option = {
+        name = EVTOPTO_EDU_3
+        trigger = {
+            has_character_flag = learns_poet
+        }
+        clr_character_flag = learns_poet
+        add_trait = poet
+    }
+    option = {
+        name = EVTOPTP_EDU_3
+        trigger = {
+            has_character_flag = learns_falconer
+        }
+        clr_character_flag = learns_falconer
+        add_trait = falconer
+    }
+    option = {
+        name = EVTOPTQ_EDU_3
+        trigger = {
+            has_character_flag = learns_drunkard
+        }
+        clr_character_flag = learns_drunkard
+        add_trait = drunkard
+    }
+    option = {
+        name = EVTOPTR_EDU_3
+        trigger = {
+            has_character_flag = learns_vegetarian
+        }
+        clr_character_flag = learns_vegetarian
+        add_trait = vegetarian
+    }
+    option = {
+        name = EVTOPTS_EDU_3
+        trigger = {
+            has_character_flag = learns_fisher
+        }
+        clr_character_flag = learns_fisher
+        add_trait = fisher
+    }
+    option = {
+        name = EVTOPTT_EDU_3
+        trigger = {
+            has_character_flag = learns_seduction
+            OR = {
+                female = yes
+                AND = {
+                    female = no
+                    trait = homosexual
+                }
+            }
+        }
+        clr_character_flag = learns_seduction
+        if = {
+            limit = {
+                female = yes
+            }
+            add_trait = seductress
+        }
+        else = {
+            add_trait = seducer
+        }
+    }
+    option = {
+        name = EVTOPTU_EDU_3
+        trigger = {
+            has_character_flag = learns_seduction
+            OR = {
+                female = no
+                AND = {
+                    female = yes
+                    trait = homosexual
+                }
+            }
+        }
+        clr_character_flag = learns_seduction
+        if = {
+            limit = {
+                female = yes
+            }
+            add_trait = seductress
+        }
+        else = {
+            add_trait = seducer
+        }
+    }
+}
+
+#Child might lose trait
+character_event = {
+    id = edu.4
+
+    hide_window = yes 
+
+    is_triggered_only = yes
+
+    immediate = {
+        random_list = {
+            30 = { # doesn't lose it
+                modifier = {
+                    factor = 1.5
+                    trait = stubborn
+                }
+                modifier = {
+                    factor = 1.2
+                    trait = ambitious
+                }
+                modifier = {
+                    factor = 1.2
+                    trait = brave
+                }
+                modifier = {
+                    factor = 1.2
+                    trait = deceitful
+                }
+                modifier = {
+                    factor = 1.1
+                    trait = proud
+                }
+                modifier = {
+                    factor = 1.1
+                    trait = patient
+                }
+                modifier = {
+                    factor = 1.1
+                    trait = paranoid
+                }
+                modifier = {
+                    factor = 0.8
+                    trait = content
+                }
+                modifier = {
+                    factor = 0.8
+                    trait = trusting
+                }
+                modifier = {
+                    factor = 0.8
+                    trait = shy
+                }
+                modifier = {
+                    factor = 0.5
+                    trait = craven
+                }
+                character_event = { id = edu.3 }
+            }
+            70 = { # Loses it
+                modifier = {
+                    factor = 1.5
+                    FROM = { trait = stubborn }
+                }
+                modifier = {
+                    factor = 1.5
+                    FROM = { trait = ambitious }
+                }
+                modifier = {
+                    factor = 1.2
+                    FROM = { trait = deceitful }
+                }
+                modifier = {
+                    factor = 1.2
+                    FROM = { trait = cruel }
+                }
+                modifier = {
+                    factor = 1.1
+                    FROM = { trait = patient }
+                }
+                modifier = {
+                    factor = 0.9
+                    FROM = { trait = wroth }
+                }
+                modifier = {
+                    factor = 0.8
+                    FROM = { trait = kind }
+                }
+                modifier = {
+                    factor = 0.8
+                    FROM = { trait = shy }
+                }
+                clr_character_flag = learns_administrator
+                clr_character_flag = learns_architect
+                clr_character_flag = learns_duelist
+                clr_character_flag = learns_gamer
+                clr_character_flag = learns_gardener
+                clr_character_flag = learns_hedonist
+                clr_character_flag = learns_hunter
+                clr_character_flag = learns_impaler
+                clr_character_flag = learns_schemer
+                clr_character_flag = learns_seduction
+                clr_character_flag = learns_mystic
+                clr_character_flag = learns_scholar
+                clr_character_flag = learns_strategist
+                clr_character_flag = learns_socializer
+                clr_character_flag = learns_theologian
+                clr_character_flag = learns_poet
+                clr_character_flag = learns_falconer
+                clr_character_flag = learns_drunkard
+                clr_character_flag = learns_vegetarian
+                clr_character_flag = learns_fisher
+            }
+        }
+    }
+}
