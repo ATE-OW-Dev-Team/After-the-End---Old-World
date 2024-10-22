@@ -268,10 +268,36 @@ force_vassalization = { # New2
 		check_if_crusader_trigger = yes
 		FROM = {
 			show_scope_change = no
-			religion_group = ROOT
+			
+			conditional_tooltip = {
+				trigger = { 
+					NOT = {
+						ROOT = { trait = conqueror }
+					}
+				}
+				religion_group = ROOT
+			}
+			conditional_tooltip = {
+				trigger = { 
+					ROOT = { trait = conqueror }
+				}
+				ROOT = {
+					show_scope_change = no
+					OR = {
+						prestige = 100
+						custom_tooltip = { 
+							text = tooltip_antagonize_vassalize_claim 
+							hidden_tooltip = { has_opinion_modifier = { who = FROM modifier = opinion_antagonize_vassalize_claim } } 
+						}
+					}
+				}
+			}
 			conditional_tooltip = {
 				trigger = { 
 					tier = COUNT
+					NOT = {
+						ROOT = { trait = conqueror }
+					}
 				}
 				ROOT = {
 					show_scope_change = no
@@ -287,6 +313,9 @@ force_vassalization = { # New2
 			conditional_tooltip = {
 				trigger = { 
 					tier = DUKE
+					NOT = {
+						ROOT = { trait = conqueror }
+					}
 				}
 				ROOT = {
 					show_scope_change = no
@@ -302,6 +331,9 @@ force_vassalization = { # New2
 			conditional_tooltip = {
 				trigger = { 
 					tier = KING
+					NOT = {
+						ROOT = { trait = conqueror }
+					}
 				}
 				ROOT = {
 					show_scope_change = no
@@ -321,6 +353,17 @@ force_vassalization = { # New2
 		FROM = {
 			if = {
 				limit = {
+					ROOT = {
+						trait = conqueror
+					}					
+					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_antagonize_vassalize_claim } } 
+				}
+				ROOT = {
+					prestige = -100
+				}
+			}
+			else_if = {
+				limit = {
 					tier = COUNT					
 					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_antagonize_vassalize_claim } } 
 				}
@@ -328,7 +371,7 @@ force_vassalization = { # New2
 					prestige = -250
 				}
 			}
-			if = {
+			else_if = {
 				limit = {
 					tier = DUKE
 					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_antagonize_vassalize_claim } } 
@@ -337,7 +380,7 @@ force_vassalization = { # New2
 					prestige = -1000
 				}
 			}
-			if = {
+			else_if = {
 				limit = {
 					tier = KING
 					NOT = { reverse_has_opinion_modifier = { who = ROOT modifier = opinion_antagonize_vassalize_claim } } 
@@ -346,7 +389,7 @@ force_vassalization = { # New2
 					prestige = -2500
 				}
 			}
-			if = {
+			else_if = {
 				limit = {
 					reverse_has_opinion_modifier = { who = ROOT modifier = opinion_antagonize_vassalize_claim }
 				}
@@ -404,16 +447,30 @@ force_vassalization = { # New2
 		
 		FROM = {
 			lower_tier_than = ROOT
-			NOT = {
-				realm_size = 31
+			conditional_tooltip = {
+				trigger = { 
+					NOT = {
+						ROOT = { trait = conqueror }
+					}
+				}
+				NOT = {
+					realm_size = 31
+				}
 			}
 			in_revolt = no
 			is_nomadic = no
 			controls_religion = no
 			holy_order = no
-			OR = {
-				religion = ROOT
-				culture_group = ROOT
+			conditional_tooltip = {
+				trigger = { 
+					NOT = {
+						ROOT = { trait = conqueror }
+					}
+				}
+				OR = {
+					religion = ROOT
+					culture_group = ROOT
+				}
 			}
 			shares_realm_border_with = ROOT
 		}
