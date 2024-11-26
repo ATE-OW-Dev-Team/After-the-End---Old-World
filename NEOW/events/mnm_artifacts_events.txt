@@ -2,127 +2,332 @@
 #                                         #
 # M&M Monastic Artifacts Events           #
 #                                         #
-# ID MNM.9000-MNM.9999		              #
+# ID MNM.9000-MNM.9911                    #
 #                                         #
 ###########################################
 
-#IDs:
-#9000-9199 Mathilda
-#9200-9399 Henrik / Milla
-#9400-9599 David
-#9600-9799 / 9030-9032 Drikus
-#9800-9898 Axel
-#9899-9999 Joel
+# IDs:
+# 9000-9199 Mathilda
+# 9200-9399 Henrik / Milla
+# 9400-9599 David
+# 9600-9799 / 9030-9032 Drikus
+# 9800-9898 Axel
+# 9899-9999 Joel
 
 namespace = MNM
 
-#Sends rumors
+# Sends rumors
 character_event = {
 	id = MNM.9000
+
 	hide_window = yes
+	is_triggered_only = yes # on_yearly_pulse, random_events
 
-	is_triggered_only = yes
-    has_dlc = "Mystics"
-
+	has_dlc = "Mystics"
 	min_age = 13
 	only_playable = yes
 	only_capable = yes
 	prisoner = no
 
-	trigger = { 
+	trigger = {
 		is_landed = yes
 		mercenary = no
 		holy_order = no
-		OR = {
-			higher_tier_than = COUNT
-			ai = no
+
+		trigger_if = {
+			limit = { ai = yes }
+			higher_real_tier_than = COUNT
 		}
-		any_courtier_or_vassal = {
-			NOT = { trait = incapable }
-			prisoner = no
-			opinion = { who = ROOT value = 20 }
+
+		any_voter = {
 			is_councillor = yes
+			is_incapable = no
+			prisoner = no
 			ai = yes
+
+			opinion = {
+				who = ROOT
+				value >= 20
+			}
 		}
+
 		NOR = {
 			has_character_modifier = relic_rumor_major
 			has_character_modifier = relic_rumor_medium
 			has_character_modifier = relic_rumor_minor
-		}
-		NOT = {
-			has_alternate_start_parameter = { key = religion_names value = random }
+
+			has_alternate_start_parameter = {
+				key = religion_names
+				value = random
+			}
 		}
 	}
-	
+
 	weight_multiplier = {
-		days = 1
-		modifier = {
-		factor = 2.0
-		has_ambition = obj_create_treasury
+		factor = 1
+
+		mult_modifier = {
+			factor = 2.0
+			has_ambition = obj_create_treasury
 		}
 	}
 
 	immediate = {
-		random_courtier_or_vassal = {
+		save_event_target_as = relic_ruler
+
+		random_voter = {
 			limit = {
-				NOT = { trait = incapable }
-				prisoner = no
-				opinion = { who = ROOT value = 20 }
 				is_councillor = yes
+				is_incapable = no
+				prisoner = no
 				ai = yes
+
+				opinion = {
+					who = ROOT
+					value >= 20
+				}
 			}
 			save_event_target_as = rumor_councillor
 		}
-		save_event_target_as = relic_ruler
+
 		random_list = {
-			10 = { #Epic rumor
-				modifier = {
+			10 = { # Epic rumor
+				trigger = {
+					trigger_if = {
+						limit = { religion_group = christian }
+
+						NAND = {
+							has_artifact = bones_of_st_peter
+							has_artifact = staff_of_moses
+							has_artifact = davids_harp
+						}
+					}
+					trigger_else_if = {
+						limit = { religion_group = jewish_group }
+
+						NAND = {
+							has_artifact = bones_of_st_peter
+							has_artifact = staff_of_moses
+							has_artifact = davids_harp
+						}
+					}
+					trigger_else_if = {
+						limit = { religion_group = muslim }
+
+						NAND = {
+							has_artifact = staff_of_moses
+							has_artifact = davids_harp
+							has_artifact = seal_of_mohammad
+							has_artifact = holy_banner_of_mohammad
+							has_artifact = blessed_mantle
+						}
+					}
+					trigger_else_if = {
+						limit = { religion_group = zoroastrian_group }
+
+						NAND = {
+							has_artifact = cup_of_jamshid
+							has_artifact = babr_e_bayan
+						}
+					}
+					trigger_else_if = {
+						limit = { religion_group = indian_group }
+						NOT = { has_artifact = buddhas_tooth }
+					}
+					trigger_else_if = {
+						limit = { religion_openly_finnish_or_reformed_trigger = yes }
+						NOT = { has_artifact = sampo }
+					}
+					trigger_else_if = {
+						limit = { religion_openly_baltic_or_reformed_trigger = yes }
+						NOT = { has_artifact = axe_of_perkunas }
+					}
+					trigger_else_if = {
+						limit = { religion_openly_tengri_or_reformed_trigger = yes }
+						NOT = { has_artifact = yada_tashy }
+					}
+				}
+
+				mult_modifier = {
 					factor = 0.7
 					ai = yes
 				}
-				event_target:rumor_councillor = { character_event = { id = MNM.9001 } } 
+
+				character_event = { id = MNM.9004 }
 			}
-			30 = { #Good rumor
-				event_target:rumor_councillor = { character_event = { id = MNM.9002 } }
-			} 
-			60 = { #Weak rumor
-				event_target:rumor_councillor = { character_event = { id = MNM.9003 } }
-			} 
-			9000 = { #AI is less likely to find artifacts
-				modifier = { factor = 0 ai = no }
-			} 
+
+			30 = { # Good rumor
+				trigger = {
+					religion_openly_finnish_or_reformed_trigger = no
+					religion_openly_baltic_or_reformed_trigger = no
+					religion_openly_tengri_or_reformed_trigger = no
+
+					trigger_if = {
+						limit = { religion_group = christian }
+
+						NAND = {
+							has_artifact = crown_of_thorns
+							has_artifact = seamless_robe_of_jesus
+							has_artifact = fragment_of_true_cross
+							has_artifact = holy_foreskin
+							has_artifact = seal_of_solomon
+							has_artifact = image_of_edessa
+						}
+					}
+					trigger_else_if = {
+						limit = { religion_group = jewish_group }
+
+						NAND = {
+							has_artifact = seal_of_solomon
+							has_artifact = tabernacle
+						}
+					}
+					trigger_else_if = {
+						limit = { religion_group = muslim }
+
+						NAND = {
+							has_artifact = seal_of_solomon
+							has_artifact = sword_of_mohammad
+							has_artifact = letter_of_mohammad
+							has_artifact = blessed_sandals
+							has_artifact = cloak_of_mohammad
+						}
+					}
+					trigger_else_if = {
+						limit = { religion_group = zoroastrian_group }
+
+						NAND = {
+							has_artifact = derafsh_kaviani
+							has_artifact = cyrus_cylinder
+						}
+					}
+					trigger_else_if = {
+						limit = { religion_group = indian_group }
+
+						NAND = {
+							has_artifact = mountain_of_light_diamond
+							has_artifact = elaborate_danda
+							has_artifact = sarira
+							has_artifact = sariraka_actual_body_part
+						}
+					}
+				}
+
+				character_event = { id = MNM.9005 }
+			}
+
+			60 = { # Weak rumor
+				trigger = {
+					trigger_if = {
+						limit = { religion_group = christian }
+
+						NAND = {
+							has_artifact = fingerbone_of_saint
+							has_artifact = famous_head
+							has_artifact = famous_tongue
+							has_artifact = infamous_tongue
+							has_artifact = famous_hand
+							has_artifact = famous_arm
+							has_artifact = famous_foot
+							has_artifact = famous_ancient_weapon
+							has_artifact = chains_of_st_peter
+							has_artifact = right_hand_st_demetrius
+							has_artifact = veil_of_veronica
+							has_artifact = remains_of_st_cessianus
+							has_artifact = weeping_statue
+						}
+					}
+					trigger_else_if = {
+						limit = { religion_group = jewish_group }
+
+						NAND = {
+							has_artifact = famous_head
+							has_artifact = famous_tongue
+							has_artifact = infamous_tongue
+							has_artifact = famous_hand
+							has_artifact = famous_arm
+							has_artifact = famous_foot
+							has_artifact = famous_ancient_weapon
+							has_artifact = davids_sling
+						}
+					}
+					trigger_else_if = {
+						limit = { religion_group = muslim }
+
+						NAND = {
+							has_artifact = mohammads_beard
+							has_artifact = famous_head
+							has_artifact = famous_tongue
+							has_artifact = infamous_tongue
+							has_artifact = famous_hand
+							has_artifact = famous_arm
+							has_artifact = famous_foot
+							has_artifact = famous_ancient_weapon
+							has_artifact = mohammads_bowl
+							has_artifact = tooth_of_mohammad
+
+							OR = {
+								has_artifact = blessed_mantle # safeguard so you don't end up with two waters
+								has_artifact = water_of_blessed_mantle
+							}
+						}
+					}
+					trigger_else_if = {
+						limit = { religion_group = zoroastrian_group }
+
+						NAND = {
+							has_artifact = haoma_sapling
+							has_artifact = keshmar_cypress_branch
+							has_artifact = famous_head
+							has_artifact = famous_tongue
+							has_artifact = infamous_tongue
+							has_artifact = famous_hand
+							has_artifact = famous_arm
+							has_artifact = famous_foot
+							has_artifact = famous_ancient_weapon
+						}
+					}
+					trigger_else_if = {
+						limit = { religion_group = indian_group }
+
+						NAND = {
+							has_artifact = famous_head
+							has_artifact = famous_tongue
+							has_artifact = infamous_tongue
+							has_artifact = famous_hand
+							has_artifact = famous_arm
+							has_artifact = famous_foot
+							has_artifact = famous_ancient_weapon
+						}
+					}
+					trigger_if = {
+						limit = { religion_group = pagan_group }
+
+						NAND = {
+							has_artifact = famous_head
+							has_artifact = famous_tongue
+							has_artifact = infamous_tongue
+							has_artifact = famous_hand
+							has_artifact = famous_arm
+							has_artifact = famous_foot
+							has_artifact = famous_ancient_weapon
+						}
+					}
+				}
+
+				character_event = { id = MNM.9006 }
+			}
+
+			9000 = { # AI is less likely to find artifacts
+				trigger = { ai = yes }
+			}
 		}
 	}
 }
 
-#Ping events for rumors (on councilor)
+# Rumors [Major/Extraordinary rumor]
 character_event = {
-	id = MNM.9001 #Major rumor
-	hide_window = yes
-	is_triggered_only = yes
-    has_dlc = "Mystics"
-	immediate = { event_target:relic_ruler = { character_event = { id = MNM.9004 } } }
-}
-
-character_event = {
-	id = MNM.9002 #Good rumor
-	hide_window = yes
-	is_triggered_only = yes
-    has_dlc = "Mystics"
-	immediate = { event_target:relic_ruler = { character_event = { id = MNM.9005 } } }
-}
-
-character_event = {
-	id = MNM.9003 #Decent rumor
-	hide_window = yes
-	is_triggered_only = yes
-    has_dlc = "Mystics"
-	immediate = { event_target:relic_ruler = { character_event = { id = MNM.9006 } } }
-}
-
-#Rumors [Major/Extraordinary rumor]
-character_event = {
-	id = MNM.9004 
+	id = MNM.9004
 	desc = EVTDESC_MNM_9004
 	picture = GFX_evt_treasure_chamber
 	border = GFX_event_normal_frame_religion
