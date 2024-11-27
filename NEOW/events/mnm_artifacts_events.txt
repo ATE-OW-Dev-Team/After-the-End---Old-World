@@ -331,33 +331,42 @@ character_event = {
 	desc = EVTDESC_MNM_9004
 	picture = GFX_evt_treasure_chamber
 	border = GFX_event_normal_frame_religion
+	portrait = event_target:rumor_councillor
 
 	is_triggered_only = yes
-    has_dlc = "Mystics"
+
+	has_dlc = "Mystics"
 
 	option = {
 		name = EVTOPTA_MNM_9004
+
 		custom_tooltip = { text = EVTOPTA_MNM_9004_TT }
 		custom_tooltip = { text = outcome_will_depend_on_froms_skill_tt }
+
 		add_character_modifier = {
 			name = relic_rumor_major
 			years = 20
 		}
+
 		add_artifact_search_payment_effect = yes
+
 		hidden_effect = {
-			#Start searching
-			FROM = {  #the councilor
+			# Start searching
+			event_target:rumor_councillor = { # the councilor
 				set_character_flag = relic_hunter
 				save_event_target_as = relic_hunter
 				character_event = { id = MNM.9007 days = 30 } # The looping evaluation for progress increase/decrease begins...
-			}  
+			}
 		}
+
 		ai_chance = { factor = 100 }
 	}
 
 	option = {
 		name = EVTOPTB_MNM_9004
+
 		custom_tooltip = { text = EVTOPTB_MNM_9004_TT }
+
 		add_character_modifier = {
 			name = relic_rumor_major
 			years = 20
@@ -366,47 +375,57 @@ character_event = {
 
 	after = {
 		hidden_effect = { set_variable = { which = relic_score value = 0 } }
+
 		opinion = {
-			who = FROM
-			modifier = opinion_grateful
+			name = opinion_grateful
+			who = event_target:rumor_councillor
 			years = 20
 		}
 	}
 }
 
-#Rumors [Good/Medium rumor]
+# Rumors [Good/Medium rumor]
 character_event = {
 	id = MNM.9005
 	desc = EVTDESC_MNM_9005
-	picture = "GFX_evt_treasure_chamber"
+	picture = GFX_evt_treasure_chamber
 	border = GFX_event_normal_frame_religion
+	portrait = event_target:rumor_councillor
 
 	is_triggered_only = yes
-    has_dlc = "Mystics"
+
+	has_dlc = "Mystics"
 
 	option = {
 		name = EVTOPTA_MNM_9005
+
 		custom_tooltip = { text = EVTOPTA_MNM_9005_TT }
 		custom_tooltip = { text = outcome_will_depend_on_froms_skill_tt }
+
 		add_character_modifier = {
 			name = relic_rumor_medium
 			years = 20
 		}
+
 		add_artifact_search_payment_effect = yes
+
 		hidden_effect = {
-			#Start searching
-			FROM = {  #the councilor
+			# Start searching
+			event_target:rumor_councillor = { # the councilor
 				set_character_flag = relic_hunter
 				save_event_target_as = relic_hunter
 				character_event = { id = MNM.9007 days = 30 } # The looping evaluation for progress increase/decrease begins...
-			} 
+			}
 		}
+
 		ai_chance = { factor = 100 }
 	}
 
 	option = {
 		name = EVTOPTB_MNM_9005
+
 		custom_tooltip = { text = EVTOPTB_MNM_9005_TT }
+
 		add_character_modifier = {
 			name = relic_rumor_medium
 			years = 20
@@ -415,47 +434,57 @@ character_event = {
 
 	after = {
 		hidden_effect = { set_variable = { which = relic_score value = 0 } }
+
 		opinion = {
-			who = FROM
-			modifier = opinion_grateful
+			name = opinion_grateful
+			who = event_target:rumor_councillor
 			years = 15
 		}
 	}
 }
 
-#Rumors [Decent rumor]
+# Rumors [Decent rumor]
 character_event = {
 	id = MNM.9006
 	desc = EVTDESC_MNM_9006
-	picture = "GFX_evt_gathering_of_minds"
+	picture = GFX_evt_gathering_of_minds
 	border = GFX_event_normal_frame_religion
+	portrait = event_target:rumor_councillor
 
 	is_triggered_only = yes
-    has_dlc = "Mystics"
+
+	has_dlc = "Mystics"
 
 	option = {
 		name = EVTOPTA_MNM_9006
+
 		custom_tooltip = { text = EVTOPTA_MNM_9006_TT }
 		custom_tooltip = { text = outcome_will_depend_on_froms_skill_tt }
+
 		add_character_modifier = {
 			name = relic_rumor_minor
 			years = 10
 		}
+
 		add_artifact_search_payment_effect = yes
+
 		hidden_effect = {
-			#Start searching
-			FROM = { #the councilor
+			# Start searching
+			event_target:rumor_councillor = { # the councilor
 				set_character_flag = relic_hunter
 				save_event_target_as = relic_hunter
 				character_event = { id = MNM.9007 days = 30 } # The looping evaluation for progress increase/decrease begins...
-			} 
+			}
 		}
+
 		ai_chance = { factor = 100 }
 	}
 
 	option = {
-		name = EVTOPTB_MNM_9006
+		name = INTERESTING
+
 		custom_tooltip = { text = EVTOPTB_MNM_9006_TT }
+
 		add_character_modifier = {
 			name = relic_rumor_minor
 			years = 10
@@ -464,374 +493,804 @@ character_event = {
 
 	after = {
 		hidden_effect = { set_variable = { which = relic_score value = 0 } }
+
 		opinion = {
-			who = FROM
-			modifier = opinion_grateful
+			name = opinion_grateful
+			who = event_target:rumor_councillor
 			years = 10
 		}
 	}
 }
 
-#Person you sent out starts searching
+# Person you sent out starts searching
 character_event = {
 	id = MNM.9007
-	hide_window = yes
 
-	is_triggered_only = yes
-    has_dlc = "Mystics"
+	hide_window = yes
+	is_triggered_only = yes # search_for_artifact, mnm_artifact_decisions.txt, other events
+
+	has_character_flag = relic_hunter
+	has_job_title = yes
+	has_dlc = "Mystics"
+	only_capable = yes
+	prisoner = no
+
+	trigger = {
+		liege = {
+			character = event_target:relic_ruler
+
+			OR = {
+				has_character_modifier = relic_rumor_major
+				has_character_modifier = relic_rumor_medium
+				has_character_modifier = relic_rumor_minor
+			}
+		}
+	}
+
+	fail_trigger_effect = {
+		if = {
+			limit = { has_character_flag = relic_hunter }
+			event_target:relic_ruler = { character_event = { id = MNM.9009 } }
+		}
+		else = {
+			event_target:relic_ruler = { clr_artifact_searcher_effect = yes }
+		}
+	}
 
 	immediate = {
-		if = { #Stop hunting for relics
-			limit = {
-				OR = {
-					is_alive = no
-					NOT = { has_character_flag = relic_hunter }
-					is_councillor = no
-					trait = incapable
-					prisoner = yes
-					liege = { NOT = { character = event_target:relic_ruler } } 
-					liege = {
-						NOR = {
-							has_character_modifier = relic_rumor_major
-							has_character_modifier = relic_rumor_medium
-							has_character_modifier = relic_rumor_minor
-						}
-					}
-				}
-			}
-			if = {
-				limit = { has_character_flag = relic_hunter }
-				event_target:relic_ruler = { character_event = { id = MNM.9009 } }
-			}
-			if = {
-				limit = { NOT = { has_character_flag = relic_hunter } }
-				event_target:relic_ruler = { clr_artifact_searcher_effect = yes }
-			}
-			break = yes
-		}
-
-		#If relic is found...
+		# If relic is found...
 		if = {
-			limit = {
-				the_hunt_for_an_artifact_has_made_enough_progress_trigger = yes
-			}
-			character_event = { id = MNM.9008 } #Relic tombola
+			limit = { the_hunt_for_an_artifact_has_made_enough_progress_trigger = yes }
+			event_target:relic_ruler = { character_event = { id = MNM.9008 } } # Relic tombola
 		}
 
-		#If relic isn't found...
+		# If relic isn't found...
 		else = {
 			if = {
 				limit = { # to make sure that you don't the Ask For Help events too often...
-					event_target:relic_ruler = { had_character_flag = { flag = they_asked_for_your_help days = 550 } }
+					event_target:relic_ruler = {
+						had_character_flag = {
+							flag = they_asked_for_your_help
+							months >= 18
+						}
+					}
 				}
+
 				clr_character_flag = they_asked_for_your_help
 			}
-			#Outcome of this search
+
+			# Outcome of this search
 			random_list = {
-				20 = { #Search through diplomacy
-					modifier = { factor = 5 has_job_title = job_chancellor }
-					modifier = { factor = 3 diplomacy = 10 }
+				20 = { # Search through diplomacy
+					mult_modifier = { factor = 5 has_job_title = job_chancellor }
+					mult_modifier = { factor = 3 diplomacy >= 10 }
+
 					random_list = {
-						15 = { #Passive points gain
-							modifier = { factor = 1.5 has_job_title = job_chancellor }
-							modifier = { factor = 1.2 diplomacy = 8 }
-							modifier = { factor = 1.2 diplomacy = 10 }
-							modifier = { factor = 1.4 diplomacy = 12 }
-							modifier = { factor = 1.4 diplomacy = 15 }	
-							modifier = { factor = 1.4 diplomacy = 18 }
-							modifier = { factor = 1.5 has_pleasant_personality_trigger = yes }
+						15 = { # Passive points gain
+							mult_modifier = { factor = 1.5 has_job_title = job_chancellor }
+							mult_modifier = { factor = 1.2 diplomacy >= 8 }
+							mult_modifier = { factor = 1.2 diplomacy >= 10 }
+							mult_modifier = { factor = 1.4 diplomacy >= 12 }
+							mult_modifier = { factor = 1.4 diplomacy >= 15 }
+							mult_modifier = { factor = 1.4 diplomacy >= 18 }
+							mult_modifier = { factor = 1.5 has_pleasant_personality_trigger = yes }
+
 							event_target:relic_ruler = {
-								change_variable = { which = relic_score value = 1 } 
+								change_variable = { which = relic_score value = 1 }
+
 								if = {
-									limit = {
-										the_hunt_for_an_artifact_has_made_enough_progress_trigger = yes
-									}
-									character_event = { id = MNM.9035 } #progress nearing end notification
+									limit = { the_hunt_for_an_artifact_has_made_enough_progress_trigger = yes }
+									character_event = { id = MNM.9035 } # progress nearing end notification
 								}
 								else = { character_event = { id = MNM.9031 } }
 							}
-						} 
-						15 = { #Ask for help
-							modifier = { factor = 1.5 has_job_title = job_chancellor }	
-							modifier = { factor = 1.4 diplomacy = 12 }
-							modifier = { factor = 0 event_target:relic_ruler = { has_character_modifier = treasure_hunting_diplomats } }
-							trigger = { event_target:relic_ruler = { NOT = { has_character_flag = they_asked_for_your_help } } }
+						}
+
+						15 = { # Ask for help
+							trigger = {
+								event_target:relic_ruler = {
+									NOR = {
+										has_character_flag = they_asked_for_your_help
+										has_character_modifier = treasure_hunting_diplomats
+									}
+								}
+							}
+
+							mult_modifier = { factor = 1.5 has_job_title = job_chancellor }
+							mult_modifier = { factor = 1.4 diplomacy >= 12 }
+
 							event_target:relic_ruler = { character_event = { id = MNM.9020 } }
-						} 
-						1 = { #Setback
-							modifier = { factor = 1.25 event_target:relic_ruler = { has_character_modifier = relic_rumor_medium } }
-							modifier = { factor = 1.5 event_target:relic_ruler = { has_character_modifier = relic_rumor_major } }
-							modifier = { factor = 1.5 NOT = { has_job_title = job_chancellor } }
-							modifier = { factor = 1.5 is_dumb_trigger = yes }
-							modifier = { factor = 2.5 NOT = { diplomacy = 8 } } 
-							event_target:relic_ruler = { 
-								change_variable = { which = relic_score value = -1 } 
-								character_event = { id = MNM.9032 } #small setback event
+						}
+
+						1 = { # Setback
+							mult_modifier = { factor = 1.25 event_target:relic_ruler = { has_character_modifier = relic_rumor_medium } }
+							mult_modifier = { factor = 1.5 event_target:relic_ruler = { has_character_modifier = relic_rumor_major } }
+							mult_modifier = { factor = 1.5 NOT = { has_job_title = job_chancellor } }
+							mult_modifier = { factor = 1.5 is_dumb_trigger = yes }
+							mult_modifier = { factor = 2.5 diplomacy < 8 }
+
+							event_target:relic_ruler = {
+								change_variable = { which = relic_score value = -1 }
+								character_event = { id = MNM.9032 } # small setback event
 							}
 						}
-						1 = { #Unfortunate accident
-							modifier = { factor = 1.5 NOT = { has_job_title = job_chancellor } }
-							modifier = { factor = 1.5 NOT = { diplomacy = 8 } } 
-							modifier = { factor = 0 ai = no }
+
+						1 = { # Unfortunate accident
+							trigger = { ai = yes }
+
+							mult_modifier = { factor = 1.5 NOT = { has_job_title = job_chancellor } }
+							mult_modifier = { factor = 1.5 diplomacy < 8 }
+
 							event_target:relic_ruler = { character_event = { id = MNM.9029 } }
-						} 
+						}
 					}
 				}
-				20 = { #Search through martial
-					modifier = { factor = 5 has_job_title = job_marshal }
-					modifier = { factor = 3 martial = 10 }
+				20 = { # Search through martial
+					mult_modifier = { factor = 5 has_job_title = job_marshal }
+					mult_modifier = { factor = 3 martial >= 10 }
+
 					random_list = {
-						15 = { #Passive points gain
-							modifier = { factor = 1.5 has_job_title = job_marshal }
-							modifier = { factor = 1.2 martial = 8 }
-							modifier = { factor = 1.2 martial = 10 }
-							modifier = { factor = 1.4 martial = 12 }	
-							modifier = { factor = 1.4 martial = 15 }	
-							modifier = { factor = 1.4 martial = 18 }	
-							modifier = { factor = 1.4 trait = brave }
-							modifier = { factor = 1.4 combat_rating = 20 }
-							event_target:relic_ruler = { 
-								change_variable = { which = relic_score value = 1 } 
+						15 = { # Passive points gain
+							mult_modifier = { factor = 1.5 has_job_title = job_marshal }
+							mult_modifier = { factor = 1.2 martial >= 8 }
+							mult_modifier = { factor = 1.2 martial >= 10 }
+							mult_modifier = { factor = 1.4 martial >= 12 }
+							mult_modifier = { factor = 1.4 martial >= 15 }
+							mult_modifier = { factor = 1.4 martial >= 18 }
+							mult_modifier = { factor = 1.4 trait = brave }
+							mult_modifier = { factor = 1.4 combat_rating >= 20 }
+
+							event_target:relic_ruler = {
+								change_variable = { which = relic_score value = 1 }
+
 								if = {
-									limit = {
-										the_hunt_for_an_artifact_has_made_enough_progress_trigger = yes
-									}
-									character_event = { id = MNM.9035 }  #progress nearing end notification
+									limit = { the_hunt_for_an_artifact_has_made_enough_progress_trigger = yes }
+									character_event = { id = MNM.9035 }  # progress nearing end notification
 								}
 								else = { character_event = { id = MNM.9031 } }
 							}
-						} 
-						15 = { #Ask for help
-							modifier = { factor = 1.5 has_job_title = job_marshal }	
-							modifier = { factor = 1.4 martial = 12 }
-							modifier = { factor = 0 event_target:relic_ruler = { has_character_modifier = treasure_hunting_soldiers } }
-							trigger = { event_target:relic_ruler = { NOT = { has_character_flag = they_asked_for_your_help } } }
+						}
+
+						15 = { # Ask for help
+							trigger = {
+								event_target:relic_ruler = {
+									NOR = {
+										has_character_flag = they_asked_for_your_help
+										has_character_modifier = treasure_hunting_soldiers
+									}
+								}
+							}
+
+							mult_modifier = { factor = 1.5 has_job_title = job_marshal }
+							mult_modifier = { factor = 1.4 martial >= 12 }
+
 							event_target:relic_ruler = { character_event = { id = MNM.9021 } }
-						} 
-						1 = { #Setback
-							modifier = { factor = 1.25 event_target:relic_ruler = { has_character_modifier = relic_rumor_medium } }
-							modifier = { factor = 1.5 event_target:relic_ruler = { has_character_modifier = relic_rumor_major } }
-							modifier = { factor = 1.5 is_dumb_trigger = yes }
-							modifier = { factor = 1.5 NOT = { has_job_title = job_marshal } }
-							modifier = { factor = 2.5 NOT = { martial = 8 } } 
-							event_target:relic_ruler = { 
-								change_variable = { which = relic_score value = -1 } 
-								character_event = { id = MNM.9032 } #small setback event
+						}
+
+						1 = { # Setback
+							mult_modifier = { factor = 1.25 event_target:relic_ruler = { has_character_modifier = relic_rumor_medium } }
+							mult_modifier = { factor = 1.5 event_target:relic_ruler = { has_character_modifier = relic_rumor_major } }
+							mult_modifier = { factor = 1.5 is_dumb_trigger = yes }
+							mult_modifier = { factor = 1.5 NOT = { has_job_title = job_marshal } }
+							mult_modifier = { factor = 2.5 martial < 8 }
+
+							event_target:relic_ruler = {
+								change_variable = { which = relic_score value = -1 }
+								character_event = { id = MNM.9032 } # small setback event
 							}
 						}
-						1 = { #Unfortunate accident
-							modifier = { factor = 1.5 NOT = { has_job_title = job_marshal } }
-							modifier = { factor = 1.5 NOT = { martial = 8 } } 
-							modifier = { factor = 1.5 NOT = { combat_rating = 0 } } 
-							modifier = { factor = 0 ai = no }
+
+						1 = { # Unfortunate accident
+							trigger = { ai = yes }
+
+							mult_modifier = { factor = 1.5 NOT = { has_job_title = job_marshal } }
+							mult_modifier = { factor = 1.5 martial < 8 }
+							mult_modifier = { factor = 1.5 combat_rating < 0 }
+
 							event_target:relic_ruler = { character_event = { id = MNM.9029 } }
-						} 
+						}
 					}
 				}
-				20 = { #Search through stewardship
-					modifier = { factor = 5 has_job_title = job_treasurer }
-					modifier = { factor = 3 stewardship = 10 }
+
+				20 = { # Search through stewardship
+					mult_modifier = { factor = 5 has_job_title = job_treasurer }
+					mult_modifier = { factor = 3 stewardship >= 10 }
+
 					random_list = {
-						15 = { #Passive points gain
-							modifier = { factor = 1.5 has_job_title = job_treasurer }
-							modifier = { factor = 1.2 stewardship = 10 }
-							modifier = { factor = 1.2 stewardship = 10 }
-							modifier = { factor = 1.4 stewardship = 12 }
-							modifier = { factor = 1.4 stewardship = 15 }	
-							modifier = { factor = 1.4 stewardship = 18 }	
-							modifier = { factor = 1.4 monthly_income = 3 }
-							event_target:relic_ruler = { 
-								change_variable = { which = relic_score value = 1 } 
+						15 = { # Passive points gain
+							mult_modifier = { factor = 1.5 has_job_title = job_treasurer }
+							mult_modifier = { factor = 1.2 stewardship >= 10 }
+							mult_modifier = { factor = 1.4 stewardship >= 12 }
+							mult_modifier = { factor = 1.4 stewardship >= 15 }
+							mult_modifier = { factor = 1.4 stewardship >= 18 }
+							mult_modifier = { factor = 1.4 monthly_income >= 3 }
+
+							event_target:relic_ruler = {
+								change_variable = { which = relic_score value = 1 }
+
 								if = {
-									limit = {
-										the_hunt_for_an_artifact_has_made_enough_progress_trigger = yes
-									}
-									character_event = { id = MNM.9035 } #progress nearing end notification
+									limit = { the_hunt_for_an_artifact_has_made_enough_progress_trigger = yes }
+									character_event = { id = MNM.9035 } # progress nearing end notification
 								}
 								else = { character_event = { id = MNM.9031 } }
 							}
-						} 
-						15 = { #Ask for help
-							modifier = { factor = 1.5 has_job_title = job_treasurer }	
-							modifier = { factor = 1.4 stewardship = 12 }
-							modifier = { factor = 0 event_target:relic_ruler = { has_character_modifier = treasure_hunting_stewards } }
-							trigger = { event_target:relic_ruler = { NOT = { has_character_flag = they_asked_for_your_help } } }
+						}
+
+						15 = { # Ask for help
+							trigger = {
+								event_target:relic_ruler = {
+									NOR = {
+										has_character_flag = they_asked_for_your_help
+										has_character_modifier = treasure_hunting_stewards
+									}
+								}
+							}
+
+							mult_modifier = { factor = 1.5 has_job_title = job_treasurer }
+							mult_modifier = { factor = 1.4 stewardship >= 12 }
+
 							event_target:relic_ruler = { character_event = { id = MNM.9022 } }
-						} 
-						1 = { #Setback
-							modifier = { factor = 1.25 event_target:relic_ruler = { has_character_modifier = relic_rumor_medium } }
-							modifier = { factor = 1.5 event_target:relic_ruler = { has_character_modifier = relic_rumor_major } }
-							modifier = { factor = 1.5 is_dumb_trigger = yes }
-							modifier = { factor = 1.5 NOT = { has_job_title = job_treasurer } }
-							modifier = { factor = 2.5 NOT = { stewardship = 8 } } 
-							event_target:relic_ruler = { 
-								change_variable = { which = relic_score value = -1 } 
-								character_event = { id = MNM.9032 } #small setback event
+						}
+
+						1 = { # Setback
+							mult_modifier = { factor = 1.25 event_target:relic_ruler = { has_character_modifier = relic_rumor_medium } }
+							mult_modifier = { factor = 1.5 event_target:relic_ruler = { has_character_modifier = relic_rumor_major } }
+							mult_modifier = { factor = 1.5 is_dumb_trigger = yes }
+							mult_modifier = { factor = 1.5 NOT = { has_job_title = job_treasurer } }
+							mult_modifier = { factor = 2.5 stewardship < 8 }
+
+							event_target:relic_ruler = {
+								change_variable = { which = relic_score value = -1 }
+								character_event = { id = MNM.9032 } # small setback event
 							}
 						}
-						1 = { #Unfortunate accident
-							modifier = { factor = 1.5 NOT = { has_job_title = job_treasurer } }
-							modifier = { factor = 1.5 NOT = { stewardship = 8 } } 
-							modifier = { factor = 0 ai = no }
+
+						1 = { # Unfortunate accident
+							trigger = { ai = yes }
+
+							mult_modifier = { factor = 1.5 NOT = { has_job_title = job_treasurer } }
+							mult_modifier = { factor = 1.5 stewardship < 8 }
+
 							event_target:relic_ruler = { character_event = { id = MNM.9029 } }
-						} 
+						}
 					}
 				}
-				20 = { #Search through intrigue
-					modifier = { factor = 5 has_job_title = job_spymaster }
-					modifier = { factor = 3 intrigue = 10 }
+
+				20 = { # Search through intrigue
+					mult_modifier = { factor = 5 has_job_title = job_spymaster }
+					mult_modifier = { factor = 3 intrigue >= 10 }
+
 					random_list = {
-						15 = { #Passive points gain
-							modifier = { factor = 1.5 has_job_title = job_spymaster }
-							modifier = { factor = 1.2 intrigue = 10 }
-							modifier = { factor = 1.2 intrigue = 10 }
-							modifier = { factor = 1.4 intrigue = 12 }
-							modifier = { factor = 1.4 intrigue = 15 }	
-							modifier = { factor = 1.4 intrigue = 18 }	
-							modifier = { factor = 1.4 has_unpleasant_personality_trigger = yes }
-							event_target:relic_ruler = { 
-								change_variable = { which = relic_score value = 1 } 
+						15 = { # Passive points gain
+							mult_modifier = { factor = 1.5 has_job_title = job_spymaster }
+							mult_modifier = { factor = 1.2 intrigue >= 10 }
+							mult_modifier = { factor = 1.4 intrigue >= 12 }
+							mult_modifier = { factor = 1.4 intrigue >= 15 }
+							mult_modifier = { factor = 1.4 intrigue >= 18 }
+							mult_modifier = { factor = 1.4 has_unpleasant_personality_trigger = yes }
+
+							event_target:relic_ruler = {
+								change_variable = { which = relic_score value = 1 }
+
 								if = {
-									limit = {
-										the_hunt_for_an_artifact_has_made_enough_progress_trigger = yes
-									}
-									character_event = { id = MNM.9035 } #progress nearing end notification
+									limit = { the_hunt_for_an_artifact_has_made_enough_progress_trigger = yes }
+									character_event = { id = MNM.9035 } # progress nearing end notification
 								}
 								else = { character_event = { id = MNM.9031 } }
 							}
-						} 
-						15 = { #Ask for help
-							modifier = { factor = 1.5 has_job_title = job_spymaster }	
-							modifier = { factor = 1.4 intrigue = 12 }
-							modifier = { factor = 0 event_target:relic_ruler = { has_character_modifier = treasure_hunting_spies } }
-							trigger = { event_target:relic_ruler = { NOT = { has_character_flag = they_asked_for_your_help } } }
+						}
+
+						15 = { # Ask for help
+							trigger = {
+								event_target:relic_ruler = {
+									NOR = {
+										has_character_flag = they_asked_for_your_help
+										has_character_modifier = treasure_hunting_spies
+									}
+								}
+							}
+
+							mult_modifier = { factor = 1.5 has_job_title = job_spymaster }
+							mult_modifier = { factor = 1.4 intrigue >= 12 }
+
 							event_target:relic_ruler = { character_event = { id = MNM.9023 } }
-						} 
-						1 = { #Setback
-							modifier = { factor = 1.25 event_target:relic_ruler = { has_character_modifier = relic_rumor_medium } }
-							modifier = { factor = 1.5 event_target:relic_ruler = { has_character_modifier = relic_rumor_major } }
-							modifier = { factor = 1.5 is_dumb_trigger = yes }
-							modifier = { factor = 1.5 NOT = { has_job_title = job_spymaster } }
-							modifier = { factor = 2.5 NOT = { intrigue = 8 } } 
-							event_target:relic_ruler = { 
-								change_variable = { which = relic_score value = -1 } 
-								character_event = { id = MNM.9032 } #small setback event
+						}
+
+						1 = { # Setback
+							mult_modifier = { factor = 1.25 event_target:relic_ruler = { has_character_modifier = relic_rumor_medium } }
+							mult_modifier = { factor = 1.5 event_target:relic_ruler = { has_character_modifier = relic_rumor_major } }
+							mult_modifier = { factor = 1.5 is_dumb_trigger = yes }
+							mult_modifier = { factor = 1.5 NOT = { has_job_title = job_spymaster } }
+							mult_modifier = { factor = 2.5 intrigue < 8 }
+
+							event_target:relic_ruler = {
+								change_variable = { which = relic_score value = -1 }
+								character_event = { id = MNM.9032 } # small setback event
 							}
 						}
-						1 = { #Unfortunate accident
-							modifier = { factor = 1.5 NOT = { has_job_title = job_spymaster } }
-							modifier = { factor = 1.5 NOT = { intrigue = 8 } } 
-							modifier = { factor = 0 ai = no }
+
+						1 = { # Unfortunate accident
+							trigger = { ai = yes }
+
+							mult_modifier = { factor = 1.5 NOT = { has_job_title = job_spymaster } }
+							mult_modifier = { factor = 1.5 intrigue < 8 }
+
 							event_target:relic_ruler = { character_event = { id = MNM.9029 } }
-						} 
+						}
 					}
-				}	
-				20 = { #Search through learning
-					modifier = { factor = 5 has_job_title = job_spiritual }
-					modifier = { factor = 3 learning = 10 }
+				}
+
+				20 = { # Search through learning
+					mult_modifier = { factor = 5 has_job_title = job_spiritual }
+					mult_modifier = { factor = 3 learning >= 10 }
+
 					random_list = {
-						15 = { #Passive points gain
-							modifier = { factor = 1.5 has_job_title = job_spiritual }
-							modifier = { factor = 1.2 learning = 10 }	
-							modifier = { factor = 1.2 learning = 10 }
-							modifier = { factor = 1.4 learning = 12 }
-							modifier = { factor = 1.4 learning = 15 }	
-							modifier = { factor = 1.4 learning = 18 }	
-							modifier = { factor = 1.4 is_learned_trigger = yes }
-							event_target:relic_ruler = { 
-								change_variable = { which = relic_score value = 1 } 
+						15 = { # Passive points gain
+							mult_modifier = { factor = 1.5 has_job_title = job_spiritual }
+							mult_modifier = { factor = 1.2 learning >= 10 }
+							mult_modifier = { factor = 1.4 learning >= 12 }
+							mult_modifier = { factor = 1.4 learning >= 15 }
+							mult_modifier = { factor = 1.4 learning >= 18 }
+							mult_modifier = { factor = 1.4 is_learned_trigger = yes }
+
+							event_target:relic_ruler = {
+								change_variable = { which = relic_score value = 1 }
+
 								if = {
-									limit = {
-										the_hunt_for_an_artifact_has_made_enough_progress_trigger = yes
-									}
-									character_event = { id = MNM.9035 } #progress nearing end notification
+									limit = { the_hunt_for_an_artifact_has_made_enough_progress_trigger = yes }
+									character_event = { id = MNM.9035 } # progress nearing end notification
 								}
 								else = { character_event = { id = MNM.9031 } }
 							}
-						} 
-						15 = { #Ask for help
-							modifier = { factor = 1.5 has_job_title = job_spiritual }	
-							modifier = { factor = 1.4 learning = 12 }
-							modifier = { factor = 0 event_target:relic_ruler = { has_character_modifier = treasure_hunting_scholars } }
-							trigger = { event_target:relic_ruler = { NOT = { has_character_flag = they_asked_for_your_help } } }
+						}
+
+						15 = { # Ask for help
+							trigger = {
+								event_target:relic_ruler = {
+									NOR = {
+										has_character_flag = they_asked_for_your_help
+										has_character_modifier = treasure_hunting_scholars
+									}
+								}
+							}
+
+							mult_modifier = { factor = 1.5 has_job_title = job_spiritual }
+							mult_modifier = { factor = 1.4 learning >= 12 }
+
 							event_target:relic_ruler = { character_event = { id = MNM.9024 } }
-						} 
-						1 = { #Setback
-							modifier = { factor = 1.25 event_target:relic_ruler = { has_character_modifier = relic_rumor_medium } }
-							modifier = { factor = 1.5 event_target:relic_ruler = { has_character_modifier = relic_rumor_major } }
-							modifier = { factor = 1.5 NOT = { has_job_title = job_spiritual } }
-							modifier = { factor = 1.5 is_dumb_trigger = yes }
-							modifier = { factor = 2.5 NOT = { learning = 8 } } 
-							event_target:relic_ruler = { 
-								change_variable = { which = relic_score value = -1 } 
-								character_event = { id = MNM.9032 } #small setback event
+						}
+
+						1 = { # Setback
+							mult_modifier = { factor = 1.25 event_target:relic_ruler = { has_character_modifier = relic_rumor_medium } }
+							mult_modifier = { factor = 1.5 event_target:relic_ruler = { has_character_modifier = relic_rumor_major } }
+							mult_modifier = { factor = 1.5 NOT = { has_job_title = job_spiritual } }
+							mult_modifier = { factor = 1.5 is_dumb_trigger = yes }
+							mult_modifier = { factor = 2.5 learning < 8 }
+
+							event_target:relic_ruler = {
+								change_variable = { which = relic_score value = -1 }
+								character_event = { id = MNM.9032 } # small setback event
 							}
 						}
-						1 = { #Unfortunate accident
-							modifier = { factor = 1.5 NOT = { has_job_title = job_spiritual } }
-							modifier = { factor = 1.5 NOT = { learning = 8 } } 
-							modifier = { factor = 0 ai = no }
+
+						1 = { # Unfortunate accident
+							trigger = { ai = yes }
+
+							mult_modifier = { factor = 1.5 NOT = { has_job_title = job_spiritual } }
+							mult_modifier = { factor = 1.5 learning < 8 }
+
 							event_target:relic_ruler = { character_event = { id = MNM.9029 } }
-						} 
+						}
 					}
 				}
-				5 = { #Ask for money
-					modifier = {
+
+				5 = { # Ask for money
+					mult_modifier = {
 						factor = 2
+
 						OR = {
 							trait = greedy
 							trait = deceitful
 						}
 					}
-					modifier = {
+					mult_modifier = {
 						factor = 2
 						trait = slothful
 					}
-					modifier = {
+					mult_modifier = {
 						factor = 2
 						is_rival = event_target:relic_ruler
 					}
+
 					event_target:relic_ruler = {
 						character_event = { id = MNM.9025 }
 					}
 				}
-				15 = { #Mess up badly
-					modifier = { factor = 0.5 is_smart_trigger = yes }
-					modifier = { factor = 1.5 is_dumb_trigger = yes }
+
+				15 = { # Mess up badly
 					trigger = {
-						event_target:relic_ruler = { check_variable = { which = relic_score value = 0 } }
-						NOT = { reverse_has_opinion_modifier = { who = event_target:relic_ruler modifier = opinion_useless_moron } }
+						event_target:relic_ruler = { check_variable = { which = relic_score value >= 0 } }
+						NOT = { reverse_has_opinion_modifier = { who = event_target:relic_ruler name = opinion_useless_moron } }
 					}
-					event_target:relic_ruler = { character_event = { id = MNM.9027 } } 
+
+					mult_modifier = { factor = 0.5 is_smart_trigger = yes }
+					mult_modifier = { factor = 1.5 is_dumb_trigger = yes }
+
+					event_target:relic_ruler = { character_event = { id = MNM.9027 } }
 				}
-				5 = { #Encounter a better rumor
-					modifier = { factor = 3 is_smart_trigger = yes }
+
+				5 = { # Encounter a better rumor
 					trigger = {
-						NOT = { event_target:relic_ruler = { has_character_modifier = relic_rumor_major } }
-						NOT = { event_target:relic_ruler = { check_variable = { which = relic_score value = 5 } } }
+						event_target:relic_ruler = {
+							check_variable = { which = relic_score value < 5 }
+							NOT = { has_character_modifier = relic_rumor_major }
+						}
 					}
+
+					mult_modifier = { factor = 3 is_smart_trigger = yes }
+
 					event_target:relic_ruler = { character_event = { id = MNM.9028 } }
 				}
-				10 = {
-					#Nothing happens
-				}
+
+				10 = { } # Nothing happens
 			}
-			character_event = { id = MNM.9007 days = 300 random = 80 } 
+
+			character_event = {
+				id = MNM.9007
+				days = 300
+				random = 80
+			}
 		}
 	}
 }
 
-#Artifact is found
+# Artifact is found
 character_event = {
 	id = MNM.9008
+
 	hide_window = yes
-
 	is_triggered_only = yes
-    has_dlc = "Mystics"
 
-	immediate = {	
-		#Artifact tombola
-		event_target:relic_ruler = {
+	has_dlc = "Mystics"
+
+	immediate = {
+		# Artifact tombola
+		trigger_switch = {
+			on_trigger = has_character_modifier
+
+			relic_rumor_major = {
+				random_list = {
+					# Christian artifacts
+					10 = {
+						trigger = {
+							religion_group = christian
+							NOT = { has_artifact = bones_of_st_peter }
+						}
+
+						set_character_flag = bones_of_st_peter
+					}
+
+					# Jewish artifacts
+					10 = {
+						trigger = {
+							NOT = { has_artifact = staff_of_moses }
+
+							OR = {
+								religion_group = jewish_group
+								religion_group = christian
+								religion_group = muslim
+							}
+						}
+
+						mult_modifier = {
+							factor = 0.5
+							NOT = { religion_group = jewish_group }
+						}
+
+						set_character_flag = staff_of_moses
+					}
+
+					10 = {
+						trigger = {
+							NOT = { has_artifact = davids_harp }
+
+							OR = {
+								religion_group = jewish_group
+								religion_group = christian
+								religion_group = muslim
+							}
+						}
+
+						mult_modifier = {
+							factor = 0.5
+							NOT = { religion_group = jewish_group }
+						}
+
+						set_character_flag = davids_harp
+					}
+
+					5 = {
+						trigger = {
+							NOT = { has_artifact = ark_of_the_covenant }
+
+							OR = {
+								religion_group = jewish_group
+								religion_group = christian
+							}
+						}
+
+						set_character_flag = ark_of_the_covenant
+					}
+
+					# Muslim artifacts
+					10 = {
+						trigger = {
+							religion_group = muslim
+							NOT = { has_artifact = seal_of_mohammad }
+						}
+
+						set_character_flag = seal_of_mohammad
+					}
+
+					10 = {
+						trigger = {
+							religion_group = muslim
+							NOT = { has_artifact = holy_banner_of_mohammad }
+						}
+
+						set_character_flag = holy_banner_of_mohammad
+					}
+
+					10 = {
+						trigger = {
+							religion_group = muslim
+							NOT = { has_artifact = blessed_mantle }
+						}
+
+						set_character_flag = blessed_mantle
+					}
+
+					# Zoroastrian artifacts
+					10 = {
+						trigger = {
+							religion_group = zoroastrian_group
+							NOT = { has_artifact = cup_of_jamshid }
+						}
+
+						set_character_flag = cup_of_jamshid
+					}
+
+					10 = {
+						trigger = {
+							NOT = { has_artifact = babr_e_bayan }
+
+							OR = {
+								religion_group = zoroastrian_group
+								culture_group = iranian
+							}
+						}
+
+						set_character_flag = babr_e_bayan
+					}
+
+					# Dharmic artifacts
+					10 = {
+						trigger = {
+							religion_group = indian_group
+							NOT = { has_artifact = buddhas_tooth }
+						}
+
+						set_character_flag = buddhas_tooth
+					}
+
+					10 = {
+						trigger = {
+							religion_group = indian_group
+							NOT = { has_artifact = mountain_of_light_diamond }
+						}
+
+						set_character_flag = mountain_of_light_diamond
+					}
+
+					# Finnish artifacts
+					10 = {
+						trigger = {
+							religion_openly_finnish_or_reformed_trigger = yes
+							NOT = { has_artifact = sampo }
+						}
+
+						set_character_flag = sampo
+					}
+
+					# Romuvan artifacts
+					10 = {
+						trigger = {
+							religion_openly_baltic_or_reformed_trigger = yes
+							NOT = { has_artifact = axe_of_perkunas }
+						}
+
+						set_character_flag = axe_of_perkunas
+					}
+
+					# Tengri artifacts
+					10 = {
+						trigger = {
+							religion_openly_tengri_or_reformed_trigger = yes
+							NOT = { has_artifact = yada_tashy }
+						}
+
+						set_character_flag = yada_tashy
+					}
+				}
+			}
+
+			relic_rumor_medium = {
+				random_list = {
+					# Christian artifacts
+					10 = {
+						trigger = {
+							religion_group = christian
+							NOT = { has_artifact = seamless_robe_of_jesus }
+						}
+
+						set_character_flag = seamless_robe_of_jesus
+					}
+
+					10 = {
+						trigger = {
+							religion_group = christian
+							NOT = { has_artifact = crown_of_thorns }
+						}
+
+						set_character_flag = crown_of_thorns
+					}
+
+					20 = {
+						trigger = {
+							religion_group = christian
+							NOT = { has_artifact = fragment_of_true_cross }
+						}
+
+						set_character_flag = fragment_of_true_cross
+					}
+
+					20 = {
+						trigger = {
+							religion_group = christian
+							NOT = { has_artifact = holy_foreskin }
+						}
+
+						set_character_flag = holy_foreskin
+					}
+
+					20 = {
+						trigger = {
+							religion_group = christian
+							NOT = { has_artifact = image_of_edessa }
+						}
+
+						set_character_flag = image_of_edessa
+					}
+
+					# Jewish artifacts
+					10 = {
+						trigger = {
+							NOT = { has_artifact = seal_of_solomon }
+
+							OR = {
+								religion_group = jewish_group
+								religion_group = christian
+								religion_group = muslim
+							}
+						}
+
+						mult_modifier = {
+							factor = 0.5
+							NOT = { religion_group = jewish_group }
+						}
+
+						set_character_flag = seal_of_solomon
+					}
+
+					20 = {
+						trigger = {
+							religion_group = jewish_group
+							NOT = { has_artifact = tabernacle }
+						}
+
+						set_character_flag = tabernacle
+					}
+
+					# Muslim artifacts
+					10 = {
+						trigger = {
+							religion_group = muslim
+							NOT = { has_artifact = sword_of_mohammad }
+						}
+
+						set_character_flag = sword_of_mohammad
+					}
+
+					20 = {
+						trigger = {
+							religion_group = muslim
+							NOT = { has_artifact = letter_of_mohammad }
+						}
+
+						set_character_flag = letter_of_mohammad
+					}
+
+					20 = {
+						trigger = {
+							religion_group = muslim
+							NOT = { has_artifact = cloak_of_mohammad }
+						}
+
+						set_character_flag = cloak_of_mohammad
+					}
+
+					20 = {
+						trigger = {
+							religion_group = muslim
+							NOT = { has_artifact = blessed_sandals }
+						}
+
+						set_character_flag = blessed_sandals
+					}
+
+					# Zoroastrian artifacts
+					10 = {
+						trigger = {
+							NOT = { has_artifact = derafsh_kaviani }
+
+							OR = {
+								religion_group = zoroastrian_group
+								culture_group = iranian
+								culture_group = east_iranic
+								has_landed_title = e_persia
+								has_landed_title = k_persia
+							}
+						}
+
+						set_character_flag = derafsh_kaviani
+					}
+
+					20 = {
+						trigger = {
+							NOT = { has_artifact = cyrus_cylinder }
+
+							OR = {
+								religion_group = zoroastrian_group
+								culture_group = iranian
+								culture_group = east_iranic
+							}
+						}
+
+						set_character_flag = cyrus_cylinder
+					}
+
+					# Dharmic artifacts
+					20 = {
+						trigger = {
+							religion_group = indian_group
+							NOT = { has_artifact = elaborate_danda }
+						}
+
+						set_character_flag = elaborate_danda
+					}
+
+					20 = {
+						trigger = {
+							religion_group = indian_group
+							NOT = { has_artifact = sariraka_actual_body_part }
+						}
+
+						set_character_flag = sariraka_actual_body_part
+					}
+				}
+			}
+
+			relic_rumor_minor = {
 			random_list = {
 				#Generic artifacts
 				10 = { #Famous Head
