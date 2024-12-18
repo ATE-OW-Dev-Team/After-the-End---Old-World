@@ -7,7 +7,7 @@ NDiplomacy = {
 	ATTACKING_SOMEONE_DEFENDING_AGAINST_OTHER_RELIGIOUS_GROUP_PIETY_COST = 100,		-- Piety hit for attacking someone who is defending against other religious group
 	ATTACKER_CALL_DECLINE_COST = 25, 			-- Prestige cost for refusing to join an offensive war
 	DEFENDER_CALL_DECLINE_COST = 100, 			-- Prestige cost for refusing to join a defensive war
-	SUZERAIN_DEFENDER_CALL_DECLINE_COST = 150,	-- Prestige cost for a suzerain refusing to join a defensive war, when they are supposed to alway accept
+	SUZERAIN_DEFENDER_CALL_DECLINE_COST = 150,	-- Prestige cost for a suzerain refusing to join a defensive war, when they are supposed to always accept
 	ALLIED_CALL_DECLINE_COST = 200,
 
 	TRIBAL_VASSAL_CALL_DECLINE_COST_FACTOR = 2.0, -- Prestige cost multiplier for tribal vassals
@@ -255,7 +255,7 @@ NDiplomacy = {
 	SEND_GIFT_INTERACTION_ENABLED = 1,						-- Should this action be used at all?
 
 	SEND_GIFT_DIPLOMACY_MULT = 0.5,							-- Diplomacy affects the opinion bonus multiplied with this
-	SEND_GIFT_NOT_LIEGE_BONUS = 7,							-- Not being the liege of the receiver affects the opinon bonus by this much
+	SEND_GIFT_NOT_LIEGE_BONUS = 7,							-- Not being the liege of the receiver affects the opinion bonus by this much
 	SEND_GIFT_GREED_MULT = 0.15,							-- Changes how much greed affects the opinion
 	SEND_ARTIFACT_GREED_MULT = 0.05,						-- Changes how much greed affects the opinion
 
@@ -756,7 +756,7 @@ NDiplomacy = {
 	BANISH_TAKE_WEALTH_PERCENTAGE_COURTIER = 1,
 	BANISH_REALM_SIZE_CHANCE_RATIO_MODIFIER = 2,
 
-	DEFENSIVE_PACT_THREAT_LIMIT = 0.05,							-- The amount of provinces in a realm that is needed for beeing a valid target of a defensive pact
+	DEFENSIVE_PACT_THREAT_LIMIT = 0.05,							-- The amount of provinces in a realm that is needed for being a valid target of a defensive pact
 	DEFENSIVE_PACT_SIZE_RATIO = 1.0,							-- Relative size requirement is this at 100% threat
 	DEFENSIVE_PACT_MAX_RANGE = 400,								-- At 100% threat characters are able to join defensive pacts against targets of this distance
 	DEFENSIVE_PACT_MAX_RANGE_SAME_GROUP = 300,					-- At 100% threat characters are able to join defensive pacts against targets of this distance
@@ -777,7 +777,7 @@ NDiplomacy = {
 	LAW_CHANGE_PRESTIGE_COST_ABSOLUTISM = 100,				-- Prestige cost for Nomadic government when changing normal demesne laws with no council
 	CROWN_LAW_CHANGE_PRESTIGE_COST_ABSOLUTISM = 100,		-- Prestige cost for Nomadic government when changing Crown laws with no council
 
-	FAVOR_THRESHOLD_TO_FORCE_HUMANS = 250,					-- Mininum importance of issue for us to consider forcing a human to do it by using the favor they owe us
+	FAVOR_THRESHOLD_TO_FORCE_HUMANS = 250,					-- Minimum importance of issue for us to consider forcing a human to do it by using the favor they owe us
 	CHANCES_TO_USE_FAVOR = 75,								-- Chance to use favor to change the outcome of a diplomatic request (as a percentage)
 
 	NON_AGGRESSION_PACT_REJECTED_COOLDOWN = 1,				-- Number of years before a character can ask to form a non-aggression pact again
@@ -994,7 +994,7 @@ NTitle = {
 	KING_CLAIM_PRESTIGE_COST = 1200, -- Unused, impossible
 	EMPEROR_CLAIM_PRESTIGE_COST = 2400, -- Unused, impossible
 
--- Title Revokation Prestige Cost
+-- Title Revocation Prestige Cost
 	BARON_REVOKE_PRESTIGE_COST = 25,
 	COUNT_REVOKE_PRESTIGE_COST = 50,
 	DUKE_REVOKE_PRESTIGE_COST = 100,
@@ -1083,7 +1083,7 @@ NReligion = {
 	HERESY_TAKEOVER_PROVINCES = 10,					-- The number of provinces a heresy needs MORE than the current norm for it to become the new Orthodoxy
 	PAPAL_SUCCESSION_PASS_ON_HOLDINGS = 1,			-- Set to zero if holdings shouldn't be passed on
 	PAPAL_SUCCESSION_LOSE_MINOR_TITLES = 1,			-- Set to zero if minor religious titles should be lost
-	AUTHORITY_FROM_PIETY_CAP = 0.25,				-- Maxmimum boost to religious authority due to head's piety
+	AUTHORITY_FROM_PIETY_CAP = 0.25,				-- Maximum boost to religious authority due to head's piety
 },
 
 NEconomy = {
@@ -1186,7 +1186,7 @@ NNomad = {
 	CLAN_SAME_FAITH_BONUS = 10,						-- How much clan sentiment you get from having the same faith
 
 	CAPITAL_AT_TRADE_POST_MODIFIER = 0.1,			-- Trade post income modifier with the presence of a nomad capital
-	CAPITAL_ADJACADENT_TO_TRADE_POST_MODIFIER = 0.05, -- Trade post income modifier with a adjacadent nomad capital
+	CAPITAL_ADJACADENT_TO_TRADE_POST_MODIFIER = 0.05, -- Trade post income modifier with a adjacent nomad capital
 	CAPITAL_AT_OWN_HOLY_SITE_PIETY = 1,				-- Monthly Piety for having the capital in the holy site of your own religion
 	CAPITAL_AT_OTHER_HOLY_SITE_PRESTIGE = 1,		-- Monthly Prestige for having the capital in the holy site of other religions
 
@@ -1455,16 +1455,16 @@ NMilitary = {
 	SHATTERED_RETREAT_ENABLED_COMBAT = 1,		-- Enables shattered retreat for combat if set to 1
 	SHATTERED_RETREAT_ENABLED_SIEGE = 0,		-- Enables shattered retreat for sieges if set to 1
 	SIMPLE_RETREAT_ENABLED_SIEGE = 0,			-- Enables simple retreat for sieges if set to 1
-	SHATTERED_RETREAT_HOSTILE_ATTRITION = 10,	-- Attrition taken when traversing hostile territory durring a shattered retreat (as a percentage)
-	SHATTERED_RETREAT_NEUTRAL_ATTRITION = 5,	-- Attrition taken when traversing neutral territory durring a shattered retreat (as a percentage)
-	SHATTERED_RETREAT_FRIENDLY_ATTRITION = 0,	-- Attrition taken when traversing friendly territory durring a shattered retreat (as a percentage)
+	SHATTERED_RETREAT_HOSTILE_ATTRITION = 10,	-- Attrition taken when traversing hostile territory during a shattered retreat (as a percentage)
+	SHATTERED_RETREAT_NEUTRAL_ATTRITION = 5,	-- Attrition taken when traversing neutral territory during a shattered retreat (as a percentage)
+	SHATTERED_RETREAT_FRIENDLY_ATTRITION = 0,	-- Attrition taken when traversing friendly territory during a shattered retreat (as a percentage)
 
 	SHATTERED_RETREAT_MOVEMENT_MULTIPLIER = 1.3,-- Multiplier of unit movement speed when shattered
 	SHATTERED_RETREAT_MORALE_MULTIPLIER = 1.5,	-- Multiplier of morale regain when shattered
 
 	SHATTERED_RETREAT_PREFERRED_PROVINCES = 4,				-- Units will try to move at least this many provinces away in shattered retreat
 	SHATTERED_RETREAT_MAX_PROVINCES = 10,					-- Units can not move longer than this many provinces during a shattered retreat
-	SHATTERED_RETREAT_DISTANCE_MULTIPLIER = -20,			-- Value added for each province away from the prefered distance (whether too close or too far)
+	SHATTERED_RETREAT_DISTANCE_MULTIPLIER = -20,			-- Value added for each province away from the preferred distance (whether too close or too far)
 	SHATTERED_RETREAT_OWN_UNIT_MULTIPLIER = 0.1, 			-- Multiplier of own units in province when evaluating retreat provinces
 	SHATTERED_RETREAT_WAR_FRIEND_UNIT_MULTIPLIER = 0.025, 	-- Multiplier of war friend units in province when evaluating retreat provinces
 	SHATTERED_RETREAT_ENEMY_UNIT_MULTIPLIER = -0.3, 		-- Multiplier of war friend units in province when evaluating retreat provinces
@@ -1477,7 +1477,7 @@ NMilitary = {
 	SHATTERED_RETREAT_SAME_RELIGION	= 30,		            -- Added for same religion controlled provinces when evaluating retreat provinces
 	SHATTERED_RETREAT_SAME_CULTURE = 10,		            -- Added for same culture controlled provinces when evaluating retreat provinces
 	SHATTERED_RETREAT_SAME_GOVERNMENT = 15,		            -- Added for same government controlled provinces when evaluating retreat provinces
-	SHATTERED_RETREAT_MAX_DISTANCE_DIVIDER = 4,				-- The previous values are now divided by distance away from the prefered distance, but won't be divided by more than this
+	SHATTERED_RETREAT_MAX_DISTANCE_DIVIDER = 4,				-- The previous values are now divided by distance away from the preferred distance, but won't be divided by more than this
 	SHATTERED_RETREAT_RANDOM = 10,				            -- Added random factor when evaluating shattered retreat provinces
 	SHATTERED_RETREAT_BOAT_ADJACENCY_COASTAL_BONUS = 20, 	-- Bonus added to coastal provinces adjacent to boats the unit can board
 	MERCENARY_CREATE_LEVY_RATIO = 0.25,						-- Amount of max levies used to calculate the maximum size of non-nomadic dynamic mercenaries.
@@ -1542,7 +1542,7 @@ NDisease = {
 	INFECTION_CHANCE_MODIFIER_FORT = 0.05,
 	INFECTION_CHANCE_MODIFIER_UNITS = 0.05,
 	INFECTION_CHANCE_MODIFIER_TRADEROUTE = 0.5,
-	INFECTION_CHANCE_MODIFIER_TAXES = 0.01,				-- Multiplied by the province total taxes and added to contagiousness to dermine where to spread
+	INFECTION_CHANCE_MODIFIER_TAXES = 0.01,				-- Multiplied by the province total taxes and added to contagiousness to determine where to spread
 	INFECTION_CHANCE_ORIGINAL_PROVINCE_MODIFIER = 0.5,	-- How much the original province of infection impacts the chances of a new province being infected
 	INFECTION_CHANCE_NEIGHBOURS_MODIFIER = 0.2,		-- How much the number of already infected neighbours affects the chances of infection
 
@@ -1650,8 +1650,8 @@ NAI =
 
 	NOMAD_DESIRED_UNUSED_MANPOWER = 0.2,					-- The ratio of total manpower nomads want to keep for reinforcing their hordes
 	AI_MIN_CLAN_SIZE_MULTIPLIER = 0.75,						-- Used to calculate the minimum clan size that the AI prefers from the desired clan size
-	NOMAD_HIGH_MANPOWER_AGRESSION_MULTIPLIER = 1.5,			-- Nomad agression multiplier for having high manpower
-	NOMAD_LOW_MANPOWER_AGRESSION_MULTIPLIER = 0.5,			-- Nomad agression multiplier for having low manpower
+	NOMAD_HIGH_MANPOWER_AGRESSION_MULTIPLIER = 1.5,			-- Nomad aggression multiplier for having high manpower
+	NOMAD_LOW_MANPOWER_AGRESSION_MULTIPLIER = 0.5,			-- Nomad aggression multiplier for having low manpower
 	NOMAD_KEEPS_BARON_TRIBAL_SETTLEMENTS = 1,				-- If set to 1, Independent AI Nomads will never give away baron tribal settlements in owned provinces (they will instead use the decision to pillage these holdings)
 	NOMAD_BUILDS_TEMPLES = 0,								-- If set to 1, AI Nomads will build temples like any other government would (when at 0 they will only build them in holy sites lacking a temple province)
 
@@ -1692,7 +1692,7 @@ NAI =
 
 	EXPANDING_HORDE_TRESHOLD = 10000,						-- How many event spawned troops needed for AI to think it is still expanding
 
-	CONTINUE_WAR_TRESHOLD = 5, 								-- How much warscore needed for the AI to consider using a favor to sto pthe liege enforce peace
+	CONTINUE_WAR_TRESHOLD = 5, 								-- How much warscore needed for the AI to consider using a favor to stop the liege enforce peace
 	STOP_WAR_THRESHOLD = -50,								-- How much warscore needed for the AI to consider using a favor to force the liege to start enforcing peace
 	TROOP_STRENGTH_PER_TIER_ENFORCE_PEACE = 2500,			-- For AI to consider how powerful a vassal is
 
@@ -1890,7 +1890,7 @@ NLearningScenario =
 NWonders =
 {
 	MIN_LOOTABLE_STAGE = 2, -- The stage set here will be lootable, but looting will automagically stop after it has been looted and no looting will be possible below this stage.
-	CONVERTER_IGNORE_HISTORICAL_WONDERS = 1, -- If set to one then the historical wonders will not be transfered through the EU4 converter even if they have finished the final stage of construction.
+	CONVERTER_IGNORE_HISTORICAL_WONDERS = 1, -- If set to one then the historical wonders will not be transferred through the EU4 converter even if they have finished the final stage of construction.
 	NON_CONCLAVE_COST_MULTIPLIER = 0.6 -- Without the Conclave tax laws the independent rulers will have significantly less income.
 }
 
