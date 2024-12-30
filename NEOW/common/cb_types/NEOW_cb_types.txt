@@ -4720,6 +4720,479 @@ dismantle_confederacy_cb = {
 			}
 	}
 }
+
+dismantle_mega_empire_cb = {
+	name = CB_NAME_DISMANTLE_MEGA_EMPIRE
+	war_name = WAR_NAME_DISMANTLE_MEGA_EMPIRE
+	sprite = 30
+	truce_days = 1825
+	is_permanent = yes
+	display_on_map = no
+	hostile_against_others = yes
+	can_ask_to_join_war = no
+	
+	defender_unoccupied_warscore = yes
+	
+	can_use_gui = {
+		ROOT = {
+			independent = yes
+			prestige = 2000
+			realm_size = 50 
+			is_within_diplo_range = FROM 
+		}
+		FROM = { 
+			independent = yes
+			realm_size = 450 
+			real_tier = EMPEROR
+			is_within_diplo_range = ROOT 
+		}
+	}
+	
+	on_add = {
+		ROOT = {
+			independent = yes
+			prestige = 5000
+			realm_size = 100 
+		}
+	}
+	can_use = {
+		ROOT = { 
+			independent = yes
+			prestige = 2000
+			realm_size = 50 
+			is_within_diplo_range = FROM 
+		}
+		FROM = { 
+			independent = yes
+			realm_size = 400 
+			real_tier = EMPEROR
+			is_within_diplo_range = ROOT 
+		}
+	}
+
+	on_success = {
+		FROM = {
+			custom_tooltip = { 
+				text = dismantle_mega_empire_success_tt
+				hidden_effect = {
+					any_courtier = { death = { death_reason = death_execution killer = ROOT } }
+					any_demesne_title = {
+						limit = {
+							higher_tier_than = COUNT
+							is_landless_type_title = no
+						}
+						destroy_landed_title = THIS
+					}
+					death = { death_reason = death_execution killer = ROOT }
+				}
+			}
+			capital_scope = {
+				if = {
+					limit = {
+						num_of_settlements = 7
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+				}
+				else_if = {
+					limit = {
+						num_of_settlements = 6
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+				}
+				else_if = {
+					limit = {
+						num_of_settlements = 5
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+				}
+				else_if = {
+					limit = {
+						num_of_settlements = 4
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+				}
+				else_if = {
+					limit = {
+						num_of_settlements = 3
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+				}
+				else_if = {
+					limit = {
+						num_of_settlements = 2
+					}
+					random_province_holding = {
+						destroy_settlement = yes
+					}
+				}
+				else = {
+				}
+			}
+		}
+		ROOT = {
+			prestige = 2500
+		}
+	}
+
+	on_fail = {
+		FROM = {
+			piety = 2000
+			participation_scaled_prestige = 250
+		}
+		any_defender = {
+			limit = { NOT = { character = FROM } }
+			hidden_tooltip = { participation_scaled_prestige = 250 }
+		}
+		ROOT = {
+			piety = -1000
+		}
+	}
+
+	on_reverse_demand = {
+		ROOT = {
+			piety = -200
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 3.0
+				min = 300
+			}
+		}
+		FROM = {
+			piety = 200
+			participation_scaled_prestige = 1000
+		}
+		any_defender = {
+			limit = { NOT = { character = FROM } }
+			hidden_tooltip = { participation_scaled_prestige = 1000 }
+		}
+	}
+	
+	on_attacker_leader_death = {
+		end_war = invalid
+	}
+
+	attacker_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	attacker_ai_defeat_worth = {
+		factor = 100
+	}
+
+	defender_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	defender_ai_defeat_worth = {
+		factor = 100
+	}
+
+	ai_will_do = {
+		factor = 1
+			modifier = {
+				factor = 0.5
+				ROOT = {trait = misguided_warrior}
+			}
+			modifier = {
+				factor = 0.7
+				ROOT = {trait = tough_soldier}
+			}
+			modifier = {
+				factor = 1.5
+				ROOT = {trait = skilled_tactician}
+			}
+			modifier = {
+				factor = 2
+				ROOT = {trait = brilliant_strategist}
+			}
+			modifier = {
+				factor = 2
+				ROOT = {trait = exalted_warlord}
+			}
+			modifier = {
+				factor = 2
+				ROOT = {trait = brave}
+			}
+			modifier = {
+				factor = 0
+				ROOT = {trait = bhutan_isolationist}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {trait = bhutan_open}
+			}
+			modifier = {
+				factor = 0
+				ROOT = {
+					opinion = { 
+						who = FROM
+						value = 40
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				ROOT = {trait = bhutan_expansionist}
+			}
+			modifier = {
+				factor = 2
+				ROOT = {trait = ambitious}
+			}
+			modifier = {
+				factor = 0.1
+				ROOT = {trait = slothful}
+			}
+			modifier = {
+				factor = 2
+				ROOT = {trait = proud}
+			}
+			modifier = {
+				factor = 0.2
+				ROOT = {trait = greedy}
+			}
+			modifier = {
+				factor = 0.1
+				ROOT = {trait = content}
+			}
+			modifier = {
+				factor = 0.1
+				FROM = {trait = humble}
+			}
+			modifier = {
+				factor = 2
+				FROM = {trait = ambitious}
+			}
+			modifier = {
+				factor = 2
+				FROM = {prestige = 2000}
+			}
+			modifier = {
+				factor = 2
+				FROM = {wealth = 1500}
+			}
+			modifier = {
+				factor = 2
+				FROM = {trait = wroth}
+			}
+			modifier = {
+				factor = 1.5
+				FROM = {trait = greedy}
+			}
+			modifier = {
+				factor = 2
+				FROM = {trait = envious}
+			}
+			modifier = {
+				factor = 2
+				FROM = {trait = viking}
+			}
+			modifier = {
+				factor = 2
+				FROM = {trait = ravager}
+			}
+			modifier = {
+				factor = 2
+				FROM = {trait = seaking}
+			}
+			modifier = {
+				factor = 2
+				FROM = {trait = sea_queen}
+			}
+			modifier = {
+				factor = 2
+				FROM = {trait = proud}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {trait = misguided_warrior}
+			}
+			modifier = {
+				factor = 0.7
+				FROM = {trait = tough_soldier}
+			}
+			modifier = {
+				factor = 1.5
+				FROM = {trait = skilled_tactician}
+			}
+			modifier = {
+				factor = 2
+				FROM = {trait = brilliant_strategist}
+			}
+			modifier = {
+				factor = 2
+				FROM = {trait = exalted_warlord}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {trait = amateurish_plotter}
+			}
+			modifier = {
+				factor = 0.7
+				FROM = {trait = flamboyant_schemer}
+			}
+			modifier = {
+				factor = 1.5
+				FROM = {trait = intricate_webweaver}
+			}
+			modifier = {
+				factor = 2
+				FROM = {trait = elusive_shadow}
+			}
+			modifier = {
+				factor = 2
+				FROM = {trait = conniving_puppetmaster}
+			}
+			modifier = {
+				factor = 0.7
+				FROM = {trait = naive_appeaser}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {trait = underhanded_rogue}
+			}
+			modifier = {
+				factor = 0.3
+				FROM = {trait = charismatic_negotiator}
+			}
+			modifier = {
+				factor = 0.1
+				FROM = {trait = grey_eminence}
+			}
+			modifier = {
+				factor = 0.1
+				FROM = {trait = virtuoso_arbitrator}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {trait = slow}
+			}
+			modifier = {
+				factor = 0.2
+				FROM = {trait = imbecile}
+			}
+			modifier = {
+				factor = 0.2
+				FROM = {
+					martial < 5
+				}
+			}
+			modifier = {
+				factor = 0.7
+				FROM = {
+					martial = 5
+					martial < 10
+				}
+			}
+			modifier = {
+				factor = 1.3
+				FROM = {
+					martial = 10
+					martial < 15
+				}
+			}
+			modifier = {
+				factor = 1.8
+				FROM = {
+					martial = 15
+					martial < 20
+				}
+			}
+			modifier = {
+				factor = 2.2
+				FROM = {
+					martial = 20
+				}
+			}
+			modifier = {
+				factor = 0.2
+				FROM = {
+					intrigue < 5
+				}
+			}
+			modifier = {
+				factor = 0.7
+				FROM = {
+					intrigue = 5
+					intrigue < 10
+				}
+			}
+			modifier = {
+				factor = 1.3
+				FROM = {
+					intrigue = 10
+					intrigue < 15
+				}
+			}
+			modifier = {
+				factor = 1.8
+				FROM = {
+					intrigue = 15
+					intrigue < 20
+				}
+			}
+			modifier = {
+				factor = 2.2
+				FROM = {
+					intrigue = 20
+				}
+			}
+	}
+}
 dismantle_threat_bhutan_cb = {
 	name = CB_NAME_DISMANTLE_THREAT_BHUTAN
 	war_name = WAR_NAME_DISMANTLE_THREAT_BHUTAN
@@ -9690,6 +10163,188 @@ byzantine_reconquest = {
 	}
 }
 
+marble_reconquest = {
+	name = CB_NAME_IMPERIAL
+	war_name = WAR_NAME_IMPERIAL
+	sprite = 17
+	truce_days = 1825
+	is_permanent = yes
+	check_de_jure_tier = DUKE # this scans all dejure duchies for the counties which are held by or vassals(or below) of selected character. Only valid if is_permanent = yes
+
+	allowed_to_target_tributaries = no
+	
+	sort_priority = 1900
+
+	can_use_gui = {
+		check_if_crusader_trigger = yes
+	}
+
+	can_use = {
+		ROOT = { bhutan_major_cb = yes	}
+		ROOT = {
+			has_landed_title = e_marblists
+			independent = yes
+			OR = { 
+				religion_group = christian
+			}
+			NOT = { same_realm = FROM }
+			mercenary = no
+		}
+	}
+
+	can_use_title = {
+		OR = {
+			de_jure_liege_or_above = k_byzantium
+			de_jure_liege_or_above = k_anatolia
+			de_jure_liege_or_above = k_epirus
+			de_jure_liege_or_above = k_macedonia
+			de_jure_liege_or_above = k_thrace
+			de_jure_liege_or_above = k_cyprus
+			de_jure_liege_or_above = k_armenia
+			de_jure_liege_or_above = k_bulgaria
+			de_jure_liege_or_above = k_serbja
+			de_jure_liege_or_above = k_italy
+			de_jure_liege_or_above = k_syria
+			de_jure_liege_or_above = k_malta
+			de_jure_liege_or_above = k_jerusalem
+			de_jure_liege_or_above = k_egypt
+			de_jure_liege_or_above = k_sardinia
+			de_jure_liege_or_above = k_turkey
+			de_jure_liege_or_above = k_karaman
+			de_jure_liege_or_above = k_karadeniz
+			de_jure_liege_or_above = k_daglikarazi
+			de_jure_liege_or_above = k_lebanon
+			de_jure_liege_or_above = k_israel
+			de_jure_liege_or_above = k_two_siciles
+			de_jure_liege_or_above = k_chorwatia
+			de_jure_liege_or_above = k_bosnai
+			de_jure_liege_or_above = k_georgia
+			de_jure_liege_or_above = k_aromania
+			de_jure_liege_or_above = k_azerbaijan
+			de_jure_liege_or_above = k_montenegro
+			de_jure_liege_or_above = k_assyria
+			de_jure_liege_or_above = k_kurdistan
+			de_jure_liege_or_above = k_iraq
+			de_jure_liege_or_above = k_libya
+			de_jure_liege_or_above = k_algeria
+			de_jure_liege_or_above = k_africa
+			de_jure_liege_or_above = k_latium
+			de_jure_liege_or_above = k_tuscany
+			de_jure_liege_or_above = k_lombardo-veneto
+			de_jure_liege_or_above = k_san_marino
+			de_jure_liege_or_above = k_slovenia
+		}
+	}
+	
+	is_valid = {
+		ROOT = {
+			independent = yes
+			OR = { 
+				religion_group = christian
+			}
+			NOT = { same_realm = FROM }
+		}
+	}
+
+	on_add = {
+		general_on_add_effect = yes
+	}
+	
+	on_success = {
+		ROOT = {
+			participation_scaled_prestige = 100
+		}
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			hidden_tooltip = { 
+				participation_scaled_prestige = 100
+			}
+		}
+		
+		FROM = { prestige = -100 }
+	}
+
+	on_success_title = {
+		custom_tooltip = { 
+			text = other_invasion_succ_tip
+			hidden_tooltip = {
+				ROOT = {
+					vassalize_or_take_under_title = {
+						title = PREV
+						enemy = FROM
+						type = invasion
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				holder_scope = { character = FROM }
+			}
+			usurp_title_only = { target = ROOT type = invasion }
+		}
+
+		hidden_tooltip = {
+			check_if_reconquista_finished_effect = yes
+			FROM = {
+				landless_pope_effect = yes
+			}
+		}
+	}
+
+	on_fail = {
+		ROOT = { prestige = -150 }
+	}
+
+	on_reverse_demand = {
+		ROOT = {
+			transfer_scaled_wealth = {
+				to = FROM
+				value = 4.0
+			}
+			ROOT = { prestige = -200 }
+		}
+		FROM = {
+			participation_scaled_piety = 100
+			participation_scaled_prestige = 200
+			if = {
+				limit = {
+					uses_decadence = yes
+				}
+				participation_scaled_decadence = -10
+			}
+		}
+		any_defender = {
+			limit = { NOT = { character = FROM } }
+			hidden_tooltip = { 
+				participation_scaled_piety = 100
+				participation_scaled_prestige = 200
+				if = {
+					limit = {
+						uses_decadence = yes
+					}
+					participation_scaled_decadence = -10
+				}
+			}
+		}
+	}
+
+	attacker_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	attacker_ai_defeat_worth = {
+		factor = 100
+	}
+
+	defender_ai_victory_worth = {
+		factor = -1 # always accept
+	}
+	
+	defender_ai_defeat_worth = {
+		factor = 100
+	}
+}
 macedonian_reconquest = {
 	name = CB_NAME_IMPERIAL
 	war_name = WAR_NAME_IMPERIAL
