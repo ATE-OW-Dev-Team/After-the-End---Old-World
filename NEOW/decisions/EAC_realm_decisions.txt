@@ -161,8 +161,8 @@ decisions = {
 				culture_group = austronesian
 				culture_group = asian_anglophone
 				culture_group = aeta_group
-				culture_group = hispano_austronesian
 				culture_group = south_philippinic
+				culture = chavacano
 			}
 			OR = {
 				religion = catholic
@@ -269,8 +269,8 @@ decisions = {
 				culture_group = austronesian
 				culture_group = asian_anglophone
 				culture_group = aeta_group
-				culture_group = hispano_austronesian
 				culture_group = south_philippinic
+				culture = chavacano
 			}
 			OR = {
 				religion_group = muslim
@@ -1283,6 +1283,123 @@ decisions = {
 			factor = 1
 		}
 	}
+	
+	form_ikaya = { #Sri Vijaya
+		is_high_prio = yes
+		only_playable = no
+		ai_check_interval = 24
+		potential = {
+			form_empire_potential = yes
+			culture = serani
+			e_ikaya = {
+				is_titular = yes
+				has_holder = no
+			}
+			NOT = {
+				OR = {
+					has_landed_title = e_utsmaniyah
+					has_landed_title = e_tang
+					}
+				}
+			NOT = {
+				OR = {
+					culture = cina
+					culture = singapura
+				}
+				OR = { 
+					religion = pancasila
+					religion = agamatirta
+				}
+			}
+			prisoner = no
+			has_regent = no
+		}
+
+		allow = {
+			prestige = 10000 
+			realm_size = 150
+			form_title_allow = yes
+			independent = yes
+			AND = {	#Control the important cities of SEA
+				completely_controls = c_malacca 
+				completely_controls = c_jakarta 
+				completely_controls = c_singapore
+				completely_controls = c_bandar_seri_begawan
+				completely_controls = c_banda_aceh
+				completely_controls = c_palembang
+				
+			}
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = form_ikaya_tt
+				e_nusantara = {
+					gain_title_effect = yes
+				}
+			}
+			give_nickname = nick_the_unifier
+			if = {
+				limit = {
+					is_female = yes
+					has_dlc = "Holy Fury"
+				}
+				create_bloodline = {
+					type = ikaya_female
+				}
+				new_bloodline = {
+					set_description = "ikaya_female_desc"
+				}
+			}
+			if = {
+				limit = {
+					is_female = no
+					has_dlc = "Holy Fury"
+				}
+				create_bloodline = {
+					type = ikaya_male
+				}
+				new_bloodline = {
+					set_description = "ikaya_male_desc"
+				}
+			}
+			e_ikaya = {
+				add_law = ze_administration_laws_2
+				add_law = vice_royalty_2
+				add_law = succ_primogeniture
+			}
+			hidden_tooltip = {
+				k_aceh = { de_jure_liege = e_ikaya }
+				k_bengkulu = { de_jure_liege = e_ikaya }
+				k_riau = { de_jure_liege = e_ikaya }
+				k_kedah = { de_jure_liege = e_ikaya }		
+				k_pahang = { de_jure_liege = e_ikaya }	
+				k_malaca = { de_jure_liege = e_ikaya }	
+				k_paktai = { de_jure_liege = e_ikaya }	
+				k_malaca = { de_jure_liege = e_ikaya }	
+				k_majapahit = { de_jure_liege = e_ikaya }	
+				k_sunda = { de_jure_liege = e_ikaya }	
+				k_bali = { de_jure_liege = e_ikaya }	
+				k_west_kalimantan = { de_jure_liege = e_ikaya }	
+				k_kalimantan = { de_jure_liege = e_ikaya }	
+				k_sarawak = { de_jure_liege = e_ikaya }	
+				k_sabah = { de_jure_liege = e_ikaya }
+				k_borneo = { de_jure_liege = e_ikaya }
+				k_brunei = {de_jure_liege = e_ikaya }
+				k_singapore = {de_jure_liege = e_ikaya }
+				k_terengganu = {de_jure_liege = e_ikaya }
+				k_kelantan_patani = {de_jure_liege = e_ikaya }
+				k_miri_kapit = {de_jure_liege = e_ikaya }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
 	form_utsmaniyah_empire = { 
 		is_high_prio = yes
 		only_playable = no
@@ -1627,6 +1744,58 @@ decisions = {
 					k_cyprus = { set_de_jure_if_controls_effect = yes }
 					k_aromania = { set_de_jure_if_controls_effect = yes }
 				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	integrate_brunei = {
+		is_high_prio = yes
+		only_playable = no
+		ai_check_interval = 36
+		potential = {
+			culture = brunei
+			has_landed_title = k_brunei
+			NOT = {
+				has_global_flag = brunei_integration
+			}
+			prisoner = no
+			has_regent = no
+		}
+
+		allow = {
+			custom_tooltip = {
+				text = all_relevant_titles_must_be_owned_or_owned_by_vassals_tt
+			}
+			OR = {
+				k_sabah = { show_scope_change = no province_completely_controls_trigger = yes }
+				has_landed_title = k_sabah
+			}
+			OR = {
+				k_sarawak = { show_scope_change = no province_completely_controls_trigger = yes }
+				has_landed_title = k_sarawak
+			}
+			conditional_tooltip = {
+						trigger = { k_miri_kapit = { is_titular = no } }
+						k_miri_kapit = { show_scope_change = no province_completely_controls_trigger = yes }
+						has_landed_title = k_miri_kapit
+					}
+		}
+
+		effect = {
+			set_global_flag = brunei_integration
+			hidden_tooltip = {
+				d_serian = { de_jure_liege = k_brunei }
+				d_bintulu = { de_jure_liege = k_brunei }
+				d_daro = { de_jure_liege = k_brunei }
+				d_limbang = { de_jure_liege = k_brunei }
+				d_tenom = { de_jure_liege = k_brunei }
+				d_kinabatangan = { de_jure_liege = k_brunei }
+				d_kota_marudu = { de_jure_liege = k_brunei }
 			}
 		}
 		revoke_allowed = {
