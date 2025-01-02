@@ -14,6 +14,965 @@ namespace = SoA
 # The Order of Saint Anthony
 ########################################
 
+# The Grand Master demands one of your sons due to debt
+character_event = {
+	id = SoA.1000
+	hide_window = yes
+	
+	min_age = 16
+	only_playable = yes
+	religion_group = christian
+	
+	trigger = {
+		OR = {
+			religion = catholic
+			religion = cathar
+			religion = fraticelli
+			religion = waldensian
+			religion = lollard
+		}
+		is_heretic = no
+		has_character_modifier = borrowed_from_knights_templar
+		NOT = { has_character_flag = sent_son_to_knights_templar }
+		any_child = {
+			is_female = no
+			is_adult = yes
+			is_ruler = no
+			prisoner = no
+			NOT = { trait = incapable }
+			ROOT = {
+				NOT = { 
+					current_heir = { 
+						character = PREVPREV 
+					}
+				}
+			}
+		}
+		has_dlc = "Sons of Abraham"
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	immediate = {
+		random_child = {
+			limit = {
+				is_female = no
+				is_adult = yes
+				is_ruler = no
+				prisoner = no
+				NOT = { trait = incapable }
+				ROOT = {
+					NOT = { 
+						current_heir = { 
+							character = PREVPREV 
+						}
+					}
+				}
+			}
+			character_event = {
+				id = SoA.1001
+			}
+		}
+	}
+}
+
+character_event = {
+	id = SoA.1001
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		d_knights_templar = {
+			holder_scope = {
+				character_event = {
+					id = SoA.1002
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = SoA.1002
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			letter_event = {
+				id = SoA.1003
+			}
+		}
+	}
+}
+
+letter_event = {
+	id = SoA.1003
+	desc = {
+        text = EVTDESC_SOA_1003
+        trigger = {
+			NOT = {
+				has_alternate_start_parameter = {
+					key = religion_names
+					value = random
+				}
+			}
+        }
+    }
+	desc = {
+        text = HOLY_ORDER_DEMAND_SON_ALT
+        trigger = {
+			has_alternate_start_parameter = {
+				key = religion_names
+				value = random
+			}
+        }
+    }
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SOA_1003 # Agree
+		ai_chance = {
+			factor = 100
+		}
+		
+		set_character_flag = sent_son_to_knights_templar
+		
+		piety = 100
+		
+		d_knights_templar = {
+			holder_scope = {
+				FROMFROM = {
+					hidden_tooltip = {
+						clear_wealth = PREV
+					}
+					spouse = {
+						remove_spouse = spouse
+						hidden_tooltip = { character_event = { id = SoA.2862 } }
+					}
+					move_character = PREV
+					add_trait = celibate
+					end_inaccessibility_effect = yes #removes in_hiding or in_seclusion
+
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_SOA_1003 # Pay them back
+		wealth = -300
+		hidden_tooltip = {
+			remove_character_modifier = borrowed_from_knights_templar
+		}
+		FROM = {
+			wealth = 300
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_SOA_1003 # Refuse
+		piety = -1000
+	}
+}
+
+# Ping event when borrowing money from the Templars
+character_event = {
+	id = SoA.1010
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		wealth = -300
+		FROM = {
+			letter_event = {
+				id = SoA.1011
+			}
+		}
+		abdicate_holy_order_if_religion_changes_effect = yes
+	}
+}
+
+# Notification event when borrowing money from the Templars
+letter_event = {
+	id = SoA.1011
+	desc = {
+        text = EVTDESC_SOA_1011
+        trigger = {
+			NOT = {
+				has_alternate_start_parameter = {
+					key = religion_names
+					value = random
+				}
+			}
+        }
+    }
+	desc = {
+        text = HOLY_ORDER_BORROW_ALT
+        trigger = {
+			has_alternate_start_parameter = {
+				key = religion_names
+				value = random
+			}
+        }
+    }
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# Ping event when vassalizing the Templars
+character_event = {
+	id = SoA.1015
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_defacto_liege = FROM
+		FROM = {
+			letter_event = {
+				id = SoA.1016
+			}
+		}
+		abdicate_holy_order_if_religion_changes_effect = yes
+	}
+}
+
+# Notification event when vassalizing the Templars
+letter_event = {
+	id = SoA.1016
+	desc = EVTDESC_SOA_1016
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# The Grand Master demands the right to build a castle in your demesne
+character_event = {
+	id = SoA.1020
+	
+	hide_window = yes
+	
+	min_age = 16
+	only_playable = yes
+	religion_group = christian
+	
+	trigger = {
+		OR = {
+			religion = catholic
+			religion = cathar
+			religion = fraticelli
+			religion = waldensian
+			religion = lollard
+		}
+		is_heretic = no
+		
+		has_character_modifier = borrowed_from_knights_templar
+		NOT = { has_character_flag = sent_son_to_knights_templar }
+		
+		any_demesne_province = {
+			has_empty_holding = yes
+		}
+		
+		d_knights_templar = {
+			holder_scope = {
+				wealth = 300
+			}
+		}
+		has_dlc = "Sons of Abraham"
+		
+		NOT = { has_character_modifier = expelled_d_knights_templar }
+		NOT = {
+			any_liege = {
+				has_character_modifier = expelled_d_knights_templar
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	immediate = {
+		random_demesne_province = {
+			limit = {
+				has_empty_holding = yes
+			}
+			province_event = {
+				id = SoA.1021
+			}
+		}
+	}
+}
+
+province_event = {
+	id = SoA.1021
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		d_knights_templar = {
+			holder_scope = {
+				character_event = {
+					id = SoA.1022
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = SoA.1022
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			letter_event = {
+				id = SoA.1023
+			}
+		}
+	}
+}
+
+letter_event = {
+	id = SoA.1023
+	desc = {
+        text = EVTDESC_SOA_1023
+        trigger = {
+			NOT = {
+				has_alternate_start_parameter = {
+					key = religion_names
+					value = random
+				}
+			}
+        }
+    }
+	desc = {
+        text = HOLY_ORDER_BUILD_CASTLE_ALT
+        trigger = {
+			has_alternate_start_parameter = {
+				key = religion_names
+				value = random
+			}
+        }
+    }
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SOA_1023 # Agree
+		ai_chance = {
+			factor = 100
+		}
+		
+		hidden_tooltip = {
+			remove_character_modifier = borrowed_from_knights_templar
+			remove_character_modifier = expelled_d_knights_templar
+			FROMFROM = {
+				province_event = { id = SoA.1024 }
+			}
+		}
+		
+		piety = 100
+	}
+	
+	option = {
+		name = EVTOPTB_SOA_1003 # Pay them back
+		wealth = -300
+		hidden_tooltip = {
+			remove_character_modifier = borrowed_from_knights_templar
+		}
+		FROM = {
+			wealth = 300
+		}
+	}
+	
+	option = {
+		name = EVTOPTC_SOA_1003 # Refuse
+		piety = -1000
+	}
+}
+
+# Castle has been erected
+province_event = {
+	id = SoA.1024
+	desc = EVTDESC_SOA_1024
+	picture = GFX_evt_castle_construction
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			wealth = -300
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SOA_1024
+		build_holding = {
+		   type = castle
+		   holder = FROMFROM
+		}
+	}
+}
+
+# The son of a ruler volunteers to join the Knights Templar
+character_event = {
+	id = SoA.1030
+	hide_window = yes
+	
+	only_men = yes
+	min_age = 16
+	max_age = 45
+	only_capable = yes
+	prisoner = no
+	religion_group = christian
+	
+	trigger = {
+		is_ruler = no
+		OR = {
+			religion = catholic
+			religion = cathar
+			religion = fraticelli
+			religion = waldensian
+			religion = lollard
+		}
+		is_heretic = no
+		
+		martial = 5
+		
+		is_title_active = d_knights_templar
+		
+		OR = {
+			father_even_if_dead = {
+				primary_title = { higher_tier_than = BARON }
+			}
+			mother_even_if_dead = {
+				primary_title = { higher_tier_than = BARON }
+			}
+		}
+		
+		liege = {
+			holy_order = no
+			OR = {
+				religion = catholic
+				religion = cathar
+				religion = fraticelli
+				religion = waldensian
+				religion = lollard
+			}
+			liege = {
+				holy_order = no
+			}
+		}
+		
+		has_dlc = "Sons of Abraham"
+		
+		NOT = { has_character_modifier = expelled_d_knights_templar }
+		NOT = {
+			any_liege = {
+				has_character_modifier = expelled_d_knights_templar
+			}
+		}
+		
+		NOT = {
+			any_spouse = {
+				OR = {
+					is_landed = yes
+					AND = {
+						is_pregnant = yes
+					father_of_unborn = { character = ROOT } # Won't happen if spouse is pregnant with non-bastard child
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 100
+		modifier = {
+			factor = 0.25
+			trait = zealous
+		}
+		modifier = {
+			factor = 0.5
+			trait = celibate
+		}
+		modifier = {
+			factor = 0.5
+			trait = homosexual
+		}
+		modifier = {
+			factor = 0.7
+			trait = content
+		}
+		modifier = {
+			factor = 0.75
+			trait = chaste
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { age = 25 }
+		}
+		modifier = {
+			factor = 1.5
+			trait = slothful
+		}
+		modifier = {
+			factor = 2.0
+			trait = lustful
+		}
+		modifier = {
+			factor = 2.0
+			trait = cynical
+		}
+		modifier = {
+			factor = 2.0
+			trait = hedonist
+		}
+		modifier = {
+			factor = 2.0
+			trait = ambitious
+		}
+		modifier = {
+			factor = 2.0
+			any_heir_title = {
+				always = yes
+			}
+		}
+		modifier = {
+			factor = 2.0
+			is_primary_heir = yes
+		}
+		modifier = {
+			factor = 2
+			any_spouse = {
+				reverse_opinion = { who = ROOT value = 100 }
+			}
+		}
+		modifier = {
+			factor = 3.0 # Prefer the Teutonic Order
+			OR = {
+				culture_group = north_germanic
+				culture_group = central_germanic
+				culture_group = magyar
+				culture_group = south_slavic
+				culture_group = west_slavic
+			}
+		}
+	}
+	
+	immediate = {
+		liege = {
+			character_event = {
+				id = SoA.1031
+			}
+		}
+	}
+}
+
+# Son or brother asks to join the Knights Templar
+character_event = {
+	id = SoA.1031
+	desc = EVTDESC_SOA_1031
+	picture = GFX_evt_crusaders
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SOA_1031 # Agree
+		ai_chance = {
+			factor = 100
+		}
+		
+		if = {
+			limit = {
+				religion = FROM
+			}
+			piety = 100
+		}
+		
+		FROM = {
+			character_event = {
+				id = SoA.1032
+				tooltip = EVTTOOLTIP_SOA_1032
+			}
+		}
+	}
+	
+	option = {
+		name = EVTOPTB_SOA_1031 # Refuse
+		
+		if = {
+			limit = {
+				religion = FROM
+			}
+			piety = -100
+		}
+		
+		FROM = {
+			character_event = {
+				id = SoA.1033
+				tooltip = EVTTOOLTIP_SOA_1033
+			}
+		}
+	}
+}
+
+# Son or brother joins the Knights Templar
+character_event = {
+	id = SoA.1032
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		d_knights_templar = {
+			holder_scope = {
+				save_event_target_as = order_target
+				ROOT = {
+					character_event = { id = SoA.2864 }
+				}
+			}
+		}
+	}
+}
+
+# Liege refuses request to join the Knights Templar
+character_event = {
+	id = SoA.1033
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		opinion = {
+			who = FROM
+			modifier = opinion_refused_request_holy_order
+		}
+	}
+}
+
+# The Grand Master humbly requests the right to build a castle in your demesne
+character_event = {
+	id = SoA.1050
+	hide_window = yes
+	
+	min_age = 16
+	only_playable = yes
+	religion_group = christian
+	
+	trigger = {
+		OR = {
+			religion = catholic
+			religion = cathar
+			religion = fraticelli
+			religion = waldensian
+			religion = lollard
+		}
+		is_heretic = no
+		
+		d_knights_templar = {
+			holder_scope = {
+				wealth = 300
+				NOT = {
+					realm_size = 10
+				}
+				NOT = {
+					num_of_count_titles = 1
+				}
+			}
+		}
+		
+		any_demesne_province = {
+			has_empty_holding = yes
+			OR = {
+				region = world_persia
+				region = world_middle_east
+				region = world_asia_minor
+				region = world_africa_north
+				region = world_europe_south
+				region = world_europe_west
+			}
+		}
+		
+		has_dlc = "Sons of Abraham"
+		
+		NOT = { has_character_modifier = expelled_d_knights_templar }
+		NOT = {
+			any_liege = {
+				has_character_modifier = expelled_d_knights_templar
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.5
+			d_knights_templar = {
+				holder_scope = {
+					NOT = { demesne_size = 1 }
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			d_knights_templar = {
+				holder_scope = {
+					NOT = { demesne_size = 2 }
+				}
+			}
+		}
+		modifier = {
+			factor = 2.0
+			d_knights_templar = {
+				holder_scope = {
+					realm_size = 5
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		random_demesne_province = {
+			limit = {
+				has_empty_holding = yes
+				OR = {
+					region = world_persia
+					region = world_middle_east
+					region = world_asia_minor
+					region = world_africa_north
+					region = world_europe_south
+					region = world_europe_west
+				}
+			}
+			province_event = {
+				id = SoA.1051
+			}
+		}
+	}
+}
+
+province_event = {
+	id = SoA.1051
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		d_knights_templar = {
+			holder_scope = {
+				character_event = {
+					id = SoA.1052
+				}
+			}
+		}
+	}
+}
+
+character_event = {
+	id = SoA.1052
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			letter_event = {
+				id = SoA.1053
+			}
+		}
+	}
+}
+
+letter_event = {
+	id = SoA.1053
+	desc = {
+        text = EVTDESC_SOA_1053
+        trigger = {
+			NOT = {
+				has_alternate_start_parameter = {
+					key = religion_names
+					value = random
+				}
+			}
+        }
+    }
+	desc = {
+        text = HOLY_ORDER_BUILD_CASTLE_FOR_MONEY_ALT
+        trigger = {
+			has_alternate_start_parameter = {
+				key = religion_names
+				value = random
+			}
+        }
+    }
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTA_SOA_1023 # Agree
+		ai_chance = {
+			factor = 80
+			modifier = {
+				factor = 0
+				has_character_modifier = expelled_d_knights_templar
+			}
+		}
+		
+		hidden_tooltip = {
+			FROMFROM = {
+				province_event = { id = SoA.1054 }
+			}
+			remove_character_modifier = expelled_d_knights_templar
+		}
+		
+		piety = 200
+		wealth = 100
+	}
+	
+	option = {
+		name = EVTOPTB_SOA_1031 # Refuse
+		ai_chance = {
+			factor = 20
+		}
+		
+		piety = -100
+	}
+}
+
+# Castle has been erected
+province_event = {
+	id = SoA.1054
+	desc = EVTDESC_SOA_1054
+	picture = GFX_evt_castle_construction
+	border = GFX_event_normal_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		FROMFROM = {
+			wealth = -300
+		}
+	}
+	
+	option = {
+		name = EVTOPTA_SOA_1024
+		build_holding = {
+		   type = castle
+		   holder = FROMFROM
+		}
+	}
+}
+
+
+# Ping event when expelling a Christian Holy Order
+character_event = {
+	id = SoA.1060
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		any_title_under = {
+			limit = {
+				tier = BARON
+				location = {
+					owner = {
+						OR = {
+							character = FROM
+							is_liege_or_above = FROM
+						}
+					}
+				}
+			}
+			usurp_title = FROM
+		}
+		
+		if = {
+			limit = {
+				is_liege_or_above = FROM
+			}
+			set_defacto_liege = THIS
+		}
+	
+		FROM = {
+			letter_event = {
+				id = SoA.1061
+			}
+		}
+		
+		opinion = {
+			who = FROM
+			modifier = opinion_expelled_from_realm
+		}
+	}
+}
+
+# Notification event when expelling a Christian Holy Order
+letter_event = {
+	id = SoA.1061
+	desc = {
+        text = EVTDESC_SOA_1061
+        trigger = {
+			NOT = {
+				has_alternate_start_parameter = {
+					key = religion_names
+					value = random
+				}
+			}
+        }
+    }
+	desc = {
+        text = HOLY_ORDER_EXPEL_ALT
+        trigger = {
+			has_alternate_start_parameter = {
+				key = religion_names
+				value = random
+			}
+        }
+    }
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		remove_character_modifier = donated_to_holy_order
+	}
+	
+	option = {
+		name = EVTOPTB_SOA_1061
+	}
+}
 # The Order of Saint Anthony is reborn
 narrative_event = {
 	id = SoA.1709
