@@ -1,0 +1,565 @@
+settlement_decisions = {
+
+	recruit_jannisary = {
+		only_independent = yes
+		filter = owned
+		ai_target_filter = owned
+		ai_check_interval = 48
+	
+		from_potential = {
+			ai = no
+			is_playable = yes
+			government = neoziamet_government
+			NOR = {
+				culture = turk
+				has_landed_title = e_ottoman
+			}
+			higher_tier_than = DUKE
+		}
+		
+		potential = {
+			NOT = {
+				holding_type = nomad
+			}
+			holder_scope = {
+				character = FROM
+			}
+		}
+		
+		allow = {
+			FROM = {
+				scaled_wealth = { value = 0.15 min = 100 max = 250 }
+				prestige = 500
+				NOT = {
+					has_character_modifier = in_seclusion
+				}
+			}
+			location = {
+				NOT = { religion = FROM }
+				NOT = { has_province_modifier = recruited_jannisaries }
+			}
+		}
+		
+		effect = {
+			FROM = {
+				scaled_wealth = { value = -0.15 min = -50 max = -300 }
+				prestige = -500
+				save_event_target_as = devshirme_ruler
+				capital_scope = { save_event_target_as = devshirme_capital_province }
+			}
+			hidden_tooltip = {
+			location = {
+				add_province_modifier = { 
+					name = recruited_jannisaries
+					years = 10
+					}
+				any_province_holding = {
+					event_target:devshirme_ruler = {
+						spawn_unit = {
+							province = event_target:devshirme_capital_province
+							home = ROOT # Set tech level etc of troops based on the province you're spawning from, rather than the ruler's capital. Seems more reasonable.
+							owner = event_target:devshirme_ruler
+							earmark = jannisary_troops # It may be useful for future developments for these troops to be earmarked. And you don't lose anything by doing this.
+							troops = {
+								heavy_infantry = { 100 100 }
+								archers = { 100 100 }
+							}
+							attrition = 1
+							maintenance_multiplier = 1.25
+							reinforces = yes
+							reinforce_rate_multiplier = 0.2
+							merge = yes
+						}
+					 }
+				  }
+			   }
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.15
+				FROM = {
+					NOT = {
+						any_war = {
+							OR = {
+								defender = { character = FROM }
+								attacker = { character = FROM }
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0.15
+				FROM = {
+					tier = EMPEROR
+					martial <= 10
+				}
+			}
+			modifier = {
+				factor = 0.15
+				FROM = {
+					tier = KING
+					martial <= 10
+				}
+			}
+			modifier = {
+				factor = 25
+				FROM = {
+					tier = EMPEROR
+					any_war = {
+							OR = {
+								defender = { character = FROM }
+								attacker = { character = FROM }
+							}
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				FROM = {
+					tier = EMPEROR
+					OR = {
+						trait = skilled_tactician
+						trait = brilliant_strategist
+						trait = exalted_warlord
+					}
+				}
+			}
+			modifier = {
+				factor = 5
+				FROM = {
+					tier = EMPEROR
+					OR = {
+						trait = cavalry_leader
+						trait = heavy_cavalry_guard
+						trait = heavy_infantry_leader
+						trait = heavy_infantry_guard
+					}
+				}
+			}
+			modifier = {
+				factor = 25
+				FROM = {
+					tier = KING
+					any_war = {
+							OR = {
+								defender = { character = FROM }
+								attacker = { character = FROM }
+							}
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				FROM = {
+					tier = KING
+					OR = {
+						trait = skilled_tactician
+						trait = brilliant_strategist
+						trait = exalted_warlord
+					}
+				}
+			}
+			modifier = {
+				factor = 5
+				FROM = {
+					tier = KING
+					OR = {
+						trait = cavalry_leader
+						trait = heavy_cavalry_guard
+						trait = heavy_infantry_leader
+						trait = heavy_infantry_guard
+					}
+				}
+			}
+			modifier = {
+				factor = 0.01
+				FROM = {
+					wealth <= 200
+				}
+			}
+		}
+	}
+	
+	recruit_gun_jannisary = {
+		only_independent = yes
+		filter = owned
+		ai_target_filter = owned
+		ai_check_interval = 48
+	
+		from_potential = {
+			ai = no
+			is_playable = yes
+			government = neoziamet_government
+			OR = {
+				culture = turk
+				has_landed_title = e_ottoman
+			}
+			higher_tier_than = DUKE
+		}
+		
+		potential = {
+			NOT = {
+				holding_type = nomad
+			}
+			holder_scope = {
+				character = FROM
+			}
+		}
+		
+		allow = {
+			FROM = {
+				scaled_wealth = { value = 0.15 min = 100 max = 250 }
+				prestige = 500
+				NOT = {
+					has_character_modifier = in_seclusion
+				}
+			}
+			location = {
+				NOT = { religion = FROM }
+				NOT = { has_province_modifier = recruited_jannisaries }
+			}
+		}
+		
+		effect = {
+			FROM = {
+				scaled_wealth = { value = -0.15 min = -50 max = -300 }
+				prestige = -500
+				save_event_target_as = devshirme_ruler
+				capital_scope = { save_event_target_as = devshirme_capital_province }
+			}
+			hidden_tooltip = {
+			location = {
+				add_province_modifier = { 
+					name = recruited_jannisaries
+					years = 10
+					}
+				any_province_holding = {
+					event_target:devshirme_ruler = {
+						spawn_unit = {
+							province = event_target:devshirme_capital_province
+							home = ROOT # Set tech level etc of troops based on the province you're spawning from, rather than the ruler's capital. Seems more reasonable.
+							owner = event_target:devshirme_ruler
+							earmark = jannisary_troops # It may be useful for future developments for these troops to be earmarked. And you don't lose anything by doing this.
+							troops = {
+								heavy_infantry = { 100 100 }
+								gunmen = { 100 100 }
+							}
+							attrition = 1
+							maintenance_multiplier = 1.25
+							reinforces = yes
+							reinforce_rate_multiplier = 0.2
+							merge = yes
+						}
+					 }
+				  }
+			   }
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.15
+				FROM = {
+					NOT = {
+						any_war = {
+							OR = {
+								defender = { character = FROM }
+								attacker = { character = FROM }
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0.15
+				FROM = {
+					tier = EMPEROR
+					martial <= 10
+				}
+			}
+			modifier = {
+				factor = 0.15
+				FROM = {
+					tier = KING
+					martial <= 10
+				}
+			}
+			modifier = {
+				factor = 25
+				FROM = {
+					tier = EMPEROR
+					any_war = {
+							OR = {
+								defender = { character = FROM }
+								attacker = { character = FROM }
+							}
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				FROM = {
+					tier = EMPEROR
+					OR = {
+						trait = skilled_tactician
+						trait = brilliant_strategist
+						trait = exalted_warlord
+					}
+				}
+			}
+			modifier = {
+				factor = 5
+				FROM = {
+					tier = EMPEROR
+					OR = {
+						trait = cavalry_leader
+						trait = heavy_cavalry_guard
+						trait = heavy_infantry_leader
+						trait = heavy_infantry_guard
+					}
+				}
+			}
+			modifier = {
+				factor = 25
+				FROM = {
+					tier = KING
+					any_war = {
+							OR = {
+								defender = { character = FROM }
+								attacker = { character = FROM }
+							}
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				FROM = {
+					tier = KING
+					OR = {
+						trait = skilled_tactician
+						trait = brilliant_strategist
+						trait = exalted_warlord
+					}
+				}
+			}
+			modifier = {
+				factor = 5
+				FROM = {
+					tier = KING
+					OR = {
+						trait = cavalry_leader
+						trait = heavy_cavalry_guard
+						trait = heavy_infantry_leader
+						trait = heavy_infantry_guard
+					}
+				}
+			}
+			modifier = {
+				factor = 0.01
+				FROM = {
+					wealth <= 200
+				}
+			}
+		}
+	}
+	
+	recruit_cavalier = {
+		only_independent = yes
+		filter = owned
+		ai_target_filter = owned
+		ai_check_interval = 48
+	
+		from_potential = {
+			ai = no
+			is_playable = yes
+			OR = {
+				government = roman_imperial_government
+				government = ethiopian_imperial_government
+			}
+			higher_tier_than = DUKE
+		}
+		
+		potential = {
+			NOT = {
+				holding_type = nomad
+			}
+			holder_scope = {
+				character = FROM
+			}
+		}
+		
+		allow = {
+			FROM = {
+				scaled_wealth = { value = 0.15 min = 100 max = 250 }
+				prestige = 500
+				NOT = {
+					has_character_modifier = in_seclusion
+				}
+			}
+			location = {
+				religion = FROM
+				NOT = { has_province_modifier = recruited_cavalier }
+			}
+		}
+		
+		effect = {
+			FROM = {
+				scaled_wealth = { value = -0.15 min = -50 max = -300 }
+				prestige = -500
+				save_event_target_as = imperial_ruler
+				capital_scope = { save_event_target_as = imperial_capital_province }
+			}
+			hidden_tooltip = {
+			location = {
+				add_province_modifier = { 
+					name = recruited_cavalier
+					years = 10
+					}
+				any_province_holding = {
+					event_target:imperial_ruler = {
+						spawn_unit = {
+							province = event_target:imperial_capital_province
+							home = ROOT # Set tech level etc of troops based on the province you're spawning from, rather than the ruler's capital. Seems more reasonable.
+							owner = event_target:imperial_ruler
+							earmark = cavalier_troops # It may be useful for future developments for these troops to be earmarked. And you don't lose anything by doing this.
+							troops = {
+								knights = { 175 175 }
+								superheavy_infantry = { 25 25 }
+							}
+							attrition = 1
+							maintenance_multiplier = 1.25
+							reinforces = yes
+							reinforce_rate_multiplier = 0.2
+							merge = yes
+						}
+					 }
+				  }
+			   }
+			}
+		}
+		
+		revoke_allowed = {
+			always = no
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.15
+				FROM = {
+					NOT = {
+						any_war = {
+							OR = {
+								defender = { character = FROM }
+								attacker = { character = FROM }
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0.15
+				FROM = {
+					tier = EMPEROR
+					martial <= 10
+				}
+			}
+			modifier = {
+				factor = 0.15
+				FROM = {
+					tier = KING
+					martial <= 10
+				}
+			}
+			modifier = {
+				factor = 25
+				FROM = {
+					tier = EMPEROR
+					any_war = {
+							OR = {
+								defender = { character = FROM }
+								attacker = { character = FROM }
+							}
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				FROM = {
+					tier = EMPEROR
+					OR = {
+						trait = skilled_tactician
+						trait = brilliant_strategist
+						trait = exalted_warlord
+					}
+				}
+			}
+			modifier = {
+				factor = 5
+				FROM = {
+					tier = EMPEROR
+					OR = {
+						trait = cavalry_leader
+						trait = heavy_cavalry_guard
+						trait = heavy_infantry_leader
+						trait = heavy_infantry_guard
+					}
+				}
+			}
+			modifier = {
+				factor = 25
+				FROM = {
+					tier = KING
+					any_war = {
+							OR = {
+								defender = { character = FROM }
+								attacker = { character = FROM }
+							}
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				FROM = {
+					tier = KING
+					OR = {
+						trait = skilled_tactician
+						trait = brilliant_strategist
+						trait = exalted_warlord
+					}
+				}
+			}
+			modifier = {
+				factor = 5
+				FROM = {
+					tier = KING
+					OR = {
+						trait = cavalry_leader
+						trait = heavy_cavalry_guard
+						trait = heavy_infantry_leader
+						trait = heavy_infantry_guard
+					}
+				}
+			}
+			modifier = {
+				factor = 0.01
+				FROM = {
+					wealth <= 150
+				}
+			}
+		}
+	}
+}	
