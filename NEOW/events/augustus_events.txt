@@ -1,0 +1,108 @@
+namespace=augustus
+#########################################
+#
+#	Augustus events
+#
+#########################################
+# 
+
+# Augustus Trait Gained (FLAG)
+character_event = {
+	id = augustus.1
+	desc = {
+		text = EVTDESCaugustus.1
+	}
+	picture = GFX_evt_magnificent_castle
+	
+	only_playable = yes
+	
+	trigger = {
+		OR = {
+			AND ={
+				has_global_flag = ottomans_refounded
+				ROOT = { has_landed_title = e_ottoman }
+			}
+			AND = {
+				has_global_flag = transnistria_good
+				ROOT ={ has_landed_title = e_transnistria }
+			}
+		}
+		ROOT = {
+			NOT = { trait = augustus }
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = EVTOPTAaugustus.1
+		ROOT = {
+			add_trait = augustus
+		}
+	}
+}
+
+# Augustus Trait Gained (NO FLAG)
+character_event = {
+	id = augustus.2
+	desc = {
+		text = EVTDESCaugustus.2
+	}
+	picture = GFX_evt_magnificent_castle
+	
+	only_playable = yes
+	
+	trigger = {
+		ROOT = {
+			OR = {
+				has_landed_title = e_marblists
+				has_landed_title = e_byzantium
+				has_landed_title = e_roman_empire
+			}
+			NOT = { trait = augustus }
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = EVTOPTAaugustus.2
+		ROOT = {
+			add_trait = augustus
+		}
+	}
+}
+
+# Augustus Trait Lost
+character_event = {
+	id = augustus.3
+	desc = EVTDESCaugustus.3
+	picture = GFX_evt_magnificent_castle
+		
+	trigger = {
+		ROOT = {
+			trait = augustus
+			NOR = { 
+				has_landed_title = e_ottoman 
+				has_landed_title = e_transnistria
+				has_landed_title = e_marblists
+				has_landed_title = e_byzantium
+				has_landed_title = e_roman_empire
+			}
+			is_alive = yes
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	
+	option = {
+		name = EVTOPTAaugustus.3
+		ROOT = {
+			remove_trait = augustus
+		}
+	}
+}
