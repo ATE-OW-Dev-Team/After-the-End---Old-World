@@ -3224,58 +3224,45 @@ decisions = {
 			}
 		}
 		effect = {		
-			piety = 1000
-			prestige = 500
-			hidden_tooltip = {
-				if = {
-					limit = {
-						NOT = { is_title_active = k_sevillian_pope }
-					}
-					activate_title = { title = k_sevillian_pope status = yes }
-					create_random_priest = {
-						random_traits = yes
-						religion = ROOT
-						female = no
-						dynasty = none
-					}
-					new_character = {
-						k_sevillian_pope = {
-							grant_title = PREV
-						}
+			if = {
+				limit = {
+					religion = sevillian
+				}
+				k_sevillian_pope = {
+					holder_scope = {
 						c_sevilla = {
 							grant_title = PREV
-						}
-						wealth = 500
-					}
-					k_sevillian_pope = {
-						set_preferred_capital = c_sevilla
-					}
-					k_sevillian_pope = {
-						holder_scope = {
-							opinion = {
-								who = ROOT
-								modifier = opinion_restored_to_sevilla
+							any_de_jure_vassal_title = {
+								limit = {
+									holder_scope = { 
+										OR = {
+											character = ROOT
+											is_liege_or_above = ROOT
+										}
+									}
+								}
+								grant_title = PREVPREV
 							}
+						}
+						save_event_target_as = restored_pope
+					}
+				}
+			}
+			if = {
+				limit = {
+					religion = sevillian
+					NOT = { has_character_flag = restored_sevillian_pope_in_sevilla }
+				}
+				k_sevillian_pope = {
+					holder_scope = {
+						opinion = {
+							who = ROOT
+							modifier = opinion_restored_to_rome
 						}
 					}
 				}
-				else = {
-					k_sevillian_pope ={
-						holder_scope = { 
-							grant_title_no_opinion = k_sevillian_pope
-							wealth = 500
-						}
-						set_preferred_capital = c_sevilla
-					}
-					k_sevillian_pope = {
-						holder_scope = {
-							opinion = {
-								who = ROOT
-								modifier = opinion_restored_to_sevilla
-							}
-						}
-					}
-				}
+				piety = 1000
+				set_character_flag = restored_sevillian_pope_in_sevilla
 			}
 		}
 		
