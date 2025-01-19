@@ -1142,321 +1142,6 @@ narrative_event = {
 	}
 }
 
-#Teuta's bloodline. Fired on_war_ended_victory of a war against Byzantium.
-# From = Attacker, Root = Defender
-character_event = {
-	id = HF.24010
-	hide_window = yes
-	
-	is_triggered_only = yes
-
-	trigger = { 
-		has_dlc = "Holy Fury" 
-		NOT = { has_global_flag = flag_teuta_bloodline } #Just once.
-		OR  = { 
-			AND = { #Either won as defensive...
-				ROOT = { 
-					is_female = yes
-					is_alternate_start = no 
-					independent = yes
-					lower_tier_than = EMPEROR
-					OR = {
-					religion_group = pagan_group
-					religion_group = oceanic
-					}
-					NOT = { realm_size = 120 }
-					NOR = { 
-						religion = hellenic_pagan
-						religion = hellenic_pagan_reformed
-						culture = roman
-					}
-					OR = { 
-						culture_group = south_slavic
-						culture = dalmatian
-					}
-					capital_scope = { 
-						OR = { 
-							de_jure_liege = d_dioclea 
-							de_jure_liege = d_rashka
-						} 
-					}
-				}
-				FROM = { 
-					OR = { 
-						has_landed_title = e_byzantium
-						has_landed_title = e_roman_empire
-						has_landed_title = e_roman_republic
-					}
-				}
-			}
-			AND = { #...Or as attacker.
-				FROM = { 
-					is_female = yes
-					is_alternate_start = no 
-					independent = yes
-					lower_tier_than = EMPEROR
-					OR = {
-					religion_group = pagan_group
-					religion_group = oceanic
-					}
-					NOT = { realm_size = 120 }
-					NOR = { 
-						religion = hellenic_pagan
-						religion = hellenic_pagan_reformed
-						culture = roman
-					}
-					OR = { 
-						culture_group = south_slavic
-						culture = dalmatian
-					}
-					capital_scope = { 
-						OR = { 
-							de_jure_liege = d_dioclea 
-							de_jure_liege = d_rashka
-						} 
-					}
-				}
-				ROOT = { 
-					OR = { 
-						has_landed_title = e_byzantium
-						has_landed_title = e_roman_empire
-						has_landed_title = e_roman_republic
-					}
-				}
-			}
-		}
-	}
-	immediate = { 
-		sound_effect = bloodline_added
-		set_global_flag = flag_teuta_bloodline
-		if = { 
-			limit = { 
-				ROOT = { 
-					is_female = yes
-					is_alternate_start = no 
-					independent = yes
-					lower_tier_than = EMPEROR
-					OR = {
-					religion_group = pagan_group
-					religion_group = oceanic
-					}
-					NOT = { realm_size = 120 }
-					NOR = { 
-						religion = hellenic_pagan
-						religion = hellenic_pagan_reformed
-						culture = roman
-					}
-					OR = { 
-						culture_group = south_slavic
-						culture_group = latin
-					}
-					capital_scope = { 
-						OR = { 
-							de_jure_liege = d_dioclea 
-							de_jure_liege = d_rashka
-						} 
-					}
-				}
-			}
-			FROM = {
-				save_event_target_as = defeated_emperor
-			}	
-			ROOT = {
-				set_character_flag = flag_defensive_teuta
-				narrative_event = { id = HF.24011 days = 20 }
-			}	
-			break = yes
-		}
-		if = { 
-			limit = { 
-				FROM = { 
-					is_female = yes
-					is_alternate_start = no 
-					independent = yes
-					lower_tier_than = EMPEROR
-					OR = {
-					religion_group = pagan_group
-					religion_group = oceanic
-					}
-					NOT = { realm_size = 120 }
-					NOR = { 
-						religion = hellenic_pagan
-						religion = hellenic_pagan_reformed
-						culture = roman
-					}
-					OR = { 
-						culture_group = south_slavic
-						culture_group = latin
-					}
-					capital_scope = { 
-						OR = { 
-							de_jure_liege = d_dioclea 
-							de_jure_liege = d_rashka
-						} 
-					}
-				}
-			}
-			ROOT = {
-				save_event_target_as = defeated_emperor
-			}	
-			FROM = {
-				set_character_flag = flag_offensive_teuta
-				narrative_event = { id = HF.24011 days = 20 }
-			}	
-			break = yes
-		}
-	}
-}
-
-narrative_event = {
-	id = HF.24011
-	title = EVTTITLEHF24011
-	desc = {
-		trigger = {
-				has_character_flag = flag_offensive_teuta
-		}
-		text = EVTDESCAHF24011
-	}
-	desc = {
-		trigger = {
-				has_character_flag = flag_defensive_teuta
-		}
-		text = EVTDESCBHF24011
-	}
-	picture = GFX_evt_norse_tempest
-	border = GFX_event_narrative_frame_war
-	sound = bloodline_added
-	
-	is_triggered_only = yes
-
-	trigger = { 
-		has_dlc = "Holy Fury" 
-	}
-	
-	option = {
-		name = EVTOPTAHF24011
-		if = { 
-			limit = { has_nickname = no }
-			give_nickname = nick_the_liberator
-		}
-		if = { 
-			limit = { is_female = yes }
-			create_bloodline = {
-				type = teuta_female
-			}
-			new_bloodline = {
-				set_description = "bloodline_desc_teuta"
-			}		
-		}
-		hidden_tooltip = { 
-			any_player = { 
-				limit = { 
-					is_within_diplo_range = ROOT 
-					NOT = { character = ROOT }
-				}	
-				narrative_event = { id = HF.24012 }	
-			}
-		}
-		ai_chance = { 
-			factor = 100
-		}
-	}
-	option = {
-		name = EVTOPTBHF24011
-		tiered_piety_reward_effect = yes
-		ai_chance = { 
-			factor = 0
-		}
-	}
-	after = {
-		clr_character_flag = flag_defensive_teuta
-		clr_character_flag = flag_offensive_teuta
-	}
-}
-narrative_event = {
-	id = HF.24012
-	title = EVTTITLEHF24012
-	desc = {
-		trigger = {
-			OR = {
-				has_landed_title = e_byzantium
-				has_landed_title = e_roman_empire
-				has_landed_title = e_roman_republic
-			}
-		}
-		text = EVTDESCAHF24012
-	}
-	desc = {
-		trigger = {
-			NOR = {
-				has_landed_title = e_byzantium
-				has_landed_title = e_roman_empire
-				has_landed_title = e_roman_republic
-			}
-		}
-		text = EVTDESCBHF24012
-	}
-	picture = GFX_evt_norse_tempest
-	border = GFX_event_narrative_frame_war
-	sound = bloodline_added
-	
-	is_triggered_only = yes
-
-	trigger = { 
-		has_dlc = "Holy Fury" 
-	}
-
-	option = {
-		name = EVTOPTAHF24012
-		trigger = { 
-			OR = {
-				has_landed_title = e_byzantium
-				has_landed_title = e_roman_empire
-				has_landed_title = e_roman_republic
-			}
-		}
-		ai_chance = { 
-			factor = 100
-		}
-	}
-	option = {
-		name = EVTOPTBHF24012
-		trigger = { 
-			NOR = {
-				has_landed_title = e_byzantium
-				has_landed_title = e_roman_empire
-				has_landed_title = e_roman_republic
-			}
-			OR = {
-				culture_group = byzantine
-				culture = roman
-				religion = hellenic_pagan
-				religion = hellenic_pagan_reformed
-			}
-		}
-		ai_chance = { 
-			factor = 100
-		}
-	}
-	option = {
-		name = EVTOPTCHF24012
-		trigger = { 
-			NOR = {
-				has_landed_title = e_byzantium
-				has_landed_title = e_roman_empire
-				has_landed_title = e_roman_republic
-				culture_group = byzantine
-				culture = roman
-				religion = hellenic_pagan
-				religion = hellenic_pagan_reformed
-			}
-		}
-		ai_chance = { 
-			factor = 100
-		}
-	}
-}
-
 #On_war_started: Corsair ships arrive for war.
 character_event = {
 	id = HF.24013
@@ -4494,7 +4179,7 @@ character_event = {
 			years = 5
 		}
 		hidden_tooltip = { 
-			character_event = { id = HF.24058 days = 150 random = 250 }
+			narrative_event = { id = HF.24058 days = 150 random = 250 }
 		}
 		ai_chance = { 
 			factor = 30
@@ -4513,7 +4198,7 @@ character_event = {
 			years = 5
 		}
 		hidden_tooltip = { 
-			character_event = { id = HF.24058 days = 500 random = 500 }
+			narrative_event = { id = HF.24058 days = 500 random = 500 }
 		}
 		ai_chance = { 
 			factor = 30
@@ -4528,7 +4213,7 @@ character_event = {
 		}
 		prestige = -1200
 		hidden_tooltip = { 
-			character_event = { id = HF.24058 days = 1000 random = 1000 }
+			narrative_event = { id = HF.24058 days = 1000 random = 1000 }
 		}
 		ai_chance = { 
 			factor = 30
@@ -4550,7 +4235,7 @@ character_event = {
 			years = 5
 		}
 		hidden_tooltip = { 
-			character_event = { id = HF.24058 days = 2000 random = 2000 }
+			narrative_event = { id = HF.24058 days = 2000 random = 2000 }
 		}
 		ai_chance = { 
 			factor = 30
@@ -4843,7 +4528,7 @@ character_event = {
 			years = 5
 		}
 		hidden_tooltip = { 
-			character_event = { id = HF.24061 days = 150 random = 250 }
+			narrative_event = { id = HF.24061 days = 150 random = 250 }
 		}
 		ai_chance = { 
 			factor = 30
@@ -4869,7 +4554,7 @@ character_event = {
 			years = 5
 		}
 		hidden_tooltip = { 
-			character_event = { id = HF.24061 days = 500 random = 500 }
+			narrative_event = { id = HF.24061 days = 500 random = 500 }
 		}
 		ai_chance = { 
 			factor = 30
@@ -4895,7 +4580,7 @@ character_event = {
 			years = 5
 		}
 		hidden_tooltip = { 
-			character_event = { id = HF.24061 days = 1000 random = 1000 }
+			narrative_event = { id = HF.24061 days = 1000 random = 1000 }
 		}
 		ai_chance = { 
 			factor = 30
@@ -4924,7 +4609,7 @@ character_event = {
 			years = 5
 		}
 		hidden_tooltip = { 
-			character_event = { id = HF.24061 days = 2000 random = 2000 }
+			narrative_event = { id = HF.24061 days = 2000 random = 2000 }
 		}
 		ai_chance = { 
 			factor = 30
