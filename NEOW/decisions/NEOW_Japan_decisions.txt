@@ -156,13 +156,11 @@ decisions = {
 			k_bakufu= {
 				has_holder = no
 			}
-			if = {
-				limit = {
+			OR = {
+				AND ={
 					has_landed_title = k_pretender_bakufu
+					prestige = 2500
 				}
-				prestige = 2500
-			}
-			else = {
 				prestige = 3500
 			}
 			higher_real_tier_than = DUKE
@@ -186,6 +184,105 @@ decisions = {
 		}
 		ai_will_do = {
 			factor = 1
+		}
+	}
+	vassalize_kirishitan_patriarch = {
+		ai_check_interval = 60 #check only once every 60 months.
+		is_high_prio = yes
+		only_independent = yes
+		potential = {
+			is_playable = yes
+			independent = yes
+			controls_religion = no
+			OR = {
+				culture_group = japan_group
+				culture = nikkei
+			}
+			religion = kirishitan
+			higher_real_tier_than = KING
+			religion_head = {
+				independent = yes
+			}
+		}
+		allow = {
+			OR = {
+				has_landed_title = e_japan
+				AND = {
+					has_landed_title = e_tokyo
+					has_global_flag = imperial_japanese_restoration
+				}	
+			}
+			NOT = { excommunicated_for = religion_head }
+			piety = 2000
+			prestige = 2500
+			OR = {
+				wealth = 500
+				c_kagoshima = {
+					holder_scope = {
+						OR = {
+							character = ROOT
+							is_liege_or_above = ROOT
+						}
+						trigger_if = {
+							limit = { ROOT = { ai = yes } }
+							NOR = {
+								ai = no
+								any_liege = { ai = no }  # AI will never take temples away from a player
+							}
+						}
+					}
+				}
+			}
+			religion_head = {
+				war = no
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					c_kagoshima = {
+						holder_scope = {
+							OR = {
+								character = ROOT
+								is_liege_or_above = ROOT
+							}
+							trigger_if = {
+								limit = { ROOT = { ai = yes } }
+								NOR = {
+									ai = no
+									any_liege = { ai = no }  # AI will never take temples away from a player
+								}
+							}
+						}
+					}
+				}
+				religion_head = {
+					show_scope_change = no
+					b_tashirofumoto = {
+						show_scope_change = no
+						grant_title = PREV
+					}
+				}
+			}
+			else = {
+				wealth = -500
+				religion_head = {
+					wealth = 500
+				}
+			}
+			religion_head = {
+				show_scope_change = no
+				set_defacto_liege = ROOT
+			}
+			set_global_flag = vassalised_kirishitan_patriarch_flag
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				war = yes
+			}
 		}
 	}
 }
