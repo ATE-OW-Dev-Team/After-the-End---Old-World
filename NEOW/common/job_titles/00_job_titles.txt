@@ -652,3 +652,600 @@ job_spiritual = {
 		}
 	}
 }
+
+job_first_magistrate = {
+	is_treasurer = yes
+	lift_fow = yes
+	lift_neighbor_fow = yes
+	attribute = stewardship
+	dignity = 1
+	opinion_effect = 10
+
+	monthly_salary = 0.33
+	monthly_prestige = 0.75
+
+	action = action_assist_arrest
+	action = action_train_troops
+	action = action_squeeze_peasants
+	
+	allow = {
+		can_be_marshal_trigger = yes
+		FROM = {
+			OR = {
+				tier = EMPEROR
+				tier = KING
+			}
+			independent = yes
+		}
+	}
+
+	dismiss_trigger = {
+		FROM = {
+			show_scope_change = no
+
+			# Powerful vassals can't be fired from the council under Full Council Authority
+			trigger_if = {
+				limit = {
+					has_law = succession_voting_power_1
+					ROOT = { is_powerful_vassal = yes }
+				}
+
+				OR = {
+					has_law = succession_voting_power_0
+					ROOT = {
+						show_scope_change = no
+
+						is_powerful_vassal = no
+					}
+				}
+			}
+
+			trigger_if = {
+				limit = {
+					has_character_flag = swapping_councillors
+				}
+				custom_tooltip = {
+					text = not_swapping_tt
+
+					NOT = { has_character_flag = swapping_councillors }
+				}
+			}
+		}
+	}
+
+	gain_effect = {
+		if = {
+			limit = {
+				FROM = {
+					has_law = succ_byzantine_elective
+
+					any_courtier_or_vassal = {
+						NOT = { character = ROOT }
+
+						# Check if any other vassal or courtier has higher martial than current character
+						attribute_diff = {
+							character = PREVPREV
+							attribute = martial
+							value > 5
+						}
+						# Check that said vassal or courtier would be a viable marshal
+						can_be_marshal_trigger = yes
+					}
+				}
+			}
+
+			if = {
+				limit = {
+					martial < 2
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -10
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 4
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -5
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 6
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -4
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 8
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -3
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 10
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -2
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 12
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -1
+					}
+				}
+			}
+		}
+	}
+
+	lose_effect = {
+		if = {
+			limit = {
+				FROM = {
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+
+				NOR = {
+					is_incapable = yes
+					trait = sick_incapable
+				}
+			}
+			opinion = { who = FROM modifier = opinion_fired_from_council }
+			opinion = { who = FROM modifier = opinion_recently_fired }
+			character_event = { id = HFP.20806 days = 1 } # Good Byzantine Marshal was discharged
+		}
+
+		if = {
+			limit = { has_character_flag = relic_hunter }
+			character_event = { id = MNM.9034 } # Artifact hunter councllior fired/retires ping
+		}
+	}
+
+	retire_effect = {
+		if = {
+			limit = { has_character_flag = relic_hunter }
+			character_event = { id = MNM.9034 } # Artifact hunter councllior fired/retires ping
+		}
+
+		if = {
+			limit = {
+				age < 65
+				health >= 3
+				is_sick_or_injured_trigger = no
+				can_be_councilmember_king_trigger = yes
+			}
+
+			FROM = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_resigned_from_council
+				}
+			}
+		}
+	}
+}
+
+job_second_magistrate = {
+	is_treasurer = yes
+	lift_fow = yes
+	lift_neighbor_fow = yes
+	attribute = stewardship
+	dignity = 1
+	opinion_effect = 10
+
+	monthly_salary = 0.33
+	monthly_prestige = 0.75
+
+	action = action_assist_arrest
+	action = action_train_troops
+	action = action_squeeze_peasants
+	
+	allow = {
+		can_be_marshal_trigger = yes
+		FROM = {
+			OR = {
+				tier = EMPEROR
+				tier = KING
+			}
+			independent = yes
+		}
+	}
+
+	dismiss_trigger = {
+		FROM = {
+			show_scope_change = no
+
+			# Powerful vassals can't be fired from the council under Full Council Authority
+			trigger_if = {
+				limit = {
+					has_law = succession_voting_power_1
+					ROOT = { is_powerful_vassal = yes }
+				}
+
+				OR = {
+					has_law = succession_voting_power_0
+					ROOT = {
+						show_scope_change = no
+
+						is_powerful_vassal = no
+					}
+				}
+			}
+
+			trigger_if = {
+				limit = {
+					has_character_flag = swapping_councillors
+				}
+				custom_tooltip = {
+					text = not_swapping_tt
+
+					NOT = { has_character_flag = swapping_councillors }
+				}
+			}
+		}
+	}
+
+	gain_effect = {
+		if = {
+			limit = {
+				FROM = {
+					has_law = succ_byzantine_elective
+
+					any_courtier_or_vassal = {
+						NOT = { character = ROOT }
+
+						# Check if any other vassal or courtier has higher martial than current character
+						attribute_diff = {
+							character = PREVPREV
+							attribute = martial
+							value > 5
+						}
+						# Check that said vassal or courtier would be a viable marshal
+						can_be_marshal_trigger = yes
+					}
+				}
+			}
+
+			if = {
+				limit = {
+					martial < 2
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -10
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 4
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -5
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 6
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -4
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 8
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -3
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 10
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -2
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 12
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -1
+					}
+				}
+			}
+		}
+	}
+
+	lose_effect = {
+		if = {
+			limit = {
+				FROM = {
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+
+				NOR = {
+					is_incapable = yes
+					trait = sick_incapable
+				}
+			}
+			opinion = { who = FROM modifier = opinion_fired_from_council }
+			opinion = { who = FROM modifier = opinion_recently_fired }
+			character_event = { id = HFP.20806 days = 1 } # Good Byzantine Marshal was discharged
+		}
+
+		if = {
+			limit = { has_character_flag = relic_hunter }
+			character_event = { id = MNM.9034 } # Artifact hunter councllior fired/retires ping
+		}
+	}
+
+	retire_effect = {
+		if = {
+			limit = { has_character_flag = relic_hunter }
+			character_event = { id = MNM.9034 } # Artifact hunter councllior fired/retires ping
+		}
+
+		if = {
+			limit = {
+				age < 65
+				health >= 3
+				is_sick_or_injured_trigger = no
+				can_be_councilmember_king_trigger = yes
+			}
+
+			FROM = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_resigned_from_council
+				}
+			}
+		}
+	}
+}
+
+job_third_magistrate = {
+	is_treasurer = yes
+	lift_fow = yes
+	lift_neighbor_fow = yes
+	attribute = stewardship
+	dignity = 1
+	opinion_effect = 10
+
+	monthly_salary = 0.33
+	monthly_prestige = 0.75
+
+	action = action_assist_arrest
+	action = action_train_troops
+	action = action_squeeze_peasants
+	
+	allow = {
+		can_be_marshal_trigger = yes
+		FROM = {
+			OR = {
+				tier = EMPEROR
+				tier = KING
+			}
+			independent = yes
+		}
+	}
+
+	dismiss_trigger = {
+		FROM = {
+			show_scope_change = no
+
+			# Powerful vassals can't be fired from the council under Full Council Authority
+			trigger_if = {
+				limit = {
+					has_law = succession_voting_power_1
+					ROOT = { is_powerful_vassal = yes }
+				}
+
+				OR = {
+					has_law = succession_voting_power_0
+					ROOT = {
+						show_scope_change = no
+
+						is_powerful_vassal = no
+					}
+				}
+			}
+
+			trigger_if = {
+				limit = {
+					has_character_flag = swapping_councillors
+				}
+				custom_tooltip = {
+					text = not_swapping_tt
+
+					NOT = { has_character_flag = swapping_councillors }
+				}
+			}
+		}
+	}
+
+	gain_effect = {
+		if = {
+			limit = {
+				FROM = {
+					has_law = succ_byzantine_elective
+
+					any_courtier_or_vassal = {
+						NOT = { character = ROOT }
+
+						# Check if any other vassal or courtier has higher martial than current character
+						attribute_diff = {
+							character = PREVPREV
+							attribute = martial
+							value > 5
+						}
+						# Check that said vassal or courtier would be a viable marshal
+						can_be_marshal_trigger = yes
+					}
+				}
+			}
+
+			if = {
+				limit = {
+					martial < 2
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -10
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 4
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -5
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 6
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -4
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 8
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -3
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 10
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -2
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					martial < 12
+				}
+				FROM = {
+					change_variable = {
+						which = byzantine_credibility_appointed_sycophant
+						value = -1
+					}
+				}
+			}
+		}
+	}
+
+	lose_effect = {
+		if = {
+			limit = {
+				FROM = {
+					NOT = {
+						has_character_flag = swapping_councillors
+					}
+				}
+
+				NOR = {
+					is_incapable = yes
+					trait = sick_incapable
+				}
+			}
+			opinion = { who = FROM modifier = opinion_fired_from_council }
+			opinion = { who = FROM modifier = opinion_recently_fired }
+			character_event = { id = HFP.20806 days = 1 } # Good Byzantine Marshal was discharged
+		}
+
+		if = {
+			limit = { has_character_flag = relic_hunter }
+			character_event = { id = MNM.9034 } # Artifact hunter councllior fired/retires ping
+		}
+	}
+
+	retire_effect = {
+		if = {
+			limit = { has_character_flag = relic_hunter }
+			character_event = { id = MNM.9034 } # Artifact hunter councllior fired/retires ping
+		}
+
+		if = {
+			limit = {
+				age < 65
+				health >= 3
+				is_sick_or_injured_trigger = no
+				can_be_councilmember_king_trigger = yes
+			}
+
+			FROM = {
+				opinion = {
+					who = ROOT
+					modifier = opinion_resigned_from_council
+				}
+			}
+		}
+	}
+}
