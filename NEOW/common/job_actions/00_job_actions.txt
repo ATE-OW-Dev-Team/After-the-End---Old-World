@@ -195,7 +195,134 @@ action_squeeze_peasants = {
 					location = {
 						province = ROOT
 					}
-					has_job_action = action_squeeze_peasants
+					OR = {
+						has_job_action = action_squeeze_peasants_2
+						has_job_action = action_squeeze_peasants_3
+						has_job_action = action_squeeze_peasants_4
+					}
+				}
+			}
+		}
+	}
+
+	events = {
+		steward.001 # The Steward collects a tithe and sends it to his liege
+		steward.101 # The peasents attempt to kill the Steward (Gets away, is wounded, is killed)
+		steward.201 # Increased revolt risk
+	}
+}
+action_squeeze_peasants_2 = {
+	attribute = stewardship
+	local_tax_modifier = 0.025
+
+	potential = {
+		FROM = {
+			OR = {
+				is_tribal = no
+				trait = emul_nabuchadnezzar
+			}
+			is_nomadic = no
+		}
+	}
+
+	trigger = {
+		any_province_lord = {
+			character = FROM
+		}
+		
+		NOT = {
+			FROM = {
+				any_courtier = {
+					location = {
+						province = ROOT
+					}
+					OR = {
+						has_job_action = action_squeeze_peasants
+						has_job_action = action_squeeze_peasants_3
+						has_job_action = action_squeeze_peasants_4
+					}
+				}
+			}
+		}
+	}
+
+	events = {
+		steward.001 # The Steward collects a tithe and sends it to his liege
+		steward.101 # The peasents attempt to kill the Steward (Gets away, is wounded, is killed)
+		steward.201 # Increased revolt risk
+	}
+}
+action_squeeze_peasants_3 = {
+	attribute = stewardship
+	local_tax_modifier = 0.025
+
+	potential = {
+		FROM = {
+			OR = {
+				is_tribal = no
+				trait = emul_nabuchadnezzar
+			}
+			is_nomadic = no
+		}
+	}
+
+	trigger = {
+		any_province_lord = {
+			character = FROM
+		}
+		
+		NOT = {
+			FROM = {
+				any_courtier = {
+					location = {
+						province = ROOT
+					}
+					OR = {
+						has_job_action = action_squeeze_peasants_2
+						has_job_action = action_squeeze_peasants
+						has_job_action = action_squeeze_peasants_4
+					}
+				}
+			}
+		}
+	}
+
+	events = {
+		steward.001 # The Steward collects a tithe and sends it to his liege
+		steward.101 # The peasents attempt to kill the Steward (Gets away, is wounded, is killed)
+		steward.201 # Increased revolt risk
+	}
+}
+action_squeeze_peasants_4 = {
+	attribute = stewardship
+	local_tax_modifier = 0.025
+
+	potential = {
+		FROM = {
+			OR = {
+				is_tribal = no
+				trait = emul_nabuchadnezzar
+			}
+			is_nomadic = no
+		}
+	}
+
+	trigger = {
+		any_province_lord = {
+			character = FROM
+		}
+		
+		NOT = {
+			FROM = {
+				any_courtier = {
+					location = {
+						province = ROOT
+					}
+					OR = {
+						has_job_action = action_squeeze_peasants_2
+						has_job_action = action_squeeze_peasants_3
+						has_job_action = action_squeeze_peasants
+					}
 				}
 			}
 		}
@@ -647,7 +774,11 @@ action_train_troops = {
 					location = {
 						province = ROOT
 					}
-					has_job_action = action_train_troops
+					OR = {
+						has_job_action = action_train_troops_2
+						has_job_action = action_train_troops_3
+						has_job_action = action_train_troops_4
+					}
 				}
 			}
 		}
@@ -694,6 +825,219 @@ action_train_troops = {
 	}
 }
 
+action_train_troops_2 = {
+	attribute = stewardship
+	levy_size = 0.025
+	levy_reinforce_rate = 0.05
+
+	potential = {
+		FROM = {
+			is_nomadic = no
+		}
+	}
+
+	trigger = {
+		any_province_lord = {
+			character = FROM
+		}
+		NOT = {
+			FROM = {
+				any_courtier = {
+					location = {
+						province = ROOT
+					}
+					OR = {
+						has_job_action = action_train_troops
+						has_job_action = action_train_troops_3
+						has_job_action = action_train_troops_4
+					}
+				}
+			}
+		}
+	}
+	
+	display_on_map = {
+		tooltip = JOB_TRAIN_TROOPS_CAN_CHAR
+
+		trigger = {
+			FROM = { trait = emul_ashurbanipal }
+			
+			any_province_holding = {
+				owner = { character = FROM }
+				NOT = { has_holding_modifier = ashurbanipal_chariot }
+			}
+		}
+		color = { 0 255 0 }
+	}
+
+	display_on_map = {
+		tooltip = JOB_TRAIN_TROOPS_CAN_NOT_CHAR
+
+		trigger = {
+			FROM = { trait = emul_ashurbanipal }
+			
+			any_province_lord = {
+				character = FROM
+			}
+			
+			NOT = {
+				any_province_holding = {
+					owner = { character = FROM }
+					NOT = { has_holding_modifier = ashurbanipal_chariot }
+				}
+			}
+		}
+		color = { 0 0 255 }
+	}
+
+	events = {
+		marshal.201 # Reinforcements arrive
+		marshal.301 # Marshal tries to train troops, noble interferes
+		AOS.1009
+	}
+}
+action_train_troops_3 = {
+	attribute = stewardship
+	levy_size = 0.025
+	levy_reinforce_rate = 0.05
+
+	potential = {
+		FROM = {
+			is_nomadic = no
+		}
+	}
+
+	trigger = {
+		any_province_lord = {
+			character = FROM
+		}
+		NOT = {
+			FROM = {
+				any_courtier = {
+					location = {
+						province = ROOT
+					}
+					OR = {
+						has_job_action = action_train_troops
+						has_job_action = action_train_troops_2
+						has_job_action = action_train_troops_4
+					}
+				}
+			}
+		}
+	}
+	
+	display_on_map = {
+		tooltip = JOB_TRAIN_TROOPS_CAN_CHAR
+
+		trigger = {
+			FROM = { trait = emul_ashurbanipal }
+			
+			any_province_holding = {
+				owner = { character = FROM }
+				NOT = { has_holding_modifier = ashurbanipal_chariot }
+			}
+		}
+		color = { 0 255 0 }
+	}
+
+	display_on_map = {
+		tooltip = JOB_TRAIN_TROOPS_CAN_NOT_CHAR
+
+		trigger = {
+			FROM = { trait = emul_ashurbanipal }
+			
+			any_province_lord = {
+				character = FROM
+			}
+			
+			NOT = {
+				any_province_holding = {
+					owner = { character = FROM }
+					NOT = { has_holding_modifier = ashurbanipal_chariot }
+				}
+			}
+		}
+		color = { 0 0 255 }
+	}
+
+	events = {
+		marshal.201 # Reinforcements arrive
+		marshal.301 # Marshal tries to train troops, noble interferes
+		AOS.1009
+	}
+}
+action_train_troops_4 = {
+	attribute = stewardship
+	levy_size = 0.025
+	levy_reinforce_rate = 0.05
+
+	potential = {
+		FROM = {
+			is_nomadic = no
+		}
+	}
+
+	trigger = {
+		any_province_lord = {
+			character = FROM
+		}
+		NOT = {
+			FROM = {
+				any_courtier = {
+					location = {
+						province = ROOT
+					}
+					OR = {
+						has_job_action = action_train_troops
+						has_job_action = action_train_troops_3
+						has_job_action = action_train_troops_2
+					}
+				}
+			}
+		}
+	}
+	
+	display_on_map = {
+		tooltip = JOB_TRAIN_TROOPS_CAN_CHAR
+
+		trigger = {
+			FROM = { trait = emul_ashurbanipal }
+			
+			any_province_holding = {
+				owner = { character = FROM }
+				NOT = { has_holding_modifier = ashurbanipal_chariot }
+			}
+		}
+		color = { 0 255 0 }
+	}
+
+	display_on_map = {
+		tooltip = JOB_TRAIN_TROOPS_CAN_NOT_CHAR
+
+		trigger = {
+			FROM = { trait = emul_ashurbanipal }
+			
+			any_province_lord = {
+				character = FROM
+			}
+			
+			NOT = {
+				any_province_holding = {
+					owner = { character = FROM }
+					NOT = { has_holding_modifier = ashurbanipal_chariot }
+				}
+			}
+		}
+		color = { 0 0 255 }
+	}
+
+	events = {
+		marshal.201 # Reinforcements arrive
+		marshal.301 # Marshal tries to train troops, noble interferes
+		AOS.1009
+	}
+}
 action_train_troops_nomadic = {
 	attribute = martial
 	manpower_growth = 0.015
@@ -735,7 +1079,11 @@ action_assist_arrest = {
 					location = {
 						province = ROOT
 					}
-					has_job_action = action_assist_arrest
+					OR = {
+						has_job_action = action_assist_arrest_2
+						has_job_action = action_assist_arrest_3
+						has_job_action = action_assist_arrest_4
+					}
 				}
 			}
 		}
@@ -757,6 +1105,149 @@ action_assist_arrest = {
 	events = { }
 }
 
+action_assist_arrest_2 = {
+	attribute = stewardship
+	arrest_chance_modifier = 0.01
+	local_revolt_risk = -0.01
+
+	potential = {
+	}
+
+	trigger = {
+		any_province_lord = {
+			OR = {
+				character = FROM
+				is_liege_or_above = FROM
+			}
+		}
+		
+		NOT = {
+			FROM = {
+				any_courtier = {
+					location = {
+						province = ROOT
+					}
+					OR = {
+						has_job_action = action_assist_arrest
+						has_job_action = action_assist_arrest_3
+						has_job_action = action_assist_arrest_4
+					}
+				}
+			}
+		}
+		trigger_if = {
+			limit = { FROM = { trait = emul_hammurabi } }
+			NOT = {
+				FROM = {
+					job_marshal = {
+						location = {
+							province = ROOT
+						}
+						has_job_action = action_proclaim_law
+					}
+				}
+			}
+		}
+	}
+
+	events = { }
+}
+
+action_assist_arrest_3 = {
+	attribute = stewardship
+	arrest_chance_modifier = 0.01
+	local_revolt_risk = -0.01
+
+	potential = {
+	}
+
+	trigger = {
+		any_province_lord = {
+			OR = {
+				character = FROM
+				is_liege_or_above = FROM
+			}
+		}
+		
+		NOT = {
+			FROM = {
+				any_courtier = {
+					location = {
+						province = ROOT
+					}
+					OR = {
+						has_job_action = action_assist_arrest
+						has_job_action = action_assist_arrest_2
+						has_job_action = action_assist_arrest_4
+					}
+				}
+			}
+		}
+		trigger_if = {
+			limit = { FROM = { trait = emul_hammurabi } }
+			NOT = {
+				FROM = {
+					job_marshal = {
+						location = {
+							province = ROOT
+						}
+						has_job_action = action_proclaim_law
+					}
+				}
+			}
+		}
+	}
+
+	events = { }
+}
+
+action_assist_arrest_4 = {
+	attribute = stewardship
+	arrest_chance_modifier = 0.01
+	local_revolt_risk = -0.01
+
+	potential = {
+	}
+
+	trigger = {
+		any_province_lord = {
+			OR = {
+				character = FROM
+				is_liege_or_above = FROM
+			}
+		}
+		
+		NOT = {
+			FROM = {
+				any_courtier = {
+					location = {
+						province = ROOT
+					}
+					OR = {
+						has_job_action = action_assist_arrest
+						has_job_action = action_assist_arrest_3
+						has_job_action = action_assist_arrest_2
+					}
+				}
+			}
+		}
+		trigger_if = {
+			limit = { FROM = { trait = emul_hammurabi } }
+			NOT = {
+				FROM = {
+					job_marshal = {
+						location = {
+							province = ROOT
+						}
+						has_job_action = action_proclaim_law
+					}
+				}
+			}
+		}
+	}
+
+	events = { }
+}
 action_organize_army = {
 	attribute = martial
 	liege_modifier = organize_army_liege_mod
