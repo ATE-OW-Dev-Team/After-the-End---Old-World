@@ -623,11 +623,6 @@ feudal_governments = {
 			tribal_government
 			nomadtribal_government
         }
-		vassal_call_to_arms = {
-			tribal_government
-			nomadtribal_government
-			kratocratic_government
-		}
 		forced_contract = {
 			viceroyal_government
 		}
@@ -688,10 +683,9 @@ feudal_governments = {
 			has_oligarchy_title_trigger = no
         }
 		character_modifier = {
-			levy_size = 0.05
-			city_vassal_max_levy = 0.15
-			castle_vassal_max_levy = 0.15
-			temple_vassal_max_levy = 0.15
+			city_vassal_min_levy = 0.3
+			castle_vassal_min_levy = 0.3
+			temple_vassal_min_levy = 0.3
 			city_vassal_tax_modifier = -0.1
 			temple_vassal_tax_modifier = -0.1
 			castle_vassal_tax_modifier = -0.1
@@ -700,6 +694,8 @@ feudal_governments = {
 			global_revolt_risk = 0.01
 		}
 
+		max_liege_levy = 1
+		max_liege_tax = 0.2
         barons_need_dynasty = yes
         can_build_tribal = no
         uses_prestige_for_law_change = yes
@@ -2787,8 +2783,30 @@ feudal_governments = {
 		}
 		frame_suffix = "_viceroyalty"
 		potential = {		
-			primary_title = {
-				is_vice_royalty = yes
+			OR = {
+				primary_title = {
+					is_vice_royalty = yes
+				}
+				AND = {
+					is_save_game = no
+					has_game_started = no
+					OR = {
+						tier = DUKE
+						tier = KING
+					}
+					liege = {
+						government = roman_imperial_government
+					}
+				}
+				AND = {
+					OR = {
+						tier = DUKE
+						tier = KING
+					}
+					liege = {
+						government = roman_imperial_government
+					}
+				}
 			}
 			isnt_forced_to_theocracy = yes
 			NOT = {
