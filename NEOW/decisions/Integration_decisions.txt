@@ -737,6 +737,92 @@ decisions = {
 	}
 }
 settlement_decisions = {
+	excavate_perserved_ruin = {
+		only_playable = yes
+		filter = owned
+		ai_target_filter = owned
+		ai_check_interval = 48
+	
+		from_potential = {
+			ai = no
+			higher_tier_than = BARON
+		}
+		
+		potential = {
+			holder_scope = {
+				character = FROM
+			}
+			location = {
+				OR = {
+					has_province_modifier = perserved_minor_ruin
+					has_province_modifier = perserved_major_ruin
+				}
+			}
+		}
+		
+		allow = {
+			FROM = {
+				wealth = 200
+			}
+			location = {
+				OR = {
+					has_province_modifier = perserved_minor_ruin
+					has_province_modifier = perserved_major_ruin
+				}
+			}
+		}
+		
+		effect = {
+			location = {
+				if = {
+					limit = {
+						has_province_modifier = perserved_minor_ruin
+					}
+					remove_province_modifier = perserved_minor_ruin
+					add_province_modifier = {
+						name = exploited_minor_ruin
+						stacking = no
+						duration = -1
+					}
+					random_list = {
+						50 = {
+							character_event = { id = cleanup.2245 days = 60 random = 14 }
+						}
+						50 = {
+							character_event = { id = cleanup.2246 days = 60 random = 14 }
+						}
+					}
+					wealth = -200
+				}
+				if = {
+					limit = {
+						has_province_modifier = perserved_major_ruin
+					}
+					remove_province_modifier = perserved_major_ruin
+					add_province_modifier = {
+						name = exploited_major_ruin
+						stacking = no
+						duration = -1
+					}
+					random_list = {
+						25 = {
+							character_event = { id = cleanup.2245 days = 60 random = 14 }
+						}
+						75 = {
+							character_event = { id = cleanup.2246 days = 60 random = 14 }
+						}
+					}
+					wealth = -200
+				}
+			}
+		}
+		
+		
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
 	invite_local = {
 		only_playable = yes
 		filter = owned
