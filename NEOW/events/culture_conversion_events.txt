@@ -97,6 +97,39 @@ province_event = {
 				}
 			}
 		}
+		
+		mult_modifier = {
+			factor = 0.97
+			location = { TECH_MAJESTY == 1 }
+		}
+		mult_modifier = {
+			factor = 0.92
+			location = { TECH_MAJESTY == 2 }
+		}
+		mult_modifier = {
+			factor = 0.87
+			location = { TECH_MAJESTY == 3 }
+		}
+		mult_modifier = {
+			factor = 0.82
+			location = { TECH_MAJESTY == 4 }
+		}
+		mult_modifier = {
+			factor = 0.77
+			location = { TECH_MAJESTY == 5 }
+		}
+		mult_modifier = {
+			factor = 0.72
+			location = { TECH_MAJESTY == 6 }
+		}
+		mult_modifier = {
+			factor = 0.67
+			location = { TECH_MAJESTY == 7 }
+		}
+		mult_modifier = {
+			factor = 0.62
+			location = { TECH_MAJESTY == 8 }
+		}
 		mult_modifier = {
 			factor = 1.25#tolerance
 			owner = { 
@@ -236,7 +269,7 @@ province_event = {
 			factor = 0.5
 			has_global_flag = flag_started_roman_renaissance
 			owner = { culture = roman }
-			location = { county = { culture_group = apeninian } }
+			location = { county = { OR = { culture_group = apeninian culture_group = sardic } } }
 		}
 		mult_modifier = { #Greek culture is more impervious to Romanization.
 			factor = 2
@@ -387,20 +420,86 @@ province_event = {
 	picture = GFX_evt_culture_change
 	hide_window = yes
 	trigger = {
-		any_neighbor_province = {
-			limit = {
-				has_province_modifier = depopulated_3
-				NOT = {
-					culture = ROOT
+		
+		OR = {
+			port = yes
+			NOR = {
+				has_game_rule = {
+					name = culture_conversion
+					value = restricted
+				}
+				has_game_rule = {
+					name = culture_conversion
+					value = faster_melting_pots_and_slower_normal
 				}
 			}
-			has_province_modifier = depopulated_3
 		}
-		ROOT = {
-			NOR = {
-				has_province_modifier = depopulated_3
-				has_province_modifier = depopulated_2
-				has_province_modifier = depopulated_1
+		
+		owner = {
+			top_liege = {
+				culture = PREV
+			}
+			NOT = { culture = ROOT }
+			capital_scope = {
+				province_id = ROOT
+			}
+			
+			OR = {
+				primary_title = {
+					conquest_culture = PREV
+				}
+				ROOT = {
+					county = {
+						conquest_culture = PREVPREV
+					}
+				}
+				ROOT = {
+					duchy = {
+						holder_scope = {
+							character = PREVPREVPREV
+						}
+						conquest_culture = PREVPREV
+					}
+				}
+				ROOT = {
+					kingdom = {
+						holder_scope = {
+							character = PREVPREVPREV
+						}
+						conquest_culture = PREVPREV
+					}
+				}
+				ROOT = {
+					empire = {
+						holder_scope = {
+							character = PREVPREVPREV
+						}
+						conquest_culture = PREVPREV
+					}
+				}
+			}
+		}
+		
+		NOT = { # Exclude provinces covered by event 55000
+			any_neighbor_province = {
+				has_owner = yes
+				ROOT = {
+					owner = {
+						culture = PREVPREV
+					}
+				}
+				owner = {
+					ROOT = {
+						owner = {
+							culture = PREVPREV
+						}
+					}
+				}
+				NOR = {
+					has_province_modifier = depopulated_1
+					has_province_modifier = depopulated_2
+					has_province_modifier = depopulated_3
+				}
 			}
 		}
 	}
@@ -426,6 +525,38 @@ province_event = {
 			}
 		}
 		
+		mult_modifier = {
+			factor = 0.97
+			location = { TECH_MAJESTY == 1 }
+		}
+		mult_modifier = {
+			factor = 0.92
+			location = { TECH_MAJESTY == 2 }
+		}
+		mult_modifier = {
+			factor = 0.87
+			location = { TECH_MAJESTY == 3 }
+		}
+		mult_modifier = {
+			factor = 0.82
+			location = { TECH_MAJESTY == 4 }
+		}
+		mult_modifier = {
+			factor = 0.77
+			location = { TECH_MAJESTY == 5 }
+		}
+		mult_modifier = {
+			factor = 0.72
+			location = { TECH_MAJESTY == 6 }
+		}
+		mult_modifier = {
+			factor = 0.67
+			location = { TECH_MAJESTY == 7 }
+		}
+		mult_modifier = {
+			factor = 0.62
+			location = { TECH_MAJESTY == 8 }
+		}
 		mult_modifier = { 
 			factor = 0.9
 			location = { num_of_settlements == 1 }
@@ -511,8 +642,12 @@ province_event = {
 				NOT = { province = PREV }
 				any_neighbor_province = { province = PREVPREV }
 				is_land = yes 
-				NOT = {
-					culture = ROOT
+				ROOT = {
+					owner = {
+						NOT = {
+							culture = ROOT
+						}
+					}
 				}
 				has_province_modifier = depopulated_3
 			}
@@ -521,17 +656,11 @@ province_event = {
 			religion = PREV
 			decrease_depopulation_effect = yes
 			owner = {
-				limit = {
-					ai = no
-				}
 				character_event = { id = 55552 }
 			}
 		}
 		ROOT = {
 			owner = {
-				limit = {
-					ai = no
-				}
 				character_event = { id = 55553 }
 			}
 		}
@@ -823,7 +952,7 @@ province_event = {
 			factor = 0.5
 			has_global_flag = flag_started_roman_renaissance
 			liege = { culture = roman }
-			location = { county = { culture_group = apeninian } }
+			location = { county = { OR = { culture_group = apeninian culture_group = sardic } } }
 		}
 		mult_modifier = { #Greek culture is more impervious to Romanization.
 			factor = 2

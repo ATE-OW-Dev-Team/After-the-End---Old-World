@@ -26,7 +26,7 @@ narrative_event = {#Gives the Irish their bloodline if they win the Revolt
 		}
 		if = {
 			limit = {
-				primary_title = { OR = { title = k_irish_rebels title = k_ireland } }
+				primary_title = { title = k_ireland }
 			}
 			create_bloodline = {
 				type = ira_bloodline
@@ -95,7 +95,7 @@ character_event = {
 
 	immediate = {
 		spawn_unit = {
-			province = closest_to_capital
+			province = closest
 			earmark = jewish_colony_troops
 			troops = {
 				light_cavalry = { 80 80 }
@@ -110,7 +110,7 @@ character_event = {
 			disband_on_peace = no
 		}
 		spawn_unit = {
-			province = closest_to_capital
+			province = closest
 			earmark = jewish_colony_troops
 			troops = {
 				light_cavalry = { 80 80 }
@@ -125,7 +125,7 @@ character_event = {
 			disband_on_peace = no
 		}
 		spawn_unit = {
-			province = closest_to_capital
+			province = closest
 			earmark = jewish_colony_troops
 			troops = {
 				light_cavalry = { 80 80 }
@@ -142,26 +142,6 @@ character_event = {
 	}
 }
 
-character_event = {
-	id = ATV.69868
-	hide_window = yes
-	trigger = {
-		NOT = { has_character_flag = dontcheckthisantidiversity2 }
-		graphical_culture = westerngfx
-		NOR = {
-			real_father_even_if_dead = { graphical_culture = westerngfx }
-			mother_even_if_dead = { graphical_culture = westerngfx }
-		}
-	}
-	mean_time_to_happen = {
-		days = 1
-	}
-	
-	immediate = {
-		set_character_flag = dontcheckthisantidiversity2
-		culture_scope = { set_graphical_culture = PREV }
-	}
-}
 
 character_event = {
 	id = ATV.5
@@ -1104,34 +1084,6 @@ character_event = {
 		}
 	}
 }
-character_event = {#Limit the spread
-	id = ATV.28
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		father_even_if_dead = {
-			father_even_if_dead = {
-				NOR = {
-					dynasty = 25551120 #Joestar dynasty
-					dynasty = 255516934 #Di Dio dynasty
-					dynasty = ROOT #Player dynasty
-				}
-			}
-		}
-		any_owned_bloodline = {
-			has_bloodline_flag = joestar_blood
-		}
-		ai = yes
-	}
-	immediate = {
-		random_owned_bloodline = {
-			limit = { 
-				has_bloodline_flag = joestar_blood
-			}
-			remove_bloodline_member = ROOT
-		}
-	}
-}
 ##Grekter Diversity
 character_event = {
 	id = ATV.29
@@ -1428,7 +1380,7 @@ narrative_event = {
     trigger = {
         has_landed_title = c_paro
 		c_paro = {
-			top_liege = {
+			owner = {
 				NOR = {
 					has_landed_title = e_bhutan
 					has_landed_title = k_bhutan
@@ -1718,10 +1670,66 @@ character_event = {
 		}
 		random_list = {
 			50 = {
+				mult_modifier = {
+					factor = 1.2
+					trait = lustful
+				}
+				mult_modifier = {
+					factor = 1.2
+					trait = gluttonous
+				}
+				mult_modifier = {
+					factor = 1.2
+					trait = greedy
+				}
+				mult_modifier = {
+					factor = 1.2
+					trait = slothful
+				}
+				mult_modifier = {
+					factor = 1.2
+					trait = wroth
+				}
+				mult_modifier = {
+					factor = 1.2
+					trait = envious
+				}
+				mult_modifier = {
+					factor = 1.2
+					trait = proud
+				}
 				add_trait = calvinist_damned
 				remove_trait = calvinist_blessed
 			}
 			50 = {
+				mult_modifier = {
+					factor = 1.2
+					trait = chaste
+				}
+				mult_modifier = {
+					factor = 1.2
+					trait = temperate
+				}
+				mult_modifier = {
+					factor = 1.2
+					trait = charitable
+				}
+				mult_modifier = {
+					factor = 1.2
+					trait = diligent
+				}
+				mult_modifier = {
+					factor = 1.2
+					trait = patient
+				}
+				mult_modifier = {
+					factor = 1.2
+					trait = kind
+				}
+				mult_modifier = {
+					factor = 1.2
+					trait = humble
+				}
 				add_trait = calvinist_blessed
 				remove_trait = calvinist_damned
 			}
@@ -1763,9 +1771,6 @@ letter_event = {
         join_defender_wars = FROM
         piety = 250
 		prestige = 150
-        hidden_tooltip = {
-            FROM = { letter_event = { id = 238 } }
-        }
         ai_chance = {
             factor = 10
             modifier = { factor = 2 trait = zealous }
@@ -1798,9 +1803,6 @@ letter_event = {
 
     option = {
         name = EVTOPT_catholic_aid_deny
-        hidden_tooltip = {
-            FROM = { letter_event = { id = 239 } }
-        }
         ai_chance = {
             factor = 10
             modifier = { factor = 4 war = yes }
@@ -1827,37 +1829,6 @@ letter_event = {
     }
 }
 character_event = {
-	id = ATV.61
-	hide_window = yes
-	trigger = {
-		any_demesne_province = {
-			hospital_has_building = ct_dirt_road
-			NOT = {
-				has_province_modifier = dirt_roads_modifier
-			}
-		}
-	}
-	mean_time_to_happen = {
-		days = 1
-	}
-	immediate = {
-		random_demesne_province = {
-			limit = {
-				hospital_has_building = ct_dirt_road
-				NOT = {
-					has_province_modifier = dirt_roads_modifier
-				}
-			}
-
-			add_province_modifier = { 
-				name = dirt_roads_modifier 
-				duration = 730 
-				hidden = yes
-			}
-		}
-	}
-}
-character_event = {
 	id = ATV.62
 	hide_window = yes
 	trigger = {
@@ -1882,7 +1853,7 @@ character_event = {
 
 			add_province_modifier = { 
 				name = drinking_water_modifier_1 
-				duration = 730 
+				duration = 1095 
 				hidden = yes
 			}
 		}
@@ -1913,7 +1884,7 @@ character_event = {
 
 			add_province_modifier = { 
 				name = drinking_water_modifier_2 
-				duration = 730 
+				duration = 1095 
 				hidden = yes
 			}
 		}
@@ -1944,7 +1915,7 @@ character_event = {
 
 			add_province_modifier = { 
 				name = drinking_water_modifier_3 
-				duration = 730 
+				duration = 1095 
 				hidden = yes
 			}
 		}
@@ -1975,7 +1946,7 @@ character_event = {
 
 			add_province_modifier = { 
 				name = garrison_revolt_modifier_1 
-				duration = 730 
+				duration = 1095 
 				hidden = yes
 			}
 		}
@@ -2006,7 +1977,7 @@ character_event = {
 
 			add_province_modifier = { 
 				name = garrison_revolt_modifier_2 
-				duration = 730 
+				duration = 1095 
 				hidden = yes
 			}
 		}
@@ -2037,7 +2008,38 @@ character_event = {
 
 			add_province_modifier = { 
 				name = garrison_revolt_modifier_3
-				duration = 730 
+				duration = 1095 
+				hidden = yes
+			}
+		}
+	}
+}
+character_event = {
+	id = ATV.61
+	hide_window = yes
+	trigger = {
+		any_demesne_province = {
+			hospital_has_building = ct_dirt_road
+			NOT = {
+				has_province_modifier = dirt_roads_modifier
+			}
+		}
+	}
+	mean_time_to_happen = {
+		days = 3
+	}
+	immediate = {
+		random_demesne_province = {
+			limit = {
+				hospital_has_building = ct_dirt_road
+				NOT = {
+					has_province_modifier = dirt_roads_modifier
+				}
+			}
+
+			add_province_modifier = { 
+				name = dirt_roads_modifier 
+				duration = 1095 
 				hidden = yes
 			}
 		}
@@ -2068,7 +2070,7 @@ character_event = {
 
 			add_province_modifier = { 
 				name = stone_roads_modifier 
-				duration = 730 
+				duration = 1095 
 				hidden = yes
 			}
 		}
@@ -2099,7 +2101,69 @@ character_event = {
 
 			add_province_modifier = { 
 				name = stone_highways_modifier 
-				duration = 730 
+				duration = 1095 
+				hidden = yes
+			}
+		}
+	}
+}
+character_event = {
+	id = ATV.66
+	hide_window = yes
+	trigger = {
+		any_demesne_province = {
+			hospital_has_building = ct_tolled_brick_highway
+			NOT = {
+				has_province_modifier = tolled_brick_highway_modifier
+			}
+		}
+	}
+	mean_time_to_happen = {
+		days = 3
+	}
+	immediate = {
+		random_demesne_province = {
+			limit = {
+				hospital_has_building = ct_tolled_brick_highway
+				NOT = {
+					has_province_modifier = tolled_brick_highway_modifier
+				}
+			}
+
+			add_province_modifier = { 
+				name = tolled_brick_highway_modifier 
+				duration = 1095 
+				hidden = yes
+			}
+		}
+	}
+}
+character_event = {
+	id = ATV.67
+	hide_window = yes
+	trigger = {
+		any_demesne_province = {
+			hospital_has_building = ct_waystation_brick_highway
+			NOT = {
+				has_province_modifier = waystation_brick_highway_modifier
+			}
+		}
+	}
+	mean_time_to_happen = {
+		days = 3
+	}
+	immediate = {
+		random_demesne_province = {
+			limit = {
+				hospital_has_building = ct_waystation_brick_highway
+				NOT = {
+					has_province_modifier = waystation_brick_highway_modifier
+				}
+			}
+
+			add_province_modifier = { 
+				name = waystation_brick_highway_modifier 
+				duration = 1095 
 				hidden = yes
 			}
 		}

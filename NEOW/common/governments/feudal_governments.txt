@@ -193,6 +193,7 @@ feudal_governments = {
 		allow_title_revokation = no
 		can_revoke_without_reason = no
 		uses_decadence = yes
+		commander_limit = 4
 
 		can_build_tribal = no
 		
@@ -278,8 +279,8 @@ feudal_governments = {
 		can_revoke_without_reason = no
 		uses_prestige_for_law_change = yes
 		uses_bride_price = yes
-		can_create_empires = no
 		can_usurp_kingdoms_and_empires = no
+		can_be_granted_kingdoms_and_empires_by_other_government = no
 		can_grant_kingdoms_and_empires_to_other_government_group = yes
 		commander_limit = 2
 		
@@ -480,11 +481,6 @@ feudal_governments = {
 			tribal_government
 			nomadtribal_government
         }
-		vassal_call_to_arms = {
-			tribal_government
-			nomadtribal_government
-			kratocratic_government
-		}
 		forced_contract = {
 			viceroyal_government
 		}
@@ -492,6 +488,9 @@ feudal_governments = {
 			tribal_government
 			nomadtribal_government
         }
+		vassal_call_to_arms = {
+			nomadtribal_government
+		}
 		frame_suffix = "_hellenic"
 		title_prefix = "hellenic_"
 		potential = {
@@ -514,10 +513,9 @@ feudal_governments = {
 			has_oligarchy_title_trigger = no
         }
 		character_modifier = {
-			levy_size = 0.05
-			city_vassal_max_levy = 0.15
-			castle_vassal_max_levy = 0.15
-			temple_vassal_max_levy = 0.15
+			city_vassal_min_levy = 0.3
+			castle_vassal_min_levy = 0.3
+			temple_vassal_min_levy = 0.3
 			city_vassal_tax_modifier = -0.1
 			temple_vassal_tax_modifier = -0.1
 			castle_vassal_tax_modifier = -0.1
@@ -526,6 +524,8 @@ feudal_governments = {
 			global_revolt_risk = 0.01
 		}
 
+		max_liege_levy = 1
+		max_liege_tax = 0.2
         barons_need_dynasty = yes
         can_build_tribal = no
         uses_prestige_for_law_change = yes
@@ -1281,6 +1281,7 @@ feudal_governments = {
 		uses_piety_for_law_change = yes
 		dukes_called_kings = yes
 		barons_need_dynasty = yes
+		uses_decadence = yes
 
 		can_build_tribal = no
 		
@@ -1955,13 +1956,14 @@ feudal_governments = {
 		}
 		capital_move_delay = 2000
 		
+		commander_limit = 4
 		can_usurp_kingdoms_and_empires = no
 		can_imprison_without_reason = no
+		can_revoke_without_reason = no
 		can_create_empires = no
 		vassal_government_opinion_penalties = no
 		can_grant_kingdoms_and_empires_to_other_government_group = yes
 		can_be_granted_kingdoms_and_empires_by_other_government = no
-		free_retract_vassalage = yes
 	}
 	
 	ethiopian_imperial_government = {
@@ -2013,6 +2015,7 @@ feudal_governments = {
 		frame_suffix = "_ethiopianimperial"
 		title_prefix = "ethiopianimperial_"
 		potential = {
+			isnt_forced_to_theocracy = yes
 			OR = { 
 				AND = {
 					is_save_game = no
@@ -2020,8 +2023,7 @@ feudal_governments = {
 					primary_title = {
 						OR = { 
 							real_tier = EMPEROR
-							title = e_abyssinia
-							title = k_abyssinia
+							real_tier = KING
 						}
 						AND = {
 							NOR = {
@@ -2044,6 +2046,7 @@ feudal_governments = {
 						culture_group = east_african
 						culture_group = cushitic
 						culture = beta_israeli
+						culture = nobii
 						culture_group = egyptian
 						culture_group = nilotic
 					}
@@ -2052,8 +2055,7 @@ feudal_governments = {
 					primary_title = { 
 						OR = { 
 							real_tier = EMPEROR
-							title = e_abyssinia
-							title = k_abyssinia
+							real_tier = KING
 						}
 						AND = {
 							NOR = {
@@ -2080,6 +2082,10 @@ feudal_governments = {
 					}
 				}
 			}
+			ghazwa_government_trigger = no
+			makhzen_government_trigger = no
+			neoziamet_government_trigger = no
+			iqta_religion_trigger = no
 			NOT = {
 				primary_title = {
 					is_vice_royalty = yes
@@ -2159,8 +2165,30 @@ feudal_governments = {
 		}
 		frame_suffix = "_viceroyalty"
 		potential = {		
-			primary_title = {
-				is_vice_royalty = yes
+			OR = {
+				primary_title = {
+					is_vice_royalty = yes
+				}
+				AND = {
+					is_save_game = no
+					has_game_started = no
+					OR = {
+						tier = DUKE
+						tier = KING
+					}
+					liege = {
+						government = roman_imperial_government
+					}
+				}
+				AND = {
+					OR = {
+						tier = DUKE
+						tier = KING
+					}
+					liege = {
+						government = roman_imperial_government
+					}
+				}
 			}
 			isnt_forced_to_theocracy = yes
 			NOT = {
