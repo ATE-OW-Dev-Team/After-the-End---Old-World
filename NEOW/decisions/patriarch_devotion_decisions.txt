@@ -1,0 +1,2794 @@
+###GRACE INTERACTION DECISIONS FOR CHINA###
+
+#Add the decisions in a nice order which will make sense in the menu! For example, ranked by cost/reward.
+
+
+#PAYING TRIBUTE DECISIONS (GAIN GRACE)
+offmap_decisions = {
+
+	restore_pope_in_rome = {
+		only_independent = yes
+		is_high_prio = yes
+		button_name = offmap_gifts
+		ai_check_interval = 36
+	
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			religion = catholic
+			is_playable = yes
+			independent = yes
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+			religion = catholic
+			
+			controls_religion = no
+			
+			c_roma = {
+				holder_scope = {
+					OR = {
+						character = ROOT
+						is_liege_or_above = ROOT
+					}
+					OR = {
+						AND = {
+							ROOT = { religion = catholic }
+							k_papacy = {
+								holder_scope = {
+									NOT = { character = PREVPREV }
+									NOT = { is_vassal_or_below = PREVPREV }
+								}
+							}
+						}
+					}
+				}
+			}
+			prisoner = no
+			has_regent = no
+		}
+		
+		effect = {		
+			if = {
+				limit = {
+					FROM = { religion = catholic }
+				}
+				k_papacy = {
+					holder_scope = {
+						c_roma = {
+							grant_title = PREV
+							any_de_jure_vassal_title = {
+								limit = {
+									holder_scope = { 
+										OR = {
+											character = ROOT
+											is_liege_or_above = ROOT
+										}
+									}
+								}
+								grant_title = PREVPREV
+							}
+						}
+						save_event_target_as = restored_pope
+					}
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						religion = catholic
+						NOT = { has_character_flag = restored_catholic_pope_in_rome }
+					}
+				}
+				k_papacy = {
+					holder_scope = {
+						opinion = {
+							who = ROOT
+							modifier = opinion_restored_to_rome
+						}
+					}
+				}
+				piety = 1000
+				set_character_flag = restored_catholic_pope_in_rome
+			}
+			FROM = {
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = 3000
+				}
+				hidden_effect = {
+					character_event = { id = 39705 }
+					set_character_flag = testflagrome
+				}
+			}
+		}
+		
+		
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				FROM = {
+					NOT = {
+						any_demesne_province = {
+							NOT = { province_id = 333 }
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				c_roma = {
+					holder_scope = {
+						OR = {
+							ai = no
+							any_liege = { ai = no }  # AI will never take Rome province away from a player
+						}
+					}
+				}
+			}
+		}
+	}
+	restore_patriarch_celtic = {
+		only_independent = yes
+		is_high_prio = yes
+		button_name = offmap_gifts
+		ai_check_interval = 36
+	
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			religion = catholic
+			is_playable = yes
+			independent = yes
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+			religion = catholic
+			
+			controls_religion = no
+			
+			b_mellifont = {
+				holder_scope = {
+					OR = {
+						character = ROOT
+						is_liege_or_above = ROOT
+					}
+					OR = {
+						AND = {
+							ROOT = { religion = catholic }
+							d_celtic_patriarch = {
+								holder_scope = {
+									NOT = { character = PREVPREV }
+									NOT = { is_vassal_or_below = PREVPREV }
+								}
+							}
+						}
+					}
+				}
+			}
+			prisoner = no
+			has_regent = no
+		}
+		
+		effect = {		
+			if = {
+				limit = {
+					FROM = { religion = catholic }
+				}
+				d_celtic_patriarch = {
+					holder_scope = {
+						b_mellifont = {
+							grant_title = PREV
+							any_de_jure_vassal_title = {
+								limit = {
+									holder_scope = { 
+										OR = {
+											character = ROOT
+											is_liege_or_above = ROOT
+										}
+									}
+								}
+								grant_title = PREVPREV
+							}
+						}
+						save_event_target_as = restored_pope
+					}
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						religion = catholic
+						NOT = { has_character_flag = restored_catholic_patriarch_in_dublin }
+					}
+				}
+				d_celtic_patriarch = {
+					holder_scope = {
+						opinion = {
+							who = ROOT
+							modifier = opinion_restored_to_rome
+						}
+					}
+				}
+				FROM = {
+					piety = 1000
+					set_character_flag = restored_catholic_patriarch_in_dublin
+				}
+			}
+			FROM = {
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = 1500
+				}
+			}
+		}
+		
+		
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				FROM = {
+					NOT = {
+						any_demesne_province = {
+							NOT = { province_id = 11 }
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				b_mellifont = {
+					holder_scope = {
+						OR = {
+							ai = no
+							any_liege = { ai = no }  # AI will never take Rome province away from a player
+						}
+					}
+				}
+			}
+		}
+	}
+	restore_patriarch_iberian = {
+		only_independent = yes
+		is_high_prio = yes
+		button_name = offmap_gifts
+		ai_check_interval = 36
+	
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			religion = catholic
+			is_playable = yes
+			independent = yes
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+			religion = catholic
+			
+			controls_religion = no
+			
+			b_fatima = {
+				holder_scope = {
+					OR = {
+						character = ROOT
+						is_liege_or_above = ROOT
+					}
+					OR = {
+						AND = {
+							ROOT = { religion = catholic }
+							d_iberian_patriarch = {
+								holder_scope = {
+									NOT = { character = PREVPREV }
+									NOT = { is_vassal_or_below = PREVPREV }
+								}
+							}
+						}
+					}
+				}
+			}
+			prisoner = no
+			has_regent = no
+		}
+		
+		effect = {		
+			if = {
+				limit = {
+					FROM = { religion = catholic }
+				}
+				d_iberian_patriarch = {
+					holder_scope = {
+						b_fatima = {
+							grant_title = PREV
+							any_de_jure_vassal_title = {
+								limit = {
+									holder_scope = { 
+										OR = {
+											character = ROOT
+											is_liege_or_above = ROOT
+										}
+									}
+								}
+								grant_title = PREVPREV
+							}
+						}
+						save_event_target_as = restored_pope
+					}
+				}
+			}
+			if = {
+				limit = {
+					FROM = { 
+						religion = catholic
+						NOT = { has_character_flag = restored_catholic_patriarch_in_fatima }
+					}
+				}
+				d_iberian_patriarch = {
+					holder_scope = {
+						opinion = {
+							who = ROOT
+							modifier = opinion_restored_to_rome
+						}
+					}
+				}
+				FROM = {
+					piety = 1000
+					set_character_flag = restored_catholic_patriarch_in_fatima
+				}
+			}
+			FROM = {
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = 1500
+				}
+			}
+		}
+		
+		
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				FROM = {
+					NOT = {
+						any_demesne_province = {
+							NOT = { province_id = 160 }
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				b_fatima = {
+					holder_scope = {
+						OR = {
+							ai = no
+							any_liege = { ai = no }  # AI will never take Rome province away from a player
+						}
+					}
+				}
+			}
+		}
+	}
+	restore_patriarch_byzantine = {
+		only_independent = yes
+		is_high_prio = yes
+		button_name = offmap_gifts
+		ai_check_interval = 36
+	
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			religion = catholic
+			is_playable = yes
+			independent = yes
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+			religion = catholic
+			
+			controls_religion = no
+			
+			b_hagiasophia = {
+				holder_scope = {
+					OR = {
+						character = ROOT
+						is_liege_or_above = ROOT
+					}
+					OR = {
+						AND = {
+							ROOT = { religion = catholic }
+							d_byzantine_patriarch = {
+								holder_scope = {
+									NOT = { character = PREVPREV }
+									NOT = { is_vassal_or_below = PREVPREV }
+								}
+							}
+						}
+					}
+				}
+			}
+			prisoner = no
+			has_regent = no
+		}
+		
+		effect = {		
+			if = {
+				limit = {
+					FROM = { religion = catholic }
+				}
+				d_byzantine_patriarch = {
+					holder_scope = {
+						b_hagiasophia = {
+							grant_title = PREV
+							any_de_jure_vassal_title = {
+								limit = {
+									holder_scope = { 
+										OR = {
+											character = ROOT
+											is_liege_or_above = ROOT
+										}
+									}
+								}
+								grant_title = PREVPREV
+							}
+						}
+						save_event_target_as = restored_pope
+					}
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						religion = catholic
+						NOT = { has_character_flag = restored_catholic_patriarch_in_constantinople }
+					}
+				}
+				d_byzantine_patriarch = {
+					holder_scope = {
+						opinion = {
+							who = ROOT
+							modifier = opinion_restored_to_rome
+						}
+					}
+				}
+				FROM = {
+					piety = 1000
+					set_character_flag = restored_catholic_patriarch_in_constantinople
+				}
+			}
+			FROM = {
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = 1500
+				}
+			}
+		}
+		
+		
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				FROM = {
+					NOT = {
+						any_demesne_province = {
+							NOT = { province_id = 496 }
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				b_hagiasophia = {
+					holder_scope = {
+						OR = {
+							ai = no
+							any_liege = { ai = no }  # AI will never take Rome province away from a player
+						}
+					}
+				}
+			}
+		}
+	}
+	restore_patriarch_jerusalem = {
+		only_independent = yes
+		is_high_prio = yes
+		button_name = offmap_gifts
+		ai_check_interval = 36
+	
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			religion = catholic
+			is_playable = yes
+			independent = yes
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+			religion = catholic
+			
+			controls_religion = no
+			
+			b_jerusalem = {
+				holder_scope = {
+					OR = {
+						character = ROOT
+						is_liege_or_above = ROOT
+					}
+					OR = {
+						AND = {
+							ROOT = { religion = catholic }
+							d_jerusalem_patriarch = {
+								holder_scope = {
+									NOT = { character = PREVPREV }
+									NOT = { is_vassal_or_below = PREVPREV }
+								}
+							}
+						}
+					}
+				}
+			}
+			prisoner = no
+			has_regent = no
+		}
+		
+		effect = {		
+			if = {
+				limit = {
+					FROM = { religion = catholic }
+				}
+				d_jerusalem_patriarch = {
+					holder_scope = {
+						b_jerusalem = {
+							grant_title = PREV
+							any_de_jure_vassal_title = {
+								limit = {
+									holder_scope = { 
+										OR = {
+											character = ROOT
+											is_liege_or_above = ROOT
+										}
+									}
+								}
+								grant_title = PREVPREV
+							}
+						}
+						save_event_target_as = restored_pope
+					}
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						religion = catholic
+						NOT = { has_character_flag = restored_catholic_patriarch_in_jerusalem }
+					}
+				}
+				d_jerusalem_patriarch = {
+					holder_scope = {
+						opinion = {
+							who = ROOT
+							modifier = opinion_restored_to_rome
+						}
+					}
+				}
+				FROM = {
+					piety = 1000
+					set_character_flag = restored_catholic_patriarch_in_jerusalem
+				}
+			}
+			FROM = {
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = 1500
+				}
+			}
+		}
+		
+		
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				FROM = {
+					NOT = {
+						any_demesne_province = {
+							NOT = { province_id = 774 }
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				b_jerusalem = {
+					holder_scope = {
+						OR = {
+							ai = no
+							any_liege = { ai = no }  # AI will never take Rome province away from a player
+						}
+					}
+				}
+			}
+		}
+	}
+	patriarchs_send_donation = {
+		only_playable = yes
+		button_name = offmap_gifts
+		ai_check_interval = 120
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			religion = catholic
+			mercenary = no
+			is_landed = yes
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				scaled_wealth = { value = 4 min = 500 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				hidden_tooltip = {
+					NOT = { has_character_modifier = chinese_grace_send_gift_timer }
+				}
+			}
+		}
+		effect = {
+			FROM = {
+				sound_effect = china_grace_gain
+				scaled_wealth = { value = -4 min = -500 } #If this changes the ai chances should probably be adjusted
+				hidden_effect = {
+					add_character_modifier = {
+						hidden = yes
+						hidden = yes
+						name = chinese_grace_send_gift_timer
+						years = 15 #Change chinese_grace_send_gift_allow_tt if this number changes
+					} 
+				}
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = 150
+				}
+			}
+		}
+
+		
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.66 # slow down
+			}
+			modifier = {
+				factor = 0.1
+				FROM = { NOT = { monthly_income = 11 } } #I.e. it would take more than 4 years to collect the 500 gold
+			}
+		}
+	}
+
+	patriarchs_send_priest = {
+		only_playable = yes
+		button_name = offmap_gifts
+		
+		third_party_filter = home_court
+		ai_third_party_filter = home_court
+		third_party = FROM
+		ai_check_interval = 36
+		show_third_party_potential = yes
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+	
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			religion = catholic
+			mercenary = no
+			is_landed = yes
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				hidden_tooltip = {
+					NOT = { has_character_modifier = chinese_grace_send_eunuch_timer }
+				}
+			}
+		}
+		
+		third_party_potential = {
+			show_only_failed_conditions = yes
+			FROMFROM = {
+				show_scope_change = no
+				custom_tooltip = {
+					text = is_landless_male_tt
+					NOT = { is_landed = yes }
+					NOT = { is_ruler = yes }
+					NOT = { is_female = yes }
+					NOT = { is_patrician = yes }
+				}
+				custom_tooltip = {
+					text = adult_or_close_relative_of_12_years_tt
+					OR = {
+						is_adult = yes
+						AND = {
+							is_close_relative = ROOT_FROM
+							age = 12
+						}
+					}
+				}
+				
+				NOT = { is_heir = yes }
+
+				custom_tooltip = {
+					text = not_married_or_getting_married_tt
+					NOT = { is_betrothed = yes }
+					NOT = { is_married = yes }
+				}
+				custom_tooltip = {
+					text = is_not_incapable_inbred_or_imbecile_tt
+					NOT = { trait = incapable }
+					NOT = { trait = inbred }
+					NOT = { trait = imbecile }
+				}
+				custom_tooltip = {
+					text = is_not_maimed_or_infirm_tt
+					NOT = { trait = maimed }
+					NOT = { trait = infirm }
+				}
+				custom_tooltip = {
+					text = is_not_wounded_severely_injured_tt
+					NOT = { trait = wounded }
+					NOT = { trait = severely_injured }
+				}
+				custom_tooltip = {
+					text = is_not_one_eyed_handed_legged_disfigured_or_mangled_tt
+					NOT = { trait = one_eyed }
+					NOT = { trait = one_handed }
+					NOT = { trait = one_legged }
+					NOT = { trait = disfigured }
+					NOT = { trait = mangled }
+				}
+				NOT = { prisoner = yes }
+
+				OR = {
+					custom_tooltip = {
+						text = is_close_relative_tt
+						is_close_relative = ROOT_FROM
+					}
+					custom_tooltip = {
+						text = china_tribute_send_eunuch_stats_tt
+						OR = {
+							diplomacy = 15
+							martial = 15
+							stewardship = 15
+							intrigue = 15
+							learning = 15
+						}
+					}
+					custom_tooltip = {
+						text = china_tribute_send_eunuch_congenital_tt
+						OR = {
+							trait = strong
+							trait = genius
+							trait = quick
+							trait = fair
+						}
+					}
+					custom_tooltip = {
+						text = china_tribute_send_eunuch_non_inherit_congenital_tt
+						OR = {
+							trait = robust
+							trait = shrewd
+						}
+					}
+					custom_tooltip = {
+						text = has_the_right_eunuch_traits_tt
+						OR = {
+							trait = architect
+							trait = administrator
+							trait = strategist
+							trait = scholar
+							trait = faqih					
+							trait = jewish_gaon					
+						}
+					}
+				}
+			}
+		}
+		
+		third_party_allow = {
+			show_only_failed_conditions = yes
+			FROMFROM = {
+				is_ill = no
+				is_inaccessible_trigger = no
+			}
+		}
+		
+		third_party_score = {
+			factor = 100
+			
+			additive_modifier = {
+				value = 20
+				FROMFROM = { 
+					show_scope_change = no
+					diplomacy = 8					
+					hidden_trigger = {
+						NOT = { diplomacy = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					diplomacy = 12					
+					hidden_trigger = {
+						NOT = { diplomacy = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 75
+				FROMFROM = { 
+					show_scope_change = no
+					diplomacy = 16				
+					hidden_trigger = {
+						NOT = { diplomacy = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 120
+				FROMFROM = { 
+					show_scope_change = no
+					diplomacy = 20
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = { 
+					show_scope_change = no
+					martial = 8					
+					hidden_trigger = {
+						NOT = { martial = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					martial = 12					
+					hidden_trigger = {
+						NOT = { martial = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 75
+				FROMFROM = {
+					show_scope_change = no 
+					martial = 16				
+					hidden_trigger = {
+						NOT = { martial = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 120
+				FROMFROM = { 
+					show_scope_change = no
+					martial = 20
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = { 
+					show_scope_change = no
+					stewardship = 8					
+					hidden_trigger = {
+						NOT = { stewardship = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					stewardship = 12					
+					hidden_trigger = {
+						NOT = { stewardship = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 75
+				FROMFROM = { 
+					show_scope_change = no
+					stewardship = 16				
+					hidden_trigger = {
+						NOT = { stewardship = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 120
+				FROMFROM = { 
+					show_scope_change = no
+					stewardship = 20
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = { 
+					show_scope_change = no
+					intrigue = 8					
+					hidden_trigger = {
+						NOT = { intrigue = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					intrigue = 12					
+					hidden_trigger = {
+						NOT = { intrigue = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 75
+				FROMFROM = { 
+					show_scope_change = no
+					intrigue = 16				
+					hidden_trigger = {
+						NOT = { intrigue = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 120
+				FROMFROM = { 
+					show_scope_change = no
+					intrigue = 20
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = { 
+					show_scope_change = no
+					learning = 8					
+					hidden_trigger = {
+						NOT = { learning = 12 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					learning = 12					
+					hidden_trigger = {
+						NOT = { learning = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 75
+				FROMFROM = { 
+					show_scope_change = no
+					learning = 16				
+					hidden_trigger = {
+						NOT = { learning = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 120
+				FROMFROM = { 
+					show_scope_change = no
+					learning = 20
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = fair
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = { 
+					show_scope_change = no
+					trait = groomed
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = genius
+				}
+			}
+			additive_modifier = {
+				value = 30
+				FROMFROM = { 
+					show_scope_change = no
+					trait = quick
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = { 
+					show_scope_change = no
+					trait = strong
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = {
+					show_scope_change = no
+					trait = robust
+				}
+			}
+			additive_modifier = {
+				value = 30
+				FROMFROM = {
+					show_scope_change = no
+					trait = shrewd
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = architect
+				}
+			}
+			additive_modifier = {
+				value = 60
+				FROMFROM = { 
+					show_scope_change = no
+					trait = administrator
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = strategist
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = scholar
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = faqih
+				}
+			}
+			additive_modifier = {
+				value = 60
+				FROMFROM = { 
+					show_scope_change = no
+					trait = jewish_gaon
+				}
+			}
+			additive_modifier = {
+				value = 25
+				custom_tooltip = {
+					text = tribute_interaction_level3_education_tt
+					FROMFROM = { 
+						OR = {
+							trait = intricate_webweaver
+							trait = charismatic_negotiator
+							trait = fortune_builder
+							trait = skilled_tactician
+							trait = scholarly_theologian
+						}
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				custom_tooltip = {
+					text = tribute_interaction_level4_education_tt
+					FROMFROM = { 
+						OR = {
+							trait = elusive_shadow
+							trait = grey_eminence
+							trait = midas_touched
+							trait = brilliant_strategist
+							trait = mastermind_theologian
+							trait = exalted_warlord
+							trait = virtuoso_arbitrator
+							trait = golden_sovereign
+							trait = conniving_puppetmaster
+							trait = erudite_oracle
+						}
+					}
+				}
+			}
+			additive_modifier = {
+				value = 60
+				FROMFROM = {
+					show_scope_change = no
+					is_adult = no
+				}
+			}
+			modifier = {
+				factor = 2.0
+				FROMFROM = {
+					show_scope_change = no 
+					liked_by_offmap = {
+			            type = offmap_patriarchs
+			        }
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROMFROM = {
+					show_scope_change = no 
+					disliked_by_offmap = {
+				        type = offmap_patriarchs
+				    }
+				}
+			}
+			modifier = {
+				factor = 1.5
+				FROM = { 
+					show_scope_change = no
+					liked_by_offmap = {
+						type = offmap_patriarchs
+					}
+				}
+			}
+			modifier = {
+				factor = 0.66
+				FROM = {
+					show_scope_change = no 
+					disliked_by_offmap = {
+						type = offmap_patriarchs
+					}
+				}
+			}
+		}
+	
+		effect = {
+			save_event_target_as = target_governor
+			FROM = {
+				sound_effect = china_grace_gain
+				save_event_target_as = target_tribute_sender
+			}
+			FROMFROM = {
+				save_event_target_as = person_sent_as_tribute
+			}
+			FROM = {
+				show_scope_change = no
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = local_third_party_score
+				}
+			}
+			
+			#################################
+			
+			FROMFROM = {
+				show_scope_change = no
+				leave_court_for_rome_effect = yes
+			}
+			hidden_effect = {
+				FROM = {
+					add_character_modifier = {
+						modifier = chinese_grace_send_eunuch_timer
+						hidden = yes
+						years = 20
+					
+					}
+					if = {
+						limit = { local_third_party_score_low_trigger = yes }
+						set_character_flag = sent_bad_tribute
+					}
+					if = {
+						limit = { local_third_party_score_medium_trigger = yes }
+						set_character_flag = sent_decent_tribute
+					}
+					if = {
+						limit = { local_third_party_score_great_trigger = yes }
+						set_character_flag = sent_great_tribute
+					}
+					set_character_flag = sent_eunuch_tribute
+				}
+			}
+		}
+	
+		
+	
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.3 # slow down
+			}
+		}
+	}
+	
+	
+	patriarchs_offer_commander = {
+		only_playable = yes
+		button_name = offmap_gifts
+		
+		third_party_filter = home_court
+		ai_third_party_filter = home_court
+		third_party = FROM
+		ai_check_interval = 36
+		show_third_party_potential = yes
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+	
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			religion = catholic
+			mercenary = no
+			is_landed = yes
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				hidden_tooltip = {
+					NOT = { has_character_modifier = chinese_grace_send_commander_timer }
+				}
+			}
+		}
+		
+		third_party_potential = {
+			show_only_failed_conditions = yes
+			FROMFROM = {
+				show_scope_change = no
+
+				is_adult = yes
+				martial = 12
+				is_heir = no
+				NOT = { is_landed = yes }
+				NOT = { is_ruler = yes }
+				custom_tooltip = {
+					text = not_married_or_getting_married_tt
+					NOT = { is_betrothed = yes }
+					NOT = { is_married = yes }
+				}
+				custom_tooltip = {
+					text = is_not_from_china_tt
+					courtier_from_china_trigger = no
+				}
+				custom_tooltip = {
+					text = is_not_incapable_inbred_or_imbecile_tt
+					NOT = { trait = incapable }
+					NOT = { trait = inbred }
+					NOT = { trait = imbecile }
+				}
+				custom_tooltip = {
+					text = is_not_maimed_or_infirm_tt
+					NOT = { trait = maimed }
+					NOT = { trait = infirm }
+				}
+
+				NOT = { prisoner = yes }
+				
+				OR = {
+					is_female = no
+					has_minor_title = title_commander
+					has_game_rule = {
+						name = gender
+						value = all
+					}
+				}
+			}
+		}
+
+		third_party_allow = {
+			show_only_failed_conditions = yes
+			FROMFROM = {
+				is_ill = no
+				custom_tooltip = {
+					text = is_not_wounded_severely_injured_tt
+					NOT = { trait = wounded }
+					NOT = { trait = severely_injured }
+				}
+				is_inaccessible_trigger = no
+			}
+		}
+		
+		third_party_score = {
+			factor = 100
+			
+			additive_modifier = {
+				value = 20
+				FROMFROM = { 
+					show_scope_change = no
+					martial = 12					
+					hidden_trigger = {
+						NOT = { martial = 14 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					martial = 14					
+					hidden_trigger = {
+						NOT = { martial = 16 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 60
+				FROMFROM = {
+					show_scope_change = no 
+					martial = 16				
+					hidden_trigger = {
+						NOT = { martial = 18 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 80
+				FROMFROM = {
+					show_scope_change = no 
+					martial = 18				
+					hidden_trigger = {
+						NOT = { martial = 20 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 100
+				FROMFROM = {
+					show_scope_change = no 
+					martial = 20				
+					hidden_trigger = {
+						NOT = { martial = 22 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 120
+				FROMFROM = {
+					show_scope_change = no 
+					martial = 22				
+					hidden_trigger = {
+						NOT = { martial = 24 }
+					}
+				}
+			}
+			additive_modifier = {
+				value = 140
+				FROMFROM = { 
+					show_scope_change = no
+					martial = 24
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = genius
+				}
+			}
+			additive_modifier = {
+				value = 30
+				FROMFROM = { 
+					show_scope_change = no
+					trait = quick
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = strong
+				}
+			}
+			additive_modifier = {
+				value = 30
+				FROMFROM = {
+					show_scope_change = no
+					trait = robust
+				}
+			}
+			additive_modifier = {
+				value = 30
+				FROMFROM = {
+					show_scope_change = no
+					trait = shrewd
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = strategist
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = duelist
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = { 
+					show_scope_change = no
+					trait = hunter
+				}
+			}
+			additive_modifier = {
+				value = 100
+				FROMFROM = { 
+					show_scope_change = no
+					trait = berserker
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = adventurer
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = { 
+					show_scope_change = no
+					trait = patient
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = { 
+					show_scope_change = no
+					trait = brave
+				}
+			}
+			additive_modifier = {
+				value = 20
+				FROMFROM = { 
+					show_scope_change = no
+					trait = diligent
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = shieldmaiden
+				}
+			}
+		
+			additive_modifier = {
+				value = 50
+				FROMFROM = { 
+					show_scope_change = no
+					trait = sapper
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = { 
+					show_scope_change = no
+					trait = master_of_flame
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = { 
+					show_scope_change = no
+					trait = logistics_expert
+				}
+			}
+			additive_modifier = {
+				value = 50
+				FROMFROM = { 
+					show_scope_change = no
+					trait = levy_coordinator
+				}
+			}
+			
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = light_foot_leader
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = heavy_infantry_leader
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = cavalry_leader
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = inspiring_leader
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = trickster
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = organizer
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = defensive_leader
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = experimenter
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = flanker
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = aggressive_leader
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = siege_leader
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = legatian
+				}
+			}
+			additive_modifier = {
+				value = 40
+				FROMFROM = { 
+					show_scope_change = no
+					trait = drukian
+				}
+			}
+			additive_modifier = {
+				value = 30
+				FROMFROM = { 
+					show_scope_change = no
+					trait = true_christian_knight_hospitaller
+				}
+			}
+			
+			
+			additive_modifier = {
+				value = 25
+				custom_tooltip = {
+					text = tribute_interaction_level3_education_tt
+					FROMFROM = { 
+						trait = skilled_tactician
+					}
+				}
+			}
+			additive_modifier = {
+				value = 50
+				custom_tooltip = {
+					text = tribute_interaction_level4_education_tt
+					FROMFROM = { 
+						OR = {
+							trait = brilliant_strategist
+							trait = exalted_warlord
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 2.0
+				FROMFROM = { 
+					show_scope_change = no
+					liked_by_offmap = {
+						type = offmap_patriarchs
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROMFROM = {
+					show_scope_change = no 
+					disliked_by_offmap = {
+						type = offmap_patriarchs
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				FROM = { 
+					show_scope_change = no
+					liked_by_offmap = {
+						type = offmap_patriarchs
+					}
+				}
+			}
+			modifier = {
+				factor = 0.66
+				FROM = {
+					show_scope_change = no 
+					disliked_by_offmap = {
+						type = offmap_patriarchs
+					}
+				}
+			}
+		}
+	
+		effect = {
+			save_event_target_as = target_governor
+			FROM = {
+				sound_effect = china_grace_gain
+				save_event_target_as = target_tribute_sender
+			}
+			FROMFROM = {
+				save_event_target_as = person_sent_as_tribute
+			}
+			FROM = {
+				show_scope_change = no
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = local_third_party_score
+				}
+			}
+			
+			FROMFROM = {
+				show_scope_change = no
+				leave_court_for_rome_effect = yes
+			}
+			hidden_effect = {
+				FROM = {
+					add_character_modifier = {
+						modifier = chinese_grace_send_commander_timer
+						hidden = yes
+						years = 20
+					}
+					if = {
+						limit = { local_third_party_score_low_trigger = yes }
+						set_character_flag = sent_bad_tribute
+					}
+					if = {
+						limit = { local_third_party_score_medium_trigger = yes }
+						set_character_flag = sent_decent_tribute
+					}
+					if = {
+						limit = { local_third_party_score_great_trigger = yes }
+						set_character_flag = sent_great_tribute
+					}
+				}
+			}
+		}
+	
+		
+	
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.3 # slow down
+			}
+		}
+	}
+	
+	patriarchs_offer_artifact = {
+		only_playable = yes
+		button_name = offmap_gifts
+		
+		third_party_filter = artifacts
+		ai_third_party_filter = artifacts
+		third_party = FROM
+		ai_check_interval = 60
+		show_third_party_potential = yes
+	
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			religion = catholic
+			mercenary = no
+			is_landed = yes
+		}
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+			}
+		}
+		
+		third_party_potential = {
+			show_only_failed_conditions = yes
+			FROMFROM = {
+				show_scope_change = no
+				custom_tooltip = {
+					text = send_artifact_potential_tt
+					quality > 2
+					NOR = {
+						has_artifact_flag = flag_considering_donation 
+						has_artifact_flag = curse
+						has_artifact_flag = not_giftable
+						has_artifact_flag = papal
+						has_artifact_flag = saint_item
+					}
+				}
+			}
+		}
+		
+		third_party_allow = {
+			
+		}
+		
+		third_party_score = {
+			factor = 500
+			
+			additive_modifier = {
+				value = 4500
+				FROMFROM = { 
+					quality == 4
+				}
+			}
+			additive_modifier = {
+				value = 9500
+				FROMFROM = { 
+					quality == 5
+				}
+			}
+			additive_modifier = {
+				value = -200
+				FROMFROM = {
+					quality < 4
+					has_artifact_flag = lore #Magnum Opus book
+				}
+			}
+			additive_modifier = {
+				value = -3000
+				FROMFROM = {
+					quality == 4
+					has_artifact_flag = lore #Magnum Opus book
+				}
+			}
+			additive_modifier = {
+				value = -250
+				FROMFROM = {
+					quality < 4
+					has_artifact_flag = created
+				}
+			}
+			additive_modifier = {
+				value = -3500
+				FROMFROM = {
+					quality == 4
+					has_artifact_flag = created
+				}
+			}
+			modifier = {
+				factor = 1.5
+				FROM = { 
+					show_scope_change = no
+					liked_by_offmap = {
+						type = offmap_patriarchs
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {
+					show_scope_change = no 
+					disliked_by_offmap = {
+						type = offmap_patriarchs
+					}
+				}
+			}
+		}
+	
+		effect = {
+			FROM = {
+				show_scope_change = no
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = local_third_party_score
+				}
+			}
+
+			save_event_target_as = target_governor
+			FROM = {
+				sound_effect = china_grace_gain
+				save_event_target_as = target_tribute_sender
+			}
+
+			hidden_effect = { #to reduce cluttered tooltip (effect already heavily implied...)
+				offmap_patriarchs = {
+					offmap_ruler = {
+						ROOT_FROMFROM = {
+							hidden_effect = { unsafe_destroy_artifact = yes }
+						}
+					}
+				}
+			}
+
+			hidden_effect = {
+				FROM = {
+					set_character_flag = jd_gifting_artifact
+				}
+			}
+		}
+	
+		
+	
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				FROMFROM = {
+					quality > 3
+				}
+			}
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+}
+
+
+
+#REQUESTING BOON DECISIONS (PENDING GRACE)
+offmap_decisions = {
+	
+	# Chinese Artifact
+	patriarch_artifact = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			is_landed = yes
+		}
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_patriarchs value = 500 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				NOT = {
+					has_character_modifier = jd_china_boon_cd
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				
+				sound_effect = china_grace_spend
+
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = -500
+				}
+				hidden_effect = {
+					random_list = {
+						3 = {
+							add_artifact = fragment_of_true_cross
+						}
+						3 = {
+							add_artifact = holy_foreskin
+						}
+						3 = {
+							add_artifact = fingerbone_of_saint
+						}
+						3 = {
+							add_artifact = saintly_finger
+						}
+						3 = {
+							add_artifact = saintly_bone
+						}
+						2 = {
+							add_artifact = saintly_skull_tier_1
+						}
+						2 = {
+							add_artifact = saintly_skull_tier_2
+						}
+						2 = {
+							add_artifact = saintly_tongue
+						}
+						1 = {
+							add_artifact = sword_papal
+						}
+						1 = {
+							add_artifact = armor_papal
+						}
+					}
+				}
+			}
+			hidden_effect = { FROM = { set_china_boon_cd_effect = yes } }
+		}
+
+		
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				factor = 0.1
+				NOT = {
+					trait = greedy
+				}
+			}
+		}
+	}
+	
+	patriarch_clear_holy_war_timer = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			is_landed = yes
+		}
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_patriarchs value = 1000 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				has_character_modifier = holy_war_cooldown
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				
+				sound_effect = china_grace_spend
+
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = -1000
+				}
+				hidden_effect = {
+					remove_character_modifier = holy_war_cooldown
+				}
+			}
+		}
+
+		
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				factor = 0.3
+				NOT = {
+					trait = wroth
+				}
+			}
+		}
+	}
+	patriarch_appoint_court_priest_cardinal = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			is_landed = yes
+		}
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			NOT = {
+				is_the_pope_or_cardinal = {
+					count = 9
+				}
+			}
+			FROM = {
+				job_spiritual = {
+					is_alive = yes
+					NOT = {
+						has_minor_title = title_cardinal
+					}
+				}
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_patriarchs value = 3000 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				NOT = {
+					has_character_modifier = jd_china_boon_cd
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				
+				sound_effect = china_grace_spend
+
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = -3000
+				}
+				job_spiritual = {
+					give_minor_title = title_cardinal
+				}
+				hidden_effect = { FROM = { set_china_boon_cd_effect = yes } }
+			}
+		}
+
+		
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	patriarch_send_swiss_guard_detachment = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			is_landed = yes
+		}
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_patriarchs value = 1500 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				NOT = {
+					has_character_modifier = jd_china_boon_cd
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				save_event_target_as = ownerofswiss
+				sound_effect = china_grace_spend
+
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = -1500
+				}
+				spawn_unit = {
+					province = capital_scope
+					home = capital_scope
+					owner = event_target:ownerofswiss
+					troops = {
+						pikemen = { 500 500 }
+						gunmen = { 500 500 }
+						light_cavalry = { 250 250 }
+					}
+					attrition = 1
+				}
+			}
+			hidden_effect = { FROM = { set_china_boon_cd_effect = yes } }
+		}
+
+		
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	patriarch_monetary_gift = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			is_landed = yes
+		}
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_patriarchs value = 1250 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				NOT = {
+					has_character_modifier = jd_china_boon_cd
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = -1250
+				}
+				wealth = 750
+			}
+			hidden_effect = { FROM = { set_china_boon_cd_effect = yes } }
+		}
+
+		
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	patriarch_swiss_commander = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			is_landed = yes
+		}
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_patriarchs value = 1000 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				NOT = {
+					has_character_modifier = jd_china_boon_cd
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				save_event_target_as = ownerofswisscommander
+
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = -1000
+				}
+				hidden_effect = {
+
+					create_character = {
+						age = 30
+						dynasty = actually_culture
+						religion = catholic
+						culture = swiss
+						female = no
+						health = 7
+						random_traits = no
+						attributes = {
+							martial = 6
+							diplomacy = 2
+							stewardship = 3
+							intrigue = 4
+							learning = 2
+						}
+					}
+					new_character = {
+						random_list = {
+							80 = { add_trait = skilled_tactician }
+							15 = { add_trait = brilliant_strategist }
+							5 = { add_trait = exalted_warlord }
+						}
+						random_list = {
+							20 = { add_trait = brave } 
+							20 = { add_trait = strong }
+							20 = { add_trait = shrewd }
+							40 = { add_trait = robust }
+						}
+						random_list = {
+							71 = { } #Nothing
+							20 = { add_scarred_tiered_effect = yes }
+							5 = { 
+								trigger = { has_dlc = Reapers }
+								add_trait = one_eyed 
+								change_martial = 1
+							}
+							2 = { 
+								trigger = { has_dlc = Reapers }
+								add_trait = one_handed
+								change_martial = 1
+							}
+							2 = { add_trait = ugly }
+						}
+						random = {
+							chance = 10
+							random_list = {
+								50 = { 
+									add_trait = homosexual
+								}
+								50 = { 
+									add_trait = bisexual
+								}
+							}
+						}
+						opinion = {
+							who = PREV
+							modifier = opinion_servant
+							months = 1200
+						}
+
+						#Add archetype 
+						random_list = {
+							#Conservative 
+							25 = {
+								set_character_flag = archetype_conservative
+								if = {
+									limit = { has_dlc = "Way of Life" }
+									add_trait = strategist
+								}
+								add_trait = defensive_leader
+								add_trait = holy_warrior
+								random = {
+									chance = 50
+									add_trait = zealous
+								}
+								add_trait = stubborn
+								add_trait = temperate
+								random_list = {
+									20 = { add_trait = greedy }
+									20 = { add_trait = wroth }
+									20 = { add_trait = deceitful }
+									20 = { add_trait = shy }
+									20 = { add_trait = cruel }
+								}
+								random_list = {
+									25 = { add_trait = poet }
+									25 = { add_trait = chaste }
+									25 = { 
+										add_trait = patient
+										remove_trait = wroth
+									}
+									25 = { add_trait = just }
+								}
+							}
+							#Supportive
+							25 = {
+								set_character_flag = archetype_supportive
+								if = {
+									limit = { has_dlc = "Way of Life" }    
+									random_list = {
+										50 = { add_trait = hunter }
+										50 = { add_trait = strategist }
+									}
+								}
+								add_trait = siege_leader 
+								add_trait = holy_warrior
+								add_trait = humble
+								add_trait = patient
+								random_list = {
+									30 = { add_trait = slothful }
+									70 = { add_trait = shy }
+								}
+								random_list = {
+									25 = { add_trait = content }
+									25 = { add_trait = charitable }
+									25 = { add_trait = kind }
+									25 = { add_trait = trusting }
+								}      
+							}
+							#Decisive
+							25 = {
+								set_character_flag = archetype_decisive
+								if = {
+									limit = { has_dlc = "Way of Life" }
+									random_list = {
+										50 = { add_trait = strategist }
+										50 = { add_trait = duelist }
+									}
+								}
+								add_trait = experimenter 
+								add_trait = holy_warrior
+								add_trait = ambitious
+								add_trait = cynical
+								random_list = {
+									20 = { add_trait = cruel }
+									20 = { add_trait = stubborn }
+									20 = { add_trait = greedy }
+									20 = { add_trait = wroth }
+									20 = { add_trait = proud }
+								}
+								random_list = {
+									20 = { add_trait = falconer }
+									20 = { add_trait = diligent }
+									20 = { add_trait = brave }
+									20 = { add_trait = honest }
+									20 = { add_trait = gregarious }
+								}    
+							}
+							#Sociable
+							25 = {
+								set_character_flag = archetype_sociable
+								if = {
+									limit = { has_dlc = "Way of Life" }
+									random_list = {
+										20 = { add_trait = duelist }
+										40 = { add_trait = hunter }
+										40 = { add_trait = gamer }
+									}
+								}
+								add_trait = organizer 
+								add_trait = holy_warrior
+								add_trait = gregarious
+								add_trait = charitable
+								random_list = {
+									33 = { add_trait = envious }
+									33 = { add_trait = gluttonous }
+									33 = { add_trait = proud }
+								}
+								random_list = {
+									25 = { add_trait = falconer }
+									25 = { add_trait = kind }
+									25 = { add_trait = honest }
+									25 = { add_trait = lustful }
+								}   
+							}
+						}
+
+						#Add second commander trait
+						if = {
+							limit = { offmap_china = { has_status = china_golden_age } }
+							random_list = {
+								25 = {
+									trigger = { NOT = {trait = desert_terrain_leader } }
+									add_trait = desert_terrain_leader
+								}
+								25 = {
+									trigger = { NOT = {trait = flat_terrain_leader } }
+									add_trait = flat_terrain_leader
+								}
+								25 = {
+									trigger = { NOT = {trait = mountain_terrain_leader } }
+									add_trait = mountain_terrain_leader
+								}
+								25 = {
+									trigger = { NOT = {trait = rough_terrain_leader } }
+									add_trait = rough_terrain_leader
+								}
+							} 
+						}
+						if = {
+							limit = { 
+								can_hold_title = title_commander 
+								event_target:ownerofswisscommander = { can_grant_title = title_commander }
+							}
+							give_minor_title = title_commander
+						}
+					}
+				}
+			}
+			hidden_effect = { 
+				FROM = { set_china_boon_cd_effect = yes } 
+				
+			}
+		}
+
+		
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	patriarch_vatican_priest = {
+		only_playable = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			is_landed = yes
+		}
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_patriarchs value = 1000 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				NOT = {
+					has_character_modifier = jd_china_boon_cd
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				sound_effect = china_grace_spend
+				save_event_target_as = ownerofswisscommander
+
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = -1000
+				}
+				hidden_effect = {
+
+					create_character = {
+						age = 30
+						dynasty = actually_culture
+						religion = catholic
+						culture = lazian
+						female = no
+						health = 7
+						random_traits = no
+						attributes = {
+							martial = 4
+							diplomacy = 2
+							stewardship = 3
+							intrigue = 4
+							learning = 6
+						}
+					}
+					new_character = {
+						random_list = {
+							80 = { add_trait = scholarly_theologian }
+							15 = { add_trait = mastermind_theologian }
+							5 = { add_trait = erudite_oracle }
+						}
+						random_list = {
+							20 = { add_trait = stubborn } 
+							20 = { add_trait = erudite }
+							20 = { add_trait = shrewd }
+							40 = { add_trait = honest }
+						}
+						random = {
+							chance = 10
+							random_list = {
+								50 = { 
+									add_trait = homosexual
+								}
+								50 = { 
+									add_trait = bisexual
+								}
+							}
+						}
+						opinion = {
+							who = PREV
+							modifier = opinion_servant
+							months = 1200
+						}
+
+						#Add archetype 
+						random_list = {
+							#Conservative 
+							25 = {
+								set_character_flag = archetype_conservative
+								random = {
+									chance = 50
+									add_trait = zealous
+								}
+								add_trait = stubborn
+								add_trait = temperate
+								random_list = {
+									20 = { add_trait = greedy }
+									20 = { add_trait = wroth }
+									20 = { add_trait = deceitful }
+									20 = { add_trait = shy }
+									20 = { add_trait = lustful }
+								}
+								random_list = {
+									25 = { add_trait = poet }
+									25 = { add_trait = chaste }
+									25 = { 
+										add_trait = patient
+										remove_trait = wroth
+									}
+									25 = { add_trait = just }
+								}
+							}
+							#Supportive
+							25 = {
+								set_character_flag = archetype_supportive
+								add_trait = humble
+								add_trait = patient
+								random_list = {
+									30 = { add_trait = slothful }
+									70 = { add_trait = shy }
+								}
+								random_list = {
+									25 = { add_trait = content }
+									25 = { add_trait = charitable }
+									25 = { add_trait = kind }
+									25 = { add_trait = trusting }
+								}      
+							}
+							#Decisive
+							25 = {
+								set_character_flag = archetype_decisive
+								add_trait = ambitious
+								random_list = {
+									20 = { add_trait = lustful }
+									20 = { add_trait = stubborn }
+									20 = { add_trait = greedy }
+									20 = { add_trait = wroth }
+									20 = { add_trait = proud }
+								}
+								random_list = {
+									20 = { add_trait = falconer }
+									20 = { add_trait = diligent }
+									20 = { add_trait = brave }
+									20 = { add_trait = honest }
+									20 = { add_trait = gregarious }
+								}    
+							}
+							#Sociable
+							25 = {
+								set_character_flag = archetype_sociable
+								add_trait = gregarious
+								add_trait = charitable
+								random_list = {
+									33 = { add_trait = envious }
+									33 = { add_trait = gluttonous }
+									33 = { add_trait = proud }
+								}
+								random_list = {
+									25 = { add_trait = falconer }
+									25 = { add_trait = kind }
+									25 = { add_trait = honest }
+									25 = { add_trait = lustful }
+								}   
+							}
+						}
+
+					}
+				}
+			}
+			hidden_effect = { 
+				FROM = { set_china_boon_cd_effect = yes } 
+				
+			}
+		}
+
+		
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+}
+
+#HOSTILE DECISIONS (ATTACKING CHINA)
+offmap_decisions = {
+	
+}
