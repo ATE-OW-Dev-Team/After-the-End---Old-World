@@ -655,6 +655,7 @@ offmap_decisions = {
 	}
 	patriarchs_send_donation = {
 		only_playable = yes
+		is_high_prio = yes
 		button_name = offmap_gifts
 		ai_check_interval = 120
 
@@ -721,6 +722,7 @@ offmap_decisions = {
 
 	patriarchs_send_priest = {
 		only_playable = yes
+		is_high_prio = yes
 		button_name = offmap_gifts
 		
 		third_party_filter = home_court
@@ -1286,6 +1288,7 @@ offmap_decisions = {
 	
 	patriarchs_offer_commander = {
 		only_playable = yes
+		is_high_prio = yes
 		button_name = offmap_gifts
 		
 		third_party_filter = home_court
@@ -1792,6 +1795,7 @@ offmap_decisions = {
 	
 	patriarchs_offer_artifact = {
 		only_playable = yes
+		is_high_prio = yes
 		button_name = offmap_gifts
 		
 		third_party_filter = artifacts
@@ -1967,6 +1971,7 @@ offmap_decisions = {
 	# Chinese Artifact
 	patriarch_artifact = {
 		only_playable = yes
+		is_high_prio = yes
 		button_name = offmap_boons
 		ai_check_interval = 60
 
@@ -2044,6 +2049,12 @@ offmap_decisions = {
 				}
 			}
 			hidden_effect = { FROM = { set_china_boon_cd_effect = yes } }
+			hidden_effect = { 
+				FROM = { 
+					letter_event = { id = cleanup.306 }
+				} 
+				
+			}
 		}
 
 		
@@ -2065,6 +2076,7 @@ offmap_decisions = {
 	
 	patriarch_clear_holy_war_timer = {
 		only_playable = yes
+		is_high_prio = yes
 		button_name = offmap_boons
 		ai_check_interval = 60
 
@@ -2108,6 +2120,12 @@ offmap_decisions = {
 					remove_character_modifier = holy_war_cooldown
 				}
 			}
+			hidden_effect = { 
+				FROM = { 
+					letter_event = { id = cleanup.305 }
+				} 
+				
+			}
 		}
 
 		
@@ -2128,6 +2146,7 @@ offmap_decisions = {
 	}
 	patriarch_appoint_court_priest_cardinal = {
 		only_playable = yes
+		is_high_prio = yes
 		button_name = offmap_boons
 		ai_check_interval = 60
 
@@ -2185,6 +2204,12 @@ offmap_decisions = {
 				}
 				hidden_effect = { FROM = { set_china_boon_cd_effect = yes } }
 			}
+			hidden_effect = { 
+				FROM = { 
+					letter_event = { id = cleanup.304 }
+				} 
+				
+			}
 		}
 
 		
@@ -2200,6 +2225,7 @@ offmap_decisions = {
 	
 	patriarch_send_swiss_guard_detachment = {
 		only_playable = yes
+		is_high_prio = yes
 		button_name = offmap_boons
 		ai_check_interval = 60
 
@@ -2254,6 +2280,12 @@ offmap_decisions = {
 				}
 			}
 			hidden_effect = { FROM = { set_china_boon_cd_effect = yes } }
+			hidden_effect = { 
+				FROM = { 
+					letter_event = { id = cleanup.303 }
+				} 
+				
+			}
 		}
 
 		
@@ -2269,6 +2301,7 @@ offmap_decisions = {
 	
 	patriarch_monetary_gift = {
 		only_playable = yes
+		is_high_prio = yes
 		button_name = offmap_boons
 		ai_check_interval = 60
 
@@ -2312,6 +2345,12 @@ offmap_decisions = {
 				wealth = 750
 			}
 			hidden_effect = { FROM = { set_china_boon_cd_effect = yes } }
+			hidden_effect = { 
+				FROM = { 
+					letter_event = { id = cleanup.302 }
+				} 
+				
+			}
 		}
 
 		
@@ -2326,6 +2365,7 @@ offmap_decisions = {
 	}
 	patriarch_swiss_commander = {
 		only_playable = yes
+		is_high_prio = yes
 		button_name = offmap_boons
 		ai_check_interval = 60
 
@@ -2575,11 +2615,15 @@ offmap_decisions = {
 							}
 							give_minor_title = title_commander
 						}
+						save_event_target_as = swisscommander
 					}
 				}
 			}
 			hidden_effect = { 
-				FROM = { set_china_boon_cd_effect = yes } 
+				FROM = { 
+					set_china_boon_cd_effect = yes 
+					letter_event = { id = cleanup.300 }
+				} 
 				
 			}
 		}
@@ -2597,6 +2641,7 @@ offmap_decisions = {
 	
 	patriarch_vatican_priest = {
 		only_playable = yes
+		is_high_prio = yes
 		button_name = offmap_boons
 		ai_check_interval = 60
 
@@ -2766,12 +2811,16 @@ offmap_decisions = {
 								}   
 							}
 						}
+						save_event_target_as = vaticanpriest
 
 					}
 				}
 			}
 			hidden_effect = { 
-				FROM = { set_china_boon_cd_effect = yes } 
+				FROM = { 
+					set_china_boon_cd_effect = yes 
+					letter_event = { id = cleanup.301 }
+				} 
 				
 			}
 		}
@@ -2784,6 +2833,490 @@ offmap_decisions = {
 			modifier = {
 				factor = 0.1 # slow down
 			}
+		}
+	}
+	
+	patriarch_send_swiss_guard_detachment = {
+		only_playable = yes
+		is_high_prio = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			is_landed = yes
+		}
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_patriarchs value = 1500 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				NOT = {
+					has_character_modifier = jd_china_boon_cd
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				save_event_target_as = ownerofswiss
+				sound_effect = china_grace_spend
+
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = -1500
+				}
+				spawn_unit = {
+					province = capital_scope
+					home = capital_scope
+					owner = event_target:ownerofswiss
+					troops = {
+						pikemen = { 500 500 }
+						gunmen = { 500 500 }
+						light_cavalry = { 250 250 }
+					}
+					attrition = 1
+				}
+			}
+			hidden_effect = { FROM = { set_china_boon_cd_effect = yes } }
+			hidden_effect = { 
+				FROM = { 
+					letter_event = { id = cleanup.303 }
+				} 
+				
+			}
+		}
+
+		
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	vassalize_knights_templar = {
+		only_playable = yes
+		is_high_prio = yes
+		button_name = offmap_boons
+		ai_check_interval = 60
+		
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+		
+		from_potential = {
+			is_playable = yes
+			
+			OR = {
+				religion = catholic
+			}
+			
+			NOT = { has_character_modifier = expelled_d_knights_templar }
+
+			NOT = {
+				d_knights_templar = {
+					owner = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = opinion_unfit_ruler
+						}
+					}
+				}
+			}
+			
+			is_title_active = d_knights_templar
+			
+			has_landed_title = k_france
+			
+			has_dlc = "Sons of Abraham"
+			
+			d_knights_templar = {
+				holder_scope = {
+					NOT = { has_truce = ROOT }
+					ROOT = { NOT = { has_truce = PREV } }
+					liege = {
+						NOT = { character = ROOT }
+					}
+					NOT = { num_of_count_titles = 3 }
+					independent = yes
+					primary_title = { title = d_knights_templar }
+				}
+			}
+
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		
+		allow = {
+			FROM = {
+				wealth = 500
+				is_heretic = no
+				independent = yes
+
+				has_offmap_currency = { offmap = offmap_patriarchs value = 10000 }
+				conditional_tooltip = {
+					trigger = {
+						NOT = {
+							d_knights_templar = {
+								owner = {
+									opinion = {
+										who = ROOT
+										value = 25
+									}
+								}
+							}
+						}
+					}
+
+					custom_tooltip = {
+						text = vassalize_knights_templar_opinion_TT
+
+						d_knights_templar = {
+							owner = {
+								opinion = {
+									who = ROOT
+									value = 25
+								}
+							}
+						}
+					}
+				}
+
+				NOT = {
+					trait = excommunicated
+				}
+
+				custom_tooltip = {
+					text = only_one_vassalized_holy_order_TT
+
+					NOT = {
+						any_realm_lord = {
+							holy_order = yes
+						}
+					}
+				}
+			}
+		}
+		
+		effect = {
+			FROM = {
+				
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = -10000
+				}
+				wealth = -500
+				
+				hidden_tooltip = {
+					d_knights_templar = {
+						holder_scope = {
+							wealth = 500
+							character_event = {
+								id = SoA.1015
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	vassalize_knights_hospitaler = {
+		only_playable = yes
+		is_high_prio = yes
+		ai_check_interval = 60
+		
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+		from_potential = {
+			is_playable = yes
+			OR = {
+				religion = catholic
+			}
+			
+			NOT = { has_character_modifier = expelled_d_knights_hospitaler }
+
+			NOT = {
+				d_knights_hospitaler = {
+					owner = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = opinion_unfit_ruler
+						}
+					}
+				}
+			}
+			
+			is_title_active = d_knights_hospitaler
+			
+			
+			d_knights_hospitaler = {
+				holder_scope = {
+					NOT = { has_truce = ROOT }
+					ROOT = { NOT = { has_truce = PREV } }
+					liege = {
+						NOT = { character = ROOT }
+					}
+					NOT = { num_of_count_titles = 3 }
+					independent = yes
+					primary_title = { title = d_knights_hospitaler }
+				}
+			}
+			
+			has_dlc = "Sons of Abraham"
+			
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		
+		allow = {
+			FROM = {
+				wealth = 500
+				is_heretic = no
+				independent = yes
+
+				has_offmap_currency = { offmap = offmap_patriarchs value = 10000 }
+				conditional_tooltip = {
+					trigger = {
+						NOT = {
+							d_knights_hospitaler = {
+								owner = {
+									opinion = {
+										who = ROOT
+										value = 25
+									}
+								}
+							}
+						}
+					}
+
+					custom_tooltip = {
+						text = vassalize_knights_hospitaller_opinion_TT
+
+						d_knights_hospitaler = {
+							owner = {
+								opinion = {
+									who = ROOT
+									value = 25
+								}
+							}
+						}
+					}
+				}
+
+				NOT = {
+					trait = excommunicated
+				}
+
+				custom_tooltip = {
+					text = only_one_vassalized_holy_order_TT
+
+					NOT = {
+						any_realm_lord = {
+							holy_order = yes
+						}
+					}
+				}
+				
+			}
+		}
+		
+		effect = {
+			FROM = {
+				
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = -10000
+				}
+				wealth = -500
+				
+				hidden_tooltip = {
+					d_knights_hospitaler = {
+						holder_scope = {
+							wealth = 500
+							character_event = {
+								id = SoA.1115
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	vassalize_lazareans = {
+		only_playable = yes
+		is_high_prio = yes
+		ai_check_interval = 60
+		
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+		from_potential = {
+			is_playable = yes
+			OR = {
+				religion = catholic
+			}
+			
+			NOT = { has_character_modifier = expelled_d_knights_lazarus }
+
+			NOT = {
+				d_knights_lazarus = {
+					owner = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = opinion_unfit_ruler
+						}
+					}
+				}
+			}
+			
+			is_title_active = d_knights_lazarus
+			
+			
+			d_knights_lazarus = {
+				holder_scope = {
+					NOT = { has_truce = ROOT }
+					ROOT = { NOT = { has_truce = PREV } }
+					liege = {
+						NOT = { character = ROOT }
+					}
+					NOT = { num_of_count_titles = 3 }
+					independent = yes
+					primary_title = { title = d_knights_lazarus }
+				}
+			}
+			
+			has_dlc = "Sons of Abraham"
+			
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		
+		allow = {
+			FROM = {
+				wealth = 500
+				is_heretic = no
+				independent = yes
+
+				has_offmap_currency = { offmap = offmap_patriarchs value = 10000 }
+				conditional_tooltip = {
+					trigger = {
+						NOT = {
+							d_knights_lazarus = {
+								owner = {
+									opinion = {
+										who = ROOT
+										value = 25
+									}
+								}
+							}
+						}
+					}
+
+					custom_tooltip = {
+						text = vassalize_knights_hospitaller_opinion_TT
+
+						d_knights_lazarus = {
+							owner = {
+								opinion = {
+									who = ROOT
+									value = 25
+								}
+							}
+						}
+					}
+				}
+
+				NOT = {
+					trait = excommunicated
+				}
+
+				custom_tooltip = {
+					text = only_one_vassalized_holy_order_TT
+
+					NOT = {
+						any_realm_lord = {
+							holy_order = yes
+						}
+					}
+				}
+				
+			}
+		}
+		
+		effect = {
+			FROM = {
+				
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = -10000
+				}
+				wealth = -500
+				
+				hidden_tooltip = {
+					d_knights_lazarus = {
+						holder_scope = {
+							wealth = 500
+							character_event = {
+								id = SoA.1115
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		
+		
+		ai_will_do = {
+			factor = 1
 		}
 	}
 }
