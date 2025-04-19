@@ -3889,4 +3889,304 @@ offmap_decisions = {
 #HOSTILE DECISIONS (ATTACKING CHINA)
 offmap_decisions = {
 	
+	patriarch_replace_pope = {
+		only_playable = yes
+		is_high_prio = yes
+		button_name = offmap_hostility
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			is_landed = yes
+		}
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			custom_tooltip = {
+				text = has_an_anti_pope_vassal
+				FROM = {
+					any_vassal = {
+						has_claim = k_papacy
+					}
+				}
+			}
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_patriarchs value = -5000 }
+				num_of_holy_sites = 3
+				piety = 2500
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				NOT = {
+					has_character_modifier = china_raid_grace_cd
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				
+				sound_effect = china_grace_spend
+
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = 20000
+				}
+				piety = 1500
+				any_vassal = {
+					limit = {
+						has_claim = k_papacy
+					}
+					k_papacy = {
+						holder_scope = {
+							any_title_under = {
+								grant_title_no_opinion = PREVPREVPREV
+							}
+						}
+					}
+					save_event_target_as = newelpapa
+				}
+				hidden_effect = {
+					add_character_modifier = {
+						name = china_raid_grace_cd
+						hidden = yes
+						years = 5
+					}
+				}
+			}
+			hidden_effect = { 
+				FROM = { 
+					letter_event = { id = cleanup.308 }
+				} 
+				
+			}
+		}
+
+		
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	patriarch_seize_church_assets = {
+		only_playable = yes
+		is_high_prio = yes
+		button_name = offmap_hostility
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			is_landed = yes
+		}
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			custom_tooltip = {
+				text = has_an_anti_pope_vassal
+				FROM = {
+					any_vassal = {
+						has_claim = k_papacy
+					}
+				}
+			}
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_patriarchs value = -500 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				NOR = {
+					has_character_modifier = china_raid_grace_cd
+					has_character_modifier = church_assets_seized
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				
+				sound_effect = china_grace_spend
+
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = -1000
+				}
+				scaled_piety = -0.75
+				scaled_wealth = 1.25
+				hidden_effect = {
+					add_character_modifier = {
+						name = china_raid_grace_cd
+						hidden = yes
+						years = 3
+					}
+				}
+				add_character_modifier = {
+					name = church_assets_seized
+					inherit = yes
+					years = 2
+				}
+			}
+			hidden_effect = { 
+				FROM = { 
+					letter_event = { id = cleanup.309 }
+				} 
+				
+			}
+		}
+
+		
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1 # slow down
+			}
+		}
+	}
+	
+	patriarch_seize_church_relics_artifact = {
+		only_playable = yes
+		is_high_prio = yes
+		button_name = offmap_hostility
+		ai_check_interval = 60
+
+		from_potential = {
+			has_dlc = "Jade Dragon"
+			mercenary = no
+			is_landed = yes
+		}
+
+		potential = {
+			NOR = {
+				is_offmap_tag = offmap_blorg
+				is_offmap_tag = offmap_china
+				is_offmap_tag = offmap_achievements
+			}
+		}
+	
+		allow = {
+			show_only_failed_conditions = yes
+			
+			custom_tooltip = {
+				text = has_an_anti_pope_vassal
+				FROM = {
+					any_vassal = {
+						has_claim = k_papacy
+					}
+				}
+			}
+			FROM = {
+				show_scope_change = no
+				has_offmap_currency = { offmap = offmap_patriarchs value = -500 }
+				prisoner = no
+				NOT = { trait = incapable }
+				is_inaccessible_trigger = no
+				NOR = {
+					has_character_modifier = china_raid_grace_cd
+					has_character_modifier = church_relics_seized
+				}
+			}
+		}
+
+		effect = {
+			FROM = {
+				show_scope_change = no
+				
+				sound_effect = china_grace_spend
+				scaled_piety = -0.75
+				add_offmap_currency = {
+					offmap = offmap_patriarchs
+					value = -500
+				}
+				hidden_effect = {
+					random_list = {
+						3 = {
+							add_artifact = fragment_of_true_cross
+						}
+						3 = {
+							add_artifact = holy_foreskin
+						}
+						3 = {
+							add_artifact = fingerbone_of_saint
+						}
+						3 = {
+							add_artifact = saintly_finger
+						}
+						3 = {
+							add_artifact = saintly_bone
+						}
+						2 = {
+							add_artifact = saintly_skull_tier_1
+						}
+						2 = {
+							add_artifact = saintly_skull_tier_2
+						}
+						2 = {
+							add_artifact = saintly_tongue
+						}
+					}
+				}
+			}
+			hidden_effect = {
+				add_character_modifier = {
+					name = china_raid_grace_cd
+					hidden = yes
+					years = 3
+				}
+			}
+			add_character_modifier = {
+				name = church_relics_seized
+				inherit = yes
+				years = 2
+			}
+			hidden_effect = { 
+				FROM = { 
+					letter_event = { id = cleanup.310 }
+				} 
+				
+			}
+		}
+
+		
+
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0.1 # slow down
+			}
+			modifier = {
+				factor = 0.1
+				NOT = {
+					trait = greedy
+				}
+			}
+		}
+	}
 }
