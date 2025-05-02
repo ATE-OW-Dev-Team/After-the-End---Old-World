@@ -1049,6 +1049,20 @@ send_duel_result_event_effect = { # Runs via the attacker/combatant_1
 			# (D. Something else?)
 	if = {
 		limit = {
+			NOR = {
+				has_character_flag = mock_duel
+				has_character_flag = is_legendary_duel
+				has_character_flag = claim_duel@event_target:combatant_2
+			}
+			OR = {
+				has_character_flag = is_battlefield_duel
+				is_member_of_any_warrior_lodge_trigger = yes
+				has_focus = focus_war
+
+				# Special triggered event duels
+				has_character_flag = flag_duel_no_draws
+				event_target:combatant_2 = { has_character_flag = flag_duel_no_draws }
+			}
 			event_target:combatant_1 = { 
 				OR = {
 					duel_result_score_the_best_trigger = yes 
@@ -1068,6 +1082,22 @@ send_duel_result_event_effect = { # Runs via the attacker/combatant_1
 	}
 	else_if = {
 		limit = {
+			NOR = {
+				has_character_flag = mock_duel
+				has_character_flag = is_legendary_duel
+			}
+
+			OR = {
+				has_character_flag = claim_duel@event_target:combatant_2
+				has_character_flag = is_battlefield_duel
+				is_member_of_any_warrior_lodge_trigger = yes
+				has_focus = focus_war
+				has_character_flag = deadly_duel@event_target:combatant_2
+
+				# Special triggered event duels
+				has_character_flag = flag_duel_no_draws
+				event_target:combatant_2 = { has_character_flag = flag_duel_no_draws }
+			}
 			event_target:combatant_2 = { 
 				OR = {
 					duel_result_score_the_best_trigger = yes 
@@ -1097,6 +1127,7 @@ send_duel_result_event_effect = { # Runs via the attacker/combatant_1
 				}
 			}
 	}
+
 	else = {
 	random_list = {
 		5 = { # LETHAL for both...
