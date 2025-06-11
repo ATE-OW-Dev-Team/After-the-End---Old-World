@@ -110,6 +110,17 @@ decisions = {
 						}
 					}
 				}
+				current_heir = {
+					save_event_target_as = artifactreciever
+				}
+				ROOT = {
+					any_artifact = {
+						transfer_artifact = {
+							from = PREV
+							to = event_target:artifactreciever
+						}
+					}
+				}
 				abdicate = yes
 			}
 		}
@@ -1220,7 +1231,7 @@ decisions = {
 				NOT = { religion_authority = 0.5 }
 				AND = {
 					trait = cynical
-					NOT = { religion_authority = 0.6 }
+					NOT = { religion_authority = 0.7 }
 				}
 			}
 			OR = {
@@ -1239,6 +1250,7 @@ decisions = {
 				real_tier = EMPEROR
 				real_tier = KING
 			}
+			num_of_holy_sites = 1
 			k_papacy = {
 				show_scope_change = no
 				holder_scope = {
@@ -1250,10 +1262,6 @@ decisions = {
 							opinion = {
 								who = ROOT
 								value = 10
-							}
-							reverse_opinion = {
-								who = ROOT
-								value = 0
 							}
 						}
 					}
@@ -1268,7 +1276,7 @@ decisions = {
 		effect = {
 			set_global_flag = chaldean_catholic_reunion_flag
 			prestige = -500
-			piety = -750
+			piety = 1250
 			religion_authority = {
 				modifier = ruler_converted_from
 				years = 20
@@ -3006,165 +3014,6 @@ decisions = {
 		}
 	}
 	
-	restore_pope_in_rome = {
-		only_independent = yes
-		is_high_prio = yes
-		ai_check_interval = 36
-	
-		potential = {
-			is_playable = yes
-			independent = yes
-			has_dlc = "Sons of Abraham"
-			NOT = {
-				has_alternate_start_parameter = { key = religion_names value = random }
-			}
-			OR = {
-				religion = catholic
-				AND = {
-					religion = fraticelli
-					is_title_active = d_fraticelli
-				}
-			}
-			
-			controls_religion = no
-			
-			c_roma = {
-				holder_scope = {
-					OR = {
-						character = ROOT
-						is_liege_or_above = ROOT
-					}
-					OR = {
-						AND = {
-							ROOT = { religion = catholic }
-							k_papacy = {
-								holder_scope = {
-									NOT = { character = PREVPREV }
-									NOT = { is_vassal_or_below = PREVPREV }
-								}
-							}
-						}
-						AND = {
-							ROOT = { religion = fraticelli }
-							d_fraticelli = {
-								holder_scope = {
-									NOT = { character = PREVPREV }
-									NOT = { is_vassal_or_below = PREVPREV }
-								}
-							}
-						}
-					}
-				}
-			}
-			prisoner = no
-			has_regent = no
-		}
-		
-		effect = {		
-			if = {
-				limit = {
-					religion = catholic
-				}
-				k_papacy = {
-					holder_scope = {
-						c_roma = {
-							grant_title = PREV
-							any_de_jure_vassal_title = {
-								limit = {
-									holder_scope = { 
-										OR = {
-											character = ROOT
-											is_liege_or_above = ROOT
-										}
-									}
-								}
-								grant_title = PREVPREV
-							}
-						}
-						save_event_target_as = restored_pope
-					}
-				}
-			}
-			if = {
-				limit = {
-					religion = catholic
-					NOT = { has_character_flag = restored_catholic_pope_in_rome }
-				}
-				k_papacy = {
-					holder_scope = {
-						opinion = {
-							who = ROOT
-							modifier = opinion_restored_to_rome
-						}
-					}
-				}
-				piety = 1000
-				set_character_flag = restored_catholic_pope_in_rome
-			}
-			
-			if = {
-				limit = {
-					religion = fraticelli
-				}
-				d_fraticelli = {
-					holder_scope = {
-						c_roma = {
-							grant_title = PREV
-							any_de_jure_vassal_title = {
-								limit = {
-									holder_scope = { 
-										OR = {
-											character = ROOT
-											is_liege_or_above = ROOT
-										}
-									}
-								}
-								grant_title = PREVPREV
-							}
-						}
-						save_event_target_as = restored_pope
-					}
-				}
-			}
-			if = {
-				limit = {
-					religion = fraticelli
-					NOT = { has_character_flag = restored_fraticelli_pope_in_rome }
-				}
-				piety = 1000
-				set_character_flag = restored_fraticelli_pope_in_rome
-			}
-			hidden_effect = {
-				character_event = { id = 39705 }
-				set_character_flag = testflagrome
-			}
-		}
-		
-		
-		
-		ai_will_do = {
-			factor = 1
-			modifier = {
-				factor = 0
-				NOT = {
-					any_demesne_province = {
-						NOT = { province_id = 333 }
-					}
-				}
-			}
-			modifier = {
-				factor = 0
-				c_roma = {
-					holder_scope = {
-						OR = {
-							ai = no
-							any_liege = { ai = no }  # AI will never take Rome province away from a player
-						}
-					}
-				}
-			}
-		}
-	}
 	restore_pope_in_sevilla = {
 		only_independent = yes
 		is_high_prio = yes
@@ -3288,7 +3137,7 @@ decisions = {
 			religion = orthodox
 			independent = yes
 			NOT = {
-				has_global_flag = patriarch_istanbul
+				has_global_flag = patriarch_istanbul_flag
 			}
 			k_orthodox = {
 				NOT = {
@@ -3317,7 +3166,7 @@ decisions = {
 		effect = {
 			piety = 1000
 			prestige = 500
-			set_global_flag = patriarch_istanbul
+			set_global_flag = patriarch_istanbul_flag
 			hidden_tooltip = {
 				if = {
 					limit = {
@@ -3349,6 +3198,9 @@ decisions = {
 						}
 						set_preferred_capital = c_byzantion
 					}
+				}
+				k_orthodox = {
+					set_defacto_liege = ROOT
 				}
 				create_random_priest = {
 					random_traits = yes
@@ -5917,7 +5769,7 @@ targeted_decisions = {
 		ai_will_do = {
 			factor = 1
 			modifier = {
-				factor = 0.25
+				factor = 0.01
 			}
 			modifier = {
 				factor = 0
@@ -5953,7 +5805,7 @@ targeted_decisions = {
 		ai_will_do = {
 			factor = 1
 			modifier = {
-				factor = 0.25
+				factor = 0.01
 			}
 			modifier = {
 				factor = 0
@@ -6035,7 +5887,7 @@ targeted_decisions = {
 		ai_will_do = {
 			factor = 1
 			modifier = {
-				factor = 0.25
+				factor = 0.01
 			}
 			modifier = {
 				factor = 0
@@ -6105,7 +5957,7 @@ targeted_decisions = {
 		ai_will_do = {
 			factor = 1
 			modifier = {
-				factor = 0.25
+				factor = 0.01
 			}
 			modifier = {
 				factor = 0

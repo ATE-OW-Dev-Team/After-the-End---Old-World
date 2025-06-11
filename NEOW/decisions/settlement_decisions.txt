@@ -21,7 +21,11 @@ settlement_decisions = {
 		
 		from_potential = {
 			is_playable = yes
-			is_feudal = yes
+			OR = {
+				is_republic = yes
+				is_theocracy = yes
+				is_feudal = yes
+			}
 			higher_tier_than = BARON
 		}
 		
@@ -45,12 +49,17 @@ settlement_decisions = {
 					religion = FROM
 				}
 			}
+			FROM = {
+				wealth = 250
+			}
 			has_building = tb_hillfort_4
 		}
 		effect = {
 			convert_to = castle
 			refill_holding_levy = yes
-			
+			FROM = {
+				wealth = -250
+			}
 			hidden_tooltip = {
 				location = { #Clear Tribal Great Pillars
 					clr_province_flag = flag_great_pillar_norse
@@ -124,7 +133,11 @@ settlement_decisions = {
 		
 		from_potential = {
 			is_playable = yes
-			is_republic = yes
+			OR = {
+				is_republic = yes
+				is_theocracy = yes
+				is_feudal = yes
+			}
 			higher_tier_than = BARON
 		}
 		
@@ -138,11 +151,17 @@ settlement_decisions = {
 			location = {
 				religion = FROM
 			}
+			FROM = {
+				wealth = 250
+			}
 			has_building = tb_market_town_4
 		}
 		effect = {
 			convert_to = city
 			refill_holding_levy = yes
+			FROM = {
+				wealth = -250
+			}
 			
 			hidden_tooltip = {
 				location = { #Clear Tribal Great Pillars
@@ -215,7 +234,11 @@ settlement_decisions = {
 		
 		from_potential = {
 			is_playable = yes
-			is_theocracy = yes
+			OR = {
+				is_republic = yes
+				is_theocracy = yes
+				is_feudal = yes
+			}
 			higher_tier_than = BARON
 			OR = {
 				NOT = { religion_group = pagan_group }
@@ -234,10 +257,16 @@ settlement_decisions = {
 				religion = FROM
 			}
 			has_building = tb_hillfort_4
+			FROM = {
+				wealth = 250
+			}
 		}
 		effect = {
 			convert_to = temple
 			refill_holding_levy = yes
+			FROM = {
+				wealth = -250
+			}
 			
 			hidden_tooltip = {
 				location = { #Clear Tribal Great Pillars
@@ -323,6 +352,9 @@ settlement_decisions = {
 				holder_scope = {
 					character = FROM
 				}
+			}
+			NOT = {
+				holding_type = FAMILY_PALACE
 			}
 		}
 		allow = {
@@ -450,17 +482,20 @@ settlement_decisions = {
 		
 		potential = {
 			NOT = { holding_type = nomad }
-			OR = {
-				FROM = { is_nomadic = yes }
-				location = {
-					num_of_settlements = 2
-				}
+			location = {
+				num_of_settlements = 2
 			}
 			OR = {
 				owner = { NOT = { character = FROM } }
 				AND = {
 					FROM = { is_nomadic = yes }
 					location = { NOT = { religion_group = FROM } }
+				}
+			}
+			NOT = {
+				AND = {
+					is_capital = yes
+					num_of_buildings == 0
 				}
 			}
 			has_siege = no
@@ -630,15 +665,7 @@ settlement_decisions = {
 			
 			if = {
 				limit = {
-					ROOT = {
-						NOT = { has_any_building = yes }
-						owner = {
-							character = FROM
-						}
-						NOT = {
-							is_capital = yes
-						}
-					}
+					num_of_buildings == 0
 				}
 				hidden_tooltip = {
 					location = {
@@ -646,9 +673,7 @@ settlement_decisions = {
 						province_event = { id = HL.4814 days = 2 random = 2 }
 					}
 				}
-				ROOT = {
-					destroy_settlement = THIS
-				}
+				destroy_settlement = THIS
 			}
 			
 		}
@@ -777,6 +802,12 @@ settlement_decisions = {
 				k_papacy = {
 					holder_scope = {
 						grant_title = ROOT
+					}
+				}
+				FROM = {
+					add_offmap_currency = {
+						offmap = offmap_patriarchs
+						value = 300
 					}
 				}
 			}
@@ -1033,10 +1064,7 @@ settlement_decisions = {
 			
 			if = {
 				limit = {
-					NOT = { has_any_building = yes }
-					owner = {
-						character = FROM
-					}
+					num_of_buildings == 0
 				}
 				hidden_tooltip = {
 					location = {

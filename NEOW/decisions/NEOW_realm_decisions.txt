@@ -360,6 +360,138 @@ decisions = {
 		}
 	}
 	
+	buy_exemption_from_bureucracy = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 36
+		potential = {
+			government = viceroyal_government
+			prisoner = no
+			has_regent = no
+		}
+	
+		allow = {
+			NOT = {
+				primary_title = {
+					is_vice_royalty = yes
+				}
+			}
+			top_liege = {
+				primary_title = {
+					NOR = {
+						has_law = centralization_3
+						has_law = centralization_4
+						has_law = crown_authority_3
+						has_law = crown_authority_4
+					}
+				}
+			}
+			OR = {
+				AND = {
+					stewardship = 10
+					trait = administrator
+				}
+				stewardship = 12
+			}
+			OR = {
+				AND = {
+					diplomacy = 12
+					trait = socializer
+				}
+				diplomacy = 15
+			}
+			wealth = 400
+		}
+	
+		effect = {
+			wealth = -400
+			set_dynasty_flag = exempt_from_viceroyal_flag
+			set_character_flag = exempt_from_viceroyal_character_flag
+			set_feudal_government_effect = yes
+			top_liege = {
+				wealth = 400
+			}
+			prestige = 500
+		}
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	revoke_all_exemptions_from_bureucracy = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 36
+		potential = {
+			any_realm_character = {
+				limit = {
+					is_landed = yes
+				}
+				OR = {	
+					has_dynasty_flag = exempt_from_viceroyal_flag
+					has_character_flag = exempt_from_viceroyal_character_flag
+				}
+			}
+			NOR = {
+				has_dynasty_flag = exempt_from_viceroyal_flag
+				has_character_flag = exempt_from_viceroyal_character_flag
+			}
+			independent = yes
+			prisoner = no
+			has_regent = no
+		}
+	
+		allow = {
+			any_realm_character = {
+				limit = {
+					is_landed = yes
+				}
+				OR = {	
+					has_dynasty_flag = exempt_from_viceroyal_flag
+					has_character_flag = exempt_from_viceroyal_character_flag
+				}
+			}
+			OR = {
+				AND = {
+					stewardship = 10
+					trait = administrator
+				}
+				stewardship = 12
+			}
+			OR = {
+				AND = {
+					diplomacy = 12
+					trait = socializer
+				}
+				diplomacy = 15
+			}
+			wealth = 600
+		}
+	
+		effect = {
+			wealth = -600
+			any_realm_character = {
+				limit = {
+					is_landed = yes
+					OR = {
+						has_dynasty_flag = exempt_from_viceroyal_flag
+						has_character_flag = exempt_from_viceroyal_character_flag
+					}
+				}
+				clr_dynasty_flag = exempt_from_viceroyal_flag
+				clr_character_flag = exempt_from_viceroyal_character_flag
+				set_government_type = viceroyal_government
+			}
+			prestige = 100
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.2
+			}
+		}
+	}
 	centralise_germany = {
 		is_high_prio = yes
 		only_playable = yes
@@ -1942,7 +2074,7 @@ decisions = {
 				culture = sazzac
 				culture = aromanian
 				culture = istromanian
-				culture_group = apeninian culture_group = sardic
+				OR = { culture_group = apeninian culture_group = gallo_italic } culture_group = sardic
 				culture_group = lusophone
 				culture_group = hispanophone
 				culture_group = alpinian
@@ -2288,6 +2420,14 @@ decisions = {
 					trigger = { k_wendia = { is_titular = no } }
 					k_wendia = { show_scope_change = no province_completely_controls_trigger = yes }
 				}
+				conditional_tooltip = {
+					trigger = { k_silesia = { is_titular = no } }
+					k_silesia = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
+				conditional_tooltip = {
+					trigger = { k_gorale = { is_titular = no } }
+					k_gorale = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
 		}
 
 		effect = {
@@ -2330,6 +2470,8 @@ decisions = {
 					k_czechoslovakia 	= { set_de_jure_if_controls_effect = yes }
 					k_wendia 			= { set_de_jure_if_controls_effect = yes }
 					k_hungary 			= { set_de_jure_if_controls_effect = yes }
+					k_silesia 			= { set_de_jure_if_controls_effect = yes }
+					k_gorale 			= { set_de_jure_if_controls_effect = yes }
 				}
 				ROOT = {
 					narrative_event = { id = ATEOW_realm_event.99999 }
@@ -2782,6 +2924,7 @@ decisions = {
 				culture = ulsterite
 				culture = ashkenazi
 				culture = angler
+				culture = norman
 				has_landed_title = d_anglican
 			}
 			k_england = {
@@ -4067,7 +4210,10 @@ decisions = {
 		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
-			culture_group = maghreb_arabic
+			OR = {
+				culture_group = maghreb_arabic
+				culture_group = berber
+			}
 			religion_group = muslim
 			e_al-andalus= {
 				has_holder = no
@@ -5223,7 +5369,6 @@ decisions = {
 				k_belgium = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_luxemburg = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_rhonie = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_brittany = { show_scope_change = no province_completely_controls_trigger = yes }
 				conditional_tooltip = {
 						trigger = { k_alsace_lorraine = { is_titular = no } }
 						k_alsace_lorraine = { show_scope_change = no province_completely_controls_trigger = yes }
@@ -5237,7 +5382,6 @@ decisions = {
 				k_belgium = { de_jure_liege = e_france }
 				k_luxemburg = { de_jure_liege = e_france }
 				k_rhonie = { de_jure_liege = e_france }
-				k_brittany = { de_jure_liege = e_france }
 				d_new_luxemburg = { de_jure_liege = k_alsace_lorraine }
 				d_alsace = { de_jure_liege = k_alsace_lorraine }
 			}
@@ -5273,7 +5417,6 @@ decisions = {
 				k_belgium = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_luxemburg = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_rhonie = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_brittany = { show_scope_change = no province_completely_controls_trigger = yes }
 				conditional_tooltip = {
 						trigger = { k_koln = { is_titular = no } }
 						k_koln = { show_scope_change = no province_completely_controls_trigger = yes }
@@ -5312,7 +5455,6 @@ decisions = {
 				k_belgium = { de_jure_liege = e_france }
 				k_luxemburg = { de_jure_liege = e_france }
 				k_rhonie = { de_jure_liege = e_france }
-				k_brittany = { de_jure_liege = e_france }
 				d_new_luxemburg = { de_jure_liege = k_alsace_lorraine }
 				d_alsace = { de_jure_liege = k_alsace_lorraine }
 			}
@@ -5346,22 +5488,18 @@ decisions = {
 			}
 			prestige = 1000
 			k_rhonie = { show_scope_change = no province_completely_controls_trigger = yes }
-			k_brittany = { show_scope_change = no province_completely_controls_trigger = yes }
 			d_alsace = { show_scope_change = no province_completely_controls_trigger = yes }
 			d_new_luxemburg = { show_scope_change = no province_completely_controls_trigger = yes }
-			d_pas-de-calais = { show_scope_change = no province_completely_controls_trigger = yes }
-			c_rosello = { show_scope_change = no province_completely_controls_trigger = yes }
+			d_pas-de-calais = { show_scope_change = no province_completely_controls_trigger = yes }			
 		}
 
 		effect = {
 			set_global_flag = restored_modern_france
 			hidden_tooltip = {
 				k_rhonie = { de_jure_liege = e_france }
-				k_brittany = { de_jure_liege = e_france }
 				d_alsace = { de_jure_liege = k_alsace_lorraine }
 				d_new_luxemburg = { de_jure_liege = k_alsace_lorraine }
-				d_pas-de-calais = { de_jure_liege = k_france }
-				c_rosello = { de_jure_liege = d_toulouse }
+				d_pas-de-calais = { de_jure_liege = k_france }				
 			}
 		}
 		
@@ -7449,7 +7587,7 @@ decisions = {
 			form_empire_potential = yes
 			government = oligarchic_republic
 			OR = {
-			culture_group = apeninian culture_group = sardic
+			OR = { culture_group = apeninian culture_group = gallo_italic } culture_group = sardic
 			}
 			e_roman_republic = {
 				is_titular = yes
@@ -8144,6 +8282,7 @@ decisions = {
 			hidden_tooltip = {
 				d_provance = { de_jure_liege = k_provance }
 				d_dauphin = { de_jure_liege = k_provance }
+				d_french_comte = { de_jure_liege = k_france }
 			}
 		}
 		
@@ -9675,7 +9814,7 @@ decisions = {
 				d_jazira = { show_scope_change = no province_completely_controls_trigger = yes }
 				d_mosul = { show_scope_change = no province_completely_controls_trigger = yes }
 				d_edessa = { show_scope_change = no province_completely_controls_trigger = yes }
-				d_armenia_minor = { show_scope_change = no province_completely_controls_trigger = yes }
+				k_cukurova = { show_scope_change = no province_completely_controls_trigger = yes }
 		}
 
 		effect = {
@@ -9689,7 +9828,7 @@ decisions = {
 				limit = { tier = KING }
 				de_jure_liege = e_armenia
 			}
-			d_armenia_minor = { de_jure_liege = k_daglikarazi }
+			k_cukurova = { de_jure_liege = e_armenia }
 			k_assyria = { de_jure_liege = e_armenia }
 			k_azaristan = { de_jure_liege = e_armenia }
 			k_syria = { de_jure_liege = e_armenia }
@@ -10893,8 +11032,7 @@ decisions = {
 			form_empire_allow = yes
 			#Control a bunch of lands and islands
 				k_catalunia = { show_scope_change = no province_completely_controls_trigger = yes }
-				d_sardinia = { show_scope_change = no province_completely_controls_trigger = yes }
-				d_corsica = { show_scope_change = no province_completely_controls_trigger = yes }
+				k_sardinia = { show_scope_change = no province_completely_controls_trigger = yes }
 				d_campania = { show_scope_change = no province_completely_controls_trigger = yes }
 				d_puglia = { show_scope_change = no province_completely_controls_trigger = yes }
 				d_abruzzo = { show_scope_change = no province_completely_controls_trigger = yes }
@@ -10925,7 +11063,6 @@ decisions = {
 			hidden_tooltip = {
 				###True rulers of the Med
 				k_catalunia = { de_jure_liege = e_aragon }
-				d_provance = { de_jure_liege = k_italy }
 				k_sardinia = { de_jure_liege = e_aragon }
 				k_two_siciles = { de_jure_liege = e_aragon }
 				k_andorra = { de_jure_liege = e_aragon }
@@ -11268,17 +11405,54 @@ decisions = {
 					
 			#Control these lands
 			OR = {
-					k_inner_mongolia = { show_scope_change = no province_completely_controls_trigger = yes }
-					has_landed_title = k_inner_mongolia
+				AND = {
+					OR = {
+						k_inner_mongolia = { show_scope_change = no province_completely_controls_trigger = yes }
+						has_landed_title = k_inner_mongolia
+					}
+					OR = {
+						k_shaanxi = { show_scope_change = no province_completely_controls_trigger = yes }
+						has_landed_title = k_shaanxi
+					}
+					OR = {
+						k_hebei = { show_scope_change = no province_completely_controls_trigger = yes }
+						has_landed_title = k_hebei
+					}
 				}
-				OR = {
-					k_shaanxi = { show_scope_change = no province_completely_controls_trigger = yes }
-					has_landed_title = k_shaanxi
+				AND = {
+					OR = {
+						dynasty = 1842120 #Giray
+						any_owned_bloodline = {
+							has_bloodline_flag = genghis_wong_line
+						}
+					}
+					AND = {
+						k_britannia = { is_titular = no }
+						OR = {
+							k_britannia = { show_scope_change = no province_completely_controls_trigger = yes }
+							has_landed_title = k_britannia
+						}
+						k_norf_gov = { is_titular = no }
+						OR = {
+							k_norf_gov = { show_scope_change = no province_completely_controls_trigger = yes }
+							has_landed_title = k_norf_gov
+						}
+					}
+					k_england = { is_titular = no }
+					OR = {
+						k_england = { show_scope_change = no province_completely_controls_trigger = yes }
+						has_landed_title = k_england
+					}
+					OR = {
+						k_wales = { show_scope_change = no province_completely_controls_trigger = yes }
+						has_landed_title = k_wales
+					}
+					OR = {
+						k_scotland = { show_scope_change = no province_completely_controls_trigger = yes }
+						has_landed_title = k_scotland
+					}
 				}
-				OR = {
-					k_hebei = { show_scope_change = no province_completely_controls_trigger = yes }
-					has_landed_title = k_hebei
-				}
+			}
 		}
 		effect = {
 			custom_tooltip = {
@@ -11321,11 +11495,47 @@ decisions = {
 			}
 
 			hidden_tooltip = {
-				###Unite the kingdoms and fulfill your dreams
-				k_inner_mongolia = { de_jure_liege = e_yuan }
-				k_shaanxi = { de_jure_liege = e_yuan }
-				k_hebei = { de_jure_liege = e_yuan }
+			###Unite the kingdoms and fulfill your dreams
+				if = {
+					limit = {
+						OR = {
+							dynasty = 1842120 #Giray
+							custom_tooltip = {
+								text = giray_blood_tt
+								any_owned_bloodline = {
+									has_bloodline_flag = genghis_wong_line
+								}
+							}
+						}
+						capital_scope = {
+							region = world_europe_west_brittania
+						}
+					}
+					if = {
+						limit = {
+							k_england = { is_titular = no }
+						}
+						k_england = { de_jure_liege = e_yuan }
+					}
+					else = {
+						k_britannia = { de_jure_liege = e_yuan }
+						k_norf_gov = { de_jure_liege = e_yuan }
+					}
+					k_scotland = { de_jure_liege = e_yuan }
+					k_wales = { de_jure_liege = e_yuan }
+				}
+				else = {
+					k_inner_mongolia = { de_jure_liege = e_yuan }
+					k_shaanxi = { de_jure_liege = e_yuan }
+					k_hebei = { de_jure_liege = e_yuan }
+				}
 				e_yuan = {
+					k_doggerland =  {set_de_jure_if_controls_effect = yes }
+					k_mann =  {set_de_jure_if_controls_effect = yes }
+					k_brittany =  {set_de_jure_if_controls_effect = yes }
+					k_france =  {set_de_jure_if_controls_effect = yes }
+					k_aquitaine =  {set_de_jure_if_controls_effect = yes }
+					k_ireland =  {set_de_jure_if_controls_effect = yes }
 					k_mongolia = { set_de_jure_if_controls_effect = yes }
 					k_gansu = { set_de_jure_if_controls_effect = yes }
 					k_liaoning = { set_de_jure_if_controls_effect = yes }
@@ -11341,7 +11551,6 @@ decisions = {
 				}
 			}
 		}
-		
 		ai_will_do = {
 			factor = 1
 		}
@@ -11957,8 +12166,8 @@ decisions = {
 				AND = {
 					ai = no
 					piety = 1000
-					num_of_holy_sites = 3
-					realm_size = 100
+					num_of_holy_sites = 1
+					realm_size = 110
 					OR = {
 						has_character_modifier = government_legitimacy_4
 						has_character_modifier = government_legitimacy_5
@@ -13202,6 +13411,8 @@ decisions = {
 			form_empire_potential = yes
 			OR = {
 				culture = old_norman
+				culture = angler
+				culture = norman
 				culture = new_english
 			}
 			NOT = {
