@@ -1014,6 +1014,7 @@ decisions = {
 				religion = muwahidunna
 				religion_group = muslim
 			}
+			NOT = { religion = bani }
 			NOT = { has_character_flag = ramadan }
 			NOT = { has_character_modifier = observed_ramadan }
 			NOT = { trait = on_hajj }
@@ -1065,6 +1066,73 @@ decisions = {
 			}
 		}
 		
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	observe_ramuwan = {
+		only_playable = yes
+		is_high_prio = yes
+		ai_check_interval = 24
+		potential = {
+			ai = no
+			is_playable = yes
+			prisoner = no
+			is_adult = yes
+			religion = bani
+			NOT = { has_character_flag = ramuwan }
+			NOT = { has_character_modifier = observed_ramuwan }
+			NOT = { trait = on_hajj }
+			NOT = { trait = incapable }
+			NOT = {
+				has_alternate_start_parameter = { key = religion_names value = random }
+			}
+		}
+		allow = {
+			war = no
+			prisoner = no
+			NOT = { is_inaccessible_trigger = yes }
+			wealth = 100
+			custom_tooltip = {
+				text = IS_HEALTHY
+				NOR = {
+					is_ill = yes
+					has_symptom_trigger = yes
+				}
+			}
+			custom_tooltip = {
+				text = is_not_busy_trigger_tooltip
+				hidden_tooltip = { NOT = { has_character_flag = do_not_disturb } }
+			}
+		}
+		effect = {
+			character_event = { id = baniramuwan.1 tooltip = "begin_fast" }
+			set_character_flag = ramuwan
+			decadence = -3
+			piety = 15
+			wealth = -100
+			add_character_modifier = {
+				name = observed_ramuwan
+				duration = 1900
+				hidden = no
+			}
+			if = {
+				limit = {
+					has_dlc = "Reapers"
+				}
+				custom_tooltip = {
+					text = capital_prospers_custom_tooltip
+					hidden_tooltip = {
+						capital_scope = {
+							change_variable = { which = prosperity_value value = 8 }
+						}
+					}
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
 		ai_will_do = {
 			factor = 0
 		}
@@ -1391,6 +1459,13 @@ decisions = {
 				religion = devaloka
 				has_religion_feature = religion_feature_novelist
 				religion = juche
+				AND = {
+					religion = bani
+					OR = {
+						NOT = { trait = bani_asulam }
+						trait = mystic
+					}
+				}
 			}
 		}
 
@@ -3597,3 +3672,6 @@ decisions = {
 		}
 	}
 }
+
+
+
