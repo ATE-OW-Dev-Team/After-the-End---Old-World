@@ -17,12 +17,33 @@ targetted_decisions = {
 				ai = no
 				AND = {
 					OR = {
+						trait = skilled_tactician
 						trait = brilliant_strategist
 						trait = exalted_warlord
 						trait = fortune_builder
-						culture_group = apeninian
+						OR = { culture_group = apeninian culture_group = gallo_italic } 
+						culture_group = sardic
+						culture_group = alpinian
+						culture_group = berber
+						culture_group = nord
+						culture_group = armenian_group
+						culture_group = east_african
+						culture_group = cushitic
+						culture_group = francacfrique
+						culture_group = goidelic
+						culture_group = north_philippinic
+						culture_group = south_philippinic
+						culture_group = austronesian
+						culture_group = japan_group
+						culture_group = haida_group
+						culture = nikkei
+						culture = alaskhan
 						culture = griko
 						culture = arbereshe
+						culture = swiss
+						culture = romansch
+						culture = arpitan
+						culture = patoues
 					}
 					OR = {
 						higher_tier_than = COUNT
@@ -37,6 +58,7 @@ targetted_decisions = {
 					}
 				}
 			}
+			prestige = 150
 			NOR = {
 				government = nomadic_government
 				has_character_modifier = mercenary_traditions
@@ -56,18 +78,25 @@ targetted_decisions = {
 					}
 				}
 			}
+			NOR = {
+				trait = dog
+				trait = cat
+				trait = horse
+			}
 		}
 		
 		allow = {
 			can_be_mercenary_leader_allow_trigger = yes
 			FROM = {
 				NOT = { has_mercenary_band = yes }
-				wealth = 50
+				wealth = 100
+				prestige = 250
 			}
 		}
 		effect = {
 			FROM = {
-				wealth = -50
+				wealth = -100
+				prestige = -250
 				custom_tooltip = {
 					text = CREATE_DYNAMIC_MERC_TOOLTIP
 					hidden_tooltip = {
@@ -105,12 +134,13 @@ targetted_decisions = {
 				set_title_flag = not_hired
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
-			factor = 0.05
+			factor = 1
 			
+			modifier = { 
+				factor = 0.05
+			}
 			modifier = { 
 				factor = 0
 				controls_religion = yes
@@ -121,7 +151,7 @@ targetted_decisions = {
 	abdicate_rule = {
 		filter = self
 		ai_target_filter = self
-		ai_check_interval = 12
+		ai_check_interval = 24
 	    diplomacy_icon = GFX_abdicate_rule
 
 		only_rulers = yes
@@ -145,9 +175,18 @@ targetted_decisions = {
 					trait = possessed
 				}
 			}
-
-			age >= 50
-			ruled_years >= 10
+			OR = {
+				AND = {
+					age >= 50
+					ruled_years >= 10
+				}
+				AND = {
+					NOT = {	
+						trait = crowned_indian_feudal 
+					}
+					age = 21
+				}
+			}
 
 			trigger_if = {
 				limit = { health >= 3.1 }
@@ -178,7 +217,9 @@ targetted_decisions = {
 
 		effect = {
 			set_character_flag = considering_abdication
-
+			current_heir = {
+				save_event_target_as = artifactreciever
+			}
 			character_event = {
 				id = Plus.120
 				tooltip = consider_abdication
@@ -225,9 +266,7 @@ targetted_decisions = {
 		effect = {
 			character_event = { id = ZE.11020 }
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 0
 		}
@@ -237,7 +276,7 @@ targetted_decisions = {
 		only_rulers = yes
 		filter = realm
 		ai_target_filter = self 
-		ai_check_interval = 12
+		ai_check_interval = 24
 	    diplomacy_icon = GFX_scroll_icon
 		
 		from_potential = {
@@ -257,9 +296,7 @@ targetted_decisions = {
 				character_event = { id = ZE.6020 }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 0
 		}
@@ -269,7 +306,7 @@ targetted_decisions = {
 		only_playable = yes
 		filter = sub_realm
 		ai_target_filter = court
-		ai_check_interval = 12
+		ai_check_interval = 24
 	    diplomacy_icon = GFX_scroll_icon
 		
 		from_potential = {
@@ -329,9 +366,7 @@ targetted_decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 			modifier = {
@@ -357,7 +392,7 @@ targetted_decisions = {
 		only_playable = yes
 		filter = court
 		ai_target_filter = court
-		ai_check_interval = 12
+		ai_check_interval = 24
 	    diplomacy_icon = GFX_scroll_icon
 		
 		from_potential = {
@@ -420,9 +455,7 @@ targetted_decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 			modifier = {
@@ -444,7 +477,7 @@ targetted_decisions = {
 		only_playable = yes
 		filter = liege
 		ai_target_filter = liege
-		ai_check_interval = 12
+		ai_check_interval = 24
 	    diplomacy_icon = GFX_scroll_icon
 		
 		from_potential = {
@@ -490,9 +523,7 @@ targetted_decisions = {
 				character_event = { id = ZE.8120 }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1000
 		}
@@ -530,7 +561,10 @@ targetted_decisions = {
 		}
 
 		ai_will_do = {
-			factor = 0.001
+			factor = 1
+			modifier = { 
+				factor = 0.01
+			}
 		}
 	}
 
@@ -566,7 +600,10 @@ targetted_decisions = {
 		}
 
 		ai_will_do = {
-			factor = 0.001
+			factor = 1
+			modifier = { 
+				factor = 0.01
+			}
 		}
 	}
 	
@@ -576,7 +613,7 @@ targetted_decisions = {
 		
 		filter = home_court
 		ai_target_filter = home_court
-		ai_check_interval = 12
+		ai_check_interval = 24
 	    diplomacy_icon = GFX_scroll_icon
 	
 		from_potential = {
@@ -636,9 +673,7 @@ targetted_decisions = {
 			}
 		}
 		
-		revoke_allowed = {
-			always = no
-		}
+		
 		
 		ai_will_do = {
 			factor = 1
@@ -654,7 +689,7 @@ targetted_decisions = {
 		only_playable = yes
 		filter = sub_realm
 		ai_target_filter = court
-		ai_check_interval = 12
+		ai_check_interval = 24
 	    diplomacy_icon = GFX_scroll_icon
 		
 		from_potential = {
@@ -711,9 +746,7 @@ targetted_decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 			modifier = {
@@ -738,7 +771,7 @@ targetted_decisions = {
 		only_playable = yes
 		filter = court
 		ai_target_filter = court
-		ai_check_interval = 12
+		ai_check_interval = 24
 	    diplomacy_icon = GFX_scroll_icon
 		
 		from_potential = {
@@ -797,9 +830,7 @@ targetted_decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 			modifier = {

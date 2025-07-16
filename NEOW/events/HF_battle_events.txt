@@ -488,7 +488,7 @@ character_event = {
 					}
 					NOT = { trait = patient }
 					NOT = { trait = wroth }
-					NOT = { trait = blinded } #Because you *see* something. Uh, yeah.
+					NOT = { OR = { trait = blinded trait = blind } } #Because you *see* something. Uh, yeah.
 					NOT = { has_character_modifier = battle_events_8_cooldown } #all commander traits-giving events are set to need a year in between firing...
 				}
 				good_soldier_outcome_score = yes
@@ -557,29 +557,6 @@ character_event = {
 				character_event = { id = HL.10200 } # Lose Craven (Old Horse Lords event)
 			}
 
-			#MISC: Old events
-			50 = {
-				trigger = {
-					has_dlc = "The Old Gods"
-					culture_group = nord
-					OR = {
-						religion = norse_pagan
-						religion = norse_pagan_reformed
-					}
-					is_alive = yes
-					NOT = { trait = berserker }
-					OR = {
-						NOT = { age = 50 }
-						immortal = yes
-					}
-					OR = {
-						trait = wroth
-						trait = aggressive_leader
-					}
-				}
-				character_event = { id = TOG.3000 } # Becomes Berserker
-				log = "fired OLD battle EVENT TOG.3000"
-			}
 			50 = {
 				trigger = {
 					has_dlc = "The Old Gods"
@@ -625,54 +602,6 @@ character_event = {
 				character_event = { id = TOG.3004 } # Berserker Kills Many
 				log = "fired OLD battle EVENT TOG.3004"
 			}
-
-			15 = {
-				trigger = {
-					OR = {
-						religion = norse_pagan
-						religion = norse_pagan_reformed
-						liege = { is_member_of_any_warrior_lodge_trigger = yes }
-					}
-					trait = shieldmaiden
-
-					liege = {
-						at_location = ROOT
-						age = 16
-						prisoner = no
-						NOT = { has_character_modifier = lucky_to_be_alive }
-					}
-					NOT = {
-						trait = incapable
-						prisoner = no
-						has_character_modifier = favored_shieldmaiden
-						has_character_modifier = bad_shieldmaiden
-						has_character_modifier = clumsy_shieldmaiden
-						has_character_modifier = inattentive_soldier
-					}
-				}
-				character_event = { id = 79009 } # Shieldmaiden can save liege on battlefield (choice for Shieldmaiden who is ROOT)
-				log = "fired OLD battle EVENT 79009"
-			}
-			15 = {
-				trigger = {
-					OR = {
-						religion = norse_pagan
-						religion = norse_pagan_reformed
-						is_member_of_any_warrior_lodge_trigger = yes
-					}
-					age = 16
-					NOT = { trait = incapable }
-
-					any_courtier_or_vassal = {
-						trait = shieldmaiden
-						NOT = { trait = incapable }
-						prisoner = no
-						has_minor_title = title_commander
-					}
-				}
-				character_event = { id = 79001 } # Shieldmaiden saves liege, but she is injured (small chain, fired for liege who is ROOT)
-				log = "fired OLD battle EVENT 79001"
-			}						
 
 			# SCRYING VISIONS (2)
 			50 = {
@@ -1208,6 +1137,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -1241,6 +1171,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -1343,6 +1274,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -1381,6 +1313,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -1493,6 +1426,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -1526,6 +1460,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -1589,6 +1524,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -1627,6 +1563,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -1759,7 +1696,7 @@ character_event = {
 		set_character_flag = skip_wounded_trait
 		random_list = { #Randomize bruised body part.
 			10 = { #the eyes
-				trigger = { NOT = { trait = blinded } }
+				trigger = { NOT = { OR = { trait = blinded trait = blind } } }
 				if = { limit = { trait = one_eyed }
 					set_character_flag = injury_both_eyes
 				}
@@ -1785,7 +1722,7 @@ character_event = {
 			}
 			10 = { #Only in case you already have ALL the other maimed traits?
 				trigger = {
-					trait = blinded
+					OR = { trait = blinded trait = blind }
 					trait = one_handed
 					trait = one_legged
 					trait = disfigured
@@ -1834,6 +1771,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -1872,6 +1810,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -1949,6 +1888,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -1987,6 +1927,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -2059,6 +2000,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -2097,6 +2039,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -2208,6 +2151,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -2241,6 +2185,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -2357,7 +2302,7 @@ character_event = {
 			limit = { has_dlc = Reapers }
 			random_list = { #Randomize injured body part.
 				10 = { #the eyes
-					trigger = { NOT = { trait = blinded } }
+					trigger = { NOT = { OR = { trait = blinded trait = blind } } }
 					if = { limit = { trait = one_eyed }
 						set_character_flag = injury_both_eyes
 					}
@@ -2383,7 +2328,7 @@ character_event = {
 				}
 				10 = { #Only in case you already have ALL the other maimed traits?
 					trigger = {
-						trait = blinded
+						OR = { trait = blinded trait = blind }
 						trait = one_handed
 						trait = one_legged
 						trait = disfigured
@@ -2467,6 +2412,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -2505,6 +2451,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -2562,6 +2509,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -2600,6 +2548,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -2669,6 +2618,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -2707,6 +2657,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -2787,6 +2738,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -2825,6 +2777,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -2930,6 +2883,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -2963,6 +2917,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -4080,6 +4035,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -4118,6 +4074,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -4167,6 +4124,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -4200,6 +4158,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -4272,6 +4231,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -4310,6 +4270,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -4370,6 +4331,7 @@ character_event = {
 				OR = {
 					religion = orleanist
 					religion = concordianist
+					religion = easternprotestant
 					religion = novelist
 					religion = novelist_reformed
 					religion = summer_queen
@@ -4403,6 +4365,7 @@ character_event = {
 			limit = {
 				OR = {
 					culture_group = japan_group
+					culture = nikkei
 					religion = shinto
 					religion = bushinto
 					religion = buddhoshinto
@@ -4542,12 +4505,6 @@ character_event = {
         name = EVTOPTA_HFP_11025_dog
         custom_tooltip = { text = EVTOPTA_HFP_11025_TT_dog }
 		remove_character_modifier = pet_hunting_dog
-		random_friend = {
-			limit = {
-				trait = dog
-			}	
-			death = yes
-		}
 		hidden_effect = {
 			remove_character_modifier = pet_best_friends
 			if = { #To handle omens from hermetics
@@ -5675,7 +5632,11 @@ character_event = {
 	                    has_opinion_modifier = { who = event_target:my_fellow_commander modifier = opinion_budding_friendship }
 	                }
 	            }
-	            tooltip = { add_friend = event_target:my_fellow_commander }
+	            tooltip = { add_friend = event_target:my_fellow_commander 
+				add_alliance = {
+					who = event_target:my_fellow_commander
+					years = 100
+				}}
 	        }
 	        else = { #otherwise, add opinions... (*actually* added in follow-up)
 	            tooltip = {
@@ -5777,6 +5738,10 @@ character_event = {
 	                }
 	            }
 	            add_friend = FROM
+				add_alliance = {
+					who = FROM
+					years = 100
+				}
 	        }
 	        else = {
 	            opinion = {
@@ -5835,7 +5800,11 @@ character_event = {
                     has_opinion_modifier = { who = event_target:my_fellow_commander modifier = opinion_budding_friendship }
                 }
             }
-            tooltip = { add_friend = event_target:my_fellow_commander }
+            tooltip = { add_friend = event_target:my_fellow_commander
+				add_alliance = {
+					who = event_target:my_fellow_commander
+					years = 100
+				} }
         }
         else = { #otherwise, add opinions... (*actually* added in follow-up)
             tooltip = {
@@ -5964,6 +5933,10 @@ character_event = {
                 }
             }
             add_friend = FROM
+				add_alliance = {
+					who = FROM
+					years = 100
+				}
         }
         else = {
             opinion = {
@@ -6820,8 +6793,8 @@ character_event = {
 				limit = {
 					OR = {
 						has_religion_feature = religion_ritual_sacrifice
-						religion = aztec
-						religion = aztec_reformed
+						
+						
 					}
 				}
 				if = { #A foreign religious head is also quite good.
@@ -7075,7 +7048,7 @@ character_event = {
 
 	trigger = {
 		is_alive = yes
-		NOT = { trait = blinded }
+		NOT = { OR = { trait = blinded trait = blind } }
 		OR = { #Either you have a child, or you have a friend...
 			any_child_even_if_dead = {
 				age = 10

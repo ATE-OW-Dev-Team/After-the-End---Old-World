@@ -74,7 +74,7 @@ narrative_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 6
+		months = 8
 	}
 	
 	immediate = {
@@ -265,7 +265,7 @@ narrative_event = {
 	has_global_flag = assassins_founded
 	
 	trigger = {
-		year = 2560
+		year = 2565
 		has_landed_title = d_hashshashin
 		NOT = {
 			has_global_flag = kgb_riga
@@ -286,7 +286,7 @@ narrative_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 6
+		months = 8
 	}
 	
 	option = {
@@ -360,7 +360,7 @@ narrative_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 6
+		months = 8
 	}
 	
 	option = {
@@ -428,7 +428,7 @@ narrative_event = {
 	}
 	
 	mean_time_to_happen = {
-		days = 1
+		days = 3
 	}
 	
 	option = {
@@ -477,7 +477,7 @@ narrative_event = {
 	has_global_flag = assassins_scatter
 	
 	trigger = {
-		year = 2570
+		year = 2600
 		controls_religion = yes # Let it happen for the Pope - he's always around
 		NOT = { 
 			has_global_flag = assassins_resurface
@@ -486,7 +486,7 @@ narrative_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 860
+		months = 880
 	}
 	
 	immediate = {
@@ -671,7 +671,7 @@ narrative_event = {
 	has_global_flag = assassins_founded
 	
 	trigger = {
-		year = 2575
+		year = 2600
 		has_landed_title = d_hashshashin
 		NOT = { demesne_size = 1 }
 		NOT = {
@@ -685,7 +685,7 @@ narrative_event = {
 	}
 	
 	mean_time_to_happen = {
-		days = 1
+		days = 3
 	}
 	
 	option = {
@@ -706,165 +706,6 @@ narrative_event = {
 		}
 		trigger = { 
 			NOT = { has_landed_title = d_hashshashin }
-		}
-	}
-}
-
-###################################
-# Assassins strike at the Mongols #
-###################################
-
-# Assassins attempt to kill Mongol leader
-character_event = {
-	id = 88005
-	hide_window = yes # not optimal but better than an empty event.
-	
-	has_global_flag = assassins_founded
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		OR = {
-			NOT = { has_global_flag = assassins_scatter }
-			has_global_flag = assassins_resurface
-		}
-		NOT = { has_global_flag = assassins_destroyed }
-		NOT = { has_global_flag = mongols_provoke_assassins }
-		OR = {
-			has_landed_title = e_ilkhanate
-			has_landed_title = e_golden_horde
-			any_liege = { has_landed_title = e_ilkhanate }
-			any_liege = { has_landed_title = e_golden_horde }
-		}
-		FROM = {
-			OR = {
-				title = b_bolkhov
-				title = b_ikskile
-				title = b_naumburg
-			}
-		}
-	}
-	
-	immediate = {
-		set_global_flag = mongols_provoke_assassins
-		if = {
-			limit = { 
-				OR = {
-					has_landed_title = e_ilkhanate
-					has_landed_title = e_golden_horde
-				}
-			}
-			random_list = {
-				40 = {
-					character_event = { id = 88006 days = 5 }
-				}
-				60 = {
-					character_event = { id = 88008 days = 5 }
-				}
-			}
-		}
-		if = {
-			limit = { 
-				OR = {
-					any_liege = { has_landed_title = e_ilkhanate }
-					any_liege = { has_landed_title = e_golden_horde }
-				}
-			}
-			random_list = {
-				40 = {
-					any_liege = { 
-						limit = {
-							OR = {
-								has_landed_title = e_ilkhanate
-								has_landed_title = e_golden_horde
-							}
-						}
-						character_event = { id = 88006 days = 5 }
-					}
-				}
-				60 = {
-					any_liege = { 
-						limit = {
-							OR = {
-								has_landed_title = e_ilkhanate
-								has_landed_title = e_golden_horde
-							}
-						}
-						character_event = { id = 88008 days = 5 }
-					}
-				}
-			}
-		}
-	}
-}
-
-# They succeed!
-character_event = {
-	id = 88006
-
-	hide_window = yes # not optimal but better than an empty event.
-	
-	is_triggered_only = yes
-	
-	trigger = {
-		ai = yes
-	}
-	
-	immediate = {
-		death = { death_reason = death_hashshashin }
-		narrative_event = { id = 88007 days = 2 }
-	}
-}
-
-# The Mongol leader is dead!
-narrative_event = {
-	id = 88007
-	title = "EVTNAME88007"
-	desc = "EVTDESC88007"
-	border = GFX_event_narrative_frame_intrigue
-	major = yes
-	
-	picture = "GFX_evt_shadow"
-	
-	is_triggered_only = yes
-	
-	option = {
-		name = "EVTOPTA88007"
-	}
-}
-
-# They fail!
-character_event = {
-	id = 88008
-	hide_window = yes # not optimal but better than an empty event.
-	
-	is_triggered_only = yes
-	
-	option = {
-		narrative_event = { id = 88009 days = 2 }
-	}
-}
-
-# The Mongol leader has survived!
-narrative_event = {
-	id = 88009
-	title = "EVTNAME88009"
-	desc = "EVTDESC88009"
-	border = GFX_event_narrative_frame_intrigue
-	major = yes
-	
-	picture = "GFX_evt_shadow"
-	
-	is_triggered_only = yes
-	
-	option = {
-		name = "EVTOPTA88009"
-		trigger = { religion_group = old_world_cultist_group }
-	}
-	option = {
-		name = "EVTOPTA88016"
-		trigger = { 
-			NOT = { religion_group = old_world_cultist_group }
 		}
 	}
 }
@@ -899,7 +740,7 @@ character_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 160
+		months = 180
 	}
 	
 	option = {
@@ -957,7 +798,7 @@ character_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 22
+		months = 24
 	}
 	
 	option = {
@@ -998,7 +839,7 @@ character_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 480
+		months = 490
 	}
 	
 	option = {
@@ -1052,7 +893,7 @@ character_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 880
+		months = 890
 	}
 	
 	immediate = {
@@ -1208,7 +1049,7 @@ character_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 160
+		months = 180
 	}
 	
 	option = {
@@ -1245,7 +1086,7 @@ character_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 1400
+		months = 1420
 	}
 	
 	option = {
@@ -1314,7 +1155,7 @@ character_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 6500
+		months = 6550
 		modifier = {
 			factor = 0.5
 			trait = possessed

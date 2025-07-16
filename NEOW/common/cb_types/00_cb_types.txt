@@ -2223,26 +2223,210 @@ change_feudal_elective_succession_law = {
 	name = CB_NAME_FEUDAL_ELECTIVE_SUCCESSION_LAW
 	war_name = WAR_NAME_FEUDAL_ELECTIVE_SUCCESSION_LAW
 	sprite = 6
-	truce_days = 1825
+	truce_days = 3650
 	attacker_can_call_allies = no
 	can_ask_to_join_war = no
 	major_revolt = yes
-	is_permanent = no
+	
+	can_use = {
+		ROOT = {
+			vassal_of = FROM	
+		}
+	}
 
-	can_use = { always = no }
+	can_use_gui = {
+		check_if_crusader_trigger = yes
+	}
 
-	is_valid = { always = no }
+	is_valid = {
+		FROM = {
+			in_revolt = no
+			liege_before_war = {
+				in_revolt = no
+				liege_before_war = {
+					in_revolt = no
+				}
+			}
+		}
+		ROOT = {
+			OR = {
+				liege = {
+					character = PREV # either independent
+				}
+				liege = { 
+					FROM = { 
+						is_liege_or_above = PREV # or have shared liege
+					}
+				}
+			}
+		}
+	}
 
-	on_success = {}
+	is_valid_title = {
+		NOR = {
+			has_law = succ_feudal_elective
+			has_law = succ_hre_elective
+		}
+		OR = {
+			tier = emperor
+			tier = king
+			is_primary_holder_title = yes
+		}
 
-	on_fail = {}
+	}
+	on_add = {
+		general_on_add_effect = yes
+	}
+	on_success = {
+		FROM = {
+		
+			hidden_tooltip = { disband_event_forces = faction_loyalists }
+			if = {
+				limit = { NOT = { has_dlc = "Zeus" } }
+				any_demesne_title = { # All titles
+					limit = {
+						OR = {
+							tier = king
+							tier = emperor
+						}
+	#					is_titular = no
+						NOT = { has_law = crown_authority_0 }
+					}
+					if = {
+						limit = { has_law = crown_authority_1 }
+						add_law = crown_authority_0
+					}
+					if = {
+						limit = { has_law = crown_authority_2 }
+						add_law = crown_authority_1
+					}
+					if = {
+						limit = { has_law = crown_authority_3 }
+						add_law = crown_authority_2
+					}
+					if = {
+						limit = { has_law = crown_authority_4 }
+						add_law = crown_authority_3
+					}
+				}
+			}
+		}
+		ROOT = {
+			show_scope_change = no
+			participation_scaled_prestige = 100
+			hidden_tooltip = {
+				disband_event_forces = faction_revolters
+			}
+		}
+		any_attacker = {
+			limit = { NOT = { character = ROOT } }
+			hidden_tooltip = {
+				participation_scaled_prestige = 100 
+				disband_event_forces = faction_revolters
+			}
+		}
+	}
+	
+	on_success_title = {
+		if = { 
+			limit = {
+				NOR = { 
+					title = e_hre 
+					has_title_flag = alternate_hre
+				}
+			}
+			add_law_w_cooldown = succ_feudal_elective
+			#succession_w_cooldown = {
+			#	base_type = feudal_elective
+			#	voting_rules = feudal_elective
+			#}
+		}
+		if = { 
+			limit = {
+				OR = { 
+					title = e_hre 
+					has_title_flag = alternate_hre
+				}
+			}
+			add_law_w_cooldown = succ_hre_elective
+			#succession_w_cooldown = {
+			#	base_type = feudal_elective
+			#	voting_rules = hre_feudal_elective
+			#}
+		}
+	}
 
-	on_reverse_demand = {}
+	on_fail = {
+		ROOT = {
+			show_scope_change = no
+			prestige = -100
+		}
+		FROM = {
+			show_scope_change = no
+			participation_scaled_prestige = 50
+		}
+		any_defender = {
+			limit = { NOT = { character = FROM } }
+			hidden_tooltip = { participation_scaled_prestige = 50 }
+		}
+		
+		hidden_tooltip = {
+			any_attacker = {
+				disband_event_forces = faction_revolters
+				add_character_modifier = {
+					name = faction_succ_feudal_elective_ultimatum_timer
+					hidden = yes
+					duration = 3650
+				}
+			}
+		}
+		FROM = { hidden_tooltip = { disband_event_forces = faction_loyalists } }
+	}
+	
+	on_reverse_demand = {
+		ROOT = {
+			show_scope_change = no
+			prestige = -200
+			prisoner = FROM
+		}
+		FROM = {
+			show_scope_change = no
+			participation_scaled_prestige = 100
+			hidden_tooltip = { 
+				if = { 
+					limit = { NOT = { has_opinion_modifier = { modifier = opinion_traitor who = ROOT } } } #Allow free revocation of a title.
+					opinion = {
+						who = ROOT
+						modifier = opinion_traitor
+					}
+				}
+			}
+		}
+		any_defender = {
+			limit = { NOT = { character = FROM } }
+			hidden_tooltip = { participation_scaled_prestige = 100 }
+		}
+		
+		hidden_tooltip = {
+			any_attacker = {
+				limit = { liege = { character = FROM } }
+				prisoner = FROM
+				disband_event_forces = faction_revolters
+				add_character_modifier = {
+					name = faction_succ_feudal_elective_ultimatum_timer
+					hidden = yes
+					duration = 3650
+				}
+			}
+		}
+		
+		FROM = { hidden_tooltip = { disband_event_forces = faction_loyalists } }
+	}
 
 	attacker_ai_victory_worth = {
 		factor = -1 # always accept
 	}
-
+	
 	attacker_ai_defeat_worth = {
 		factor = 100
 	}
@@ -2250,7 +2434,7 @@ change_feudal_elective_succession_law = {
 	defender_ai_victory_worth = {
 		factor = -1 # always accept
 	}
-
+	
 	defender_ai_defeat_worth = {
 		factor = 100
 	}
@@ -2448,135 +2632,135 @@ invasion = {
 			hidden_tooltip = { conquest_culture = ROOT }
 		}
 		
-		if = {
-			limit = { ROOT = { character = 140 } }
-			ROOT = {
-				if = {
-					limit = {
-						has_dlc = "Holy Fury"
-						NOT = {
-							any_owned_bloodline = {
-								has_bloodline_flag = william_the_conqueror_bloodline
-							}
-						}
-					}
-					create_bloodline = {
-						type = william_the_conqueror
-					}
-				}
-			}
-			hidden_tooltip = {
-				add_law = succ_primogeniture
-				ROOT = {
-					any_vassal = {
-						limit = {
-							culture = saxon
-						}
-						opinion = {
-							modifier = opinion_subjugated 
-							who = ROOT
-						}
-					}
-					if = {
-						limit = { # Help AI William by usurping extra land
-							ai = yes
-						}
-						d_bedford = {
-							usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
-							any_de_jure_vassal_title = {
-								limit = {
-									holder_scope = {
-										culture = saxon
-										ai = yes # But not from players
-										same_realm = ROOT
-									}
-								}
-								usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
-							}
-						}
-						d_canterbury = {
-							usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
-							any_de_jure_vassal_title = {
-								limit = {
-									holder_scope = {
-										culture = saxon
-										ai = yes # But not from players
-										same_realm = ROOT
-									}
-								}
-								usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
-							}
-						}
-						d_cornwall = {
-							usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
-							any_de_jure_vassal_title = {
-								limit = {
-									holder_scope = {
-										culture = saxon
-										ai = yes # But not from players
-										same_realm = ROOT
-									}
-								}
-								usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
-							}
-						}
-						d_somerset = {
-							usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
-							any_de_jure_vassal_title = {
-								limit = {
-									holder_scope = {
-										culture = saxon
-										ai = yes # But not from players
-										same_realm = ROOT
-									}
-								}
-								usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
-							}
-						}
-						d_gloucester = {
-							usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
-							any_de_jure_vassal_title = {
-								limit = {
-									holder_scope = {
-										culture = saxon
-										ai = yes # But not from players
-										same_realm = ROOT
-									}
-								}
-								usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
-							}
-						}
-						d_norfolk = {
-							usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
-							any_de_jure_vassal_title = {
-								limit = {
-									holder_scope = {
-										culture = saxon
-										ai = yes # But not from players
-										same_realm = ROOT
-									}
-								}
-								usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
-							}
-						}
-					}
-					if = {
-						limit = {
-							c_middlesex = {
-								holder_scope = {
-									character = ROOT
-								}
-							}
-						}
-						c_middlesex = {
-							capital_holding = {
-								ROOT = { capital = PREV }
-							}
-						}
-					}
-				}
-			}
-		}
+		# if = {
+			# limit = { ROOT = { character = 140 } }
+			# ROOT = {
+				# if = {
+					# limit = {
+						# has_dlc = "Holy Fury"
+						# NOT = {
+							# any_owned_bloodline = {
+								# has_bloodline_flag = william_the_conqueror_bloodline
+							# }
+						# }
+					# }
+					# create_bloodline = {
+						# type = william_the_conqueror
+					# }
+				# }
+			# }
+			# hidden_tooltip = {
+				# add_law = succ_primogeniture
+				# ROOT = {
+					# any_vassal = {
+						# limit = {
+							# culture = saxon
+						# }
+						# opinion = {
+							# modifier = opinion_subjugated 
+							# who = ROOT
+						# }
+					# }
+					# if = {
+						# limit = { # Help AI William by usurping extra land
+							# ai = yes
+						# }
+						# d_bedford = {
+							# usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
+							# any_de_jure_vassal_title = {
+								# limit = {
+									# holder_scope = {
+										# culture = saxon
+										# ai = yes # But not from players
+										# same_realm = ROOT
+									# }
+								# }
+								# usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
+							# }
+						# }
+						# d_canterbury = {
+							# usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
+							# any_de_jure_vassal_title = {
+								# limit = {
+									# holder_scope = {
+										# culture = saxon
+										# ai = yes # But not from players
+										# same_realm = ROOT
+									# }
+								# }
+								# usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
+							# }
+						# }
+						# d_cornwall = {
+							# usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
+							# any_de_jure_vassal_title = {
+								# limit = {
+									# holder_scope = {
+										# culture = saxon
+										# ai = yes # But not from players
+										# same_realm = ROOT
+									# }
+								# }
+								# usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
+							# }
+						# }
+						# d_somerset = {
+							# usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
+							# any_de_jure_vassal_title = {
+								# limit = {
+									# holder_scope = {
+										# culture = saxon
+										# ai = yes # But not from players
+										# same_realm = ROOT
+									# }
+								# }
+								# usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
+							# }
+						# }
+						# d_gloucester = {
+							# usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
+							# any_de_jure_vassal_title = {
+								# limit = {
+									# holder_scope = {
+										# culture = saxon
+										# ai = yes # But not from players
+										# same_realm = ROOT
+									# }
+								# }
+								# usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
+							# }
+						# }
+						# d_norfolk = {
+							# usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
+							# any_de_jure_vassal_title = {
+								# limit = {
+									# holder_scope = {
+										# culture = saxon
+										# ai = yes # But not from players
+										# same_realm = ROOT
+									# }
+								# }
+								# usurp_title_plus_barony_if_unlanded = { target = ROOT type = invasion }
+							# }
+						# }
+					# }
+					# if = {
+						# limit = {
+							# c_middlesex = {
+								# holder_scope = {
+									# character = ROOT
+								# }
+							# }
+						# }
+						# c_middlesex = {
+							# capital_holding = {
+								# ROOT = { capital = PREV }
+							# }
+						# }
+					# }
+				# }
+			# }
+		# }
 
 		hidden_tooltip = {
 			check_if_reconquista_finished_effect = yes
@@ -2943,7 +3127,7 @@ tribal_invasion = {
 								}
 							}
 							culture = nahuatl
-							religion = aztec
+							
 							clr_province_flag = aztec_explorers
 							clr_province_flag = aztec_second_wave
 						}
@@ -3150,7 +3334,7 @@ tribal_invasion = {
 			}
 			empire = {
 				OR = {
-					title = e_tartaria
+					title = e_siberia
 					title = e_russia
 				}
 			}
@@ -3325,6 +3509,8 @@ crusade = {
 						religion = east_brethren
 						religion = pusaka
 						religion = pancasila
+						religion = shindo
+						religion = shindo_reformed
 					}
 				}
 			}
@@ -5689,8 +5875,6 @@ religious = {
 				FROM = {
 					OR = {
 						religion = amidism
-						religion = kirishitan
-						religion = isukirian
 					}
 				}
 			}
@@ -5698,8 +5882,6 @@ religious = {
 				ROOT = {
 					OR = {
 						religion = amidism
-						religion = kirishitan
-						religion = isukirian
 					}
 				}
 				FROM = {
@@ -5716,7 +5898,19 @@ religious = {
 			is_nomadic = no
 			NOT = { government = viceroyal_government }
 			NOT = { government = confederation_government }
-			NOT = { religion_group = pagan_group }
+			conditional_tooltip = {
+				trigger = { 
+					NOR = {
+						religion = novelist	
+						religion = novelist_reformed	
+						religion = hellenic_pagan	
+						religion = hellenic_pagan_reformed	
+					}
+				}
+				NOT = { 
+					religion_group = pagan_group 
+				}
+			}
 			NOT = { religion = nousthreskeia }
 			NOT = { pacifist = yes }
 			NOR = { 
@@ -5765,6 +5959,19 @@ religious = {
 							any_current_enemy = {
 								NOT = {
 									religion_group = old_world_cultist_group
+								}
+							}
+						}
+					}
+				}
+				AND = {	
+					religion_group = esoteric
+					NOT = { religion = FROM }
+					FROM = {
+						NOT = { 
+							any_current_enemy = {
+								NOT = {
+									religion_group = esoteric
 								}
 							}
 						}
@@ -5888,6 +6095,8 @@ religious = {
 									FROM = { religion_group = syncratic_group }
 									ROOT = { religion_group = old_world_cultist_group }
 									FROM = { religion_group = old_world_cultist_group }
+									ROOT = { religion_group = esoteric }
+									FROM = { religion_group = esoteric }
 									ROOT = {
 										religion = agamatirta
 									}
@@ -5898,7 +6107,19 @@ religious = {
 										religion = pusaka
 									}
 									AND = {
-										ROOT = { religion_group = pagan_group }
+										ROOT = { 
+											conditional_tooltip = {
+												trigger = { 
+													NOR = {
+														religion = novelist	
+														religion = novelist_reformed	
+														religion = hellenic_pagan	
+														religion = hellenic_pagan_reformed	
+													}
+												}
+												religion_group = pagan_group 
+											} 
+										}
 										has_global_flag = pagan_ghws_unlocked
 									}
 									AND = {
@@ -5935,6 +6156,33 @@ religious = {
 									}
 								}
 							}
+						}
+					}
+				}
+			}
+		}
+		OR = {
+			AND = {
+				ROOT = {
+					OR = {
+						has_landed_title = e_britannia
+						top_liege = {
+							has_landed_title = e_britannia
+						}
+					}
+					year = 2575
+				}
+				de_jure_liege_or_above = k_ireland
+			}
+			NOT = {
+				de_jure_liege_or_above = k_ireland
+			}
+			NOT = {
+				ROOT = {
+					OR = {
+						has_landed_title = e_britannia
+						top_liege = {
+							has_landed_title = e_britannia
 						}
 					}
 				}
@@ -5993,7 +6241,19 @@ religious = {
 
 	is_valid = {
 		ROOT = {
-			NOT = { religion_group = pagan_group }
+			conditional_tooltip = {
+				trigger = { 
+					NOR = {
+						religion = novelist	
+						religion = novelist_reformed	
+						religion = hellenic_pagan	
+						religion = hellenic_pagan_reformed	
+					}
+				}
+				NOT = { 
+					religion_group = pagan_group 
+				}
+			}
 			NOT = { pacifist = yes }
 			NOT = { same_realm = FROM }
 			NOT = {
@@ -6048,6 +6308,7 @@ religious = {
 				AND = {
 					OR = {
 						religion_group = muslim
+						religion_group = esoteric
 						religion_group = old_world_cultist_group
 						religion_group = syncratic_group
 					}
@@ -8180,6 +8441,7 @@ coastal_county_republic = {
 				religion = baptist
 				religion = charismatic
 				religion = ramadi
+				religion = bani
 				religion = memorialist
 			}
 			NOT = {
@@ -8315,6 +8577,7 @@ coastal_county_republic = {
 				religion = baptist
 				religion = charismatic
 				religion = ramadi
+				religion = bani
 				religion = memorialist
 			}
 		}
@@ -8513,7 +8776,7 @@ mainland_county_annex = {
 			OR = {
 				religion = thaislam
 				religion = theravada
-				religion = cao_dai
+				religion = caodai
 				religion = hmongism
 				religion = mahayana
 				religion = combuddhist
@@ -8542,7 +8805,7 @@ mainland_county_annex = {
 			OR = {
 				religion = thaislam
 				religion = theravada
-				religion = cao_dai
+				religion = caodai
 				religion = hmongism
 				religion = mahayana
 				religion = combuddhist
@@ -8756,174 +9019,174 @@ mainland_county_annex = {
 }
 
 
-weaken_vassal_plot = {
-	name = CB_NAME_WEAKEN_VASSAL
-	war_name = WAR_NAME_WEAKEN_VASSAL
-	sprite = 3
-	truce_days = 1825
-	hostile_against_others = yes
+# weaken_vassal_plot = {
+	# name = CB_NAME_WEAKEN_VASSAL
+	# war_name = WAR_NAME_WEAKEN_VASSAL
+	# sprite = 3
+	# truce_days = 1825
+	# hostile_against_others = yes
 
-	press_claim = yes
-	attacker_can_call_allies = no
-	can_ask_to_join_war = no
+	# press_claim = yes
+	# attacker_can_call_allies = no
+	# can_ask_to_join_war = no
 
-	can_use_gui = {
-		check_if_crusader_trigger = yes
-	}
+	# can_use_gui = {
+		# check_if_crusader_trigger = yes
+	# }
 
-	can_use_title = {
-		OR = {
-			FROM = {
-				has_landed_title = PREV
-			}
-			holder_scope = {
-				is_liege_or_above = FROM
-			}
-		}
-	}
+	# can_use_title = {
+		# OR = {
+			# FROM = {
+				# has_landed_title = PREV
+			# }
+			# holder_scope = {
+				# is_liege_or_above = FROM
+			# }
+		# }
+	# }
 
-	is_valid_title = {
-		OR = {
-			FROM = {
-				has_landed_title = PREV
-			}
-			holder_scope = {
-				is_liege_or_above = FROM
-			}
-		}
-	}
+	# is_valid_title = {
+		# OR = {
+			# FROM = {
+				# has_landed_title = PREV
+			# }
+			# holder_scope = {
+				# is_liege_or_above = FROM
+			# }
+		# }
+	# }
 
-	on_add = {
-		general_on_add_effect = yes
-	}
+	# on_add = {
+		# general_on_add_effect = yes
+	# }
 
-	on_success = {
-		ROOT = {
-			participation_scaled_prestige = 100
-		}
-		any_attacker = {
-			limit = {
-				NOT = { character = ROOT }
-			}
-			participation_scaled_prestige = 100
-		}
-		FROM = {
-			if = {
-				limit = { NOT = { has_dlc = "Zeus" } }
-				any_demesne_title = { # All titles
-					limit = {
-						OR = {
-							tier = king
-							tier = emperor
-						}
-	#					is_titular = no
-						NOT = { has_law = crown_authority_0 }
-					}
-					if = {
-						limit = { has_law = crown_authority_1 }
-						add_law = crown_authority_0
-					}
-					if = {
-						limit = { has_law = crown_authority_2 }
-						add_law = crown_authority_1
-					}
-					if = {
-						limit = { has_law = crown_authority_3 }
-						add_law = crown_authority_2
-					}
-					if = {
-						limit = { has_law = crown_authority_4 }
-						add_law = crown_authority_3
-					}
-				}
-			}
-		}
-	}
+	# on_success = {
+		# ROOT = {
+			# participation_scaled_prestige = 100
+		# }
+		# any_attacker = {
+			# limit = {
+				# NOT = { character = ROOT }
+			# }
+			# participation_scaled_prestige = 100
+		# }
+		# FROM = {
+			# if = {
+				# limit = { NOT = { has_dlc = "Zeus" } }
+				# any_demesne_title = { # All titles
+					# limit = {
+						# OR = {
+							# tier = king
+							# tier = emperor
+						# }
+	# #					is_titular = no
+						# NOT = { has_law = crown_authority_0 }
+					# }
+					# if = {
+						# limit = { has_law = crown_authority_1 }
+						# add_law = crown_authority_0
+					# }
+					# if = {
+						# limit = { has_law = crown_authority_2 }
+						# add_law = crown_authority_1
+					# }
+					# if = {
+						# limit = { has_law = crown_authority_3 }
+						# add_law = crown_authority_2
+					# }
+					# if = {
+						# limit = { has_law = crown_authority_4 }
+						# add_law = crown_authority_3
+					# }
+				# }
+			# }
+		# }
+	# }
 	
-	on_success_title = {
-		FROM = {
-			random_vassal = {
-				limit = {
-					tier = count
-					any_demesne_title = {
-						tier = count
-						dejure_liege_title = {
-							ROOT = {
-								plot_target_title = {
-									title = PREVPREV
-								}
-							}
-						}
-					}
-				}
-				grant_title = PREVPREV
-			}
-		}
-	}
+	# on_success_title = {
+		# FROM = {
+			# random_vassal = {
+				# limit = {
+					# tier = count
+					# any_demesne_title = {
+						# tier = count
+						# dejure_liege_title = {
+							# ROOT = {
+								# plot_target_title = {
+									# title = PREVPREV
+								# }
+							# }
+						# }
+					# }
+				# }
+				# grant_title = PREVPREV
+			# }
+		# }
+	# }
 
-	on_fail = {
-		ROOT = {
-			prestige = -100
-			cancel_plot = plot_weaken_fellow_vassal
-		}
-		FROM = {
-			participation_scaled_prestige = 50
-		}
-		any_defender = {
-			limit = { NOT = { character = FROM } }
-			hidden_tooltip = { participation_scaled_prestige = 50 }
-		}
-	}
+	# on_fail = {
+		# ROOT = {
+			# prestige = -100
+			# cancel_plot = plot_weaken_fellow_vassal
+		# }
+		# FROM = {
+			# participation_scaled_prestige = 50
+		# }
+		# any_defender = {
+			# limit = { NOT = { character = FROM } }
+			# hidden_tooltip = { participation_scaled_prestige = 50 }
+		# }
+	# }
 	
-	on_invalidation = {
-		ROOT = {
-			cancel_plot = plot_weaken_fellow_vassal
-		}
+	# on_invalidation = {
+		# ROOT = {
+			# cancel_plot = plot_weaken_fellow_vassal
+		# }
 		
-	}
+	# }
 
-	on_reverse_demand = {
-		ROOT = {
-			prestige = -200
-			imprison = FROM
-			cancel_plot = plot_weaken_fellow_vassal
-		}
-		FROM = {
-			participation_scaled_prestige = 100
-		}
-		any_defender = {
-			limit = { NOT = { character = FROM } }
-			hidden_tooltip = { participation_scaled_prestige = 100 }
-		}
-	}
+	# on_reverse_demand = {
+		# ROOT = {
+			# prestige = -200
+			# imprison = FROM
+			# cancel_plot = plot_weaken_fellow_vassal
+		# }
+		# FROM = {
+			# participation_scaled_prestige = 100
+		# }
+		# any_defender = {
+			# limit = { NOT = { character = FROM } }
+			# hidden_tooltip = { participation_scaled_prestige = 100 }
+		# }
+	# }
 	
-	on_attacker_leader_death = {
-		hidden_tooltip = {
-			any_defender = {
-				letter_event = {
-					id = 251
-				}
-			}
-		}
-		end_war = invalid
-	}
+	# on_attacker_leader_death = {
+		# hidden_tooltip = {
+			# any_defender = {
+				# letter_event = {
+					# id = 251
+				# }
+			# }
+		# }
+		# end_war = invalid
+	# }
 	
-	attacker_ai_victory_worth = {
-		factor = -1 # always accept
-	}
+	# attacker_ai_victory_worth = {
+		# factor = -1 # always accept
+	# }
 	
-	attacker_ai_defeat_worth = {
-		factor = 100
-	}
+	# attacker_ai_defeat_worth = {
+		# factor = 100
+	# }
 
-	defender_ai_victory_worth = {
-		factor = -1 # always accept
-	}
+	# defender_ai_victory_worth = {
+		# factor = -1 # always accept
+	# }
 	
-	defender_ai_defeat_worth = {
-		factor = 100
-	}
-}
+	# defender_ai_defeat_worth = {
+		# factor = 100
+	# }
+# }
 
 decadence_invasion = {
 	name = CB_NAME_INVASION
@@ -9916,13 +10179,14 @@ imperial_reconquest = {
 			de_jure_liege_or_above = k_anatolia
 			de_jure_liege_or_above = k_epirus
 			de_jure_liege_or_above = k_macedonia
+			de_jure_liege_or_above = k_thrace
 			de_jure_liege_or_above = k_cyprus
+			de_jure_liege_or_above = k_crete
 			de_jure_liege_or_above = k_trebizond
 			de_jure_liege_or_above = k_armenia
 			de_jure_liege_or_above = k_bulgaria
 			de_jure_liege_or_above = k_serbia
 			de_jure_liege_or_above = k_malta
-			de_jure_liege_or_above = k_croatia
 			de_jure_liege_or_above = k_italy
 			de_jure_liege_or_above = k_sicily
 			de_jure_liege_or_above = k_bavaria
@@ -10760,6 +11024,7 @@ viking_invasion = {
 				OR = {
 					primary_title = { title = k_cyprus_league }
 					primary_title = { title = k_cyprus }
+					primary_title = { title = k_crete }
 					primary_title = { title = k_lanka }
 					primary_title = { title = k_canarias }
 					primary_title = { title = k_sardinia }
@@ -10865,6 +11130,7 @@ pagan_subjugation = {
 			}
 		}
 		ROOT = {
+			prestige = 500
 			religion_group = pagan_group
 			is_reformed_religion = no
 			NOT = { same_realm = FROM }
@@ -10931,6 +11197,7 @@ pagan_subjugation = {
 	
 	on_add = {
 		ROOT = {
+			prestige = -500
 			add_character_modifier = { 
 				name = launched_subjugation
 				years = 100
@@ -12989,7 +13256,6 @@ muslim_county_conquest = {
 				religion = voodun
 				religion = islamity
 				religion = muwahidunna
-				religion = ahlehaqq
 				religion = jugoslavist
 			}
 		}
@@ -13259,10 +13525,11 @@ pagan_county_conquest = {
 						religion = aurorean
 						religion = gnostic
 						religion = vagarna
+						religion = amaitist
+						religion = raven_tales
+						religion = raven_tales_reformed
 						religion = thelemic
-						religion = shinko
-						religion = shindo
-						religion = shindo_reformed
+						religion_group = shintoist_group
 						religion = kaharingan_pagan
 						religion = kaharingan_pagan_reformed
 						religion = bungan_pagan
@@ -13331,6 +13598,9 @@ pagan_county_conquest = {
 						religion = hellenic_pagan
 						religion = gnostic
 						religion = vagarna
+						religion = amaitist
+						religion = raven_tales
+						religion = raven_tales_reformed
 						religion = thelemic
 						religion = shinko
 						religion = shindo
@@ -13377,10 +13647,11 @@ pagan_county_conquest = {
 						religion = gnostic
 						religion = aurorean
 						religion = vagarna
+						religion = amaitist
+						religion = raven_tales
+						religion = raven_tales_reformed
 						religion = thelemic
-						religion = shinko
-						religion = shindo
-						religion = shindo_reformed
+						religion_group = shintoist_group
 						religion = kaharingan_pagan
 						religion = kaharingan_pagan_reformed
 						religion = bungan_pagan
@@ -14449,7 +14720,12 @@ dejure_county_claim = {
 		OR = {
 			AND = {
 				ROOT = {
-					has_landed_title = e_britannia
+					OR = {
+						has_landed_title = e_britannia
+						top_liege = {
+							has_landed_title = e_britannia
+						}
+					}
 					year = 2575
 				}
 				de_jure_liege_or_above = k_ireland
@@ -14459,7 +14735,12 @@ dejure_county_claim = {
 			}
 			NOT = {
 				ROOT = {
-					has_landed_title = e_britannia
+					OR = {
+						has_landed_title = e_britannia
+						top_liege = {
+							has_landed_title = e_britannia
+						}
+					}
 				}
 			}
 		}
@@ -14644,15 +14925,74 @@ dejure_barony_claim = {
 	
 	can_use_gui = {
 		check_if_crusader_trigger = yes
+		ROOT = {
+			conditional_tooltip = {
+				trigger = { 
+					OR = {
+						religion = catholic
+						religion = apostolic
+						religion = katoliko
+					}
+				}
+				FROM = {
+					NOR = {
+						has_landed_title = k_papacy
+						has_landed_title = d_celtic_patriarch
+						has_landed_title = d_iberian_patriarch
+						has_landed_title = d_byzantine_patriarch
+						has_landed_title = d_jerusalem_patriarch
+					}
+				}
+			}
+		}
 	}
 
 	can_use = {
 		FROM = {
 			ROOT_can_press_dejure_claim_trigger = yes
 		}
+		ROOT = {
+			conditional_tooltip = {
+				trigger = { 
+					OR = {
+						religion = catholic
+						religion = apostolic
+						religion = katoliko
+					}
+				}
+				FROM = {
+					NOR = {
+						has_landed_title = k_papacy
+						has_landed_title = d_celtic_patriarch
+						has_landed_title = d_iberian_patriarch
+						has_landed_title = d_byzantine_patriarch
+						has_landed_title = d_jerusalem_patriarch
+					}
+				}
+			}
+		}
 	}
-
 	can_use_title = {
+		ROOT = {
+			conditional_tooltip = {
+				trigger = { 
+					OR = {
+						religion = catholic
+						religion = apostolic
+						religion = katoliko
+					}
+				}
+				FROM = {
+					NOR = {
+						has_landed_title = k_papacy
+						has_landed_title = d_celtic_patriarch
+						has_landed_title = d_iberian_patriarch
+						has_landed_title = d_byzantine_patriarch
+						has_landed_title = d_jerusalem_patriarch
+					}
+				}
+			}
+		}
 		has_holder = yes
 		holder_scope = {
 			OR = {
@@ -14663,7 +15003,12 @@ dejure_barony_claim = {
 		OR = {
 			AND = {
 				ROOT = {
-					has_landed_title = e_britannia
+					OR = {
+						has_landed_title = e_britannia
+						top_liege = {
+							has_landed_title = e_britannia
+						}
+					}
 					year = 2575
 				}
 				de_jure_liege_or_above = k_ireland
@@ -14673,7 +15018,12 @@ dejure_barony_claim = {
 			}
 			NOT = {
 				ROOT = {
-					has_landed_title = e_britannia
+					OR = {
+						has_landed_title = e_britannia
+						top_liege = {
+							has_landed_title = e_britannia
+						}
+					}
 				}
 			}
 		}
@@ -14939,7 +15289,12 @@ other_dejure_county_claim = {
 		OR = {
 			AND = {
 				ROOT = {
-					has_landed_title = e_britannia
+					OR = {
+						has_landed_title = e_britannia
+						top_liege = {
+							has_landed_title = e_britannia
+						}
+					}
 					year = 2575
 				}
 				de_jure_liege_or_above = k_ireland
@@ -14949,7 +15304,12 @@ other_dejure_county_claim = {
 			}
 			NOT = {
 				ROOT = {
-					has_landed_title = e_britannia
+					OR = {
+						has_landed_title = e_britannia
+						top_liege = {
+							has_landed_title = e_britannia
+						}
+					}
 				}
 			}
 		}
@@ -19668,7 +20028,7 @@ nomad_invasion = {
 			}
 			empire = {
 				OR = {
-					title = e_tartaria
+					title = e_siberia
 					title = e_russia
 				}
 			}
@@ -19680,7 +20040,7 @@ nomad_invasion = {
 			}
 			empire = {
 				OR = {
-					title = e_tartaria
+					title = e_siberia
 					title = e_turkestan
 					title = e_pontic_steppe
 					title = e_idel_ural

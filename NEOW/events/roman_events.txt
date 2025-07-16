@@ -1,102 +1,110 @@
+#######################################
+#
+# Roman Events
+#
+# Event ID LoR.1 - LoR.199 reserved
+#
+#######################################
 
-### The Augustus Trait
+# Written by Henrik Eklund
 
-# Augustus Trait Gained
+namespace = LoR
+
+### Victory Triumphs
+
+# Triumph Expected
 character_event = {
-	id = LoR.45
-	desc = {
-		text = EVTDESCLoR.45
-		trigger = { 
-			is_alternate_start = no
+	id = LoR.30
+	desc = EVTDESCLoR.30
+	picture = GFX_evt_victory_arch_byzantine
+
+	hide_from = yes
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			has_landed_title = e_byzantium
+			has_landed_title = e_roman_empire
+		}
+
+		OR = {
+			religion_group = christian
+			religion = hellenic_pagan
+			religion = hellenic_pagan_reformed
+			religion = poseidonian
 		}
 	}
-	desc = {
-		text = EVTDESCLoR45_HF
-		trigger = { 
-			is_alternate_start = yes
+
+	option = {
+		name = EVTOPTALoR.30
+
+		character_event = {
+			id = LoR.31
+			days = 12
+			tooltip = EVTTOOLTIPLoR.31
+		}
+
+		scaled_wealth = -0.3
+		prestige = 75
+	}
+
+	option = {
+		name = EVTOPTBLoR.30
+
+		scaled_wealth = -0.1
+		prestige = 25
+	}
+
+	option = {
+		name = EVTOPTCLoR.30
+
+		prestige = -30
+	}
+}
+
+# Triumph Held
+character_event = {
+	id = LoR.31
+	desc = EVTDESCLoR.31
+	picture = GFX_evt_victory_arch_byzantine
+
+	hide_from = yes
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTALoR.31
+
+		custom_tooltip = {
+			text = triumph_held
+
+			any_realm_lord = {
+				limit = {
+					higher_real_tier_than = BARON
+					NOT = { character = ROOT }
+				}
+
+				opinion = {
+					name = opinion_triumph_held
+					who = ROOT
+				}
+
+				character_event = { id = LoR.32 }
+			}
 		}
 	}
-	picture = GFX_evt_rome_restored_byzantine
-	
-	only_playable = yes
-	has_dlc = "Legacy of Rome"
-	
-	trigger = {
-		has_landed_title = e_roman_empire
-		NOT = { trait = augustus }
-	}
-	
+}
+
+# Triumph Held Vassals
+character_event = {
+	id = LoR.32
+	desc = EVTDESCLoR.32
+	picture = GFX_evt_victory_arch_byzantine
+
 	is_triggered_only = yes
-	
-	
+
+	ai = no
+
 	option = {
-		name = EVTOPTALoR.45
-		add_trait = augustus
-	}
-}
-
-# Augustus Trait Lost
-character_event = {
-	id = LoR.46
-	desc = EVTDESCLoR.46
-	picture = GFX_evt_rome_restored_byzantine
-	
-	has_dlc = "Legacy of Rome"
-	has_global_flag = rome_restored
-		
-	trigger = {
-		trait = augustus
-		NOT = { has_landed_title = e_roman_empire }
-		is_alive = yes
-	}
-	
-	is_triggered_only = yes
-	
-	option = {
-		name = EVTOPTALoR.46
-		remove_trait = augustus
-	}
-}
-
-#On_death Augustus Trait inheritance
-character_event = {
-	id = LoR.47
-	hide_window = yes
-	
-	only_playable = yes
-	has_global_flag = rome_restored
-	has_dlc = "Legacy of Rome"
-	
-	trigger = {
-		has_landed_title = e_roman_empire
-	}
-	
-	is_triggered_only = yes
-	
-	
-	immediate = {
-		e_roman_empire = { current_heir = { character_event = { id = LoR.45 days = 2 } } }
-	}
-}
-
-#On_title_usurped Augustus Trait inheritance
-character_event = {
-	id = LoR.48
-	hide_window = yes
-	
-	only_playable = yes
-	has_global_flag = rome_restored
-	has_dlc = "Legacy of Rome"
-	
-	trigger = {
-		FROM = { title = e_roman_empire }
-		NOT = { trait = augustus }
-	}
-	
-	is_triggered_only = yes
-	
-	
-	immediate = {
-		ROOT = { character_event = { id = LoR.45 days = 2 } }
+		name = EVTOPTALoR.32
 	}
 }

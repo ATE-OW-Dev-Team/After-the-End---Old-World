@@ -167,11 +167,11 @@ Melting Pot cultures, format is "X ruling over Y" with any already present at th
  - Schleswigvolk (Prussian over Danish)
  - Llanito* (British over Iberian cultures)
  - Sazzac* (Wallachian, Transylvanian or Moldovan over Cossack)
- - Brytwysher (Brittannic cultures over any Indo-Aryan or Dravidian culture)
+ - Brytwysher (brythonic cultures over any Indo-Aryan or Dravidian culture)
  - Angrezi (Ulsterite, Westlander, Eastlander, Northlander, Old Norman, or New English over any Indo-Aryan or Dravidian culture)
  - Wendish (Polish or Czech cultures over Prussian, Brandenburger, or Saxon
  - Atlantian Greek cultures over Doggerlander)
- - Francig (Brittannic over French cultures)
+ - Francig (brythonic over French cultures)
  - Pondicherien (French cultures over any Indo-Aryan or Dravidian cultures)
  - Gottonsk (Gothic cultures ruling in Crimea)
  - Babylonian (Assyrian, Aramaic or Siryon over Iraqi)

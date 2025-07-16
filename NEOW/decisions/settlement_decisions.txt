@@ -17,11 +17,15 @@ settlement_decisions = {
 		filter = owned
 		ai_target_filter = owned
 		is_high_prio = yes
-		ai_check_interval = 12
+		ai_check_interval = 24
 		
 		from_potential = {
 			is_playable = yes
-			is_feudal = yes
+			OR = {
+				is_republic = yes
+				is_theocracy = yes
+				is_feudal = yes
+			}
 			higher_tier_than = BARON
 		}
 		
@@ -45,31 +49,17 @@ settlement_decisions = {
 					religion = FROM
 				}
 			}
-			conditional_tooltip = {
-				trigger = {
-					FROM = {
-						NOT = {
-							has_landed_title = e_russia }
-						}
-				}
-				has_building = tb_hillfort_4
+			FROM = {
+				wealth = 250
 			}
-			conditional_tooltip = {
-				trigger = {
-					FROM = {
-						has_landed_title = e_russia
-					}
-				}
-				FROM = {
-					has_landed_title = e_russia
-				}
-				has_building = tb_hillfort_1
-			}
+			has_building = tb_hillfort_4
 		}
 		effect = {
-			convert_to = CASTLE
+			convert_to = castle
 			refill_holding_levy = yes
-			
+			FROM = {
+				wealth = -250
+			}
 			hidden_tooltip = {
 				location = { #Clear Tribal Great Pillars
 					clr_province_flag = flag_great_pillar_norse
@@ -127,9 +117,7 @@ settlement_decisions = {
 			}
 		}
 		
-		revoke_allowed = {
-			always = no
-		}
+		
 		
 		ai_will_do = {
 			factor = 1
@@ -141,11 +129,15 @@ settlement_decisions = {
 		filter = owned
 		ai_target_filter = owned
 		is_high_prio = yes
-		ai_check_interval = 12
+		ai_check_interval = 24
 		
 		from_potential = {
 			is_playable = yes
-			is_republic = yes
+			OR = {
+				is_republic = yes
+				is_theocracy = yes
+				is_feudal = yes
+			}
 			higher_tier_than = BARON
 		}
 		
@@ -159,11 +151,17 @@ settlement_decisions = {
 			location = {
 				religion = FROM
 			}
+			FROM = {
+				wealth = 250
+			}
 			has_building = tb_market_town_4
 		}
 		effect = {
-			convert_to = CITY
+			convert_to = city
 			refill_holding_levy = yes
+			FROM = {
+				wealth = -250
+			}
 			
 			hidden_tooltip = {
 				location = { #Clear Tribal Great Pillars
@@ -221,9 +219,7 @@ settlement_decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1 # On average ca 1 year before taken
 		}
@@ -234,11 +230,15 @@ settlement_decisions = {
 		filter = owned
 		ai_target_filter = owned
 		is_high_prio = yes
-		ai_check_interval = 12
+		ai_check_interval = 24
 		
 		from_potential = {
 			is_playable = yes
-			is_theocracy = yes
+			OR = {
+				is_republic = yes
+				is_theocracy = yes
+				is_feudal = yes
+			}
 			higher_tier_than = BARON
 			OR = {
 				NOT = { religion_group = pagan_group }
@@ -257,10 +257,16 @@ settlement_decisions = {
 				religion = FROM
 			}
 			has_building = tb_hillfort_4
+			FROM = {
+				wealth = 250
+			}
 		}
 		effect = {
 			convert_to = temple
 			refill_holding_levy = yes
+			FROM = {
+				wealth = -250
+			}
 			
 			hidden_tooltip = {
 				location = { #Clear Tribal Great Pillars
@@ -318,9 +324,7 @@ settlement_decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1 # On average ca 1 year before taken
 			modifier = {
@@ -349,6 +353,9 @@ settlement_decisions = {
 					character = FROM
 				}
 			}
+			NOT = {
+				holding_type = FAMILY_PALACE
+			}
 		}
 		allow = {
 			FROM = {
@@ -370,9 +377,7 @@ settlement_decisions = {
 		effect = {
 			make_capital_holding = yes
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 			
@@ -430,9 +435,7 @@ settlement_decisions = {
 		effect = {
 			revoke_capital_holding = yes
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -448,48 +451,62 @@ settlement_decisions = {
 		from_potential = {
 			is_playable = yes
 			OR = {
-				is_nomadic = yes
-				is_tribal = yes
-				religion = stalinist
-				religion = jacobinist
-				religion = trotskyite
-				religion = titoist
-				religion = red_cult
-				trait = cruel
-				trait = impaler
-				trait = aggressive_leader
-				trait = viking
-				trait = pirate
-				trait = ravager
-				trait = seaking
-				trait = sea_queen
-				trait = deceitful
-				trait = arbitrary
-				trait = greedy
-				trait = berserker
-				trait = wroth
-			}
-			NOR = {
-				trait = kind
-				trait = charitable
-				trait = just
+				AND = {
+					OR = {
+						is_nomadic = yes
+						is_tribal = yes
+						religion = stalinist
+						religion = jacobinist
+						religion = trotskyite
+						religion = titoist
+						religion = red_cult
+						trait = cruel
+						trait = impaler
+						trait = aggressive_leader
+						trait = viking
+						trait = pirate
+						trait = ravager
+						trait = seaking
+						trait = sea_queen
+						trait = deceitful
+						trait = arbitrary
+						trait = greedy
+						trait = berserker
+						trait = wroth
+					}
+					NOR = {
+						trait = kind
+						trait = charitable
+						trait = just
+					}
+				}
+				OR = {
+					trait = viking
+					trait = pirate
+					trait = ravager
+					trait = seaking
+					trait = sea_queen
+				}
 			}
 			has_dlc = "Horse Lords"
 		}
 		
 		potential = {
 			NOT = { holding_type = nomad }
-			OR = {
-				FROM = { is_nomadic = yes }
-				location = {
-					num_of_settlements = 2
-				}
+			location = {
+				num_of_settlements = 2
 			}
 			OR = {
 				owner = { NOT = { character = FROM } }
 				AND = {
 					FROM = { is_nomadic = yes }
 					location = { NOT = { religion_group = FROM } }
+				}
+			}
+			NOT = {
+				AND = {
+					is_capital = yes
+					num_of_buildings == 0
 				}
 			}
 			has_siege = no
@@ -553,7 +570,20 @@ settlement_decisions = {
 					}
 				}
 			}
-			
+			location = {
+				random_list = {
+					15 = {
+						random_list = {
+							33 = { change_random_civ_tech = -1 }
+							34 = { change_random_eco_tech = -1 }
+							33 = { change_random_mil_tech  = -1 }
+						}
+					}
+					85 = {
+					
+					}
+				}
+			}
 			if = {
 				limit = { NOT = { holding_type = tribal } }
 				FROM = {
@@ -564,9 +594,9 @@ settlement_decisions = {
 					hidden_tooltip = {
 						FROM = {
 							random_list = {
-								10 = { military_techpoints = 7 }
-								10 = { economy_techpoints = 7 }
-								10 = { culture_techpoints = 7 }
+								10 = { military_techpoints = 10 }
+								10 = { economy_techpoints = 10 }
+								10 = { culture_techpoints = 10 }
 							}
 						}
 					}
@@ -646,15 +676,7 @@ settlement_decisions = {
 			
 			if = {
 				limit = {
-					ROOT = {
-						NOT = { has_any_building = yes }
-						owner = {
-							character = FROM
-						}
-						NOT = {
-							is_capital = yes
-						}
-					}
+					num_of_buildings == 0
 				}
 				hidden_tooltip = {
 					location = {
@@ -662,15 +684,11 @@ settlement_decisions = {
 						province_event = { id = HL.4814 days = 2 random = 2 }
 					}
 				}
-				ROOT = {
-					destroy_settlement = THIS
-				}
+				destroy_settlement = THIS
 			}
 			
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 			modifier = { 
@@ -715,6 +733,153 @@ settlement_decisions = {
 		}
 	}
 	
+	grant_pope_defacto_ownership_catholic = {
+		only_independent = yes
+		filter = realm_owned
+		ai_target_filter = realm_owned
+		ai_check_interval = 48
+		
+		from_potential = {
+			is_playable = yes
+			OR = {
+				religion = catholic
+				religion = fraticelli
+				religion = koptic
+				religion = sevillian
+			}
+			NOT = {
+				has_character_modifier = sisu_change_cooldown
+			}
+		}
+		
+		potential = {
+			holding_type = temple
+			location = {
+				OR = {
+					conditional_tooltip = {
+						trigger = {
+							religion = catholic
+						}
+						religion = catholic
+					}
+					conditional_tooltip = {
+						trigger = {
+							religion = fraticelli
+						}
+						religion = fraticelli
+					}
+					conditional_tooltip = {
+						trigger = {
+							religion = koptic
+						}
+						religion = koptic
+					}
+					conditional_tooltip = {
+						trigger = {
+							religion = sevillian
+						}
+						religion = sevillian
+					}
+				}
+			}
+			holder_scope = {
+				OR = {
+					character = FROM
+					any_liege = {
+						character = FROM
+					}
+				}
+			}
+		}
+		
+		allow = {
+			FROM = {
+				independent = yes
+				age = 16
+				war = no
+				in_command = no
+				prisoner = no
+				is_incapable = no
+			}
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					FROM = {
+						religion = catholic
+					}
+				}
+				k_papacy = {
+					holder_scope = {
+						grant_title = ROOT
+					}
+				}
+				FROM = {
+					add_offmap_currency = {
+						offmap = offmap_patriarchs
+						value = 300
+					}
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						religion = fraticelli
+					}
+				}
+				d_fraticelli = {
+					holder_scope = {
+						grant_title = ROOT
+					}
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						religion = koptic
+					}
+				}
+				k_koptic = {
+					holder_scope = {
+						grant_title = ROOT
+					}
+				}
+			}
+			if = {
+				limit = {
+					FROM = {
+						religion = sevillian
+					}
+				}
+				k_sevillian_pope = {
+					holder_scope = {
+						grant_title = ROOT
+					}
+				}
+			}
+			FROM = {
+				add_character_modifier = {
+					modifier = sisu_change_cooldown
+					hidden = yes
+					months = 24
+				}
+				wealth = 400
+				piety = 150
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = { 
+				factor = 0.01
+			}
+			modifier = { 
+				factor = 0.5
+			}
+		}
+	}
 	pillage_settlement = {
 		only_independent = yes
 		filter = owned
@@ -804,6 +969,20 @@ settlement_decisions = {
 				}
 			}
 			
+			location = {
+				random_list = {
+					15 = {
+						random_list = {
+							33 = { change_random_civ_tech = -1 }
+							34 = { change_random_eco_tech = -1 }
+							33 = { change_random_mil_tech  = -1 }
+						}
+					}
+					85 = {
+					
+					}
+				}
+			}
 			if = {
 				limit = { NOT = { holding_type = tribal } }
 				FROM = {
@@ -814,9 +993,9 @@ settlement_decisions = {
 					hidden_tooltip = {
 						FROM = {
 							random_list = {
-								10 = { military_techpoints = 5 }
-								10 = { economy_techpoints = 5 }
-								10 = { culture_techpoints = 5 }
+								10 = { military_techpoints = 10 }
+								10 = { economy_techpoints = 10 }
+								10 = { culture_techpoints = 10 }
 							}
 						}
 					}
@@ -896,10 +1075,7 @@ settlement_decisions = {
 			
 			if = {
 				limit = {
-					NOT = { has_any_building = yes }
-					owner = {
-						character = FROM
-					}
+					num_of_buildings == 0
 				}
 				hidden_tooltip = {
 					location = {
@@ -911,9 +1087,7 @@ settlement_decisions = {
 			}
 			
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 			
@@ -970,9 +1144,7 @@ settlement_decisions = {
 			}
 			
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 0
 		}
@@ -1517,9 +1689,7 @@ settlement_decisions = {
 			}
 			
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 			modifier = {
@@ -2088,9 +2258,7 @@ settlement_decisions = {
 			}
 		}
 		
-		revoke_allowed = {
-			always = no
-		}
+		
 		
 		ai_will_do = {
 			factor = 0.1 # On average ca 1 year before taken
@@ -2670,7 +2838,7 @@ settlement_decisions = {
 												tier = baron
 												holding_type = tribal
 											}
-											convert_to = CITY
+											convert_to = city
 											refill_holding_levy = yes
 											location = { #Clear Tribal Great Pillars
 												clr_province_flag = flag_great_pillar_norse
@@ -2775,9 +2943,7 @@ settlement_decisions = {
 			}
 		}
 
-		revoke_allowed = {
-			always = no
-		}
+		
 
 		ai_will_do = {
 			factor = 1
@@ -2915,9 +3081,7 @@ settlement_decisions = {
 			grant_title = FROM
 		}
 		
-		revoke_allowed = {
-			always = no
-		}
+		
 		
 		ai_will_do = {
 			factor = 0
@@ -2933,10 +3097,6 @@ settlement_decisions = {
 				is_capital = yes
 				location = {
 					has_wonder = yes
-					NOR = {
-						wonder = wonder_city_of_wonders
-						wonder = wonder_city_of_wonders_rep
-					}
 				}
 			}
 		}

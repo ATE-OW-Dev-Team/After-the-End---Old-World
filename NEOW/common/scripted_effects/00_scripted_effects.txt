@@ -398,7 +398,7 @@ add_trait_one_eyed_effect = {
 		limit = {
 			NOR = {
 				trait = one_eyed
-				trait = blinded
+				OR = { trait = blinded trait = blind }
 			}
 		}
 
@@ -1006,7 +1006,7 @@ add_trait_silently_one_eyed_effect = {
 		limit = {
 			NOR = {
 				trait = one_eyed
-				trait = blinded
+				OR = { trait = blinded trait = blind }
 			}
 		}
 
@@ -3827,7 +3827,7 @@ add_maimed_trait_effect = {
 						factor = 0
 						OR = {
 							trait = one_eyed
-							trait = blinded
+							OR = { trait = blinded trait = blind }
 							NOT = { has_dlc = "Reapers" }
 						}
 					}
@@ -4637,6 +4637,33 @@ decrease_depopulation_effect = {
 
 		add_province_modifier = {
 			name = depopulated_2
+			duration = -1
+		}
+	}
+}
+
+increase_population_effect = {
+	if = {
+		limit = { has_province_modifier = prosperity_modifier_2 }
+		remove_province_modifier = prosperity_modifier_2
+		add_province_modifier = {
+			name = prosperity_modifier_3
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = { has_province_modifier = prosperity_modifier_1 }
+
+		remove_province_modifier = prosperity_modifier_1
+
+		add_province_modifier = {
+			name = prosperity_modifier_2
+			duration = -1
+		}
+	}
+	else = {
+		add_province_modifier = {
+			name = prosperity_modifier_1
 			duration = -1
 		}
 	}
@@ -10405,6 +10432,8 @@ add_ascetic_trait_effect = {
 				OR = {
 					religion = old_hindu
 					religion = parabrahmanist
+					religion = jagannatha
+					religion = saura
 					religion = kalikula
 					religion = shaivasiddhanta
 					religion = jain
@@ -10440,6 +10469,8 @@ add_ascetic_trait_effect = {
 				OR = {
 					religion = old_hindu
 					religion = parabrahmanist
+					religion = jagannatha
+					religion = saura
 					religion = kalikula
 					religion = shaivasiddhanta
 					religion = jain
@@ -12853,7 +12884,6 @@ spawn_good_commander_effect = {
 					religion = yazidi
 					religion = yersenism
 					religion = mandaeanism
-					religion = ahlehaqq
 				}
 			}
 
@@ -13023,7 +13053,6 @@ spawn_great_commander_effect = {
 					religion = yazidi
 					religion = yersenism
 					religion = mandaeanism
-					religion = ahlehaqq
 				}
 			}
 
@@ -13341,7 +13370,6 @@ spawn_fantastic_commander_effect = {
 					religion = yazidi
 					religion = yersenism
 					religion = mandaeanism
-					religion = ahlehaqq
 				}
 			}
 
@@ -13501,7 +13529,6 @@ spawn_fantastic_diplomat_effect = {
 					religion = yazidi
 					religion = yersenism
 					religion = mandaeanism
-					religion = ahlehaqq
 				}
 			}
 
@@ -13613,7 +13640,6 @@ spawn_fantastic_scholar_effect = {
 						religion = yazidi
 						religion = yersenism
 						religion = mandaeanism
-						religion = ahlehaqq
 					}
 				}
 				add_trait = pyir
@@ -13762,7 +13788,6 @@ spawn_elder_effect = {
 						religion = yazidi
 						religion = yersenism
 						religion = mandaeanism
-						religion = ahlehaqq
 					}
 				}
 				add_trait = pyir
@@ -14685,6 +14710,13 @@ set_china_boon_cd_effect = {
 		hidden = yes
 	}
 }
+set_patriarch_boon_cd_effect = {
+	add_character_modifier = {
+		name = jd_patriarch_boon_cd
+		years = 1 # If this is changed, edit china_offmap_boon_decisions_enabled_trigger_cd_tt
+		hidden = yes
+	}
+}
 
 # Added via tribute to China decisions... Always one year
 set_china_tribute_cd_effect = {
@@ -14702,6 +14734,14 @@ leave_court_for_china_effect = {
 
 		set_character_flag = ignore_refund
 		death = { death_reason = death_went_to_china }
+	}
+}
+leave_court_for_rome_effect = {
+	custom_tooltip = {
+		text = will_leave_for_rome_tt
+
+		set_character_flag = ignore_refund
+		death = { death_reason = death_went_to_rome }
 	}
 }
 
@@ -15289,11 +15329,11 @@ china_war_spawn_troops_no_disband_effect = {
 				merge = yes
 
 				troops = {
-					archers = { 168 168 }
-					light_infantry = { 284 284 }
+					archers = { 200 200 }
+					light_infantry = { 300 300 }
 					heavy_infantry = { 0 0 }
 					pikemen = { 0 0 }
-					light_cavalry = { 41 41 }
+					light_cavalry = { 50 50 }
 					knights = { 0 0 }
 				}
 			}
@@ -15315,11 +15355,11 @@ china_war_spawn_troops_no_disband_effect = {
 				merge = yes
 
 				troops = {
-					archers = { 148 148 }
-					light_infantry = { 264 264 }
+					archers = { 200 200 }
+					light_infantry = { 300 300 }
 					heavy_infantry = { 0 0 }
 					pikemen = { 0 0 }
-					light_cavalry = { 81 81 }
+					light_cavalry = { 50 50 }
 					knights = { 0 0 }
 				}
 			}
@@ -15341,11 +15381,11 @@ china_war_spawn_troops_no_disband_effect = {
 				merge = yes
 
 				troops = {
-					archers = { 144 144 }
-					light_infantry = { 221 221 }
-					heavy_infantry = { 49 49 }
+					archers = { 200 200 }
+					light_infantry = { 300 300 }
+					heavy_infantry = { 0 0 }
 					pikemen = { 0 0 }
-					light_cavalry = { 79 79 }
+					light_cavalry = { 100 100 }
 					knights = { 0 0 }
 				}
 			}
@@ -15367,11 +15407,11 @@ china_war_spawn_troops_no_disband_effect = {
 				merge = yes
 
 				troops = {
-					archers = { 144 144 }
-					light_infantry = { 203 203 }
-					heavy_infantry = { 66 66 }
-					pikemen = { 19 19 }
-					light_cavalry = { 61 61 }
+					archers = { 150 150 }
+					light_infantry = { 200 200 }
+					heavy_infantry = { 75 75 }
+					pikemen = { 50 50 }
+					light_cavalry = { 100 100 }
 					knights = { 0 0 }
 				}
 			}
@@ -15393,11 +15433,11 @@ china_war_spawn_troops_no_disband_effect = {
 				merge = yes
 
 				troops = {
-					archers = { 136 136 }
-					light_infantry = { 134 134 }
-					heavy_infantry = { 102 102 }
-					pikemen = { 41 41 }
-					light_cavalry = { 80 80 }
+					archers = { 150 150 }
+					light_infantry = { 200 200 }
+					heavy_infantry = { 75 75 }
+					pikemen = { 50 50 }
+					light_cavalry = { 100 100 }
 					knights = { 0 0 }
 				}
 			}
@@ -15419,12 +15459,12 @@ china_war_spawn_troops_no_disband_effect = {
 				merge = yes
 
 				troops = {
-					archers = { 122 122 }
-					light_infantry = { 71 71 }
-					heavy_infantry = { 85 85 }
-					pikemen = { 78 78 }
-					light_cavalry = { 113 113 }
-					knights = { 24 24 }
+					archers = { 150 150 }
+					light_infantry = { 100 100 }
+					heavy_infantry = { 100 100 }
+					pikemen = { 100 100 }
+					light_cavalry = { 150 150 }
+					knights = { 25 25 }
 				}
 			}
 		}
@@ -15438,12 +15478,12 @@ china_war_spawn_troops_no_disband_effect = {
 				merge = yes
 
 				troops = {
-					archers = { 107 107 }
-					light_infantry = { 22 22 }
-					heavy_infantry = { 106 106 }
-					pikemen = { 96 96 }
-					light_cavalry = { 111 111 }
-					knights = { 51 51 }
+					archers = { 150 150 }
+					light_infantry = { 25 25 }
+					heavy_infantry = { 125 125 }
+					pikemen = { 125 125 }
+					light_cavalry = { 100 100 }
+					knights = { 50 50 }
 				}
 			}
 		}
@@ -17597,7 +17637,7 @@ troubled_pregnancy_chance_low_effect = {
 
 			mult_modifier = {
 				factor = 1.5
-				trait = blinded
+				OR = { trait = blinded trait = blind }
 			}
 
 			mult_modifier = {
@@ -18060,7 +18100,7 @@ troubled_pregnancy_chance_medium_effect = {
 
 			mult_modifier = {
 				factor = 1.5
-				trait = blinded
+				OR = { trait = blinded trait = blind }
 			}
 
 			mult_modifier = {
@@ -21093,10 +21133,6 @@ fire_haruspicy_event_effect = {
 						religion = hellenic_pagan
 						religion = hellenic_pagan_reformed
 						religion = poseidonian
-						religion = shinto
-						religion = bushinto
-						religion = buddhoshinto
-						religion = ainushinto
 						religion = shindo
 						religion = shinko		
 					} 
@@ -21125,10 +21161,6 @@ fire_haruspicy_event_effect = {
 						religion = hellenic_pagan
 						religion = hellenic_pagan_reformed
 						religion = poseidonian
-						religion = shinto
-						religion = bushinto
-						religion = buddhoshinto
-						religion = ainushinto
 						religion = shindo
 						religion = shinko			
 					} 
@@ -21966,7 +21998,6 @@ spawn_debutante_effect = {
 					religion = yazidi
 					religion = yersenism
 					religion = mandaeanism
-					religion = ahlehaqq
 				}
 			}
 
@@ -24373,9 +24404,9 @@ landless_pope_effect = {
 			catholic = { is_name_randomized = no }
 		}
 
-		destroy_landed_title = k_papal_state
+		destroy_landed_title = k_papacy
 
-		k_papal_state = {
+		k_papacy = {
 			any_direct_de_jure_vassal_title = {
 				de_jure_liege = k_romagna
 			}

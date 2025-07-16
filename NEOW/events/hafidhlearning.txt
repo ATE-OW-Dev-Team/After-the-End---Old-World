@@ -1,0 +1,432 @@
+namespace = HDH
+
+### Hafiz Decision Event Chain###
+
+letter_event = {
+	id = HDH.0000
+	desc = EVTDESCHDH0
+	border = GFX_event_letter_frame_religion
+
+	is_triggered_only = yes
+
+	option = {
+		name = EVTOPTAHDH0000
+
+		piety = 5
+		clr_character_flag = starting_hafiz_flag
+		set_character_flag = studying_quran
+
+		narrative_event = {
+			id = HDH.0001  # Aspiring Hafiz event
+			days = 1
+			random = 7
+		}
+	}
+}
+
+narrative_event = { # Aspiring Hafiz 
+	id = HDH.0001
+	title = EVTTITLEHDH0001
+	desc = EVTDESCHDH0001
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes 
+	
+	trigger = {
+		NOR = {
+			has_character_modifier = aspiring_hafiz
+			has_character_modifier = partial_hafiz
+			has_character_flag = HDH_ST
+			has_character_flag = starting_hafiz_flag
+			trait = hafiz
+			has_alternate_start_parameter = {
+				key = religion_names
+				value = random
+			}
+		}
+	}
+	
+	immediate = {
+		set_character_flag = HDH_ST
+	}
+
+	option = {
+		name = EVTOPTAHDH0001
+
+		add_character_modifier = {
+			name = aspiring_hafiz
+			duration = -1
+		}
+
+		hidden_effect = {
+			random_list = {
+				50 = {
+					mult_modifier = {
+						factor = 2
+						trait = diligent
+					}
+
+					mult_modifier = {
+						factor = 2
+						trait = zealous
+					}
+
+					random_list = {
+						33 = {
+							narrative_event = {
+								id = HDH.0002 # Give up?
+								months = 6
+							}
+						}
+
+						33 = {
+							narrative_event = {
+								id = HDH.0003 # Partial
+								years = 1
+							}
+						}
+						
+						33 = {
+							narrative_event = {
+								id = HDH.0004 # Full
+								years = 2
+							}
+						}
+						
+					}
+				}
+
+				50 = {
+					mult_modifier = {
+						factor = 2
+						trait = cynical
+					}
+
+					mult_modifier = {
+						factor = 2
+						trait = slothful
+					}
+
+					mult_modifier = {
+						factor = 2
+						trait = content
+					}
+					
+					random_list = {
+						33 = {
+							narrative_event = {
+								id = HDH.0002 # Give up?
+								years = 1
+							}
+						}
+
+						33 = {
+							narrative_event = {
+								id = HDH.0003 # Partial
+								years = 2
+							}
+						}
+						
+						33 = {
+							narrative_event = {
+								id = HDH.0004 # Full
+								years = 4
+							}
+						}
+						
+					}
+				}
+			}
+		}
+
+		ai_chance = {
+			factor = 50
+
+			mult_modifier = {
+				factor = 2
+				trait = zealous
+			}
+			mult_modifier = {
+				factor = 0.5
+				trait = cynical
+			}
+			mult_modifier = {
+				factor = 0.5
+				trait = content
+			}
+			mult_modifier = {
+				factor = 2
+				trait = diligent
+			}
+			mult_modifier = {
+				factor = 0.5
+				trait = slothful
+			}
+			mult_modifier = {
+				factor = 2
+				trait = ambitious
+			}
+		}
+	}
+}
+
+# Convinced/Not convinced?
+narrative_event = {
+	id = HDH.0002
+	title = EVTTITLEHDH0002
+	desc = EVTDESCHDH0002
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes
+
+	has_character_flag = HDH_ST
+	
+	trigger = {
+		has_character_modifier = aspiring_hafiz
+		NOT = { trait = hafiz }
+	}
+
+	fail_trigger_effect = {
+		if = {
+			limit = {
+				NOR = { 
+					religion_group = muslim 
+					religion = voodun
+					religion = islamity
+					religion = pusaka
+					religion = muwahidunna
+				}
+			}
+
+			clr_character_flag = HDH_ST
+			remove_character_modifier = aspiring_hafiz
+		}
+		else_if = {
+			limit = {
+				has_character_flag = HDH_ST
+				has_character_modifier = aspiring_hafiz
+				NOT = { trait = hafiz }
+			}
+
+			repeat_event = {
+				id = HDH.0002
+				months = 1
+			}
+		}
+	}
+
+	option = {
+		name = EVTOPTAHDH0002
+
+		narrative_event = {
+			id = HDH.0003
+			months = 6
+		}
+		
+		ai_chance = {
+			factor = 50
+
+			mult_modifier = {
+				factor = 0.5
+				trait = cynical
+			}
+			mult_modifier = {
+				factor = 2
+				trait = zealous
+			}
+			mult_modifier = {
+				factor = 0.5
+				trait = content
+			}
+			mult_modifier = {
+				factor = 2
+				trait = diligent
+			}
+			mult_modifier = {
+				factor = 0.5
+				trait = slothful
+			}
+			mult_modifier = {
+				factor = 2
+				trait = ambitious
+			}
+		}
+	}
+	option = {
+		name = EVTOPTBHDH0002
+
+		remove_character_modifier = aspiring_hafiz
+		clr_character_flag = HDH_ST
+		
+		ai_chance = {
+			factor = 50
+
+			mult_modifier = {
+				factor = 2
+				trait = cynical
+			}
+			mult_modifier = {
+				factor = 0.5
+				trait = zealous
+			}
+			mult_modifier = {
+				factor = 2
+				trait = content
+			}
+			mult_modifier = {
+				factor = 0.5
+				trait = diligent
+			}
+			mult_modifier = {
+				factor = 2
+				trait = slothful
+			}
+			mult_modifier = {
+				factor = 0.5
+				trait = ambitious
+			}
+		}
+	}
+}
+
+# You have partially memorized the Quran!
+narrative_event = {
+	id = HDH.0003
+	title = EVTTITLEHDH0003
+	desc = EVTDESCHDH0003
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes
+
+	has_character_flag = HDH_ST
+
+	trigger = {
+		has_character_modifier = aspiring_hafiz
+		NOT = { trait = hafiz }
+	}
+
+	fail_trigger_effect = {
+		if = {
+			limit = {
+				NOR = { 
+					religion_group = muslim 
+					religion = voodun
+					religion = islamity
+					religion = pusaka
+					religion = muwahidunna
+				}
+			}
+
+			clr_character_flag = HDH_ST
+			remove_character_modifier = aspiring_hafiz
+		}
+		else_if = {
+			limit = {
+				has_character_flag = HDH_ST
+				has_character_modifier = aspiring_hafiz
+			}
+
+			repeat_event = {
+				id = HDH.0003
+				months = 1
+			}
+		}
+	}
+
+	immediate = {
+		remove_character_modifier = aspiring_hafiz
+	}
+
+	option = {
+		name = EVTOPTAHDH0003
+		add_character_modifier = {
+			name = partial_hafiz
+			duration = -1
+		}
+		narrative_event = {
+			id = HDH.0004
+			months = 6
+		}
+	}
+
+	option = {
+		name = EVTOPTBHDH0003
+		add_character_modifier = {
+			name = partial_hafiz
+			duration = -1
+		}
+		if = {
+			limit = { trait = zealous }
+			remove_trait = zealous
+		}
+		if = {
+			limit = { trait = diligent }
+			remove_trait = diligent
+		}
+		else = {
+			piety = -50
+		}
+		
+	}
+
+}
+
+# You have learnt fully memorized the Quran!
+narrative_event = {
+	id = HDH.0004
+	title = EVTTITLEHDH0004
+	desc = EVTDESCHDH0004
+	picture = GFX_evt_shadowy_cabal
+
+	is_triggered_only = yes
+
+	has_character_flag = HDH_ST
+
+	trigger = {
+		has_character_modifier = partial_hafiz
+		NOT = { trait = hafiz }
+	}
+
+	fail_trigger_effect = {
+		if = {
+			limit = {
+				NOR = {
+					religion_group = muslim 
+					religion = voodun
+					religion = islamity
+					religion = pusaka
+					religion = muwahidunna
+				}
+			}
+
+			clr_character_flag = HDH_ST
+			remove_character_modifier = partial_hafiz
+		}
+		else_if = {
+			limit = {
+				has_character_flag = HDH_ST
+				has_character_modifier = partial_hafiz
+			}
+
+			repeat_event = {
+				id = HDH.0004
+				months = 1
+			}
+		}
+	}
+
+	immediate = {
+		remove_character_modifier = partial_hafiz
+	}
+
+	option = {
+		name = EVTOPTAHDH0004
+		
+		add_trait = hafiz
+	}
+
+	after = {
+		clr_character_flag = HDH_ST
+		clr_character_flag = studying_quran
+	}
+}

@@ -7,6 +7,7 @@
 #######################################
 
 namespace = MOBS
+namespace = LoR
 
 ### The Pentarchy
 
@@ -26,10 +27,17 @@ narrative_event = {
 		name = EVTOPTALoR.200
 
 		if = {
-			limit = { religion = ROOT }
-			set_parent_religion = { religion = orthodox parent = ROOT }
+			limit = {
+				religion = bezpopotvsy
+			}
+			set_parent_religion = { religion = orthodox parent = bezpopotvsy }
 		}
-
+		if = {
+			limit = {
+				religion = oldbeliever
+			}
+			set_parent_religion = { religion = orthodox parent = oldbeliever }
+		}
 		set_global_flag = oldbeliever_schism_mended
 		give_nickname = nick_the_saint
 		hidden_tooltip = {
@@ -89,10 +97,23 @@ narrative_event = {
 		name = EVTOPTALoR.200
 
 		if = {
-			limit = { religion = ROOT }
-			set_parent_religion = { religion = oldbeliever parent = ROOT }
+			limit = {
+				religion = orthodox
+			}
+			set_parent_religion = { religion = oldbeliever parent = orthodox }
 		}
-
+		if = {
+			limit = {
+				religion = marblists
+			}
+			set_parent_religion = { religion = oldbeliever parent = marblists }
+		}
+		if = {
+			limit = {
+				religion = neodonatists
+			}
+			set_parent_religion = { religion = oldbeliever parent = neodonatists }
+		}
 		set_global_flag = orthodox_oldbeliever_schism_mended
 		give_nickname = nick_the_saint
 		hidden_tooltip = {
@@ -214,8 +235,22 @@ narrative_event = {
 		name = EVTOPTALoR.200
 
 		if = {
-			limit = { religion = ROOT }
-			set_parent_religion = { religion = sevillian parent = ROOT }
+			limit = {
+				religion = catholic
+			}
+			set_parent_religion = { religion = sevillian parent = catholic }
+		}
+		if = {
+			limit = {
+				religion = fraticelli
+			}
+			set_parent_religion = { religion = sevillian parent = fraticelli }
+		}
+		if = {
+			limit = {
+				religion = cadaverist
+			}
+			set_parent_religion = { religion = sevillian parent = cadaverist }
 		}
 
 		set_global_flag = sevillian_schism_mended
@@ -277,10 +312,23 @@ narrative_event = {
 		name = EVTOPTALoR.200
 
 		if = {
-			limit = { religion = ROOT }
-			set_parent_religion = { religion = catholic parent = ROOT }
+			limit = {
+				religion = sevillian
+			}
+			set_parent_religion = { religion = catholic parent = sevillian }
 		}
-
+		if = {
+			limit = {
+				religion = transatlantic
+			}
+			set_parent_religion = { religion = catholic parent = transatlantic }
+		}
+		if = {
+			limit = {
+				religion = penitente
+			}
+			set_parent_religion = { religion = catholic parent = penitente }
+		}
 		set_global_flag = catholic_sevillian_schism_mended
 		give_nickname = nick_the_saint
 		hidden_tooltip = {
@@ -323,5 +371,241 @@ narrative_event = {
 	option = { # No
 		name = EVTOPTBLoR.211
 		ai_chance = { factor = 40 }
+	}
+}
+
+### The Great Schism Mended
+
+# The Schism Mended
+narrative_event = {
+	id = LoR.210
+	title = EVTNAMELoR.210
+	desc = EVTDESCLoR.210
+	
+	picture = GFX_evt_icon
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.200
+
+		if = {
+			limit = {
+				religion = orthodox
+			}
+			set_parent_religion = { religion = catholic parent = orthodox }
+		}
+		if = {
+			limit = {
+				religion = marblists
+			}
+			set_parent_religion = { religion = catholic parent = marblists }
+		}
+		if = {
+			limit = {
+				religion = neodonatists
+			}
+			set_parent_religion = { religion = catholic parent = neodonatists }
+		}
+		set_global_flag = great_schism_mended
+		give_nickname = nick_the_saint
+		hidden_tooltip = {
+			any_playable_ruler = {
+				limit = {
+					religion = catholic
+					controls_religion = no
+				}
+				narrative_event = { id = LoR.211 }
+			}
+		}
+	}
+}
+
+# Convert or Not?
+narrative_event = {
+	id = LoR.211
+	title = EVTNAMELoR.210
+	desc = EVTDESCLoR.210
+	
+	picture = GFX_evt_icon
+	
+	is_triggered_only = yes
+	
+	option = { # Yes
+		name = EVTOPTALoR.211
+		ai_chance = { factor = 75 }
+		religion = FROM
+		any_courtier = {
+			limit = {
+				religion = catholic
+				liege = { character = ROOT }
+			}
+			religion = FROM
+		}
+		capital_scope = {
+			religion = FROM
+		}
+	}
+	option = { # No
+		name = EVTOPTBLoR.211
+		ai_chance = { factor = 25 }
+	}
+}
+
+### The Great Schism Mended Catholic
+
+# The Schism Mended
+narrative_event = {
+	id = LoR.1210
+	title = EVTNAMELoR.1210
+	desc = EVTDESCLoR.1210
+	
+	picture = GFX_evt_icon
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.200
+
+		set_parent_religion = { religion = orthodox parent = catholic }
+
+		if = {
+			limit = {
+				religion = catholic
+			}
+			set_parent_religion = { religion = orthodox parent = catholic }
+		}
+		if = {
+			limit = {
+				religion = fraticelli
+			}
+			set_parent_religion = { religion = orthodox parent = fraticelli }
+		}
+		if = {
+			limit = {
+				religion = cadaverist
+			}
+			set_parent_religion = { religion = orthodox parent = cadaverist }
+		}
+		set_global_flag = great_schism_mended
+		give_nickname = nick_the_saint
+		hidden_tooltip = {
+			any_playable_ruler = {
+				limit = {
+					religion = orthodox
+					controls_religion = no
+				}
+				narrative_event = { id = LoR.1211 }
+			}
+		}
+	}
+}
+
+# Convert or Not?
+narrative_event = {
+	id = LoR.1211
+	title = EVTNAMELoR.1210
+	desc = EVTDESCLoR.1210
+	
+	picture = GFX_evt_icon
+	
+	is_triggered_only = yes
+	
+	option = { # Yes
+		name = EVTOPTALoR.1211
+		ai_chance = { factor = 75 }
+		religion = FROM
+		any_courtier = {
+			limit = {
+				religion = orthodox
+				liege = { character = ROOT }
+			}
+			religion = FROM
+		}
+		capital_scope = {
+			religion = FROM
+		}
+	}
+	option = { # No
+		name = EVTOPTBLoR.1211
+		ai_chance = { factor = 25 }
+	}
+}
+
+
+### The Great Schism Mended Sevillian
+
+# The Schism Mended
+narrative_event = {
+	id = LoR.2210
+	title = EVTNAMELoR.2210
+	desc = EVTDESCLoR.2210
+	
+	picture = GFX_evt_icon
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EVTOPTALoR.200
+		if = {
+			limit = {
+				religion = sevillian
+			}
+			set_parent_religion = { religion = orthodox parent = sevillian }
+		}
+		if = {
+			limit = {
+				religion = transatlantic
+			}
+			set_parent_religion = { religion = orthodox parent = transatlantic }
+		}
+		if = {
+			limit = {
+				religion = penitente
+			}
+			set_parent_religion = { religion = orthodox parent = penitente }
+		}
+		set_global_flag = great_schism_mended
+		give_nickname = nick_the_saint
+		hidden_tooltip = {
+			any_playable_ruler = {
+				limit = {
+					religion = orthodox
+					controls_religion = no
+				}
+				narrative_event = { id = LoR.2211 }
+			}
+		}
+	}
+}
+
+# Convert or Not?
+narrative_event = {
+	id = LoR.2211
+	title = EVTNAMELoR.2210
+	desc = EVTDESCLoR.2210
+	
+	picture = GFX_evt_icon
+	
+	is_triggered_only = yes
+	
+	option = { # Yes
+		name = EVTOPTALoR.2211
+		ai_chance = { factor = 75 }
+		religion = FROM
+		any_courtier = {
+			limit = {
+				religion = orthodox
+				liege = { character = ROOT }
+			}
+			religion = FROM
+		}
+		capital_scope = {
+			religion = FROM
+		}
+	}
+	option = { # No
+		name = EVTOPTBLoR.2211
+		ai_chance = { factor = 25 }
 	}
 }

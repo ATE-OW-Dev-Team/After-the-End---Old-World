@@ -3,7 +3,7 @@ decisions = {
 	centralise_cyprus = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			primary_title = {
 				title = k_cyprus_league
@@ -25,7 +25,7 @@ decisions = {
 				text = centralise_cyprus_tt
 				set_feudal_government_effect = yes
 				primary_title = {
-					k_cyprus = {
+					k_crete = {
 						grant_title = ROOT
 						copy_title_laws = PREV
 						copy_title_history = PREV
@@ -45,9 +45,7 @@ decisions = {
 			}
 			prestige = -500
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -56,7 +54,7 @@ decisions = {
 	centralise_padania = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			primary_title = {
 				title = e_padania
@@ -150,9 +148,7 @@ decisions = {
 			}
 			prestige = -500
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -266,7 +262,7 @@ decisions = {
 	form_aegean = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			primary_title = {
 				title = k_cyprus_league
@@ -287,6 +283,7 @@ decisions = {
 			}
 			form_empire_allow = yes
 				k_cyprus = { show_scope_change = no province_completely_controls_trigger = yes }
+				k_crete = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_byzantium = { show_scope_change = no province_completely_controls_trigger = yes }
 				OR = {
 					conditional_tooltip = {
@@ -301,6 +298,10 @@ decisions = {
 					conditional_tooltip = {
 						trigger = { k_karaman = { is_titular = no } }
 						k_karaman = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_cukurova = { is_titular = no } }
+						k_cukurova = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
 						trigger = { k_zazakistan = { is_titular = no } }
@@ -330,11 +331,13 @@ decisions = {
 				unsafe_destroy_landed_title = k_cyprus_league
 				k_byzantium = { de_jure_liege = e_aegean }
 				k_cyprus = { de_jure_liege = e_aegean }
+				k_crete = { de_jure_liege = e_aegean }
 				k_turkey = { de_jure_liege = e_aegean }
 				e_aegean = {
 					k_epirus = { set_de_jure_if_controls_effect = yes }
 					k_karadeniz = { set_de_jure_if_controls_effect = yes }
 					k_karaman = { set_de_jure_if_controls_effect = yes }
+					k_cukurova = { set_de_jure_if_controls_effect = yes }
 					k_armenia = { set_de_jure_if_controls_effect = yes }
 					k_daglikarazi = { set_de_jure_if_controls_effect = yes }
 					k_bulgaria = { set_de_jure_if_controls_effect = yes }
@@ -345,23 +348,154 @@ decisions = {
 					k_aromania = { set_de_jure_if_controls_effect = yes }
 					k_hellas_minor = { set_de_jure_if_controls_effect = yes }
 					k_macedonia = { set_de_jure_if_controls_effect = yes }
+					k_thrace = { set_de_jure_if_controls_effect = yes }
 					k_lebanon = { set_de_jure_if_controls_effect = yes }
 					k_laconia = { set_de_jure_if_controls_effect = yes }
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
 	}
 	
+	buy_exemption_from_bureucracy = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 36
+		potential = {
+			government = viceroyal_government
+			prisoner = no
+			has_regent = no
+		}
+	
+		allow = {
+			NOT = {
+				primary_title = {
+					is_vice_royalty = yes
+				}
+			}
+			top_liege = {
+				primary_title = {
+					NOR = {
+						has_law = centralization_3
+						has_law = centralization_4
+						has_law = crown_authority_3
+						has_law = crown_authority_4
+					}
+				}
+			}
+			OR = {
+				AND = {
+					stewardship = 10
+					trait = administrator
+				}
+				stewardship = 12
+			}
+			OR = {
+				AND = {
+					diplomacy = 12
+					trait = socializer
+				}
+				diplomacy = 15
+			}
+			wealth = 400
+		}
+	
+		effect = {
+			wealth = -400
+			set_dynasty_flag = exempt_from_viceroyal_flag
+			set_character_flag = exempt_from_viceroyal_character_flag
+			set_feudal_government_effect = yes
+			top_liege = {
+				wealth = 400
+			}
+			prestige = 500
+		}
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	revoke_all_exemptions_from_bureucracy = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 36
+		potential = {
+			any_realm_character = {
+				limit = {
+					is_landed = yes
+				}
+				OR = {	
+					has_dynasty_flag = exempt_from_viceroyal_flag
+					has_character_flag = exempt_from_viceroyal_character_flag
+				}
+			}
+			NOR = {
+				has_dynasty_flag = exempt_from_viceroyal_flag
+				has_character_flag = exempt_from_viceroyal_character_flag
+			}
+			independent = yes
+			prisoner = no
+			has_regent = no
+		}
+	
+		allow = {
+			any_realm_character = {
+				limit = {
+					is_landed = yes
+				}
+				OR = {	
+					has_dynasty_flag = exempt_from_viceroyal_flag
+					has_character_flag = exempt_from_viceroyal_character_flag
+				}
+			}
+			OR = {
+				AND = {
+					stewardship = 10
+					trait = administrator
+				}
+				stewardship = 12
+			}
+			OR = {
+				AND = {
+					diplomacy = 12
+					trait = socializer
+				}
+				diplomacy = 15
+			}
+			wealth = 600
+		}
+	
+		effect = {
+			wealth = -600
+			any_realm_character = {
+				limit = {
+					is_landed = yes
+					OR = {
+						has_dynasty_flag = exempt_from_viceroyal_flag
+						has_character_flag = exempt_from_viceroyal_character_flag
+					}
+				}
+				clr_dynasty_flag = exempt_from_viceroyal_flag
+				clr_character_flag = exempt_from_viceroyal_character_flag
+				set_government_type = viceroyal_government
+			}
+			prestige = 100
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.2
+			}
+		}
+	}
 	centralise_germany = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			primary_title = {
 				title = e_german_confederation
@@ -403,9 +537,7 @@ decisions = {
 			}
 			prestige = -500
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -422,6 +554,7 @@ decisions = {
 			war = no
 			in_command = no
 			prisoner = no
+			is_pilgrim = no
 			is_incapable = no
 			NOT = {
 				has_character_modifier = hidden_timer_modif
@@ -480,17 +613,306 @@ decisions = {
 			}
 		}
 	}
+	choose_skirmisher_guard = {
+		is_high_prio = yes
+		ai_check_interval = 24
+		
+		potential = {
+			war = no
+			prisoner = no
+			is_incapable = no
+			OR = {
+				trait = misguided_warrior
+				trait = tough_soldier
+				trait = skilled_tactician
+				trait = brilliant_strategist
+				trait = exalted_warlord
+				has_minor_title = title_commander
+			}
+			NOR = {
+				trait = skirmisher_guard
+				trait = heavy_infantry_guard
+				trait = spear_guard
+				trait = light_cavalry_guard
+				trait = heavy_cavalry_guard
+				trait = ranged_guard
+			}
+		}
+		allow = {
+			prestige = 100
+			scaled_wealth = {
+				value = 0.25
+				min = 10
+				max = 150
+			}
+		}
+		effect = {
+			prestige = -100
+			scaled_wealth = {
+				value = -0.25
+				min = -10
+				max = -150
+			}
+			add_trait = skirmisher_guard
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.85
+			}
+		}
+	}
+	choose_heavy_infantry_guard = {
+		is_high_prio = yes
+		ai_check_interval = 24
+		
+		potential = {
+			war = no
+			prisoner = no
+			is_incapable = no
+			OR = {
+				trait = misguided_warrior
+				trait = tough_soldier
+				trait = skilled_tactician
+				trait = brilliant_strategist
+				trait = exalted_warlord
+				has_minor_title = title_commander
+			}
+			NOR = {
+				trait = skirmisher_guard
+				trait = heavy_infantry_guard
+				trait = spear_guard
+				trait = light_cavalry_guard
+				trait = heavy_cavalry_guard
+				trait = ranged_guard
+			}
+		}
+		allow = {
+			prestige = 100
+			scaled_wealth = {
+				value = 0.25
+				min = 10
+				max = 150
+			}
+		}
+		effect = {
+			prestige = -100
+			scaled_wealth = {
+				value = -0.25
+				min = -10
+				max = -150
+			}
+			add_trait = heavy_infantry_guard
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.85
+			}
+		}
+	}
+	choose_spear_guard = {
+		is_high_prio = yes
+		ai_check_interval = 24
+		
+		potential = {
+			war = no
+			prisoner = no
+			is_incapable = no
+			OR = {
+				trait = misguided_warrior
+				trait = tough_soldier
+				trait = skilled_tactician
+				trait = brilliant_strategist
+				trait = exalted_warlord
+				has_minor_title = title_commander
+			}
+			NOR = {
+				trait = skirmisher_guard
+				trait = heavy_infantry_guard
+				trait = spear_guard
+				trait = light_cavalry_guard
+				trait = heavy_cavalry_guard
+				trait = ranged_guard
+			}
+		}
+		allow = {
+			prestige = 100
+			scaled_wealth = {
+				value = 0.25
+				min = 10
+				max = 150
+			}
+		}
+		effect = {
+			prestige = -100
+			scaled_wealth = {
+				value = -0.25
+				min = -10
+				max = -150
+			}
+			add_trait = spear_guard
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.85
+			}
+		}
+	}
+	choose_light_cavalry_guard = {
+		is_high_prio = yes
+		ai_check_interval = 24
+		
+		potential = {
+			war = no
+			prisoner = no
+			is_incapable = no
+			OR = {
+				trait = misguided_warrior
+				trait = tough_soldier
+				trait = skilled_tactician
+				trait = brilliant_strategist
+				trait = exalted_warlord
+				has_minor_title = title_commander
+			}
+			NOR = {
+				trait = skirmisher_guard
+				trait = heavy_infantry_guard
+				trait = spear_guard
+				trait = light_cavalry_guard
+				trait = heavy_cavalry_guard
+				trait = ranged_guard
+			}
+		}
+		allow = {
+			prestige = 100
+			scaled_wealth = {
+				value = 0.25
+				min = 10
+				max = 150
+			}
+		}
+		effect = {
+			prestige = -100
+			scaled_wealth = {
+				value = -0.25
+				min = -10
+				max = -150
+			}
+			add_trait = light_cavalry_guard
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.85
+			}
+		}
+	}
+	choose_heavy_cavalry_guard = {
+		is_high_prio = yes
+		ai_check_interval = 24
+		
+		potential = {
+			war = no
+			prisoner = no
+			is_incapable = no
+			OR = {
+				trait = misguided_warrior
+				trait = tough_soldier
+				trait = skilled_tactician
+				trait = brilliant_strategist
+				trait = exalted_warlord
+				has_minor_title = title_commander
+			}
+			NOR = {
+				trait = skirmisher_guard
+				trait = heavy_infantry_guard
+				trait = spear_guard
+				trait = light_cavalry_guard
+				trait = heavy_cavalry_guard
+				trait = ranged_guard
+			}
+		}
+		allow = {
+			prestige = 100
+			scaled_wealth = {
+				value = 0.25
+				min = 10
+				max = 150
+			}
+		}
+		effect = {
+			prestige = -100
+			scaled_wealth = {
+				value = -0.25
+				min = -10
+				max = -150
+			}
+			add_trait = heavy_cavalry_guard
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.85
+			}
+		}
+	}
+	choose_ranged_guard = {
+		is_high_prio = yes
+		ai_check_interval = 24
+		
+		potential = {
+			war = no
+			prisoner = no
+			is_incapable = no
+			OR = {
+				trait = misguided_warrior
+				trait = tough_soldier
+				trait = skilled_tactician
+				trait = brilliant_strategist
+				trait = exalted_warlord
+				has_minor_title = title_commander
+			}
+			NOR = {
+				trait = skirmisher_guard
+				trait = heavy_infantry_guard
+				trait = spear_guard
+				trait = light_cavalry_guard
+				trait = heavy_cavalry_guard
+				trait = ranged_guard
+			}
+		}
+		allow = {
+			prestige = 100
+			scaled_wealth = {
+				value = 0.25
+				min = 10
+				max = 150
+			}
+		}
+		effect = {
+			prestige = -100
+			scaled_wealth = {
+				value = -0.25
+				min = -10
+				max = -150
+			}
+			add_trait = ranged_guard
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.85
+			}
+		}
+	}
 
 	improve_education_trait = {
 		is_high_prio = yes
 		ai_check_interval = 36
 		
 		potential = {
-			war = no
-			in_command = no
-			prisoner = no
-			is_incapable = no
-			age = 18
 			OR = {
 				trait = quick
 				trait = genius
@@ -550,8 +972,14 @@ decisions = {
 			}
 		}
 		allow = {
+			war = no
+			in_command = no
+			prisoner = no
+			is_incapable = no
+			is_pilgrim = no
+			age = 18
 			prestige = 150
-			wealth = 250
+			wealth = 500
 			OR = {
 				trait = quick
 				trait = genius
@@ -687,7 +1115,7 @@ decisions = {
 	
 	steal_british_gunsmithery_secrets = {
 		is_high_prio = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		
 		potential = {
 			prisoner = no
@@ -832,7 +1260,7 @@ decisions = {
 	}
 	focus_theology_adopt_vegetarian = {
 		is_high_prio = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		
 		potential = {
 			war = no
@@ -857,6 +1285,7 @@ decisions = {
 					religion_group = indian_group
 					NOR = {
 						religion = parabrahmanist
+						religion = jagannatha
 						religion = shaivasiddhanta
 					}
 				}
@@ -1035,6 +1464,7 @@ decisions = {
 			}
 			OR = {
 				culture_group = japan_group
+				culture = nikkei
 				religion = shinto
 				religion = bushinto
 				religion = buddhoshinto
@@ -1103,7 +1533,7 @@ decisions = {
 	launch_invasion_of_america = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			primary_title = { title = e_britannia }
 			NOT = {
@@ -1135,9 +1565,7 @@ decisions = {
 				achievement_destiny_arrives_all_the_same_done_effect = yes
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -1146,7 +1574,7 @@ decisions = {
 	form_shangri_la = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -1223,9 +1651,7 @@ decisions = {
 				destroy_landed_title = THIS
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -1234,11 +1660,10 @@ decisions = {
 	form_british_raj = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {###Must be British
-				culture_group = brittannic
 				culture_group = anglo_frisian
 				culture_group = goidelic
 				culture_group = brythonic
@@ -1320,9 +1745,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -1330,7 +1753,7 @@ decisions = {
 	bhutan_diplo_reform = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			government = bhutanese_decayed_government
 			primary_title = { title = e_bhutan }
@@ -1381,9 +1804,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -1392,7 +1813,7 @@ decisions = {
 	bhutan_martial_reform = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 			potential = {
 			government = bhutanese_decayed_government
 			primary_title = { title = e_bhutan }
@@ -1446,9 +1867,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -1456,7 +1875,7 @@ decisions = {
 	bhutan_stewardship_reform = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			government = bhutanese_decayed_government
 			primary_title = { title = e_bhutan }
@@ -1511,9 +1930,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -1521,7 +1938,7 @@ decisions = {
 	bhutan_intrigue_reform = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			government = bhutanese_decayed_government
 			primary_title = { title = e_bhutan }
@@ -1576,9 +1993,6 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-		always = no
-		}
 		ai_will_do = {
 			factor = 1
 		}
@@ -1586,7 +2000,7 @@ decisions = {
 	bhutan_learning_reform = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			government = bhutanese_decayed_government
 			primary_title = { title = e_bhutan }
@@ -1640,9 +2054,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -1650,7 +2062,7 @@ decisions = {
 	form_rome = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			###form_empire_potential = yes
 			OR = {		###Must be an Italian or a Romanian
@@ -1662,16 +2074,23 @@ decisions = {
 				culture = aromanian
 				culture = istromanian
 				culture_group = apeninian
+				culture_group = gallo_italic
+				culture_group = sardic
 				culture_group = lusophone
 				culture_group = hispanophone
 				culture_group = alpinian
 				culture_group = francophone
 				culture_group = occitanophone
+				culture_group = amero_hispanophone
+				culture_group = amero_lusophone
+				culture_group = hispano_austronesian
 				has_landed_title = e_byzantium
 				has_landed_title = e_transnistria
 				has_landed_title = e_great_russia
 				has_landed_title = e_ottoman
 				has_landed_title = e_latin_empire
+				has_landed_title = e_abyssinia
+				has_landed_title = e_hre
 			}
 			NOT = {
 				government = oligarchic_republic
@@ -1737,6 +2156,7 @@ decisions = {
 					add_law = ze_administration_laws_2
 				}
 			}
+			set_government_type = roman_imperial_government
 			hidden_tooltip = {
 				###De Jure Fuckery
 				k_malta = { de_jure_liege = e_roman_empire }
@@ -1801,9 +2221,7 @@ decisions = {
 				sound_effect = bloodline_added
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -1812,7 +2230,7 @@ decisions = {
 	form_seljuk = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			###form_empire_potential = yes
 			OR = {		###Must be an Italian or a Romanian
@@ -1864,9 +2282,7 @@ decisions = {
 				k_azerbaijan = { de_jure_liege = e_seljuk }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -1874,7 +2290,7 @@ decisions = {
 	form_mesopotamia = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			###form_empire_potential = yes
 			religion = mesopotamian
@@ -1915,9 +2331,7 @@ decisions = {
                 }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -1925,7 +2339,7 @@ decisions = {
 	form_nuyutawh = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			religion = mormon
 			k_nuyutawh = {
@@ -1963,21 +2377,23 @@ decisions = {
                 }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
 	}
-	form_zapadoslavia = {
+	form_visegrad = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
-			culture_group = west_slavic
-			e_zapadoslavia = {
+			OR = {		###Must be one of the following cultures
+				culture_group = magyar
+				culture_group = west_slavic
+			}
+			e_carpathia = {
+				is_titular = yes
 				has_holder = no
 			}
 			prisoner = no
@@ -1988,6 +2404,7 @@ decisions = {
 			form_empire_allow = yes
 			#Control Czech, Poland & Slovakia
 				k_poland = { show_scope_change = no province_completely_controls_trigger = yes }
+				k_hungary = { show_scope_change = no province_completely_controls_trigger = yes }
 				conditional_tooltip = {
 					trigger = { k_slovakia = { is_titular = no } }
 					k_slovakia = { show_scope_change = no province_completely_controls_trigger = yes }
@@ -2004,26 +2421,33 @@ decisions = {
 					trigger = { k_wendia = { is_titular = no } }
 					k_wendia = { show_scope_change = no province_completely_controls_trigger = yes }
 				}
+				conditional_tooltip = {
+					trigger = { k_silesia = { is_titular = no } }
+					k_silesia = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
+				conditional_tooltip = {
+					trigger = { k_gorale = { is_titular = no } }
+					k_gorale = { show_scope_change = no province_completely_controls_trigger = yes }
+				}
 		}
 
 		effect = {
 			custom_tooltip = {
-				text = form_zapadoslavia_tt
-				e_zapadoslavia = {
+				text = form_visegrad_tt
+				e_carpathia = {
 					gain_empire_effect = yes
 				}
 			}
-			
 			if = {
 				limit = {
 					is_female = yes
 					has_dlc = "Holy Fury"
 				}
 				create_bloodline = {
-					type = zapadoslavia_female
+					type = visegrad_female
 				}
 				new_bloodline = {
-					set_description = "zapadoslavia_female_desc"
+					set_description = "visegrad_female_desc"
 				}
 			}
 			if = {
@@ -2032,21 +2456,23 @@ decisions = {
 					has_dlc = "Holy Fury"
 				}
 				create_bloodline = {
-					type = zapadoslavia_male
+					type = visegrad_male
 				}
 				new_bloodline = {
-					set_description = "zapadoslavia_male_desc"
+					set_description = "visegrad_male_desc"
 				}
 			}
 
 			hidden_tooltip = {
-				###Poland, Bohemia and Slovaki unite!
-				k_poland = { de_jure_liege = e_zapadoslavia }
-				e_zapadoslavia = {
+				k_poland = { de_jure_liege = e_carpathia }
+				e_carpathia = {
 					k_slovakia 			= { set_de_jure_if_controls_effect = yes }
 					k_bohemia 			= { set_de_jure_if_controls_effect = yes }
 					k_czechoslovakia 	= { set_de_jure_if_controls_effect = yes }
-					k_wendia 	= { set_de_jure_if_controls_effect = yes }
+					k_wendia 			= { set_de_jure_if_controls_effect = yes }
+					k_hungary 			= { set_de_jure_if_controls_effect = yes }
+					k_silesia 			= { set_de_jure_if_controls_effect = yes }
+					k_gorale 			= { set_de_jure_if_controls_effect = yes }
 				}
 				ROOT = {
 					narrative_event = { id = ATEOW_realm_event.99999 }
@@ -2056,9 +2482,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -2067,7 +2491,7 @@ decisions = {
 	form_kamat = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -2129,9 +2553,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -2139,7 +2561,7 @@ decisions = {
 	form_soitoskania = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = soitoskan
@@ -2185,9 +2607,7 @@ decisions = {
 				activate_title = { title = k_khorasan status = no }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -2195,7 +2615,7 @@ decisions = {
 	form_romaraj = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {		
@@ -2244,9 +2664,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -2256,7 +2674,7 @@ decisions = {
 	form_wolgagermany = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {		###Must be a Wolga German
@@ -2296,9 +2714,7 @@ decisions = {
 				d_ishim = { de_jure_liege = k_wolgadeutschland }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -2306,7 +2722,7 @@ decisions = {
 	form_turkmenli = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = turcoman
@@ -2326,6 +2742,7 @@ decisions = {
 			#Controls a bunch of shit
 				d_samarra = { show_scope_change = no province_completely_controls_trigger = yes }
 				d_mosul = { show_scope_change = no province_completely_controls_trigger = yes }
+				d_baghdad = { show_scope_change = no province_completely_controls_trigger = yes }
 		}
 
 		effect = {
@@ -2341,11 +2758,10 @@ decisions = {
 			hidden_tooltip = {
 				d_samarra = { de_jure_liege = k_turkmenli }
 				d_mosul = { de_jure_liege = k_turkmenli }
+				d_baghdad = { de_jure_liege = k_turkmenli }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -2353,7 +2769,7 @@ decisions = {
 	form_tocharia = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = tokharian
@@ -2395,9 +2811,7 @@ decisions = {
 				d_karashar = { de_jure_liege = k_tocharia }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -2405,7 +2819,7 @@ decisions = {
 	form_sogdia = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = yaghnobit
@@ -2423,9 +2837,8 @@ decisions = {
 			}
 			form_kingdom_allow = yes
 			#Controls a bunch of shit
-			d_samarkand = { show_scope_change = no province_completely_controls_trigger = yes }
-			d_khiva = { show_scope_change = no province_completely_controls_trigger = yes }
-			d_ferghana = { show_scope_change = no province_completely_controls_trigger = yes }
+			k_khiva = { show_scope_change = no province_completely_controls_trigger = yes }
+			k_fergana = { show_scope_change = no province_completely_controls_trigger = yes }
 		}
 
 		effect = {
@@ -2440,13 +2853,16 @@ decisions = {
 
 			hidden_tooltip = {
 				d_samarkand = { de_jure_liege = k_sogdia }
+				d_bukhara = { de_jure_liege = k_sogdia }
+				d_samarkand = { de_jure_liege = k_sogdia }
 				d_khiva = { de_jure_liege = k_sogdia }
-				d_ferghana = { de_jure_liege = k_sogdia }
+				d_fergana = { de_jure_liege = k_sogdia }
+				d_tashkent = { de_jure_liege = k_sogdia }
+				d_pvokr_armenistan = { de_jure_liege = k_sogdia }
+				d_kokand = { de_jure_liege = k_sogdia }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -2455,7 +2871,7 @@ decisions = {
 	recreate_transnistria = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			e_transnistria = {
@@ -2487,9 +2903,7 @@ decisions = {
 			}
 			piety = 600
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -2497,7 +2911,7 @@ decisions = {
 	form_england = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {
@@ -2510,6 +2924,8 @@ decisions = {
 				culture = farlander
 				culture = ulsterite
 				culture = ashkenazi
+				culture = angler
+				culture = norman
 				has_landed_title = d_anglican
 			}
 			k_england = {
@@ -2586,9 +3002,7 @@ decisions = {
 				d_the_isles = { de_jure_liege = k_mann }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -2597,7 +3011,7 @@ decisions = {
 	# form_wales = {
 		# is_high_prio = yes
 		# only_playable = no
-		# ai_check_interval = 24
+		# ai_check_interval = 36
 		# potential = {
 			# form_kingdom_potential = yes
 			# OR = {		###Must be Welsh
@@ -2680,7 +3094,7 @@ decisions = {
 	restore_hungary = {#####Hungry Hungry Hungary
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			NOT = {
 				has_global_flag = restored_hungary
@@ -2716,9 +3130,7 @@ decisions = {
 				d_esztergom = { de_jure_liege = k_hungary }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -2728,7 +3140,7 @@ decisions = {
 			
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {	
@@ -2767,38 +3179,9 @@ decisions = {
 				d_cornwall = { de_jure_liege = k_cornwall }
 				d_hampshire = { de_jure_liege = k_cornwall }
 				d_somerset = { de_jure_liege = k_cornwall }
-				
-				k_britannia = {
-					destroy_landed_title = THIS
-				}
-				activate_title = {
-					title = k_britannia
-					status = no
-				}
-				d_northumberland = { de_jure_liege = k_england }
-				d_liverpool = { de_jure_liege = k_england }
-				d_york = { de_jure_liege = k_england }
-				d_lincoln = { de_jure_liege = k_england }
-				
-				d_hereford = { de_jure_liege = k_england }
-				d_bedford = { de_jure_liege = k_england }
-				d_norfolk = { de_jure_liege = k_england }
-				d_canterbury = { de_jure_liege = k_england }
-				
-				d_gloucester = { de_jure_liege = k_england }
-				d_channel_islands = { de_jure_liege = k_england }
-				
-				d_gwynedd = { de_jure_liege = k_wales }
-				d_powys = { de_jure_liege = k_wales }
-				d_gwent = { de_jure_liege = k_wales }
-				d_deheubarth = { de_jure_liege = k_wales }
-				
-				d_the_isles = { de_jure_liege = k_mann }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -2806,7 +3189,7 @@ decisions = {
 	form_arabia = { #Saudi Arabia
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -2855,9 +3238,7 @@ decisions = {
 				k_yemen = { de_jure_liege = e_south_arabia }				
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -2865,7 +3246,7 @@ decisions = {
 	form_czechoslovakia = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {	
@@ -2910,9 +3291,7 @@ decisions = {
 				d_nyitra = { de_jure_liege = k_czechoslovakia }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -2921,7 +3300,7 @@ decisions = {
 	form_great_russia = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -2962,6 +3341,9 @@ decisions = {
 					k_circassia = { show_scope_change = no province_completely_controls_trigger = yes }
 					k_balkaria = { show_scope_change = no province_completely_controls_trigger = yes }
 					k_donkuban = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_caspia = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_povolzhye = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_chechnya = { show_scope_change = no province_completely_controls_trigger = yes }
 				}
 			}
 			k_smalensk = { show_scope_change = no province_completely_controls_trigger = yes }
@@ -3071,6 +3453,24 @@ decisions = {
 					}
 					k_ossetia = { de_jure_liege = e_great_russia }
 				}
+				if = {
+					limit = {
+						k_caspia = { show_scope_change = no province_completely_controls_trigger = yes } 
+					}
+					k_caspia = { de_jure_liege = e_great_russia }
+				}
+				if = {
+					limit = {
+						k_chechnya = { show_scope_change = no province_completely_controls_trigger = yes } 
+					}
+					k_chechnya = { de_jure_liege = e_great_russia }
+				}
+				if = {
+					limit = {
+						k_povolzhye = { show_scope_change = no province_completely_controls_trigger = yes } 
+					}
+					k_povolzhye = { de_jure_liege = e_great_russia }
+				}
 
 				ROOT = {
 					narrative_event = { id = ATEOW_realm_event.99996 }
@@ -3080,9 +3480,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -3091,7 +3489,7 @@ decisions = {
 	form_cccp = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -3130,13 +3528,12 @@ decisions = {
 					k_circassia = { show_scope_change = no province_completely_controls_trigger = yes }
 					k_balkaria = { show_scope_change = no province_completely_controls_trigger = yes }
 					k_donkuban = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_caspia = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_povolzhye = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_chechnya = { show_scope_change = no province_completely_controls_trigger = yes }
 				}
 			}
 			k_smalensk  = { show_scope_change = no province_completely_controls_trigger = yes }
-			conditional_tooltip = {
-				trigger = { k_belarus = { de_jure_liege = e_great_russia } }
-				k_belarus = { show_scope_change = no province_completely_controls_trigger = yes }
-			}
 			conditional_tooltip = {
 				trigger = { k_belarus = { de_jure_liege = e_cccp } }
 				k_belarus = { show_scope_change = no province_completely_controls_trigger = yes }
@@ -3351,6 +3748,24 @@ decisions = {
 					}
 					k_ossetia = { de_jure_liege = e_cccp }
 				}
+				if = {
+					limit = {
+						k_caspia = { show_scope_change = no province_completely_controls_trigger = yes } 
+					}
+					k_caspia = { de_jure_liege = e_cccp }
+				}
+				if = {
+					limit = {
+						k_chechnya = { show_scope_change = no province_completely_controls_trigger = yes } 
+					}
+					k_chechnya = { de_jure_liege = e_cccp }
+				}
+				if = {
+					limit = {
+						k_povolzhye = { show_scope_change = no province_completely_controls_trigger = yes } 
+					}
+					k_ossetia = { de_jure_liege = e_cccp }
+				}
 
 				ROOT = {
 					narrative_event = { id = ATEOW_realm_event.99995 }
@@ -3361,9 +3776,7 @@ decisions = {
 				achievement_one_more_try_done_effect = yes
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -3372,7 +3785,7 @@ decisions = {
 	form_european_union = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			e_european_union = {
@@ -3532,9 +3945,9 @@ decisions = {
 				activate_title = { title = e_italy status = no }
 			    if = {
 				    limit = {
-					    e_carpathia = { show_scope_change = no province_completely_controls_trigger = yes }
+					    e_baltic = { show_scope_change = no province_completely_controls_trigger = yes }
 				    }
-					e_carpathia = {
+					e_baltic = {
 						any_direct_de_jure_vassal_title = {
 							de_jure_liege = e_european_union
 						}
@@ -3543,18 +3956,28 @@ decisions = {
 				if = {
 				    limit = {
 					    OR = {
-					    	has_landed_title = e_carpathia
-						    e_carpathia = { has_holder = no }
+					    	has_landed_title = e_baltic
+						    e_baltic = { has_holder = no }
 					    }
 				    }
-				    e_carpathia = { destroy_landed_title = THIS }
-				    activate_title = { title = e_carpathia status = no }
+				    e_baltic = { destroy_landed_title = THIS }
+				    activate_title = { title = e_baltic status = no }
+			    }
+				if = {
+				    limit = {
+					    OR = {
+					    	has_landed_title = e_hre
+						    e_hre = { has_holder = no }
+					    }
+				    }
+				    e_hre = { destroy_landed_title = THIS }
+				    activate_title = { title = e_hre status = no }
 			    }
 			    if = {
 				    limit = {
-					    e_commonwealth = { show_scope_change = no province_completely_controls_trigger = yes }
+					    e_zapadoslavia = { show_scope_change = no province_completely_controls_trigger = yes }
 				    }
-					e_commonwealth = {
+					e_zapadoslavia = {
 						any_direct_de_jure_vassal_title = {
 							de_jure_liege = e_european_union
 						}
@@ -3563,12 +3986,12 @@ decisions = {
 				if = {
 				    limit = {
 					    OR = {
-					    	has_landed_title = e_commonwealth
-						    e_commonwealth = { has_holder = no }
+					    	has_landed_title = e_zapadoslavia
+						    e_zapadoslavia = { has_holder = no }
 					    }
 				    }
-				    e_commonwealth = { destroy_landed_title = THIS }
-				    activate_title = { title = e_commonwealth status = no }
+				    e_zapadoslavia = { destroy_landed_title = THIS }
+				    activate_title = { title = e_zapadoslavia status = no }
 			    }
 			    if = {
 				    limit = {
@@ -3630,9 +4053,9 @@ decisions = {
 				}
 			    if = {
 				    limit = {
-					    k_croatia = { show_scope_change = no province_completely_controls_trigger = yes }
+					    k_chorwatia = { show_scope_change = no province_completely_controls_trigger = yes }
 				    }
-					k_croatia = { de_jure_liege = e_european_union }
+					k_chorwatia = { de_jure_liege = e_european_union }
 				}
 			    if = {
 				    limit = {
@@ -3675,9 +4098,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -3687,7 +4108,7 @@ decisions = {
 	form_austria_romaia = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -3778,9 +4199,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -3789,10 +4208,13 @@ decisions = {
 	form_al-andalus = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
-			culture_group = maghreb_arabic
+			OR = {
+				culture_group = maghreb_arabic
+				culture_group = berber
+			}
 			religion_group = muslim
 			e_al-andalus= {
 				has_holder = no
@@ -3844,9 +4266,7 @@ decisions = {
 				k_sevillian_state = { de_jure_liege = e_al-andalus }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -3855,7 +4275,7 @@ decisions = {
 	form_hungary_austria = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -3957,9 +4377,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -3967,7 +4385,7 @@ decisions = {
 	form_austria_hungary = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			culture = austrian
@@ -4068,9 +4486,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -4079,7 +4495,7 @@ decisions = {
 	form_prussia = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {
@@ -4127,9 +4543,7 @@ decisions = {
 				
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -4138,7 +4552,7 @@ decisions = {
 	restore_latin_empire = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -4163,13 +4577,17 @@ decisions = {
 				has_landed_title = k_turkey
 				has_landed_title = k_karadeniz
 				has_landed_title = k_karaman
+				has_landed_title = k_cukurova
 				has_landed_title = k_bulgaria
 				has_landed_title = k_georgia
 				has_landed_title = k_cyprus
+				has_landed_title = k_crete
 				has_landed_title = k_anatolia
 				has_landed_title = k_zazakistan
 				has_landed_title = k_aromania
 				has_landed_title = k_abkhazia
+				has_landed_title = k_thrace
+				has_landed_title = k_macedonia
 			}
 			prisoner = no
 			has_regent = no
@@ -4189,20 +4607,35 @@ decisions = {
 				religion = transatlantic
 			}
 			form_empire_allow = yes
-				k_byzantium = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_athos = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_epirus = { show_scope_change = no province_completely_controls_trigger = yes }
-				OR = {
+			OR ={
+				AND = {
+					k_byzantium = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_athos = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_epirus = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_thrace = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_macedonia = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_cyprus = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_crete = { show_scope_change = no province_completely_controls_trigger = yes }
 					conditional_tooltip = {
-						trigger = { k_turkey = { is_titular = no } }
-						k_turkey = { show_scope_change = no province_completely_controls_trigger = yes }
+						trigger = { k_bulgaria = { is_titular = no } }
+						k_bulgaria = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
-						trigger = { k_anatolia = { is_titular = no } }
-						k_anatolia = { show_scope_change = no province_completely_controls_trigger = yes }
+						trigger = { k_aromania = { is_titular = no } }
+						k_aromania = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 				}
-				k_cyprus = { show_scope_change = no province_completely_controls_trigger = yes }
+				AND = {
+					OR = {
+						conditional_tooltip = {
+							trigger = { k_turkey = { is_titular = no } }
+							k_turkey = { show_scope_change = no province_completely_controls_trigger = yes }
+						}
+						conditional_tooltip = {
+							trigger = { k_anatolia = { is_titular = no } }
+							k_anatolia = { show_scope_change = no province_completely_controls_trigger = yes }
+						}
+					}
 					conditional_tooltip = {
 						trigger = { k_karadeniz = { is_titular = no } }
 						k_karadeniz = { show_scope_change = no province_completely_controls_trigger = yes }
@@ -4212,12 +4645,12 @@ decisions = {
 						k_karaman = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
-						trigger = { k_armenia = { is_titular = no } }
-						k_armenia = { show_scope_change = no province_completely_controls_trigger = yes }
+						trigger = { k_cukurova = { is_titular = no } }
+						k_cukurova = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
-						trigger = { k_bulgaria = { is_titular = no } }
-						k_bulgaria = { show_scope_change = no province_completely_controls_trigger = yes }
+						trigger = { k_armenia = { is_titular = no } }
+						k_armenia = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
 						trigger = { k_georgia = { is_titular = no } }
@@ -4228,10 +4661,6 @@ decisions = {
 						k_zazakistan = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
-						trigger = { k_aromania = { is_titular = no } }
-						k_aromania = { show_scope_change = no province_completely_controls_trigger = yes }
-					}
-					conditional_tooltip = {
 						trigger = { k_abkhazia = { is_titular = no } }
 						k_abkhazia = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
@@ -4239,14 +4668,7 @@ decisions = {
 						trigger = { k_daglikarazi = { is_titular = no } }
 						k_daglikarazi = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
-			e_ottoman = {
-				has_holder = no
-			}
-			e_byzantium = {
-				has_holder = no
-			}
-			e_macedonia = {
-				has_holder = no
+				}
 			}
 		}
 
@@ -4260,15 +4682,18 @@ decisions = {
 				k_athos = { de_jure_liege = e_latin_empire }
 				k_epirus = { de_jure_liege = e_latin_empire }
 				k_macedonia = { de_jure_liege = e_latin_empire }
+				k_thrace = { de_jure_liege = e_latin_empire }
 				e_latin_empire = {
 					k_turkey = { set_de_jure_if_controls_effect = yes }
 					k_karadeniz = { set_de_jure_if_controls_effect = yes }
 					k_karaman = { set_de_jure_if_controls_effect = yes }
+					k_cukurova = { set_de_jure_if_controls_effect = yes }
 					k_armenia = { set_de_jure_if_controls_effect = yes }
 					k_daglikarazi = { set_de_jure_if_controls_effect = yes }
 					k_bulgaria = { set_de_jure_if_controls_effect = yes }
 					k_georgia = { set_de_jure_if_controls_effect = yes }
 					k_cyprus = { set_de_jure_if_controls_effect = yes }
+					k_crete = { set_de_jure_if_controls_effect = yes }
 					k_abkhazia = { set_de_jure_if_controls_effect = yes }
 					k_zazakistan = { set_de_jure_if_controls_effect = yes }
 					k_aromania = { set_de_jure_if_controls_effect = yes }
@@ -4286,9 +4711,7 @@ decisions = {
 			}
 			set_global_flag = reconquista_finished
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -4297,7 +4720,7 @@ decisions = {
 	restore_byzantine_empire = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -4326,15 +4749,19 @@ decisions = {
 				has_landed_title = k_turkey
 				has_landed_title = k_karadeniz
 				has_landed_title = k_karaman
+				has_landed_title = k_cukurova
 				has_landed_title = k_bulgaria
 				has_landed_title = k_georgia
 				has_landed_title = k_cyprus
+				has_landed_title = k_crete
 				has_landed_title = k_anatolia
 				has_landed_title = k_zazakistan
 				has_landed_title = k_aromania
 				has_landed_title = k_abkhazia
 				has_landed_title = k_hellas_minor
 				has_landed_title = k_laconia
+				has_landed_title = k_thrace
+				has_landed_title = k_macedonia
 			}
 			prisoner = no
 			has_regent = no
@@ -4349,20 +4776,35 @@ decisions = {
 				religion = jugoslavist				
 			}
 			form_empire_allow = yes
-				k_byzantium = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_athos = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_epirus = { show_scope_change = no province_completely_controls_trigger = yes }
-				OR = {
+			OR = {
+				AND = {
+					k_byzantium = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_athos = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_epirus = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_thrace = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_macedonia = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_cyprus = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_crete = { show_scope_change = no province_completely_controls_trigger = yes }
 					conditional_tooltip = {
-						trigger = { k_turkey = { is_titular = no } }
-						k_turkey = { show_scope_change = no province_completely_controls_trigger = yes }
+						trigger = { k_bulgaria = { is_titular = no } }
+						k_bulgaria = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
-						trigger = { k_anatolia = { is_titular = no } }
-						k_anatolia = { show_scope_change = no province_completely_controls_trigger = yes }
+						trigger = { k_aromania = { is_titular = no } }
+						k_aromania = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 				}
-				k_cyprus = { show_scope_change = no province_completely_controls_trigger = yes }
+				AND = {
+					OR = {
+						conditional_tooltip = {
+							trigger = { k_turkey = { is_titular = no } }
+							k_turkey = { show_scope_change = no province_completely_controls_trigger = yes }
+						}
+						conditional_tooltip = {
+							trigger = { k_anatolia = { is_titular = no } }
+							k_anatolia = { show_scope_change = no province_completely_controls_trigger = yes }
+						}
+					}
 					conditional_tooltip = {
 						trigger = { k_karadeniz = { is_titular = no } }
 						k_karadeniz = { show_scope_change = no province_completely_controls_trigger = yes }
@@ -4372,12 +4814,12 @@ decisions = {
 						k_karaman = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
-						trigger = { k_armenia = { is_titular = no } }
-						k_armenia = { show_scope_change = no province_completely_controls_trigger = yes }
+						trigger = { k_cukurova = { is_titular = no } }
+						k_cukurova = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
-						trigger = { k_bulgaria = { is_titular = no } }
-						k_bulgaria = { show_scope_change = no province_completely_controls_trigger = yes }
+						trigger = { k_armenia = { is_titular = no } }
+						k_armenia = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
 						trigger = { k_georgia = { is_titular = no } }
@@ -4388,10 +4830,6 @@ decisions = {
 						k_zazakistan = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
-						trigger = { k_aromania = { is_titular = no } }
-						k_aromania = { show_scope_change = no province_completely_controls_trigger = yes }
-					}
-					conditional_tooltip = {
 						trigger = { k_abkhazia = { is_titular = no } }
 						k_abkhazia = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
@@ -4399,17 +4837,7 @@ decisions = {
 						trigger = { k_daglikarazi = { is_titular = no } }
 						k_daglikarazi = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
-			e_ottoman = {
-				has_holder = no
-			}
-			e_latin_empire = {
-				has_holder = no
-			}
-			e_macedonia = {
-				has_holder = no
-			}
-			e_marblists = {
-				has_holder = no
+				}
 			}
 		}
 
@@ -4421,6 +4849,7 @@ decisions = {
 					add_law = succ_byzantine_elective
 					add_law = ze_administration_laws_2
 				}
+				set_government_type = roman_imperial_government
 				k_byzantium = { de_jure_liege = e_byzantium }
 				k_athos = { de_jure_liege = e_byzantium }
 				k_epirus = { de_jure_liege = e_byzantium }
@@ -4428,6 +4857,7 @@ decisions = {
 					k_turkey = { set_de_jure_if_controls_effect = yes }
 					k_karadeniz = { set_de_jure_if_controls_effect = yes }
 					k_karaman = { set_de_jure_if_controls_effect = yes }
+					k_cukurova = { set_de_jure_if_controls_effect = yes }
 					k_armenia = { set_de_jure_if_controls_effect = yes }
 					k_daglikarazi = { set_de_jure_if_controls_effect = yes }
 					k_bulgaria = { set_de_jure_if_controls_effect = yes }
@@ -4437,11 +4867,13 @@ decisions = {
 					k_bosnai = { set_de_jure_if_controls_effect = yes }
 					k_georgia = { set_de_jure_if_controls_effect = yes }
 					k_cyprus = { set_de_jure_if_controls_effect = yes }
+					k_crete = { set_de_jure_if_controls_effect = yes }
 					k_abkhazia	= { set_de_jure_if_controls_effect = yes }
 					k_zazakistan = { set_de_jure_if_controls_effect = yes }
 					k_aromania = { set_de_jure_if_controls_effect = yes }
 					k_hellas_minor = { set_de_jure_if_controls_effect = yes }
 					k_macedonia = { set_de_jure_if_controls_effect = yes }
+					k_thrace = { set_de_jure_if_controls_effect = yes }
 					k_laconia = { set_de_jure_if_controls_effect = yes }
 					k_istromania = { set_de_jure_if_controls_effect = yes }
 				}
@@ -4455,9 +4887,7 @@ decisions = {
 			}
 			set_global_flag = reconquista_finished
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -4465,10 +4895,16 @@ decisions = {
 	restore_ottoman_empire = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
-			religion_group = muslim
+			OR = {
+				religion_group = muslim
+				religion = ironist
+				religion = muwahidunna
+				religion = alawite
+				religion = dahatatta
+			}
 			e_ottoman = {
 				OR = {
 					is_titular = yes
@@ -4482,15 +4918,19 @@ decisions = {
 				has_landed_title = k_turkey
 				has_landed_title = k_karadeniz
 				has_landed_title = k_karaman
+				has_landed_title = k_cukurova
 				has_landed_title = k_bulgaria
 				has_landed_title = k_georgia
 				has_landed_title = k_cyprus
+				has_landed_title = k_crete
 				has_landed_title = k_anatolia
 				has_landed_title = k_zazakistan
 				has_landed_title = k_aromania
 				has_landed_title = k_abkhazia
 				has_landed_title = k_hellas_minor
 				has_landed_title = k_laconia
+				has_landed_title = k_thrace
+				has_landed_title = k_macedonia
 			}
 			prisoner = no
 			has_regent = no
@@ -4500,28 +4940,58 @@ decisions = {
 			custom_tooltip = {
 				text = all_relevant_titles_must_be_owned_or_owned_by_vassals_tt
 			}
-			religion_group = muslim
+			OR = {
+				religion_group = muslim
+				religion = ironist
+				religion = muwahidunna
+				religion = alawite
+				religion = dahatatta
+			}
 			form_empire_allow = yes
-			
-				k_turkey = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_karadeniz = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_karaman = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_daglikarazi = { show_scope_change = no province_completely_controls_trigger = yes }
+			OR = {
+				AND = {
+					k_byzantium = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_athos = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_epirus = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_thrace = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_macedonia = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_cyprus = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_crete = { show_scope_change = no province_completely_controls_trigger = yes }
 					conditional_tooltip = {
-						trigger = { k_byzantium = { is_titular = no } }
-						k_byzantium = { show_scope_change = no province_completely_controls_trigger = yes }
+						trigger = { k_bulgaria = { is_titular = no } }
+						k_bulgaria = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
-						trigger = { k_athos = { is_titular = no } }
-						k_athos = { show_scope_change = no province_completely_controls_trigger = yes }
+						trigger = { k_aromania = { is_titular = no } }
+						k_aromania = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+				}
+				AND = {
+					OR = {
+						conditional_tooltip = {
+							trigger = { k_turkey = { is_titular = no } }
+							k_turkey = { show_scope_change = no province_completely_controls_trigger = yes }
+						}
+						conditional_tooltip = {
+							trigger = { k_anatolia = { is_titular = no } }
+							k_anatolia = { show_scope_change = no province_completely_controls_trigger = yes }
+						}
+					}
+					conditional_tooltip = {
+						trigger = { k_karadeniz = { is_titular = no } }
+						k_karadeniz = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_karaman = { is_titular = no } }
+						k_karaman = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_cukurova = { is_titular = no } }
+						k_cukurova = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
 						trigger = { k_armenia = { is_titular = no } }
 						k_armenia = { show_scope_change = no province_completely_controls_trigger = yes }
-					}
-					conditional_tooltip = {
-						trigger = { k_bulgaria = { is_titular = no } }
-						k_bulgaria = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
 						trigger = { k_georgia = { is_titular = no } }
@@ -4532,28 +5002,14 @@ decisions = {
 						k_zazakistan = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
-						trigger = { k_aromania = { is_titular = no } }
-						k_aromania = { show_scope_change = no province_completely_controls_trigger = yes }
-					}
-					conditional_tooltip = {
 						trigger = { k_abkhazia = { is_titular = no } }
 						k_abkhazia = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
 					conditional_tooltip = {
-						trigger = { k_epirus = { is_titular = no } }
-						k_epirus = { show_scope_change = no province_completely_controls_trigger = yes }
+						trigger = { k_daglikarazi = { is_titular = no } }
+						k_daglikarazi = { show_scope_change = no province_completely_controls_trigger = yes }
 					}
-			e_byzantium = {
-				has_holder = no
-			}
-			e_latin_empire = {
-				has_holder = no
-			}
-			e_macedonia = {
-				has_holder = no
-			}
-			e_marblists = {
-				has_holder = no
+				}
 			}
 		}
 
@@ -4566,6 +5022,7 @@ decisions = {
 				k_turkey = { de_jure_liege = e_ottoman }
 				k_karadeniz = { de_jure_liege = e_ottoman }
 				k_karaman = { de_jure_liege = e_ottoman }
+				k_cukurova = { de_jure_liege = e_ottoman }
 				k_daglikarazi = { de_jure_liege = e_ottoman }
 				e_ottoman = {
 					k_turkey = { set_de_jure_if_controls_effect = yes }
@@ -4573,7 +5030,6 @@ decisions = {
 					k_athos = { set_de_jure_if_controls_effect = yes }
 					k_epirus = { set_de_jure_if_controls_effect = yes }
 					k_karadeniz = { set_de_jure_if_controls_effect = yes }
-					k_karaman = { set_de_jure_if_controls_effect = yes }
 					k_armenia = { set_de_jure_if_controls_effect = yes }
 					k_daglikarazi = { set_de_jure_if_controls_effect = yes }
 					k_bulgaria = { set_de_jure_if_controls_effect = yes }
@@ -4583,11 +5039,13 @@ decisions = {
 					k_bosnai = { set_de_jure_if_controls_effect = yes }
 					k_georgia = { set_de_jure_if_controls_effect = yes }
 					k_cyprus = { set_de_jure_if_controls_effect = yes }
+					k_crete = { set_de_jure_if_controls_effect = yes }
 					k_abkhazia	= { set_de_jure_if_controls_effect = yes }
 					k_zazakistan = { set_de_jure_if_controls_effect = yes }
 					k_aromania = { set_de_jure_if_controls_effect = yes }
 					k_hellas_minor = { set_de_jure_if_controls_effect = yes }
 					k_macedonia = { set_de_jure_if_controls_effect = yes }
+					k_thrace = { set_de_jure_if_controls_effect = yes }
 					k_laconia = { set_de_jure_if_controls_effect = yes }
 					k_istromania = { set_de_jure_if_controls_effect = yes }
 				}
@@ -4600,9 +5058,7 @@ decisions = {
 				# }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -4611,7 +5067,7 @@ decisions = {
 	restore_macedonian_empire = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -4631,11 +5087,14 @@ decisions = {
 				has_landed_title = k_turkey
 				has_landed_title = k_karadeniz
 				has_landed_title = k_karaman
+				has_landed_title = k_cukurova
 				has_landed_title = k_bulgaria
 				has_landed_title = k_georgia
 				has_landed_title = k_cyprus
+				has_landed_title = k_crete
 				has_landed_title = k_anatolia
 				has_landed_title = k_macedonia
+				has_landed_title = k_thrace
 				has_landed_title = k_zazakistan
 				has_landed_title = k_aromania
 				has_landed_title = k_abkhazia
@@ -4651,68 +5110,68 @@ decisions = {
 				text = all_relevant_titles_must_be_owned_or_owned_by_vassals_tt
 			}
 			form_empire_allow = yes
-				OR = {
-					conditional_tooltip = {
-						trigger = { k_turkey = { is_titular = no } }
-						k_turkey = { show_scope_change = no province_completely_controls_trigger = yes }
-					}
-					conditional_tooltip = {
-						trigger = { k_anatolia = { is_titular = no } }
-						k_anatolia = { show_scope_change = no province_completely_controls_trigger = yes }
-					}
-				}
-				k_cyprus = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_byzantium = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_athos = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_epirus = { show_scope_change = no province_completely_controls_trigger = yes }
-				conditional_tooltip = {
-					trigger = { k_zazakistan = { is_titular = no } }
-					k_zazakistan = { show_scope_change = no province_completely_controls_trigger = yes }
-				}
-				conditional_tooltip = {
-					trigger = { k_aromania = { is_titular = no } }
-					k_aromania = { show_scope_change = no province_completely_controls_trigger = yes }
-				}
-				conditional_tooltip = {
-					trigger = { k_abkhazia = { is_titular = no } }
-					k_abkhazia = { show_scope_change = no province_completely_controls_trigger = yes }
-				}
-				conditional_tooltip = {
-					trigger = { k_karadeniz = { is_titular = no } }
-					k_karadeniz = { show_scope_change = no province_completely_controls_trigger = yes }
-				}
-				conditional_tooltip = {
-					trigger = { k_karaman = { is_titular = no } }
-					k_karaman = { show_scope_change = no province_completely_controls_trigger = yes }
-				}
-				conditional_tooltip = {
-					trigger = { k_armenia = { is_titular = no } }
-					k_armenia = { show_scope_change = no province_completely_controls_trigger = yes }
-				}
-				conditional_tooltip = {
-					trigger = { k_daglikarazi = { is_titular = no } }
-					k_daglikarazi = { show_scope_change = no province_completely_controls_trigger = yes }
-				}
-				conditional_tooltip = {
-					trigger = { k_bulgaria = { is_titular = no } }
-					k_bulgaria = { show_scope_change = no province_completely_controls_trigger = yes }
-				}
-				conditional_tooltip = {
-					trigger = { k_georgia = { is_titular = no } }
-					k_georgia = { show_scope_change = no province_completely_controls_trigger = yes }
-				}
-				conditional_tooltip = {
-					trigger = { k_macedonia = { is_titular = no } }
+			OR = {	
+				AND = {
+					k_byzantium = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_athos = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_epirus = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_thrace = { show_scope_change = no province_completely_controls_trigger = yes }
 					k_macedonia = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_cyprus = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_crete = { show_scope_change = no province_completely_controls_trigger = yes }
+					conditional_tooltip = {
+						trigger = { k_bulgaria = { is_titular = no } }
+						k_bulgaria = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_aromania = { is_titular = no } }
+						k_aromania = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
 				}
-			e_ottoman = {
-				has_holder = no
-			}
-			e_latin_empire = {
-				has_holder = no
-			}
-			e_byzantium = {
-				has_holder = no
+				AND = {
+					OR = {
+						conditional_tooltip = {
+							trigger = { k_turkey = { is_titular = no } }
+							k_turkey = { show_scope_change = no province_completely_controls_trigger = yes }
+						}
+						conditional_tooltip = {
+							trigger = { k_anatolia = { is_titular = no } }
+							k_anatolia = { show_scope_change = no province_completely_controls_trigger = yes }
+						}
+					}
+					conditional_tooltip = {
+						trigger = { k_karadeniz = { is_titular = no } }
+						k_karadeniz = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_karaman = { is_titular = no } }
+						k_karaman = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_cukurova = { is_titular = no } }
+						k_cukurova = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_armenia = { is_titular = no } }
+						k_armenia = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_georgia = { is_titular = no } }
+						k_georgia = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_zazakistan = { is_titular = no } }
+						k_zazakistan = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_abkhazia = { is_titular = no } }
+						k_abkhazia = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_daglikarazi = { is_titular = no } }
+						k_daglikarazi = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+				}
 			}
 		}
 
@@ -4726,15 +5185,18 @@ decisions = {
 				k_athos = { de_jure_liege = e_macedonia }
 				k_epirus = { de_jure_liege = e_macedonia }
 				k_macedonia = { de_jure_liege = e_macedonia }
+				k_thrace = { de_jure_liege = e_macedonia }
 				e_macedonia = {
 					k_turkey = { set_de_jure_if_controls_effect = yes }
 					k_karaman = { set_de_jure_if_controls_effect = yes }
+					k_cukurova = { set_de_jure_if_controls_effect = yes }
 					k_karadeniz = { set_de_jure_if_controls_effect = yes }
 					k_armenia = { set_de_jure_if_controls_effect = yes }
 					k_daglikarazi = { set_de_jure_if_controls_effect = yes }
 					k_bulgaria 	= { set_de_jure_if_controls_effect = yes }
 					k_georgia = { set_de_jure_if_controls_effect = yes }
 					k_cyprus = { set_de_jure_if_controls_effect = yes }
+					k_crete = { set_de_jure_if_controls_effect = yes }
 					k_lebanon = { set_de_jure_if_controls_effect = yes }
 					k_syria = { set_de_jure_if_controls_effect = yes }
 					k_persia = { set_de_jure_if_controls_effect = yes }
@@ -4764,9 +5226,7 @@ decisions = {
 				# }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -4823,9 +5283,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 			
@@ -4886,48 +5344,10 @@ decisions = {
 			factor = 1
 		}
 	}
-	restore_macedonia = {
-		is_high_prio = yes
-		only_playable = no
-		ai_check_interval = 24
-		potential = {
-			has_landed_title = k_macedonia
-			NOT = {
-				has_global_flag = restored_macedonia
-			}
-			prisoner = no
-			has_regent = no
-		}
-
-		allow = {
-			custom_tooltip = {
-				text = all_relevant_titles_must_be_owned_or_owned_by_vassals_tt
-			}
-			prestige = 750
-				d_thessalonika = { show_scope_change = no province_completely_controls_trigger = yes }
-				d_adrianopolis = { show_scope_change = no province_completely_controls_trigger = yes }
-				d_ohrid = { show_scope_change = no province_completely_controls_trigger = yes }
-		}
-
-		effect = {
-			set_global_flag = restored_macedonia
-			hidden_tooltip = {
-				d_thessalonika = { de_jure_liege = k_macedonia }
-				d_adrianopolis = { de_jure_liege = k_macedonia }
-				d_ohrid = { de_jure_liege = k_macedonia }
-			}
-		}
-		revoke_allowed = {
-			always = no
-		}
-		ai_will_do = {
-			factor = 1
-		}
-	}
 	restore_numenor_fully = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			has_landed_title = e_france
 			OR = {
@@ -4950,7 +5370,6 @@ decisions = {
 				k_belgium = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_luxemburg = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_rhonie = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_brittany = { show_scope_change = no province_completely_controls_trigger = yes }
 				conditional_tooltip = {
 						trigger = { k_alsace_lorraine = { is_titular = no } }
 						k_alsace_lorraine = { show_scope_change = no province_completely_controls_trigger = yes }
@@ -4964,14 +5383,11 @@ decisions = {
 				k_belgium = { de_jure_liege = e_france }
 				k_luxemburg = { de_jure_liege = e_france }
 				k_rhonie = { de_jure_liege = e_france }
-				k_brittany = { de_jure_liege = e_france }
 				d_new_luxemburg = { de_jure_liege = k_alsace_lorraine }
 				d_alsace = { de_jure_liege = k_alsace_lorraine }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -4979,7 +5395,7 @@ decisions = {
 	restore_france_fully = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			has_landed_title = e_france
 			NOR = {
@@ -5002,7 +5418,6 @@ decisions = {
 				k_belgium = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_luxemburg = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_rhonie = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_brittany = { show_scope_change = no province_completely_controls_trigger = yes }
 				conditional_tooltip = {
 						trigger = { k_koln = { is_titular = no } }
 						k_koln = { show_scope_change = no province_completely_controls_trigger = yes }
@@ -5041,14 +5456,11 @@ decisions = {
 				k_belgium = { de_jure_liege = e_france }
 				k_luxemburg = { de_jure_liege = e_france }
 				k_rhonie = { de_jure_liege = e_france }
-				k_brittany = { de_jure_liege = e_france }
 				d_new_luxemburg = { de_jure_liege = k_alsace_lorraine }
 				d_alsace = { de_jure_liege = k_alsace_lorraine }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5057,7 +5469,7 @@ decisions = {
 	restore_modern_france = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			has_landed_title = e_france
 			NOR = {
@@ -5077,25 +5489,21 @@ decisions = {
 			}
 			prestige = 1000
 			k_rhonie = { show_scope_change = no province_completely_controls_trigger = yes }
-			k_brittany = { show_scope_change = no province_completely_controls_trigger = yes }
 			d_alsace = { show_scope_change = no province_completely_controls_trigger = yes }
 			d_new_luxemburg = { show_scope_change = no province_completely_controls_trigger = yes }
-			d_pas-de-calais = { show_scope_change = no province_completely_controls_trigger = yes }
+			d_pas-de-calais = { show_scope_change = no province_completely_controls_trigger = yes }			
 		}
 
 		effect = {
 			set_global_flag = restored_modern_france
 			hidden_tooltip = {
 				k_rhonie = { de_jure_liege = e_france }
-				k_brittany = { de_jure_liege = e_france }
 				d_alsace = { de_jure_liege = k_alsace_lorraine }
 				d_new_luxemburg = { de_jure_liege = k_alsace_lorraine }
-				d_pas-de-calais = { de_jure_liege = k_france }
+				d_pas-de-calais = { de_jure_liege = k_france }				
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5103,7 +5511,7 @@ decisions = {
 	form_assyria = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {		###Must be Assyrian
@@ -5152,9 +5560,7 @@ decisions = {
 				d_jazira = { de_jure_liege = k_assyria }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5162,7 +5568,7 @@ decisions = {
 	expand_assyria = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {		###Must be Assyrian
@@ -5202,9 +5608,7 @@ decisions = {
 				d_palmyra = { de_jure_liege = k_assyria }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5212,7 +5616,7 @@ decisions = {
 	form_korean_empire = { #West Korea for Koryo Saram
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -5262,9 +5666,7 @@ decisions = {
 				k_khotan = { de_jure_liege = e_west_korea }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5314,7 +5716,7 @@ decisions = {
 	form_imperium = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			culture = manx
@@ -5345,23 +5747,20 @@ decisions = {
 					limit = { tier = KING }
 					de_jure_liege = e_mann
 				}
-				narrative_event = { id = bloodlines.12 } #Event for formation
+				narrative_event = { id = bloodlines.6 } #Event for formation
 			}
 			hidden_tooltip = {
 				###Unite the kingdoms and fulfill your dreams
 				e_mann = {
 					k_ireland = { set_de_jure_if_controls_effect = yes }
 					k_wales = { set_de_jure_if_controls_effect = yes }
-					k_wales_gov = { set_de_jure_if_controls_effect = yes }
 					k_norf_gov = { set_de_jure_if_controls_effect = yes }
 					k_brittany = { set_de_jure_if_controls_effect = yes }
 					k_england = { set_de_jure_if_controls_effect = yes }
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5370,7 +5769,7 @@ decisions = {
 	form_esperantujo = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			e_esperantujo = {
@@ -5401,9 +5800,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5411,7 +5808,7 @@ decisions = {
 	form_kanem = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			culture = saran
@@ -5444,9 +5841,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5454,7 +5849,7 @@ decisions = {
 	form_k_mann = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = manx
@@ -5515,9 +5910,7 @@ decisions = {
 				d_the_isles = { de_jure_liege = k_mann }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5525,7 +5918,7 @@ decisions = {
 	form_poleshiukiya = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = tutejszy
@@ -5561,9 +5954,7 @@ decisions = {
 				d_cherven_cities = { de_jure_liege = k_poleshiukiya }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5571,7 +5962,7 @@ decisions = {
 	form_north_sea = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			has_landed_title = d_feroes
@@ -5616,9 +6007,7 @@ decisions = {
 			add_claim = c_saudakrokur
 			add_claim = c_isafjordur
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5626,7 +6015,7 @@ decisions = {
 	form_venice = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			has_landed_title = d_venezia
@@ -5663,9 +6052,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5674,7 +6061,7 @@ decisions = {
 	form_aland = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			has_landed_title = d_aland
@@ -5715,9 +6102,7 @@ decisions = {
 				k_aland = { de_jure_liege = e_scandinavia }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5778,7 +6163,7 @@ decisions = {
 	form_danzig = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			has_landed_title = d_tricity
@@ -5816,12 +6201,10 @@ decisions = {
 			}
 			hidden_tooltip = {
 				d_tricity = { de_jure_liege = k_danzig }
-				k_danzig = { de_jure_liege = e_commonwealth }
+				k_danzig = { de_jure_liege = e_zapadoslavia }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5830,7 +6213,7 @@ decisions = {
 	form_hansa = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {
@@ -5871,9 +6254,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5881,7 +6262,7 @@ decisions = {
 	form_genoa = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			has_landed_title= d_liguria
@@ -5917,9 +6298,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5927,7 +6306,7 @@ decisions = {
 	form_atlantis = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			culture = atlantian
@@ -5980,9 +6359,7 @@ decisions = {
 				sound_effect = bloodline_added
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -5991,10 +6368,13 @@ decisions = {
 	form_zion = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
-			culture = israeli
+			OR = {
+				culture = israeli
+				culture = yehudai
+			}
 			religion_group = jewish
 			e_zion = {
 				has_holder = no
@@ -6042,9 +6422,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -6253,7 +6631,7 @@ decisions = {
 	form_west_mandate = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			religion = maoist
@@ -6266,17 +6644,38 @@ decisions = {
 
 		allow = {
 			doesnt_holds_special_empire = yes
-			piety = 1000
-			num_of_holy_sites = 3
-			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 3
+					realm_size = 100
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 
@@ -6299,7 +6698,7 @@ decisions = {
 						limit = { tier = KING }
 						de_jure_liege = e_maoist
 					}
-					narrative_event = { id = bloodlines.6 } #Event for formation
+					narrative_event = { id = bludlines.1 } #Event for formation
 				}
 			}
 			set_government_type = mandate_heaven
@@ -6341,15 +6740,6 @@ decisions = {
 			piety = 1000
 			num_of_holy_sites = 3
 			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
-			}
 		}
 
 		effect = {
@@ -6371,7 +6761,7 @@ decisions = {
 						limit = { tier = KING }
 						de_jure_liege = e_red_cult
 					}
-					narrative_event = { id = bloodlines.7 } #Event for formation
+					narrative_event = { id = bludlines.2 } #Event for formation
 				}
 			}
 			e_red_cult = {
@@ -6407,17 +6797,38 @@ decisions = {
 
 		allow = {
 			doesnt_holds_special_empire = yes
-			piety = 1000
-			num_of_holy_sites = 3
-			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 3
+					realm_size = 100
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 
@@ -6500,17 +6911,38 @@ decisions = {
 
 		allow = {
 			doesnt_holds_special_empire = yes
-			piety = 1000
-			num_of_holy_sites = 3
-			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 3
+					realm_size = 100
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 
@@ -6532,7 +6964,7 @@ decisions = {
 						limit = { tier = KING }
 						de_jure_liege = e_taoist
 					}
-					narrative_event = { id = bloodlines.8 } #Event for formation
+					narrative_event = { id = bludlines.3 } #Event for formation
 				}
 			}
 			set_government_type = mandate_heaven
@@ -6564,17 +6996,38 @@ decisions = {
 
 		allow = {
 			doesnt_holds_special_empire = yes
-			piety = 1000
-			num_of_holy_sites = 3
-			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 3
+					realm_size = 100
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 
@@ -6658,17 +7111,38 @@ decisions = {
 
 		allow = {
 			doesnt_holds_special_empire = yes
-			piety = 1000
-			num_of_holy_sites = 3
-			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 3
+					realm_size = 100
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 
@@ -6751,17 +7225,38 @@ decisions = {
 
 		allow = {
 			doesnt_holds_special_empire = yes
-			piety = 1000
-			num_of_holy_sites = 3
-			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 3
+					realm_size = 100
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 
@@ -6845,17 +7340,38 @@ decisions = {
 
 		allow = {
 			doesnt_holds_special_empire = yes
-			piety = 1000
-			num_of_holy_sites = 3
-			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 3
+					realm_size = 100
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 
@@ -6939,17 +7455,38 @@ decisions = {
 
 		allow = {
 			doesnt_holds_special_empire = yes
-			piety = 1000
-			num_of_holy_sites = 3
-			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 3
+					realm_size = 100
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 
@@ -6971,7 +7508,7 @@ decisions = {
 						limit = { tier = KING }
 						de_jure_liege = e_heavenly
 					}
-					narrative_event = { id = bloodlines.9 } #Event for formation
+					narrative_event = { id = bludlines.4 } #Event for formation
 				}
 			}
 			set_government_type = mandate_heaven
@@ -6987,9 +7524,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -6997,7 +7532,7 @@ decisions = {
 	form_french_republic = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			government = oligarchic_republic
@@ -7040,9 +7575,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -7050,11 +7583,15 @@ decisions = {
 	form_roman_republic = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			government = oligarchic_republic
-			culture_group = apeninian
+			OR = {
+				culture_group = apeninian
+				culture_group = gallo_italic
+				culture_group = sardic
+			}
 			e_roman_republic = {
 				is_titular = yes
 				has_holder = no
@@ -7120,9 +7657,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -7130,7 +7665,7 @@ decisions = {
 	form_russian_republic = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			government = oligarchic_republic
@@ -7197,9 +7732,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -7207,7 +7740,7 @@ decisions = {
 	form_hellenic_republic = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			government = oligarchic_republic
@@ -7235,6 +7768,7 @@ decisions = {
 			#Control a bunch of lands
 			completely_controls = k_byzantium
 			completely_controls = k_cyprus
+			completely_controls = k_crete
 			}
 		  }
 		}
@@ -7278,9 +7812,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -7288,7 +7820,7 @@ decisions = {
 	form_turkish_republic = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			government = oligarchic_republic
@@ -7315,6 +7847,7 @@ decisions = {
 			AND = {
 			#Control a bunch of lands
 			completely_controls = k_karaman
+			completely_controls = k_cukurova
 			completely_controls = k_karadeniz
 			completely_controls = k_turkey
 			completely_controls = k_daglikarazi
@@ -7361,9 +7894,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -7454,7 +7985,7 @@ decisions = {
 	form_ruthenia = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -7553,9 +8084,7 @@ decisions = {
 				# }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -7563,7 +8092,7 @@ decisions = {
 	form_istromania = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = istromanian		
@@ -7606,9 +8135,7 @@ decisions = {
 				c_veglia = { de_jure_liege = d_istria }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -7616,7 +8143,7 @@ decisions = {
 	form_ladins = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {
@@ -7662,9 +8189,7 @@ decisions = {
 				d_carinthia = { de_jure_liege = k_ladins }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -7672,13 +8197,14 @@ decisions = {
 	form_normandy = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {		###Must be norman
 				culture = norman
 				culture = old_norman
 				culture = new_english
+				culture = angler
 			}
 			k_normandy = {
 				is_titular = yes
@@ -7715,9 +8241,7 @@ decisions = {
 				d_channel_islands = { de_jure_liege = k_normandy }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -7725,7 +8249,7 @@ decisions = {
 	form_provance = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			###Must be provencal
@@ -7761,11 +8285,10 @@ decisions = {
 			hidden_tooltip = {
 				d_provance = { de_jure_liege = k_provance }
 				d_dauphin = { de_jure_liege = k_provance }
+				d_french_comte = { de_jure_liege = k_france }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -7773,11 +8296,13 @@ decisions = {
 	form_burgundy = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {		###Must be Burgundian, one way or the other...
 				culture = burgundian
+				culture = arpitan
+				culture = patoues
 				dynasty = 24550014 #House of Burgundy-Portugal
 			}
 			k_burgundy = {
@@ -7817,9 +8342,7 @@ decisions = {
 				d_new_luxemburg = { de_jure_liege = k_burgundy }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -7827,7 +8350,7 @@ decisions = {
 	form_crimea = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {		###Must be gothic or tartar
@@ -7880,9 +8403,7 @@ decisions = {
 				d_crimea = { de_jure_liege = k_crimea }				
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 			modifier = {
@@ -7899,7 +8420,7 @@ decisions = {
 	form_hellas_minor = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture_group = byzantine
@@ -7953,9 +8474,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 
@@ -7964,7 +8483,7 @@ decisions = {
 	form_laconia = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = tsakonian
@@ -8038,9 +8557,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 
@@ -8111,7 +8628,7 @@ decisions = {
 	form_mazandaran = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = mazanish
@@ -8147,9 +8664,7 @@ decisions = {
 				d_gilan = { de_jure_liege = k_mazandaran }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 
@@ -8159,7 +8674,7 @@ decisions = {
 	form_zazakistan = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = zaza
@@ -8197,9 +8712,7 @@ decisions = {
 				d_mesopotamia = { de_jure_liege = k_zazakistan }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 
@@ -8208,7 +8721,7 @@ decisions = {
 #	form_ossetia = {
 #		is_high_prio = yes
 #		only_playable = no
-#		ai_check_interval = 24
+#		ai_check_interval = 36
 #		potential = {
 #			culture = alan
 #			d_ossetia = {
@@ -8254,7 +8767,7 @@ decisions = {
 	form_aromania = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = aromanian
@@ -8274,6 +8787,7 @@ decisions = {
 				d_dyrrachion = { show_scope_change = no province_completely_controls_trigger = yes }
 				d_epirus = { show_scope_change = no province_completely_controls_trigger = yes }
 				d_ohrid = { show_scope_change = no province_completely_controls_trigger = yes }
+				d_toskeria = { show_scope_change = no province_completely_controls_trigger = yes }
 		}
 
 		effect = {
@@ -8290,11 +8804,10 @@ decisions = {
 				d_dyrrachion = { de_jure_liege = k_aromania }
 				d_epirus = { de_jure_liege = k_aromania }
 				d_ohrid = { de_jure_liege = k_aromania }
+				d_toskeria = { de_jure_liege = k_aromania }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 
@@ -8304,7 +8817,7 @@ decisions = {
 	form_abkhazia = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 				culture = abkhazian
@@ -8344,9 +8857,7 @@ decisions = {
 				d_circassia = { de_jure_liege = k_abkhazia }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 
@@ -8405,9 +8916,582 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.8
+			}
 		}
+	}
+	build_hospital_buildings = {
+		is_high_prio = yes
+		ai_check_interval = 60
+		potential = {
+			any_demesne_province = {
+				has_hospital = yes
+			}
+			ai = yes
+			wealth = 100
+			OR = {
+				trait = golden_sovereign
+				trait = midas_touched
+				trait = fortune_builder
+				trait = thrifty_clerk
+				trait = mastermind_theologian
+				trait = erudite_oracle
+				trait = scholarly_theologian
+				trait = martial_cleric
+				trait = mystic
+				trait = scholar
+				trait = physician
+				trait = charitable
+				trait = diligent
+				trait = kind
+				trait = temperate
+				trait = erudite
+				trait = just
+			}
+			prisoner = no
+			has_regent = no
+			war = no
+			in_command = no
+			is_incapable = no
+		}
+
+		allow = {
+			wealth = 100
+		}
+
+		effect = {
+			wealth = -100
+			random_demesne_province = {
+				limit = {
+					has_hospital = yes
+				}
+				random_list = {
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = ct_dirt_road
+								}
+								TECH_CASTLE_CONSTRUCTION = 1
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = ct_dirt_road
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = ct_stone_road
+								}
+								hospital_has_building = ct_dirt_road
+								TECH_CASTLE_CONSTRUCTION = 2
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = ct_stone_road
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = ct_stone_highway
+								}
+								hospital_has_building = ct_stone_road
+								TECH_CASTLE_CONSTRUCTION = 3
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = ct_stone_highway
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = ct_tolled_brick_highway
+								}
+								hospital_has_building = ct_stone_highway
+								TECH_CASTLE_CONSTRUCTION = 4
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = ct_tolled_brick_highway
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = ct_waystation_brick_highway
+								}
+								hospital_has_building = ct_tolled_brick_highway
+								TECH_CASTLE_CONSTRUCTION = 5
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = ct_waystation_brick_highway
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = alcohol_distillery_1
+								}
+								TECH_CONSTRUCTION = 2
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = alcohol_distillery_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = alcohol_distillery_2
+								}
+								TECH_CONSTRUCTION = 4
+								hospital_has_building = alcohol_distillery_1
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = alcohol_distillery_2
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = hospital_garden_1
+								}
+								TECH_CONSTRUCTION = 2
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = hospital_garden_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = hospital_garden_2
+								}
+								TECH_CONSTRUCTION = 4
+								hospital_has_building = hospital_garden_1
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = hospital_garden_2
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = drinking_1
+								}
+								TECH_CONSTRUCTION = 2
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = drinking_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = drinking_2
+								}
+								TECH_CONSTRUCTION = 4
+								hospital_has_building = drinking_1
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = drinking_2
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = drinking_3
+								}
+								TECH_CONSTRUCTION = 6
+								hospital_has_building = drinking_2
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = drinking_3
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = waste_disposal_1
+								}
+								TECH_CONSTRUCTION = 2
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = waste_disposal_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = waste_disposal_2
+								}
+								TECH_CONSTRUCTION = 4
+								hospital_has_building = waste_disposal_1
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = waste_disposal_2
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = waste_disposal_3
+								}
+								TECH_CONSTRUCTION = 6
+								hospital_has_building = waste_disposal_2
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = waste_disposal_3
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = animal_pens_1
+								}
+								TECH_CONSTRUCTION = 2
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = animal_pens_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = animal_pens_2
+								}
+								TECH_CONSTRUCTION = 4
+								hospital_has_building = animal_pens_1
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = animal_pens_2
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = bunks_1
+								}
+								TECH_CONSTRUCTION = 2
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = bunks_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = bunks_2
+								}
+								TECH_CONSTRUCTION = 4
+								hospital_has_building = bunks_1
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = bunks_2
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = hospital_building_1
+								}
+								TECH_CONSTRUCTION = 2
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = hospital_building_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = hospital_building_2
+								}
+								TECH_CONSTRUCTION = 3
+								hospital_has_building = hospital_building_1
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = hospital_building_2
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = hospital_building_4
+								}
+								TECH_CONSTRUCTION = 5
+								hospital_has_building = hospital_building_3
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = hospital_building_4
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = hospital_building_5
+								}
+								TECH_CONSTRUCTION = 6
+								hospital_has_building = hospital_building_4
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = hospital_building_5
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = soup_kitchen_1
+								}
+								hospital_has_building = hospital_building_1
+								TECH_CONSTRUCTION = 2
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = soup_kitchen_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = chapel_1
+								}
+								hospital_has_building = hospital_building_1
+								TECH_CONSTRUCTION = 3
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = chapel_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = translation_house_1
+								}
+								hospital_has_building = hospital_building_1
+								TECH_CONSTRUCTION = 3
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = translation_house_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = pilgrims_inn_1
+								}
+								hospital_has_building = hospital_building_1
+								TECH_CONSTRUCTION = 3
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = pilgrims_inn_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = library_1
+								}
+								hospital_has_building = hospital_building_2
+								TECH_CONSTRUCTION = 3
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = library_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = pharmacology_laboratory_1
+								}
+								hospital_has_building = hospital_building_3
+								TECH_CONSTRUCTION = 4
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = pharmacology_laboratory_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = observatory_1
+								}
+								hospital_has_building = hospital_building_3
+								hospital_has_building = pharmacology_laboratory_1
+								TECH_CONSTRUCTION = 4
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = observatory_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = medical_academy_1
+								}
+								hospital_has_building = hospital_building_3
+								hospital_has_building = library_1
+								TECH_CONSTRUCTION = 4
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = medical_academy_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = ct_university_0
+								}
+								TECH_CONSTRUCTION = 2
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = ct_university_0
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = ct_university_1
+								}
+								hospital_has_building = ct_university_0
+								TECH_CONSTRUCTION = 4
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = ct_university_1
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = ct_university_2
+								}
+								hospital_has_building = ct_university_1
+								TECH_CONSTRUCTION = 6
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = ct_university_2
+						}
+					}
+					10 = {
+						trigger = {
+							location = {
+								NOT = {
+									hospital_has_building = ct_university_3
+								}
+								hospital_has_building = ct_university_2
+								TECH_CONSTRUCTION = 7
+							}
+						}
+						add_to_extra_holding = {
+							type = hospital
+							building = ct_university_3
+						}
+					}
+				}
+			}
+		}
+		
 		ai_will_do = {
 			factor = 1
 			modifier = {
@@ -8418,7 +9502,7 @@ decisions = {
 	form_luristan = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 				culture = lurish
@@ -8456,9 +9540,7 @@ decisions = {
 				c_hendjan = { de_jure_liege = d_khozistan }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 
@@ -8468,7 +9550,7 @@ decisions = {
 	form_centcom = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 				culture = amriqi
@@ -8519,9 +9601,7 @@ decisions = {
 				sound_effect = bloodline_added
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -8529,7 +9609,7 @@ decisions = {
 	form_europabund = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 				culture = kuhjungs
@@ -8561,9 +9641,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -8571,7 +9649,7 @@ decisions = {
 	form_lutherstadt = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -8606,9 +9684,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -8616,7 +9692,7 @@ decisions = {
 	form_kazzinkh = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -8634,7 +9710,7 @@ decisions = {
 				text = all_relevant_titles_must_be_owned_or_owned_by_vassals_tt
 			}
 			form_empire_allow = yes
-			controls = 1132 # Oskemen
+			#controls = 1132 # Oskemen
 			realm_size = 150
 		}
 
@@ -8650,9 +9726,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -8661,7 +9735,7 @@ decisions = {
 	form_tirnanog = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -8704,9 +9778,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -8714,7 +9786,7 @@ decisions = {
 	form_armenian_empire = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 					###Must be Armenian
@@ -8742,8 +9814,12 @@ decisions = {
 				k_azerbaijan = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_lebanon = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_syria = { show_scope_change = no province_completely_controls_trigger = yes }
+				k_azaristan = { show_scope_change = no province_completely_controls_trigger = yes }
+				k_assyria = { show_scope_change = no province_completely_controls_trigger = yes }
 				d_jazira = { show_scope_change = no province_completely_controls_trigger = yes }
 				d_mosul = { show_scope_change = no province_completely_controls_trigger = yes }
+				d_edessa = { show_scope_change = no province_completely_controls_trigger = yes }
+				k_cukurova = { show_scope_change = no province_completely_controls_trigger = yes }
 		}
 
 		effect = {
@@ -8757,12 +9833,16 @@ decisions = {
 				limit = { tier = KING }
 				de_jure_liege = e_armenia
 			}
-			d_jazira = { de_jure_liege = k_daglikarazi }
-			d_mosul = { de_jure_liege = k_syria }
+			k_cukurova = { de_jure_liege = e_armenia }
+			k_assyria = { de_jure_liege = e_armenia }
+			k_azaristan = { de_jure_liege = e_armenia }
+			k_syria = { de_jure_liege = e_armenia }
+			k_azerbaijan = { de_jure_liege = e_armenia }
+			k_lebanon = { de_jure_liege = e_armenia }
+			k_armenia = { de_jure_liege = e_armenia }
+			k_daglikarazi = { de_jure_liege = e_armenia }
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -8770,7 +9850,7 @@ decisions = {
 	form_neo_assyria = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {		###Must be Assyrian
@@ -8813,9 +9893,7 @@ decisions = {
 					de_jure_liege = e_assyria
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -8823,7 +9901,7 @@ decisions = {
 	form_babylon = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			###Must be Assyrian or babylonian
@@ -8850,7 +9928,8 @@ decisions = {
 			#Controls a bunch of shit
 				d_baghdad = { show_scope_change = no province_completely_controls_trigger = yes }
 				d_basra = { show_scope_change = no province_completely_controls_trigger = yes }
-				d_khozistan = { show_scope_change = no province_completely_controls_trigger = yes }
+				d_babil = { show_scope_change = no province_completely_controls_trigger = yes }
+				d_karbala = { show_scope_change = no province_completely_controls_trigger = yes }
 		}
 
 		effect = {
@@ -8866,12 +9945,11 @@ decisions = {
 			hidden_tooltip = {
 				d_baghdad = { de_jure_liege = k_babylon }
 				d_basra = { de_jure_liege = k_babylon }
-				d_khozistan = { de_jure_liege = k_babylon }
+				d_babil = { de_jure_liege = k_babylon }
+				d_karbala = { de_jure_liege = k_babylon }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -8879,7 +9957,7 @@ decisions = {
 	form_aram = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {		###Must be Aramaic
@@ -8928,9 +10006,7 @@ decisions = {
 				d_beqaa = { de_jure_liege = k_aram }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -8938,7 +10014,7 @@ decisions = {
 	form_syriac = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			religion = chaldean
@@ -8981,9 +10057,7 @@ decisions = {
 				k_aram = { de_jure_liege = e_syriac }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -8991,7 +10065,7 @@ decisions = {
 	form_chuvash = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = chuvash
@@ -9020,9 +10094,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9030,7 +10102,7 @@ decisions = {
 	form_new_brazil = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {
@@ -9061,9 +10133,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9071,7 +10141,7 @@ decisions = {
 	integrate_babylon = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			has_landed_title = e_assyria
 			has_landed_title = k_babylon
@@ -9095,9 +10165,7 @@ decisions = {
 				k_babylon = { de_jure_liege = e_assyria }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9105,7 +10173,7 @@ decisions = {
 	integrate_assyria = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			has_landed_title = e_assyria
 			has_landed_title = k_assyria
@@ -9129,9 +10197,7 @@ decisions = {
 				k_assyria = { de_jure_liege = e_assyria }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9140,7 +10206,7 @@ decisions = {
 	integrate_aram = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			has_landed_title = e_assyria
 			has_landed_title = k_aram
@@ -9164,9 +10230,7 @@ decisions = {
 				k_aram = { de_jure_liege = e_assyria }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9174,7 +10238,7 @@ decisions = {
 	integrate_babylon_b = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			has_landed_title = e_babylon
 			has_landed_title = k_babylon
@@ -9198,9 +10262,7 @@ decisions = {
 				k_babylon = { de_jure_liege = e_babylon }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9208,7 +10270,7 @@ decisions = {
 	integrate_assyria_b = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			has_landed_title = e_babylon
 			has_landed_title = k_assyria
@@ -9232,9 +10294,7 @@ decisions = {
 				k_assyria = { de_jure_liege = e_babylon }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9243,7 +10303,7 @@ decisions = {
 	integrate_aram_b = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			has_landed_title = e_babylon
 			has_landed_title = k_aram
@@ -9267,9 +10327,7 @@ decisions = {
 				k_aram = { de_jure_liege = e_babylon }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9278,7 +10336,7 @@ decisions = {
 	form_neo_babylon = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {		###Must be Babylonian
@@ -9338,9 +10396,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9349,7 +10405,7 @@ decisions = {
 	orange_nassau_restored = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			dynasty = 2000727
 			NOT = {
@@ -9405,9 +10461,7 @@ decisions = {
 				d_knights_hospitaler_2 = { set_defacto_liege = k_holland }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9416,7 +10470,7 @@ decisions = {
 	form_lusitania = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			culture_group = lusophone
@@ -9468,9 +10522,7 @@ decisions = {
 				d_extremadura = { de_jure_liege = k_portugal }				
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9479,7 +10531,7 @@ decisions = {
 	form_wendia = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = wendish
@@ -9519,25 +10571,23 @@ decisions = {
 				d_lausitt = { de_jure_liege = k_wendia }
 				d_meissenn = { de_jure_liege = k_wendia }
 				d_east_pommerania = { de_jure_liege = k_poland }
-				k_wendia = { de_jure_liege = e_commonwealth }
+				k_wendia = { de_jure_liege = e_zapadoslavia }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
 	}
 	
-	form_hui = {
+	form_hua = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
-			religion = qingzhen
-			e_hui = {
+			religion = xidaotang
+			e_hua = {
 				is_titular = yes
 				has_holder = no
 			}
@@ -9553,14 +10603,125 @@ decisions = {
 			piety = 1000
 			num_of_holy_sites = 3
 			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = form_hui_tt 
+				e_hua = {
+					gain_title_effect = yes
+				}
+			}
+			hidden_tooltip = {
+			e_hua = {
+				gain_empire_effect = yes
+			}				
+			any_demesne_title = {
+				limit = {
+					tier = EMPEROR
+					NOT = { title = e_hua }
+				}
+				destroy_landed_title = yes
+			}
+			any_demesne_title = {
+				limit = { tier = KING }
+				de_jure_liege = e_hua
+			}
+			}
+			e_hua = {
+				add_law = ze_administration_laws_2
+				add_law = vice_royalty_2
+			}
+			if = {
+				limit = {
+						is_female = yes
+						has_dlc = "Holy Fury"
+					}
+				create_bloodline = {
+					type = chinese_emperor_female
+				}
+				new_bloodline = {
+					set_description = "bloodline_desc_chinese"
+				}
+			}
+			if = {
+				limit = {
+					is_female = no
+					has_dlc = "Holy Fury"
+				}
+				create_bloodline = {
+					type = chinese_emperor_male
+				}
+				new_bloodline = {
+					set_description = "bloodline_desc_chinese"
+				}
+			}
+			xidaotang = {
+				religion_authority = {
+					modifier = papacy_instituted
+					years = 20
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	form_hui = {
+		is_high_prio = yes
+		only_playable = no
+		ai_check_interval = 36
+		potential = {
+			form_empire_potential = yes
+			religion = qingzhen
+			e_hui = {
+				is_titular = yes
+				has_holder = no
+			}
+			prisoner = no
+			has_regent = no
+		}
+
+		allow = {
+			custom_tooltip = {
+				text = all_relevant_titles_must_be_owned_or_owned_by_vassals_tt
+			}
+			form_empire_allow = yes
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 3
+					realm_size = 100
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 
@@ -9624,9 +10785,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9635,7 +10794,7 @@ decisions = {
 	form_jin = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			religion = eastern_lightning
@@ -9658,18 +10817,39 @@ decisions = {
 			custom_tooltip = {
 				text = all_relevant_titles_must_be_owned_or_owned_by_vassals_tt
 			}
-			form_title_allow = yes
-			piety = 1000
-			num_of_holy_sites = 3
-			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			form_empire_allow = yes
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 3
+					realm_size = 100
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 
@@ -9728,9 +10908,7 @@ decisions = {
 				add_law = succ_dynastic_meritocratic
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9825,7 +11003,7 @@ decisions = {
 	form_aragon = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {		###Must be one of the following cultures
@@ -9859,8 +11037,7 @@ decisions = {
 			form_empire_allow = yes
 			#Control a bunch of lands and islands
 				k_catalunia = { show_scope_change = no province_completely_controls_trigger = yes }
-				d_sardinia = { show_scope_change = no province_completely_controls_trigger = yes }
-				d_corsica = { show_scope_change = no province_completely_controls_trigger = yes }
+				k_sardinia = { show_scope_change = no province_completely_controls_trigger = yes }
 				d_campania = { show_scope_change = no province_completely_controls_trigger = yes }
 				d_puglia = { show_scope_change = no province_completely_controls_trigger = yes }
 				d_abruzzo = { show_scope_change = no province_completely_controls_trigger = yes }
@@ -9891,15 +11068,12 @@ decisions = {
 			hidden_tooltip = {
 				###True rulers of the Med
 				k_catalunia = { de_jure_liege = e_aragon }
-				d_provance = { de_jure_liege = k_italy }
 				k_sardinia = { de_jure_liege = e_aragon }
 				k_two_siciles = { de_jure_liege = e_aragon }
 				k_andorra = { de_jure_liege = e_aragon }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9908,7 +11082,7 @@ decisions = {
 	form_kashubia = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = kashubian
@@ -9947,12 +11121,10 @@ decisions = {
 				d_prussia = { de_jure_liege = k_kashubia }
 				d_pomeralia = { de_jure_liege = k_kashubia }				
 				d_east_pommerania = { de_jure_liege = k_kashubia }
-				k_kashubia = { de_jure_liege = e_commonwealth }
+				k_kashubia = { de_jure_liege = e_zapadoslavia }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -9961,7 +11133,7 @@ decisions = {
 	form_caucasia = { #Transcaucasia
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {		###Must be one of the following cultures
@@ -10019,9 +11191,6 @@ decisions = {
 			hidden_tooltip = {
 				###Unite the Caucasus
 				k_georgia = { de_jure_liege = e_caucasia }
-				d_mesopotamia = { de_jure_liege = k_karaman }
-				d_edessa = { de_jure_liege = k_karaman }
-				d_coloneia = { de_jure_liege = k_karaman }
 				d_tabriz = { de_jure_liege = k_persia }
 				d_gilan = { de_jure_liege = k_persia }
 				k_armenia = { de_jure_liege = e_caucasia }
@@ -10029,9 +11198,7 @@ decisions = {
 				k_abkhazia = { set_de_jure_if_controls_effect = yes }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -10040,7 +11207,7 @@ decisions = {
 	form_konkani = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			culture = konkani
@@ -10078,9 +11245,7 @@ decisions = {
 				k_gujarat = { de_jure_liege = e_konkani }				
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -10089,7 +11254,7 @@ decisions = {
 	form_swedish = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {		###Must be one of the following cultures
@@ -10122,22 +11287,11 @@ decisions = {
 				k_sweden = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_finland = { show_scope_change = no province_completely_controls_trigger = yes }
 				k_estonia = { show_scope_change = no province_completely_controls_trigger = yes }
-				completely_controls = c_kexholm 
-				completely_controls = c_vodi
+				d_pieter = { show_scope_change = no province_completely_controls_trigger = yes }				
 		}
 
 		effect = {
 			prestige = 1000
-			hidden_tooltip = {
-			}
-			primary_title = {
-				e_swedish = {
-					grant_title = ROOT
-					copy_title_laws = PREV
-					copy_title_history = PREV
-				}
-			}
-			
 			custom_tooltip = {
 				text = form_swedish_tt 
 				e_swedish = {
@@ -10149,12 +11303,15 @@ decisions = {
 				###Unite the kingdoms
 				k_sweden = { de_jure_liege = e_swedish }
 				k_finland = { de_jure_liege = e_swedish }
-				k_estonia = { de_jure_liege = e_swedish }				
+				k_estonia = { de_jure_liege = e_swedish }
+				e_swedish = {
+					k_karelia = { set_de_jure_if_controls_effect = yes }
+					k_lithuania = { set_de_jure_if_controls_effect = yes }
+					k_lativia = { set_de_jure_if_controls_effect = yes }					
+				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -10164,7 +11321,7 @@ decisions = {
 	form_bulgaria = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			culture = bulgarian
@@ -10184,7 +11341,9 @@ decisions = {
 			form_empire_allow = yes
 			#Control a bunch of lands
 				k_bulgaria = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_romania = { show_scope_change = no province_completely_controls_trigger = yes }								
+				k_romania = { show_scope_change = no province_completely_controls_trigger = yes }
+				k_thrace = { show_scope_change = no province_completely_controls_trigger = yes }
+				k_macedonia = { show_scope_change = no province_completely_controls_trigger = yes }
 		}
 
 		effect = {
@@ -10211,13 +11370,11 @@ decisions = {
 				###Unite the kingdoms and own stuff
 				k_bulgaria = { de_jure_liege = e_bulgaria }
 				k_romania = { de_jure_liege = e_bulgaria }
-				d_adrianopolis = { de_jure_liege = k_bulgaria }
-								
+				k_thrace = { de_jure_liege = e_bulgaria }
+				k_macedonia = { de_jure_liege = e_bulgaria }				
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -10226,7 +11383,7 @@ decisions = {
 	form_yuan = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -10237,7 +11394,8 @@ decisions = {
 				culture_group = mongolic
 				culture = uyghur
 				culture = kirghiz		
-				culture = altai						
+				culture = altai	
+				culture = tartarskii
 			}
 			e_yuan = {
 				is_titular = yes
@@ -10252,17 +11410,54 @@ decisions = {
 					
 			#Control these lands
 			OR = {
-					k_inner_mongolia = { show_scope_change = no province_completely_controls_trigger = yes }
-					has_landed_title = k_inner_mongolia
+				AND = {
+					OR = {
+						k_inner_mongolia = { show_scope_change = no province_completely_controls_trigger = yes }
+						has_landed_title = k_inner_mongolia
+					}
+					OR = {
+						k_shaanxi = { show_scope_change = no province_completely_controls_trigger = yes }
+						has_landed_title = k_shaanxi
+					}
+					OR = {
+						k_hebei = { show_scope_change = no province_completely_controls_trigger = yes }
+						has_landed_title = k_hebei
+					}
 				}
-				OR = {
-					k_shaanxi = { show_scope_change = no province_completely_controls_trigger = yes }
-					has_landed_title = k_shaanxi
+				AND = {
+					OR = {
+						dynasty = 1842120 #Giray
+						any_owned_bloodline = {
+							has_bloodline_flag = genghis_wong_line
+						}
+					}
+					AND = {
+						k_britannia = { is_titular = no }
+						OR = {
+							k_britannia = { show_scope_change = no province_completely_controls_trigger = yes }
+							has_landed_title = k_britannia
+						}
+						k_norf_gov = { is_titular = no }
+						OR = {
+							k_norf_gov = { show_scope_change = no province_completely_controls_trigger = yes }
+							has_landed_title = k_norf_gov
+						}
+					}
+					k_england = { is_titular = no }
+					OR = {
+						k_england = { show_scope_change = no province_completely_controls_trigger = yes }
+						has_landed_title = k_england
+					}
+					OR = {
+						k_wales = { show_scope_change = no province_completely_controls_trigger = yes }
+						has_landed_title = k_wales
+					}
+					OR = {
+						k_scotland = { show_scope_change = no province_completely_controls_trigger = yes }
+						has_landed_title = k_scotland
+					}
 				}
-				OR = {
-					k_hebei = { show_scope_change = no province_completely_controls_trigger = yes }
-					has_landed_title = k_hebei
-				}
+			}
 		}
 		effect = {
 			custom_tooltip = {
@@ -10305,11 +11500,47 @@ decisions = {
 			}
 
 			hidden_tooltip = {
-				###Unite the kingdoms and fulfill your dreams
-				k_inner_mongolia = { de_jure_liege = e_yuan }
-				k_shaanxi = { de_jure_liege = e_yuan }
-				k_hebei = { de_jure_liege = e_yuan }
+			###Unite the kingdoms and fulfill your dreams
+				if = {
+					limit = {
+						OR = {
+							dynasty = 1842120 #Giray
+							custom_tooltip = {
+								text = giray_blood_tt
+								any_owned_bloodline = {
+									has_bloodline_flag = genghis_wong_line
+								}
+							}
+						}
+						capital_scope = {
+							region = world_europe_west_brittania
+						}
+					}
+					if = {
+						limit = {
+							k_england = { is_titular = no }
+						}
+						k_england = { de_jure_liege = e_yuan }
+					}
+					else = {
+						k_britannia = { de_jure_liege = e_yuan }
+						k_norf_gov = { de_jure_liege = e_yuan }
+					}
+					k_scotland = { de_jure_liege = e_yuan }
+					k_wales = { de_jure_liege = e_yuan }
+				}
+				else = {
+					k_inner_mongolia = { de_jure_liege = e_yuan }
+					k_shaanxi = { de_jure_liege = e_yuan }
+					k_hebei = { de_jure_liege = e_yuan }
+				}
 				e_yuan = {
+					k_doggerland =  {set_de_jure_if_controls_effect = yes }
+					k_mann =  {set_de_jure_if_controls_effect = yes }
+					k_brittany =  {set_de_jure_if_controls_effect = yes }
+					k_france =  {set_de_jure_if_controls_effect = yes }
+					k_aquitaine =  {set_de_jure_if_controls_effect = yes }
+					k_ireland =  {set_de_jure_if_controls_effect = yes }
 					k_mongolia = { set_de_jure_if_controls_effect = yes }
 					k_gansu = { set_de_jure_if_controls_effect = yes }
 					k_liaoning = { set_de_jure_if_controls_effect = yes }
@@ -10321,12 +11552,9 @@ decisions = {
 					k_choseon = { set_de_jure_if_controls_effect = yes }
 					k_amur = { set_de_jure_if_controls_effect = yes }
 					k_sakhalin = { set_de_jure_if_controls_effect = yes }
-					k_kamchatka = { set_de_jure_if_controls_effect = yes }					
+					k_kamchatka = { set_de_jure_if_controls_effect = yes }		
 				}
 			}
-		}
-		revoke_allowed = {
-			always = no
 		}
 		ai_will_do = {
 			factor = 1
@@ -10358,17 +11586,52 @@ decisions = {
 		}
 		allow = {
 			doesnt_holds_special_empire = yes
-			piety = 1000
-			num_of_holy_sites = 3
-			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 3
+					realm_size = 100
+					OR = {
+						culture = evenk
+						culture = oroqen
+						culture = udege
+						culture = xibe
+						culture = ulch
+						culture = nanai
+						culture = nivkh	
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						culture = evenk
+						culture = oroqen
+						culture = udege
+						culture = xibe
+						culture = ulch
+						culture = nanai
+						culture = nivkh	
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 		effect = {
@@ -10415,13 +11678,13 @@ decisions = {
 				k_liaoning = { de_jure_liege = e_qing }
 				k_jilin = { de_jure_liege = e_qing }
 				k_oroqen = { de_jure_liege = e_qing }
+				k_heilongjiang = { de_jure_liege = e_qing }
 				any_demesne_title = {
 					limit = { tier = KING }
 					de_jure_liege = e_qing
 				}
 				e_qing = {
 					k_mongolia = { set_de_jure_if_controls_effect = yes }
-					k_heilongjiang = { set_de_jure_if_controls_effect = yes }
 					k_hebei = { set_de_jure_if_controls_effect = yes }
 					k_inner_mongolia = { set_de_jure_if_controls_effect = yes }
 					k_khabarovsk = { set_de_jure_if_controls_effect = yes }
@@ -10443,7 +11706,97 @@ decisions = {
 			factor = 1
 		}
 	}
-	
+	form_xia = {
+		is_high_prio = yes
+		only_playable = yes
+		ai_check_interval = 24
+		potential = {
+			form_empire_potential = yes
+			OR = {
+				religion = novelist
+				religion = novelist_reformed
+			}
+			OR = {
+				culture_group = chinese_group
+				culture_group = south_chinese_group
+			}
+			e_xia = {
+				is_titular = yes
+				has_holder = no
+			}
+			prisoner = no
+			has_regent = no
+		}
+		allow = {
+			doesnt_holds_special_empire = yes
+			OR = {
+				has_character_modifier = government_legitimacy_4
+				has_character_modifier = government_legitimacy_5
+				has_character_modifier = government_legitimacy_6
+				has_character_modifier = government_legitimacy_7
+				has_character_modifier = government_legitimacy_8
+				has_character_modifier = government_legitimacy_9
+				has_character_modifier = government_legitimacy_10
+			}
+			completely_controls = k_shaanxi
+			completely_controls = k_henan
+		}
+		effect = {
+			custom_tooltip = {
+				text = form_xia_tt
+				e_xia = {
+					gain_title_effect = yes
+					make_primary_title = yes
+				}
+			}
+			if = {
+				limit = {
+						is_female = yes
+						has_dlc = "Holy Fury"
+					}
+				create_bloodline = {
+					type = chinese_emperor_female
+				}
+				new_bloodline = {
+					set_description = "bloodline_desc_chinese"
+				}
+			}
+			if = {
+				limit = {
+					is_female = no
+					has_dlc = "Holy Fury"
+				}
+				create_bloodline = {
+					type = chinese_emperor_male
+				}
+				new_bloodline = {
+					set_description = "bloodline_desc_chinese"
+				}
+			}
+			set_government_type = mandate_heaven
+			e_xia = {
+				add_law = ze_administration_laws_2
+				add_law = vice_royalty_2
+				add_law = succ_dynastic_meritocratic
+			}
+
+			hidden_tooltip = {
+				###Unite the kingdoms and fulfill your dreams
+				k_shaanxi = { de_jure_liege = e_xia }
+				k_henan = { de_jure_liege = e_xia }
+				e_xia = {
+					k_shandong = { set_de_jure_if_controls_effect = yes }
+					k_hebei = { set_de_jure_if_controls_effect = yes }
+				}
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
 	form_jing_true = {
 		is_high_prio = yes
 		only_playable = yes
@@ -10468,17 +11821,38 @@ decisions = {
 		}
 		allow = {
 			doesnt_holds_special_empire = yes
-			piety = 1000
-			num_of_holy_sites = 3
-			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 3
+					realm_size = 100
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 
@@ -10568,17 +11942,38 @@ decisions = {
 		}
 		allow = {
 			doesnt_holds_special_empire = yes
-			piety = 1000
-			num_of_holy_sites = 3
-			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 3
+					realm_size = 100
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 
@@ -10660,17 +12055,38 @@ decisions = {
 		}
 		allow = {
 			doesnt_holds_special_empire = yes
-			piety = 1000
-			num_of_holy_sites = 3
-			realm_size = 100
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 3
+					realm_size = 100
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 		effect = {
@@ -10755,16 +12171,38 @@ decisions = {
 		}
 		allow = {
 			doesnt_holds_special_empire = yes
-			piety = 1200
-			realm_size = 125 #Just be beeeeeg in this case
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					num_of_holy_sites = 1
+					realm_size = 110
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					num_of_holy_sites = 1
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 		effect = {
@@ -10851,16 +12289,36 @@ decisions = {
 		}
 		allow = {
 			doesnt_holds_special_empire = yes
-			piety = 1000
-			realm_size = 150
-			OR = {
-				has_character_modifier = government_legitimacy_4
-				has_character_modifier = government_legitimacy_5
-				has_character_modifier = government_legitimacy_6
-				has_character_modifier = government_legitimacy_7
-				has_character_modifier = government_legitimacy_8
-				has_character_modifier = government_legitimacy_9
-				has_character_modifier = government_legitimacy_10
+			OR ={
+				AND = {
+					ai = no
+					piety = 1000
+					realm_size = 100
+					OR = {
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
+				AND = {
+					ai = yes
+					piety = 500
+					realm_size = 70
+					OR = {
+						has_character_modifier = government_legitimacy_3
+						has_character_modifier = government_legitimacy_4
+						has_character_modifier = government_legitimacy_5
+						has_character_modifier = government_legitimacy_6
+						has_character_modifier = government_legitimacy_7
+						has_character_modifier = government_legitimacy_8
+						has_character_modifier = government_legitimacy_9
+						has_character_modifier = government_legitimacy_10
+					}
+				}
 			}
 		}
 		effect = {
@@ -10950,8 +12408,8 @@ decisions = {
 		}
 		allow = {
 			doesnt_holds_special_empire = yes
-			prestige = 6000
-			piety = 1000
+			prestige = 5000
+			piety = 750
 			OR = {
 				realm_size = 150
 				custom_tooltip = {
@@ -10988,7 +12446,7 @@ decisions = {
 						limit = { tier = KING }
 						de_jure_liege = e_tang
 					}
-					narrative_event = { id = bloodlines.11 } #Event for formation
+					narrative_event = { id = bludlines.6 } #Event for formation
 			}
 			set_government_type = mandate_heaven
 			e_tang = {
@@ -11029,57 +12487,46 @@ decisions = {
 		}
 	}
 	
-	form_baltic = {
+	form_plc = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {		###Must be one of the following cultures
 				culture = ugricbaltic
 				culture_group = baltic
 				culture = lietuvininkai
+				culture_group = west_slavic
 			}
-			NOT = {
-				religion = catholic #Baltic Catholics should form Commonwealth instead
-			}			
-			e_baltic = {
+					
+			e_commonwealth = {
 				is_titular = yes
 				has_holder = no
 			}
 			prisoner = no
 			has_regent = no
+			
+			e_commonwealth = {
+				is_titular = yes
+				has_holder = no
+			}
 		}
 
 		allow = {
-			custom_tooltip = {
-				text = all_relevant_titles_must_be_owned_or_owned_by_vassals_tt
-			}
 			form_empire_allow = yes
-			#Control a bunch of lands
-				k_lativia = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_estonia = { show_scope_change = no province_completely_controls_trigger = yes }
-			OR = {
-				has_landed_title = k_lithuania
-				k_lithuania = { show_scope_change = no province_completely_controls_trigger = yes }
+			has_landed_title = k_lithuania
+			has_landed_title = k_poland
 			}
-		}
 
 		effect = {
 			prestige = 1000
 			hidden_tooltip = {
-			}
-			primary_title = {
-				e_baltic = {
-					grant_title = ROOT
-					copy_title_laws = PREV
-					copy_title_history = PREV
-				}
-			}
+			}			
 			
 			custom_tooltip = {
-				text = form_baltic_tt 
-				e_baltic = {
+				text = form_plc_tt 
+				e_commonwealth = {
 					gain_title_effect = yes
 				}
 			}
@@ -11087,14 +12534,24 @@ decisions = {
 
 			hidden_tooltip = {
 				###Unite the kingdoms and own stuff
-				k_lithuania = { de_jure_liege = e_baltic }
-				k_lativia = { de_jure_liege = e_baltic }
-				k_estonia = { de_jure_liege = e_baltic }				
+				k_lithuania = { de_jure_liege = e_commonwealth }
+				k_poland = { de_jure_liege = e_commonwealth }
+				e_commonwealth = {
+					k_kashubia = { set_de_jure_if_controls_effect = yes }
+					k_gorale = { set_de_jure_if_controls_effect = yes }
+					k_silesia = { set_de_jure_if_controls_effect = yes }
+					k_bohemia = { set_de_jure_if_controls_effect = yes }
+					k_slovakia = { set_de_jure_if_controls_effect = yes }
+					k_czechoslovakia = { set_de_jure_if_controls_effect = yes }
+					k_estonia = { set_de_jure_if_controls_effect = yes }
+					k_lativia = { set_de_jure_if_controls_effect = yes }
+					k_belarus = { set_de_jure_if_controls_effect = yes }
+					k_galichia = { set_de_jure_if_controls_effect = yes }
+					k_wendia = { set_de_jure_if_controls_effect = yes }
+				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -11103,7 +12560,7 @@ decisions = {
 	form_spain = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {	###Must be one of the following
@@ -11203,9 +12660,7 @@ decisions = {
 				sound_effect = bloodline_added
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -11214,7 +12669,7 @@ decisions = {
 	form_norway = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {		###Must be one of the following cultures
@@ -11239,7 +12694,9 @@ decisions = {
 			form_empire_allow = yes
 			#Control a bunch of lands
 				k_norway = { show_scope_change = no province_completely_controls_trigger = yes }
-				k_scotland = { show_scope_change = no province_completely_controls_trigger = yes }			
+				k_faroes = { show_scope_change = no province_completely_controls_trigger = yes }
+				k_scotland = { show_scope_change = no province_completely_controls_trigger = yes }	
+				k_iceland = { show_scope_change = no province_completely_controls_trigger = yes }		
 		}
 
 		effect = {
@@ -11265,13 +12722,12 @@ decisions = {
 			hidden_tooltip = {
 				###Unite the kingdoms and own stuff
 				k_norway = { de_jure_liege = e_norway }
+				k_faroes = { de_jure_liege = e_norway }
 				k_scotland = { de_jure_liege = e_norway }
 				k_iceland = { de_jure_liege = e_norway }				
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -11280,7 +12736,7 @@ decisions = {
 	form_ilkhanate = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			culture = moghol
@@ -11320,9 +12776,7 @@ decisions = {
 				k_daylam = { de_jure_liege = e_ilkhanate }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -11331,7 +12785,7 @@ decisions = {
 	form_chagatai = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {		###Must be one of the following cultures
@@ -11388,9 +12842,7 @@ decisions = {
 				k_tajikistan = { de_jure_liege = e_chagatai }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -11399,7 +12851,7 @@ decisions = {
 	form_scythia = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {		###Must be one of the following cultures
@@ -11483,9 +12935,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -11493,7 +12943,7 @@ decisions = {
 	form_golden_horde = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {		###Must be one of the following cultures
@@ -11555,9 +13005,7 @@ decisions = {
 				k_volgaria = { de_jure_liege = e_golden_horde }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -11565,7 +13013,7 @@ decisions = {
 	restore_the_hre_OW = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -11573,6 +13021,7 @@ decisions = {
 				culture_group = alpinian
 				culture_group = west_german
 				culture_group = francophone
+				culture_group = mosellophone
 				culture = czech
 				culture = swedish
 				culture = swedefinn
@@ -11583,7 +13032,7 @@ decisions = {
 				culture = gothic
 			}
 			OR = {
-				religion_group = christian
+				religion_group = christian				
 				religion = vagarna			
 				religion = vikingur
 				religion = gnostic
@@ -11725,9 +13174,6 @@ decisions = {
 					trigger = { k_lichtenstein = { is_titular = no } }
 					k_lichtenstein = { show_scope_change = no province_completely_controls_trigger = yes }
 				}
-			e_germany = {
-				has_holder = no
-			}
 			e_german_confederation = {
 				has_holder = no
 			}
@@ -11804,9 +13250,7 @@ decisions = {
 				sound_effect = bloodline_added
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -11815,7 +13259,7 @@ decisions = {
 	form_uae = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			has_landed_title = d_abu_dhabi
@@ -11858,9 +13302,7 @@ decisions = {
 				k_uae = { de_jure_liege = e_arabia }				
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -11868,7 +13310,7 @@ decisions = {
 	form_ulm = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			primary_title = {
@@ -11905,9 +13347,7 @@ decisions = {
 				d_ulm = { de_jure_liege = k_ulm }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -11916,7 +13356,7 @@ decisions = {
 	form_ovlatiistan = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			religion = ovlatii
@@ -11934,7 +13374,8 @@ decisions = {
 			form_empire_allow = yes
 			k_khiva = { show_scope_change = no province_completely_controls_trigger = yes }
 			k_daylam  = { show_scope_change = no province_completely_controls_trigger = yes }
-			k_tajikistan  = { show_scope_change = no province_completely_controls_trigger = yes }			
+			k_tajikistan  = { show_scope_change = no province_completely_controls_trigger = yes }	
+			k_fergana = { show_scope_change = no province_completely_controls_trigger = yes }
 			
 		}
 
@@ -11945,9 +13386,8 @@ decisions = {
 				k_khiva = { de_jure_liege = e_ovlatii }
 				k_daylam = { de_jure_liege = e_ovlatii }
 				k_tajikistan = { de_jure_liege = e_ovlatii }
+				k_fergana = { de_jure_liege = e_ovlatii }
 				d_balkh = { de_jure_liege = k_khiva }
-				d_ferghana = { de_jure_liege = k_khiva }
-				c_barskhan = { de_jure_liege = d_ili }
 											
 				e_ovlatii = {
 					gain_empire_effect = yes
@@ -11962,9 +13402,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -11973,11 +13411,13 @@ decisions = {
 	form_angevin = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
 				culture = old_norman
+				culture = angler
+				culture = norman
 				culture = new_english
 			}
 			NOT = {
@@ -12064,9 +13504,7 @@ decisions = {
 				
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -12075,7 +13513,7 @@ decisions = {
 	form_bourbon = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			#form_empire_potential = yes
 			OR = {
@@ -12146,9 +13584,7 @@ decisions = {
 				k_castille = { de_jure_liege = e_bourbon }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -12158,7 +13594,7 @@ decisions = {
 	form_ghurid = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			culture = tajik
@@ -12227,9 +13663,7 @@ decisions = {
 								
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -12238,7 +13672,7 @@ decisions = {
 	form_south_sudan = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			OR = {
@@ -12283,9 +13717,7 @@ decisions = {
 				k_south_sudan = { de_jure_liege = e_chad }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -12294,7 +13726,7 @@ decisions = {
 	form_weeb = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			culture = weeb
@@ -12314,6 +13746,7 @@ decisions = {
 			form_empire_allow = yes
 			
 			k_bengal = { show_scope_change = no province_completely_controls_trigger = yes }
+			k_west_bengal = { show_scope_change = no province_completely_controls_trigger = yes }
 			k_kamarupa= { show_scope_change = no province_completely_controls_trigger = yes }		
 		}
 
@@ -12395,12 +13828,11 @@ decisions = {
 			hidden_tooltip = {
 				###Unite the kingdoms and be weeb
 				k_bengal = { de_jure_liege = e_weeb }
+				k_west_bengal = { de_jure_liege = e_weeb }
 				k_kamarupa = { de_jure_liege = e_weeb }				
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -12409,7 +13841,7 @@ decisions = {
 	form_vietnam = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			culture_group = viet
@@ -12435,7 +13867,7 @@ decisions = {
 			form_empire_allow = yes
 			
 			k_bengal = { show_scope_change = no province_completely_controls_trigger = yes }
-			k_myanmar= { show_scope_change = no province_completely_controls_trigger = yes }
+			k_mandalay = { show_scope_change = no province_completely_controls_trigger = yes }
 			OR = {
 					has_landed_title = k_kamarupa
 					k_kamarupa = { show_scope_change = no province_completely_controls_trigger = yes }
@@ -12463,12 +13895,10 @@ decisions = {
 				###Unite the kingdoms and be Viet
 				k_bengal = { de_jure_liege = e_nvietnam }
 				k_kamarupa = { de_jure_liege = e_nvietnam }
-				k_myanmar = { de_jure_liege = e_nvietnam }
+				k_mandalay = { de_jure_liege = e_nvietnam }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -12478,7 +13908,7 @@ decisions = {
 	form_marblists = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			religion = marblists
@@ -12496,18 +13926,69 @@ decisions = {
 			}
 			form_empire_allow = yes
 			#Control a bunch of lands
-			k_byzantium = { show_scope_change = no province_completely_controls_trigger = yes }
-			k_athos  = { show_scope_change = no province_completely_controls_trigger = yes }
 			OR = {
-				conditional_tooltip = {
-					trigger = { k_turkey = { is_titular = no } }
-					k_turkey = { show_scope_change = no province_completely_controls_trigger = yes }
+				AND = {
+					k_byzantium = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_athos = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_epirus = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_thrace = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_macedonia = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_cyprus = { show_scope_change = no province_completely_controls_trigger = yes }
+					k_crete = { show_scope_change = no province_completely_controls_trigger = yes }
+					conditional_tooltip = {
+						trigger = { k_bulgaria = { is_titular = no } }
+						k_bulgaria = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_aromania = { is_titular = no } }
+						k_aromania = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
 				}
-				conditional_tooltip = {
-					trigger = { k_anatolia = { is_titular = no } }
-					k_anatolia = { show_scope_change = no province_completely_controls_trigger = yes }
+				AND = {
+					OR = {
+						conditional_tooltip = {
+							trigger = { k_turkey = { is_titular = no } }
+							k_turkey = { show_scope_change = no province_completely_controls_trigger = yes }
+						}
+						conditional_tooltip = {
+							trigger = { k_anatolia = { is_titular = no } }
+							k_anatolia = { show_scope_change = no province_completely_controls_trigger = yes }
+						}
+					}
+					conditional_tooltip = {
+						trigger = { k_karadeniz = { is_titular = no } }
+						k_karadeniz = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_karaman = { is_titular = no } }
+						k_karaman = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_cukurova = { is_titular = no } }
+						k_cukurova = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_armenia = { is_titular = no } }
+						k_armenia = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_georgia = { is_titular = no } }
+						k_georgia = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_zazakistan = { is_titular = no } }
+						k_zazakistan = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_abkhazia = { is_titular = no } }
+						k_abkhazia = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
+					conditional_tooltip = {
+						trigger = { k_daglikarazi = { is_titular = no } }
+						k_daglikarazi = { show_scope_change = no province_completely_controls_trigger = yes }
+					}
 				}
-			}												
+			}											
 		}
 
 		effect = {
@@ -12529,10 +14010,13 @@ decisions = {
 				k_turkey = { de_jure_liege = e_marblists }
 				k_epirus = { de_jure_liege = e_marblists }
 				k_macedonia = { de_jure_liege = e_marblists }
+				k_thrace = { de_jure_liege = e_marblists }
 				k_cyprus = { de_jure_liege = e_marblists }
+				k_crete = { de_jure_liege = e_marblists }
 				e_marblists = {
 					k_karadeniz = { set_de_jure_if_controls_effect = yes }
 					k_karaman = { set_de_jure_if_controls_effect = yes }
+					k_cukurova = { set_de_jure_if_controls_effect = yes }
 					k_armenia = { set_de_jure_if_controls_effect = yes }
 					k_daglikarazi = { set_de_jure_if_controls_effect = yes }
 					k_bulgaria = { set_de_jure_if_controls_effect = yes }
@@ -12545,9 +14029,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -12556,7 +14038,7 @@ decisions = {
 	adopt_byzantine_elective = {
 	    is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			has_dlc = "Holy Fury"
 			primary_title = { title = e_marblists }
@@ -12582,8 +14064,8 @@ decisions = {
 				text = adopt_byzantine_elective_tt
 				e_marblists = {
 					add_law = succ_byzantine_elective
-					set_government_type = roman_imperial_government
 				}
+				set_government_type = roman_imperial_government
 			}
 			add_character_modifier = { modifier = adopted_byzantine_elective months = 360 }
 			narrative_event = { id = ATEOW_realm_event.1002 }
@@ -12666,6 +14148,7 @@ decisions = {
 				culture = northlander
 				culture = ulsterite
 				culture = old_norman
+				culture = angler
 			}  
 			prisoner = no
 			has_regent = no
@@ -12677,9 +14160,7 @@ decisions = {
 		effect = {
 		    narrative_event = { id = england_restored.0001 }
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -12688,7 +14169,7 @@ decisions = {
 	form_balearica = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			has_landed_title = d_mallorka
@@ -12725,9 +14206,7 @@ decisions = {
 				}
 			}			
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -12736,7 +14215,7 @@ decisions = {
 	form_south_arabia = { #South Arabia
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -12777,9 +14256,7 @@ decisions = {
 				k_uae = { de_jure_liege = e_south_arabia }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -12788,7 +14265,7 @@ decisions = {
 	form_mamluk = { #Mamluks
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {
@@ -12878,9 +14355,7 @@ decisions = {
 				k_syria = { de_jure_liege = e_mamluk }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -12889,7 +14364,7 @@ decisions = {
 	form_cum = { #Cumania
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			culture = gagauz
@@ -12983,9 +14458,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -12994,7 +14467,7 @@ decisions = {
 	form_albania = { #Iliria
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			culture_group = albanian			
@@ -13094,9 +14567,7 @@ decisions = {
 			}
 			narrative_event = { id = ATEOW_realm_event.99994 }
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -13105,7 +14576,7 @@ decisions = {
 	form_dacia = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {		###Must be one of the following cultures
@@ -13183,9 +14654,7 @@ decisions = {
 				d_ungvar = { de_jure_liege = e_dacia }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -13194,7 +14663,7 @@ decisions = {
 	form_langobardia = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
 			culture = langobardische
@@ -13257,9 +14726,7 @@ decisions = {
 				k_aquileia = { de_jure_liege = e_italy }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -13268,7 +14735,7 @@ decisions = {
 	form_ciscaucasia = { #Ciscaucasia
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_empire_potential = yes
 			OR = {		###Must be one of the following cultures
@@ -13342,9 +14809,7 @@ decisions = {
 				k_abkhazia = { set_de_jure_if_controls_effect = yes }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}
@@ -13352,7 +14817,7 @@ decisions = {
 	form_grey_ukraine = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			k_grey_ukraine = {
 				is_titular = yes
@@ -13384,7 +14849,7 @@ decisions = {
 	form_yellow_ukraine = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			k_yellow_ukraine = {
 				is_titular = yes
@@ -13427,7 +14892,7 @@ decisions = {
 	form_sapmi = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			k_sapmi = {
 				is_titular = yes
@@ -13457,7 +14922,7 @@ decisions = {
 	form_macaronesia = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			e_macaronesia = {
 				is_titular = yes
@@ -13488,7 +14953,7 @@ decisions = {
 	form_nubia = {
 		is_high_prio = yes
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			k_nubia = {
 				is_titular = yes
@@ -13597,10 +15062,10 @@ decisions = {
 	form_alsace_lorraine = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
-			OR = { culture = lorraine culture = rheinlander culture = alsatian }
+			OR = { culture = lorraine culture = alsatian }
 			k_alsace_lorraine= {
 				is_titular = yes
 				has_holder = no
@@ -13633,6 +15098,50 @@ decisions = {
 				d_alsace = { de_jure_liege = k_alsace_lorraine }
 			}
 		}
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	form_franconia = {
+	is_high_prio = yes
+		only_playable = no
+		ai_check_interval = 36
+		potential = {
+			form_kingdom_potential = yes
+			OR = { culture = franconian }
+			k_franconia = {
+				is_titular = yes
+				has_holder = no
+			}
+			prisoner = no
+			has_regent = no
+		}
+
+		allow = {
+			custom_tooltip = {
+				text = all_relevant_titles_must_be_owned_or_owned_by_vassals_tt
+			}
+			form_kingdom_allow = yes
+			
+			d_franconia = { show_scope_change = no province_completely_controls_trigger = yes }
+			d_nordgau = { show_scope_change = no province_completely_controls_trigger = yes }
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = form_franconia_tt 
+				k_franconia= {
+					gain_title_effect = yes
+				}
+			}
+			
+
+			hidden_tooltip = {
+				d_franconia = { de_jure_liege = k_franconia }
+				d_nordgau = { de_jure_liege = k_franconia}
+			}
+		}
 		revoke_allowed = {
 			always = no
 		}
@@ -13640,15 +15149,125 @@ decisions = {
 			factor = 1
 		}
 	}
-	
+	form_naples = {
+	is_high_prio = yes
+		only_playable = no
+		ai_check_interval = 36
+		potential = {
+			form_kingdom_potential = yes
+			OR = {
+				culture = pugliese
+				culture = neapolitan
+				culture = griko
+				culture = arbereshe
+			}
+			k_naples = {
+				is_titular = yes
+				has_holder = no
+			}
+			prisoner = no
+			has_regent = no
+		}
+
+		allow = {
+			custom_tooltip = {
+				text = all_relevant_titles_must_be_owned_or_owned_by_vassals_tt
+			}
+			form_kingdom_allow = yes
+			
+			k_two_siciles = { has_holder = no } #cant split if it exists
+			
+			d_campania = { show_scope_change = no province_completely_controls_trigger = yes }
+			d_puglia = { show_scope_change = no province_completely_controls_trigger = yes }
+			d_abruzzo = { show_scope_change = no province_completely_controls_trigger = yes }
+			d_calabria = { show_scope_change = no province_completely_controls_trigger = yes }
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = form_naples_tt 
+				k_naples= {
+					gain_title_effect = yes
+				}
+			}
+			
+
+			hidden_tooltip = {
+				d_sicily = { de_jure_liege = k_trinacria }
+				d_campania = { de_jure_liege = k_naples }
+				d_puglia = { de_jure_liege = k_naples }
+				d_abruzzo = { de_jure_liege = k_naples }
+				d_calabria = { de_jure_liege = k_naples }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	form_trinacria = {
+	is_high_prio = yes
+		only_playable = no
+		ai_check_interval = 36
+		potential = {
+			form_kingdom_potential = yes
+			OR = {
+				culture = sicilian
+			}
+			k_trinacria = {
+				is_titular = yes
+				has_holder = no
+			}
+			prisoner = no
+			has_regent = no
+		}
+
+		allow = {
+			custom_tooltip = {
+				text = all_relevant_titles_must_be_owned_or_owned_by_vassals_tt
+			}
+			form_kingdom_allow = yes
+			
+			k_two_siciles = { has_holder = no } #cant split if it exists
+			
+			d_sicily = { show_scope_change = no province_completely_controls_trigger = yes }
+		}
+
+		effect = {
+			custom_tooltip = {
+				text = form_trinacria_tt 
+				k_trinacria = {
+					gain_title_effect = yes
+				}
+			}
+			
+
+			hidden_tooltip = {
+				d_sicily = { de_jure_liege = k_trinacria }
+				d_malta = { de_jure_liege = k_trinacria }
+				d_campania = { de_jure_liege = k_naples }
+				d_puglia = { de_jure_liege = k_naples }
+				d_abruzzo = { de_jure_liege = k_naples }
+				d_calabria = { de_jure_liege = k_naples }
+			}
+		}
+		revoke_allowed = {
+			always = no
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
 	form_rhineland = {
 		is_high_prio = yes
 		only_playable = no
-		ai_check_interval = 24
+		ai_check_interval = 36
 		potential = {
 			form_kingdom_potential = yes
-			OR = { culture = rheinlander culture = alsatian culture = kuhjungs }
-			k_rhineland= {
+			OR = { culture = rheinlander culture = alsatian culture = kuhjungs culture = kleverlandish }
+			k_rhineland = {
 				is_titular = yes
 				has_holder = no
 			}
@@ -13670,8 +15289,8 @@ decisions = {
 
 		effect = {
 			custom_tooltip = {
-				text = form_alsace_lorraine_tt 
-				k_rhineland= {
+				text = form_rhineland_tt 
+				k_rhineland = {
 					gain_title_effect = yes
 				}
 			}
@@ -13684,9 +15303,7 @@ decisions = {
 				d_koln = { de_jure_liege = k_rhineland }
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 		}

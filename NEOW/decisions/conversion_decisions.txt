@@ -48,6 +48,47 @@ targeted_decisions = {
 				}
 			}
 		}
+		
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	convert_to_catholicism_from_branch = {
+		only_playable = yes
+		
+		filter = self
+		ai_target_filter = self
+		ai = no
+		
+		potential = {
+			is_playable = yes
+			OR = {
+				religion = apostolic
+				religion = katoliko
+			}
+			controls_religion = no
+		}
+		allow = {
+			capital_scope = {
+				region = world_europe
+			}
+		}
+		effect = {
+			religion = catholic
+			any_vassal = {
+				limit = {
+					OR = {
+						religion = apostolic
+						religion = katoliko
+					}
+				}
+				religion = catholic
+			}
+			capital_scope = {
+				religion = catholic
+			}
+		}
 		revoke_allowed = {
 			always = no
 		}
@@ -55,7 +96,6 @@ targeted_decisions = {
 			factor = 0
 		}
 	}
-	
 	convert_to_liege_religion_on_liege = {
 		only_playable = yes
 		
@@ -106,9 +146,7 @@ targeted_decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 0
 		}
@@ -138,9 +176,7 @@ targeted_decisions = {
 				culture = ROOT
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 0
 		}
@@ -169,9 +205,7 @@ targeted_decisions = {
 				reverse_culture = ROOT
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 0
 		}
@@ -179,7 +213,7 @@ targeted_decisions = {
 	
 	convert_to_local_culture = {
 		only_playable = yes
-		ai_check_interval = 24
+		ai_check_interval = 48
 		
 		filter = self
 		ai_target_filter = self
@@ -221,13 +255,11 @@ targeted_decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 			modifier = {
-				factor = 0.25
+				factor = 0.1
 			}
 			modifier = {
 				factor = 0
@@ -249,6 +281,54 @@ targeted_decisions = {
 						}
 					}
 				}
+			}
+			modifier = {
+				factor = 0
+				trait = proud
+			}
+			modifier = {
+				factor = 0
+				trait = stubborn
+			}
+			modifier = {
+				factor = 0.5
+				trait = shy
+			}
+			modifier = {
+				factor = 0.5
+				trait = paranoid
+			}
+			modifier = {
+				factor = 0.15
+				trait = content
+			}
+			modifier = {
+				factor = 0.15
+				trait = ambitious
+			}
+			modifier = {
+				factor = 1.15
+				trait = lustful
+			}
+			modifier = {
+				factor = 1.2
+				trait = kind
+			}
+			modifier = {
+				factor = 1.2
+				trait = charitable
+			}
+			modifier = {
+				factor = 0.5
+				trait = temperate
+			}
+			modifier = {
+				factor = 0.15
+				trait = slothful
+			}
+			modifier = {
+				factor = 0.15
+				government = viceroyal_government
 			}
 			modifier = {
 				factor = 0
@@ -348,9 +428,7 @@ targeted_decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 0
 		}
@@ -393,9 +471,7 @@ targeted_decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 0
 		}
@@ -520,9 +596,7 @@ targeted_decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 			modifier = {
@@ -667,9 +741,7 @@ targeted_decisions = {
 				character_event = { id = RoI.117 } # Confirm conversion
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 0
 		}
@@ -791,9 +863,7 @@ targeted_decisions = {
 			}
 		}
 		
-		revoke_allowed = {
-			always = no
-		}
+		
 		
 		ai_will_do = {
 			factor = 0
@@ -803,6 +873,383 @@ targeted_decisions = {
 
 decisions = {
 	
+	convert_indian_religion = {
+		only_playable = yes
+		is_high_prio = yes
+		
+		ai_check_interval = 30
+		
+		potential = {
+			is_playable = yes
+			is_adult = yes
+			is_theocracy = no
+			OR = {
+				religion = parabrahmanist
+				religion = neovedantic
+				religion = jain
+				religion = sikh
+				religion = saura
+				religion = jagannatha
+				religion = kalikula
+				religion = shaivasiddhanta
+				religion = koyapunem
+				religion = old_hindu
+			}
+			NOT = { has_character_flag = india_religion_converted }
+			NOT = { trait = zealous }
+		}
+		allow = {
+			NOT = { trait = zealous }
+			prestige = 100
+			NOT = { religion_authority = 0.25 }
+			piety = 150
+			custom_tooltip = {
+				text = indian_has_not_converted
+				NOT = { has_character_flag = india_religion_converted }
+			}
+		}
+		effect = {
+			set_character_flag = india_religion_converted
+			prestige = -100
+			piety = -150
+			if = {
+				limit = { ai = no }
+				character_event = { id = parabrahmanist.66 } # Choose branch
+			}
+			if = {
+				limit = { ai = yes }
+				random_list = {
+					1 = {
+						mult_modifier = {
+							factor = 0
+							religion = parabrahmanist
+						}
+						capital_scope = {
+							religion = parabrahmanist
+						}
+						religion = parabrahmanist
+						any_courtier = {
+							limit = {
+								NOR = {
+									is_landed = yes
+									prisoner = yes
+								}
+							}	
+							set_character_flag = india_religion_converted
+							religion = parabrahmanist
+						}
+						spouse = {
+							religion = parabrahmanist
+							set_character_flag = india_religion_converted
+						}
+						any_child = {
+							religion = parabrahmanist
+							set_character_flag = india_religion_converted
+							any_child = {
+								set_character_flag = india_religion_converted
+								religion = parabrahmanist
+							}
+						}
+					}
+					1 = {
+						mult_modifier = {
+							factor = 0
+							religion = neovedantic
+						}
+						capital_scope = {
+							religion = neovedantic
+						}
+						religion = neovedantic
+						any_courtier = {
+							limit = {
+								NOR = {
+									is_landed = yes
+									prisoner = yes
+								}
+							}	
+							set_character_flag = india_religion_converted
+							religion = neovedantic
+						}
+						spouse = {
+							set_character_flag = india_religion_converted
+							religion = neovedantic
+						}
+						any_child = {
+							religion = neovedantic
+							set_character_flag = india_religion_converted
+							any_child = {
+								set_character_flag = india_religion_converted
+								religion = neovedantic
+							}
+						}
+					}
+					1 = {
+						mult_modifier = {
+							factor = 0
+							religion = jain
+						}
+						capital_scope = {
+							religion = jain
+						}
+						religion = jain
+						any_courtier = {
+							limit = {
+								NOR = {
+									is_landed = yes
+									prisoner = yes
+								}
+							}	
+							set_character_flag = india_religion_converted
+							religion = jain
+						}
+						spouse = {
+							religion = jain
+							set_character_flag = india_religion_converted
+						}
+						any_child = {
+							religion = jain
+							set_character_flag = india_religion_converted
+							any_child = {
+								set_character_flag = india_religion_converted
+								religion = jain
+							}
+						}
+					}
+					1 = {
+						mult_modifier = {
+							factor = 0
+							religion = sikh
+						}
+						capital_scope = {
+							religion = sikh
+						}
+						religion = sikh
+						any_courtier = {
+							limit = {
+								NOR = {
+									is_landed = yes
+									prisoner = yes
+								}
+							}	
+							set_character_flag = india_religion_converted
+							religion = sikh
+						}
+						spouse = {
+							religion = sikh
+							set_character_flag = india_religion_converted
+						}
+						any_child = {
+							religion = sikh
+							set_character_flag = india_religion_converted
+							any_child = {
+								set_character_flag = india_religion_converted
+								religion = sikh
+							}
+						}
+					}
+					1 = {
+						mult_modifier = {
+							factor = 0
+							religion = saura
+						}
+						capital_scope = {
+							religion = saura
+						}
+						religion = saura
+						any_courtier = {
+							limit = {
+								NOR = {
+									is_landed = yes
+									prisoner = yes
+								}
+							}	
+							set_character_flag = india_religion_converted
+							religion = saura
+						}
+						spouse = {
+							religion = saura
+							set_character_flag = india_religion_converted
+						}
+						any_child = {
+							religion = saura
+							set_character_flag = india_religion_converted
+							any_child = {
+								set_character_flag = india_religion_converted
+								religion = saura
+							}
+						}
+					}
+					1 = {
+						mult_modifier = {
+							factor = 0
+							religion = jagannatha
+						}
+						capital_scope = {
+							religion = jagannatha
+						}
+						religion = jagannatha
+						any_courtier = {
+							limit = {
+								NOR = {
+									is_landed = yes
+									prisoner = yes
+								}
+							}	
+							set_character_flag = india_religion_converted
+							religion = jagannatha
+						}
+						spouse = {
+							set_character_flag = india_religion_converted
+							religion = jagannatha
+						}
+						any_child = {
+							set_character_flag = india_religion_converted
+							religion = jagannatha
+							any_child = {
+								set_character_flag = india_religion_converted
+								religion = jagannatha
+							}
+						}
+					}
+					1 = {
+						mult_modifier = {
+							factor = 0
+							religion = kalikula
+						}
+						capital_scope = {
+							religion = kalikula
+						}
+						religion = kalikula
+						any_courtier = {
+							limit = {
+								NOR = {
+									is_landed = yes
+									prisoner = yes
+								}
+							}	
+							set_character_flag = india_religion_converted
+							religion = kalikula
+						}
+						spouse = {
+							set_character_flag = india_religion_converted
+							religion = kalikula
+						}
+						any_child = {
+							set_character_flag = india_religion_converted
+							religion = kalikula
+							any_child = {
+								set_character_flag = india_religion_converted
+								religion = kalikula
+							}
+						}
+					}
+					1 = {
+						mult_modifier = {
+							factor = 0
+							religion = shaivasiddhanta
+						}
+						capital_scope = {
+							religion = shaivasiddhanta
+						}
+						religion = shaivasiddhanta
+						any_courtier = {
+							limit = {
+								NOR = {
+									is_landed = yes
+									prisoner = yes
+								}
+							}	
+							set_character_flag = india_religion_converted
+							religion = shaivasiddhanta
+						}
+						spouse = {
+							set_character_flag = india_religion_converted
+							religion = shaivasiddhanta
+						}
+						any_child = {
+							religion = shaivasiddhanta
+							set_character_flag = india_religion_converted
+							any_child = {
+								religion = shaivasiddhanta
+								set_character_flag = india_religion_converted
+							}
+						}
+					}
+					1 = {
+						mult_modifier = {
+							factor = 0
+							religion = koyapunem
+						}
+						capital_scope = {
+							religion = koyapunem
+						}
+						religion = koyapunem
+						any_courtier = {
+							limit = {
+								NOR = {
+									is_landed = yes
+									prisoner = yes
+								}
+							}	
+							religion = koyapunem
+							set_character_flag = india_religion_converted
+						}
+						spouse = {
+							religion = koyapunem
+							set_character_flag = india_religion_converted
+						}
+						any_child = {
+							religion = koyapunem
+							set_character_flag = india_religion_converted
+							any_child = {
+								religion = koyapunem
+								set_character_flag = india_religion_converted
+							}
+						}
+					}
+					1 = {
+						mult_modifier = {
+							factor = 0
+							religion = old_hindu
+						}
+						capital_scope = {
+							religion = old_hindu
+						}
+						religion = old_hindu
+						any_courtier = {
+							limit = {
+								NOR = {
+									is_landed = yes
+									prisoner = yes
+								}
+							}	
+							religion = old_hindu
+							set_character_flag = india_religion_converted
+						}
+						spouse = {
+							religion = old_hindu
+							set_character_flag = india_religion_converted
+						}
+						any_child = {
+							religion = old_hindu
+							set_character_flag = india_religion_converted
+							any_child = {
+								religion = old_hindu
+								set_character_flag = india_religion_converted
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.33
+			}
+		}
+	}
 	# Weak or unreformed religions are allowed to convert to the attacker's religion when under Holy War
 	convert_to_attacker_religion = {
 		only_playable = yes
@@ -1000,9 +1447,7 @@ decisions = {
 			}
 		}
 		
-		revoke_allowed = {
-			always = no
-		}
+		
 		
 		ai_will_do = {
 			factor = 1
@@ -1096,7 +1541,7 @@ decisions = {
 			OR = { 
 				culture_group = transnistrian
 				culture_group = byzantine
-				culture_group = apeninian
+				OR = { culture_group = apeninian culture_group = gallo_italic } culture_group = sardic
 			}
 			has_dlc = "Holy Fury"
 			OR = {
@@ -1142,7 +1587,7 @@ decisions = {
 						}
 						if = {
 							limit = { 
-								culture_group = apeninian
+								OR = { culture_group = apeninian culture_group = gallo_italic } culture_group = sardic
 								NOT = { distance = { where = 333 distance = 100 } } 
 							}
 							random = { 
@@ -1205,9 +1650,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 			modifier = {
@@ -1230,7 +1673,7 @@ decisions = {
 			OR = { 
 				culture_group = transnistrian 
 				culture_group = byzantine
-				culture_group = apeninian
+				OR = { culture_group = apeninian culture_group = gallo_italic } culture_group = sardic
 			}
 			has_dlc = "Holy Fury"
 			NOT = { government = chinese_imperial_government }
@@ -1245,7 +1688,7 @@ decisions = {
 			OR = { 
 				culture_group = transnistrian 
 				culture_group = byzantine
-				culture_group = apeninian
+				OR = { culture_group = apeninian culture_group = gallo_italic } culture_group = sardic
 			}
 		}
 		effect = {
@@ -1267,7 +1710,7 @@ decisions = {
 						}
 						if = {
 							limit = { 
-								culture_group = apeninian
+								OR = { culture_group = apeninian culture_group = gallo_italic } culture_group = sardic
 								capital_scope = { NOT = { distance = { where = PREV distance = 100 } } } 
 							}
 							random = { 
@@ -1330,9 +1773,7 @@ decisions = {
 				}
 			}
 		}
-		revoke_allowed = {
-			always = no
-		}
+		
 		ai_will_do = {
 			factor = 1
 			modifier = {
