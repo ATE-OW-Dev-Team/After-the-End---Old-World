@@ -2515,22 +2515,6 @@ decisions = {
 		}
 		
 	}
-	send_neeraji_mission = {
-		only_playable = yes
-		is_high_prio = yes
-		ai_check_interval = 36
-		
-		potential = {
-			has_quest = quest_neeraji_mission
-		}
-		allow = {
-			piety = 20
-		}
-		effect = {
-			narrative_event = { id = jain.8 }
-		}
-		
-	}
 
 	celebrate_stalinmas = {
 		only_playable = yes
@@ -8557,6 +8541,90 @@ title_decisions = {
 					religion_group = buddhist_group
 					religion = osvicenism
 				}
+			}
+			FROM = {
+				wealth = 250
+			}
+		}
+		
+		effect = {
+			FROM = {
+				hidden_tooltip = { 
+					add_character_modifier = { name = hidden_timer_modif duration = 183 hidden = yes} 		
+				}
+				wealth = -250
+				piety = 100
+			}
+			location = {
+				trigger_switch = {
+					on_trigger	= terrain
+					farmlands	= { change_variable = { which = prosperity_value value = 20 } } #gain depends on terrain type
+					plains		= { change_variable = { which = prosperity_value value = 15 } }
+					steppe 		= { change_variable = { which = prosperity_value value = 15 } }
+					forest 		= { change_variable = { which = prosperity_value value = 12 } }
+					hills		= { change_variable = { which = prosperity_value value = 12 } }
+					tells		= { change_variable = { which = prosperity_value value = 12 } }
+					jungle		= { change_variable = { which = prosperity_value value = 9 } }
+					desert		= { change_variable = { which = prosperity_value value = 9 } }
+					mountain	= { change_variable = { which = prosperity_value value = 7 } }
+					arctic		= { change_variable = { which = prosperity_value value = 7 } }
+				}
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.6
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {trait = cynical}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {trait = greedy}
+			}
+			modifier = {
+				factor = 1.5
+				FROM={trait = zealous}
+			}
+			modifier = {
+				factor = 1.5
+				FROM={trait = charitable}
+			}
+		}
+	}
+	ecumenical_help_the_poor = {
+		only_playable = yes
+			filter = owned		
+			ai_target_filter = owned
+		ai_check_interval = 9
+		
+		from_potential = {
+			is_ruler = yes
+			religion = baptist
+			NOT = {
+				has_character_modifier = hidden_timer_modif
+			}
+		}
+		
+		potential = {
+			tier = COUNT
+			location = { 
+				religion = baptist
+			}
+			holder_scope = {
+				OR = {
+					is_liege_or_above = FROM
+					character = FROM
+				}
+			}
+		}
+		
+		allow = {
+			location = {
+				religion = baptist
 			}
 			FROM = {
 				wealth = 250
