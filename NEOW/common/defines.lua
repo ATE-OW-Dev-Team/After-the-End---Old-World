@@ -1050,7 +1050,7 @@ NTitle = {
 	EMPIRE_DEJURE_COUNTY_LIMIT_TO_CREATE = 0.8,		-- Fraction of de jure counties that you must control to create an imperial title
 	EMPIRE_DEJURE_COUNTY_LIMIT_TO_USURP = 0.8,		-- Fraction of de jure counties that you must control to usurp an imperial title
 
-	CUSTOM_TITLE_COLOR_OFFSET = 0.35					-- The offset from the base title color when creating a new title
+	CUSTOM_TITLE_COLOR_OFFSET = 0.15					-- The offset from the base title color when creating a new title
 },
 
 NReligion = {
