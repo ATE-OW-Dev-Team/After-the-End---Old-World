@@ -13782,8 +13782,6 @@ spawn_elder_effect = {
 		if = { # Assign African face paint
 			limit = {
 				OR = {
-					religion = west_african_pagan
-					religion = west_african_pagan_reformed
 					has_religion_feature = religion_animistic
 					religion = kiratist
 					religion = koyapunem
@@ -14554,34 +14552,30 @@ hermetics_upgrade_scandal_effect = {
 	}
 }
 
-# Raiding adventurer war declaration effect
+#Raiding adventurer war declaration effect
 raiding_adventurer_war_declaration_effect = {
-	custom_tooltip = {
-		text = raiding_adventurer_war_declaration_tooltip
+	custom_tooltip = { text = raiding_adventurer_war_declaration_tooltip }
 
-		event_target:selling_province = {
-			duchy = {
-				save_event_target_as = target_duchy
+	event_target:selling_province = {
+		event_target:raiding_adventurer = {
+			unsafe_war = {
+				target = PREVPREV
+				casus_belli = duchy_adventure
+				thirdparty_title = PREV
+				tier = DUKE
 			}
-
-			event_target:raiding_adventurer = {
-				unsafe_war = {
-					target = PREVPREV
-					casus_belli = duchy_adventure
-					thirdparty_title = event_target:target_duchy
-				}
-
-				any_army = {
-					set_can_toggle_looting = yes
-					set_looting = no
-				}
+			any_army = {
+				set_can_toggle_looting = yes
+				set_looting = no
 			}
 		}
+	}
+	
+	clr_character_flag = adventurer_unsafe_duchy_war
+	clr_character_flag = adventurer_safe_duchy_war
+	clr_character_flag = negotiating_with_adventurer
 
-		clr_character_flag = adventurer_unsafe_duchy_war
-		clr_character_flag = adventurer_safe_duchy_war
-		clr_character_flag = negotiating_with_adventurer
-
+	hidden_effect = {
 		event_target:raiding_adventurer = {
 			clr_character_flag = raiding_adventurer
 		}
@@ -21789,104 +21783,10 @@ bloodthirsty_tiered_traits_effect = {
 
 # Tied to religion, used only for special events
 add_random_tattoo_effect = {
-	if = {
-		limit = {
-			OR = { 
-				religion = norse_pagan
-				religion = norse_pagan_reformed
-			}
-			NOR = { 
-				trait = african_tattoo_1
-				trait = african_tattoo_2
-				trait = african_tattoo_3
-				trait = african_tattoo_4
-				trait = african_tattoo_5
-				trait = african_tattoo_6
-				trait = african_tattoo_7
-				trait = african_tattoo_8
-				trait = african_tattoo_9
-				trait = african_tattoo_10
-				trait = african_tattoo_11
-				trait = african_tattoo_12
-				trait = slavic_tattoo_1
-				trait = slavic_tattoo_2
-				trait = slavic_tattoo_3
-				trait = slavic_tattoo_4
-				trait = slavic_tattoo_5
-				trait = slavic_tattoo_6
-				trait = norse_tattoo_1
-				trait = norse_tattoo_2
-				trait = norse_tattoo_3
-				trait = norse_tattoo_4
-				trait = norse_tattoo_5
-				trait = norse_tattoo_6
-			}
-		}
-		random_list = { 
-			50 = { add_trait = norse_tattoo_1 }
-			50 = { add_trait = norse_tattoo_2 }
-			40 = { add_trait = norse_tattoo_3 }
-			30 = { add_trait = norse_tattoo_4 }
-			20 = { add_trait = norse_tattoo_5 }
-			10 = { add_trait = norse_tattoo_6 } 
-		}
-	}
 
-	else_if = {
+	if = {
 		limit = { 
 			OR = { 
-				religion = west_african_pagan
-				religion = west_african_pagan_reformed
-				religion = zun_pagan
-				religion = zun_pagan_reformed
-			}
-			NOR = { 
-				trait = african_tattoo_1
-				trait = african_tattoo_2
-				trait = african_tattoo_3
-				trait = african_tattoo_4
-				trait = african_tattoo_5
-				trait = african_tattoo_6
-				trait = african_tattoo_7
-				trait = african_tattoo_8
-				trait = african_tattoo_9
-				trait = african_tattoo_10
-				trait = african_tattoo_11
-				trait = african_tattoo_12
-				trait = slavic_tattoo_1
-				trait = slavic_tattoo_2
-				trait = slavic_tattoo_3
-				trait = slavic_tattoo_4
-				trait = slavic_tattoo_5
-				trait = slavic_tattoo_6
-				trait = norse_tattoo_1
-				trait = norse_tattoo_2
-				trait = norse_tattoo_3
-				trait = norse_tattoo_4
-				trait = norse_tattoo_5
-				trait = norse_tattoo_6
-			}
-		}
-		random_list = { 
-			50 = { add_trait = african_tattoo_1 }
-			40 = { add_trait = african_tattoo_2 }
-			40 = { add_trait = african_tattoo_3 }
-			30 = { add_trait = african_tattoo_4 }
-			30 = { add_trait = african_tattoo_5 }
-			20 = { add_trait = african_tattoo_6 }
-			20 = { add_trait = african_tattoo_7 }
-			10 = { add_trait = african_tattoo_8 } 
-			6 = { add_trait = african_tattoo_9 } 
-			4 = { add_trait = african_tattoo_10 } 
-			2 = { add_trait = african_tattoo_11 } 
-			1 = { add_trait = african_tattoo_12 } 
-		}
-	}
-	else_if = {
-		limit = { 
-			OR = { 
-				religion = slavic_pagan
-				religion = slavic_pagan_reformed
 				religion = baltic_pagan
 				religion = baltic_pagan_reformed
 				religion = finnish_pagan
@@ -22087,13 +21987,9 @@ transfer_crown_on_abdication_effect = {
 				artifact_type = crown_pahlavi
 				artifact_type = crown_fylkir
 				artifact_type = crown_tengri_fylkir
-				artifact_type = crown_slavic_fylkir
 				artifact_type = crown_romuva_fylkir
 				artifact_type = crown_finnish_fylkir
-				artifact_type = crown_west_african_fylkir
-				artifact_type = crown_zun_fylkir
 				artifact_type = scepter_bon_fylkir
-				artifact_type = crown_aztec_fylkir
 				artifact_type = scepter_hellenic_fylkir
 			}
 		}
@@ -24347,32 +24243,6 @@ add_same_commander_trait_as_FROM = {
 
 				add_trait = levy_coordinator
 			}
-		}
-	}
-}
-
-landless_pope_effect = {
-	if = {
-		limit = {
-			has_landed_title = k_papacy
-			num_of_count_titles_in_realm == 0
-			is_landed = no
-			catholic = { is_name_randomized = no }
-		}
-
-		destroy_landed_title = k_papacy
-
-		k_papacy = {
-			any_direct_de_jure_vassal_title = {
-				de_jure_liege = k_romagna
-			}
-		}
-
-		narrative_event = { id = HFP.40037 } # Papal States becomes Romagna when the Pope holds no lands in Italy
-
-		activate_title = {
-			title = d_papal_guards
-			status = no
 		}
 	}
 }

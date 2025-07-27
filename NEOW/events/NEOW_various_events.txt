@@ -1,78 +1,6 @@
 namespace=ATV
 namespace=maoevent
 namespace=LENIN
-narrative_event = {#Gives the Irish their bloodline if they win the Revolt
-	id = ATV.1
-	title = cleanup6Title
-	desc = cleanup6Desc
-	picture = GFX_evt_melee
-	border = "GFX_event_narrative_frame_war"	
-	major = yes
-	is_triggered_only = yes
-	
-	immediate = {
-		set_global_flag = ira_bloodline_founded
-	}
-	option = {
-		name = cleanup6A
-		trigger = {
-			OR = {
-			culture = irish
-			culture = high_irish
-			culture = ulsterian
-			culture = munsterian
-			culture = aeslabh
-			}
-		}
-		if = {
-			limit = {
-				primary_title = { title = k_ireland }
-			}
-			create_bloodline = {
-				type = ira_bloodline
-			}
-			new_bloodline = {
-				set_description = "bloodline_desc_ira_bloodline"
-			}			
-		}
-	}
-	option = {
-		name = cleanup6B
-		trigger = {
-			OR = {
-				culture_group = brythonic
-				culture = frencig
-				culture = prinsesser
-			}
-		}		
-	}
-	option = {
-		name = cleanup6C
-		trigger = {
-			OR = {
-				culture = scottish
-				culture = old_welsh
-			}
-		}		
-	}
-	option = {
-		name = cleanup6D
-		trigger = {
-			NOR = {
-				culture = irish
-				culture = high_irish
-				culture = ulsterian
-				culture = munsterian
-				culture = aeslabh
-				culture_group = brythonic
-				culture = scottish
-				culture = old_welsh
-				culture = frencig
-				culture = prinsesser
-			}
-		}		
-	}	
-}
 character_event = {
 	id = ATV.2
 	hide_window = yes
@@ -95,7 +23,7 @@ character_event = {
 
 	immediate = {
 		spawn_unit = {
-			province = closest
+			province = closest_to_capital
 			earmark = jewish_colony_troops
 			troops = {
 				light_cavalry = { 80 80 }
@@ -110,7 +38,7 @@ character_event = {
 			disband_on_peace = no
 		}
 		spawn_unit = {
-			province = closest
+			province = closest_to_capital
 			earmark = jewish_colony_troops
 			troops = {
 				light_cavalry = { 80 80 }
@@ -125,7 +53,7 @@ character_event = {
 			disband_on_peace = no
 		}
 		spawn_unit = {
-			province = closest
+			province = closest_to_capital
 			earmark = jewish_colony_troops
 			troops = {
 				light_cavalry = { 80 80 }
@@ -2115,9 +2043,6 @@ character_event = {
 				has_province_modifier = stone_roads_modifier
 			}
 		}
-		NOT = {
-			has_province_modifier = stone_roads_modifier
-		}
 	}
 	mean_time_to_happen = {
 		days = 3
@@ -2148,9 +2073,6 @@ character_event = {
 			NOT = {
 				has_province_modifier = stone_highways_modifier
 			}
-		}
-		NOT = {
-			has_province_modifier = stone_highways_modifier
 		}
 	}
 	mean_time_to_happen = {
@@ -2856,65 +2778,6 @@ character_event = {
 			holder_scope = {
 				set_defacto_liege = THIS
 			}
-		}
-	}
-}
-character_event = {
-	id = ATV.83
-	hide_window = yes
-	trigger = {
-		NOT = { has_character_flag = diversity }
-		culture = serani
-	}
-	mean_time_to_happen = {
-		days = 3
-	}
-	
-	immediate = {
-		set_character_flag = diversity
-		if = {
-			limit = {
-				NOR = {
-					father_even_if_dead = { always = yes }
-					mother_even_if_dead = { always = yes }
-				}
-			}
-			random_list = {
-				70 = {
-					set_graphical_culture = filipino
-				}
-				15 = {
-					set_graphical_culture = tamil
-				}
-				9 = {
-					set_graphical_culture = han
-				}
-				5 = {
-					set_graphical_culture = portuguese
-				}
-				1 = {
-					set_graphical_culture = dutch
-				}
-			}
-		}
-		any_child_even_if_dead = {
-			character_event = { id = ATV.84 }
-		}
-	}
-}
-character_event = {
-	id = ATV.84
-	hide_window = yes
-	is_triggered_only = yes
-	trigger = {
-		culture = serani
-	}
-	
-	immediate = {
-		set_character_flag = diversity
-		set_graphical_culture = FROM
-		any_child_even_if_dead = {
-			character_event = { id = ATV.83 }
 		}
 	}
 }
