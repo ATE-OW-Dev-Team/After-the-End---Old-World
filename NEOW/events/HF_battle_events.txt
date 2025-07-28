@@ -298,8 +298,8 @@ character_event = {
 
 				random = { #Fix to the quick fix
 	    			chance = 75
-	    			break = yes
 	    			allow_new_battle_events_effect = yes
+	    			break = yes
 	    		}
 
 				character_event = { id = HFP.11001 } # Killed (remake of 242)
@@ -341,8 +341,8 @@ character_event = {
 				warrior_lodge_risk_reduction_score = yes
 				random = { #Fix to the quick fix
 	    			chance = 75
-	    			break = yes
 	    			allow_new_battle_events_effect = yes
+	    			break = yes
 	    		}
 				character_event = { id = HFP.11012 } # Serious head-injury (remake of 245). Chance to become Disfigured (if has RIP) or Incapable.
 			}
@@ -800,6 +800,10 @@ character_event = {
 				}
 				set_character_flag = is_battlefield_duel
 				debug_battle_death_counter_effect = yes #for debug purposes
+				death = {
+					death_reason = death_battle
+					killer = event_target:enemy_commander
+				}
 				if = {
 					limit = { #If it does *not* make sense that the enemy_commander killed home_commander...
 						OR = {
@@ -812,10 +816,6 @@ character_event = {
 						death_reason = death_battle
 					}
 					break = yes
-				}
-				death = {
-					death_reason = death_battle
-					killer = event_target:enemy_commander
 				}
 			}
 		}		
@@ -975,6 +975,12 @@ character_event = {
 			limit = {
 				multiplayer = no
 			}
+			death = {
+				death_reason = death_battle
+				killer = event_target:enemy_commander
+			}
+			set_character_flag = is_battlefield_duel
+			debug_battle_death_counter_effect = yes #for debug purposes
 			if = {
 				limit = { #If it does *not* make sense that the enemy_commander killed home_commander...
 					OR = {
@@ -988,12 +994,6 @@ character_event = {
 				}
 				break = yes
 			}
-			death = {
-				death_reason = death_battle
-				killer = event_target:enemy_commander
-			}
-			set_character_flag = is_battlefield_duel
-			debug_battle_death_counter_effect = yes #for debug purposes
 		}
 	}	
 }
@@ -3032,7 +3032,9 @@ character_event = {
 				event_target:enemy_liege = { is_alive = yes }
 				NOR = {
 					event_target:equipped_artifact = { is_indestructible = yes }
-					has_artifact_flag = flag_considering_donation
+					any_artifact = {
+						has_artifact_flag = flag_considering_donation
+					}
 				}
 			}
 		}
@@ -3163,6 +3165,7 @@ character_event = {
 			trigger = { has_character_flag = wounded_disfigured }
 		}
 		
+		allow_new_battle_events_effect = yes
 		if = {
 			limit = { has_character_flag = wounded_incapable }
 			custom_tooltip = { text = EVTOPTA_HFP_11012_tt }
@@ -3178,7 +3181,6 @@ character_event = {
 			clr_character_flag = wounded_disfigured
 			break = yes
 		}
-		allow_new_battle_events_effect = yes
 	}
 }
 
@@ -5675,10 +5677,6 @@ character_event = {
         		same_society_as = event_target:my_fellow_commander
         	}
         	modifier = {
-        		factor = 1.5
-        		same_society_as = event_target:my_fellow_commander
-        	}
-        	modifier = {
         		factor = 5
         		event_target:my_fellow_commander = {
         			current_scope_and_root_make_sense_as_friendlies_trigger = yes
@@ -6478,13 +6476,6 @@ character_event = {
     option = {
     	name = EVTOPTB_HFP_11042 #Take other commander instead?! #traitor
     	prestige =-50
-        if = {
-            limit = { has_nickname = no }
-            random = {
-            	chance = 50
-            	give_nickname = nick_the_traitor
-            }
-        }
        	add_character_modifier = {
 			name = battlefield_betrayal
 			years = 10
