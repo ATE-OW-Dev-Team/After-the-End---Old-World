@@ -4139,151 +4139,133 @@ letter_event = {
 	}
 }
 
-#Ping to Excommunicated ruler/liege of antipope, prepare for war.
+# Ping to Excommunicated ruler/liege of antipope, prepare for war
 character_event = {
 	id = HF.20218
-	desc = {
-		trigger = {
-			FROM = { has_character_flag = flag_excommunicated_for_coronation }
-		}
-		text = EVTDESCHFA20218
-	}
-	desc = {
-		trigger = {
-			FROM = { has_character_flag = flag_antipope_for_coronation }
-		}
-		text = EVTDESCHFB20218
-	}
-
 	picture = GFX_evt_crusaders
 	border = GFX_event_normal_frame_religion
 
+	desc = {
+		text = EVTDESCHFA20218
+		trigger = {
+			FROM = { has_character_flag = flag_excommunicated_for_coronation }
+		}
+	}
+	desc = {
+		text = EVTDESCHFB20218
+		trigger = {
+			FROM = { has_character_flag = flag_antipope_for_coronation }
+		}
+	}
+
 	is_triggered_only = yes
 
-	immediate = { FROM = { character_event = { id = HF.20219 } } }
-	
+	immediate = {
+		FROM = { character_event = { id = HF.20219 } }
+	}
+
 	option = {
 		name = EVTOPTAHF20218
+
 		if = {
-			limit = { 
-				FROM = { 
-					has_character_flag = flag_excommunicated_for_coronation
-				} 
-			}
+			limit = { FROM = { has_character_flag = flag_excommunicated_for_coronation } }
+
 			opinion = {
+				name = opinion_promised_to_depose_me
 				who = FROM
-				modifier = opinion_promsied_to_depose_me
-				months = 120
+				years = 10
 			}
-			FROM = {
-				opinion = {
-					who = ROOT
-					modifier = opinion_promsied_to_depose_him
-					months = 120
-				}
+
+			reverse_opinion = {
+				name = opinion_promised_to_depose_him
+				who = FROM
+				years = 10
 			}
 		}
-		if = {
-			limit = { 
-				FROM = { 
-					has_character_flag = flag_antipope_for_coronation 
-				} 
-			}
+		else = {
 			opinion = {
+				name = opinion_promised_to_depose_myantipope
 				who = FROM
-				modifier = opinion_promsied_to_depose_myantipope
-				months = 120
+				years = 10
 			}
-			FROM = {
-				opinion = {
-					who = ROOT
-					modifier = opinion_promsied_to_depose_hisantipope
-					months = 120
-				}
+
+			reverse_opinion = {
+				name = opinion_promised_to_depose_hisantipope
+				who = ROOT
+				years = 10
 			}
 		}
 	}
 }
 
-#Back to uncrowned King, start the war.
+# Back to uncrowned Ruler, start the war
 character_event = {
 	id = HF.20219
-	desc = {
-		trigger = {
-			has_character_flag = flag_excommunicated_for_coronation
-		}
-		text = EVTDESCHFA20219
-	}
-	desc = {
-		trigger = {
-			has_character_flag = flag_antipope_for_coronation
-		}
-		text = EVTDESCHFB20219
-	}
-
 	picture = GFX_evt_crusaders
 	border = GFX_event_normal_frame_religion
 
+	desc = {
+		text = EVTDESCHFA20219
+		trigger = { has_character_flag = flag_excommunicated_for_coronation }
+	}
+	desc = {
+		text = EVTDESCHFB20219
+		trigger = { has_character_flag = flag_antipope_for_coronation }
+	}
+
 	is_triggered_only = yes
 
-	immediate = { 
+	immediate = {
 		if = {
 			limit = { has_character_flag = flag_excommunicated_for_coronation }
-			FROM = {
-				reverse_war = {
-					target = ROOT
-					casus_belli = excommunicated_ruler
-				}
+
+			war = {
+				target = FROM
+				casus_belli = excommunicated_ruler
 			}
 		}
-		if = {
-			limit = { has_character_flag = flag_antipope_for_coronation }
-			FROM = {
-				reverse_war = {
-					target = ROOT
-					casus_belli = depose_antipope
-				}
+		else = {
+			war = {
+				target = FROM
+				casus_belli = depose_antipope
 			}
 		}
 	}
-	
+
 	option = {
 		name = EVTOPTAHF20219
+
 		tooltip = {
 			if = {
-				limit = { has_character_flag = flag_excommunicated_for_coronation } 
+				limit = { has_character_flag = flag_excommunicated_for_coronation }
+
 				reverse_opinion = {
+					name = opinion_promised_to_depose_me
 					who = FROM
-					modifier = opinion_promsied_to_depose_me
-					months = 120
+					years = 10
 				}
-				FROM = {
-				show_scope_change = no	
-					reverse_opinion = {
-						who = ROOT
-						modifier = opinion_promsied_to_depose_him
-						months = 120
-					}
+
+				opinion = {
+					name = opinion_promised_to_depose_him
+					who = FROM
+					years = 10
 				}
 			}
-			if = {
-				limit = { has_character_flag = flag_antipope_for_coronation } 
+			else = {
 				reverse_opinion = {
+					name = opinion_promised_to_depose_myantipope
 					who = FROM
-					modifier = opinion_promsied_to_depose_myantipope
-					months = 120
+					years = 10
 				}
-				FROM = {
-				show_scope_change = no	
-					reverse_opinion = {
-						who = ROOT
-						modifier = opinion_promsied_to_depose_hisantipope
-						months = 120
-					}
+
+				opinion = {
+					name = opinion_promised_to_depose_hisantipope
+					who = FROM
+					years = 10
 				}
 			}
 		}
-		#clr_character_flag = flag_preparing_coronation #Replaced by timed modifier
+
 	}
 }
 
