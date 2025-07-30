@@ -681,7 +681,7 @@ NDiplomacy = {
 	ASK_TO_DECLARE_WAR_INTERACTION_THRESHOLD_FOR_NO = 0,	-- useless since this is an auto accepted interaction.
 	ASK_TO_DECLARE_WAR_INTERACTION_THRESHOLD_FOR_YES = 0,	-- useless since this is an auto accepted interaction.
 	ASK_TO_DECLARE_WAR_INTERACTION_MUST_HAVE_COST = 0,		-- Is having prestige/piety >= cost required for this action?
-	ASK_TO_DECLARE_WAR_INTERACTION_ENABLED = 1,				-- Should this action be used at all?
+	ASK_TO_DECLARE_WAR_INTERACTION_ENABLED = 0,				-- Should this action be used at all?
 
 	FORM_NON_AGGRESSION_PACT_INTERACTION_MONEY = 0,
 	FORM_NON_AGGRESSION_PACT_INTERACTION_PIETY = 0,
