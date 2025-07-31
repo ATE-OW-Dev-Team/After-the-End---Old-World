@@ -609,7 +609,7 @@ NDefines = {
 		FORM_ALLIANCE_INTERACTION_THRESHOLD_FOR_NO = 25,
 		FORM_ALLIANCE_INTERACTION_THRESHOLD_FOR_YES = 25,
 		FORM_ALLIANCE_INTERACTION_MUST_HAVE_COST = 1,									-- Is having prestige/piety >= cost required for this action?
-		FORM_ALLIANCE_INTERACTION_ENABLED = 1,5											-- Should this action be used at all?
+		FORM_ALLIANCE_INTERACTION_ENABLED = 1,											-- Should this action be used at all?
 
 		DISSOLVE_ALLIANCE_INTERACTION_MONEY = 0,
 		DISSOLVE_ALLIANCE_INTERACTION_PIETY = 0,
