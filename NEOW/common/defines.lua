@@ -261,15 +261,15 @@ NDiplomacy = {
 
 	OFFER_VASSALIZATION_INTERACTION_MONEY = 0,
 	OFFER_VASSALIZATION_INTERACTION_PIETY = 0,
-	OFFER_VASSALIZATION_INTERACTION_PRESTIGE = 200,
-	OFFER_VASSALIZATION_INTERACTION_THRESHOLD_FOR_NO = 20,
-	OFFER_VASSALIZATION_INTERACTION_THRESHOLD_FOR_YES = 20,
+	OFFER_VASSALIZATION_INTERACTION_PRESTIGE = 0,
+	OFFER_VASSALIZATION_INTERACTION_THRESHOLD_FOR_NO = 25,
+	OFFER_VASSALIZATION_INTERACTION_THRESHOLD_FOR_YES = 25,
 	OFFER_VASSALIZATION_INTERACTION_MUST_HAVE_COST = 1,				-- Is having prestige/piety >= cost required for this action?
 	OFFER_VASSALIZATION_INTERACTION_ENABLED = 1,						-- Should this action be used at all?
 
 	ASK_FOR_VASSALIZATION_INTERACTION_MONEY = 0,
 	ASK_FOR_VASSALIZATION_INTERACTION_PIETY = 0,
-	ASK_FOR_VASSALIZATION_INTERACTION_PRESTIGE = 200,
+	ASK_FOR_VASSALIZATION_INTERACTION_PRESTIGE = 0,
 	ASK_FOR_VASSALIZATION_INTERACTION_THRESHOLD_FOR_NO = 0,
 	ASK_FOR_VASSALIZATION_INTERACTION_THRESHOLD_FOR_YES = 0,
 	ASK_FOR_VASSALIZATION_INTERACTION_MUST_HAVE_COST = 1,				-- Is having prestige/piety >= cost required for this action?
@@ -478,8 +478,8 @@ NDiplomacy = {
 	ASK_TO_JOIN_WAR_INTERACTION_MONEY = 0,
 	ASK_TO_JOIN_WAR_INTERACTION_PIETY = 0,
 	ASK_TO_JOIN_WAR_INTERACTION_PRESTIGE = 0,
-	ASK_TO_JOIN_WAR_INTERACTION_THRESHOLD_FOR_NO = 15,
-	ASK_TO_JOIN_WAR_INTERACTION_THRESHOLD_FOR_YES = 15,
+	ASK_TO_JOIN_WAR_INTERACTION_THRESHOLD_FOR_NO = 25,
+	ASK_TO_JOIN_WAR_INTERACTION_THRESHOLD_FOR_YES = 25,
 	ASK_TO_JOIN_WAR_INTERACTION_MUST_HAVE_COST = 1,				-- Is having prestige/piety >= cost required for this action?
 	ASK_TO_JOIN_WAR_INTERACTION_ENABLED = 1,						-- Should this action be used at all?
 
@@ -606,8 +606,8 @@ NDiplomacy = {
 	FORM_ALLIANCE_INTERACTION_MONEY = 0,
 	FORM_ALLIANCE_INTERACTION_PIETY = 0,
 	FORM_ALLIANCE_INTERACTION_PRESTIGE = 250,
-	FORM_ALLIANCE_INTERACTION_THRESHOLD_FOR_NO = 15,
-	FORM_ALLIANCE_INTERACTION_THRESHOLD_FOR_YES = 15,
+	FORM_ALLIANCE_INTERACTION_THRESHOLD_FOR_NO = 25,
+	FORM_ALLIANCE_INTERACTION_THRESHOLD_FOR_YES = 25,
 	FORM_ALLIANCE_INTERACTION_MUST_HAVE_COST = 1,					-- Is having prestige/piety >= cost required for this action?
 	FORM_ALLIANCE_INTERACTION_ENABLED = 1,						-- Should this action be used at all?
 
@@ -622,8 +622,8 @@ NDiplomacy = {
 	START_COALITION_INTERACTION_MONEY = 0,
 	START_COALITION_INTERACTION_PIETY = 0,
 	START_COALITION_INTERACTION_PRESTIGE = 15,
-	START_COALITION_INTERACTION_THRESHOLD_FOR_NO = 5,
-	START_COALITION_INTERACTION_THRESHOLD_FOR_YES = 5,
+	START_COALITION_INTERACTION_THRESHOLD_FOR_NO = 0,
+	START_COALITION_INTERACTION_THRESHOLD_FOR_YES = 0,
 	START_COALITION_INTERACTION_MUST_HAVE_COST = 0,					-- Is having prestige/piety >= cost required for this action?
 	START_COALITION_INTERACTION_ENABLED = 1,						-- Should this action be used at all?
 
@@ -681,12 +681,12 @@ NDiplomacy = {
 	ASK_TO_DECLARE_WAR_INTERACTION_THRESHOLD_FOR_NO = 0,	-- useless since this is an auto accepted interaction.
 	ASK_TO_DECLARE_WAR_INTERACTION_THRESHOLD_FOR_YES = 0,	-- useless since this is an auto accepted interaction.
 	ASK_TO_DECLARE_WAR_INTERACTION_MUST_HAVE_COST = 0,		-- Is having prestige/piety >= cost required for this action?
-	ASK_TO_DECLARE_WAR_INTERACTION_ENABLED = 1,				-- Should this action be used at all?
+	ASK_TO_DECLARE_WAR_INTERACTION_ENABLED = 0,				-- Should this action be used at all?
 
 	FORM_NON_AGGRESSION_PACT_INTERACTION_MONEY = 0,
 	FORM_NON_AGGRESSION_PACT_INTERACTION_PIETY = 0,
 	FORM_NON_AGGRESSION_PACT_INTERACTION_PRESTIGE = 0,
-	FORM_NON_AGGRESSION_PACT_INTERACTION_THRESHOLD_FOR_NO = 15,
+	FORM_NON_AGGRESSION_PACT_INTERACTION_THRESHOLD_FOR_NO = 25,
 	FORM_NON_AGGRESSION_PACT_INTERACTION_THRESHOLD_FOR_YES = 25,
 	FORM_NON_AGGRESSION_PACT_INTERACTION_MUST_HAVE_COST = 0,		-- Is having prestige/piety >= cost required for this action?
 	FORM_NON_AGGRESSION_PACT_INTERACTION_ENABLED = 1,				-- Should this action be used at all?
@@ -876,22 +876,22 @@ NCharacter = {
 	DYNASTY_CONTROLS_HOLY_ORDER_PIETY = 1,			-- Monthly Piety from a dynasty member as head of a Holy Order (only for counts+ and if the same religion)
 	DYNASTY_CONTROLS_RELIGIOUS_HEAD_PRESTIGE = 2,	-- Monthly Prestige from a dynasty member as head of a religion (only for counts+ and if the same religion)
 	DYNASTY_CONTROLS_RELIGIOUS_HEAD_PIETY = 1,		-- Monthly Piety from a dynasty member as head of a religion (only for counts+ and if the same religion)
-	NATURAL_DEATH_CHANCE_AGE_0 = 110,				-- Natural deaths per decade out of 10000 people: Age 0-9
-	NATURAL_DEATH_CHANCE_AGE_10 = 15,				-- Natural deaths per decade out of 10000 people: Age 10-19
-	NATURAL_DEATH_CHANCE_AGE_20 = 15,				-- Natural deaths per decade out of 10000 people: Age 20-29
+	NATURAL_DEATH_CHANCE_AGE_0 = 70,				-- Natural deaths per decade out of 10000 people: Age 0-9
+	NATURAL_DEATH_CHANCE_AGE_10 = 10,				-- Natural deaths per decade out of 10000 people: Age 10-19
+	NATURAL_DEATH_CHANCE_AGE_20 = 10,				-- Natural deaths per decade out of 10000 people: Age 20-29
 	NATURAL_DEATH_CHANCE_AGE_30 = 20,				-- Natural deaths per decade out of 10000 people: Age 30-39
 	NATURAL_DEATH_CHANCE_AGE_40 = 31,				-- Natural deaths per decade out of 10000 people: Age 40-49
 	NATURAL_DEATH_CHANCE_AGE_50 = 100,				-- Natural deaths per decade out of 10000 people: Age 50-59
-	NATURAL_DEATH_CHANCE_AGE_60 = 500,				-- Natural deaths per decade out of 10000 people: Age 60-69
-	NATURAL_DEATH_CHANCE_AGE_70 = 2000,				-- Natural deaths per decade out of 10000 people: Age 70-79
+	NATURAL_DEATH_CHANCE_AGE_60 = 400,				-- Natural deaths per decade out of 10000 people: Age 60-69
+	NATURAL_DEATH_CHANCE_AGE_70 = 1800,				-- Natural deaths per decade out of 10000 people: Age 70-79
 	NATURAL_DEATH_CHANCE_AGE_80 = 3500,				-- Natural deaths per decade out of 10000 people: Age 80-90
 	NATURAL_DEATH_CHANCE_AGE_90 = 7000,				-- Natural deaths per decade out of 10000 people: Age 90-99
-	NATURAL_DEATH_CHANCE_AGE_100 = 9000,			-- Natural deaths per decade out of 10000 people: Age 100+
-	FERTILITY_BASE_MULT = 0.33,						-- Base fertility multiplier to adjust the base chance of impregnation
-	SECONDARY_SPOUSE_FERTILITY_MULT = 0.2,			-- Applied to fertility of secondary spouses and concubines
-	NOT_SPOUSE_FERTILITY_MULT = 0.25,				-- Applied to fertility when two lovers are not married
-	MARRIED_LOVERS_FERTILITY_MULT = 1.2,			-- Applied to fertility when lovers are married
-	INFANT_DEATH_CHANCE = 0.03,						-- Chance of stillbirth / death at birth
+	NATURAL_DEATH_CHANCE_AGE_100 = 9000,	
+	FERTILITY_BASE_MULT = 0.45,						-- Base fertility multiplier to adjust the base chance of impregnation
+	SECONDARY_SPOUSE_FERTILITY_MULT = 0.35,			-- Applied to fertility of secondary spouses and concubines
+	NOT_SPOUSE_FERTILITY_MULT = 0.40,				-- Applied to fertility when two lovers are not married
+	MARRIED_LOVERS_FERTILITY_MULT = 1.3,			-- Applied to fertility when lovers are married
+	INFANT_DEATH_CHANCE = 0.02,						-- Chance of stillbirth / death at birth
 	EARLY_PORTRAIT_AND_UNIT_BEFORE_YEAR = 2550,		-- Before this date, early versions of Units and Portraits will be used if available
 	LATE_PORTRAIT_AND_UNIT_AFTER_YEAR = 2700,		-- After this date, late versions of Units and Portraits will be used if available
 	TRIBAL_EMPTY_HOLDING_LEVY_MULTIPLIER = 0.5,
@@ -1238,8 +1238,8 @@ NMilitary = {
 	SIEGE_MORALE_LOSS = 0.5,										-- Base monthly morale loss in a siege
 	PAGAN_HOME_SIEGE_MORALE_LOSS_MULT = 0.66,		-- "Defensive Pagan" bonus (multiplier on SIEGE_MORALE_LOSS)
 	FORT_LEVEL_MORALE_LOSS_REDUCTION_MULT = 2.0,	-- Fort Level effect on morale loss (a higher value slows down morale loss)
-	DAYS_BETWEEN_COMBAT_EVENTS = 14,				-- Combat events will happen every this many days
-	DAYS_BEFORE_FIRST_COMBAT_EVENT = 7,				-- First combat event can't fire before this many days
+	DAYS_BETWEEN_COMBAT_EVENTS = 10,				-- Combat events will happen every this many days
+	DAYS_BEFORE_FIRST_COMBAT_EVENT = 5,				-- First combat event can't fire before this many days
 	BATTLE_PRESTIGE_MULTIPLIER = 10,				-- Total prestige gained in the battle will be this * ( losers losses ) / 1000
 	BATTLE_TECH_MULTIPLIER = 0.5,					-- Military tech gain from battles multiplier.
 	MAINLEADER_PRESTIGE_PART = 0.35,				-- The % of the total prestige gained in the battle that the center flank leader will get
@@ -1560,11 +1560,11 @@ NDisease = {
 
 NGraphics = {
 	PORT_SHIP_OFFSET = 3.0,
-	CITY_SPRAWL_SHRINK_DISTANCE = 100.0, -- Start shrinking at this distance
-	CITY_SPRAWL_DRAW_DISTANCE = 130.0, -- Remove at this distance
-	CITY_SPRAWL_AMOUNT = 0.65, -- Size of cities, higher gives larger cities
+	CITY_SPRAWL_SHRINK_DISTANCE = 150.0, -- Start shrinking at this distance
+	CITY_SPRAWL_DRAW_DISTANCE = 200.0, -- Remove at this distance
+	CITY_SPRAWL_AMOUNT = 1, -- Size of cities, higher gives larger cities
 	CITY_SPRAWL_NUDGE_TAX_VALUE = 50, -- Debug flag
-	PROVINCE_NAME_DRAW_DISTANCE = 400.0, -- Remove province names beyond this distance
+	PROVINCE_NAME_DRAW_DISTANCE = 500.0, -- Remove province names beyond this distance
 	MILD_WINTER_VALUE = 90,
 	NORMAL_WINTER_VALUE = 145,
 	SEVERE_WINTER_VALUE = 255,
@@ -1577,7 +1577,7 @@ NGraphics = {
 },
 
 NEngine = {
-	EVENT_PROCESS_OFFSET = 220, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
+	EVENT_PROCESS_OFFSET = 145, 	 -- Events are checked every X day per character or province (1 is ideal, but CPU heavy). Max value of 255
 	COURTIER_EVENT_PROCESS_OFFSET = 254, 	 -- Events are checked every X day for courtiers. Max value of 255
 	COURTIERS_MTTTH_EVENTS = 1,  -- Toggles if courtiers are allowed to run MTTH events or not
 	MISSING_SCRIPTED_SUCCESSOR_ERROR_CUTOFF_YEAR = 1066, -- The missing scripted successor error will not be shown before this date
@@ -1590,7 +1590,7 @@ NEngine = {
 
 NAI =
 {
-	INTERACTION_THRESHOLD_FOR_NO = 15,						-- Interactions with chance below this will always be declined
+	INTERACTION_THRESHOLD_FOR_NO = 25,						-- Interactions with chance below this will always be declined
 	INTERACTION_THRESHOLD_FOR_YES = 25,						-- Interactions with chance above this will always be accepted
 	INTERACTION_MIN_DAYS_REJECTED = 365,					-- AI will remember a rejection at least this time
 	INTERACTION_DAYS_REJECTED_RANDOM = 730,					-- Max random extra days AI will reject offer
