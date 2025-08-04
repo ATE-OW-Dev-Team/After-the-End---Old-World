@@ -82,7 +82,7 @@ decisions = {
 						}
 					}
 				}
-				character_event = { id = HF.24240 tooltip = tooltip_evt_hf_24240 }
+				narrative_event = { id = HF.24240 tooltip = tooltip_evt_hf_24240 }
 			}
 			custom_tooltip = {
 				text = adopt_chinese_imperialism_tt
@@ -865,9 +865,11 @@ decisions = {
 
 			if = {
 				limit = {
-					FROM = {
-						capital_scope = {
-							NOT = { region = world_africa_central }
+					offmap_china = {
+						governor = {
+							capital_scope = {
+								NOT = { region = world_africa_central }
+							}
 						}
 					}
 				}
@@ -1104,53 +1106,51 @@ targeted_decisions = {
 		allow = {
 			FROM = {
 				show_scope_change = no
-				higher_tier_than = DUKE
+
+				higher_real_tier_than = DUKE
 			}
+
 			custom_tooltip = {
 				text = not_negotiated_recently_tt
-				hidden_tooltip = {
-					FROM = {
-						NOT = {
-							has_character_modifier = adventurer_negotiate_cd
-						}
-					}
+
+				FROM = {
+					NOT = { has_character_modifier = adventurer_negotiate_cd }
 				}
 			}
+
 			custom_tooltip = {
 				text = has_valid_province_tt
-				hidden_tooltip = {
-					FROM = {
-						OR = {
-							any_demesne_province = {
-								is_capital = no 
-								num_of_settlements = 1
-								NOT = {
-									has_province_modifier = nomad_agitation
-								}
-								OR = {
-									AND = {
-										ROOT = { is_seafarer = yes }
-										port = yes
-									}
-									ROOT = { is_seafarer = no }
-									NOT = { any_demesne_province = { port = yes } }
-								}
+
+				FROM = {
+					OR = {
+						any_demesne_province = {
+							is_capital = no
+							num_of_settlements >= 1
+							NOT = { has_province_modifier = nomad_agitation }
+							owned_by = PREV
+
+							trigger_if = {
+								limit = { ROOT = { is_seafarer = yes } }
+								is_coastal = yes
 							}
-							any_vassal = {
-								any_demesne_province = {
-									is_capital = no 
-									num_of_settlements = 1
-									NOT = {
-										has_province_modifier = nomad_agitation
-									}
-									OR = {
-										AND = {
-											ROOT = { is_seafarer = yes }
-											port = yes
-										}
-										ROOT = { is_seafarer = no }
-										NOT = { any_demesne_province = { port = yes } }
-									}
+							trigger_else = {
+								is_coastal = no
+							}
+						}
+
+						any_vassal = {
+							any_demesne_province = {
+								is_capital = no
+								num_of_settlements >= 1
+								NOT = { has_province_modifier = nomad_agitation }
+								owned_by = PREV
+
+								trigger_if = {
+									limit = { ROOT = { is_seafarer = yes } }
+									is_coastal = yes
+								}
+								trigger_else = {
+									is_coastal = no
 								}
 							}
 						}

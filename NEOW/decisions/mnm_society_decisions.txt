@@ -905,7 +905,10 @@ targeted_decisions = {
 		}
 		effect = {
 			FROM = {
-				has_society_currency_major_trigger = yes
+				change_society_currency = {
+					society = the_assassins
+					value = -500
+				}
 				wealth = -250
 				add_character_modifier = { 
 					modifier = recently_fomented_unrest 
@@ -1670,118 +1673,6 @@ targeted_decisions = {
 		}
 	}
 
-	#Power: Demonic Possession
-	devil_worshipers_demonic_possession = {
-		is_in_society = yes
-
-		ai_target_filter = sub_realm
-		ai_check_interval = 24
-
-		from_potential = {
-			is_devil_worshiper_trigger = yes
-			society_rank > 1
-		}
-
-		potential = {
-			OR = {
-				host = { character = FROM }
-				liege = { character = FROM }
-			}
-			NOT = { character = FROM }
-			ai = yes
-		}
-
-		allow = {
-			FROM = {
-				prisoner = no
-				NOT = { trait = incapable }
-				has_society_currency_minor_trigger = yes
-
-				custom_tooltip = {
-					text = is_accessible
-					OR = {
-						is_inaccessible_trigger = no
-						AND = {
-							FROM = {
-								has_character_modifier = in_seclusion
-								at_location = ROOT
-							}
-							ROOT = {
-								has_character_modifier = in_seclusion
-							}
-						}
-					}
-				}
-			}
-			ROOT = {
-			
-				NOT = { trait = incapable }
-
-				custom_tooltip = {
-					text = possess_courtier_already_done
-					NOR = {
-						has_character_flag = possessing_courtier
-						has_opinion_modifier = { who = FROM modifier = opinion_loyal_servant }
-						trait = possessed
-						trait = lunatic
-					}
-				}
-			}	
-		}
-
-		effect = {
-			ROOT = {
-				set_character_flag = possessing_courtier
-				hidden_effect = { 
-					character_event = { id = MNM.7840 days = 3 random = 7 }
-				}
-			}
-			FROM = { 
-				detract_society_currency_minor_effect = yes
-			}
-			if = {
-				limit = {
-					NOT = {
-						is_quest_target_of = FROM
-					}
-				}
-				FROM = {
-					increase_visibility_effect = yes
-				}
-			}
-			if = {
-				limit = {
-					is_quest_target_of = FROM
-				}
-				FROM = {
-					increase_visibility_minor_effect = yes
-				}
-			}
-		}
-
-		ai_will_do = {
-			factor = 1
-			modifier = {
-				factor = 0.1 # slow down
-			}
-			modifier = {
-				factor = 0.5
-				is_benevolent_trigger = yes
-			}
-			modifier = {
-				factor = 0.25
-				ROOT = {
-					is_landed = no
-				}
-			}
-			modifier = {
-				factor = 3
-				ROOT = {
-					among_most_powerful_vassals = 5
-				}
-			}
-		}
-	}
 
 	#Action: satanist recruit
 	devil_workshippers_recruit = {
