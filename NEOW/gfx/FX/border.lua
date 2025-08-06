@@ -155,7 +155,7 @@ float4 main( VS_OUTPUT_BORDER Input ) : COLOR
 		vData.r * vColorTint[0] + vData.g * vColorTint[1] + vData.b * vColorTint[2], 
 		vData.r * vColorTint[3] + vData.g * vColorTint[4] + vData.b * vColorTint[5], vData.a ).rgb;
 
-	vColor.a *= lerp( vColorTint[0].a, vColorTint[3].a, vData.a );
+	vColor.a *= lerp( vColorTint[0].a, vColorTint[3].a, vData.a )*0.9f;
 	
 	float vPulseFactor = saturate( smoothstep( 0.0f, 1.0f, ( 0.8f - abs( Input.uv.x - 0.5f ) ) + sin( vTime * 2.5f ) * 0.15f ) ) * vSelectionColor.a; 
 

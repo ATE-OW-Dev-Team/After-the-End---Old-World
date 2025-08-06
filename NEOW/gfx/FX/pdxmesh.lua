@@ -240,6 +240,11 @@ PdxMeshStandardSkinned = {
 	PixelShader = "PixelPdxMeshStandard";
 	ShaderModel = 3;
 }
+AvtMeshSettlements = {
+	VertexShader = "VertexPdxMeshStandard";
+	PixelShader = "PixelAvtMeshSettlements";
+	ShaderModel = 3;
+}
 
 -- PdxMeshColor variations
 PdxMeshColor = {
@@ -278,6 +283,41 @@ StaticStandardShield = {
 	VertexShader = "VertexPdxMeshStandardBillboard";
 	PixelShader = "PixelPdxMeshStandardShield";
 	ShaderModel = 3;
+}
+-- JdxMeshTextureShield variations
+JdxMeshShield = {
+	VertexShader = "VertexJdxMeshShield";
+	PixelShader = "PixelPdxMeshStandard";
+	ShaderModel = 3;
+}
+
+-- Skinned shield not actually supported..
+JdxMeshShieldSkinned = {
+	VertexShader = "VertexPdxMeshStandardSkinned";
+	PixelShader = "PixelPdxMeshStandard";
+	ShaderModel = 3;
+}
+
+-- JdxMeshShieldTextureAtlas variations
+JdxMeshShieldTextureAtlas = {
+	VertexShader = "VertexJdxMeshShield";
+	PixelShader = "PixelPdxMeshTextureAtlas";
+	ShaderModel = 3;
+}
+
+-- Skinned shield not actually supported..
+JdxMeshShieldTextureAtlasSkinned = {
+	VertexShader = "VertexPdxMeshStandardSkinned";
+	PixelShader = "PixelPdxMeshTextureAtlas";
+	ShaderModel = 3;
+}
+
+-- Alpha Shader
+PdxMeshAlphaBlend = {
+VertexShader = "VertexPdxMeshStandard";
+PixelShader = "PixelPdxMeshStandard";
+ShaderModel = 3;
+BlendState = "BlendStateAlphaBlend";
 }
 
 --[[
@@ -397,6 +437,51 @@ VS_OUTPUT_PDXMESHSTANDARD main( const VS_INPUT_PDXMESHSTANDARD v )
 	Out.vBitangent = normalize( cross( Out.vNormal, Out.vTangent ) * v.vTangent.w );
 
 	
+	return Out;
+}
+
+]] )
+
+DeclareShader( "VertexJdxMeshShield", [[
+
+VS_OUTPUT_PDXMESHSTANDARD main( const VS_INPUT_PDXMESHSTANDARD v )
+{
+  	VS_OUTPUT_PDXMESHSTANDARD Out = (VS_OUTPUT_PDXMESHSTANDARD)0;
+
+	Out.vPosition = float4(v.vPosition.xyz * clamp( 0.35f + ( vCamPos.y / 500.0f ), 0.45f, 2.2f ), 1.0);
+
+#	ifdef PDX_OPENGL
+
+	float4x4 Rot = float4x4( ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0], 0.0f,
+                     ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1], 0.0f,
+                     ViewMatrix[0][2], ViewMatrix[1][2], ViewMatrix[2][2], 0.0f,
+                     0.0f, 0.0f, 0.0f, 1.0f );
+#	else
+
+	float4x4 Rot = { ViewMatrix._m00_m10_m20, 0.0f,
+                     ViewMatrix._m01_m11_m21, 0.0f,
+					 ViewMatrix._m02_m12_m22, 0.0f,
+					 0.0f, 0.0f, 0.0f, 1.0f };
+#	endif
+
+	Out.vPosition = mul( Out.vPosition, Rot );
+	Out.vPosition = mul( Out.vPosition, WorldMatrix );
+
+	Out.vPos = Out.vPosition;
+	Out.vPosition = mul( Out.vPosition, ViewProjectionMatrix );
+
+#	ifdef PDX_OPENGL
+	Out.vNormal = normalize( mul( v.vNormal.xyz, float3x3(Rot) ) );
+	Out.vTangent = normalize( mul( v.vTangent.xyz, float3x3(Rot) ) );
+#	else
+	Out.vNormal = normalize( mul( v.vNormal.xyz, (float3x3)Rot ) );
+	Out.vTangent = normalize( mul( v.vTangent.xyz, (float3x3)Rot ) );
+#	endif
+
+	Out.vBitangent = normalize( cross( Out.vNormal, Out.vTangent ) * v.vTangent.w );
+
+	Out.vUV0 = v.vUV0;
+	Out.vUV1 = v.vUV1;
 	return Out;
 }
 
@@ -603,6 +688,31 @@ float4 main( VS_OUTPUT_PDXMESHSTANDARD In ) : COLOR
 	vColor.rgb = ApplyDistanceFog( vColor.rgb, vPos ) * vFoW;
 	
 	vColor.rgb = ComposeSpecular( vColor.rgb, CalculateSpecular( vPos, vNormal, (vSpecColor.a * 2.0 ) ) * vFoW );
+	
+	return vColor;
+}
+	
+]] )
+
+DeclareShader( "PixelAvtMeshSettlements", [[
+	
+float4 main( VS_OUTPUT_PDXMESHSTANDARD In ) : COLOR
+{
+	float3 vPos = In.vPos.xyz / In.vPos.w;
+
+	float4 vFoWColor = GetFoWColor( vPos, FoWTexture);
+
+	float4 vColor = tex2D( DiffuseMap, In.vUV0 );
+	float4 vSpecColor = tex2D( SpecularMap, In.vUV0 );
+	
+	/*float3 vNormalSample = UnpackNormal( NormalMap, In.vUV0 );
+	float3x3 TBN = Create3x3( normalize( In.vTangent ), normalize( In.vBitangent ), normalize( In.vNormal ) );
+	float3 vNormal = mul( vNormalSample, TBN );*/
+	float3 vNormal = normalize( In.vNormal );
+
+	vColor.rgb = CalculateLighting( vColor.rgb, vNormal );
+	float vFoW = GetFoW( vPos, FoWTexture, FoWDiffuse );
+	vColor.rgb = ApplyDistanceFog( vColor.rgb, vPos ) * vFoW;
 	
 	return vColor;
 }
