@@ -11,5 +11,5 @@ float4	vBorderLookup_HeightScale_UseMultisample_Unused	;
 //#define	vBorderLookup vBorderLookup_HeightScale_UseMultisample.x
 
 const static float WATER_HEIGHT = 19.0f;
-const static float WATER_HEIGHT_RECP = 1.0f / 29.0f;
+const static float WATER_HEIGHT_RECP = 1.0f / 19.0f;
 const static float vTimeScale = 0.5f / 300.0f;

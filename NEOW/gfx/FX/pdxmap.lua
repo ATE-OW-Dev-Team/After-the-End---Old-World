@@ -125,10 +125,10 @@ Defines = { } -- Comma separated defines ie. "USE_SIMPLE_LIGHTS", "GUI"
 DeclareShared( [[
 
 static const float3 GREYIFY = float3( 0.212671, 0.715160, 0.072169 );
-static const float TERRAINTILEFREQ = 144.0f;
+static const float TERRAINTILEFREQ = 128.0f;
 static const float NUM_TILES = 4.0f;
 static const float TEXELS_PER_TILE = 512.0f;
-static const float ATLAS_TEXEL_POW2_EXPONENT= 10.0f;
+static const float ATLAS_TEXEL_POW2_EXPONENT= 11.0f;
 static const float WATER_HEIGHT_RECP_SQUARED = ( 1.0f / 19.0f ) * ( 1.0f / 19.0f );
 static const float TERRAIN_WATER_CLIP_HEIGHT = 3.0f;
 static const float TERRAIN_UNDERWATER_CLIP_HEIGHT = 3.0f;
@@ -368,7 +368,7 @@ float4 main( VS_OUTPUT_TERRAIN Input ) : COLOR
 		
 	float3 TerrainColor = tex2D( TerrainColorTint, Input.uv2 ).rgb;
 	
-	sample.rgb = GetOverlay( sample.rgb, TerrainColor, 0.5f );
+	sample.rgb = GetOverlay( sample.rgb, TerrainColor, 0.75f );
 
 	float4 vFoWColor = GetFoWColor( Input.prepos, FoWTexture);
 	sample.rgb = ApplySnow( sample.rgb, Input.prepos, normal, vFoWColor, FoWDiffuse );
@@ -402,7 +402,7 @@ float4 main( VS_OUTPUT_TERRAIN Input ) : COLOR
 	float lod = clamp( trunc( mipmapLevel( vTileRepeat ) - 0.5f ), 0.0f, 6.0f );
 	float vMipTexels = pow( 2.0f, ATLAS_TEXEL_POW2_EXPONENT - lod );
 
-	float3 normal = normalize( tex2D( HeightNormal, Input.uv2 * vMapSize.zw ).rbg - 1.0f );
+	float3 normal = normalize( tex2D( HeightNormal, Input.uv2 * vMapSize.zw ).rbg - 0.5f );
 	
 	float4 sample = tex2Dlod( TerrainDiffuse, sample_terrain( IndexU.w, IndexV.w, vTileRepeat, vMipTexels, lod ) );
 
@@ -419,8 +419,8 @@ float4 main( VS_OUTPUT_TERRAIN Input ) : COLOR
 		float3 terrain_colorRD = tex2D( ProvinceColorMap, Input.uv + vOffsets.yx ).rgb;
 		float3 terrain_colorLU = tex2D( ProvinceColorMap, Input.uv + vOffsets.xy ).rgb;
 		float3 terrain_colorRU = tex2D( ProvinceColorMap, Input.uv + vOffsets.yy ).rgb;
-
-	float2 vFrac = frac( float2( Input.uv.x * vMapSize.x - 0.5f, Input.uv.y * vMapSize.y - 0.5f ) );
+		
+		float2 vFrac = frac( float2( Input.uv.x * vMapSize.x - 0.5f, Input.uv.y * vMapSize.y - 0.5f ) );
 		
 		float vAlphaFactor = 10.0f;
 
@@ -453,18 +453,18 @@ float4 main( VS_OUTPUT_TERRAIN Input ) : COLOR
 		}
 	}
 	
-	float3 TerrainColor = tex2D( TerrainColorTint, Input.uv2 ).rgb;	
+	float3 TerrainColor = tex2D( TerrainColorTint, Input.uv2 ).rgb;
 	float3 vOut;
 	
 	if ( terrain_color.a < 1.0f )
 	{
-//		terrain_normal = normalize( terrain_normal );
+		terrain_normal = normalize( terrain_normal );
 
-//		normal = normal.yxz * terrain_normal.x
-//			+ normal.xyz * terrain_normal.y
-//			+ normal.xzy * terrain_normal.z;
+		normal = normal.yxz * terrain_normal.x
+			+ normal.xyz * terrain_normal.y
+			+ normal.xzy * terrain_normal.z;
 		
-		sample.rgb = GetOverlay( sample.rgb, TerrainColor, 0.5f )*2.5;
+		sample.rgb = GetOverlay( sample.rgb, TerrainColor, 0.75f );
 		vOut = sample.rgb;
 		float4 vFoWColor = GetFoWColor( Input.prepos, FoWTexture);
 		vOut = ApplySnow( vOut, Input.prepos, normal, vFoWColor, FoWDiffuse );
@@ -472,12 +472,12 @@ float4 main( VS_OUTPUT_TERRAIN Input ) : COLOR
 	else
 	{
 		sample.rgb = GetOverlay( sample.rgb, TerrainColor, 0.5f );
-		float2 vBlend = float2( 0.5, 0.85f );
-		vOut = ( dot(sample.rgb, GREYIFY * 3.0f) * vBlend.x + terrain_color.rgb * vBlend.y );
+		float2 vBlend = float2( 0.4f, 0.45f );
+		vOut = ( dot(sample.rgb, GREYIFY) * vBlend.x + terrain_color.rgb * vBlend.y );
 	}
-	
+
 	vOut = calculate_secondary( Input.uv, vOut, Input.prepos.xz );
-	vOut = CalculateLighting( vOut, normal )*1.0f;
+	vOut = CalculateLighting( vOut, normal );
 	vOut = ApplyDistanceFog( vOut, Input.prepos, FoWTexture, FoWDiffuse );
 
 	return float4( ComposeSpecular( vOut, 0.0f ), 1.0f );

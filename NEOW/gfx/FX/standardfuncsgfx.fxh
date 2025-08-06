@@ -184,7 +184,7 @@ float3 ApplyDistanceFog( float3 vColor, float3 vPos, in sampler2D FoWTexture, in
 const static float SNOW_START_HEIGHT 	= 18.0f;
 const static float SNOW_RIDGE_START_HEIGHT 	= 22.0f;
 const static float SNOW_NORMAL_START 	= 0.7f;
-const static float3 SNOW_COLOR = float3( 0.86f, 0.88f, 1.0f );
+const static float3 SNOW_COLOR = float3( 0.7f, 0.7f, 0.7f );
 const static float3 SNOW_WATER_COLOR = float3( 0.5f, 0.7f, 0.7f );
 
 float GetSnow( float4 vFoWColor )
@@ -195,7 +195,7 @@ float GetSnow( float4 vFoWColor )
 float3 ApplySnow( float3 vColor, float3 vPos, inout float3 vNormal, float4 vFoWColor, in sampler2D FoWDiffuse, float3 vSnowColor )
 {
 	float vSnowFade = saturate( vPos.y - SNOW_START_HEIGHT );
-	float vNormalFade = saturate( saturate( vNormal.y - SNOW_NORMAL_START ) * 2.6f );
+	float vNormalFade = saturate( saturate( vNormal.y - SNOW_NORMAL_START ) * 10.0f );
 
 	float vNoise = tex2D( FoWDiffuse, ( vPos.xz + 0.5f ) / 100.0f  ).r;
 	float vSnowTexture = tex2D( FoWDiffuse, ( vPos.xz + 0.5f ) / 10.0f  ).r;
@@ -205,11 +205,11 @@ float3 ApplySnow( float3 vColor, float3 vPos, inout float3 vNormal, float4 vFoWC
 	//Increase snow on ridges
 	vNoise += saturate( vPos.y - SNOW_RIDGE_START_HEIGHT )*( saturate( (vNormal.y-0.9f) * 1000.0f )*vIsSnow );
 	vNoise = saturate( vNoise );
-	vNoise = 1.0;
+	//vNoise = 1.0;
 	
 	float vSnow = saturate( saturate( vNoise - ( 1.0f - vIsSnow ) ) * 5.0f );
 	float vFrost = saturate( saturate( vNoise + 0.5f ) - ( 1.0f - vIsSnow ) );
-	vFrost = 0.2;
+	vFrost = 0.0;
 	vColor = lerp( vColor, vSnowColor * ( 0.9f + 0.1f * vSnowTexture), saturate( vSnow + vFrost ) * vSnowFade * vNormalFade * ( saturate( vIsSnow*2.25f ) ) );	
 	
 	vNormal.y += 1.0f * saturate( vSnow + vFrost ) * vSnowFade * vNormalFade;
