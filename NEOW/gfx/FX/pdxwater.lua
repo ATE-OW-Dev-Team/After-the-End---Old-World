@@ -179,8 +179,8 @@ float3 CalcWaterNormal( float2 uv, float vTimeSpeed )
 	float2 uv1 = vScaleUV * uv;
 	float2 uv2 = vScaleUV * uv * 1.3;
 	float noiseScale = 12.0f;
-	float3 noiseNormal1 = tex2D( WaterNoise, uv1 * noiseScale + time1 * 1.0f ).rgb - 0.5f;
-	float3 noiseNormal2 = tex2D( WaterNoise, uv2 * noiseScale + time2 * 1.0f ).rgb - 0.5f;
+	float3 noiseNormal1 = tex2D( WaterNoise, uv1 * noiseScale + time1 * 3.0f ).rgb - 0.5f;
+	float3 noiseNormal2 = tex2D( WaterNoise, uv2 * noiseScale + time2 * 3.0f ).rgb - 0.5f;
 	float3 normalNoise = noiseNormal1 + noiseNormal2 + float3( 0.0f, 0.0f, 1.5f );
 	return normalize( /*normalWaves +*/ normalNoise ).xzy;
 }
@@ -257,8 +257,8 @@ float3 CalcWaterNormal( float2 uv, float vTimeSpeed )
 	float2 uv1 = vScaleUV * uv;
 	float2 uv2 = vScaleUV * uv * 1.3;
 	float noiseScale = 12.0f;
-	float3 noiseNormal1 = tex2D( WaterNoise, uv1 * noiseScale + time1 * 1.0f ).rgb - 0.5f;
-	float3 noiseNormal2 = tex2D( WaterNoise, uv2 * noiseScale + time2 * 1.0f ).rgb - 0.5f;
+	float3 noiseNormal1 = tex2D( WaterNoise, uv1 * noiseScale + time1 * 3.0f ).rgb - 0.5f;
+	float3 noiseNormal2 = tex2D( WaterNoise, uv2 * noiseScale + time2 * 3.0f ).rgb - 0.5f;
 	float3 normalNoise = noiseNormal1 + noiseNormal2 + float3( 0.0f, 0.0f, 1.5f );
 	return normalize( /*normalWaves +*/ normalNoise ).xzy;
 }
@@ -274,7 +274,7 @@ float4 main( VS_OUTPUT_WATER Input ) : COLOR
 	refractiveUV += vTime_HalfPixelOffset.gb;
 	float vRefractionScale = saturate( 5.0f - ( Input.screen_pos.z / Input.screen_pos.w ) * 5.0f );
 	float3 refractiveColor = tex2D( WaterRefraction, (refractiveUV.xy - normal.xz * vRefractionScale * 0.2f) ).rgb;
-
+	
 	float2 ColorMapUV = Input.uv;
 	ColorMapUV.y = 1.0f - ColorMapUV.y;
 	float4 ColormapColor = tex2D( ProvinceColorMap, ColorMapUV.xy );
@@ -297,12 +297,12 @@ float4 main( VS_OUTPUT_WATER Input ) : COLOR
 	float specular = saturate( pow( saturate( dot( H, normal ) ), vSpecWidth ) * vSpecMultiplier );
 
 	float2 vBlend = float2( 0.65f, 0.35f );
-
-	refractiveColor = lerp( refractiveColor, waterColor.rgb, 0.0f );
+	
+	refractiveColor = lerp( refractiveColor, waterColor.rgb, 0.3f );
 	float3 outColor = refractiveColor * ( 1.0f - fresnel ) + reflectiveColor * fresnel;
 	
 	outColor = outColor * vBlend.x + ColormapColor.rgb * vBlend.y;
-
+ 
 	float vFoW = GetFoW( Input.pos, FoWTexture, FoWDiffuse );
 	outColor = ApplyDistanceFog( outColor, Input.pos ) * vFoW;
 

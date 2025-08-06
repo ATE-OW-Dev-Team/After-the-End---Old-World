@@ -131,7 +131,7 @@ VS_OUTPUT main( const VS_INPUT_INSTANCE v )
 	float vSummedRandom = v.vTexCoord1.x + vRandom;
 	vSummedRandom = vSummedRandom >= 1.0f ? vSummedRandom - 1.0f : vSummedRandom;
 	
-	float vHeightScaleFactor = 0.85f + vSummedRandom * 0.5f;
+	float vHeightScaleFactor = 0.75f + vSummedRandom * 0.5f;
 	Out.vPosition = float4( v.vPosition.xyz, 1.0 );
 	Out.vPosition.y *= vHeightScaleFactor;
 
@@ -190,7 +190,7 @@ float3 ApplySnowTree( float3 vColor, float3 vPos, float4 vFoWColor, in sampler2D
 {
 	float vIsSnow = GetSnow( vFoWColor );
 	float vPattern = tex2D(FoWDiffuse, float2(vPos.x, vPos.z)).a + 0.9;
-	vColor = GetOverlay( vColor, SNOW_COLOR - 0.2f, min(vIsSnow * vPattern, 0.9) );	
+	vColor = GetOverlay( vColor, SNOW_COLOR, min(vIsSnow * vPattern, 0.9) );	
 	return vColor;
 }
 
