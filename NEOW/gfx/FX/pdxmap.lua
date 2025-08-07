@@ -125,10 +125,10 @@ Defines = { } -- Comma separated defines ie. "USE_SIMPLE_LIGHTS", "GUI"
 DeclareShared( [[
 
 static const float3 GREYIFY = float3( 0.212671, 0.715160, 0.072169 );
-static const float TERRAINTILEFREQ = 144.0f;
+static const float TERRAINTILEFREQ = 128.0f;
 static const float NUM_TILES = 4.0f;
 static const float TEXELS_PER_TILE = 512.0f;
-static const float ATLAS_TEXEL_POW2_EXPONENT= 10.0f;
+static const float ATLAS_TEXEL_POW2_EXPONENT= 11.0f;
 static const float WATER_HEIGHT_RECP_SQUARED = ( 1.0f / 19.0f ) * ( 1.0f / 19.0f );
 static const float TERRAIN_WATER_CLIP_HEIGHT = 3.0f;
 static const float TERRAIN_UNDERWATER_CLIP_HEIGHT = 3.0f;
@@ -475,7 +475,7 @@ float4 main( VS_OUTPUT_TERRAIN Input ) : COLOR
 		float2 vBlend = float2( 0.5, 0.85f );
 		vOut = ( dot(sample.rgb, GREYIFY * 3.0f) * vBlend.x + terrain_color.rgb * vBlend.y );
 	}
-	
+
 	vOut = calculate_secondary( Input.uv, vOut, Input.prepos.xz );
 	vOut = CalculateLighting( vOut, normal )*1.0f;
 	vOut = ApplyDistanceFog( vOut, Input.prepos, FoWTexture, FoWDiffuse );

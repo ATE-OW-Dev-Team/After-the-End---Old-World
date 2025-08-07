@@ -209,6 +209,9 @@ character_event = {
 		}
 		ai_chance = { 
 			factor = 30
+			modifier = { factor = 1 
+
+			} 
 		}
 	}
 	option = { #Invested by random priest
@@ -3582,7 +3585,7 @@ character_event = {
 		text = EVTDESCHFB20220
 	}
 
-	trigger = { higher_real_tier_than = duke } #In case the first ruler dies or loses his Coronation-worthy tier before the war is won.
+	trigger = { higher_real_tier_than = DUKE } #In case the first ruler dies or loses his Coronation-worthy tier before the war is won.
 
 	picture = GFX_evt_crusaders
 	border = GFX_event_normal_frame_religion
@@ -4418,7 +4421,7 @@ character_event = {
 					NOT = { has_any_opinion_modifier = opinion_coronation_guest }
 					religion = ROOT 	
 					is_within_diplo_range = ROOT
-					higher_real_tier_than = duke
+					higher_real_tier_than = DUKE
 					NOT = { distance_from_realm = { who = ROOT value = 120 } }
 				}
 				letter_event = { id = HF.20302 } #Send Invitations to other Catholic neighbors
@@ -4580,7 +4583,7 @@ letter_event = {
 	
 	option = {
 		name = EVTOPTAHF20301
-		hidden_tooltip = { FROM = { letter_event = { id = HF.20303 days = 3 random = 5 } } } #Notification.
+		hidden_tooltip = { FROM = { character_event = { id = HF.20303 days = 3 random = 5 } } } #Notification.
 		opinion = {
 			modifier = opinion_coronation_guest
 			months = 4
@@ -7355,6 +7358,7 @@ character_event = {
 	
 	option = {
 		name = EVTOPTAHF20346
+		show_portrait = coronation_knight
 		event_target:coronation_knight = { 
 			move_character = ROOT 
 			opinion = {
@@ -7845,6 +7849,7 @@ character_event = {
 		tooltip_info = learning
 		change_learning = 2
 		piety = 30
+		show_portrait = coronation_scholar
 		event_target:coronation_scholar = { 
 			move_character = ROOT 
 			opinion = {
@@ -7859,6 +7864,7 @@ character_event = {
 	}
 	option = {
 		name = EVTOPTBHF20351
+		show_portrait = coronation_scholar
 		event_target:coronation_scholar = { 
 			move_character = ROOT 
 			opinion = {
@@ -8179,20 +8185,20 @@ character_event = {
 	desc = { 
 		trigger = {
 			war = no 
-			NOT = { event_target:coronation_priest = { higher_real_tier_than = duke } } 
+			NOT = { event_target:coronation_priest = { higher_real_tier_than = DUKE } } 
 		} 
 		text = EVTDESCHFA20358
 	}
 	desc = { 
 		trigger = { 
-			event_target:coronation_priest = { higher_real_tier_than = duke } 
+			event_target:coronation_priest = { higher_real_tier_than = DUKE } 
 		} 
 		text = EVTDESCHFB20358
 	}
 	desc = { 
 		trigger = {
 			war = yes
-			event_target:coronation_priest = { higher_real_tier_than = duke } 
+			event_target:coronation_priest = { higher_real_tier_than = DUKE } 
 		} 
 		text = EVTDESCHFC20358 #Papal Envoy.
 		picture = GFX_evt_mounted_combat_day_hf
@@ -8216,19 +8222,19 @@ character_event = {
 		name = {
 			text = EVTOPTAHF20358
 			trigger = {
-				NOR = { event_target:coronation_priest = { higher_real_tier_than = duke } war = yes } 
+				NOR = { event_target:coronation_priest = { higher_real_tier_than = DUKE } war = yes } 
 			}
 		}
 		name = {
 			text = EVTOPTAHF20358_B
 			trigger = {
 				war = no
-				event_target:coronation_priest = { higher_real_tier_than = duke } 
+				event_target:coronation_priest = { higher_real_tier_than = DUKE } 
 			}
 		}
 		trigger = { diplomacy = 10 }
 		if = { 
-			limit = { event_target:coronation_priest = { higher_real_tier_than = duke } }
+			limit = { event_target:coronation_priest = { higher_real_tier_than = DUKE } }
 			event_target:coronation_priest = { 
 				add_character_modifier = {
 					name = mud_splatter
@@ -8245,19 +8251,19 @@ character_event = {
 		name = {
 			text = EVTOPTBHF20358
 			trigger = {
-				NOR = { event_target:coronation_priest = { higher_real_tier_than = duke } war = yes } 
+				NOR = { event_target:coronation_priest = { higher_real_tier_than = DUKE } war = yes } 
 			}
 		}
 		name = {
 			text = EVTOPTBHF20358_B
 			trigger = {
 				war = no
-				event_target:coronation_priest = { higher_real_tier_than = duke } 
+				event_target:coronation_priest = { higher_real_tier_than = DUKE } 
 			}
 		}
 		piety = -75
 		if = { 
-			limit = { event_target:coronation_priest = { higher_real_tier_than = duke } }
+			limit = { event_target:coronation_priest = { higher_real_tier_than = DUKE } }
 			event_target:coronation_priest = { 
 				add_character_modifier = {
 					name = mud_splatter
@@ -8841,12 +8847,6 @@ character_event = {
 				character_event = { id = HF.20371 } #Coronation event for guests.
 				character_event = { id = HF.20370 days = 3 random = 3 } #wrap up, clear all flags.
 			} 
-			if = {
-				limit = {
-					ai = no
-				}
-				set_character_flag = achievement_leglise_cest_moi
-			}
 		}
 
 		ai_chance = { 	
@@ -9280,8 +9280,6 @@ character_event = {
 
 	is_triggered_only = yes
 
-	#option = {
-	#	name = EVTOPTAHF20369
 	immediate = {
 		hidden_tooltip = { #Post-ceremony flavor.
 			if = { 
@@ -9404,11 +9402,12 @@ character_event = {
 		if = { 
 			limit = { 
 				FROM = { has_character_modifier = extravagant_coronation }
-				higher_real_tier_than = duke
+				higher_real_tier_than = DUKE
 				age = 11
 				prisoner = no
 				is_feudal = yes
 				is_landed = yes
+				higher_real_tier_than = DUKE
 				NOT = { trait = incapable }
 				is_vice_royalty = no
 				has_coronation_trigger = yes
@@ -9548,7 +9547,7 @@ character_event = {
 				is_feudal = yes
 				NOT = { government = order_government }
 				NOT = { government = oligarchic_republic }
-				higher_real_tier_than = duke
+				higher_real_tier_than = DUKE
 				NOT = { has_character_flag = is_charlemagne }
 				NOT = { has_character_flag = is_carloman }
 				NOT = { trait = crowned_by_priest }
@@ -9712,7 +9711,7 @@ character_event = {
 	is_triggered_only = yes
 
 	trigger = { 
-		higher_real_tier_than = duke
+		higher_real_tier_than = DUKE
 		has_coronation_trigger = yes
 		NOR =  { 
 			trait = crowned_by_priest
@@ -9740,7 +9739,7 @@ character_event = {
 	trigger = { 
 		has_dlc = "Holy Fury"
 		is_feudal = yes
-		higher_real_tier_than = duke
+		higher_real_tier_than = DUKE
 		ruled_years = 5
 		has_coronation_trigger = yes
 		NOR =  { 
@@ -9947,7 +9946,7 @@ character_event = {
 		}
 		has_coronation_trigger = yes
 		capital_scope = { religion = ROOT }
-		higher_real_tier_than = duke
+		higher_real_tier_than = DUKE
 	}
 
 	is_triggered_only = yes
@@ -9986,7 +9985,7 @@ character_event = {
 			trait = crowned_by_myself
 		}
 		has_coronation_trigger = yes
-		higher_real_tier_than = duke
+		higher_real_tier_than = DUKE
 	}
 
 	is_triggered_only = yes
@@ -10059,7 +10058,7 @@ character_event = {
 				trait = crowned_by_myself
 			}
 			has_coronation_trigger = yes
-			higher_real_tier_than = duke
+			higher_real_tier_than = DUKE
 		}
 	}
 
@@ -10105,7 +10104,7 @@ character_event = {
 		trigger = { 
 			FROM = { 
 				is_ruler = yes 
-				higher_real_tier_than = duke
+				higher_real_tier_than = DUKE
 				NOR = { 
 					trait = crowned_by_priest
 					trait = crowned_by_bishop
@@ -10371,7 +10370,7 @@ character_event = {
 				trait = crowned_by_myself
 			}
 			has_coronation_trigger = yes
-			higher_real_tier_than = duke
+			higher_real_tier_than = DUKE
 		}
 	}
 
@@ -10448,7 +10447,7 @@ character_event = {
 				trait = crowned_by_myself
 			}
 			has_coronation_trigger = yes
-			higher_real_tier_than = duke
+			higher_real_tier_than = DUKE
 		}
 	}
 
@@ -10802,7 +10801,7 @@ character_event = {
 				current_heir = { vassal_of = PREV } 
 			}
 			religion_group = christian
-			higher_real_tier_than = duke
+			higher_real_tier_than = DUKE
 			OR = { 
 				trait = crowned_by_priest
 				trait = crowned_by_bishop
@@ -10835,7 +10834,7 @@ character_event = {
 		religion_group = christian
 		liege = { 
 			NOT = { character = ROOT }
-			higher_real_tier_than = duke
+			higher_real_tier_than = DUKE
 			is_inaccessible_trigger = no
 			OR = { 
 				trait = crowned_by_priest
@@ -10964,7 +10963,7 @@ character_event = {
 	is_triggered_only = yes
 
 	trigger = { 
-		higher_real_tier_than = duke
+		higher_real_tier_than = DUKE
 		is_inaccessible_trigger = no
 		OR = { 
 			trait = crowned_by_priest
@@ -11001,7 +11000,7 @@ character_event = {
 	is_triggered_only = yes
 
 	trigger = { 
-		higher_real_tier_than = duke
+		higher_real_tier_than = DUKE
 		OR = { 
 			trait = crowned_by_priest
 			trait = crowned_by_bishop
@@ -11305,9 +11304,7 @@ character_event = {
 				any_artifact = { 
 					limit = { artifact_type = iron_crown_of_lombardy }
 					unsafe_destroy_artifact = yes
-					artifact_owner = {
-						add_artifact = fragment_of_true_cross
-					}
+					add_artifact = fragment_of_true_cross
 				}
 			}
 		}
@@ -11526,7 +11523,7 @@ character_event = {
 		is_vice_royalty = no
 		NOT = { government = order_government }
 		NOT = { government = oligarchic_republic }
-		higher_real_tier_than = duke
+		higher_real_tier_than = DUKE
 		has_coronation_trigger = yes
 		NOT = { check_variable = { which = uncrowned_count value = 30 } } #Stop at minus thirty.
 		NOR =  { 
@@ -11576,6 +11573,51 @@ character_event = {
 				has_landed_title = e_byzantium 
 				any_artifact = { artifact_type = crown_byzantine }
 				e_byzantium = { 
+					current_heir = { 
+						NOT = { dynasty = ROOT }
+					} 
+				} 
+			}
+			AND =  { 
+				has_landed_title = d_tengri_pagan_reformed 
+				any_artifact = { artifact_type = crown_tengri_fylkir }
+				d_tengri_pagan_reformed = { 
+					current_heir = { 
+						NOT = { dynasty = ROOT }
+					} 
+				} 
+			}
+			AND =  { 
+				has_landed_title = d_finnish_pagan_reformed 
+				any_artifact = { artifact_type = crown_finnish_fylkir }
+				d_finnish_pagan_reformed = { 
+					current_heir = { 
+						NOT = { dynasty = ROOT }
+					} 
+				} 
+			}
+			AND =  { 
+				has_landed_title = k_hellenic_pagan
+				any_artifact = { artifact_type = scepter_hellenic_fylkir }
+				k_hellenic_pagan = { 
+					current_heir = { 
+						NOT = { dynasty = ROOT }
+					} 
+				} 
+			}
+			AND =  { 
+				has_landed_title = d_baltic_pagan_reformed 
+				any_artifact = { artifact_type = crown_romuva_fylkir }
+				d_baltic_pagan_reformed = { 
+					current_heir = { 
+						NOT = { dynasty = ROOT }
+					} 
+				} 
+			}
+			AND =  { 
+				has_landed_title = d_bon_reformed 
+				any_artifact = { artifact_type = scepter_bon_fylkir }
+				d_bon_reformed = { 
 					current_heir = { 
 						NOT = { dynasty = ROOT }
 					} 
@@ -11853,6 +11895,81 @@ character_event = {
 			any_artifact = { 
 				limit = { artifact_type = crown_byzantine }
 				save_event_target_as = inheriting_artifact_2
+			}
+			current_heir = { character_event = { id = HF.20407 days = 1 } }
+		}
+		if = { 
+			limit = { 
+				has_landed_title = d_tengri_pagan_reformed
+				any_artifact = { artifact_type = crown_tengri_fylkir }
+			}
+			d_tengri_pagan_reformed = { 
+				current_heir = { save_event_target_as = worthy_tengri_fylkir_crown }
+			}
+			player_heir = { save_event_target_as = unworthy_tengri_fylkir_crown }
+			any_artifact = { 
+				limit = { artifact_type = crown_tengri_fylkir }
+				save_event_target_as = inheriting_artifact_tengricrown
+			}
+			current_heir = { character_event = { id = HF.20407 days = 1 } }
+		}
+		if = { 
+			limit = { 
+				has_landed_title = d_finnish_pagan_reformed
+				any_artifact = { artifact_type = crown_finnish_fylkir }
+			}
+			d_finnish_pagan_reformed = { 
+				current_heir = { save_event_target_as = worthy_finnish_fylkir_crown }
+			}
+			player_heir = { save_event_target_as = unworthy_finnish_fylkir_crown }
+			any_artifact = { 
+				limit = { artifact_type = crown_finnish_fylkir }
+				save_event_target_as = inheriting_artifact_finnishcrown
+			}
+			current_heir = { character_event = { id = HF.20407 days = 1 } }
+		}
+		if = { 
+			limit = { 
+				has_landed_title = d_baltic_pagan_reformed
+				any_artifact = { artifact_type = crown_romuva_fylkir }
+			}
+			d_baltic_pagan_reformed = { 
+				current_heir = { save_event_target_as = worthy_baltic_fylkir_crown }
+			}
+			player_heir = { save_event_target_as = unworthy_baltic_fylkir_crown }
+			any_artifact = { 
+				limit = { artifact_type = crown_romuva_fylkir }
+				save_event_target_as = inheriting_artifact_balticcrown
+			}
+			current_heir = { character_event = { id = HF.20407 days = 1 } }
+		}
+		if = { 
+			limit = { 
+				has_landed_title = d_bon_reformed
+				any_artifact = { artifact_type = scepter_bon_fylkir }
+			}
+			d_bon_reformed = { 
+				current_heir = { save_event_target_as = worthy_bon_fylkir_crown }
+			}
+			player_heir = { save_event_target_as = unworthy_bon_fylkir_crown }
+			any_artifact = { 
+				limit = { artifact_type = scepter_bon_fylkir }
+				save_event_target_as = inheriting_artifact_boncrown
+			}
+			current_heir = { character_event = { id = HF.20407 days = 1 } }
+		}
+		if = { 
+			limit = { 
+				has_landed_title = k_hellenic_pagan
+				any_artifact = { artifact_type = scepter_hellenic_fylkir }
+			}
+			k_hellenic_pagan = { 
+				current_heir = { save_event_target_as = worthy_hellenic_fylkir_crown }
+			}
+			player_heir = { save_event_target_as = unworthy_hellenic_fylkir_crown }
+			any_artifact = { 
+				limit = { artifact_type = scepter_hellenic_fylkir }
+				save_event_target_as = inheriting_artifact_helleniccrown
 			}
 			current_heir = { character_event = { id = HF.20407 days = 1 } }
 		}
@@ -13472,7 +13589,7 @@ character_event = {
 		FROMFROM = {
 			has_character_modifier = uncrowned_modifier
 			NOT = { #If no longer King-tier.
-				higher_real_tier_than = duke
+				higher_real_tier_than = DUKE
 			}
 		}
 	}
