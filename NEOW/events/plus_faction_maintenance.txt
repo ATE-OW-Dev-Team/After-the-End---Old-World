@@ -999,47 +999,6 @@ character_event = {
 			}
 		}
 		
-		#claimants to the granted title who aren't close relatives of the new owner are displeased
-		event_target:pf_new_title = {
-			any_claimant = {
-				limit = {
-					NOR = {
-						character = ROOT
-						character = event_target:pf_new_owner
-						is_close_relative = event_target:pf_new_owner
-					}
-					OR = {
-						AND = {
-							is_female = no
-							ROOT = {
-								succ_law_title = {
-									NOT = { has_law = enatic_succession }
-									NOT = { has_law = enatic_cognatic_succession }
-								}
-							}
-						}
-						AND = {
-							is_female = yes
-							ROOT = {
-								succ_law_title = {
-									NOT = { has_law = agnatic_succession }
-									NOT = { has_law = cognatic_succession }
-								}
-							}
-						}
-					}
-					any_liege = { character = ROOT }
-				}
-				if = {
-					limit = { has_strong_claim = PREV }
-					opinion = { who = ROOT modifier = faction_disapprove_title_grant multiplier = 4 years = 10 }
-				}
-				if = {
-					limit = { has_weak_claim = PREV }
-					opinion = { who = ROOT modifier = faction_disapprove_title_grant multiplier = 2 years = 10 }
-				}
-			}
-		}
 		#members of the same faction as the new holder are pleased, based on the tier of the title
 		if = {
 			limit = { event_target:pf_new_owner = { in_faction = faction_court } }
