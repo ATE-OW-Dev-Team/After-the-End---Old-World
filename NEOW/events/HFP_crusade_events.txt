@@ -3740,215 +3740,223 @@ character_event = {
     is_triggered_only = yes
 
     immediate = {
-        any_crusade_participant = {
-            limit = {
-                OR = {
-                    crusade_beneficiary = {
-                        OR = {
-							is_female = yes
-                            is_alive = no
-                            character = FROM
-                            is_landed = yes
-                            any_heir_title = { 
-                                always = yes
-                            }
-                            mercenary = yes
-                            holy_order = yes
-                            is_sick_or_injured_trigger = yes
-                            trait = monk
-                            trait = nun
-							AND = {
-								ai = yes
-								is_married = yes
-								spouse = {
-									OR = {
-										is_landed = yes
-										any_heir_title = { 
-											always = yes
+		if = {
+			limit = {	
+				OR = {
+					is_preparing_crusade = yes
+					has_crusade_war_started = yes
+				}
+			}
+			any_crusade_participant = {
+				limit = {
+					OR = {
+						crusade_beneficiary = {
+							OR = {
+								is_female = yes
+								is_alive = no
+								character = FROM
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
+								mercenary = yes
+								holy_order = yes
+								is_sick_or_injured_trigger = yes
+								trait = monk
+								trait = nun
+								AND = {
+									ai = yes
+									is_married = yes
+									spouse = {
+										OR = {
+											is_landed = yes
+											any_heir_title = { 
+												always = yes
+											}
+										}
+									}
+								}
+								AND = {
+									ai = yes
+									is_betrothed = yes
+									betrothed = {
+										OR = {
+											is_landed = yes
+											any_heir_title = { 
+												always = yes
+											}
+										}
+									}
+								}
+								AND = {
+									ai = yes
+									player_heir = {
+										OR = {
+											is_landed = yes
+											any_heir_title = { 
+												always = yes
+											}
 										}
 									}
 								}
 							}
-							AND = {
-								ai = yes
-								is_betrothed = yes
-								betrothed = {
-									OR = {
-										is_landed = yes
-										any_heir_title = { 
-											always = yes
-										}
-									}
+						}
+						NOT = {
+							crusade_beneficiary = {
+								always = yes
+							}
+						}
+						holy_order = yes
+					}
+					ai = yes
+				}
+				crusade_beneficiary = {
+					remove_opinion = {
+						who = PREV
+						modifier = opinion_beneficiary
+					}
+				}
+				set_crusade_beneficiary = none
+				character_event = { id = HFP.41007 }
+			}
+			any_crusade_participant = {
+				limit = {
+					OR = {
+						crusade_beneficiary = {
+							OR = {
+								is_alive = no
+								character = FROM
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
+								mercenary = yes
+								holy_order = yes
+								NOT = {
+									age = 12
+								}
+								trait = monk
+								trait = nun
+								is_sick_or_injured_trigger = yes
+							}
+						}
+						NOT = {
+							crusade_beneficiary = {
+								 always = yes
+							}
+						}
+						holy_order = yes
+					}
+					ai = no
+				}
+				crusade_beneficiary = {
+					save_event_target_as = old_crusade_beneficiary
+				}
+				if = {
+					limit = {
+						crusade_beneficiary = {
+							OR = {
+								is_alive = no
+								FROM = {
+									has_character_flag = dying_beneficiary
 								}
 							}
-							AND = {
-								ai = yes
-								player_heir = {
-									OR = {
-										is_landed = yes
-										any_heir_title = { 
-											always = yes
-										}
-									}
+						}
+						NOT = { has_global_flag = distributing_crusade }
+					}
+					set_character_flag = dead_beneficiary_flag
+					FROM = {
+						clr_character_flag = dying_beneficiary
+					}
+				}
+				if = {
+					limit = {
+						crusade_beneficiary = {
+							OR = {
+								is_landed = yes
+								FROM = {
+									has_character_flag = landed_beneficiary
 								}
 							}
-                        }
-                    }
-                    NOT = {
-                        crusade_beneficiary = {
-                            always = yes
-                        }
-                    }
-                    holy_order = yes
-                }
-                ai = yes
-            }
-            crusade_beneficiary = {
-                remove_opinion = {
-                    who = PREV
-                    modifier = opinion_beneficiary
-                }
-            }
-			set_crusade_beneficiary = none
-            character_event = { id = HFP.41007 }
-        }
-        any_crusade_participant = {
-            limit = {
-                OR = {
-                    crusade_beneficiary = {
-                        OR = {
-                            is_alive = no
-                            character = FROM
-                            is_landed = yes
-                            any_heir_title = { 
-                                always = yes
-                            }
-                            mercenary = yes
-                            holy_order = yes
-                            NOT = {
-                                age = 12
-                            }
-                            trait = monk
-                            trait = nun
-                            is_sick_or_injured_trigger = yes
-                        }
-                    }
-                    NOT = {
-                        crusade_beneficiary = {
-                             always = yes
-                        }
-                    }
-                    holy_order = yes
-                }
-                ai = no
-            }
-            crusade_beneficiary = {
-                save_event_target_as = old_crusade_beneficiary
-            }
-            if = {
-                limit = {
-                    crusade_beneficiary = {
-                        OR = {
-                            is_alive = no
-                            FROM = {
-                                has_character_flag = dying_beneficiary
-                            }
-                        }
-                    }
-                    NOT = { has_global_flag = distributing_crusade }
-                }
-                set_character_flag = dead_beneficiary_flag
-                FROM = {
-                    clr_character_flag = dying_beneficiary
-                }
-            }
-            if = {
-                limit = {
-                    crusade_beneficiary = {
-                        OR = {
-                            is_landed = yes
-                            FROM = {
-                                has_character_flag = landed_beneficiary
-                            }
-                        }
-                    }
-                    NOT = { has_global_flag = distributing_crusade }
-                }
-                set_character_flag = landed_beneficiary_flag
-                FROM = {
-                    clr_character_flag = landed_beneficiary
-                }
-            }
-            if = {
-                limit = {
-                    crusade_beneficiary = {
-                        any_heir_title = { 
-                            always = yes
-                        }
-                    }
-                    NOT = { has_global_flag = distributing_crusade }
-                }
-                set_character_flag = heir_beneficiary_flag
-            }
-            if = {
-                limit = {
-                    crusade_beneficiary = {
-                        mercenary = yes
-                    }
-                    NOT = { has_global_flag = distributing_crusade }
-                }
-                set_character_flag = mercenary_beneficiary_flag
-            }
-            if = {
-                limit = {
-                    crusade_beneficiary = {
-                        holy_order = yes
-                    }
-                    NOT = { has_global_flag = distributing_crusade }
-                }
-                set_character_flag = holy_order_beneficiary_flag
-            }
-            if = {
-                limit = {
-                    crusade_beneficiary = {
-                        NOT = {
-                            age = 12
-                        }
-                    }
-                    NOT = { has_global_flag = distributing_crusade }
-                }
-                set_character_flag = underage_beneficiary_flag
-            }
-            if = {
-                limit = {
-                    crusade_beneficiary = {
-                        is_sick_or_injured_trigger = yes
-                    }
-                    NOT = { has_global_flag = distributing_crusade }
-                }
-                set_character_flag = sick_or_injured_beneficiary_flag
-            }
-            if = {
-                limit = {
-                    crusade_beneficiary = {
-                        OR = {
-                            trait = monk
-                            trait = nun
-                        }
-                    }
-                    NOT = { has_global_flag = distributing_crusade }
-                }
-                set_character_flag = monk_nun_beneficiary_flag
-            }
-            character_event = { id = HFP.41110 }
-            crusade_beneficiary = {
-                remove_opinion = {
-                    who = PREV
-                    modifier = opinion_beneficiary
-                }
-            }
-            set_crusade_beneficiary = none
-        }
+						}
+						NOT = { has_global_flag = distributing_crusade }
+					}
+					set_character_flag = landed_beneficiary_flag
+					FROM = {
+						clr_character_flag = landed_beneficiary
+					}
+				}
+				if = {
+					limit = {
+						crusade_beneficiary = {
+							any_heir_title = { 
+								always = yes
+							}
+						}
+						NOT = { has_global_flag = distributing_crusade }
+					}
+					set_character_flag = heir_beneficiary_flag
+				}
+				if = {
+					limit = {
+						crusade_beneficiary = {
+							mercenary = yes
+						}
+						NOT = { has_global_flag = distributing_crusade }
+					}
+					set_character_flag = mercenary_beneficiary_flag
+				}
+				if = {
+					limit = {
+						crusade_beneficiary = {
+							holy_order = yes
+						}
+						NOT = { has_global_flag = distributing_crusade }
+					}
+					set_character_flag = holy_order_beneficiary_flag
+				}
+				if = {
+					limit = {
+						crusade_beneficiary = {
+							NOT = {
+								age = 12
+							}
+						}
+						NOT = { has_global_flag = distributing_crusade }
+					}
+					set_character_flag = underage_beneficiary_flag
+				}
+				if = {
+					limit = {
+						crusade_beneficiary = {
+							is_sick_or_injured_trigger = yes
+						}
+						NOT = { has_global_flag = distributing_crusade }
+					}
+					set_character_flag = sick_or_injured_beneficiary_flag
+				}
+				if = {
+					limit = {
+						crusade_beneficiary = {
+							OR = {
+								trait = monk
+								trait = nun
+							}
+						}
+						NOT = { has_global_flag = distributing_crusade }
+					}
+					set_character_flag = monk_nun_beneficiary_flag
+				}
+				character_event = { id = HFP.41110 }
+				crusade_beneficiary = {
+					remove_opinion = {
+						who = PREV
+						modifier = opinion_beneficiary
+					}
+				}
+				set_crusade_beneficiary = none
+			}
+		}
     }
 }
 
