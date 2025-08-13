@@ -6,67 +6,84 @@ letter_event = {
 	id = HF.20000
 	desc = EVTDESCHF20000
 	border = GFX_event_letter_frame_religion
-	show_from_from = yes
-	
-	is_triggered_only = yes
+	portrait = event_target:converting_king
 
-	option = { #Accept request, start preparation for mass conversion
+	is_triggered_only = yes # request_sponsored_baptism, HF_baptism_decisons.txt, convert_to_attacker_religion, conversion_decisions.txt
+
+	option = { # Accept request, start preparation for mass conversion
 		name = EVTOPTAHF20000
-		custom_tooltip = { text = accept_baptism_request }
-		hidden_tooltip = {
-			set_character_flag = flag_sponsoring_baptism
-			FROM = { set_character_flag = flag_converting_baptism }
-			save_event_target_as = sponsoring_king
-			FROM = { save_event_target_as = converting_king } 
-		}
-		FROM = { hidden_tooltip = { letter_event = { id = HF.20002 days = 5 random = 5 } } }
-		ai_chance = {
-			factor = 100 # Acceptance added in the decision itself.
+
+		custom_tooltip = {
+			text = accept_baptism_request
+
+			hidden_effect = {
+				set_character_flag = flag_sponsoring_baptism
+				save_event_target_as = sponsoring_king
+
+				event_target:converting_king = {
+					set_character_flag = flag_converting_baptism
+
+					letter_event = {
+						id = HF.20002
+						days = 5
+						random = 5
+					}
+				}
+			}
 		}
 	}
-	option = { #Deny request, end event chain
+
+	option = { # Deny request, end event chain
 		name = EVTOPTBHF20000
-		custom_tooltip = { text = refuse_baptism_request }
-		FROM = {
-			opinion = {
-				modifier = opinion_denied_request
-				years = 10
-				who = ROOT
+
+		custom_tooltip = {
+			text = refuse_baptism_request
+
+			remove_opinion = {
+				name = opinion_baptism_sponsor_target
+				who = event_target:converting_king
 			}
-		}
-		hidden_tooltip = { 
-			remove_opinion = {  
-				who = FROM
-				modifier = opinion_baptism_sponsor_target
-			}
-			FROM = { 
-				remove_opinion = {  
+
+			event_target:converting_king = {
+				remove_opinion = {
+					name = opinion_baptism_sponsor_target
 					who = ROOT
-					modifier = opinion_baptism_sponsor_target
+				}
+
+				letter_event = {
+					id = HF.20001
+					days = 5
+					random = 5
 				}
 			}
 		}
 
-		FROM = { hidden_tooltip = { letter_event = { id = HF.20001 days = 5 random = 5 } } }
-		ai_chance = { #Only for Multiplayer
-			factor = 0
+		reverse_opinion = {
+			name = opinion_denied_request
+			who = event_target:converting_king
+			years = 10
 		}
+
+		ai_chance = { factor = 0 } # Only for Multiplayer
 	}
 }
 
-#Converter: Sponsor refused your request to Baptism. Chain ENDS.
+# Converter: Sponsor refused your request to Baptism. Chain ENDS.
 letter_event = {
 	id = HF.20001
 	desc = EVTDESCHF20001
 	border = GFX_event_letter_frame_religion
-	
+
 	is_triggered_only = yes
-	
+
+	ai = no
+
 	option = {
-		name = EVTOPTAHF20001 
+		name = UNFORTUNATE
+
 		tooltip = {
 			opinion = {
-				modifier = opinion_denied_request
+				name = opinion_denied_request
 				years = 10
 				who = FROM
 			}
@@ -74,40 +91,60 @@ letter_event = {
 	}
 }
 
-#Converter: Sponsor accepted your request. Non-aggression pact remains, prepare for ceremony.
+# Converter: Sponsor accepted your request. Non-aggression pact remains, prepare for ceremony.
 letter_event = {
 	id = HF.20002
 	desc = EVTDESCHF20002
 	border = GFX_event_letter_frame_religion
 
+	is_triggered_only = yes
+
+	has_character_flag = flag_converting_baptism
+
 	trigger = {
-		has_character_flag = flag_converting_baptism
-		event_target:sponsoring_king = { is_alive = yes } 
+		FROM = { is_alive = yes }
 	}
 
-	is_triggered_only = yes
-	
 	option = {
-		name = EVTOPTAHF20002
+		name = GOOD
+
 		prestige = -500
-		if = { 
+
+		if = {
 			limit = { trait = zealous }
 			piety = -100
 		}
-		narrative_event = { id = HF.20003 days = 12 random = 11 tooltip = EVTTOOLTIPHF20003 } #Big fluff event
-		custom_tooltip = {  #Have vassals make their own choice as well.
+
+		narrative_event = {
+			id = HF.20003 # Big fluff event
+			days = 12
+			random = 11
+			tooltip = EVTTOOLTIPHF20003
+		}
+
+		custom_tooltip = { # Have vassals make their own choice as well.
 			text = EVTTOOLTIPHF20005
-			hidden_tooltip = {
-				any_vassal = { letter_event = { id = HF.20005 days = 2 random = 8 } }
+
+			any_vassal = {
+				letter_event = {
+					id = HF.20005
+					days = 2
+					random = 8
+				}
 			}
 		}
 	}
 }
 
-#The Baptism itself happens. Converter, his courtiers and provinces are converted.
+# The Baptism itself happens. Converter, his courtiers and provinces are converted.
 narrative_event = {
 	id = HF.20003
 	title = EVTTITLE20003
+	picture = GFX_evt_mass_baptism
+	border = GFX_event_narrative_frame_religion
+	sound = mass_conversion_baptism
+	portrait = event_target:sponsoring_king
+
 	desc = {
 		trigger = {
 			event_target:sponsoring_king = { OR = { religion_group = christian religion = jugoslavist } }
@@ -209,7 +246,7 @@ narrative_event = {
 				higher_real_tier_than = DUKE
 				event_target:sponsoring_king = { religion_group = christian }
 			}
-			ROOT = { give_nickname = nick_the_confessor }
+			event_target:converting_king = { give_nickname = nick_the_confessor }
 		}
 		if = { 
 			limit = { 
@@ -222,7 +259,7 @@ narrative_event = {
 					} 
 				}
 			}
-			ROOT = { give_nickname = nick_the_submissive }
+			event_target:converting_king = { give_nickname = nick_the_submissive }
 		}
 		if = { 
 			limit = { 
@@ -230,7 +267,7 @@ narrative_event = {
 				higher_real_tier_than = DUKE
 				event_target:sponsoring_king = { religion_group = jewish_group }
 			}
-			ROOT = { give_nickname = nick_the_deliverer }
+			event_target:converting_king = { give_nickname = nick_the_deliverer }
 		}
 		if = { 
 			limit = { 
@@ -240,7 +277,7 @@ narrative_event = {
 					religion_group = indian_group 
 				}
 			}
-			ROOT = { give_nickname = nick_the_purified }
+			event_target:converting_king = { give_nickname = nick_the_purified }
 		}
 		if = { 
 			limit = { 
@@ -248,7 +285,7 @@ narrative_event = {
 				higher_real_tier_than = DUKE
 				event_target:sponsoring_king = { OR = { religion_group = buddhist_group religion = bon_reformed } }
 			}
-			ROOT = { give_nickname = nick_the_illuminated }
+			event_target:converting_king = { give_nickname = nick_the_illuminated }
 		}
 		if = { 
 			limit = { 
@@ -259,7 +296,7 @@ narrative_event = {
 					NOT = { religion = hellenic_pagan_reformed }
 				}
 			}
-			ROOT = { give_nickname = nick_the_exalted }
+			event_target:converting_king = { give_nickname = nick_the_exalted }
 		}
 		if = {
 			limit = {
@@ -267,7 +304,7 @@ narrative_event = {
 				higher_real_tier_than = DUKE
 				event_target:sponsoring_king = { OR = { religion = islamity religion = bushism religion = voodun } }
 			}
-			ROOT = { give_nickname = nick_the_awoken }
+			event_target:converting_king = { give_nickname = nick_the_awoken }
 		}
 		if = { 
 			limit = { 
@@ -275,7 +312,7 @@ narrative_event = {
 				higher_real_tier_than = DUKE
 				event_target:sponsoring_king = { religion = jacobinist }
 			}
-			ROOT = { give_nickname = nick_the_bleeding_eyes }
+			event_target:converting_king = { give_nickname = nick_the_bleeding_eyes }
 		}
 		if = { 
 			limit = { 
@@ -283,7 +320,7 @@ narrative_event = {
 				higher_real_tier_than = DUKE
 				event_target:sponsoring_king = { religion = khanist }
 			}
-			ROOT = { give_nickname = nick_the_sky_rider }
+			event_target:converting_king = { give_nickname = nick_the_sky_rider }
 		}
 		if = { 
 			limit = { 
@@ -291,19 +328,18 @@ narrative_event = {
 				higher_real_tier_than = DUKE
 				event_target:sponsoring_king = { religion = hellenic_pagan_reformed }
 			}
-			ROOT = { give_nickname = nick_the_civilized }
+			event_target:converting_king = { give_nickname = nick_the_civilized }
 		}
-		if = { #Increase tribal organization.
-			limit = { 
-				primary_title = { 
-					has_law = tribal_organization_3
-				}
-			}
-			ROOT = {
-				 
-				any_demesne_title = { 
-					
-					limit = { higher_tier_than = COUNT }
+		# Increase tribal organization
+		trigger_switch = {
+			on_trigger = has_law
+
+			tribal_organization_3 = {
+				any_demesne_title = {
+					show_scope_change = no
+
+					limit = { higher_real_tier_than = COUNT }
+
 					add_law = {
 						law = tribal_organization_4
 						cooldown = no
@@ -311,311 +347,351 @@ narrative_event = {
 					}
 				}
 			}
-		}
-		if = { #Increase tribal organization.
-			limit = { 
-				primary_title = { 
-					has_law = tribal_organization_2
-				}
-			}
-			ROOT = {
-				 
-				any_demesne_title = { 
-					
-					limit = { higher_tier_than = COUNT }
+
+			tribal_organization_2 = {
+				any_demesne_title = {
+					show_scope_change = no
+
+					limit = { higher_real_tier_than = COUNT }
+
 					add_law = {
 						law = tribal_organization_3
 						cooldown = no
 						opinion_effect = no
 					}
 				}
-			} 
-		}
-		if = { #Increase tribal organization.
-			limit = { 
-				primary_title = { 
-					has_law = tribal_organization_1
-				}
 			}
-			ROOT = {
-				 
-				any_demesne_title = { 
-					
-					limit = { higher_tier_than = COUNT }
+
+			tribal_organization_1 = {
+				any_demesne_title = {
+					show_scope_change = no
+
+					limit = { higher_real_tier_than = COUNT }
+
 					add_law = {
 						law = tribal_organization_2
 						cooldown = no
 						opinion_effect = no
 					}
 				}
-			} 
-		}
-		if = { #Increase tribal organization.
-			limit = { 
-				primary_title = { 
-					has_law = tribal_organization_0
-				}
 			}
-			ROOT = {
-				 
-				any_demesne_title = { 
-					
-					limit = { higher_tier_than = COUNT }
+
+			tribal_organization_0 = {
+				any_demesne_title = {
+
+					show_scope_change = no
+
+					limit = { higher_real_tier_than = COUNT }
+
 					add_law = {
 						law = tribal_organization_1
 						cooldown = no
 						opinion_effect = no
 					}
 				}
-			} 
-		}
-		hidden_tooltip = { 
-			if = { 
-				limit = { higher_real_tier_than = COUNT }
-				any_playable_ruler = { 
-					limit = { 
-						ai = no
-						NOT = { character = ROOT }
-						NOT = { vassal_of = ROOT }
-						OR = {
-							is_within_diplo_range = ROOT
-							religion =  event_target:converting_king
-						}
-						OR = { 
-							religion_group =  event_target:sponsoring_king
-							religion_group =  event_target:converting_king
-						}
-					}
-					narrative_event = { id = HF.20090 } #Notify all other rulers if Converter is King or above
-				}
 			}
 		}
-		hidden_tooltip = { 
+
+		if = {
+			limit = { higher_real_tier_than = COUNT }
+
+			any_player = {
+				limit = {
+					OR = {
+						religion_group = event_target:sponsoring_king
+						religion_group = event_target:converting_king
+					}
+
+					OR = {
+						is_within_diplo_range = ROOT
+						religion = event_target:converting_king
+					}
+
+					NOR = {
+						character = ROOT
+						vassal_of = ROOT
+					}
+				}
+
+				narrative_event = { id = HF.20090 } # Notify all other rulers if Converter is King or above
+			}
+		}
+
+		hidden_effect = {
 			chronicle = {
 				entry = CHRONICLE_MASS_CONVERSION_CONVERTER
 				portrait = [sponsoring_king.GetID]
 			}
-			any_realm_character = { clr_character_flag = flag_vassal_asked_baptism }
-			if = { #If leader of society of same religion, convert all secret provinces, disband society.
-				limit = { 
-					society_member_of = secret_religious_cult 
-					society_rank == 4
-					true_religion = event_target:sponsoring_king
-					}
-					root_secret_religion_provinces_convert_effect = yes
-					any_realm_character = {
-						limit = {
-							NOT = { character = ROOT }
-							same_society_as = ROOT
+
+			any_realm_character = {
+				clr_character_flag = flag_vassal_asked_baptism
+			}
+
+			if = {
+				limit = { society_member_of = secret_religious_cult }
+
+				if = {
+					limit = { society_rank == 4 }
+
+					# If leader of society of same religion, convert all secret provinces, disband society.
+					if = {
+						limit = { true_religion = event_target:sponsoring_king }
+
+						root_secret_religion_provinces_convert_effect = yes
+
+						society = {
+							any_society_member = {
+								limit = { same_realm = ROOT }
+								leave_society = yes
+							}
 						}
+
+						any_realm_character = {
+							limit = { has_character_flag = currently_part_of_secret_religion_uncovering	}
+							clr_character_flag = currently_part_of_secret_religion_uncovering
+						}
+
+						society = {
+							any_society_member = {
+								leave_society = yes
+							}
+						}
+					}
+
+					# If leader of society of other religion, disband society.
+					else = {
+						society = {
+							any_society_member = {
+								limit = { same_realm = ROOT }
+								leave_society = yes
+							}
+						}
+
+						any_realm_character = {
+							limit = { has_character_flag = currently_part_of_secret_religion_uncovering	}
+							clr_character_flag = currently_part_of_secret_religion_uncovering
+						}
+
+						society = {
+							any_society_member = {
+								leave_society = yes
+							}
+						}
+					}
+				}
+				else = {
+					# If member of society of same religion, convert all secret provinces inside realm, then leave society.
+					if = {
+						limit = { true_religion = event_target:sponsoring_king }
+
+						root_secret_religion_provinces_convert_effect = yes
 						leave_society = yes
 					}
-					any_realm_character = {
-						limit = { has_character_flag = currently_part_of_secret_religion_uncovering	}
-						clr_character_flag = currently_part_of_secret_religion_uncovering
-					}
-				any_society_member = {
-					limit = {
-						NOT = { character = ROOT }
-						same_society_as = ROOT
-					}
-					leave_society = yes
-				}
-				leave_society = yes
-			}
-			if = { #If leader of society of other religion, disband society.
-				limit = { 
-					society_member_of = secret_religious_cult 
-					society_rank == 4
-					NOT = { true_religion = event_target:sponsoring_king }
-					}
-					any_realm_character = {
-						limit = {
-							NOT = { character = ROOT }
-							same_society_as = ROOT
-						}
+					# If member of society of other religion, leave society.
+					else = {
 						leave_society = yes
 					}
-					any_realm_character = {
-						limit = { has_character_flag = currently_part_of_secret_religion_uncovering	}
-						clr_character_flag = currently_part_of_secret_religion_uncovering
-					}
-				any_society_member = {
-					limit = {
-						NOT = { character = ROOT }
-						same_society_as = ROOT
-					}
-					leave_society = yes
-				}
-				leave_society = yes
-			}
-			if = { #If member of society of same religion, convert all secret provinces inside realm, then leave society.
-				limit = { 
-					society_member_of = secret_religious_cult 
-					NOT = { society_rank == 4 }
-					true_religion = event_target:sponsoring_king
-					}
-					root_secret_religion_provinces_convert_effect = yes
-				leave_society = yes
-			}
-			if = { #If member of society of other religion, leave society.
-				limit = { 
-					society_member_of = secret_religious_cult 
-					NOT = { society_rank == 4 }
-					NOT = { true_religion = event_target:sponsoring_king }
-				}
-				leave_society = yes
-			}
-		}
-		if = { 
-			limit = { 
-				OR = { 
-					tier = COUNT
-					tier = DUKE 
 				}
 			}
-			religion_authority = {
-				modifier = ruler_converted_from
-				years = 20
+		}
+
+		trigger_switch = {
+			on_trigger = real_tier
+
+			EMPEROR = {
+				religion_authority = {
+					name = baptized_emperor_from
+					years = 30
+				}
+			}
+
+			KING = {
+				religion_authority = {
+					name = baptized_king_from
+					years = 20
+				}
+			}
+
+			fallback = {
+				religion_authority = {
+					name = ruler_converted_from
+					years = 20
+				}
 			}
 		}
-		if = { 
-			limit = { tier = KING }
-			religion_authority = {
-				modifier = baptized_king_from
-				years = 20
+
+		# Workaround for automatic usurpation of theocratic characters
+		event_target:sponsoring_king = {
+			religion_scope = {
+				save_event_target_as = target_religion
 			}
 		}
-		if = { 
-			limit = { tier = EMPEROR }
-			religion_authority = {
-				modifier = baptized_emperor_from
-				years = 30
+
+		convert_religion_failsafe_effect = yes
+
+		custom_tooltip = {
+			text = ALL_PROVINCES_CONVERT_TOOLTIP
+
+			any_demesne_province = {
+				limit = { owned_by = PREV }
+				religion = event_target:sponsoring_king
 			}
 		}
-		religion = event_target:sponsoring_king
-		custom_tooltip = { text = ALL_PROVINCES_CONVERT_TOOLTIP } 
-		hidden_tooltip = { any_demesne_province = { religion = event_target:sponsoring_king } } 
-		
-		if = { 
-			limit = { 
-				trait = zealous
-			}
-			remove_trait = zealous
-			hidden_tooltip = { character_event = { id = 38310 } } #Notification
-			piety = -20
-		}
-		random = { 
-			chance = 40 
+
+		remove_trait_silently_zealous_effect = yes
+
+		random = {
+			chance = 40
 			add_trait = sympathy_pagans
 		}
-		if = { #Give Baptised Trait if Christian and a bishop is available. 
-			limit = { 
-				event_target:sponsoring_king = { 
-					religion_group = christian 
-					any_realm_character = { 
+
+		# Give Baptised Trait if Christian and a bishop is available.
+		if = {
+			limit = {
+				event_target:sponsoring_king = {
+					religion_group = christian
+
+					any_realm_lord = {
 						is_theocracy = yes
-						liege = { character = event_target:sponsoring_king }
 						religion = event_target:sponsoring_king
-						NOT = { block_general_event_trigger = yes }
-						powerful_bishop_trigger = yes
-					}
-				}
-			}
-			hidden_tooltip = { 
-				event_target:sponsoring_king = { 
-					random_realm_character = { 
-						limit = { 
-							liege = { character = event_target:sponsoring_king }
-							is_theocracy = yes
-							religion = event_target:sponsoring_king
-							NOT = { block_general_event_trigger = yes }
-							powerful_bishop_trigger = yes
+						controls_religion = no
+						block_general_event_trigger = no
+
+						OR = {
+							higher_real_tier_than = BARON
+							is_antipope = yes
+							is_cardinal = yes
 						}
-						save_event_target_as = scoped_baptizer
 					}
 				}
-				save_persistent_event_target = { name = baptizing_bishop_per scope = event_target:scoped_baptizer } 
 			}
-			ROOT = { custom_tooltip = { text = tooltip_gain_baptized_by_bishop } }
-			hidden_tooltip = { add_trait = baptized_by_bishop }
-			if = { #AND Crowned by Bishop if Catholic/Fraticelli
+
+			event_target:sponsoring_king = {
+				random_realm_lord = {
+					limit = {
+						is_theocracy = yes
+						religion = event_target:sponsoring_king
+						controls_religion = no
+						block_general_event_trigger = no
+
+						OR = {
+							higher_real_tier_than = BARON
+							is_antipope = yes
+							is_cardinal = yes
+						}
+					}
+
+					save_event_target_as = scoped_baptizer
+				}
+			}
+
+			save_persistent_event_target = {
+				name = baptizing_bishop_per
+				scope = event_target:scoped_baptizer
+			}
+
+			custom_tooltip = {
+				text = tooltip_gain_baptized_by_bishop
+				add_trait = baptized_by_bishop
+			}
+
+			# AND Crowned by Bishop if Catholic/Fraticelli
+			if = {
 				limit = {
-					ROOT = { higher_real_tier_than = DUKE }
+					higher_real_tier_than = DUKE
+
 					event_target:sponsoring_king = {
-						has_coronation_trigger = yes
+						OR = {
+							religion = catholic
+							religion = fraticelli
+						}
 					}
 				}
-				hidden_tooltip = { save_persistent_event_target = { name = coronation_priest_per scope = event_target:scoped_baptizer } }
-				ROOT = { custom_tooltip = { text = tooltip_gain_crowned_by_bishop } }
-				hidden_tooltip = { add_trait = crowned_by_bishop }
+
+				save_persistent_event_target = {
+					name = coronation_priest_per
+					scope = event_target:scoped_baptizer
+				}
+
+				custom_tooltip = {
+					text = tooltip_gain_crowned_by_bishop
+					add_trait = crowned_by_bishop
+				}
 			}
 		}
+
 		clr_character_flag = flag_converting_baptism
 		set_character_flag = flag_converted_baptism
-		hidden_tooltip = { # Notify Sponsor of the event
-			event_target:sponsoring_king = {
-				narrative_event = { id = HF.20004 }
-			}
-			any_realm_character = { limit = { NOT = { character = ROOT } }
-				narrative_event = { id = HF.20008 }  #Convert vassals and their courtiers
-			}
-		character_event = { id = HF.20036 days = 3 random = 3 } #A new priest arrives. (also starts the post-ceremony events)
+
+		# Notify Sponsor of the event
+		event_target:sponsoring_king = {
+			narrative_event = { id = HF.20004 }
 		}
-		hidden_tooltip = { #Chance of true_religion vassals revolting.
-			if = {
-				limit = { 
-					event_target:converting_king = { 
-						OR = {
-							any_vassal = { 
-								has_character_flag = ai_flag_refuse_conversion
-								higher_real_tier_than = BARON
-								count = 4
-							}
-							any_vassal = {
-								has_character_flag = ai_flag_refuse_conversion
-								higher_real_tier_than = COUNT
-								count = 2
-							}
-							any_vassal = { 
-								has_character_flag = ai_flag_refuse_conversion
-								higher_real_tier_than = DUKE
-								count = 1
-							}
-						}
+
+		any_realm_character = {
+			narrative_event = { id = HF.20008 } # Convert vassals and their courtiers
+		}
+
+		character_event = {
+			id = HF.20036 # A new priest arrives. (also starts the post-ceremony events)
+			days = 3
+			random = 3
+		}
+
+		# Chance of true_religion vassals revolting.
+		if = {
+			limit = {
+				OR = {
+					any_vassal = {
+						has_character_flag = ai_flag_refuse_conversion
+						higher_real_tier_than = BARON
+						count = 4
+					}
+
+					any_vassal = {
+						has_character_flag = ai_flag_refuse_conversion
+						higher_real_tier_than = COUNT
+						count = 2
+					}
+
+					any_vassal = {
+						has_character_flag = ai_flag_refuse_conversion
+						higher_real_tier_than = DUKE
+					}
+
+					any_vassal = {
+						has_character_flag = ai_flag_refuse_conversion
+						NOT = { religion = event_target:converting_king }
 					}
 				}
-				if = { 
-					limit =	{ 
-						event_target:converting_king = { 
-							any_vassal = { 
-								NOT = { religion = event_target:converting_king }
-								has_character_flag = ai_flag_refuse_conversion
-							}
-						}
-					}
-					event_target:converting_king = { 
-						random_vassal = { 
-							limit = { 
-								NOT = { religion = event_target:converting_king }
-								has_character_flag = ai_flag_refuse_conversion
-							}
-							preferred_limit = { 
-								ai = no 
-								trait = brave
-								trait = zealous
-								is_powerful_vassal = yes
-							}
-							preferred_limit = { 
-								ai = no 
-								is_powerful_vassal = yes
-							}
-							preferred_limit = { 
-								is_powerful_vassal = yes
-							}
-							long_character_event = { id = HF.20029 days = 5 random = 5 }
-						}
-					}
+			}
+
+			random_vassal = {
+				limit = {
+					has_character_flag = ai_flag_refuse_conversion
+					NOT = { religion = event_target:converting_king }
+				}
+
+				preferred_limit = {
+					ai = no
+					trait = brave
+					trait = zealous
+					is_powerful_vassal = yes
+				}
+
+				preferred_limit = {
+					ai = no
+					is_powerful_vassal = yes
+				}
+
+				preferred_limit = {
+					is_powerful_vassal = yes
+				}
+
+				long_character_event = {
+					id = HF.20029 # Chance to start rebellion
+					days = 5
+					random = 5
 				}
 			}
 		}
