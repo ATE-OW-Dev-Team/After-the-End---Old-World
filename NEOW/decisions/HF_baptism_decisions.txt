@@ -2,121 +2,111 @@
 targetted_decisions = {
 
 	request_sponsored_baptism = {
-		ai_target_filter = court
+		# filter = independent_rulers # CleanSlate: Nonfunctional
+
 		ai = no
-	    diplomacy_icon = GFX_baptism_icon
+
 		from_potential = {
 			has_dlc = "Holy Fury"
-			religion_group = pagan_group
-			#higher_real_tier_than = count 		#condition only for ai to avoid single counts spamming Kings
-			NOT = { trait = incapable }
-			NOT = { is_reformed_religion = yes }
-			#NOT = { has_character_modifier = baptism_request_cooldown }
-			NOT = { has_character_flag = flag_converting_baptism }
 			independent = yes
-
+			religion_group = pagan_group
+			is_reformed_religion = no
+			is_tribal = yes
+			is_incapable = no
+			NOT = { has_character_flag = flag_converting_baptism }
 		}
+
 		potential = {
 			independent = yes
-			is_tribal = no
-			is_nomadic = no
+			is_within_diplo_range = FROM
 			higher_real_tier_than = DUKE
-			NOT = { trait = incapable }
+			is_incapable = no
 			has_regent = no
-			NOT = { religion = FROM }
-			NOT = { pays_tribute_to = FROM }
-			NOT = { has_character_flag = flag_sponsoring_baptism }
+
 			OR = {
-				NOT = { religion_group = pagan_group }
+				is_feudal = yes
+				is_republic = yes
+			}
+
+			NOR = {
+				religion = FROM
+				pays_tribute_to = FROM
+				has_character_flag = flag_sponsoring_baptism
+			}
+
+			trigger_if = {
+				limit = { religion_group = pagan_group }
 				is_reformed_religion = yes
 			}
 		}
+
 		allow = {
-			is_within_diplo_range = FROM
-			prisoner = no
-			has_regent = no
-			custom_tooltip = {
-				text = NOT_CURRENTLY_BAPTIZING
-				hidden_tooltip = {
-					NOT = { has_character_flag = flag_sponsoring_baptism }
+			ROOT = {
+				prisoner = no
+				has_regent = no
+
+				trigger_if = {
+					limit = { has_character_modifier = baptism_request_cooldown }
+
+					custom_tooltip = {
+						text = NOT_BEEN_ASKED_BAPTISM_RECENTLY
+						always = no
+					}
 				}
+
 			}
-			conditional_tooltip = {
-				trigger = { has_character_modifier = baptism_request_cooldown }
-				custom_tooltip = {
-					text = NOT_BEEN_ASKED_BAPTISM_RECENTLY
-					hidden_tooltip = {  
-						NOT = { has_character_modifier = baptism_request_cooldown } 
-					} 
-				} 
-			} 
-			custom_tooltip = {
-				text = NOT_ROOT_RELIGION_PLAYABLE
-				hidden_tooltip = { ROOTs_religion_is_playable_trigger = yes }
-			}
+
 			FROM = { pagan_baptism_trigger = yes }
 		}
+
 		effect = {
 			hidden_effect = {
+				add_character_modifier = {
+					name = baptism_request_cooldown
+					months = 1
+					hidden = yes
+				}
+
+				opinion = {
+					name = opinion_baptism_sponsor_target
+					years = 20
+					who = FROM
+					origin_description = EVTTOOLTIPHFA20005
+				}
+
 				FROM = {
 					add_character_modifier = {
 						name = baptism_request_cooldown
 						months = 1
 						hidden = yes
 					}
-				}
-				add_character_modifier = {
-					name = baptism_request_cooldown
-					months = 1
-					hidden = yes
-				}
-			opinion = {
-					modifier = opinion_baptism_sponsor_target
-					years = 20
-					who = FROM
-					origin_description = EVTTOOLTIPHFA20005
-				}
-				FROM = {
+
 					opinion = {
-						modifier = opinion_baptism_sponsor_target
+						name = opinion_baptism_sponsor_target
 						years = 20
 						who = ROOT
 						origin_description = EVTTOOLTIPHFB20005
 					}
+
+					save_event_target_as = converting_king
 				}
 			}
-			letter_event = { id = HF.20000 tooltip = EVTTOOLTIPHF20000 }
+
+			letter_event = {
+				id = HF.20000 # Possible Sponsor receives mass baptism request
+				tooltip = EVTTOOLTIPHF20000
+			}
 		}
-		
+
 		ai_will_do = {
 			factor = 0
 		}
+
 		ai_acceptance = {
-			factor = 10	# The base score	
-			yes_threshold = 0 
-			show_maybe_for_human = yes 
-	
-			additive_modifier = {
-				value = 10
-				localisation_key = baptism_sponsor_patriarch
-				religion_head = { is_liege_or_above = ROOT }
-			}
-		#	additive_modifier = {
-		#		value = -15 
-		#		custom_tooltip = { text = send_extracoronation_invitations
-		#		NOT = { true_religion = FROM }
-		#		society_member_of = secret_religious_cult }
-		#	}
-		#	additive_modifier = {
-		#		value = 5
-		#		true_religion = FROM
-		#	}
-		#	additive_modifier = {
-		#		value = 10
-		#		custom_tooltip = { text = send_extracoronation_invitations }
-		#		hidden_tooltip = { true_religion = FROM
-		#		society_member_of = secret_religious_cult }
-		#	}
+			factor = 10 # The base score
+			yes_threshold = 0
+			show_maybe_for_human = yes
+
 			additive_modifier = {
 				value = 5
 				localisation_key = baptism_sponsor_emperor
@@ -127,7 +117,7 @@ targetted_decisions = {
 				localisation_key = baptism_sponsor_ally
 				has_non_aggression_pact_with = FROM
 			}
-			additive_modifier = { #Fylkir and the like, not actual theocracies.
+			additive_modifier = { # Fylkir and the like, not actual theocracies
 				value = 5
 				localisation_key = baptism_sponsor_fylkir
 				religion_head = { character = ROOT }
@@ -135,13 +125,18 @@ targetted_decisions = {
 			additive_modifier = {
 				value = -5
 				localisation_key = baptism_sponsor_wealth
-				NOT = { wealth = 0 }
+				wealth < 0
 			}
 			additive_modifier = {
 				value = 5
 				localisation_key = baptism_sponsor_wealth
-				wealth = 100
-				NOT = { wealth = 200 }
+				wealth >= 100
+				wealth < 200
+			}
+			additive_modifier = {
+				value = 10
+				localisation_key = baptism_sponsor_patriarch
+				religion_head = { is_vassal_or_below_of = ROOT }
 			}
 			additive_modifier = {
 				value = 10
@@ -154,21 +149,21 @@ targetted_decisions = {
 				OR = {
 					religion_group = christian
 					religion_group = muslim
-					religion_group = zoroastrian_group
 				}
+				NOT = { religion = yazidi }
 			}
 			additive_modifier = {
 				value = 10
 				localisation_key = baptism_sponsor_sympathetic
 				trait = sympathy_pagans
-				FROM = { religion_group = pagan_group } 
-				NOT = { true_religion = FROM } 
+				FROM = { religion_group = pagan_group }
+				NOT = { true_religion = FROM }
 			}
 			additive_modifier = {
 				value = 10
 				localisation_key = baptism_sponsor_sympathetic
 				true_religion = FROM
-				NOT = { trait = sympathy_pagans } 
+				NOT = { trait = sympathy_pagans }
 			}
 			additive_modifier = {
 				value = 20
@@ -176,7 +171,7 @@ targetted_decisions = {
 				true_religion = FROM
 				trait = sympathy_pagans
 			}
-			additive_modifier = { #Potential reformed pagans
+			additive_modifier = { # Potential reformed pagans
 				value = 10
 				localisation_key = baptism_sponsor_pagan
 				religion_group = pagan_group
@@ -185,21 +180,19 @@ targetted_decisions = {
 				value = -30
 				localisation_key = baptism_sponsor_size
 				relative_realm_size = {
-					who = FROM 
+					who = FROM
 					size < 1.5
 				}
 			}
 			additive_modifier = {
 				value = -15
 				localisation_key = baptism_sponsor_size
-				NOT = {
-					relative_realm_size = {
-						who = FROM 
-						size < 1.5
-					}
+				relative_realm_size = {
+					who = FROM
+					size >= 1.5
 				}
 				relative_realm_size = {
-					who = FROM 
+					who = FROM
 					size < 1
 				}
 			}
@@ -207,61 +200,117 @@ targetted_decisions = {
 				value = 20
 				localisation_key = baptism_sponsor_size
 				relative_realm_size = {
-					who = FROM 
+					who = FROM
 					size > 2
 				}
 			}
 			additive_modifier = {
 				value = -100
 				localisation_key = baptism_sponsor_power
-				FROM = { relative_power = { who = ROOT power = 5 } }
+				FROM = {
+					relative_power = {
+						who = ROOT
+						power >= 5
+					}
+				}
 			}
 			additive_modifier = {
 				value = -50
 				localisation_key = baptism_sponsor_power
-				NOT = { FROM = { relative_power = { who = ROOT power = 5 } } }
-				FROM = { relative_power = { who = ROOT power = 4 } }
+				FROM = {
+					relative_power = {
+						who = ROOT
+						power >= 4
+					}
+					relative_power = {
+						who = ROOT
+						power < 5
+					}
+				}
 			}
 			additive_modifier = {
 				value = -20
 				localisation_key = baptism_sponsor_power
-				NOT = { FROM = { relative_power = { who = ROOT power = 4 } } }
-				FROM = { relative_power = { who = ROOT power = 3 } }
+				FROM = {
+					relative_power = {
+						who = ROOT
+						power >= 3
+					}
+					relative_power = {
+						who = ROOT
+						power < 4
+					}
+				}
 			}
 			additive_modifier = {
 				value = -10
 				localisation_key = baptism_sponsor_power
-				NOT = { FROM = { relative_power = { who = ROOT power = 3 } } }
-				FROM = { relative_power = { who = ROOT power = 2 } }
+				FROM = {
+					relative_power = {
+						who = ROOT
+						power >= 2
+					}
+					relative_power = {
+						who = ROOT
+						power < 3
+					}
+				}
 			}
 			additive_modifier = {
 				value = 5
 				localisation_key = baptism_sponsor_power
-				relative_power = { who = FROM power = 2 }
-				NOT = { relative_power = { who = FROM power = 3 } }
+				relative_power = {
+					who = FROM
+					power >= 2
+				}
+				relative_power = {
+					who = FROM
+					power < 3
+				}
 			}
 			additive_modifier = {
 				value = 15
 				localisation_key = baptism_sponsor_power
-				relative_power = { who = FROM power = 3 }
-				NOT = { relative_power = { who = FROM power = 4 } }
+				relative_power = {
+					who = FROM
+					power >= 3
+				}
+				relative_power = {
+					who = FROM
+					power < 4
+				}
 			}
 			additive_modifier = {
 				value = 30
 				localisation_key = baptism_sponsor_power
-				relative_power = { who = FROM power = 4 }
-				NOT = { relative_power = { who = FROM power = 6 } }
+				relative_power = {
+					who = FROM
+					power >= 4
+				}
+				relative_power = {
+					who = FROM
+					power < 6
+				}
 			}
 			additive_modifier = {
 				value = 50
 				localisation_key = baptism_sponsor_power
-				relative_power = { who = FROM power = 6 }
-				NOT = { relative_power = { who = FROM power = 8 } }
+				relative_power = {
+					who = FROM
+					power >= 6
+				}
+				relative_power = {
+					who = FROM
+					power < 8
+				}
 			}
 			additive_modifier = {
 				value = 100
 				localisation_key = baptism_sponsor_power
-				relative_power = { who = FROM power = 8 }
+				relative_power = {
+					who = FROM
+					power >= 8
+				}
 			}
 			additive_modifier = {
 				value = 10
@@ -282,13 +331,27 @@ targetted_decisions = {
 				value = 50
 				localisation_key = baptism_sponsor_suzerain
 				FROM = { pays_tribute_to = ROOT }
-				NOT = { ROOT = { is_offmap_governor = offmap_china } }
+				ROOT = {
+					NOT = {
+						offmap_china = {
+							governor = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
 			}
 			additive_modifier = {
-				value = 75		#Counteract huge distance penalty.
+				value = 75 # Counteract huge distance penalty
 				localisation_key = baptism_sponsor_suzerain
 				FROM = { pays_tribute_to = ROOT }
-				ROOT = { is_offmap_governor = offmap_china }
+				ROOT = {
+					offmap_china = {
+						governor = {
+							character = PREVPREV
+						}
+					}
+				}
 			}
 			additive_modifier = {
 				value = -75
@@ -303,89 +366,257 @@ targetted_decisions = {
 			additive_modifier = {
 				value = -5
 				localisation_key = baptism_sponsor_opinion
-				NOT = { opinion = { who = FROM value = 0 } }
-				opinion = { who = FROM value = -20 }
-				NOT = { ROOT = { is_offmap_governor = offmap_china } }
+				ROOT = {
+					NOT = {
+						offmap_china = {
+							governor = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
+				opinion = {
+					who = FROM
+					value >= -20
+				}
+				opinion = {
+					who = FROM
+					value < 0
+				}
 			}
 			additive_modifier = {
 				value = -10
 				localisation_key = baptism_sponsor_opinion
-				NOT = { opinion = { who = FROM value = -20 } }
-				opinion = { who = FROM value = -40 } 
-				NOT = { ROOT = { is_offmap_governor = offmap_china } }
+				ROOT = {
+					NOT = {
+						offmap_china = {
+							governor = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
+				opinion = {
+					who = FROM
+					value >= -40
+				}
+				opinion = {
+					who = FROM
+					value < -20
+				}
 			}
 			additive_modifier = {
 				value = -15
 				localisation_key = baptism_sponsor_opinion
-				NOT = { opinion = { who = FROM value = -40 } }
-				opinion = { who = FROM value = -60 } 
-				NOT = { ROOT = { is_offmap_governor = offmap_china } }
+				ROOT = {
+					NOT = {
+						offmap_china = {
+							governor = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
+				opinion = {
+					who = FROM
+					value >= -60
+				}
+				opinion = {
+					who = FROM
+					value < -40
+				}
 			}
 			additive_modifier = {
 				value = -20
 				localisation_key = baptism_sponsor_opinion
-				NOT = { opinion = { who = FROM value = -60 } }
-				opinion = { who = FROM value = -80 } 
-				NOT = { ROOT = { is_offmap_governor = offmap_china } }
+				ROOT = {
+					NOT = {
+						offmap_china = {
+							governor = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
+				opinion = {
+					who = FROM
+					value >= -80
+				}
+				opinion = {
+					who = FROM
+					value < -60
+				}
 			}
 			additive_modifier = {
 				value = -25
 				localisation_key = baptism_sponsor_opinion
-				NOT = { opinion = { who = FROM value = -80 } }
-				opinion = { who = FROM value = -100 } 
-				NOT = { ROOT = { is_offmap_governor = offmap_china } }
+				ROOT = {
+					NOT = {
+						offmap_china = {
+							governor = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
+				opinion = {
+					who = FROM
+					value >= -100
+				}
+				opinion = {
+					who = FROM
+					value < -80
+				}
 			}
 			additive_modifier = {
 				value = -30
 				localisation_key = baptism_sponsor_opinion
-				NOT = { opinion = { who = FROM value = -100 } }
-				NOT = { ROOT = { is_offmap_governor = offmap_china } }
+				ROOT = {
+					NOT = {
+						offmap_china = {
+							governor = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
+				opinion = {
+					who = FROM
+					value < -100
+				}
 			}
 			additive_modifier = {
 				value = 10
 				localisation_key = baptism_sponsor_distance
-				NOT = { distance_from_realm = { who = FROM value = 35 } }
-				NOT = { ROOT = { is_offmap_governor = offmap_china } }
+				ROOT = {
+					NOT = {
+						offmap_china = {
+							governor = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
+				distance_from_realm = {
+					who = FROM
+					value < 35
+				}
 			}
 			additive_modifier = {
 				value = -5
 				localisation_key = baptism_sponsor_distance
-				distance_from_realm = { who = FROM value = 50 }
-				NOT = { distance_from_realm = { who = FROM value = 75 } }
-				NOT = { ROOT = { is_offmap_governor = offmap_china } }
+				ROOT = {
+					NOT = {
+						offmap_china = {
+							governor = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
+				distance_from_realm = {
+					who = FROM
+					value >= 50
+				}
+				distance_from_realm = {
+					who = FROM
+					value < 75
+				}
 			}
 			additive_modifier = {
 				value = -15
 				localisation_key = baptism_sponsor_distance
-				distance_from_realm = { who = FROM value = 75 }
-				NOT = { distance_from_realm = { who = FROM value = 100 } }
-				NOT = { ROOT = { is_offmap_governor = offmap_china } }
+				ROOT = {
+					NOT = {
+						offmap_china = {
+							governor = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
+				distance_from_realm = {
+					who = FROM
+					value >= 75
+				}
+				distance_from_realm = {
+					who = FROM
+					value < 100
+				}
 			}
 			additive_modifier = {
 				value = -30
 				localisation_key = baptism_sponsor_distance
-				distance_from_realm = { who = FROM value = 100 }
-				NOT = { distance_from_realm = { who = FROM value = 150 } }
-				NOT = { ROOT = { is_offmap_governor = offmap_china } }
+				ROOT = {
+					NOT = {
+						offmap_china = {
+							governor = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
+				distance_from_realm = {
+					who = FROM
+					value >= 100
+				}
+				distance_from_realm = {
+					who = FROM
+					value < 150
+				}
 			}
 			additive_modifier = {
 				value = -50
 				localisation_key = baptism_sponsor_distance
-				distance_from_realm = { who = FROM value = 150 }
-				NOT = { distance_from_realm = { who = FROM value = 250 } }
-				NOT = { ROOT = { is_offmap_governor = offmap_china } }
+				ROOT = {
+					NOT = {
+						offmap_china = {
+							governor = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
+				distance_from_realm = {
+					who = FROM
+					value >= 150
+				}
+				distance_from_realm = {
+					who = FROM
+					value < 250
+				}
 			}
 			additive_modifier = {
 				value = -75
 				localisation_key = baptism_sponsor_distance
-				distance_from_realm = { who = FROM value = 250 }
-				NOT = { ROOT = { is_offmap_governor = offmap_china } }
+				ROOT = {
+					NOT = {
+						offmap_china = {
+							governor = {
+								character = PREVPREV
+							}
+						}
+					}
+				}
+				distance_from_realm = {
+					who = FROM
+					value >= 250
+				}
 			}
 			additive_modifier = {
 				value = -35
 				localisation_key = baptism_sponsor_distance
-				distance_from_realm = { who = FROM value = 250 }
-				ROOT = { is_offmap_governor = offmap_china }
+				ROOT = {
+					offmap_china = {
+						governor = {
+							character = PREVPREV
+						}
+					}
+				}
+				distance_from_realm = {
+					who = FROM
+					value >= 250
+				}
 			}
 		}
 	}
