@@ -762,11 +762,11 @@ NDiplomacy = {
 	DEFENSIVE_PACT_MAX_RANGE_SAME_GROUP = 300,					-- At 100% threat characters are able to join defensive pacts against targets of this distance
 	DEFENSIVE_PACT_THREAT_SIZE_START = 0.0,						-- Relative size requirement starts from this level of threat
 	DEFENSIVE_PACT_BASE_SIZE = 0.0,								-- This is the base size requirement at 0% threat
-	MAX_INFAMY_GAIN = 50,										-- This is the max infamy gained from a single source
+	MAX_INFAMY_GAIN = 25,										-- This is the max infamy gained from a single source
 
 	EVERY_DEFENSIVE_PACT_JOIN_THREAT = 0.95,					-- If threat is this high, members of all defensive pacts against a target will join
 	EVERY_DEFENSIVE_PACT_EXCEPT_HEADS_JOIN_THREAT = 0.90,		-- If threat is this high, members of all defensive pacts against a target will join, except religious heads that only joins when their own group is attacked
-	OTHER_DEFENSIVE_PACT_JOIN_THREAT = 1.01,						-- If threat is this high, other religious groups band together when attacked, if it's lower every defensive pact acts on it's own
+	OTHER_DEFENSIVE_PACT_JOIN_THREAT = 0.85,						-- If threat is this high, other religious groups band together when attacked, if it's lower every defensive pact acts on it's own
 
 	RELEASE_VASSAL_TRUCE_DAYS = 3650,
 
