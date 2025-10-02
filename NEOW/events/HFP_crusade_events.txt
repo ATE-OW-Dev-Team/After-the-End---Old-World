@@ -230,7 +230,7 @@ character_event = {
                     }
                 }
             }
-    		set_official_crusade_recipient = none
+    		set_official_crusade_recipient = NONE
             any_crusade_participant = {
                 limit = {
                     NOT = {
@@ -346,22 +346,6 @@ character_event = {
                     }
 				}
 			}	
-			katoliko = {
-				official_crusade_recipient = {
-                    character = ROOT
-                    NOT = {
-                        religion = katoliko
-                    }
-				}
-			}	
-			aglipayan = {
-				official_crusade_recipient = {
-                    character = ROOT
-                    NOT = {
-                        religion = aglipayan
-                    }
-				}
-			}	
 		}
         NOT = {
             has_character_flag = fourth_crusade_recipient
@@ -377,8 +361,6 @@ character_event = {
 			cadaverist = { k_ecclesiarchy = { owner = { character_event = { id = HFP.41000 days = 1 } } } }	
 			calvinist = { k_calvinist = { owner = { character_event = { id = HFP.41000 days = 1 } } } }	
 			neohuguenot = { k_jury_god = { owner = { character_event = { id = HFP.41000 days = 1 } } } }	
-			katoliko = { k_katoliko = { owner = { character_event = { id = HFP.41000 days = 1 } } } }
-			aglipayan = { k_aglipayan = { owner = { character_event = { id = HFP.41000 days = 1 } } } }
     	}
     }
 }
@@ -420,16 +402,6 @@ character_event = {
                     character = ROOT
 				}
 			}
-			katoliko = {
-				official_crusade_recipient = {
-                    character = ROOT
-				}
-			}
-			aglipayan = {
-				official_crusade_recipient = {
-                    character = ROOT
-				}
-			}
             has_character_flag = fourth_crusade_recipient
 		}
     }
@@ -440,28 +412,22 @@ character_event = {
                 has_character_flag = fourth_crusade_recipient
             }
             catholic = {
-                set_official_crusade_recipient = none
+                set_official_crusade_recipient = NONE
             }
             fraticelli = {
-                set_official_crusade_recipient = none
+                set_official_crusade_recipient = NONE
             }
             cadaverist = {
-                set_official_crusade_recipient = none
+                set_official_crusade_recipient = NONE
             }
             calvinist = {
-                set_official_crusade_recipient = none
+                set_official_crusade_recipient = NONE
             }
             neohuguenot = {
-                set_official_crusade_recipient = none
+                set_official_crusade_recipient = NONE
             }
             sevillian = {
-                set_official_crusade_recipient = none
-            }
-            katoliko = {
-                set_official_crusade_recipient = none
-            }
-            aglipayan = {
-                set_official_crusade_recipient = none
+                set_official_crusade_recipient = NONE
             }
         }
 
@@ -472,8 +438,6 @@ character_event = {
 			cadaverist = { k_ecclesiarchy = { owner = { character_event = { id = HFP.41000 } } } }
 			calvinist = { k_calvinist = { owner = { character_event = { id = HFP.41000 } } } }
 			neohuguenot = { k_jury_god = { owner = { character_event = { id = HFP.41000 } } } }
-			katoliko = { k_katoliko = { owner = { character_event = { id = HFP.41000 } } } }
-			aglipayan = { k_aglipayan = { owner = { character_event = { id = HFP.41000 } } } }
 			sevillian = { k_sevillian_pope = { owner = { character_event = { id = HFP.41000 } } } }
     	}
     }
@@ -494,8 +458,6 @@ character_event = {
 			religion = neohuguenot
 			religion = cadaverist
 			religion = calvinist
-			religion = katoliko
-			religion = aglipayan
     	}
     }
 
@@ -512,6 +474,7 @@ character_event = {
     		}
     		narrative_event = { id = HFP.41004 }
     	}
+        abdicate_holy_order_if_religion_changes_effect = yes
     }
 }
 
@@ -1260,1129 +1223,1613 @@ character_event = {
 
 # Beneficiary event - AI only
 character_event = {
-	id = HFP.41007
+    id = HFP.41007
+    hide_window = yes
+    is_triggered_only = yes
+    ai = yes
 
-	is_triggered_only = yes
-	hide_window = yes
+    trigger = {
+        OR = {
+            has_pledged_crusade_participation = yes
+            crusade_preparation_strength < 175
+        }
+    }
 
-	trigger = {
-		OR = {
-			has_pledged_crusade_participation = yes
-			crusade_preparation_strength < 1.75
-		}
-	}
+    immediate = {
 
-	immediate = {
-		if = {
-			limit = { has_pledged_crusade_participation = no }
+        if = {
+            limit = {
+                has_pledged_crusade_participation = no
+            }
+            pledge_crusade_participation = yes
+            if = {
+                limit = {
+                    trait = excommunicated
+                }
+                rightful_religious_head_scope = {
+                    character_event = { id = HFP.41056 }
+                }
+            }
+            trigger_switch = {
+                on_trigger = tier
+                EMPEROR = { add_to_crusade_prestige_pot = 2000 add_to_crusade_piety_pot = 800 }
+                KING = { add_to_crusade_prestige_pot = 1000 add_to_crusade_piety_pot = 400 }
+                DUKE = { add_to_crusade_prestige_pot = 500 add_to_crusade_piety_pot = 200 }
+                COUNT = { add_to_crusade_prestige_pot = 250 add_to_crusade_piety_pot = 100 }
+                BARON = { add_to_crusade_prestige_pot = 125 add_to_crusade_piety_pot = 100 }
+            }
+            random = {
+                chance = 50
+                add_to_crusade_artifact_pot = 1
+            }
+        }
 
-			pledge_crusade_participation = yes
-
-			if = {
-				limit = { trait = excommunicated }
-
-				letter_event = {
-					id = HFP.41057
-					days = 3
-				}
-			}
-
-			trigger_switch = {
-				on_trigger = real_tier
-
-				EMPEROR = { add_to_crusade_prestige_pot = 2000 add_to_crusade_piety_pot = 800 }
-				KING    = { add_to_crusade_prestige_pot = 1000 add_to_crusade_piety_pot = 400 }
-				DUKE    = { add_to_crusade_prestige_pot =  500 add_to_crusade_piety_pot = 200 }
-				COUNT   = { add_to_crusade_prestige_pot =  250 add_to_crusade_piety_pot = 100 }
-				BARON   = { add_to_crusade_prestige_pot =  125 add_to_crusade_piety_pot = 100 }
-			}
-
-			random = {
-				chance = 50
-				add_to_crusade_artifact_pot = 1
-			}
-		}
-
-		# Any Dynasty courtier has a claim on the Crusade Title
-		if = {
-			limit = {
-				any_courtier = {
-					has_claim = crusade_target_title
-					dynasty = ROOT
-					is_adult = yes
-					is_ruler = no
+    	# Any Dynasty courtier has a claim on the Crusade Title
+    	if = {
+    		limit = {
+    			any_courtier = {
+    				crusade_target_title = {
+    					claimed_by = PREV
+    				}                
+                    age = 16
+                    is_landed = no
+                    dynasty = ROOT
 					is_lowborn = no
-
-					trigger_if = {
-						limit = { is_female = yes }
-						practical_age < 40
+                    NOT = {
+                        any_heir_title = { 
+                            always = yes
+                        }
+                    }
+					NAND = {
+						is_female = yes
+						age = 40
 					}
-
-					mercenary = no
-					is_incapable = no
-
-					NOR = {
-						trait = monk
-						trait = nun
-
-						any_heir_title = {
-							always = yes
-						}
-
-						any_spouse = {
+                    mercenary = no
+                    NOR = {
+                        trait = incapable
+                        trait = monk
+                        trait = nun
+                    }
+					NAND = {
+						is_married = yes
+						spouse = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
-
+					}
+					NAND = {
+						is_betrothed = yes
 						betrothed = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
-
-
+					}
+					NAND = {
 						player_heir = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
 					}
-				}
-			}
-
-			random_courtier = {
-				limit = {
-					has_claim = crusade_target_title
-					dynasty = ROOT
-					is_adult = yes
-					is_ruler = no
+    			}
+    		}
+    		random_courtier = {
+    			limit = {
+    				crusade_target_title = {
+    					claimed_by = PREV
+    				}
+                    age = 16
+    				is_landed = no
+    				dynasty = ROOT
 					is_lowborn = no
-
-					trigger_if = {
-						limit = { is_female = yes }
-						practical_age < 40
-					}
-
-					mercenary = no
-					is_incapable = no
-
-					NOR = {
-						trait = monk
-						trait = nun
-
-						any_heir_title = {
-							always = yes
-						}
-
-						any_spouse = {
+                    NOT = {
+                        any_heir_title = { 
+                            always = yes
+                        }
+                    }
+                    NOT = {
+                        any_heir_title = { 
+                            always = yes
+                        }
+                    }
+    				mercenary = no
+                    NOR = {
+                        trait = incapable
+                        trait = monk
+                        trait = nun
+                    }
+					NAND = {
+						is_married = yes
+						spouse = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
-
+					}
+					NAND = {
+						is_betrothed = yes
 						betrothed = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
-
+					}
+					NAND = {
 						player_heir = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
 					}
-				}
-
+    			}
 				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						OR = {
-							has_law = true_cognatic_succession
-							has_law = enatic_succession
-							has_law = enatic_cognatic_succession
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
 						}
 					}
-
-					reverse_opinion = {
-						who = PREV
-						value >= 90
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						OR = {
-							has_law = true_cognatic_succession
-							has_law = enatic_succession
-							has_law = enatic_cognatic_succession
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 90
 						}
 					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 75
+					NOT = {
+						is_foe = ROOT
 					}
-
-					NOT = { is_foe = ROOT }
 				}
-
 				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						OR = {
-							has_law = true_cognatic_succession
-							has_law = enatic_succession
-							has_law = enatic_cognatic_succession
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
 						}
 					}
-
-					reverse_opinion = {
-						who = PREV
-						value >= 50
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						OR = {
-							has_law = true_cognatic_succession
-							has_law = enatic_succession
-							has_law = enatic_cognatic_succession
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 75
 						}
 					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 25
+					NOT = {
+						is_foe = ROOT
 					}
-
-					NOT = { is_foe = ROOT }
 				}
-
 				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						OR = {
-							has_law = true_cognatic_succession
-							has_law = enatic_succession
-							has_law = enatic_cognatic_succession
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
 						}
 					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					reverse_opinion = {
-						who = ROOT
-						value >= 90
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 50
+						}
 					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					reverse_opinion = {
-						who = ROOT
-						value >= 75
+					NOT = {
+						is_foe = ROOT
 					}
-
-					NOT = { is_foe = ROOT }
 				}
-
 				preferred_limit = {
-					reverse_opinion = {
-						who = ROOT
-						value >= 50
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
 					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					reverse_opinion = {
-						who = ROOT
-						value >= 25
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 25
+						}
 					}
-
-					NOT = { is_foe = ROOT }
+					NOT = {
+						is_foe = ROOT
+					}
 				}
-
 				preferred_limit = {
-					NOT = { is_foe = ROOT }
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
 				}
-
-				set_character_flag = crusade_beneficiary
-
-				opinion = {
-					name = opinion_beneficiary
-					who = ROOT
-					years = 10
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 90
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
 				}
-
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 75
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 50
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 25
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+                set_character_flag = crusade_beneficiary
+                opinion = {
+                    who = ROOT
+                    modifier = opinion_beneficiary
+                    years = 10
+                }
 				ROOT = {
 					set_crusade_beneficiary = PREV
 				}
-			}
-		}
-
-		# A fitting child for the Crusade Title
-		else_if = {
-			limit = {
-				any_child = {
-					is_adult = yes
-					practical_age < 40
-					is_ruler = no
-					is_incapable = no
-					mercenary = no
-
-					trigger_if = {
-						limit = { is_female = yes }
-
-						NOT = {
-							any_child = { is_ruler = yes }
-						}
-
-						OR = {
-							has_law = true_cognatic_succession
-							has_law = enatic_succession
-							has_law = enatic_cognatic_succession
-						}
-					}
-
-					NOR = {
-						trait = monk
-						trait = nun
-
-						any_heir_title = {
-							always = yes
-						}
-
-						any_spouse = {
+    		}
+    	}
+    	# A fitting child for the Crusade Title
+    	else_if = {
+    		limit = {
+    			any_child = {
+    				is_landed = no
+	    			age = 16
+	    			NOT = {
+	    				age = 40
+	    			}
+                    NOT = {
+                        any_heir_title = { 
+                            always = yes
+                        }
+                    }
+	    			mercenary = no
+                    NOR = {
+                        trait = incapable
+                        trait = monk
+                        trait = nun
+                    }
+					NAND = {
+						is_married = yes
+						spouse = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
-
+					}
+					NAND = {
+						is_betrothed = yes
 						betrothed = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
-
+					}
+					NAND = {
 						player_heir = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
 					}
-				}
-			}
-
-			random_child = {
-				limit = {
-					is_adult = yes
-					practical_age < 40
-					is_ruler = no
-					is_incapable = no
-					mercenary = no
-
-					trigger_if = {
-						limit = { is_female = yes }
-
-						NOT = {
-							any_child = { is_ruler = yes }
-						}
-
-						OR = {
-							has_law = true_cognatic_succession
-							has_law = enatic_succession
-							has_law = enatic_cognatic_succession
+					NAND = {
+						is_female = yes
+						any_child = {
+							is_landed = yes
 						}
 					}
-
-					NOR = {
-						trait = monk
-						trait = nun
-
-						any_heir_title = {
-							always = yes
-						}
-
-						any_spouse = {
+					OR = {
+						is_female = no
+						ROOT = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
 							}
 						}
-
+					}
+    			}
+    		}
+    		random_child = {
+    			limit = {
+    				is_landed = no
+    				age = 16
+    				NOT = {
+    					age = 40
+    				}
+                    NOT = {
+                        any_heir_title = { 
+                            always = yes
+                        }
+                    }
+    				mercenary = no
+                    NOR = {
+                        trait = incapable
+                        trait = monk
+                        trait = nun
+                    }
+					NAND = {
+						is_married = yes
+						spouse = {
+							OR = {
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
+							}
+						}
+					}
+					NAND = {
+						is_betrothed = yes
 						betrothed = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
-
+					}
+					NAND = {
 						player_heir = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
 					}
-				}
-
-				preferred_limit = {
-					opinion = {
-						who = ROOT
-						value >= 90
+					NAND = {
+						is_female = yes
+						any_child = {
+							is_landed = yes
+						}
 					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					opinion = {
-						who = ROOT
-						value >= 75
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
 					}
-
-					NOT = { is_foe = ROOT }
-				}
-
+    			}
 				preferred_limit = {
-					opinion = {
-						who = ROOT
-						value >= 50
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 90
+						}
 					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					opinion = {
-						who = ROOT
-						value >= 25
+					NOT = {
+						is_foe = ROOT
 					}
-
-					NOT = { is_foe = ROOT }
 				}
-
 				preferred_limit = {
-					NOT = { is_foe = ROOT }
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 75
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
 				}
-
-				opinion = {
-					name = opinion_beneficiary
-					who = ROOT
-					years = 10
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 50
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
 				}
-
-				set_character_flag = crusade_beneficiary
-
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 25
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+                opinion = {
+                    who = ROOT
+                    modifier = opinion_beneficiary
+                    years = 10
+                }
+                set_character_flag = crusade_beneficiary
 				ROOT = {
 					set_crusade_beneficiary = PREV
 				}
-			}
-		}
-
-		# A fitting dynasty member for the Crusade Title
-		else_if = {
-			limit = {
-				any_courtier = {
-					dynasty = ROOT
-					is_adult = yes
-
-					trigger_if = {
-						limit = { is_female = yes }
-
-						practical_age < 40
-
-						OR = {
-							has_law = true_cognatic_succession
-							has_law = enatic_succession
-							has_law = enatic_cognatic_succession
-						}
-
-						NOT = {
-							any_child = { is_ruler = yes }
-						}
+    		}
+    	}
+    	# A fitting dynasty member for the Crusade Title
+    	else_if = {
+    		limit = {
+    			any_courtier = {
+    				is_landed = no
+	    			age = 16
+	    			NOT = {
+	    				age = 60
+	    			}
+					NAND = {
+						is_female = yes
+						age = 40
 					}
-					trigger_else = {
-						practical_age < 60
-					}
-
-					is_ruler = no
+	    			NOT = {
+	    				is_child_of = ROOT	
+	    			}
+                    NOT = {
+                        any_heir_title = { 
+                            always = yes
+                        }
+                    }
+	    			dynasty = ROOT
 					is_lowborn = no
-					mercenary = no
-					is_incapable = no
-
-					NOR = {
-						trait = monk
-						trait = nun
-						is_child_of = ROOT
-
-						any_heir_title = {
-							always = yes
-						}
-
-						any_spouse = {
+	    			mercenary = no
+                    NOR = {
+                        trait = incapable
+                        trait = monk
+                        trait = nun
+                    }
+					NAND = {
+						is_married = yes
+						spouse = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
-
+					}
+					NAND = {
+						is_betrothed = yes
 						betrothed = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
-
+					}
+					NAND = {
 						player_heir = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
 					}
-				}
-			}
-
-			random_courtier = {
-				limit = {
-					dynasty = ROOT
-					is_adult = yes
-
-					trigger_if = {
-						limit = { is_female = yes }
-
-						practical_age < 40
-
-						OR = {
-							has_law = true_cognatic_succession
-							has_law = enatic_succession
-							has_law = enatic_cognatic_succession
-						}
-
-						NOT = {
-							any_child = { is_ruler = yes }
+					NAND = {
+						is_female = yes
+						any_child = {
+							is_landed = yes
 						}
 					}
-					trigger_else = {
-						practical_age < 60
-					}
-
-					is_ruler = no
-					is_lowborn = no
-					mercenary = no
-					is_incapable = no
-
-					NOR = {
-						trait = monk
-						trait = nun
-						is_child_of = ROOT
-
-						any_heir_title = {
-							always = yes
-						}
-
-						any_spouse = {
+					OR = {
+						is_female = no
+						ROOT = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
 							}
 						}
-
+					}
+    			}
+    		}
+    		random_courtier = {
+    			limit = {
+    				is_landed = no
+    				age = 16
+    				NOT = {
+    					age = 60
+    				}
+					NAND = {
+						is_female = yes
+						age = 40
+					}
+    				NOT = {
+    					is_child_of = ROOT
+    				}
+                    NOT = {
+                        any_heir_title = { 
+                            always = yes
+                        }
+                    }
+    				dynasty = ROOT
+					is_lowborn = no
+    				mercenary = no
+                    NOR = {
+                        trait = incapable
+                        trait = monk
+                        trait = nun
+                    }
+					NAND = {
+						is_married = yes
+						spouse = {
+							OR = {
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
+							}
+						}
+					}
+					NAND = {
+						is_betrothed = yes
 						betrothed = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
-
+					}
+					NAND = {
 						player_heir = {
 							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
 							}
 						}
 					}
-				}
-
-				preferred_limit = {
-					reverse_opinion = {
-						who = ROOT
-						value >= 90
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-						is_married = no
-					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 75
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					reverse_opinion = {
-						who = ROOT
-						value >= 75
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-						is_married = no
-					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 50
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					reverse_opinion = {
-						who = ROOT
-						value >= 50
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-						is_married = no
-					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 25
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					reverse_opinion = {
-						who = ROOT
-						value >= 25
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-						is_married = no
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					NOT = { is_foe = ROOT }
-				}
-
-				opinion = {
-					name = opinion_beneficiary
-					who = ROOT
-					years = 10
-				}
-
-				set_character_flag = crusade_beneficiary
-
-				ROOT = {
-					set_crusade_beneficiary = PREV
-				}
-			}
-		}
-
-		# Literally any dynasty member without land / heir to land
-		else_if = {
-			limit = {
-				any_dynasty_member = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						practical_age < 40
-
-						NOT = {
-							any_child = { is_ruler = yes }
+					NAND = {
+						is_female = yes
+						any_child = {
+							is_landed = yes
 						}
 					}
-
-					trigger_if = {
-						limit = { is_adult = no }
-
-						age >= 12
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+    			}
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 90
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
 						is_female = no
 					}
-
-					is_ruler = no
-					is_incapable = no
-					is_lowborn = no
-
-					NOR = {
-						trait = monk
-						trait = nun
-
-						any_heir_title = {
-							always = yes
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 75
 						}
-
-						any_spouse = {
-							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
-							}
-						}
-
-						betrothed = {
-							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
-							}
-						}
-
-						player_heir = {
-							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
-							}
-						}
+					}
+					NOT = {
+						is_foe = ROOT
 					}
 				}
-			}
-
-			random_dynasty_member = {
-				limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						practical_age < 40
-
-						NOT = {
-							any_child = { is_ruler = yes }
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 75
 						}
 					}
-
-					trigger_if = {
-						limit = { is_adult = no }
-
-						age >= 12
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
 						is_female = no
 					}
-
-					is_ruler = no
-					is_incapable = no
-					is_lowborn = no
-
-					NOR = {
-						trait = monk
-						trait = nun
-
-						any_heir_title = {
-							always = yes
-						}
-
-						any_spouse = {
-							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
-							}
-						}
-
-						betrothed = {
-							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
-							}
-						}
-
-						player_heir = {
-							OR = {
-								is_ruler = yes
-								any_heir_title = { always = yes }
-							}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 50
 						}
 					}
+					NOT = {
+						is_foe = ROOT
+					}
 				}
-
 				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 50
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
 						is_married = no
-
-						ROOT = {
-							OR = {
-								has_law = true_cognatic_succession
-								has_law = enatic_succession
-								has_law = enatic_cognatic_succession
-							}
+						is_female = no
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 25
 						}
 					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 90
+					NOT = {
+						is_foe = ROOT
 					}
-
-					NOT = { is_foe = ROOT }
 				}
-
 				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						ROOT = {
-							OR = {
-								has_law = true_cognatic_succession
-								has_law = enatic_succession
-								has_law = enatic_cognatic_succession
-							}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 25
 						}
 					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 90
+					NOT = {
+						is_foe = ROOT
 					}
-
-					NOT = { is_foe = ROOT }
 				}
-
 				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
+					OR = {
 						is_married = no
-
-						ROOT = {
-							OR = {
-								has_law = true_cognatic_succession
-								has_law = enatic_succession
-								has_law = enatic_cognatic_succession
-							}
-						}
+						is_female = no
 					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 75
+					NOT = {
+						is_foe = ROOT
 					}
-
-					NOT = { is_foe = ROOT }
 				}
-
 				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						ROOT = {
-							OR = {
-								has_law = true_cognatic_succession
-								has_law = enatic_succession
-								has_law = enatic_cognatic_succession
-							}
-						}
+					NOT = {
+						is_foe = ROOT
 					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 75
-					}
-
-					NOT = { is_foe = ROOT }
 				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						is_married = no
-
-						ROOT = {
-							OR = {
-								has_law = true_cognatic_succession
-								has_law = enatic_succession
-								has_law = enatic_cognatic_succession
-							}
-						}
-					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 50
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						ROOT = {
-							OR = {
-								has_law = true_cognatic_succession
-								has_law = enatic_succession
-								has_law = enatic_cognatic_succession
-							}
-						}
-					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 50
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						is_married = no
-
-						ROOT = {
-							OR = {
-								has_law = true_cognatic_succession
-								has_law = enatic_succession
-								has_law = enatic_cognatic_succession
-							}
-						}
-					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 25
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						ROOT = {
-							OR = {
-								has_law = true_cognatic_succession
-								has_law = enatic_succession
-								has_law = enatic_cognatic_succession
-							}
-						}
-					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 25
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						is_married = no
-
-						ROOT = {
-							OR = {
-								has_law = true_cognatic_succession
-								has_law = enatic_succession
-								has_law = enatic_cognatic_succession
-							}
-						}
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-
-						ROOT = {
-							OR = {
-								has_law = true_cognatic_succession
-								has_law = enatic_succession
-								has_law = enatic_cognatic_succession
-							}
-						}
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-						is_married = no
-					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 90
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					reverse_opinion = {
-						who = ROOT
-						value >= 90
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-						is_married = no
-					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 75
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					reverse_opinion = {
-						who = ROOT
-						value >= 75
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-						is_married = no
-					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 50
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					reverse_opinion = {
-						who = ROOT
-						value >= 50
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-						is_married = no
-					}
-
-					reverse_opinion = {
-						who = ROOT
-						value >= 25
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					reverse_opinion = {
-						who = ROOT
-						value >= 25
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					trigger_if = {
-						limit = { is_female = yes }
-						is_married = no
-					}
-
-					NOT = { is_foe = ROOT }
-				}
-
-				preferred_limit = {
-					NOT = { is_foe = ROOT }
-				}
-
-				opinion = {
-					name = opinion_beneficiary
-					who = ROOT
-					years = 10
-				}
-
-				set_character_flag = crusade_beneficiary
-
+                opinion = {
+                    who = ROOT
+                    modifier = opinion_beneficiary
+                    years = 10
+                }
+                set_character_flag = crusade_beneficiary
 				ROOT = {
 					set_crusade_beneficiary = PREV
 				}
+    		}
+    	}
+    	# Literally any dynasty member without land / heir to land
+    	else_if = {
+    		limit = {
+    			any_dynasty_member = {
+					is_lowborn = no
+                    NOT = {
+                        any_heir_title = { 
+                            always = yes
+                        }
+                    }	
+					NAND = {
+						is_female = yes
+						age = 40
+					}
+    				mercenary = no
+    				is_landed = no
+    				mercenary = no
+					OR = {
+						age = 16
+						AND = {
+							age = 12
+							is_female = no
+						}
+					}
+                    NOR = {
+                        trait = incapable
+                        trait = monk
+                        trait = nun
+                    }
+					NAND = {
+						is_married = yes
+						spouse = {
+							OR = {
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
+							}
+						}
+					}
+					NAND = {
+						is_betrothed = yes
+						betrothed = {
+							OR = {
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
+							}
+						}
+					}
+					NAND = {
+						player_heir = {
+							OR = {
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
+							}
+						}
+					}
+					NAND = {
+						is_female = yes
+						any_child = {
+							is_landed = yes
+						}
+					}
+    			}
+    		}
+    		random_dynasty_member = {
+    			limit = {
+					is_lowborn = no
+                    NOT = {
+                        any_heir_title = { 
+                            always = yes
+                        }
+                    }
+					NAND = {
+						is_female = yes
+						age = 40
+					}
+    				mercenary = no
+    				is_landed = no
+    				mercenary = no
+                    OR = {
+						age = 16
+						AND = {
+							age = 12
+							is_female = no
+						}
+					}
+                    NOR = {
+                        trait = incapable
+                        trait = monk
+                        trait = nun
+                    }
+					NAND = {
+						is_married = yes
+						spouse = {
+							OR = {
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
+							}
+						}
+					}
+					NAND = {
+						is_betrothed = yes
+						betrothed = {
+							OR = {
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
+							}
+						}
+					}
+					NAND = {
+						player_heir = {
+							OR = {
+								is_landed = yes
+								any_heir_title = { 
+									always = yes
+								}
+							}
+						}
+					}
+					NAND = {
+						is_female = yes
+						any_child = {
+							is_landed = yes
+						}
+					}
+    			}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 90
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 90
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 75
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 75
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 50
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 50
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 25
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 25
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 90
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 90
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 75
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 75
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 50
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 50
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 25
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 25
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 90
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 90
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 75
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 75
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 50
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 50
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 25
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 25
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_female = no
+						ROOT = {
+							OR = {
+								has_law = true_cognatic_succession
+								has_law = enatic_succession
+								has_law = enatic_cognatic_succession
+							}
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 90
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 90
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 75
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 75
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 50
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 50
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 25
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					ROOT = {
+						opinion = {
+							who = PREV
+							value = 25
+						}
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					OR = {
+						is_married = no
+						is_female = no
+					}
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+				preferred_limit = {
+					NOT = {
+						is_foe = ROOT
+					}
+				}
+                opinion = {
+                    who = ROOT
+                    modifier = opinion_beneficiary
+                    years = 10
+                }
+                set_character_flag = crusade_beneficiary
+				ROOT = {
+					set_crusade_beneficiary = PREV
+				}    		
 			}
-		}
-
-		# If nobody can be found
-		else = {
-			set_crusade_beneficiary = none
-		}
-	}
+    	}
+    	# If nobody can be found
+    	else = {
+    		set_crusade_beneficiary = NONE
+    	}
+    }
 }
 
 ## Launch Related Announcements
@@ -2753,7 +3200,7 @@ letter_event = {
         remove_trait = excommunicated
         set_character_flag = forced_to_crusade
         FROM = {
-        	
+        	show_scope_change = no
         	remove_favor = ROOT
         }
 
@@ -2828,7 +3275,7 @@ character_event = {
     					}
     				}
     			}
-    			character_event = { id = HFP.41032 days = 10 random = 10 }
+    			letter_event = { id = HFP.41032 days = 10 random = 10 }
     		}
     		#A rival participant wants to make amends, now that you are going to war together
     		10 = {
@@ -2927,7 +3374,7 @@ character_event = {
         	years = 5
         }
         event_target:pleased_courtier = {
-        	
+        	show_scope_change = no
         	opinion = {
         		modifier = opinion_crusade_agreement
         		who = ROOT
@@ -2986,7 +3433,7 @@ character_event = {
         	years = 5
         }
         event_target:pleased_participant = {
-        	
+        	show_scope_change = no
         	opinion = {
         		modifier = opinion_crusade_agreement
         		who = ROOT
@@ -3004,10 +3451,6 @@ character_event = {
     		}
     	}
     	add_friend = event_target:pleased_participant
-				add_alliance = {
-					who = event_target:pleased_participant
-					years = 100
-				}
     }
 }
 
@@ -3055,7 +3498,7 @@ character_event = {
     		who = event_target:pleased_participant
     	}
     	event_target:pleased_participant = {
-    		
+    		show_scope_change = no
     		opinion = {
     			modifier = insulted
     			who = ROOT
@@ -3150,7 +3593,7 @@ character_event = {
     	name = EVTOPTB_HFP_41035
     	trigger = {
     		NOR = {
-    			OR = { trait = blinded trait = blind }
+    			trait = blinded
     			trait = one_eyed
     		}
     	}
@@ -3183,10 +3626,24 @@ character_event = {
     ai = no
 
     trigger = {
-        NOT = {
-			crusade_target_char = {
-				religion_group = ROOT
-			}
+        OR = {
+            NOT = {
+                ROOT = {
+                    crusade_target_title = {
+                        title = k_thrace
+                    }
+                }
+            }
+            NOT = {
+                crusade_target_char = {
+                    has_landed_title = e_byzantium
+                }
+            }
+            NOT = {
+                crusade_target_char = {
+                    religion_group = FROM
+                }
+            }
         }
         age = 16
         check_if_alternate_crusades_trigger = yes
@@ -3224,7 +3681,7 @@ character_event = {
     					}
     				}
     			}
-    			character_event = { id = HFP.41042 days = 10 random = 10 }
+    			letter_event = { id = HFP.41042 days = 10 random = 10 }
     		}
     		#You gain a new rival from leaving the Crusade
     		10 = {
@@ -3255,7 +3712,7 @@ character_event = {
     				}
     			}
     			rightful_religious_head_scope = {
-    				narrative_event = { id = HFP.41044 days = 10 random = 10 }
+    				character_event = { id = HFP.41044 days = 10 random = 10 }
     			}
     		}
     	}
@@ -3319,7 +3776,7 @@ character_event = {
         	years = 5
         }
         event_target:displeased_courtier = {
-        	
+        	show_scope_change = no
         	opinion = {
         		modifier = opinion_disapprove
         		who = ROOT
@@ -3331,7 +3788,7 @@ character_event = {
     option = {
     	name = EVTOPTB_HFP_41041
         event_target:displeased_courtier = {
-        	
+        	show_scope_change = no
         	opinion = {
         		modifier = opinion_disapprove
         		who = ROOT
@@ -3390,7 +3847,7 @@ character_event = {
         	years = 5
         }
         event_target:displeased_participant = {
-        	
+        	show_scope_change = no
         	opinion = {
         		modifier = opinion_disapprove
         		who = ROOT
@@ -3589,174 +4046,150 @@ character_event = {
 
 # The player receives a letter from the Pope, asking to pledge to the Crusade - Player Only
 letter_event = {
-	id = HFP.41051
-	desc = EVTDESC_HFP_41051
-	border = GFX_event_letter_frame_religion
+    id = HFP.41051
+    desc = EVTDESC_HFP_41051
+    border = GFX_event_letter_frame_religion
+    is_triggered_only = yes
+    ai = no
+    trigger = {
+    	is_preparing_crusade = yes
+    	religion = FROM
+    	mercenary = no
+    	age = 16
+    	higher_tier_than = BARON
+    	NOT = { has_character_flag = asked_to_pledge }
+        NOT = { any_war = { using_cb = crusade } }
+    	has_pledged_crusade_participation = no
+        rightful_religious_head_scope = {
+            character = FROM
+            NOT = {
+                war_with = PREV
+            }
+        }
+        check_if_alternate_crusades_trigger = yes
+        check_if_not_fourth_crusade_trigger = yes
+    }
 
-	is_triggered_only = yes
+    immediate = {
+    	crusade_target_title = {
+    		save_event_target_as = crusade_title
+    	}
 
-	min_age = 16
+        export_to_variable = { which = small_contribution value = monthly_income }
+        multiply_variable = { which = small_contribution value = 12 }
+        if = {
+            limit = {
+                check_variable = { which = small_contribution value < 100 }
+            }
+            set_variable = { which = small_contribution value = 100 }
+        }
+        set_variable = { which = small_contribution_cost value = 0 }
+        subtract_variable = { which = small_contribution_cost which = small_contribution value = 2 }
+        set_variable = { which = small_piety_boon which = small_contribution }
+        divide_variable = { which = small_piety_boon value = 2 }
+        if = {
+            limit = {
+                check_variable = { which = small_piety_boon value < 50 }
+            }
+            set_variable = { which = small_piety_boon value = 50 }
+        }
+    }
 
-	trigger = {
-		is_preparing_crusade = yes
-		religion = FROM
-		higher_real_tier_than = BARON
-		has_pledged_crusade_participation = no
-		mercenary = no
-		check_if_alternate_crusades_trigger = yes
-		check_if_not_fourth_crusade_trigger = yes
+    option = {      
+        name = EVTOPTA_HFP_41051
 
-		rightful_religious_head_scope = {
-			character = FROM
-			NOT = { war_with = PREV }
+        FROM = {
+            show_scope_change = no
+            opinion = {
+                modifier = pope_invest_approve
+                who = ROOT
+                years = 5
+            }
+        }
+
+
+        hidden_tooltip = {
+            piety = 100
+            add_character_modifier = {
+                name = recently_pledged_to_crusade_cooldown
+                hidden = yes
+                duration = 45
+            }
+
+            trigger_switch = {
+                on_trigger = tier
+                EMPEROR = { add_to_crusade_prestige_pot = 2000 add_to_crusade_piety_pot = 800 }
+                KING = { add_to_crusade_prestige_pot = 1000 add_to_crusade_piety_pot = 400 }
+                DUKE = { add_to_crusade_prestige_pot = 500 add_to_crusade_piety_pot = 200 }
+                COUNT = { add_to_crusade_prestige_pot = 250 add_to_crusade_piety_pot = 100 }
+                BARON = { add_to_crusade_prestige_pot = 125 add_to_crusade_piety_pot = 100 }
+            }
+
+            random = {
+                chance = 50
+                add_to_crusade_artifact_pot = 1
+            }
+        }
+
+        pledge_crusade_participation = yes
+
+        if = {
+            limit = {
+                trait = excommunicated
+            }
+            rightful_religious_head_scope = {
+                character_event = { id = HFP.41056 }
+            }
+        }
+    }
+    option = {
+        name = EVTOPTC_HFP_41022
+
+        wealth = small_contribution_cost
+        add_to_crusade_gold_pot = small_contribution
+        piety = small_piety_boon
+
+        FROM = {
+            show_scope_change = no
+            opinion = {
+                modifier = pope_invest_approve
+                who = ROOT
+                years = 5
+            }
+        }
+        FROM = {
+            show_scope_change = no
+            remove_favor = ROOT
+        }
+    }
+    option = {      
+        name = EVTOPTB_HFP_41051
+        custom_tooltip = { text = EVTOPTB_HFP_41051_TT }
+
+        FROM = {
+            show_scope_change = no
+            opinion = {
+                modifier = opinion_insulted
+                who = ROOT
+                years = 5
+            }
+        }
+
+        add_character_modifier = {
+            modifier = not_pledged_to_crusade
+            years = 10
+            hidden = yes
+        }
+    }
+
+    after = {
+    	set_character_flag = asked_to_pledge
+		hidden_tooltip = {
+			set_variable = { which = small_contribution value = 0 }
+			set_variable = { which = small_contribution_cost value = 0 }
+			set_variable = { which = small_piety_boon value = 0 }
 		}
-
-		NOR = {
-			has_character_flag = asked_to_pledge
-			any_war = { using_cb = crusade }
-		}
-	}
-
-	immediate = {
-		set_character_flag = asked_to_pledge
-
-		crusade_target_title = {
-			save_event_target_as = crusade_title
-		}
-
-		export_to_variable = {
-			which = local_small_contribution
-			value = yearly_income
-		}
-
-		if = {
-			limit = {
-				check_variable = {
-					which = local_small_contribution
-					value < 100
-				}
-			}
-
-			set_variable = {
-				which = local_small_contribution
-				value = 100
-			}
-		}
-
-		set_variable = {
-			which = local_small_contribution_cost
-			value = 0
-		}
-
-		subtract_variable = {
-			which = local_small_contribution_cost
-			which = local_small_contribution
-		}
-
-		set_variable = {
-			which = local_small_piety_boon
-			which = local_small_contribution
-		}
-
-		divide_variable = {
-			which = local_small_piety_boon
-			value = 2
-		}
-
-		if = {
-			limit = {
-				check_variable = {
-					which = local_small_piety_boon
-					value < 50
-				}
-			}
-
-			set_variable = {
-				which = local_small_piety_boon
-				value = 50
-			}
-		}
-	}
-
-	option = {
-		name = EVTOPTA_HFP_41051
-
-		reverse_opinion = {
-			name = pope_invest_approve
-			who = FROM
-			years = 5
-		}
-
-		hidden_effect = {
-			piety = 100
-
-			add_character_modifier = {
-				name = recently_pledged_to_crusade_cooldown
-				days = 45
-				hidden = yes
-			}
-
-			trigger_switch = {
-				on_trigger = real_tier
-
-				EMPEROR = { add_to_crusade_prestige_pot = 2000 add_to_crusade_piety_pot = 800 }
-				KING    = { add_to_crusade_prestige_pot = 1000 add_to_crusade_piety_pot = 400 }
-				DUKE    = { add_to_crusade_prestige_pot =  500 add_to_crusade_piety_pot = 200 }
-				COUNT   = { add_to_crusade_prestige_pot =  250 add_to_crusade_piety_pot = 100 }
-				BARON   = { add_to_crusade_prestige_pot =  125 add_to_crusade_piety_pot = 100 }
-			}
-
-			random = {
-				chance = 50
-				add_to_crusade_artifact_pot = 1
-			}
-		}
-
-		pledge_crusade_participation = yes
-
-		if = {
-			limit = { trait = excommunicated }
-
-			letter_event = {
-				id = HFP.41057
-				days = 3
-			}
-		}
-	}
-
-	option = {
-		name = EVTOPTC_HFP_41022
-
-		wealth = local_small_contribution_cost
-		add_to_crusade_gold_pot = local_small_contribution
-		piety = local_small_piety_boon
-
-		reverse_opinion = {
-			name = pope_invest_approve
-			who = FROM
-			years = 5
-		}
-
-		reverse_remove_favor = ROOT
-	}
-
-	option = {
-		name = EVTOPTB_HFP_41051
-
-		custom_tooltip = { text = EVTOPTB_HFP_41051_TT }
-
-		reverse_opinion = {
-			name = opinion_insulted
-			who = FROM
-			years = 5
-		}
-
-		add_character_modifier = {
-			name = not_pledged_to_crusade
-			years = 10
-			hidden = yes
-		}
-	}
+    }
 }
 
 # Recheck Beneficiary every month
@@ -3766,223 +4199,215 @@ character_event = {
     is_triggered_only = yes
 
     immediate = {
-		if = {
-			limit = {	
-				OR = {
-					is_preparing_crusade = yes
-					has_crusade_war_started = yes
-				}
-			}
-			any_crusade_participant = {
-				limit = {
-					OR = {
-						crusade_beneficiary = {
-							OR = {
-								is_female = yes
-								is_alive = no
-								character = FROM
-								is_landed = yes
-								any_heir_title = { 
-									always = yes
-								}
-								mercenary = yes
-								holy_order = yes
-								is_sick_or_injured_trigger = yes
-								trait = monk
-								trait = nun
-								AND = {
-									ai = yes
-									is_married = yes
-									spouse = {
-										OR = {
-											is_landed = yes
-											any_heir_title = { 
-												always = yes
-											}
-										}
-									}
-								}
-								AND = {
-									ai = yes
-									is_betrothed = yes
-									betrothed = {
-										OR = {
-											is_landed = yes
-											any_heir_title = { 
-												always = yes
-											}
-										}
-									}
-								}
-								AND = {
-									ai = yes
-									player_heir = {
-										OR = {
-											is_landed = yes
-											any_heir_title = { 
-												always = yes
-											}
+        any_crusade_participant = {
+            limit = {
+                OR = {
+                    crusade_beneficiary = {
+                        OR = {
+							is_female = yes
+                            is_alive = no
+                            character = FROM
+                            is_landed = yes
+                            any_heir_title = { 
+                                always = yes
+                            }
+                            mercenary = yes
+                            holy_order = yes
+                            is_sick_or_injured_trigger = yes
+                            trait = monk
+                            trait = nun
+							AND = {
+								ai = yes
+								is_married = yes
+								spouse = {
+									OR = {
+										is_landed = yes
+										any_heir_title = { 
+											always = yes
 										}
 									}
 								}
 							}
-						}
-						NOT = {
-							crusade_beneficiary = {
-								always = yes
-							}
-						}
-						holy_order = yes
-					}
-					ai = yes
-				}
-				crusade_beneficiary = {
-					remove_opinion = {
-						who = PREV
-						modifier = opinion_beneficiary
-					}
-				}
-				set_crusade_beneficiary = none
-				character_event = { id = HFP.41007 }
-			}
-			any_crusade_participant = {
-				limit = {
-					OR = {
-						crusade_beneficiary = {
-							OR = {
-								is_alive = no
-								character = FROM
-								is_landed = yes
-								any_heir_title = { 
-									always = yes
-								}
-								mercenary = yes
-								holy_order = yes
-								NOT = {
-									age = 12
-								}
-								trait = monk
-								trait = nun
-								is_sick_or_injured_trigger = yes
-							}
-						}
-						NOT = {
-							crusade_beneficiary = {
-								 always = yes
-							}
-						}
-						holy_order = yes
-					}
-					ai = no
-				}
-				crusade_beneficiary = {
-					save_event_target_as = old_crusade_beneficiary
-				}
-				if = {
-					limit = {
-						crusade_beneficiary = {
-							OR = {
-								is_alive = no
-								FROM = {
-									has_character_flag = dying_beneficiary
+							AND = {
+								ai = yes
+								is_betrothed = yes
+								betrothed = {
+									OR = {
+										is_landed = yes
+										any_heir_title = { 
+											always = yes
+										}
+									}
 								}
 							}
-						}
-						NOT = { has_global_flag = distributing_crusade }
-					}
-					set_character_flag = dead_beneficiary_flag
-					FROM = {
-						clr_character_flag = dying_beneficiary
-					}
-				}
-				if = {
-					limit = {
-						crusade_beneficiary = {
-							OR = {
-								is_landed = yes
-								FROM = {
-									has_character_flag = landed_beneficiary
+							AND = {
+								ai = yes
+								player_heir = {
+									OR = {
+										is_landed = yes
+										any_heir_title = { 
+											always = yes
+										}
+									}
 								}
 							}
-						}
-						NOT = { has_global_flag = distributing_crusade }
-					}
-					set_character_flag = landed_beneficiary_flag
-					FROM = {
-						clr_character_flag = landed_beneficiary
-					}
-				}
-				if = {
-					limit = {
-						crusade_beneficiary = {
-							any_heir_title = { 
-								always = yes
-							}
-						}
-						NOT = { has_global_flag = distributing_crusade }
-					}
-					set_character_flag = heir_beneficiary_flag
-				}
-				if = {
-					limit = {
-						crusade_beneficiary = {
-							mercenary = yes
-						}
-						NOT = { has_global_flag = distributing_crusade }
-					}
-					set_character_flag = mercenary_beneficiary_flag
-				}
-				if = {
-					limit = {
-						crusade_beneficiary = {
-							holy_order = yes
-						}
-						NOT = { has_global_flag = distributing_crusade }
-					}
-					set_character_flag = holy_order_beneficiary_flag
-				}
-				if = {
-					limit = {
-						crusade_beneficiary = {
-							NOT = {
-								age = 12
-							}
-						}
-						NOT = { has_global_flag = distributing_crusade }
-					}
-					set_character_flag = underage_beneficiary_flag
-				}
-				if = {
-					limit = {
-						crusade_beneficiary = {
-							is_sick_or_injured_trigger = yes
-						}
-						NOT = { has_global_flag = distributing_crusade }
-					}
-					set_character_flag = sick_or_injured_beneficiary_flag
-				}
-				if = {
-					limit = {
-						crusade_beneficiary = {
-							OR = {
-								trait = monk
-								trait = nun
-							}
-						}
-						NOT = { has_global_flag = distributing_crusade }
-					}
-					set_character_flag = monk_nun_beneficiary_flag
-				}
-				character_event = { id = HFP.41110 }
-				crusade_beneficiary = {
-					remove_opinion = {
-						who = PREV
-						modifier = opinion_beneficiary
-					}
-				}
-				set_crusade_beneficiary = none
-			}
-		}
+                        }
+                    }
+                    NOT = {
+                        crusade_beneficiary = {
+                            always = yes
+                        }
+                    }
+                    holy_order = yes
+                }
+                ai = yes
+            }
+            crusade_beneficiary = {
+                remove_opinion = {
+                    who = PREV
+                    modifier = opinion_beneficiary
+                }
+            }
+			set_crusade_beneficiary = NONE
+            character_event = { id = HFP.41007 }
+        }
+        any_crusade_participant = {
+            limit = {
+                OR = {
+                    crusade_beneficiary = {
+                        OR = {
+                            is_alive = no
+                            character = FROM
+                            is_landed = yes
+                            any_heir_title = { 
+                                always = yes
+                            }
+                            mercenary = yes
+                            holy_order = yes
+                            NOT = {
+                                age = 12
+                            }
+                            trait = monk
+                            trait = nun
+                            is_sick_or_injured_trigger = yes
+                        }
+                    }
+                    NOT = {
+                        crusade_beneficiary = {
+                             always = yes
+                        }
+                    }
+                    holy_order = yes
+                }
+                ai = no
+            }
+            crusade_beneficiary = {
+                save_event_target_as = old_crusade_beneficiary
+            }
+            if = {
+                limit = {
+                    crusade_beneficiary = {
+                        OR = {
+                            is_alive = no
+                            FROM = {
+                                has_character_flag = dying_beneficiary
+                            }
+                        }
+                    }
+                    NOT = { has_global_flag = distributing_crusade }
+                }
+                set_character_flag = dead_beneficiary_flag
+                FROM = {
+                    clr_character_flag = dying_beneficiary
+                }
+            }
+            if = {
+                limit = {
+                    crusade_beneficiary = {
+                        OR = {
+                            is_landed = yes
+                            FROM = {
+                                has_character_flag = landed_beneficiary
+                            }
+                        }
+                    }
+                    NOT = { has_global_flag = distributing_crusade }
+                }
+                set_character_flag = landed_beneficiary_flag
+                FROM = {
+                    clr_character_flag = landed_beneficiary
+                }
+            }
+            if = {
+                limit = {
+                    crusade_beneficiary = {
+                        any_heir_title = { 
+                            always = yes
+                        }
+                    }
+                    NOT = { has_global_flag = distributing_crusade }
+                }
+                set_character_flag = heir_beneficiary_flag
+            }
+            if = {
+                limit = {
+                    crusade_beneficiary = {
+                        mercenary = yes
+                    }
+                    NOT = { has_global_flag = distributing_crusade }
+                }
+                set_character_flag = mercenary_beneficiary_flag
+            }
+            if = {
+                limit = {
+                    crusade_beneficiary = {
+                        holy_order = yes
+                    }
+                    NOT = { has_global_flag = distributing_crusade }
+                }
+                set_character_flag = holy_order_beneficiary_flag
+            }
+            if = {
+                limit = {
+                    crusade_beneficiary = {
+                        NOT = {
+                            age = 12
+                        }
+                    }
+                    NOT = { has_global_flag = distributing_crusade }
+                }
+                set_character_flag = underage_beneficiary_flag
+            }
+            if = {
+                limit = {
+                    crusade_beneficiary = {
+                        is_sick_or_injured_trigger = yes
+                    }
+                    NOT = { has_global_flag = distributing_crusade }
+                }
+                set_character_flag = sick_or_injured_beneficiary_flag
+            }
+            if = {
+                limit = {
+                    crusade_beneficiary = {
+                        OR = {
+                            trait = monk
+                            trait = nun
+                        }
+                    }
+                    NOT = { has_global_flag = distributing_crusade }
+                }
+                set_character_flag = monk_nun_beneficiary_flag
+            }
+            character_event = { id = HFP.41110 }
+            crusade_beneficiary = {
+                remove_opinion = {
+                    who = PREV
+                    modifier = opinion_beneficiary
+                }
+            }
+            set_crusade_beneficiary = NONE
+        }
     }
 }
 
@@ -3993,10 +4418,6 @@ character_event = {
     is_triggered_only = yes
 
     trigger = {
-		OR = {
-			is_preparing_crusade = yes
-			has_crusade_war_started = yes
-		}
         has_character_flag = crusade_beneficiary
     }
 
@@ -4050,6 +4471,16 @@ narrative_event = {
                 text = player_character_TT
                 set_player_character = event_target:new_crusader_king
             }
+			event_target:new_crusader_king = {
+				if = {
+					limit = {
+						#dynasty = 308
+						completely_controls = c_jerusalem
+						higher_tier_than = DUKE
+					}
+					set_character_flag = achievement_defender_of_the_holy_sepulchre
+				}
+			}
         }
     }
 }
@@ -4148,7 +4579,7 @@ character_event = {
         crusade_beneficiary = {
             save_event_target_as = beneficiary_check_crusader_beneficiary
         }
-        narrative_event = { id = HFP.41061 days = 3 }
+        character_event = { id = HFP.41061 days = 3 }
     }
 }
 
@@ -4746,39 +5177,25 @@ letter_event = {
 ## The Pot events
 # Initial Rewards
 character_event = {
-	id = HFP.41080
-
-	is_triggered_only = yes # on_crusade_preparation_starts
-	hide_window = yes
-
-	trigger = {
+    id = HFP.41080
+    hide_window = yes
+    is_triggered_only = yes
+    trigger = {
 		uses_new_crusade = yes
-	}
+    }
 
-	immediate = {
-		# Pope puts half his treasury into the pot
-		export_to_variable = {
-			which = local_small_contribution
-			value = wealth
-		}
+    immediate = {
+        export_to_variable = { which = small_contribution value = wealth }
+        divide_variable = { which = small_contribution value = 2 }
+        subtract_variable = { which = small_contribution_cost which = small_contribution value = 2 }
 
-		divide_variable = {
-			which = local_small_contribution
-			value = 2
-		}
+    	add_to_crusade_gold_pot = small_contribution
+    	add_to_crusade_piety_pot = 400
+    	add_to_crusade_prestige_pot = 1000
+    	add_to_crusade_artifact_pot = 4
 
-		subtract_variable = {
-			which = local_small_contribution_cost
-			which = local_small_contribution
-		}
-
-		add_to_crusade_gold_pot = local_small_contribution
-		add_to_crusade_piety_pot = 400
-		add_to_crusade_prestige_pot = 1000
-		add_to_crusade_artifact_pot = 4
-
-		wealth = local_small_contribution_cost
-	}
+        wealth = small_contribution_cost
+    }
 }
 
 # Seeking Christian Monetary support - AI
@@ -4865,244 +5282,129 @@ character_event = {
 
 # Receiving Christian Monetary Support - AI
 character_event = {
-	id = HFP.41082
+    id = HFP.41082
+    hide_window = yes
+    is_triggered_only = yes
+    ai = yes
 
-	is_triggered_only = yes
-	hide_window = yes
+    trigger = {
+        is_preparing_crusade = yes
+    }
 
-	ai = yes
+    immediate = {
 
-	trigger = {
-		is_preparing_crusade = yes
-	}
-
-	immediate = {
-		set_character_flag = supported_crusade
-
-		export_to_variable = {
-			which = local_small_contribution
-			value = yearly_income
-		}
-
-		# Enforce minimum contribution, depending on tier
-		if = {
-			limit = {
-				lower_real_tier_than = DUKE
-
-				check_variable = {
-					which = local_small_contribution
-					value < 10
+        export_to_variable = { which = small_contribution value = monthly_income }
+		multiply_variable = { which = small_contribution value = 12 }
+        if = {
+            limit = {
+                check_variable = { which = small_contribution value < 10 }
+				OR = {
+					tier = COUNT
+					tier = BARON
 				}
-			}
-
-			set_variable = {
-				which = local_small_contribution
-				value = 10
-			}
-		}
-		else_if = {
-			limit = {
-				real_tier = DUKE
-
-				check_variable = {
-					which = local_small_contribution
-					value < 20
+            }
+            set_variable = { which = small_contribution value = 10 }
+        }
+        else_if = {
+            limit = {
+                check_variable = { which = small_contribution value < 20 }
+                tier = DUKE
+            }
+            set_variable = { which = small_contribution value = 20 }
+        }
+        else_if = {
+            limit = {
+                check_variable = { which = small_contribution value < 30 }
+                tier = KING
+            }
+            set_variable = { which = small_contribution value = 30 }
+        }
+        else_if = {
+            limit = {
+                check_variable = { which = small_contribution value < 40}
+                tier = EMPEROR
+            }
+            set_variable = { which = small_contribution value = 40 }
+        }
+        set_variable = { which = medium_contribution which = small_contribution }
+        multiply_variable = { which = medium_contribution value = 2 }
+        set_variable = { which = large_contribution which = medium_contribution }
+        multiply_variable = { which = large_contribution value = 2 }
+        
+        set_variable = { which = small_contribution_cost value = 0 }
+        subtract_variable = { which = small_contribution_cost which = small_contribution value = 2 }
+        set_variable = { which = medium_contribution_cost value = 0 }
+        subtract_variable = { which = medium_contribution_cost which = medium_contribution value = 2 }
+        set_variable = { which = large_contribution_cost value = 0 }
+        subtract_variable = { which = large_contribution_cost which = large_contribution value = 2 }
+        
+        set_variable = { which = small_piety_boon which = small_contribution }
+        divide_variable = { which = small_piety_boon value = 2 }
+        if = {
+            limit = {
+                check_variable = { which = small_piety_boon value < 5 }
+                OR = {
+					tier = COUNT
+					tier = BARON
 				}
-			}
+            }
+            set_variable = { which = small_piety_boon value = 5 }
+        }
+        else_if = {
+            limit = {
+                check_variable = { which = small_piety_boon value < 10 }
+                tier = DUKE
+            }
+            set_variable = { which = small_piety_boon value = 10 }
+        }
+        else_if = {
+            limit = {
+                check_variable = { which = small_piety_boon value < 15}
+                tier = KING
+            }
+            set_variable = { which = small_piety_boon value = 15 }
+        }
+        else_if = {
+            limit = {
+                check_variable = { which = small_piety_boon value < 20 }
+                tier = EMPEROR
+            }
+            set_variable = { which = small_piety_boon value = 20 }
+        }
+        set_variable = { which = medium_piety_boon which = medium_contribution }
+        divide_variable = { which = medium_piety_boon value = 2 }
+        set_variable = { which = large_piety_boon which = large_contribution }
+        divide_variable = { which = large_piety_boon value = 2 }
 
-			set_variable = {
-				which = local_small_contribution
-				value = 20
-			}
-		}
-		else_if = {
-			limit = {
-				real_tier = KING
+    	trigger_switch = {
+    		on_trigger = ai_zeal
+            70 = { add_to_crusade_gold_pot = large_contribution wealth = large_contribution_cost piety = large_piety_boon }
+    		35 = { add_to_crusade_gold_pot = medium_contribution wealth = medioum_contribution_cost piety = medium_piety_boon }
+            0 = { add_to_crusade_gold_pot = small_contribution wealth = small_contribution_cost piety = small_piety_boon }
+    	}
 
-				check_variable = {
-					which = local_small_contribution
-					value < 30
-				}
-			}
+        if = {
+            limit = {
+                NOT = {
+                    wealth = 1
+                }
+            }
+            clear_wealth = yes
+        }
+    }
+	
+	after = {
+		set_variable = { which = small_contribution value = 0 }
+		set_variable = { which = medium_contribution value = 0 }
+		set_variable = { which = large_contribution value = 0 }
+		set_variable = { which = small_contribution_cost value = 0 }
+		set_variable = { which = medioum_contribution_cost value = 0 }
+		set_variable = { which = large_contribution_cost value = 0 }
+		set_variable = { which = small_piety_boon value = 0 }
+		set_variable = { which = medium_piety_boon value = 0 }
+		set_variable = { which = large_piety_boon value = 0 }
 
-			set_variable = {
-				which = local_small_contribution
-				value = 30
-			}
-		}
-		else_if = {
-			limit = {
-				real_tier = EMPEROR
-
-				check_variable = {
-					which = local_small_contribution
-					value < 40
-				}
-			}
-
-			set_variable = {
-				which = local_small_contribution
-				value = 40
-			}
-		}
-
-		# Set-up larger contributions
-		set_variable = {
-			which = local_medium_contribution
-			which = local_small_contribution
-		}
-
-		multiply_variable = {
-			which = local_medium_contribution
-			value = 2
-		}
-
-		set_variable = {
-			which = local_large_contribution
-			which = local_medium_contribution
-		}
-
-		multiply_variable = {
-			which = local_large_contribution
-			value = 2
-		}
-
-		set_variable = {
-			which = local_small_contribution_cost
-			value = 0
-		}
-
-		subtract_variable = {
-			which = local_small_contribution_cost
-			which = local_small_contribution
-		}
-
-		set_variable = {
-			which = local_medium_contribution_cost
-			value = 0
-		}
-
-		subtract_variable = {
-			which = local_medium_contribution_cost
-			which = local_medium_contribution
-		}
-
-		set_variable = {
-			which = local_large_contribution_cost
-			value = 0
-		}
-
-		subtract_variable = {
-			which = local_large_contribution_cost
-			which = local_large_contribution
-		}
-
-		# Set-up initial piety gain
-		set_variable = {
-			which = local_small_piety_boon
-			which = local_small_contribution
-		}
-
-		divide_variable = {
-			which = local_small_piety_boon
-			value = 2
-		}
-
-		# Enforce minimum piety gain
-		if = {
-			limit = {
-				lower_real_tier_than = DUKE
-
-				check_variable = {
-					which = local_small_piety_boon
-					value < 5
-				}
-			}
-
-			set_variable = {
-				which = local_small_piety_boon
-				value = 5
-			}
-		}
-		else_if = {
-			limit = {
-				real_tier = DUKE
-
-				check_variable = {
-					which = local_small_piety_boon
-					value < 10
-				}
-			}
-
-			set_variable = {
-				which = local_small_piety_boon
-				value = 10
-			}
-		}
-		else_if = {
-			limit = {
-				real_tier = KING
-
-				check_variable = {
-					which = local_small_piety_boon
-					value < 15
-				}
-			}
-
-			set_variable = {
-				which = local_small_piety_boon
-				value = 15
-			}
-		}
-		else_if = {
-			limit = {
-				real_tier = EMPEROR
-
-				check_variable = {
-					which = local_small_piety_boon
-					value < 20
-				}
-			}
-
-			set_variable = {
-				which = local_small_piety_boon
-				value = 20
-			}
-		}
-
-		# Set-up larger piety gains, to go with larger contributions
-		set_variable = {
-			which = local_medium_piety_boon
-			which = local_medium_contribution
-		}
-
-		divide_variable = {
-			which = local_medium_piety_boon
-			value = 2
-		}
-
-		set_variable = {
-			which = local_large_piety_boon
-			which = local_large_contribution
-		}
-
-		divide_variable = {
-			which = local_large_piety_boon
-			value = 2
-		}
-
-		trigger_switch = {
-			on_trigger = ai_zeal
-
-			70 = { add_to_crusade_gold_pot = local_large_contribution  wealth = local_large_contribution_cost  piety = local_large_piety_boon }
-			35 = { add_to_crusade_gold_pot = local_medium_contribution wealth = local_medium_contribution_cost piety = local_medium_piety_boon }
-			 0 = { add_to_crusade_gold_pot = local_small_contribution  wealth = local_small_contribution_cost  piety = local_small_piety_boon }
-		}
-
-		if = {
-			limit = { wealth < 1 }
-			clear_wealth = yes
-		}
+        set_character_flag = supported_crusade
 	}
 }
 
@@ -5154,27 +5456,17 @@ character_event = {
 			religion = neohuguenot
 			religion = cadaverist
 			religion = calvinist
-			religion = katoliko
-			religion = aglipayan
         }
     }
 
     immediate = {
-		if = {
-			limit = {	
-				OR = {
-					is_preparing_crusade = yes
-					has_crusade_war_started = yes
-				}
-			}
-			add_to_crusade_piety_pot = 350
-			add_to_crusade_prestige_pot = 350
-			add_to_crusade_gold_pot = 350
-			random = {
-				chance = 5
-				add_to_crusade_artifact_pot = 1
-			}
-		}
+        add_to_crusade_piety_pot = 350
+        add_to_crusade_prestige_pot = 350
+        add_to_crusade_gold_pot = 350
+        random = {
+            chance = 5
+            add_to_crusade_artifact_pot = 1
+        }
     }
 }
 
@@ -5206,21 +5498,13 @@ character_event = {
 	}
 
     immediate = {
-		if = {
-			limit = {	
-				OR = {
-					is_preparing_crusade = yes
-					has_crusade_war_started = yes
-				}
-			}
-			add_to_crusade_piety_pot = 350
-			add_to_crusade_prestige_pot = 350
-			add_to_crusade_gold_pot = 350
-			random = {
-				chance = 5
-				add_to_crusade_artifact_pot = 1
-			}
-		}
+        add_to_crusade_piety_pot = 350
+        add_to_crusade_prestige_pot = 350
+        add_to_crusade_gold_pot = 350
+        random = {
+            chance = 5
+            add_to_crusade_artifact_pot = 1
+        }
     }
 }
 
@@ -5242,6 +5526,7 @@ character_event = {
                 set_crusade_pot_multiplier = 0
             }
         }
+        abdicate_holy_order_if_religion_changes_effect = yes
     }
 }
 
@@ -5263,6 +5548,7 @@ character_event = {
         religion_head = {
             character_event = { id = HFP.41086 days = 1 }
         }
+        abdicate_holy_order_if_religion_changes_effect = yes
     }
 }
 
@@ -5282,166 +5568,99 @@ character_event = {
 		# The piety boon you get is half of what you give in wealth
 		# If the small contribution is less than 50 gold, it will be set to 50 gold
 		# All other values are based on the small contribution, they then update accordingly
-
-		export_to_variable = {
-			which = local_small_contribution
-			value = yearly_income
-		}
-
+		
+		export_to_variable = { which = small_contribution value = monthly_income }
+		multiply_variable = { which = small_contribution value = 12 }
 		if = {
 			limit = {
-				check_variable = {
-					which = local_small_contribution
-					value < 50
-				}
+				check_variable = { which = small_contribution value < 50 }
 			}
-
-			set_variable = {
-				which = local_small_contribution
-				value = 50
+			set_variable = { which = small_contribution value = 50 }
+		}
+		set_variable = { which = medium_contribution which = small_contribution }
+		multiply_variable = { which = medium_contribution value = 2 }
+		set_variable = { which = large_contribution which = medium_contribution }
+		multiply_variable = { which = large_contribution value = 2 }
+		
+		set_variable = { which = small_contribution_cost value = 0 }
+		subtract_variable = { which = small_contribution_cost which = small_contribution value = 2 }
+		set_variable = { which = medium_contribution_cost value = 0 }
+		subtract_variable = { which = medium_contribution_cost which = medium_contribution value = 2 }
+		set_variable = { which = large_contribution_cost value = 0 }
+		subtract_variable = { which = large_contribution_cost which = large_contribution value = 2 }
+		
+		set_variable = { which = small_piety_boon which = small_contribution }
+		divide_variable = { which = small_piety_boon value = 2 }
+		if = {
+			limit = {
+				check_variable = { which = small_piety_boon value < 25 }
 			}
+			set_variable = { which = small_piety_boon value = 25 }
 		}
-
-		# Set-up larger contributions
-		set_variable = {
-			which = local_medium_contribution
-			which = local_small_contribution
-		}
-		multiply_variable = {
-			which = local_medium_contribution
-			value = 2
-		}
-
-		set_variable = {
-			which = local_large_contribution
-			which = local_medium_contribution
-		}
-		multiply_variable = {
-			which = local_large_contribution
-			value = 2
-		}
-
-		# Set-up variables to take away wealth
-		set_variable = {
-			which = local_small_contribution_cost
-			value = 0
-		}
-		subtract_variable = {
-			which = local_small_contribution_cost
-			which = local_small_contribution
-		}
-
-		set_variable = {
-			which = local_medium_contribution_cost
-			value = 0
-		}
-		subtract_variable = {
-			which = local_medium_contribution_cost
-			which = local_medium_contribution
-		}
-
-		set_variable = {
-			which = local_large_contribution_cost
-			value = 0
-		}
-		subtract_variable = {
-			which = local_large_contribution_cost
-			which = local_large_contribution
-		}
-
-		# Set-up piety gains
-		set_variable = {
-			which = local_small_piety_boon
-			which = local_small_contribution
-		}
-		divide_variable = {
-			which = local_small_piety_boon
-			value = 2
-		}
-
-		set_variable = {
-			which = local_medium_piety_boon
-			which = local_medium_contribution
-		}
-		divide_variable = {
-			which = local_medium_piety_boon
-			value = 2
-		}
-
-		set_variable = {
-			which = local_large_piety_boon
-			which = local_large_contribution
-		}
-		divide_variable = {
-			which = local_large_piety_boon
-			value = 2
-		}
+		set_variable = { which = medium_piety_boon which = medium_contribution }
+		divide_variable = { which = medium_piety_boon value = 2 }
+		set_variable = { which = large_piety_boon which = large_contribution }
+		divide_variable = { which = large_piety_boon value = 2 }
 	}
 
-	# A small gift
-	option = {
-		name = EVTOPTA_HFP_41088
-
-		trigger = { wealth >= local_small_contribution }
-
-		wealth = local_small_contribution_cost
-		add_to_crusade_gold_pot = local_small_contribution
-		piety = local_small_piety_boon
-
-		hidden_effect = {
-			remove_character_modifier = not_pledged_to_crusade
+    # A small gift
+    option = {      
+        name = EVTOPTA_HFP_41088
+		trigger = {
+			wealth = small_contribution
 		}
-	}
+        wealth = small_contribution_cost
+        add_to_crusade_gold_pot = small_contribution
+        piety = small_piety_boon
 
-	# A medium gift
-	option = {
-		name = EVTOPTB_HFP_41088
-
-		trigger = { wealth >= local_medium_contribution }
-
-		religion_head = {
-			
-
-			opinion = {
-				name = opinion_grateful
-				who = ROOT
-				years = 3
-			}
+        hidden_tooltip = {
+            remove_character_modifier = not_pledged_to_crusade
+        }
+    }
+    # A medium gift
+    option = {      
+        name = EVTOPTB_HFP_41088
+		trigger = {
+			wealth = medium_contribution
 		}
+        religion_head = {
+            show_scope_change = no
+            opinion = {
+                who = ROOT
+                modifier = opinion_grateful
+                years = 3
+            }
+        }
+        wealth = medium_contribution_cost
+        add_to_crusade_gold_pot = medium_contribution
+        piety = medium_piety_boon
 
-		wealth = local_medium_contribution_cost
-		add_to_crusade_gold_pot = local_medium_contribution
-		piety = local_medium_piety_boon
-
-		hidden_effect = {
-			remove_character_modifier = not_pledged_to_crusade
+        hidden_tooltip = {
+            remove_character_modifier = not_pledged_to_crusade
+        }
+    }
+    # A large gift
+    option = {
+        name = EVTOPTC_HFP_41088
+		trigger = {
+			wealth = large_contribution
 		}
-	}
+        religion_head = {
+            show_scope_change = no
+            opinion = {
+                who = ROOT
+                modifier = opinion_very_grateful_donation
+                years = 5
+            }
+        }
+        wealth = large_contribution_cost
+        add_to_crusade_gold_pot = large_contribution
+        piety = large_piety_boon
 
-	# A large gift
-	option = {
-		name = EVTOPTC_HFP_41088
-
-		trigger = { wealth >= local_large_contribution }
-
-		religion_head = {
-			
-
-			opinion = {
-				name = opinion_very_grateful_donation
-				who = ROOT
-				years = 5
-			}
-		}
-
-		wealth = local_large_contribution_cost
-		add_to_crusade_gold_pot = local_large_contribution
-		piety = local_large_piety_boon
-
-		hidden_effect = {
-			remove_character_modifier = not_pledged_to_crusade
-		}
-	}
+        hidden_tooltip = {
+            remove_character_modifier = not_pledged_to_crusade
+        }
+    }
     # Change your mind
     option = {
         name = EVTOPTD_HFP_41088
@@ -5654,7 +5873,7 @@ character_event = {
             clr_character_flag = crusade_beneficiary_stance
         }
         religion_head = {
-            
+            show_scope_change = no
             opinion = {
                 who = ROOT
                 modifier = opinion_selfish_crusader
@@ -5949,6 +6168,7 @@ letter_event = {
         }
         text = EVTDESC_HFP_41120_5
     }
+    picture = GFX_evt_throne_room
     is_triggered_only = yes
 
     option = {      
@@ -5995,6 +6215,7 @@ letter_event = {
         }
         text = EVTDESC_HFP_41121_2
     }
+    picture = GFX_evt_throne_room
     is_triggered_only = yes
 
     option = {      
@@ -6057,6 +6278,7 @@ character_event = {
 letter_event = {
     id = HFP.41131
     desc = EVTDESC_HFP_41131
+    picture = GFX_evt_throne_room
     is_triggered_only = yes
     trigger = {
         has_character_modifier = not_pledged_to_crusade
@@ -6071,8 +6293,8 @@ letter_event = {
                 modifier = {
                     factor = 0.5
                     OR = {
-                        tier = KING
-                        tier = EMPEROR
+                        TIER = KING
+                        TIER = EMPEROR
                     }
                 }
             }
@@ -6198,108 +6420,6 @@ province_event = {
         if = {
             limit = {
                 k_papacy = {
-                    holder_scope = {
-                        any_war = {
-                            using_cb = new_crusade
-                        }
-                    }
-                }
-            }
-            k_papacy = {
-				holder_scope = {
-					save_event_target_as = crusade_pope
-                    character_event = { id = HFP.41143 }
-                }
-            }
-        }
-        if = {
-            limit = {
-                d_fraticelli = {
-                    holder_scope = {
-                        any_war = {
-                            using_cb = new_crusade
-                        }
-                    }
-                }
-            }
-            d_fraticelli = {
-				holder_scope = {
-					save_event_target_as = crusade_pope
-                    character_event = { id = HFP.41143 }
-                }
-            }
-        }
-        if = {
-            limit = {
-                k_sevillian_pope = {
-                    holder_scope = {
-                        any_war = {
-                            using_cb = new_crusade
-                        }
-                    }
-                }
-            }
-            k_sevillian_pope = {
-				holder_scope = {
-					save_event_target_as = crusade_pope
-                    character_event = { id = HFP.41143 }
-                }
-            }
-        }	
-        if = {
-            limit = {
-                k_jury_god = {
-                    holder_scope = {
-                        any_war = {
-                            using_cb = new_crusade
-                        }
-                    }
-                }
-            }
-            k_jury_god = {
-				holder_scope = {
-					save_event_target_as = crusade_pope
-                    character_event = { id = HFP.41143 }
-                }
-            }
-        }
-        if = {
-            limit = {
-                k_calvinist = {
-                    holder_scope = {
-                        any_war = {
-                            using_cb = new_crusade
-                        }
-                    }
-                }
-            }
-            k_calvinist = {
-				holder_scope = {
-					save_event_target_as = crusade_pope
-                    character_event = { id = HFP.41143 }
-                }
-            }
-        }
-        if = {
-            limit = {
-                k_ecclesiarchy = {
-                    holder_scope = {
-                        any_war = {
-                            using_cb = new_crusade
-                        }
-                    }
-                }
-            }
-            k_ecclesiarchy = {
-				holder_scope = {
-					save_event_target_as = crusade_pope
-                    character_event = { id = HFP.41143 }
-                }
-            }
-        }
-        if = { #Delay event if the target is far far away
-            limit = {
-                k_katoliko = {
                     owner = {
                         any_war = {
                             using_cb = new_crusade
@@ -6307,69 +6427,110 @@ province_event = {
                     }
                 }
             }
-            k_katoliko = {
-				holder_scope = {
-					save_event_target_as = crusade_pope
+            k_papacy = {
+                owner = {
                     character_event = { id = HFP.41143 }
                 }
             }
         }
         if = {
             limit = {
-                k_aglipayan = {
-                    holder_scope = {
+                d_fraticelli = {
+                    owner = {
                         any_war = {
                             using_cb = new_crusade
                         }
                     }
                 }
             }
-            k_aglipayan = {
-				holder_scope = {
-					save_event_target_as = crusade_pope
+            d_fraticelli = {
+                owner = {
                     character_event = { id = HFP.41143 }
                 }
             }
         }
-		# Prepare second round of angry letters
-		event_target:crusade_pope = {
-			if = { # Delay event if the target is far far away
-				limit = {
-					any_war = {
-						using_cb = new_crusade
-
-						war_participation = {
-							who = PREV
-							score <= 0.001
-						}
-
-						defender = {
-							distance = {
-								who = PREVPREV
-								distance >= 800
-							}
-						}
-					}
-				}
-
-				event_target:pulse_province = {
-					province_event = {
-						id = HFP.41145
-						years = 2
-						random = 180
-					}
-				}
-			}
-			else = {
-				event_target:pulse_province = {
-					province_event = {
-						id = HFP.41145
-						years = 1
-						random = 180
-					}
-				}
-			}
-		}
+        if = {
+            limit = {
+                k_sevillian_pope = {
+                    owner = {
+                        any_war = {
+                            using_cb = new_crusade
+                        }
+                    }
+                }
+            }
+            k_sevillian_pope = {
+                owner = {
+                    character_event = { id = HFP.41143 }
+                }
+            }
+        }	
+        if = {
+            limit = {
+                k_jury_god = {
+                    owner = {
+                        any_war = {
+                            using_cb = new_crusade
+                        }
+                    }
+                }
+            }
+            k_jury_god = {
+                owner = {
+                    character_event = { id = HFP.41143 }
+                }
+            }
+        }
+        if = {
+            limit = {
+                k_calvinist = {
+                    owner = {
+                        any_war = {
+                            using_cb = new_crusade
+                        }
+                    }
+                }
+            }
+            k_calvinist = {
+                owner = {
+                    character_event = { id = HFP.41143 }
+                }
+            }
+        }
+        if = {
+            limit = {
+                k_ecclesiarchy = {
+                    owner = {
+                        any_war = {
+                            using_cb = new_crusade
+                        }
+                    }
+                }
+            }
+            k_ecclesiarchy = {
+                owner = {
+                    character_event = { id = HFP.41143 }
+                }
+            }
+        }
+        if = { #Delay event if the target is far far away
+            limit = {
+                any_war = {
+                    using_cb = new_crusade
+                    war_participation = {
+                        who = PREV
+                        score <= 0.001
+                    }
+                    defender = {
+                        distance = { who = PREVPREV distance = 800 }
+                    }
+                }
+            }
+            province_event = { id = HFP.41145 days = 730 random = 180 }
+        }
+        else = {
+            province_event = { id = HFP.41145 days = 365 random = 180 }
+        }
     }
 }
 
@@ -6420,6 +6581,7 @@ character_event = {
 letter_event = {
     id = HFP.41144
     desc = EVTDESC_HFP_41144
+    picture = GFX_evt_throne_room
     is_triggered_only = yes
     trigger = {
         check_if_not_fourth_crusade_trigger = yes
@@ -6440,8 +6602,8 @@ letter_event = {
                 modifier = {
                     factor = 0.5
                     OR = {
-                        tier = KING
-                        tier = EMPEROR
+                        TIER = KING
+                        TIER = EMPEROR
                     }
                 }
             }
@@ -6593,38 +6755,6 @@ province_event = {
                 }
             }
         }	
-        if = {
-            limit = {
-                k_katoliko = {
-                    owner = {
-                        any_war = {
-                            using_cb = new_crusade
-                        }
-                    }
-                }
-            }
-            k_katoliko = {
-                owner = {
-                    character_event = { id = HFP.41146 }
-                }
-            }
-        }	
-        if = {
-            limit = {
-                k_aglipayan = {
-                    owner = {
-                        any_war = {
-                            using_cb = new_crusade
-                        }
-                    }
-                }
-            }
-            k_aglipayan = {
-                owner = {
-                    character_event = { id = HFP.41146 }
-                }
-            }
-        }	
     }
 }
 
@@ -6658,6 +6788,7 @@ character_event = {
 letter_event = {
     id = HFP.41147
     desc = EVTDESC_HFP_41147
+    picture = GFX_evt_throne_room
     is_triggered_only = yes
 
     trigger = {
