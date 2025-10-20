@@ -2697,6 +2697,141 @@ targeted_decisions = {
 			}
 		}
 	}
+	
+	release_vassal_as_satellite = {
+		only_playable = yes
+		filter = vassals
+		ai_target_filter = vassals
+		ai_check_interval = 36
+	    diplomacy_icon = GFX_satellite_icon
+
+		from_potential = {
+			is_playable = yes
+			independent = yes
+			real_tier = emperor
+			NOT = {
+				government = mandala_government
+			}
+		}
+	
+		potential = {
+			NOT = { character = FROM }
+			liege = { character = FROM }
+			higher_tier_than = count
+			OR = {
+				AND = {
+					ai = yes
+					NOT = { any_dejure_liege = FROM }
+				}
+			}
+		}
+		allow = {
+			FROM = {
+				OR = {
+					AND = {
+						ai = no
+						NOT = {
+							government = mandala_government
+						}
+						TECH_MAJESTY = 3
+						TECH_RECRUITMENT = 3
+						prestige = 750
+						PREV = {
+							OR = {
+								stewardship = 10
+								diplomacy = 10
+								learning = 10
+							}
+						}
+						real_tier = emperor
+					}
+					AND = {
+						ai = yes
+						NOT = {
+							government = mandala_government
+						}
+						ROOT = {
+							NOR ={
+								de_jure_vassal_or_below = FROM
+								culture = FROM
+							}
+						}
+						ROOT = {
+							NOT = { culture_group = FROM }
+						}
+						PREV = {
+							OR = {
+								martial = 10
+								diplomacy = 10
+								learning = 10
+							}
+						}
+						real_tier = emperor
+						TECH_MAJESTY = 4
+						TECH_RECRUITMENT = 4
+						prestige = 750
+						NOT = { government = confederation_government }
+					}
+				}
+			}
+		}
+		effect = {
+			hidden_tooltip = { set_defacto_liege = THIS }
+			FROM = {
+				make_tributary = { 
+					who = PREV
+					tributary_type = satillite
+				}
+				prestige = -750
+			}
+			opinion = { modifier = opinion_released_tributary who = FROM }
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = { 
+				factor = 0.1
+			}
+			modifier = {
+				factor = 0.25
+				FROM = {
+					NOR = {
+						trait = kind
+						trait = charitable
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				de_jure_liege_or_above = FROM
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					trait = greedy
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					trait = envious
+				}
+			}
+			modifier = {
+				factor = 1.25
+				FROM = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 1.25
+				FROM = {
+					trait = humble
+				}
+			}
+		}
+	}
 	release_vassal_as_tributary = {
 		only_playable = yes
 		filter = vassals
