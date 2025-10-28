@@ -179,6 +179,18 @@ character_event = {
 	portrait = event_target:target_ruler
 
 	is_triggered_only = yes
+	
+	trigger = {
+        is_member_of_any_warrior_lodge_trigger = yes
+        NOT = { is_inaccessible_trigger = yes }
+
+        #There has to be at least two members at rank 4.
+        any_society_member = {
+            society_rank == 4
+            same_society_as = ROOT
+            count = 2
+        }
+    }
 
 	immediate = {
 		# event_targets set here:
@@ -203,173 +215,151 @@ character_event = {
 			}
 		}
 
-		# select target realm...
-		any_independent_ruler = {
-			limit = {
-				NOT = { religion_group = ROOT }
-				capital_scope = {
-					distance = {
-						who = ROOT
-						value = 1000
-					}
-				}
-			}
-
-			score_value = { # Prioritizes selecting some Emperor, if it can...
-				value = 10
-
-				title_tier_increase_score = yes
-
-				mult_modifier = {
-					factor = 0.01
-					is_nomadic = yes
-				}
-			}
-
-			save_event_target_as = target_ruler
-
-			primary_title = {
-				save_event_target_as = target_title
-			}
-		}
-
-		save_persistent_event_target = { # also saves the same as a persistent target, for safety (on_death)
-			name = target_title
-			scope = event_target:target_title
-		}
+		#select target realm...
+        any_independent_ruler = {
+            limit = {
+                NOT = { religion_group = ROOT }
+                distance = { where = event_target:home_capital distance < 1000 }
+            }
+            score_value = { #Prioritizes selecting some Emperor, if it can...
+                value = 10
+                title_tier_increase_score = yes
+            }
+            score_value = { #Prioritizes selecting some Emperor, if it can...
+                value = 10
+                nomad_reduction_score = yes
+            }
+            save_event_target_as = target_ruler
+            primary_title = {
+                save_event_target_as = target_title
+            }
+        }
+        save_persistent_event_target = { #also saves the same as a persistent target, for safety (on_death)
+            name = target_title
+            scope = event_target:target_title
+        }
 
 		save_event_target_as = original_hero
 		set_character_flag = call_to_legend_active
-
 		hidden_effect = {
-			society = { # Find and save your fellow heroes (can be other players)...
-				random_society_member = {
-					limit = {
-						society_rank == 4
-						NOT = { character = ROOT }
-					}
+            society = { #Find and save your fellow heroes (can be other players)...
+                random_society_member = {
+                    limit = {
+                        society_rank == 4
+                        NOT = { character = ROOT }
+                    }
+                    set_character_flag = do_not_disturb
+                    set_character_flag = call_to_legend_active
+                    save_event_target_as = fellow_hero_1
+                }
+                random_society_member = {
+                    limit = {
+                        society_rank == 4
+                        NOT = { character = ROOT }
+                        NOT = { character = event_target:fellow_hero_1 }
+                    }
+                    set_character_flag = do_not_disturb
+                    set_character_flag = call_to_legend_active
+                    save_event_target_as = fellow_hero_2
+                }
+                random_society_member = {
+                    limit = {
+                        society_rank == 4
+                        NOT = { character = ROOT }
+                        NOT = { character = event_target:fellow_hero_1 }
+                        NOT = { character = event_target:fellow_hero_2 }
+                    }
+                    set_character_flag = do_not_disturb
+                    set_character_flag = call_to_legend_active
+                    save_event_target_as = fellow_hero_3
+                }
+            }
+        }
+    }
 
-					set_character_flag = do_not_disturb
-					set_character_flag = call_to_legend_active
-					save_event_target_as = fellow_hero_1
-				}
+	option = {      
+        name = EVTOPTA_HF_12001 #Start the whole thing
 
-				random_society_member = {
-					limit = {
-						society_rank == 4
+        show_portrait = event_target:province_holder
 
-						NOR = {
-							character = ROOT
-							character = event_target:fellow_hero_1
-						}
-					}
+        hidden_effect = {
+            set_variable = {
+                which = legendary_event_progress
+                value = 0
+            }
+        }
+        hidden_effect = { add_1_point_to_legendary_progress_effect = yes }
+        evaluate_legendary_progress_effect = yes
 
-					set_character_flag = do_not_disturb
-					set_character_flag = call_to_legend_active
-					save_event_target_as = fellow_hero_2
-				}
+        hidden_effect = {
+            #Other heroes, they get the choice to back out...
+            any_society_member = {
+                limit = {
+                    same_society_as = ROOT
+                    has_character_flag = call_to_legend_active
+                    NOT = { character = ROOT }
+                }
+                character_event = { id = HF.12002 } # Give them the choice to back out...
+            }
+            any_society_member = {
+                limit = {
+                    same_society_as = ROOT
+                    NOT = { has_character_flag = call_to_legend_active }
+                    NOT = { character = ROOT }
+                }
+                character_event = { id = HF.12011 } # Let other society members know what is going on
+            }
+        }
 
-				random_society_member = {
-					limit = {
-						society_rank == 4
-
-						NOR = {
-							character = ROOT
-							character = event_target:fellow_hero_1
-							character = event_target:fellow_hero_2
-						}
-					}
-
-					set_character_flag = do_not_disturb
-					set_character_flag = call_to_legend_active
-					save_event_target_as = fellow_hero_3
-				}
-			}
-		}
-	}
-
-	option = {
-		name = EVTOPTA_HF_12001 # Start the whole thing
-		show_portrait = event_target:target_ruler
-
-		hidden_effect = {
-			set_variable = {
-				which = legendary_event_progress
-				value = 0
-			}
-		}
-
-		add_1_point_to_legendary_progress_effect = yes
-		evaluate_legendary_progress_effect = yes
-
-		# Other heroes, they get the choice to back out...
-		society = {
-			any_society_member = {
-				limit = {
-					has_character_flag = call_to_legend_active
-					NOT = { character = ROOT }
-				}
-
-				if = {
-					limit = { has_character_flag = call_to_legend_active }
-					character_event = { id = HF.12002 } # Give them the choice to back out...
-				}
-				else = {
-					character_event = { id = HF.12011 } # Let other society members know what is going on
-				}
-			}
-		}
-
-		custom_tooltip = { text = EVTOPTA_HF_12001_TT }
-		character_event = { id = HF.12003 days = 5 } # Hidden tombola...
-	}
+        custom_tooltip = { text = EVTOPTA_HF_12001_TT }        
+        hidden_effect = { character_event = { id = HF.12003 days = 5 } } #Hidden tombola...
+    }
 
 	option = { # (AI's don't get this option)
-		name = EVTOPTB_HF_12001 # I'd rather not start anything...
+        name = EVTOPTB_HF_12001 #I'd rather not start anything...
+        set_character_flag = rank_up_blocked
+        clr_character_flag = call_to_legend_active
+        society_rank_down = 1
+        custom_tooltip = { text = EVTOPTB_HF_12002_TT }
 
-		trigger = { ai = no } # Because the ai will never refuse...
+        if = {
+            limit = {
+                # If there are no adventures left (because you're in a weird MP where everyone is in this lodge and at rank 4 and you all decided to turn this epic chain down for some reason)
+                NOT = {
+                    any_society_member = {
+                        society_rank == 4
+                        same_society_as = ROOT
+                        has_character_flag = call_to_legend_active
+                        NOT = { character = ROOT }
+                    }
+                }
+            }
+            stop_society_progress = yes # To prevent things from breaking
+        }
 
-		set_character_flag = rank_up_blocked
-		clr_character_flag = call_to_legend_active
-		society_rank_down = 1
-		custom_tooltip = { text = EVTOPTB_HF_12002_TT }
+        hidden_effect = {
+            if = {
+                limit = { is_society_grandmaster = yes }
+                set_society_grandmaster = no
+            }
+        }
 
-		if = {
-			limit = {
-				# If there are no adventurers left (because you're in a weird MP where everyone is in this lodge and at rank 4 and you all decided to turn this epic chain down for some reason)
-				NOT = {
-					society = {
-						any_society_member = {
-							society_rank == 4
-							has_character_flag = call_to_legend_active
-							NOT = { character = ROOT }
-						}
-					}
-				}
-			}
+        hidden_effect = {
+            #Other heroes get the choice to continue without you...
+            any_society_member = {
+                limit = {
+                    same_society_as = ROOT
+                    has_character_flag = call_to_legend_active
+                    NOT = { character = ROOT }
+                }
+                character_event = { id = HF.12002 } # Give them the choice to back out...
+            }
+        }
 
-			stop_society_progress = yes # To prevent things from breaking
-		}
-
-		hidden_effect = {
-			if = {
-				limit = { is_society_grandmaster = yes }
-				set_society_grandmaster = no
-			}
-		}
-
-		# Other heroes get the choice to continue without you...
-		society = {
-			any_society_member = {
-				limit = {
-					has_character_flag = call_to_legend_active
-					NOT = { character = ROOT }
-				}
-
-				character_event = { id = HF.12002 } # Give them the choice to back out...
-			}
-		}
-	}
+        trigger = {
+            ai = no #Because the ai will never refuse...
+        }
+    }
 }
 
 # Potential follow-up, for OTHER HEROES only (if there were more heroes at rank 4).
@@ -383,79 +373,70 @@ character_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		capital_scope = { save_event_target_as = home_capital }
-	#	save_event_target_as = player_hero
-	}
+        capital_scope = { save_event_target_as = home_capital }
+        save_event_target_as = player_hero
+    }
 
-	option = {
-		name = EVTOPTA_HF_12002 # Let's go!
-		show_portrait = event_target:target_ruler
+    option = {      
+        name = EVTOPTA_HF_12002 #Let's go!
+        custom_tooltip = { text = EVTOPTA_HF_12002_TT }
+        hidden_effect = {
+	        set_variable = {
+	            which = legendary_event_progress
+	            value = 0
+	        }
+        }
+        add_2_points_to_legendary_progress_effect = yes
+        evaluate_legendary_progress_effect = yes
+        show_portrait = event_target:target_ruler
+        character_event = { id = HF.12003 days = 5 } #Send hidden tombola on self...
 
-		custom_tooltip = { text = EVTOPTA_HF_12002_TT }
+        hidden_effect = { # Lower-ranking player members are notified...
+            any_society_member = {
+                limit = {
+                    ai = no
+                    same_society_as = ROOT
+                    NOT = { has_character_flag = call_to_legend_active }
+                    NOT = { character = ROOT }
+                }
+                character_event = { id = HF.12011 } # Let other society members know what is going on
+            }
+        }
+    }
+    option = {
+        name = EVTOPTB_HF_12001 #I'd rather stay here.
+        custom_tooltip = { text = EVTOPTB_HF_12002_TT }
+        clr_character_flag = do_not_disturb
+        clr_character_flag = call_to_legend_active
+        set_character_flag = rank_up_blocked
+        society_rank_down = 1
 
-		hidden_effect = {
-			set_variable = {
-				which = legendary_event_progress
-				value = 0
-			}
-		}
+        hidden_effect = {
+            if = {
+                limit = { is_society_grandmaster = yes }
+                set_society_grandmaster = no
+            }
+        }
 
-		add_2_points_to_legendary_progress_effect = yes
-		evaluate_legendary_progress_effect = yes
-
-		character_event = { id = HF.12003 days = 5 } # Send hidden tombola on self...
-
-		any_player = { # Lower-ranking player members are notified...
-			limit = {
-				same_society_as = ROOT
-
-				NOR = {
-					has_character_flag = call_to_legend_active
-					character = ROOT
-				}
-			}
-
-			character_event = { id = HF.12011 } # Let other society members know what is going on
-		}
-	}
-
-	option = {
-		name = EVTOPTB_HF_12001 # I'd rather stay here.
-
-		trigger = { ai = no }
-
-		custom_tooltip = { text = EVTOPTB_HF_12002_TT }
-
-		clr_character_flag = do_not_disturb
-		clr_character_flag = call_to_legend_active
-		set_character_flag = rank_up_blocked
-		society_rank_down = 1
-
-		hidden_effect = {
-			if = {
-				limit = { is_society_grandmaster = yes }
-				set_society_grandmaster = no
-			}
-		}
-
-		if = {
-			limit = {
-				# If there are no adventurers left (because you're in a weird MP where everyone is in this lodge and at rank 4 and you all decided to turn this epic chain down for some reason)
-				NOT = {
-					society = {
-						any_society_member = {
-							society_rank == 4
-							has_character_flag = call_to_legend_active
-							NOT = { character = ROOT }
-						}
-					}
-				}
-			}
-
-			stop_society_progress = yes # To prevent things from breaking
-		}
-
-	}
+        if = {
+            limit = {
+                # If there are no adventures left (because you're in a weird MP where everyone is in this lodge and at rank 4 and you all decided to turn this epic chain down for some reason)
+                NOT = {
+                    any_society_member = {
+                        society_rank == 4
+                        same_society_as = ROOT
+                        has_character_flag = call_to_legend_active
+                        NOT = { character = ROOT }
+                    }
+                }
+            }
+            stop_society_progress = yes # To prevent things from breaking
+        }
+        
+        trigger = {
+            ai = no
+        }
+    }
 }
 
 # Other society members are informed of the journey starting...
@@ -1114,31 +1095,29 @@ character_event = {
 #					}
 #				}
 #			}
-#			100 = { # Means people remember a ruler once decapitated an enemy here...
-#				trigger = {
-#					event_target:home_capital = {
-#						persistent_event_target:local_fearsome_commander_target = { always = yes }
-#					}
-#				}
-				if = { # Means YOU did it and text should reflect that.
-					limit = {
-						event_target:home_capital = {
-							persistent_event_target:local_fearsome_commander_target = { character = ROOT }
-						}
-					}
-
-					set_character_flag = i_was_fearsome_commander
-				}
-				else = {
-					set_character_flag = remember_fearsome_commander
-
-					event_target:home_capital = {
-						persistent_event_target:local_fearsome_commander_target = { save_event_target_as = target }
-					}
-				}
-#			}
-#		}
-	}
+            100 = { #Means people remember a ruler once decapitated an enemy here...
+                trigger = {
+                    event_target:home_capital = { 
+                        persistent_event_target:local_fearsome_commander_target = { always = yes }
+                    }
+                }
+                if = { #Means YOU did it and text should reflect that.
+                    limit = {
+                        event_target:home_capital = { 
+                            persistent_event_target:local_fearsome_commander_target = { character = ROOT }
+                        }
+                    }
+                    set_character_flag = i_was_fearsome_commander
+                }
+                else = {
+                    set_character_flag = remember_fearsome_commander
+                    event_target:home_capital = { 
+                        persistent_event_target:local_fearsome_commander_target = { save_event_target_as = target }
+                    }
+                }
+            }
+        }
+    }
 
 	option = {
 		name = EVTOPTA_HF_12006 # Yes, hold a feast in their name
@@ -1523,593 +1502,585 @@ character_event = {
 
 ### A DUEL!
 character_event = {
-	id = HF.12010
-	title = legendary_raid_title
-	picture = GFX_evt_bandits
-	border = GFX_event_normal_frame_war
-	portrait = event_target:my_duel_target
-
-	is_triggered_only = yes
-
-	immediate = {
-		hidden_effect = {
-			# Find someone to talk to...
-			save_fellow_member_effect = yes
-
-			# Find someone to duel...
-			event_target:target_ruler = {
-				if = { # First fight, just find *someone*...
-					limit = {
-						ROOT = {
-							NOT = {
-								any_kill_list_character = {
-									count >= 3
-									death_reason = death_legendary_win_duel
-								}
-							}
-						}
-					}
-
-					if = { # if there is anyone who fits the base bill...
-						limit = { # base requirements
-							any_realm_character = {
-								ai = yes
-								is_adult = yes
-								is_inaccessible_or_incapable_trigger = no
-
-								NOR = {
-									same_society_as = ROOT
-									has_character_modifier = bedridden_illness
-									has_character_modifier = severe_illness
-									has_character_flag = fought_duel_against@ROOT
-									character = event_target:my_duel_target # Can't have previously dueled...
-									character = event_target:target_ruler # Should not be the ruler themselves...
-								}
-							}
-						}
-
-						any_realm_character = {
-							limit = { # same base requirements
-								ai = yes
-								is_adult = yes
-								is_inaccessible_or_incapable_trigger = no
-
-								NOR = {
-									same_society_as = ROOT
-									has_character_modifier = bedridden_illness
-									has_character_modifier = severe_illness
-									has_character_flag = fought_duel_against@ROOT
-									character = event_target:my_duel_target # Can't have previously dueled...
-									character = event_target:target_ruler # Should not be the ruler themselves...
-								}
-							}
-
-							score_value = { # Prioritizes selecting a good warrior, if it can...
-								value = 10
-								good_soldier_outcome_score = yes # Prioritizes selecting a good warrior, if it can...
-
-								mult_modifier = { # tries to make sure you fight someone the same gender as you...
-									factor = 1.5
-									same_sex = ROOT
-								}
-							}
-
-							save_event_target_as = my_duel_target
-							set_character_flag = fought_duel_against@ROOT
-
-							# REQUIRED event targets for setting up duel evaluation!
-							save_event_target_as = combatant_2 # the target of the duel...
-							ROOT = { save_event_target_as = combatant_1 } # the person issuing the duel...
-						}
-					}
-					else = { # There was no one available, so we spawn a character instead...
-						# Spawn a character
-						spawn_great_commander_effect = yes
-
-						event_target:invited_character = {
-							upgrade_education_effect = yes
-							add_one_duel_experience_modifier = yes
-							save_event_target_as = my_duel_target
-							set_character_flag = fought_duel_against@ROOT
-
-							# REQUIRED event targets for setting up duel evaluation!
-							save_event_target_as = combatant_2 # the target of the duel...
-							ROOT = { save_event_target_as = combatant_1 } # the person issuing the duel...
-						}
-					}
-				}
-
-				else = { # You have killed X amount of characters already...
-					ROOT = { randomize_XYZ_desc_flag_effect = yes }
-
-					# Spawn different characters, depending X/Y/Z-flag...
-					if = {
-						limit = { ROOT = { has_character_flag = WL_desc_X } } # Old man/woman
-						spawn_old_duelist_effect = yes
-						# event_target:invited_character = { add_age = 50 health = 2 } # For future reference: additional functionality would be cool
-					}
-					else_if = {
-						limit = { ROOT = { has_character_flag = WL_desc_Y } } # Giant
-						spawn_giant_duelist_effect = yes
-					}
-					else_if = {
-						limit = { ROOT = { has_character_flag = WL_desc_Z } } # Actual bear
-						spawn_creature_champion_effect = yes
-					}
-
-					event_target:invited_character = {
-						save_event_target_as = my_duel_target
-						set_character_flag = fought_duel_against@ROOT
-
-						# REQUIRED event targets for setting up duel evaluation!
-						save_event_target_as = combatant_2 # the target of the duel...
-					}
-
-					ROOT = { save_event_target_as = combatant_1 } # the person issuing the duel...
-				}
-
-				event_target:my_duel_target = {
-					if = {
-						limit = {
-							combat_rating_diff = { who = ROOT value <= -85 } # if ROOT is 85 better
-						}
-
-						remove_trait = erudite
-						remove_trait = infirm
-						remove_trait = mangled
-						remove_trait = inbred
-						remove_trait = blinded
-						remove_trait = incapable
-						remove_trait = maimed
-						remove_trait = wounded
-						remove_trait = severely_injured
-						remove_disease_trait_effect = yes
-						clear_disease_level_effect = yes
-						remove_disease_flags_effect = yes
-						remove_all_negative_congenital_traits_effect = yes
-						add_trait = strong
-						add_trait = wroth
-						clear_education_trait = yes
-						remove_lifestyle_trait_effect = yes
-						add_trait = brilliant_strategist
-						add_trait = duelist
-
-						while = {
-							count = 8
-							add_one_duel_experience_modifier = yes
-						}
-					}
-					else_if = {
-						limit = {
-							combat_rating_diff = { who = ROOT value <= -65 } # if ROOT is 65 better
-						}
-
-						remove_trait = erudite
-						remove_trait = infirm
-						remove_trait = mangled
-						remove_trait = inbred
-						remove_trait = blinded
-						remove_trait = incapable
-						remove_trait = maimed
-						remove_trait = wounded
-						remove_trait = severely_injured
-						remove_disease_trait_effect = yes
-						clear_disease_level_effect = yes
-						remove_disease_flags_effect = yes
-						clear_education_trait = yes
-						remove_lifestyle_trait_effect = yes
-
-						random_list = {
-							50 = { add_trait = elusive_shadow }
-							50 = { add_trait = brilliant_strategist }
-						}
-
-						random_list = {
-							50 = { add_trait = hunter }
-							50 = { add_trait = duelist }
-						}
-
-						random_list = {
-							20 = { add_trait = robust }
-							10 = { add_trait = strong }
-							10 = { add_trait = genius }
-							 5 = { health = 1 }
-						}
-
-						while = {
-							count = 3
-							add_one_duel_experience_modifier = yes
-						}
-					}
-					else_if = {
-						limit = {
-							combat_rating_diff = { who = ROOT value <= -50 } # if ROOT is 50 better
-						}
-
-						remove_trait = erudite
-						remove_trait = infirm
-						remove_trait = mangled
-						remove_trait = inbred
-						remove_trait = blinded
-						remove_trait = incapable
-						remove_trait = maimed
-						remove_trait = wounded
-						remove_trait = severely_injured
-						remove_disease_trait_effect = yes
-						clear_disease_level_effect = yes
-						remove_disease_flags_effect = yes
-						clear_education_trait = yes
-						remove_lifestyle_trait_effect = yes
-
-						random_list = {
-							50 = { add_trait = elusive_shadow }
-							50 = { add_trait = brilliant_strategist }
-						}
-
-						random_list = {
-							50 = { add_trait = hunter }
-							50 = { add_trait = duelist }
-						}
-
-						while = {
-							count = 3
-							add_one_duel_experience_modifier = yes
-						}
-					}
-					else_if = {
-						limit = {
-							combat_rating_diff = { who = ROOT value <= -35 } # if ROOT is 35 better
-						}
-
-						remove_trait = erudite
-						remove_disease_trait_effect = yes
-						clear_disease_level_effect = yes
-						remove_disease_flags_effect = yes
-
-						if = {
-							limit = { has_severe_disability_trigger = yes }
-							remove_trait = infirm
-							remove_trait = mangled
-							remove_trait = inbred
-							remove_trait = blinded
-							remove_trait = incapable
-							remove_trait = maimed
-						}
-						else_if = {
-							limit = { has_injury_trigger = yes }
-							remove_trait = wounded
-							remove_trait = severely_injured
-						}
-						else = {
-							clear_education_trait = yes
-							remove_lifestyle_trait_effect = yes
-
-							random_list = {
-								50 = {
-									add_trait = elusive_shadow
-
-									random_list = {
-										50 = { add_trait = impaler }
-										50 = { add_trait = schemer }
-									}
-								}
-								50 = {
-									add_trait = brilliant_strategist
-
-									random_list = {
-										50 = { add_trait = hunter }
-										50 = { add_trait = duelist }
-									}
-								}
-							}
-						}
-
-						add_one_duel_experience_modifier = yes
-						add_one_duel_experience_modifier = yes
-					}
-					else_if = {
-						limit = {
-							combat_rating_diff = { who = ROOT value <= -20 } # if ROOT is 20 better
-						}
-
-						remove_trait = erudite
-						remove_lifestyle_trait_effect = yes
-
-						random_list = {
-							50 = { add_trait = hunter }
-							50 = { add_trait = duelist }
-						}
-
-						if = {
-							limit = { NOT = { trait = brave } }
-							add_trait = brave
-						}
-						else_if = {
-							limit = { has_severe_disability_trigger = yes }
-							remove_trait = infirm
-							remove_trait = mangled
-							remove_trait = inbred
-							remove_trait = blinded
-							remove_trait = incapable
-							remove_trait = maimed
-						}
-						else_if = {
-							limit = { has_injury_trigger = yes }
-							remove_trait = wounded
-							remove_trait = severely_injured
-						}
-						else_if = {
-							limit = { NOT = { trait = wroth } }
-							add_trait = wroth
-						}
-						else_if = {
-							limit = { NOT = { trait = cruel } }
-							add_trait = cruel
-						}
-					}
-					else_if = {
-						limit = {
-							combat_rating_diff = { who = PREV value <= -10 } # if ROOT is 10 better
-						}
-
-						remove_trait = erudite
-
-						if = {
-							limit = { NOT = { trait = brave } }
-							add_trait = brave
-						}
-						else_if = {
-							limit = { NOT = { trait = wroth } }
-							add_trait = wroth
-						}
-						else_if = {
-							limit = { NOT = { trait = cruel } }
-							add_trait = cruel
-						}
-						else_if = {
-							limit = { has_severe_disability_trigger = yes }
-							remove_trait = infirm
-							remove_trait = mangled
-							remove_trait = inbred
-							remove_trait = blinded
-							remove_trait = incapable
-							remove_trait = maimed
-						}
-						else_if = {
-							limit = { has_injury_trigger = yes }
-							remove_trait = wounded
-							remove_trait = severely_injured
-						}
-						else = {
-							add_trait = strong
-						}
-					}
-				}
-			}
-
-			if = { # Means you have not reached the "boss" fight
-				limit = {
-					NOR = {
-						has_character_flag = WL_desc_X
-						has_character_flag = WL_desc_Y
-						has_character_flag = WL_desc_Z
-					}
-				}
-
-				randomize_ABCDEF_desc_flag_effect = yes # Get a random desc
-			}
-		}
-	}
-
-
-	desc = {
-		text = EVTDESC_HF_12010_A # Someone is hunting! Aha!
-		picture = GFX_evt_bandits
-		trigger = { has_character_flag = WL_desc_A }
-	}
-	desc = {
-		text = EVTDESC_HF_12010_B # Outside the campfire, someone is tending to nature's call
-		picture = GFX_evt_carriage
-		trigger = { has_character_flag = WL_desc_B }
-	}
-	desc = {
-		text = EVTDESC_HF_12010_C # In the streets of a village, accosted by locals
-		picture = GFX_evt_market
-		trigger = { has_character_flag = WL_desc_C }
-	}
-	desc = {
-		text = EVTDESC_HF_12010_D # A moonlit night, listening to companion snoring, sneaky assassin?
-		picture = GFX_evt_mysterious_forest
-		trigger = { has_character_flag = WL_desc_D }
-	}
-	desc = {
-		text = EVTDESC_HF_12010_E # Urchin tips you off, pointing you to finest warrior around
-		picture = GFX_evt_market
-		trigger = { has_character_flag = WL_desc_E }
-	}
-	# "Boss" fights...
-	desc = {
-		text = EVTDESC_HF_12010_X # Boss fight nr 1 (Old Fencer)
-		picture = GFX_evt_outside_tavern_hf
-		trigger = { has_character_flag = WL_desc_X }
-	}
-	desc = {
-		text = EVTDESC_HF_12010_Y # Boss fight nr 2 (Giant)
-		picture = GFX_evt_mounted_combat_day_hf
-		trigger = { has_character_flag = WL_desc_Y }
-	}
-	desc = {
-		text = EVTDESC_HF_12010_Z # Boss fight nr 3 (Bear)
-		picture = GFX_evt_sway_hf
-		trigger = { has_character_flag = WL_desc_Z }
-	}
-
-	option = { # I shall challenge them to a duel!
-		name = {
-			text = EVTOPTA_HF_12010_A # A challenge! Yes, you! Let's fight!
-			trigger = { has_character_flag = WL_desc_A }
-		}
-		name = {
-			text = EVTOPTA_HF_12010_B # Excellent! I will duel this one!
-			trigger = { has_character_flag = WL_desc_B }
-		}
-		name = {
-			text = EVTOPTA_HF_12010_C # You wanna say that to me face? Let's fight!
-			trigger = { has_character_flag = WL_desc_C }
-		}
-		name = {
-			text = EVTOPTA_HF_12010_D # You come armed, eh...?
-			trigger = { has_character_flag = WL_desc_D }
-		}
-		name = {
-			text = EVTOPTA_HF_12010_E # Aah, such fortune!
-			trigger = { has_character_flag = WL_desc_E }
-		}
-		name = {
-			text = EVTOPTA_HF_12010_X # I won't go easy on you
-			trigger = { has_character_flag = WL_desc_X }
-		}
-		name = {
-			text = EVTOPTA_HF_12010_Y # Finally, a challenge!
-			trigger = { has_character_flag = WL_desc_Y }
-		}
-		name = {
-			text = EVTOPTA_HF_12010_Z # I'll duel anyone sent at me!
-			trigger = { has_character_flag = WL_desc_Z }
-		}
-
-		trigger_switch = { # To set/display effects properly...
-			on_trigger = has_character_flag
-
-			WL_desc_A = { custom_tooltip = { text = EVTOPTA_HF_12010_A_TT } }
-			# WL_desc_B = { custom_tooltip = { text = EVTOPTA_HF_12010_B_TT } }
-			# WL_desc_C = { custom_tooltip = { text = EVTOPTA_HF_12010_C_TT } }
-			WL_desc_D = { custom_tooltip = { text = EVTOPTA_HF_12010_D_TT } }
-			WL_desc_E = { custom_tooltip = { text = EVTOPTA_HF_12010_E_TT } }
-			WL_desc_X = { custom_tooltip = { text = EVTOPTA_HF_12010_X_TT } }
-			WL_desc_Y = { custom_tooltip = { text = EVTOPTA_HF_12010_Y_TT } }
-			WL_desc_Z = { custom_tooltip = { text = EVTOPTA_HF_12010_Z_TT } }
-		}
-
-		show_portrait = event_target:my_duel_target
-		warrior_lodge_legendary_duel_someone_effect = yes
-		add_2_points_to_legendary_progress_effect = yes # Great progress on journey!
-
-		hidden_effect = {
-			if = {
-				limit = { has_character_flag = WL_desc_Z }
-				event_target:combatant_2 = {
-					set_graphical_culture = bear
-				}
-			}
-		}
-	}
-
-	option = { # You somehow avoid fighting...
-		name = {
-			text = EVTOPTB_HF_12010_A # This one looks too big for me
-			trigger = { has_character_flag = WL_desc_A }
-		}
-		name = {
-			text = EVTOPTB_HF_12010_B
-			trigger = { has_character_flag = WL_desc_B }
-		}
-		name = {
-			text = EVTOPTB_HF_12010_C
-			trigger = { has_character_flag = WL_desc_C }
-		}
-		name = {
-			text = EVTOPTB_HF_12010_D # Guys! Wake up! Help!
-			trigger = { has_character_flag = WL_desc_D }
-		}
-		name = {
-			text = EVTOPTB_HF_12010_E # On second thought, maybe this one is for you, [fellow_member]?
-			trigger = { has_character_flag = WL_desc_E }
-		}
-
-		trigger = {
-			ai = no
-
-			NOR = { # This is not a boss fight...
-				has_character_flag = WL_desc_X
-				has_character_flag = WL_desc_Y
-				has_character_flag = WL_desc_Z
-			}
-		}
-
-		trigger_switch = { # To set/display effects properly...
-			on_trigger = has_character_flag
-
-			WL_desc_A = { custom_tooltip = { text = EVTOPTB_HF_12010_A_TT } }
-			# WL_desc_B = { custom_tooltip = { text = EVTOPTB_HF_12010_B_TT } }
-			# WL_desc_C = { custom_tooltip = { text = EVTOPTB_HF_12010_C_TT } }
-			WL_desc_D = {
-				custom_tooltip = { text = EVTOPTB_HF_12010_D_TT }
-				show_portrait = event_target:fellow_member
-
-				add_character_modifier = {
-					name = black_eye
-					months = 10
-				}
-			}
-			WL_desc_E = {
-				custom_tooltip = { text = EVTOPTB_HF_12010_E_TT }
-				show_portrait = event_target:fellow_member
-				add_trait_partially_silently_craven_effect = yes
-			}
-		}
-
-		prestige = -50
-		add_1_point_to_legendary_progress_effect = yes # Good progress on journey...
-		evaluate_legendary_progress_effect = yes
-		send_legendary_tombola_effect = yes # EDIT: actually *not* superfluous (otherwise fired from resolve_legendary_duel_effect, which only happens after actual duels)
-		clr_ABCDEF_desc_flag_effect = yes # to not leave any weird desc-flags behind for next time around...
-	}
-
-	option = { # This is getting too dangerous...
-		name = EVTOPTB_HF_12102
-
-		trigger = {
-			has_character_flag = call_to_legend_active
-			ai = no
-
-			OR = {
-				has_character_flag = WL_desc_X
-				has_character_flag = WL_desc_Y
-				has_character_flag = WL_desc_Z
-			}
-		}
-
-		custom_tooltip = { text = EVTOPTB_HF_12010_TT } # Journey is over for you, you return home in shame...
-
-		add_trait_fully_silently_craven_effect = yes
-		prestige = -500
-		clean_up_after_legendary_showdown_effect = yes
-		clr_XYZ_desc_flag_effect = yes
-		set_character_flag = failed_call_to_legend
-
-		if = {
-			limit = {
-				NOT = {
-					society = {
-						any_society_member = {
-							has_character_flag = call_to_legend_active
-							NOT = { character = ROOT }
-							prisoner = no
-							is_alive = yes
-							is_dying = no
-							is_incapable = no
-						}
-					}
-				}
-			}
-
-			custom_tooltip = {
-				text = EVTOPTC_HF_12103_TT
-				stop_society_progress = yes
-			}
-		}
-	}
+    id = HF.12010
+    title = legendary_raid_title
+    picture = GFX_evt_bandits
+    border = GFX_event_normal_frame_war
+    is_triggered_only = yes
+
+    portrait = event_target:my_duel_target
+
+
+    immediate = {
+
+        hidden_effect = {
+            #Find someone to talk to...
+            save_fellow_member_effect = yes
+            #Find someone to duel...
+            event_target:target_ruler = {
+                if = { # First fight, just find *someone*...
+                    limit = {
+                        ROOT = {
+                            NOT = {
+                                any_kill_list_character = {
+                                    count = 3
+                                    death_reason = death_legendary_win_duel
+                                }
+                            }
+                        }
+                    }
+                    if = { #if there is anyone who fits the base bill...
+                        limit = { #base requirements
+                            any_realm_character = {
+                                is_adult = yes
+                                NOT = { same_society_as = ROOT }
+                                is_inaccessible_or_incapable_trigger = no
+                                NOT = { has_character_modifier = bedridden_illness }
+                                NOT = { has_character_modifier = severe_illness }
+                                NOT = { has_character_flag = do_not_disturb }
+                                NOT = { has_character_flag = fought_duel_against@ROOT }
+                                NOT = { character = event_target:my_duel_target } #Can't have previously dueled...
+                                NOT = { character = event_target:target_ruler } #Should not be the ruler themselves...
+                                ai = yes
+                            }
+                        }
+                        any_realm_character = {
+                            limit = { #same base requirements
+                                is_adult = yes
+                                NOT = { same_society_as = ROOT }
+                                is_inaccessible_or_incapable_trigger = no
+                                NOT = { has_character_modifier = bedridden_illness }
+                                NOT = { has_character_modifier = severe_illness }
+                                NOT = { has_character_flag = do_not_disturb }
+                                NOT = { has_character_flag = fought_duel_against@ROOT }
+                                NOT = { character = event_target:my_duel_target } #Can't have previously dueled...
+                                NOT = { character = event_target:target_ruler } #Should not be the ruler themselves...
+                                ai = yes
+                            }
+                            score_value = { #Prioritizes selecting a good warrior, if it can...
+                                value = 10
+                                good_soldier_outcome_score = yes
+                            }
+                            score_value = { #tries to make sure you fight someone the same gender as you...
+                                value = 10
+                                same_gender_preference_score = yes
+                            }
+                            save_event_target_as = my_duel_target
+                            set_character_flag = fought_duel_against@ROOT
+                            
+                            #REQUIRED event targets for setting up duel evaluation!
+                            save_event_target_as = combatant_2 #the target of the duel...
+                            ROOT = { save_event_target_as = combatant_1 } #the person issuing the duel...
+                        }
+                    }
+                    else = { #There was no one available, so we spawn a character instead...
+                        # Spawn a character
+                        spawn_great_commander_effect = yes
+                        event_target:invited_character = {
+                            upgrade_education_effect = yes
+                            add_one_duel_experience_modifier = yes
+                            save_event_target_as = my_duel_target
+                            set_character_flag = fought_duel_against@ROOT
+                            
+                            #REQUIRED event targets for setting up duel evaluation!
+                            save_event_target_as = combatant_2 #the target of the duel...
+                            ROOT = { save_event_target_as = combatant_1 } #the person issuing the duel...
+                        }
+                    }
+                }
+
+                else = { #You have killed X amount of characters already...
+                    ROOT = {
+                        randomize_XYZ_desc_flag_effect = yes
+                    }
+
+                    #Spawn different characters, depending X/Y/Z-flag...
+                    if = {
+                        limit = { ROOT = { has_character_flag = WL_desc_X } } # Old man/woman
+                        spawn_old_duelist_effect = yes
+                        #event_target:invited_character = { add_age = 50 health = 2 } #For future reference: additional functionality would be cool
+                    }
+                    else_if = {
+                        limit = { ROOT = { has_character_flag = WL_desc_Y } } #Giant
+                        spawn_giant_duelist_effect = yes
+                    }
+                    else_if = {
+                        limit = { ROOT = { has_character_flag = WL_desc_Z } } # Actual bear
+                        spawn_creature_champion_effect = yes
+                    }
+                    
+                    event_target:invited_character = {
+                        save_event_target_as = my_duel_target
+                        set_character_flag = fought_duel_against@ROOT
+                        
+                        #REQUIRED event targets for setting up duel evaluation!
+                        save_event_target_as = combatant_2 #the target of the duel...
+                    }
+                    ROOT = { save_event_target_as = combatant_1 } #the person issuing the duel...
+                }
+
+                event_target:my_duel_target = {
+                    if = {
+                        limit = {
+                            ROOT = { combat_rating_diff = { who = PREV value = 85 } } # if ROOT is 85 better
+                        }
+                        remove_trait = erudite
+                        remove_disease_trait_effect = yes
+                        clear_disease_level_effect = yes
+                        remove_disease_flags_effect = yes
+                        remove_education_effect = yes
+                        add_trait = brilliant_strategist
+                        remove_lifestyle_trait_effect = yes
+                        add_trait = duelist
+                        remove_all_negative_congenital_traits_effect = yes
+                        add_trait = strong
+                        add_trait = wroth
+                        if = {
+                            limit = { has_severe_disability_trigger = yes }
+                            remove_trait = infirm
+                            remove_trait = mangled
+                            remove_trait = inbred
+                            remove_trait = blinded
+                            remove_trait = incapable
+                            remove_trait = maimed
+                        }
+                        if = {
+                            limit = { has_injury_trigger = yes }
+                            remove_trait = wounded
+                            remove_trait = severely_injured
+                        }
+                        add_one_duel_experience_modifier = yes
+                        add_one_duel_experience_modifier = yes
+                        add_one_duel_experience_modifier = yes
+                        add_one_duel_experience_modifier = yes
+                        add_one_duel_experience_modifier = yes
+                        add_one_duel_experience_modifier = yes
+                        add_one_duel_experience_modifier = yes
+                        add_one_duel_experience_modifier = yes
+                    }
+                    else_if = {
+                        limit = {
+                            ROOT = { combat_rating_diff = { who = PREV value = 65 } } # if ROOT is 65 better
+                        }
+                        remove_trait = erudite
+                        remove_disease_trait_effect = yes
+                        clear_disease_level_effect = yes
+                        remove_disease_flags_effect = yes
+                        remove_education_effect = yes
+                        random_list = {
+                            10 = { add_trait = elusive_shadow }
+                            10 = { add_trait = brilliant_strategist }
+                        }
+                        remove_lifestyle_trait_effect = yes
+                        random_list = {
+                            10 = { add_trait = hunter }
+                            10 = { add_trait = duelist }
+                        }
+                        random_list = {
+                            20 = {
+                                add_trait = robust
+                            }
+                            10 = {
+                                add_trait = strong
+                            }
+                            10 = {
+                                add_trait = genius
+                            }
+                            5 = {
+                                health = 1
+                            }
+                        }
+                        if = {
+                            limit = { has_severe_disability_trigger = yes }
+                            remove_trait = infirm
+                            remove_trait = mangled
+                            remove_trait = inbred
+                            remove_trait = blinded
+                            remove_trait = incapable
+                            remove_trait = maimed
+                        }
+                        if = {
+                            limit = { has_injury_trigger = yes }
+                            remove_trait = wounded
+                            remove_trait = severely_injured
+                        }
+                        add_one_duel_experience_modifier = yes
+                        add_one_duel_experience_modifier = yes
+                        add_one_duel_experience_modifier = yes
+                    }
+                    else_if = {
+                        limit = {
+                            ROOT = { combat_rating_diff = { who = PREV value = 50 } } # if ROOT is 50 better
+                        }
+                        remove_trait = erudite
+                        remove_disease_trait_effect = yes
+                        clear_disease_level_effect = yes
+                        remove_disease_flags_effect = yes
+                        remove_education_effect = yes
+                        random_list = {
+                            10 = { add_trait = elusive_shadow }
+                            10 = { add_trait = brilliant_strategist }
+                        }
+                        remove_lifestyle_trait_effect = yes
+                        random_list = {
+                            10 = { add_trait = hunter }
+                            10 = { add_trait = duelist }
+                        }
+                        if = {
+                            limit = { has_severe_disability_trigger = yes }
+                            remove_trait = infirm
+                            remove_trait = mangled
+                            remove_trait = inbred
+                            remove_trait = blinded
+                            remove_trait = incapable
+                            remove_trait = maimed
+                        }
+                        if = {
+                            limit = { has_injury_trigger = yes }
+                            remove_trait = wounded
+                            remove_trait = severely_injured
+                        }
+                        add_one_duel_experience_modifier = yes
+                        add_one_duel_experience_modifier = yes
+                        add_one_duel_experience_modifier = yes
+                    }
+                    else_if = {
+                        limit = {
+                            ROOT = { combat_rating_diff = { who = PREV value = 35 } }  # if ROOT is 35 better
+                        }
+                        remove_trait = erudite
+                        remove_disease_trait_effect = yes
+                        clear_disease_level_effect = yes
+                        remove_disease_flags_effect = yes
+                        remove_education_effect = yes
+                        remove_lifestyle_trait_effect = yes
+                        if = {
+                            limit = { has_severe_disability_trigger = yes }
+                            remove_trait = infirm
+                            remove_trait = mangled
+                            remove_trait = inbred
+                            remove_trait = blinded
+                            remove_trait = incapable
+                            remove_trait = maimed
+                        }
+                        else_if = {
+                            limit = { has_injury_trigger = yes }
+                            remove_trait = wounded
+                            remove_trait = severely_injured
+                        }
+                        else = {
+                            random_list = {
+                                10 = {
+                                    add_trait = elusive_shadow
+                                    random_list = {
+                                        10 = { add_trait = impaler }
+                                        10 = { add_trait = schemer }
+                                    }
+                                }
+                                10 = {
+                                    add_trait = brilliant_strategist
+                                    random_list = {
+                                        10 = { add_trait = hunter }
+                                        10 = { add_trait = duelist }
+                                    }
+                                }
+                            }
+                        }
+                        add_one_duel_experience_modifier = yes
+                        add_one_duel_experience_modifier = yes
+                    }
+                    else_if = {
+                        limit = {
+                            ROOT = { combat_rating_diff = { who = PREV value = 20 } } # if ROOT is 20 better
+                        }
+                        remove_trait = erudite
+                        remove_lifestyle_trait_effect = yes
+                        random_list = {
+                            10 = { add_trait = hunter }
+                            10 = { add_trait = duelist }
+                        }
+                        if = {
+                            limit = { NOT = { trait = brave } }
+                            add_trait = brave
+                        }
+                        else_if = {
+                            limit = { has_severe_disability_trigger = yes }
+                            remove_trait = infirm
+                            remove_trait = mangled
+                            remove_trait = inbred
+                            remove_trait = blinded
+                            remove_trait = incapable
+                            remove_trait = maimed
+                        }
+                        else_if = {
+                            limit = { has_injury_trigger = yes }
+                            remove_trait = wounded
+                            remove_trait = severely_injured
+                        }
+                        else_if = {
+                            limit = { NOT = { trait = wroth } }
+                            add_trait = wroth
+                        }
+                        else_if = {
+                            limit = { NOT = { trait = cruel } }
+                            add_trait = cruel
+                        }
+                    }
+                    else_if = {
+                        limit = {
+                            ROOT = { combat_rating_diff = { who = PREV value = 10 } } # if ROOT is 10 better
+                        }
+                        remove_trait = erudite
+                        if = {
+                            limit = { NOT = { trait = brave } }
+                            add_trait = brave
+                        }
+                        else_if = {
+                            limit = { NOT = { trait = wroth } }
+                            add_trait = wroth
+                        }
+                        else_if = {
+                            limit = { NOT = { trait = cruel } }
+                            add_trait = cruel
+                        }
+                        else_if = {
+                            limit = { has_severe_disability_trigger = yes }
+                            remove_trait = infirm
+                            remove_trait = mangled
+                            remove_trait = inbred
+                            remove_trait = blinded
+                            remove_trait = incapable
+                            remove_trait = maimed
+                        }
+                        else_if = {
+                            limit = { has_injury_trigger = yes }
+                            remove_trait = wounded
+                            remove_trait = severely_injured
+                        }
+                        else = {
+                            add_trait = strong
+                        }
+                    }
+                    else = {
+                        #do nothing
+                    }
+                }
+            }
+            if = { # Means you have not reached the "boss" fight
+                limit = {
+                    NOR = {
+                        has_character_flag = WL_desc_X
+                        has_character_flag = WL_desc_Y
+                        has_character_flag = WL_desc_Z
+                    }
+                }
+                randomize_ABCDEF_desc_flag_effect = yes # Get a random desc
+            }
+        }        
+    }
+
+
+    desc = {
+        text = EVTDESC_HF_12010_A #Someone is hunting! Aha!
+        picture = GFX_evt_bandits
+        trigger = { has_character_flag = WL_desc_A }
+    }
+    desc = {
+        text = EVTDESC_HF_12010_B #Outside the campfire, someone is tending to nature's call
+        picture = GFX_evt_carriage
+        trigger = { has_character_flag = WL_desc_B }
+    }
+    desc = {
+        text = EVTDESC_HF_12010_C #In the streets of a village, accosted by locals
+        picture = GFX_evt_market
+        trigger = { has_character_flag = WL_desc_C }
+    }
+    desc = {
+        text = EVTDESC_HF_12010_D #A moonlit night, listening to companion snoring, sneaky assassin?
+        picture = GFX_evt_mysterious_forest
+        trigger = { has_character_flag = WL_desc_D }
+    }
+    desc = {
+        text = EVTDESC_HF_12010_E #Urchin tips you off, pointing you to finest warrior around
+        picture = GFX_evt_market
+        trigger = { has_character_flag = WL_desc_E }
+    }
+    # "Boss" fights...
+    desc = {
+        text = EVTDESC_HF_12010_X #Boss fight nr 1 (Old Fencer)
+        picture = GFX_evt_outside_tavern_hf
+        trigger = { has_character_flag = WL_desc_X }
+    }
+    desc = {
+        text = EVTDESC_HF_12010_Y #Boss fight nr 2 (Giant)
+        picture = GFX_evt_mounted_combat_day_hf
+        trigger = { has_character_flag = WL_desc_Y }
+    }
+    desc = {
+        text = EVTDESC_HF_12010_Z #Boss fight nr 3 (Bear)
+        picture = GFX_evt_sway_hf
+        trigger = { has_character_flag = WL_desc_Z }
+    }
+
+    option = { #I shall challenge them to a duel!
+        name = {
+            text = EVTOPTA_HF_12010_A #A challenge! Yes, you! Let's fight!
+            trigger = { has_character_flag = WL_desc_A }
+        }
+        name = {
+            text = EVTOPTA_HF_12010_B #Excellent! I will duel this one!
+            trigger = { has_character_flag = WL_desc_B }
+        }
+        name = {
+            text = EVTOPTA_HF_12010_C #You wanna say that to me face? Let's fight!
+            trigger = { has_character_flag = WL_desc_C }
+        }
+        name = {
+            text = EVTOPTA_HF_12010_D #You come armed, eh...?
+            trigger = { has_character_flag = WL_desc_D }
+        }
+        name = {
+            text = EVTOPTA_HF_12010_E #Aah, such fortune!
+            trigger = { has_character_flag = WL_desc_E }
+        }
+        name = {
+            text = EVTOPTA_HF_12010_X #I won't go easy on you
+            trigger = { has_character_flag = WL_desc_X }
+        }
+        name = {
+            text = EVTOPTA_HF_12010_Y #Finally, a challenge!
+            trigger = { has_character_flag = WL_desc_Y }
+        }
+        name = {
+            text = EVTOPTA_HF_12010_Z #I'll duel anyone sent at me!
+            trigger = { has_character_flag = WL_desc_Z }
+        }
+        trigger_switch = { #To set/display effects properly...
+            on_trigger = has_character_flag
+            WL_desc_A = { custom_tooltip = { text = EVTOPTA_HF_12010_A_TT } }
+            #WL_desc_B = { custom_tooltip = { text = EVTOPTA_HF_12010_B_TT } }
+            #WL_desc_C = { custom_tooltip = { text = EVTOPTA_HF_12010_C_TT } }
+            WL_desc_D = { custom_tooltip = { text = EVTOPTA_HF_12010_D_TT } }
+            WL_desc_E = { custom_tooltip = { text = EVTOPTA_HF_12010_E_TT } }
+            WL_desc_X = { custom_tooltip = { text = EVTOPTA_HF_12010_X_TT } }
+            WL_desc_Y = { custom_tooltip = { text = EVTOPTA_HF_12010_Y_TT } }
+            WL_desc_Z = { custom_tooltip = { text = EVTOPTA_HF_12010_Z_TT } }
+        }
+        show_portrait = event_target:my_duel_target
+        duel_someone_effect = yes
+        add_2_points_to_legendary_progress_effect = yes # Great progress on journey!
+        hidden_effect = {
+            if = {
+                limit = {
+                    has_character_flag = WL_desc_Z    
+                }
+                event_target:combatant_2 = {
+                    set_graphical_culture = bear
+                }
+            }
+        }
+    }
+
+    option = { #You somehow avoid fighting...
+        name = {
+            text = EVTOPTB_HF_12010_A # This one looks too big for me
+            trigger = { has_character_flag = WL_desc_A }
+        }
+        name = {
+            text = EVTOPTB_HF_12010_B
+            trigger = { has_character_flag = WL_desc_B }
+        }
+        name = {
+            text = EVTOPTB_HF_12010_C
+            trigger = { has_character_flag = WL_desc_C }
+        }
+        name = {
+            text = EVTOPTB_HF_12010_D #Guys! Wake up! Help!
+            trigger = { has_character_flag = WL_desc_D }
+        }
+        name = {
+            text = EVTOPTB_HF_12010_E #On second thought, maybe this one is for you, [fellow_member]?
+            trigger = { has_character_flag = WL_desc_E }
+        }
+
+        trigger_switch = { #To set/display effects properly...
+            on_trigger = has_character_flag
+            WL_desc_A = { custom_tooltip = { text = EVTOPTB_HF_12010_A_TT } }
+            #WL_desc_B = { custom_tooltip = { text = EVTOPTB_HF_12010_B_TT } }
+            #WL_desc_C = { custom_tooltip = { text = EVTOPTB_HF_12010_C_TT } }
+            WL_desc_D = {
+                custom_tooltip = { text = EVTOPTB_HF_12010_D_TT }
+                add_character_modifier = {
+                    modifier = black_eye
+                    months = 10
+                }
+                show_portrait = event_target:fellow_member
+            }
+            WL_desc_E = {
+                custom_tooltip = { text = EVTOPTB_HF_12010_E_TT }
+                if = {
+                    limit = { trait = brave }
+                    remove_trait = brave
+                }
+                else = { add_trait = craven }
+                show_portrait = event_target:fellow_member
+            }
+        }
+        
+        prestige = -50
+        add_1_point_to_legendary_progress_effect = yes # Good progress on journey...
+        evaluate_legendary_progress_effect = yes
+        send_legendary_tombola_effect = yes #EDIT: actually *not* superfluous (otehrwise fired from resolve_legendary_duel_effect, which only happens after actual duels)
+        clr_ABCDEF_desc_flag_effect = yes #to not leave any weird desc-flags behind for next time around...
+        trigger = {
+            ai = no
+            NOR = { #This is not a boss fight...
+                has_character_flag = WL_desc_X
+                has_character_flag = WL_desc_Y
+                has_character_flag = WL_desc_Z
+            }
+        }
+    }
+
+    option = { #This is getting too dangerous...
+        name = EVTOPTB_HF_12102
+        custom_tooltip = { text = EVTOPTB_HF_12010_TT } #Journey is over for you, you return home in shame...
+        add_trait = craven
+        prestige = -500
+        clean_up_after_legendary_showdown_effect = yes
+        clr_XYZ_desc_flag_effect = yes
+        set_character_flag = failed_call_to_legend
+
+        if = {
+            limit = {
+                NOT = {
+                    any_society_member = {
+                        same_society_as = ROOT
+                        has_character_flag = call_to_legend_active
+                        NOT = { character = ROOT }
+                        prisoner = no
+                        is_alive = yes
+                        is_dying = no
+                        NOT = { trait = incapable }
+                    }
+                }
+            }
+            custom_tooltip = {
+                text = EVTOPTC_HF_12103_TT
+                stop_society_progress = yes
+            }
+        }
+
+        trigger = {
+            has_character_flag = call_to_legend_active
+            ai = no
+            OR = {
+                has_character_flag = WL_desc_X
+                has_character_flag = WL_desc_Y
+                has_character_flag = WL_desc_Z
+            }
+        }
+    }
 }
 
 
