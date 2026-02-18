@@ -3509,42 +3509,20 @@ crusade = {
 	}
 
 	can_use_title = {
-		OR = {
-			FROM = {
-				any_realm_title = {
-					de_jure_liege_or_above = PREVPREV
-				}
-				
-				independent = yes # Don't declare Crusades on revolters - chances are high the war will invalidate
-				
-				OR = {
-					has_landed_title = PREV
-					num_of_realm_counties = {
-						value = 6
-						title = PREV
-					}
-				}
+		FROM = {
+			any_realm_title = {
+				de_jure_liege_or_above = PREVPREV
 			}
-			AND = {
-				OR = {
-					has_holder = no
-					holder_scope = { religion = ROOT }
-				}
-				NOT = {
-					any_independent_ruler = {
-						any_realm_title = {
-							de_jure_liege_or_above = PREVPREV
-						}
-						NOR = { 
-							religion = FROM 
-							religion = ROOT
-						}
-					}
-				}
+			
+			independent = yes # Don't declare Crusades on revolters - chances are high the war will invalidate
+			
+			num_of_realm_counties = {
+				value = 6
+				title = PREV
 			}
 		}
 	}
-	
+
 	is_valid = {
 		ROOT = {
 			can_call_crusade = yes
@@ -3566,7 +3544,7 @@ crusade = {
 			}
 		}
 	}
-
+	
 	is_valid_title = {
 		FROM = {
 			any_realm_province = {
@@ -3576,27 +3554,18 @@ crusade = {
 	}
 
 	on_add = {
-		general_on_add_effect = yes
-	}
-
-	on_add_title = {
-		any_independent_ruler = {
-			limit = {
-				mercenary = no
-				NOT = { character = FROM }
-				religion = FROM
-				NOT = { war_with = FROM }
-				NOT = { war_with = ROOT }
-				any_realm_title = {
-					de_jure_liege_or_above = PREVPREV
-				}
+		hidden_tooltip = { fire_haruspicy_event_effect = yes }
+		if = {
+			limit = { defender = { is_offmap_governor = offmap_china } }
+			attacker = {  
+				sound_effect = china_angered_emperor
+				detract_grace_super_huge_effect = yes 
 			}
-			join_defender_wars = FROM
 		}
 	}
 
 	on_success_title = {
-		
+	
 		# Should we give the seized land to its current king?
 		if = {
 			limit = {
@@ -3606,41 +3575,11 @@ crusade = {
 				}
 			}
 			holder_scope = {
-				save_event_target_as = new_owner
-			}
-
-			if = {
-				limit = { ROOT = { NOT = { war_with = FROM } } } #just for a tooltip
-				any_independent_ruler = {
-					limit = {
-						mercenary = no
-						religion = FROM
-						any_realm_title = {
-							de_jure_liege_or_above = PREVPREV
-						}
-					}
-					
-					event_target:new_owner = {
-						gain_settlements_under_title = {
-							title = PREVPREV
-							enemy = PREV
-							is_crusade = yes
-							type = holy_war
-						}
-					}
-				}
-			}
-			else = {
-				any_defender = {
-					
-					event_target:new_owner = {
-						gain_settlements_under_title = {
-							title = PREVPREV
-							enemy = PREV
-							is_crusade = yes
-							type = holy_war
-						}
-					}
+				gain_settlements_under_title = {
+					title = PREV
+					enemy = FROM
+					is_crusade = yes # Even if the title holder is not participating in the war, gain holdings occupied by all Crusade participants
+					type = holy_war
 				}
 			}
 		}
@@ -3666,45 +3605,12 @@ crusade = {
 					limit = { is_ruler = no }
 					set_character_flag = set_feudal_gov
 				}
-				save_event_target_as = new_owner
-			}
-
-			if = {
-				limit = { ROOT = { NOT = { war_with = FROM } } } #just for a tooltip
-				any_independent_ruler = {
-					limit = {
-						mercenary = no
-						religion = FROM
-						any_realm_title = {
-							de_jure_liege_or_above = PREVPREV
-						}
-					}
-					
-					event_target:new_owner = {
-						gain_settlements_under_title = {
-							title = PREVPREV
-							enemy = PREV
-							is_crusade = yes
-							type = holy_war
-						}
-					}
+				gain_settlements_under_title = {
+					title = PREV
+					enemy = FROM
+					is_crusade = yes # Even if the title holder is not participating in the war, gain holdings occupied by all Crusade participants
+					type = holy_war
 				}
-			}
-			else = {
-				any_defender = {
-					
-					event_target:new_owner = {
-						gain_settlements_under_title = {
-							title = PREVPREV
-							enemy = PREV
-							is_crusade = yes
-							type = holy_war
-						}
-					}
-				}
-			}
-
-			best_crusade_claimant = {
 				if = {
 					limit = {
 						top_liege = {
@@ -3759,42 +3665,11 @@ crusade = {
 				}
 			}
 			most_participating_crusader = {
-				save_event_target_as = new_owner
-			}
-			if = {
-				limit = { ROOT = { NOT = { war_with = FROM } } } #just for a tooltip
-				any_independent_ruler = {
-					limit = {
-						mercenary = no
-						religion = FROM
-						any_realm_title = {
-							de_jure_liege_or_above = PREVPREV
-						}
-					}
-					
-					event_target:new_owner = {
-						gain_settlements_under_title = {
-							title = PREVPREV
-							enemy = PREV
-							is_crusade = yes
-							type = holy_war
-						}
-					}
+				gain_settlements_under_title = {
+					title = PREV
+					enemy = FROM
+					type = holy_war
 				}
-			}
-			else = {
-				any_defender = {
-					
-					event_target:new_owner = {
-						gain_settlements_under_title = {
-							title = PREVPREV
-							enemy = PREV
-							type = holy_war
-						}
-					}
-				}
-			}
-			most_participating_crusader = {
 				if  = {
 					limit = {
 						primary_title = { is_primary_type_title = no } # Mercs, the Pope, Holy Orders, etc
@@ -3874,9 +3749,16 @@ crusade = {
 				}
 			}
 		}
+		any_attacker = {
+			limit = {
+				ai = no
+				NOT = { has_character_flag = achievement_crusader }
+			}
+			set_character_flag = achievement_crusader
+		}
 		
 		ROOT = {
-			
+			show_scope_change = no
 			participation_scaled_prestige = 500
 			participation_scaled_piety = 1000
 			if = {
@@ -3901,12 +3783,15 @@ crusade = {
 
 		hidden_tooltip = {
 			check_if_reconquista_finished_effect = yes
+			FROM = {
+				landless_pope_effect = yes
+			}
 		}
 	}
 
 	on_fail = {
 		ROOT = {
-			
+			show_scope_change = no
 			piety = -100
 		}
 		
@@ -3944,7 +3829,6 @@ crusade = {
 							religion_group = christian
 							religion = hellenic_pagan
 							religion = hellenic_pagan_reformed
-							religion = poseidonian
 						}
 				}
 				hidden_tooltip = { character_event = { id = LoR.30 days = 12 } }
@@ -3981,7 +3865,7 @@ crusade = {
 
 	on_reverse_demand = {
 		ROOT = {
-			
+			show_scope_change = no
 			transfer_scaled_wealth = {
 				to = FROM
 				value = 4.0
@@ -4017,7 +3901,6 @@ crusade = {
 							religion_group = christian
 							religion = hellenic_pagan
 							religion = hellenic_pagan_reformed
-							religion = poseidonian
 						}
 				}
 				hidden_tooltip = { character_event = { id = LoR.30 days = 12 } }
@@ -4198,15 +4081,6 @@ new_crusade = {
 			hidden_tooltip = {
 				NOT = { has_character_modifier = cancel_crusade_cooldown }
 			}
-			trigger_if = {
-				limit = {
-					has_global_flag = schism_mended
-				}
-				NOR = {
-					religion = catholic
-					religion = fraticelli
-				}
-			}
 		}
 		NAND = {
 			ROOT = {
@@ -4246,62 +4120,18 @@ new_crusade = {
 			}
 		}
 	}
-
+	
 	can_use_title = {
-		OR = {
-			trigger_if = {
-				limit = { has_global_flag = fatima_massacre_crusade }
-				title = event_target:fatima_massacre_kingdom
+		FROM = {
+			any_realm_title = {
+				de_jure_liege_or_above = PREVPREV
 			}
-			FROM = {
-				any_realm_title = {
-					de_jure_liege_or_above = PREVPREV
-				}
-				
-				independent = yes # Don't declare Crusades on revolters - chances are high the war will invalidate
-				
-				OR = {
-					has_landed_title = PREV
-					num_of_realm_counties = {
-						value = 6
-						title = PREV
-					}
-				}
-			}
-			AND = {
-				OR = {
-					has_holder = no
-					holder_scope = { religion = ROOT }
-				}
-				NOT = {
-					any_independent_ruler = {
-						mercenary = no
-						any_realm_title = {
-							de_jure_liege_or_above = PREVPREV
-						}
-						NOR = { 
-							religion = FROM 
-							religion = ROOT
-						}
-					}
-				}
-			}
-		}
-		trigger_if = {
-			limit = { has_global_flag = fatima_massacre_crusade }
-			OR = {
-				title = event_target:fatima_massacre_kingdom
-				NOT = {
-					any_province = {
-						de_jure_liege_or_above = event_target:fatima_massacre_kingdom
-						holder_scope = {
-							top_liege = {
-								NOT = { religion = ROOT }
-								independent = yes
-							}
-						}
-					}
-				}
+			
+			independent = yes # Don't declare Crusades on revolters - chances are high the war will invalidate
+			
+			num_of_realm_counties = {
+				value = 6
+				title = PREV
 			}
 		}
 	}
@@ -4311,17 +4141,14 @@ new_crusade = {
 			can_call_crusade = yes
 		}
 		FROM = {
-			trigger_if = {
-				limit = {
-					has_global_flag = fatima_massacre_crusade
-				}
+			NOT = { religion = ROOT}
+			OR = {
 				NOT = { religion = ROOT }
-			}
-			trigger_else = {
-				OR = {
-					NOT = { religion_group = ROOT }
-					is_heresy_of = ROOT
-					is_parent_religion = ROOT
+				is_heresy_of = ROOT
+				is_parent_religion = ROOT
+				AND = {
+					religion_group = pagan_group
+					NOT = { religion = ROOT }
 				}
 			}
 		}
@@ -4334,15 +4161,7 @@ new_crusade = {
 			}
 		}
 	}
-
-	on_add_title = {
-		ROOT = { save_event_target_as = crusade_attacker }
-		save_event_target_as = crusade_title
-		FROM = {
-			character_event = { id = CI_EVENTS.1 days = 1 }
-		}
-	}
-
+	
 	on_add = {
 		general_on_add_effect = yes
 		if = {
@@ -4359,10 +4178,9 @@ new_crusade = {
 			}
 			set_global_flag = sevillians_can_join
 		}
-	 }
-
+	}
+	
 	on_success_title = {
-		clr_global_flag = sevillians_can_join #this flag is meant to allow sevillian lords to get events where they participate personally in the Crusade, even though they're not formally allowed to
 		ROOT = {
 			crusade_target_title = {
 				save_event_target_as = new_crusade_title
@@ -4384,13 +4202,7 @@ new_crusade = {
 				save_event_target_as = new_crusade_target_char
 			}
 		}
-		any_attacker = {
-            limit = {
-                ai = no
-                religion = cadaverist
-            }
-            achievement_in_the_grim_darkness_done_effect = yes
-        }
+
 		custom_tooltip = {
 			text = new_crusade_win_TT
 		}
@@ -4417,33 +4229,17 @@ new_crusade = {
 
 		hidden_tooltip = {
 		
-			if = { # Achievement
-				limit = {
-					event_target:new_crusade_target_char = {
-						has_landed_title = e_byzantium
-						religion_group = FROM
-					}
-				}
-				any_attacker = {
-					limit = {
-						ai = no
-					}
-					set_character_flag = achievement_venetian_guile
-				}
-			}
 
-			any_attacker = {
-				if = {
-					limit = {
-						ai = yes
-						NOT = {
-							crusade_beneficiary = {
-								always = yes
-							}
+			if = {
+				limit = {
+					ai = yes
+					NOT = {
+						crusade_beneficiary = {
+							always = yes
 						}
 					}
-					character_event = { id = HFP.41007 }
 				}
+				character_event = { id = HFP.41007 }
 			}
 		
 			# Should we give the seized land to the Official Crusade Recipient?
@@ -4474,7 +4270,7 @@ new_crusade = {
 						holy_order = no
 						mercenary = no
 						NOR = {
-							has_landed_title = k_papacy
+							has_landed_title = k_papal_state
 							has_landed_title = d_fraticelli
 						}
 						OR = {
@@ -4915,181 +4711,18 @@ new_crusade = {
 						}
 					}
 					most_participating_crusader = {
-						save_event_target_as = new_owner
-					}
-					any_independent_ruler = {
-						limit = {
-							OR = {
-								character = FROM
-								AND = {
-									religion = FROM
-									any_war = {
-										using_cb = new_crusade
-										any_attacker = { character = ROOT }
-									}
-								}
-							}
-						}
-						event_target:new_owner = {
-							gain_settlements_under_title = {
-								title = event_target:new_crusade_title
-								enemy = PREV
-								type = holy_war
-							}
+						gain_settlements_under_title = {
+							title = PREVPREV
+							enemy = FROM
+							type = holy_war
 						}
 					}
 					any_playable_ruler = {
 						narrative_event = { id = HFP.41160 }
 					}
 				}
-				# If it is a Fatima Massacre crusade
-				else_if = {
-					limit = {
-						has_global_flag = fatima_massacre_crusade
-						crusade_target_title = {
-							title = event_target:fatima_massacre_kingdom
-						}
-						FROM = {
-							religion_group = ROOT
-							NOT = {
-								religion = ROOT
-							}
-						}
-					}
-					distribute_crusade_target_title = yes
-					#The Crusader King becomes an Emperor and gets a bloodline
-					crusader_king = {
-						grant_title_no_opinion = e_apostolic_empire
-					}
-					# Find random vassals and make kings out of them
-					FROM = {
-						primary_title = {
-							save_global_event_target_as = fatima_massacre_primary
-							save_event_target_as = fatima_massacre_primary
-						}
-						random_vassal = {
-							limit = {
-								tier = DUKE
-								ai = yes
-							}
-							primary_title = {
-								create_title = {
-									tier = KING
-									landless = no
-									temporary = no
-									name = "fatima_independet_kingdom_name"
-									holder = PREV
-									culture = PREV
-									custom_created = yes
-									base_title = THIS
-									copy_title_laws = yes
-								}
-							}
-						}
-						random_vassal = {
-							limit = {
-								tier = DUKE
-								ai = yes
-							}
-							primary_title = {
-								create_title = {
-									tier = KING
-									landless = no
-									temporary = no
-									name = "fatima_independet_kingdom_name"
-									holder = PREV
-									culture = PREV
-									custom_created = yes
-									base_title = THIS
-									copy_title_laws = yes
-								}
-							}
-						}
-					}
-					# All Byzantine vassals go independent except those neighboring the old Emperor, and he/she gets an inferior Empire title while the Byzantine title is broken
-					FROM = {
-						any_vassal = {
-							limit = {
-								higher_tier_than = BARON
-							}
-							set_defacto_liege = this
-							set_character_flag = fatima_released
-						}
-						if = {
-							limit = {
-								tier = EMPEROR
-							}
-							primary_title = {
-								create_title = {
-									tier = EMPEROR
-									landless = no
-									temporary = no
-									name = "fatima_independet_empire_name"
-									holder = PREV
-									culture = PREV
-									custom_created = yes
-									base_title = THIS
-								}
-								new_title = {
-									holder_scope = {
-										any_demesne_title = {
-											limit = {
-												tier = EMPEROR
-												NOT = { title = PREV }
-											}
-											destroy_landed_title = THIS
-										}
-									}
-								}
-							}
-							any_neighbor_independent_ruler = {
-								limit = {
-									ai = yes
-									culture = PREV
-									religion = PREV
-									lower_tier_than = KING
-								}
-								set_defacto_liege = PREV
-							}
-						}
-						else = {
-							any_neighbor_independent_ruler = {
-								limit = {
-									#ai = yes
-									culture = PREV
-									religion = PREV
-									lower_tier_than = KING
-									has_character_flag = fatima_released
-								}
-								set_defacto_liege = PREV
-							}
-						}
-					}
-					# Narrative event explaining that Byzantium has been taken out
-					#e_apostolic_empire = {
-					#	holder_scope = {
-					#		narrative_event = { id = AEC.1006 }
-					#	}
-					#}
-				}
 				# Otherwise
 				else = {
-					any_independent_ruler = {
-						limit = {
-							NOT = { character = FROM }
-							religion = FROM
-							any_war = {
-								using_cb = new_crusade
-								any_attacker = { character = ROOT }
-							}
-						}
-						FROM = {
-							vassalize_or_take_under_title = {
-								title = event_target:new_crusade_title
-								enemy = PREV
-							}
-						}
-					}
 					FROM = {
 						any_realm_character = {
 							limit = {
@@ -5165,8 +4798,9 @@ new_crusade = {
 			any_attacker = {
 				limit = {
 					ai = no
+					NOT = { has_character_flag = achievement_crusader }
 				}
-				achievement_crusader_done_effect = yes
+				set_character_flag = achievement_crusader
 			}
 
 			# Nickname for the most participating Crusader
@@ -5266,13 +4900,6 @@ new_crusade = {
 				imprison = no
 			}
 
-			# Clean up stances
-			any_attacker = {
-				clr_character_flag = crusade_selfish_stance
-				clr_character_flag = crusade_beneficiary_stance
-				clr_character_flag = crusade_papal_stance
-			}
-
 			# Special bloodline for the recipient of the first Crusade
 			if = {
 				limit = {
@@ -5369,6 +4996,13 @@ new_crusade = {
 				}
 			}
 
+			# Clean up stances
+			any_attacker = {
+				clr_character_flag = crusade_selfish_stance
+				clr_character_flag = crusade_beneficiary_stance
+				clr_character_flag = crusade_papal_stance
+			}
+
 			ROOT = {
 				character_event = { id = HFP.41199 }
 			}
@@ -5376,11 +5010,13 @@ new_crusade = {
 
 		hidden_tooltip = {
 			check_if_reconquista_finished_effect = yes
+			FROM = {
+				landless_pope_effect = yes
+			}
 		}
 	}
 
 	on_fail = {
-		clr_global_flag = sevillians_can_join #this flag is meant to allow sevillian lords to get events where they participate personally in the Crusade, even though they're not formally allowed to
 		ROOT = {
 			character_event = { id = HFP.41199}
 		}
@@ -5390,13 +5026,6 @@ new_crusade = {
 			piety = -100
 		}
 		
-		any_defender = {
-            limit = {
-                ai = no
-                religion = cadaverist
-            }
-            achievement_in_the_grim_darkness_done_effect = yes
-        }
 		any_defender = {
 			limit = { NOT = { character = FROM } }
 			hidden_tooltip = { 
@@ -5465,7 +5094,6 @@ new_crusade = {
 	}
 
 	on_reverse_demand = {
-		clr_global_flag = sevillians_can_join #this flag is meant to allow sevillian lords to get events where they participate personally in the Crusade, even though they're not formally allowed to
 		ROOT = {
 			character_event = { id = HFP.41199 }
 		}
@@ -5591,7 +5219,7 @@ new_crusade = {
 				ai = no
 				religion_group = pagan_group
 			}
-			achievement_pagan_fury_done_effect = yes
+			set_character_flag = achievement_pagan_fury
 		}
 
 		# Chance to start a Shepherd's Crusade
