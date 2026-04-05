@@ -398,7 +398,7 @@ add_trait_one_eyed_effect = {
 		limit = {
 			NOR = {
 				trait = one_eyed
-				trait = blinded
+				OR = { trait = blinded trait = blind }
 			}
 		}
 
@@ -1006,7 +1006,7 @@ add_trait_silently_one_eyed_effect = {
 		limit = {
 			NOR = {
 				trait = one_eyed
-				trait = blinded
+				OR = { trait = blinded trait = blind }
 			}
 		}
 
@@ -3827,7 +3827,7 @@ add_maimed_trait_effect = {
 						factor = 0
 						OR = {
 							trait = one_eyed
-							trait = blinded
+							OR = { trait = blinded trait = blind }
 							NOT = { has_dlc = "Reapers" }
 						}
 					}
@@ -8033,7 +8033,7 @@ join_prev_monastic_order_society = {
 
 clr_artifact_flagsmodifiers_effect = {
 	event_target:relic_ruler = {
-		show_scope_change = no
+		
 
 		trigger_switch = {
 			on_trigger = has_character_modifier
@@ -8048,7 +8048,7 @@ clr_artifact_flagsmodifiers_effect = {
 
 clr_artifact_searcher_effect = {
 	event_target:relic_ruler = {
-		show_scope_change = no
+		
 
 		trigger_switch = {
 			on_trigger = has_character_modifier
@@ -10499,20 +10499,6 @@ add_sympathy_for_prevs_true_religion_effect = {
 	}
 	else_if = {
 		limit = { 
-			PREV = { true_religion_group_alien_trigger = yes } 
-			NOT = { religion_group = alien_group }
-		}
-		add_trait = sympathy_alien
-	}
-	else_if = {
-		limit = { 
-			PREV = { true_religion_group_synth_trigger = yes } 
-			NOT = { religion_group = synth_group }
-		}
-		add_trait = sympathy_synth
-	}
-	else_if = {
-		limit = { 
 			PREV = { true_religion_group_chinese_trigger = yes } 
 			NOT = { religion_group = chinese_traditional_group }
 		}
@@ -10611,20 +10597,6 @@ add_sympathy_for_prevs_open_religion_effect = {
 			NOT = { religion_group = oceanic }
 		}
 		add_trait = sympathy_oceanic
-	}
-	else_if = {
-		limit = { 
-			PREV = { religion_group = alien_group } 
-			NOT = { religion_group = alien_group }
-		}
-		add_trait = sympathy_alien
-	}
-	else_if = {
-		limit = { 
-			PREV = { religion_group = synth_group } 
-			NOT = { religion_group = synth_group }
-		}
-		add_trait = sympathy_synth
 	}
 	else_if = {
 		limit = { 
@@ -12379,7 +12351,7 @@ abdicate_all_primary_type_titles_effect = {
 			}
 
 			any_demesne_title = {
-				show_scope_change = no
+				
 
 				limit = { controls_religion = yes }
 
@@ -12396,10 +12368,10 @@ abdicate_all_primary_type_titles_effect = {
 				grant_title = new_character
 
 				holder_scope = {
-					show_scope_change = no
+					
 
 					any_vassal = {
-						show_scope_change = no
+						
 
 						set_defacto_liege = event_target:liege_target
 					}
@@ -12427,7 +12399,7 @@ abdicate_all_primary_type_titles_effect = {
 		}
 
 		any_demesne_title = {
-			show_scope_change = no
+			
 
 			limit = {
 				OR = {
@@ -12449,10 +12421,10 @@ abdicate_all_primary_type_titles_effect = {
 			grant_title = new_character
 
 			holder_scope = {
-				show_scope_change = no
+				
 
 				any_vassal = {
-					show_scope_change = no
+					
 
 					set_defacto_liege = event_target:liege_target
 				}
@@ -12608,7 +12580,7 @@ clean_up_after_leaving_society_effect = {
 		clr_character_flag = shares_400
 		clr_character_flag = shares_600
 		clr_character_flag = shares_800
-		clr_character_flag = shares_100
+		clr_character_flag = shares_1000
 		clr_character_flag = shares_selling
 		remove_character_modifier = shares_sold
 		remove_character_modifier = building_subsidies
@@ -13657,8 +13629,6 @@ spawn_elder_effect = {
 		if = { # Assign African face paint
 			limit = {
 				OR = {
-					religion = west_african_pagan
-					religion = west_african_pagan_reformed
 					has_religion_feature = religion_animistic
 					religion = kiratist
 					religion = koyapunem
@@ -14429,34 +14399,30 @@ hermetics_upgrade_scandal_effect = {
 	}
 }
 
-# Raiding adventurer war declaration effect
+#Raiding adventurer war declaration effect
 raiding_adventurer_war_declaration_effect = {
-	custom_tooltip = {
-		text = raiding_adventurer_war_declaration_tooltip
+	custom_tooltip = { text = raiding_adventurer_war_declaration_tooltip }
 
-		event_target:selling_province = {
-			duchy = {
-				save_event_target_as = target_duchy
+	event_target:selling_province = {
+		event_target:raiding_adventurer = {
+			unsafe_war = {
+				target = PREVPREV
+				casus_belli = duchy_adventure
+				thirdparty_title = PREV
+				tier = DUKE
 			}
-
-			event_target:raiding_adventurer = {
-				unsafe_war = {
-					target = PREVPREV
-					casus_belli = duchy_adventure
-					thirdparty_title = event_target:target_duchy
-				}
-
-				any_army = {
-					set_can_toggle_looting = yes
-					set_looting = no
-				}
+			any_army = {
+				set_can_toggle_looting = yes
+				set_looting = no
 			}
 		}
+	}
+	
+	clr_character_flag = adventurer_unsafe_duchy_war
+	clr_character_flag = adventurer_safe_duchy_war
+	clr_character_flag = negotiating_with_adventurer
 
-		clr_character_flag = adventurer_unsafe_duchy_war
-		clr_character_flag = adventurer_safe_duchy_war
-		clr_character_flag = negotiating_with_adventurer
-
+	hidden_effect = {
 		event_target:raiding_adventurer = {
 			clr_character_flag = raiding_adventurer
 		}
@@ -14557,6 +14523,13 @@ set_china_boon_cd_effect = {
 		hidden = yes
 	}
 }
+set_patriarch_boon_cd_effect = {
+	add_character_modifier = {
+		name = jd_patriarch_boon_cd
+		years = 1 # If this is changed, edit china_offmap_boon_decisions_enabled_trigger_cd_tt
+		hidden = yes
+	}
+}
 
 # Added via tribute to China decisions... Always one year
 set_china_tribute_cd_effect = {
@@ -14574,6 +14547,14 @@ leave_court_for_china_effect = {
 
 		set_character_flag = ignore_refund
 		death = { death_reason = death_went_to_china }
+	}
+}
+leave_court_for_rome_effect = {
+	custom_tooltip = {
+		text = will_leave_for_rome_tt
+
+		set_character_flag = ignore_refund
+		death = { death_reason = death_went_to_rome }
 	}
 }
 
@@ -17469,7 +17450,7 @@ troubled_pregnancy_chance_low_effect = {
 
 			mult_modifier = {
 				factor = 1.5
-				trait = blinded
+				OR = { trait = blinded trait = blind }
 			}
 
 			mult_modifier = {
@@ -17932,7 +17913,7 @@ troubled_pregnancy_chance_medium_effect = {
 
 			mult_modifier = {
 				factor = 1.5
-				trait = blinded
+				OR = { trait = blinded trait = blind }
 			}
 
 			mult_modifier = {
@@ -21615,104 +21596,10 @@ bloodthirsty_tiered_traits_effect = {
 
 # Tied to religion, used only for special events
 add_random_tattoo_effect = {
-	if = {
-		limit = {
-			OR = { 
-				religion = norse_pagan
-				religion = norse_pagan_reformed
-			}
-			NOR = { 
-				trait = african_tattoo_1
-				trait = african_tattoo_2
-				trait = african_tattoo_3
-				trait = african_tattoo_4
-				trait = african_tattoo_5
-				trait = african_tattoo_6
-				trait = african_tattoo_7
-				trait = african_tattoo_8
-				trait = african_tattoo_9
-				trait = african_tattoo_10
-				trait = african_tattoo_11
-				trait = african_tattoo_12
-				trait = slavic_tattoo_1
-				trait = slavic_tattoo_2
-				trait = slavic_tattoo_3
-				trait = slavic_tattoo_4
-				trait = slavic_tattoo_5
-				trait = slavic_tattoo_6
-				trait = norse_tattoo_1
-				trait = norse_tattoo_2
-				trait = norse_tattoo_3
-				trait = norse_tattoo_4
-				trait = norse_tattoo_5
-				trait = norse_tattoo_6
-			}
-		}
-		random_list = { 
-			50 = { add_trait = norse_tattoo_1 }
-			50 = { add_trait = norse_tattoo_2 }
-			40 = { add_trait = norse_tattoo_3 }
-			30 = { add_trait = norse_tattoo_4 }
-			20 = { add_trait = norse_tattoo_5 }
-			10 = { add_trait = norse_tattoo_6 } 
-		}
-	}
 
-	else_if = {
+	if = {
 		limit = { 
 			OR = { 
-				religion = west_african_pagan
-				religion = west_african_pagan_reformed
-				religion = zun_pagan
-				religion = zun_pagan_reformed
-			}
-			NOR = { 
-				trait = african_tattoo_1
-				trait = african_tattoo_2
-				trait = african_tattoo_3
-				trait = african_tattoo_4
-				trait = african_tattoo_5
-				trait = african_tattoo_6
-				trait = african_tattoo_7
-				trait = african_tattoo_8
-				trait = african_tattoo_9
-				trait = african_tattoo_10
-				trait = african_tattoo_11
-				trait = african_tattoo_12
-				trait = slavic_tattoo_1
-				trait = slavic_tattoo_2
-				trait = slavic_tattoo_3
-				trait = slavic_tattoo_4
-				trait = slavic_tattoo_5
-				trait = slavic_tattoo_6
-				trait = norse_tattoo_1
-				trait = norse_tattoo_2
-				trait = norse_tattoo_3
-				trait = norse_tattoo_4
-				trait = norse_tattoo_5
-				trait = norse_tattoo_6
-			}
-		}
-		random_list = { 
-			50 = { add_trait = african_tattoo_1 }
-			40 = { add_trait = african_tattoo_2 }
-			40 = { add_trait = african_tattoo_3 }
-			30 = { add_trait = african_tattoo_4 }
-			30 = { add_trait = african_tattoo_5 }
-			20 = { add_trait = african_tattoo_6 }
-			20 = { add_trait = african_tattoo_7 }
-			10 = { add_trait = african_tattoo_8 } 
-			6 = { add_trait = african_tattoo_9 } 
-			4 = { add_trait = african_tattoo_10 } 
-			2 = { add_trait = african_tattoo_11 } 
-			1 = { add_trait = african_tattoo_12 } 
-		}
-	}
-	else_if = {
-		limit = { 
-			OR = { 
-				religion = slavic_pagan
-				religion = slavic_pagan_reformed
 				religion = baltic_pagan
 				religion = baltic_pagan_reformed
 				religion = finnish_pagan
@@ -21850,27 +21737,6 @@ transfer_crown_on_abdication_effect = {
 				limit = { artifact_type = crown_pahlavi }
 				PREV = { has_landed_title = e_persia }
 			}
-			trigger_if = {
-				limit = { artifact_type = crown_tengri_fylkir }
-				PREV = { has_landed_title = d_tengri_pagan_reformed }
-			}
-			trigger_if = {
-				limit = { artifact_type = crown_romuva_fylkir }
-				PREV = { has_landed_title = d_baltic_pagan_reformed }
-			}
-
-			trigger_if = {
-				limit = { artifact_type = crown_finnish_fylkir }
-				PREV = { has_landed_title = d_finnish_pagan_reformed }
-			}
-			trigger_if = {
-				limit = { artifact_type = scepter_bon_fylkir }
-				PREV = { has_landed_title = d_bon_pagan_reformed }
-			}
-			trigger_if = {
-				limit = { artifact_type = scepter_hellenic_fylkir }
-				PREV = { has_landed_title = k_hellenic_pagan_reformed }
-			}
 
 		}
 
@@ -21891,16 +21757,6 @@ transfer_crown_on_abdication_effect = {
 				artifact_type = crown_hre
 				artifact_type = crown_byzantine
 				artifact_type = crown_pahlavi
-				artifact_type = crown_fylkir
-				artifact_type = crown_tengri_fylkir
-				artifact_type = crown_slavic_fylkir
-				artifact_type = crown_romuva_fylkir
-				artifact_type = crown_finnish_fylkir
-				artifact_type = crown_west_african_fylkir
-				artifact_type = crown_zun_fylkir
-				artifact_type = scepter_bon_fylkir
-				artifact_type = crown_aztec_fylkir
-				artifact_type = scepter_hellenic_fylkir
 			}
 		}
 
@@ -23691,22 +23547,6 @@ add_sympathy_for_religion_effect = {
 	}
 	else_if = {
 		limit = { 
-			religion_group = alien
-		}
-		ROOT = {
-			add_trait = sympathy_alien
-		}
-	}
-	else_if = {
-		limit = { 
-			religion_group = synth_group
-		}
-		ROOT = {
-			add_trait = sympathy_synth
-		}
-	}
-	else_if = {
-		limit = { 
 			religion_group = chinese_traditional_group
 		}
 		ROOT = {
@@ -24169,32 +24009,6 @@ add_same_commander_trait_as_FROM = {
 
 				add_trait = levy_coordinator
 			}
-		}
-	}
-}
-
-landless_pope_effect = {
-	if = {
-		limit = {
-			has_landed_title = k_papacy
-			num_of_count_titles_in_realm == 0
-			is_landed = no
-			catholic = { is_name_randomized = no }
-		}
-
-		destroy_landed_title = k_papal_state
-
-		k_papal_state = {
-			any_direct_de_jure_vassal_title = {
-				de_jure_liege = k_romagna
-			}
-		}
-
-		narrative_event = { id = HFP.40037 } # Papal States becomes Romagna when the Pope holds no lands in Italy
-
-		activate_title = {
-			title = d_papal_guards
-			status = no
 		}
 	}
 }
@@ -25002,137 +24816,6 @@ clr_flags_introduce_heir_effect = {
 	clr_character_flag = ZE_evt_heir_nothing_4
 }
 
-generate_mask_effect = {
-	random_list = {
-		20 = {
-			add_artifact = crown_african_mask_1
-
-			new_artifact = {
-				random_list = {
-					# Randomize names to avoid too much repetition
-					20 = { set_name = crown_african_mask_1_random_a }
-					20 = { set_name = crown_african_mask_1_random_b }
-					20 = { set_name = crown_african_mask_1_random_c }
-					20 = { set_name = crown_african_mask_1_random_d }
-				}
-			}
-		}
-
-		20 = {
-			add_artifact = crown_african_mask_2
-
-			new_artifact = {
-				random_list = {
-					# Randomize names to avoid too much repetition
-					20 = { set_name = crown_african_mask_2_random_a }
-					20 = { set_name = crown_african_mask_2_random_b }
-					20 = { set_name = crown_african_mask_2_random_c }
-					20 = { set_name = crown_african_mask_2_random_d }
-				}
-			}
-		}
-
-		20 = {
-			add_artifact = crown_african_mask_3
-
-			new_artifact = {
-				random_list = {
-					# Randomize names to avoid too much repetition
-					20 = { set_name = crown_african_mask_3_random_a }
-					20 = { set_name = crown_african_mask_3_random_b }
-					20 = { set_name = crown_african_mask_3_random_c }
-					20 = { set_name = crown_african_mask_3_random_d }
-				}
-			}
-		}
-
-		20 = {
-			add_artifact = crown_african_mask_4
-
-			new_artifact = {
-				random_list = {
-					# Randomize names to avoid too much repetition
-					20 = { set_name = crown_african_mask_4_random_a }
-					20 = { set_name = crown_african_mask_4_random_b }
-					20 = { set_name = crown_african_mask_4_random_c }
-					20 = { set_name = crown_african_mask_4_random_d }
-				}
-			}
-		}
-
-		20 = {
-			add_artifact = crown_african_mask_5
-
-			new_artifact = {
-				random_list = {
-					# Randomize names to avoid too much repetition
-					20 = { set_name = crown_african_mask_5_random_a }
-					20 = {
-						trigger = {
-							ROOT = {
-								is_lowborn = no
-							}
-						}
-
-						set_name = crown_african_mask_5_random_b
-					}
-					20 = { set_name = crown_african_mask_5_random_c }
-					20 = { set_name = crown_african_mask_5_random_d }
-				}
-			}
-		}
-
-		20 = {
-			add_artifact = crown_african_mask_6
-
-			new_artifact = {
-				random_list = {
-					# Randomize names to avoid too much repetition
-					20 = { set_name = crown_african_mask_6_random_a }
-					20 = { set_name = crown_african_mask_6_random_b }
-					20 = {
-						trigger = {
-							ROOT = {
-								is_lowborn = no
-							}
-						}
-
-						set_name = crown_african_mask_6_random_c
-					}
-					20 = { set_name = crown_african_mask_6_random_d }
-				}
-			}
-		}
-
-		20 = {
-			add_artifact = crown_african_mask_7
-
-			new_artifact = {
-				random_list = {
-					# Randomize names to avoid too much repetition
-					20 = { set_name = crown_african_mask_7_random_a }
-					20 = { set_name = crown_african_mask_7_random_b }
-					20 = { set_name = crown_african_mask_7_random_c }
-					20 = { set_name = crown_african_mask_7_random_d }
-				}
-			}
-		}
-
-		20 = {
-			add_artifact = crown_african_mask_8
-
-			new_artifact = {
-				random_list = {
-					# Randomize names to avoid too much repetition
-					20 = { set_name = crown_african_mask_8_random_a }
-					20 = { set_name = crown_african_mask_8_random_b }
-					20 = { set_name = crown_african_mask_8_random_c }
-					20 = { set_name = crown_african_mask_8_random_d }
-				}
-			}
-		}
-	}
-}
 
 murder_bloodline_check_effect = { 
 	change_variable = { which = bloodline_murdered_people value = 1 }
@@ -25308,7 +24991,6 @@ assign_random_nickname_effect = {
 			trigger = { trait = patient }
 
 			random_list = {
-				10 = { give_nickname = nick_the_tenacious }
 				10 = { give_nickname = nick_the_mule }
 			}
 		}

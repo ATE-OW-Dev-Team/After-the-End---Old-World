@@ -4406,18 +4406,6 @@ character_event = { # A Child is born - you have a good feeling about the kid! (
 		has_relationship_omen_modifier_trigger = yes
     }
 
-    weight_multiplier = {
-		days = 1
-		modifier = {
-			factor = 5
-			has_character_modifier = good_relationship_omen
-		}
-		modifier = {
-			factor = 0.5
-			has_character_modifier = bad_relationship_omen
-		}
-	}
-
     immediate = {
     	if = { limit = { has_character_modifier = good_relationship_omen } set_character_flag = omen_opt1 }
     	if = { limit = { has_character_modifier = bad_relationship_omen } set_character_flag = omen_opt2 }
@@ -6986,7 +6974,7 @@ character_event = { #Final follow-up for parent
         name = fina_horoscope_outcome_for_parent_opt
 
 		event_target:horoscope_child = { #to show effects achieved for kid...
-			show_scope_change = no
+			
 	        trigger_switch = {
 	        	on_trigger = has_character_flag
 	        	martial_1 = { custom_tooltip = { text = improved_martial_1_tt } }
@@ -7884,10 +7872,6 @@ character_event = {
 	
 	is_triggered_only = yes
 	
-	desc = {
-		trigger = { }
-		text = EVTDESC_MNM_1903
-	}
 	desc = {
 		trigger = { }
 		text = EVTDESC_MNM_1903
@@ -9893,7 +9877,7 @@ character_event = {
 	
 	immediate = {
 		destroy_random_ingredients_effect = yes
-		FROM = { character_event = { id = MNM.1624 days = 15 random = 15  } }
+		FROM = { narrative_event = { id = MNM.1624 days = 15 random = 15  } }
 	}
 }
 
@@ -12905,7 +12889,7 @@ character_event = {
 						trait = gregarious
 					}
 					
-					FROM = { 
+					ROOT = { 
 						change_variable = {
 							which = gath_res
 							value = 1
@@ -13493,10 +13477,6 @@ character_event = {
 		
 		ai_chance = {
 			factor = 10
-			modifier = {
-				factor = 2
-				trait = gardener
-			}
 			modifier = {
 				factor = 2
 				trait = gardener
@@ -16129,7 +16109,6 @@ character_event = { # Progress - Friends upset about missed event
 			random = {
 				chance = 30
 				remove_friend = ROOT
-			break_alliance = ROOT
 			}
 			opinion = {
 				modifier = opinion_forgot_important_occasion
@@ -16434,12 +16413,12 @@ character_event = { # Outcome - Predicting star-fall
 	
 	option = {
 		name = EVTOPTA_MNM_1847 # Invite everyone to this occasion
-		character_event = { id = MNM.1853 days = 190 random = 70 }
+		long_character_event = { id = MNM.1853 days = 190 random = 70 }
 	}
 	
 	option = {
 		name = EVTOPTB_MNM_1847 # I'll remember the day and observe it myself
-		character_event = { id = MNM.1854 days = 190 random = 70 }
+		long_character_event = { id = MNM.1854 days = 190 random = 70 }
 	}
 }
 
@@ -16767,13 +16746,12 @@ character_event = {
     is_triggered_only = yes
 
     trigger = {
-    	FROM = { has_artifact_flag = ingredient } #the artifact inherited must be an ingredient...
+    	ROOT = { any_artifact = { has_artifact_flag = ingredient } } #the artifact inherited must be an ingredient...
     	NOT = { has_character_flag = dealing_with_inherited_ingredients } #you mustn't already dealing with this...
     }
 
     immediate = {
     	set_character_flag = dealing_with_inherited_ingredients
-    	FROMFROM = { save_event_target_as = previous_ingredient_owner } #does this work on dead folk?
     	character_event = { id = MNM.5108 }
     }
 }
@@ -16788,9 +16766,8 @@ character_event = {
     	if = {
     		limit = {
     			ai = yes
-    			FROMFROM = { has_artifact_flag = ingredient }
     		}
-    		FROMFROM = { destroy_artifact = yes }
+    		ROOT = { any_artifact = { limit = { has_artifact_flag = ingredient } destroy_artifact = yes } }
     	}
     	if = {
     		limit = {

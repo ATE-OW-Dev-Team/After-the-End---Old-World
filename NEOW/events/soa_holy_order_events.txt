@@ -151,7 +151,9 @@ letter_event = {
 			holder_scope = {
 				FROMFROM = {
 					hidden_tooltip = {
-						clear_wealth = PREV
+						PREV = {
+							clear_wealth = yes
+						}
 					}
 					spouse = {
 						remove_spouse = spouse
@@ -198,7 +200,6 @@ character_event = {
 				id = SoA.1011
 			}
 		}
-		abdicate_holy_order_if_religion_changes_effect = yes
 	}
 }
 
@@ -243,13 +244,12 @@ character_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		set_defacto_liege = FROM
-		FROM = {
+		set_defacto_liege = event_target:knightsvassaliser
+		event_target:knightsvassaliser = {
 			letter_event = {
 				id = SoA.1016
 			}
 		}
-		abdicate_holy_order_if_religion_changes_effect = yes
 	}
 }
 
@@ -266,6 +266,66 @@ letter_event = {
 	}
 }
 
+# Ping event when vassalizing the Templars
+character_event = {
+	id = SoA.10152
+	
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_defacto_liege = event_target:knightsvassaliser
+		event_target:knightsvassaliser = {
+			letter_event = {
+				id = SoA.10162
+			}
+		}
+	}
+}
+
+# Notification event when vassalizing the Templars
+letter_event = {
+	id = SoA.10162
+	desc = EVTDESC_SOA_10162
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# Ping event when vassalizing the Hospitallers
+character_event = {
+	id = SoA.1115
+	hide_window = yes
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		set_defacto_liege = event_target:knightsvassaliser
+		event_target:knightsvassaliser = {
+			letter_event = {
+				id = SoA.1116
+			}
+		}
+	}
+}
+
+# Notification event when vassalizing the Hospitallers
+letter_event = {
+	id = SoA.1116
+	desc = EVTDESC_SOA_1116
+	border = GFX_event_letter_frame_religion
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = EXCELLENT
+	}
+}
 # The Grand Master demands the right to build a castle in your demesne
 character_event = {
 	id = SoA.1020
@@ -579,8 +639,7 @@ character_event = {
 		modifier = {
 			factor = 3.0 # Prefer the Teutonic Order
 			OR = {
-				culture_group = north_germanic
-				culture_group = central_germanic
+				culture_group = nord
 				culture_group = magyar
 				culture_group = south_slavic
 				culture_group = west_slavic
@@ -895,48 +954,6 @@ province_event = {
 }
 
 
-# Ping event when expelling a Christian Holy Order
-character_event = {
-	id = SoA.1060
-	hide_window = yes
-	
-	is_triggered_only = yes
-	
-	immediate = {
-		any_title_under = {
-			limit = {
-				tier = BARON
-				location = {
-					owner = {
-						OR = {
-							character = FROM
-							is_liege_or_above = FROM
-						}
-					}
-				}
-			}
-			usurp_title = FROM
-		}
-		
-		if = {
-			limit = {
-				is_liege_or_above = FROM
-			}
-			set_defacto_liege = THIS
-		}
-	
-		FROM = {
-			letter_event = {
-				id = SoA.1061
-			}
-		}
-		
-		opinion = {
-			who = FROM
-			modifier = opinion_expelled_from_realm
-		}
-	}
-}
 
 # Notification event when expelling a Christian Holy Order
 letter_event = {
@@ -1647,7 +1664,9 @@ character_event = {
 			}
 			remove_title = title_patrician_heir
 		}
-		clear_wealth = event_target:order_target
+		event_target:order_target = {
+			clear_wealth = yes
+		}
 		any_spouse = {
 			remove_spouse = PREV
 			character_event = { id = SoA.2863 }

@@ -491,9 +491,7 @@ decisions = {
             religion = catholic
 			NOT = { trait = defender_faith }
 			defender_faith = {
-				limit = {
-					is_alive = yes
-				}
+				is_alive = yes
 				count = 1
 			}
         }
@@ -636,6 +634,69 @@ decisions = {
 			}
 			modifier = {
 				factor = 0.5 # Slow it down
+			}
+		}
+	}
+	commission_hot_airballoon = {
+		only_playable = yes
+		ai_check_interval = 36
+		potential = {
+			NOT = { government = order_government }
+			NOT = {
+				has_artifact = hot_airballoon
+			}
+			age = 16
+    		is_incapable = no
+			OR = {
+				ai = no
+				higher_tier_than = BARON
+			}
+			is_landed = yes
+			martial = 15
+			learning = 15
+			OR = {
+				is_feudal = yes
+				is_republic = yes
+			}
+		}
+		allow = {
+			wealth = 1200
+			is_inaccessible_trigger = no
+		}
+		effect = {
+			wealth = -1200
+			add_artifact = hot_airballoon
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.5
+				NOR = {
+					tier = KING
+					tier = EMPEROR
+				}
+			}
+			modifier = {
+				factor = 0.5
+				trait = greedy
+			}
+			modifier = {
+				factor = 2
+				trait = drukian
+			}
+			modifier = {
+				factor = 2
+				trait = ambitious
+			}
+			
+			modifier = {
+				factor = 0.1
+				NOT = { wealth = 1500 }
+			}
+			modifier = {
+				factor = 0.1
+				trait = content
 			}
 		}
 	}
@@ -1017,39 +1078,6 @@ decisions = {
 					}
 				}
 			}
-			if = {
-				limit = { 
-					primary_title = {
-						has_law = vassal_wars_law_0
-					}
-					independent = yes
-					is_landed = yes
-				}
-				primary_title = {
-				set_the_kings_peace = yes
-				set_the_kings_full_peace = yes
-				}
-				character_event = {
-					id = cleanup.5588
-					months = 2
-				}
-			}
-			if = {
-				limit = { 
-					primary_title = {
-						has_law = vassal_wars_law_1
-					}
-					independent = yes
-					is_landed = yes
-				}
-				primary_title = {
-				set_the_kings_full_peace = yes
-				}
-				character_event = {
-					id = cleanup.5589
-					months = 2
-				}
-			}
 		}
 		
 		ai_will_do = {
@@ -1162,7 +1190,9 @@ decisions = {
 			is_playable = yes
 			religion = orthodox
 			independent = yes
-			NOT = { has_global_flag = patriarch_istanbul }
+			NOT = {
+				has_global_flag = patriarch_istanbul_flag
+			}
 			k_orthodox = {
 				NOT = {
 					holder_scope = {
@@ -1307,9 +1337,7 @@ decisions = {
 		}
 		allow = {
 			piety = 1000
-			any_demesne_title = {
-				limit = { tier = EMPEROR }
-			}
+			tier = EMPEROR
 			OR = {
 				owns = 802 # alexandria
 				any_realm_lord = {
@@ -1333,7 +1361,7 @@ decisions = {
 						wealth = 500
 					}
 					set_preferred_capital = c_alexandria
-					set_defacto_liege = FROM
+					set_defacto_liege = ROOT
 				}
 			}
 		}
@@ -1649,7 +1677,6 @@ targeted_decisions = {
 			}
 			NOR = {
 				is_father = ROOT
-				is_father_real_father = ROOT
 				is_mother = ROOT
 				is_grandparent_of = ROOT
 				is_friend = ROOT
@@ -1962,7 +1989,7 @@ targeted_decisions = {
 			OR = {
 				religion = bezpopotvsy
 				religion = prussianist
-				has_religion_feature = religion_self_immolate
+				religion_scope = { has_religion_feature = religion_self_immolate }
 			}
 			
 		}
@@ -2478,7 +2505,7 @@ targeted_decisions = {
 		effect = {
             FROM = { 
                 capital_scope = {
-                    FROM = {
+					holder_scope = {
                         spawn_unit = {
                             owner = FROM
                             province = PREV
@@ -2494,7 +2521,7 @@ targeted_decisions = {
                             cannot_inherit = yes
                             disband_on_peace = yes
                         }
-                    }
+					}
                 }
 				wealth = -200
             }
@@ -2619,6 +2646,144 @@ targeted_decisions = {
 				make_tributary = { 
 					who = PREV
 					tributary_type = march
+				}
+				prestige = -750
+			}
+			opinion = { modifier = opinion_released_tributary who = FROM }
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = { 
+				factor = 0.1
+			}
+			modifier = {
+				factor = 0.25
+				FROM = {
+					NOR = {
+						trait = kind
+						trait = charitable
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				de_jure_liege_or_above = FROM
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					trait = greedy
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					trait = envious
+				}
+			}
+			modifier = {
+				factor = 1.25
+				FROM = {
+					trait = slothful
+				}
+			}
+			modifier = {
+				factor = 1.25
+				FROM = {
+					trait = humble
+				}
+			}
+		}
+	}
+	
+	release_vassal_as_satellite = {
+		only_playable = yes
+		filter = vassals
+		ai_target_filter = vassals
+		ai_check_interval = 36
+	    diplomacy_icon = GFX_satellite_icon
+
+		from_potential = {
+			is_playable = yes
+			independent = yes
+			real_tier = emperor
+			NOT = {
+				government = mandala_government
+			}
+			OR = {
+				AND = {
+					ai = yes
+					ROOT = { NOT = { any_dejure_liege = { character = FROM } } }
+				}
+				AND = {
+					ai = no
+				}
+			}
+		}
+	
+		potential = {
+			NOT = { character = FROM }
+			liege = { character = FROM }
+			higher_tier_than = count
+		}
+		allow = {
+			FROM = {
+				OR = {
+					AND = {
+						ai = no
+						NOT = {
+							government = mandala_government
+						}
+						TECH_MAJESTY = 3
+						TECH_RECRUITMENT = 3
+						prestige = 750
+						PREV = {
+							OR = {
+								stewardship = 10
+								diplomacy = 10
+								learning = 10
+							}
+						}
+						real_tier = EMPEROR
+					}
+					AND = {
+						ai = yes
+						NOT = {
+							government = mandala_government
+						}
+						ROOT = {
+							NOR ={
+								de_jure_vassal_or_below = FROM
+								culture = FROM
+							}
+						}
+						ROOT = {
+							NOT = { culture_group = FROM }
+						}
+						PREV = {
+							OR = {
+								martial = 10
+								diplomacy = 10
+								learning = 10
+							}
+						}
+						real_tier = EMPEROR
+						TECH_MAJESTY = 4
+						TECH_RECRUITMENT = 4
+						prestige = 750
+						NOT = { government = confederation_government }
+					}
+				}
+			}
+		}
+		effect = {
+			hidden_tooltip = { set_defacto_liege = THIS }
+			FROM = {
+				make_tributary = { 
+					who = PREV
+					tributary_type = satillite
 				}
 				prestige = -750
 			}
@@ -2910,15 +3075,21 @@ title_decisions = {
 			}
 			modifier = {
 				factor = 2
-				has_province_modifier = prosperity_modifier_1 
+				location = {
+					has_province_modifier = prosperity_modifier_1 
+				}
 			}
 			modifier = {
 				factor = 2.25
-				has_province_modifier = prosperity_modifier_2
+				location = {
+					has_province_modifier = prosperity_modifier_2
+				}
 			}
 			modifier = {
 				factor = 2.5
-				has_province_modifier = prosperity_modifier_3
+				location = {
+					has_province_modifier = prosperity_modifier_3
+				}
 			}
 		}
 	}

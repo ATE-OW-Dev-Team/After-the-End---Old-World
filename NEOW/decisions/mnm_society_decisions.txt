@@ -891,7 +891,6 @@ targeted_decisions = {
 				NOR = {
 					is_close_relative = FROM
 					is_consort = FROM
-					is_main_spouse = FROM
 					is_friend = FROM
 					is_lover = FROM
 				}
@@ -906,7 +905,10 @@ targeted_decisions = {
 		}
 		effect = {
 			FROM = {
-				has_society_currency_major_trigger = yes
+				change_society_currency = {
+					society = the_assassins
+					value = -500
+				}
 				wealth = -250
 				add_character_modifier = { 
 					modifier = recently_fomented_unrest 
@@ -1655,7 +1657,7 @@ targeted_decisions = {
 					trait = infirm
 					trait = mangled
 					trait = eunuch
-					trait = blinded
+					OR = { trait = blinded trait = blind }
 					trait = incapable
 				}
 			}
@@ -1671,118 +1673,6 @@ targeted_decisions = {
 		}
 	}
 
-	#Power: Demonic Possession
-	devil_worshipers_demonic_possession = {
-		is_in_society = yes
-
-		ai_target_filter = sub_realm
-		ai_check_interval = 24
-
-		from_potential = {
-			is_devil_worshiper_trigger = yes
-			society_rank > 1
-		}
-
-		potential = {
-			OR = {
-				host = { character = FROM }
-				liege = { character = FROM }
-			}
-			NOT = { character = FROM }
-			ai = yes
-		}
-
-		allow = {
-			FROM = {
-				prisoner = no
-				NOT = { trait = incapable }
-				has_society_currency_minor_trigger = yes
-
-				custom_tooltip = {
-					text = is_accessible
-					OR = {
-						is_inaccessible_trigger = no
-						AND = {
-							FROM = {
-								has_character_modifier = in_seclusion
-								at_location = ROOT
-							}
-							ROOT = {
-								has_character_modifier = in_seclusion
-							}
-						}
-					}
-				}
-			}
-			ROOT = {
-			
-				NOT = { trait = incapable }
-
-				custom_tooltip = {
-					text = possess_courtier_already_done
-					NOR = {
-						has_character_flag = possessing_courtier
-						has_opinion_modifier = { who = FROM modifier = opinion_loyal_servant }
-						trait = possessed
-						trait = lunatic
-					}
-				}
-			}	
-		}
-
-		effect = {
-			ROOT = {
-				set_character_flag = possessing_courtier
-				hidden_effect = { 
-					character_event = { id = MNM.7840 days = 3 random = 7 }
-				}
-			}
-			FROM = { 
-				detract_society_currency_minor_effect = yes
-			}
-			if = {
-				limit = {
-					NOT = {
-						is_quest_target_of = FROM
-					}
-				}
-				FROM = {
-					increase_visibility_effect = yes
-				}
-			}
-			if = {
-				limit = {
-					is_quest_target_of = FROM
-				}
-				FROM = {
-					increase_visibility_minor_effect = yes
-				}
-			}
-		}
-
-		ai_will_do = {
-			factor = 1
-			modifier = {
-				factor = 0.1 # slow down
-			}
-			modifier = {
-				factor = 0.5
-				is_benevolent_trigger = yes
-			}
-			modifier = {
-				factor = 0.25
-				ROOT = {
-					is_landed = no
-				}
-			}
-			modifier = {
-				factor = 3
-				ROOT = {
-					among_most_powerful_vassals = 5
-				}
-			}
-		}
-	}
 
 	#Action: satanist recruit
 	devil_workshippers_recruit = {
@@ -1962,9 +1852,8 @@ targeted_decisions = {
 			death = {
 				death_reason = death_missing
 			}
-			hidden_effect = { character_event = { id = MNM.7506 } }
 			FROM = {
-				show_scope_change = no
+				
 				increase_visibility_minor_effect = yes
 				minor_soul_corruption_effect = yes
 				hidden_effect = { murder_bloodline_check_effect = yes }
@@ -1982,7 +1871,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_virgin }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_virgin 
 						add_society_currency_major_effect = yes
 					}
@@ -2002,7 +1891,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_holy_person }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_holy_person
 						add_society_currency_major_effect = yes
 					}
@@ -2019,7 +1908,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_dwarf }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_dwarf
 						add_society_currency_major_effect = yes
 					}
@@ -2036,7 +1925,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_ruler }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_ruler
 						add_society_currency_major_effect = yes
 					}
@@ -2049,7 +1938,7 @@ targeted_decisions = {
 				}
 				#No quest so add default
 				FROM = { 
-					show_scope_change = no
+					
 					add_society_currency_medium_effect = yes 
 				}
 				trigger_switch = {
@@ -2075,7 +1964,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_virgin }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_virgin 
 						add_society_currency_medium_effect = yes
 					}
@@ -2095,7 +1984,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_holy_person }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_holy_person
 						add_society_currency_medium_effect = yes
 					}
@@ -2112,7 +2001,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_dwarf }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_dwarf
 						add_society_currency_medium_effect = yes
 					}
@@ -2129,7 +2018,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_ruler }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_ruler
 						add_society_currency_medium_effect = yes
 					}
@@ -2142,7 +2031,7 @@ targeted_decisions = {
 				}
 				#No quest so add default
 				FROM = { 
-					show_scope_change = no
+					
 					add_society_currency_minor_effect = yes
 				}
 				trigger_switch = {
@@ -2165,7 +2054,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_virgin }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_virgin 
 						add_society_currency_medium_effect = yes
 					}
@@ -2185,7 +2074,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_holy_person }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_holy_person
 						add_society_currency_medium_effect = yes
 					}
@@ -2202,7 +2091,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_dwarf }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_dwarf
 						add_society_currency_medium_effect = yes
 					}
@@ -2219,7 +2108,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_ruler }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_ruler
 						add_society_currency_medium_effect = yes
 					}
@@ -2232,7 +2121,7 @@ targeted_decisions = {
 				}
 				#No quest so add default
 				FROM = {
-					show_scope_change = no
+					
 					add_society_currency_minor_effect = yes
 				}
 				trigger_switch = {
@@ -2255,7 +2144,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_virgin }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_virgin 
 						add_society_currency_minor_effect = yes
 					}
@@ -2275,7 +2164,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_holy_person }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_holy_person
 						add_society_currency_minor_effect = yes
 					}
@@ -2292,7 +2181,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_dwarf }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_dwarf
 						add_society_currency_minor_effect = yes
 					}
@@ -2309,7 +2198,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_ruler }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_ruler
 						add_society_currency_minor_effect = yes
 					}
@@ -2322,7 +2211,7 @@ targeted_decisions = {
 				}
 				#No quest so add default
 				FROM = {
-					show_scope_change = no
+					
 					add_society_currency_trivial_effect = yes
 				}
 				trigger_switch = {
@@ -2345,7 +2234,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_virgin }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_virgin 
 						add_society_currency_minor_effect = yes
 					}
@@ -2365,7 +2254,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_holy_person }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_holy_person
 						add_society_currency_minor_effect = yes
 					}
@@ -2382,7 +2271,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_dwarf }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_dwarf
 						add_society_currency_minor_effect = yes
 					}
@@ -2399,7 +2288,7 @@ targeted_decisions = {
 						FROM = { has_quest = quest_the_devil_worshipers_sacrifice_ruler }
 					}
 					FROM = { 
-						show_scope_change = no
+						
 						clr_quest = quest_the_devil_worshipers_sacrifice_ruler
 						add_society_currency_minor_effect = yes
 					}
@@ -2412,7 +2301,7 @@ targeted_decisions = {
 				}
 				#No quest so add default
 				FROM = {
-					show_scope_change = no
+					
 					add_society_currency_trivial_effect = yes
 				}
 				trigger_switch = {
@@ -2431,7 +2320,7 @@ targeted_decisions = {
 					FROM = { has_quest = quest_the_devil_worshipers_sacrifice_virgin }
 				}
 				FROM = { 
-					show_scope_change = no
+					
 					clr_quest = quest_the_devil_worshipers_sacrifice_virgin 
 					add_society_currency_minor_effect = yes
 				}
@@ -2451,7 +2340,7 @@ targeted_decisions = {
 					FROM = { has_quest = quest_the_devil_worshipers_sacrifice_holy_person }
 				}
 				FROM = { 
-					show_scope_change = no
+					
 					clr_quest = quest_the_devil_worshipers_sacrifice_holy_person
 					add_society_currency_minor_effect = yes
 				}
@@ -2468,7 +2357,7 @@ targeted_decisions = {
 					FROM = { has_quest = quest_the_devil_worshipers_sacrifice_dwarf }
 				}
 				FROM = { 
-					show_scope_change = no
+					
 					clr_quest = quest_the_devil_worshipers_sacrifice_dwarf
 					add_society_currency_minor_effect = yes
 				}
@@ -2485,7 +2374,7 @@ targeted_decisions = {
 					FROM = { has_quest = quest_the_devil_worshipers_sacrifice_ruler }
 				}
 				FROM = { 
-					show_scope_change = no
+					
 					clr_quest = quest_the_devil_worshipers_sacrifice_ruler
 					add_society_currency_minor_effect = yes
 				}
@@ -2498,7 +2387,7 @@ targeted_decisions = {
 			}
 			#No quest so add default
 			FROM = {
-				show_scope_change = no
+				
 				add_society_currency_trivial_effect = yes
 			}
 			trigger_switch = {
@@ -2660,7 +2549,7 @@ targeted_decisions = {
 					OR = {
 						AND = {
 							is_landed = yes
-							capital_holding = { holding_type = TEMPLE }
+							capital_holding = { holding_type = temple }
 						}
 					    AND = {
 					        tier = baron
@@ -2668,7 +2557,7 @@ targeted_decisions = {
 					            any_demesne_province = {
 					                any_province_holding = {
 					                    owner = { character = ROOT }
-					                    holding_type = TEMPLE
+					                    holding_type = temple
 					                }
 					            }
 					        }

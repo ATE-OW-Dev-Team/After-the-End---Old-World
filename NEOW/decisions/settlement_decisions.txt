@@ -21,7 +21,11 @@ settlement_decisions = {
 		
 		from_potential = {
 			is_playable = yes
-			is_feudal = yes
+			OR = {
+				is_republic = yes
+				is_theocracy = yes
+				is_feudal = yes
+			}
 			higher_tier_than = BARON
 		}
 		
@@ -45,12 +49,17 @@ settlement_decisions = {
 					religion = FROM
 				}
 			}
+			FROM = {
+				wealth = 250
+			}
 			has_building = tb_hillfort_4
 		}
 		effect = {
 			convert_to = castle
 			refill_holding_levy = yes
-			
+			FROM = {
+				wealth = -250
+			}
 			hidden_tooltip = {
 				location = { #Clear Tribal Great Pillars
 					clr_province_flag = flag_great_pillar_norse
@@ -124,7 +133,11 @@ settlement_decisions = {
 		
 		from_potential = {
 			is_playable = yes
-			is_republic = yes
+			OR = {
+				is_republic = yes
+				is_theocracy = yes
+				is_feudal = yes
+			}
 			higher_tier_than = BARON
 		}
 		
@@ -138,11 +151,17 @@ settlement_decisions = {
 			location = {
 				religion = FROM
 			}
+			FROM = {
+				wealth = 250
+			}
 			has_building = tb_market_town_4
 		}
 		effect = {
 			convert_to = city
 			refill_holding_levy = yes
+			FROM = {
+				wealth = -250
+			}
 			
 			hidden_tooltip = {
 				location = { #Clear Tribal Great Pillars
@@ -215,7 +234,11 @@ settlement_decisions = {
 		
 		from_potential = {
 			is_playable = yes
-			is_theocracy = yes
+			OR = {
+				is_republic = yes
+				is_theocracy = yes
+				is_feudal = yes
+			}
 			higher_tier_than = BARON
 			OR = {
 				NOT = { religion_group = pagan_group }
@@ -234,10 +257,16 @@ settlement_decisions = {
 				religion = FROM
 			}
 			has_building = tb_hillfort_4
+			FROM = {
+				wealth = 250
+			}
 		}
 		effect = {
 			convert_to = temple
 			refill_holding_levy = yes
+			FROM = {
+				wealth = -250
+			}
 			
 			hidden_tooltip = {
 				location = { #Clear Tribal Great Pillars
@@ -419,47 +448,61 @@ settlement_decisions = {
 		from_potential = {
 			is_playable = yes
 			OR = {
-				is_nomadic = yes
-				is_tribal = yes
-				religion = stalinist
-				religion = jacobinist
-				religion = trotskyite
-				religion = titoist
-				trait = cruel
-				trait = impaler
-				trait = aggressive_leader
-				trait = viking
-				trait = pirate
-				trait = ravager
-				trait = seaking
-				trait = sea_queen
-				trait = deceitful
-				trait = arbitrary
-				trait = greedy
-				trait = berserker
-				trait = wroth
-			}
-			NOR = {
-				trait = kind
-				trait = charitable
-				trait = just
+				AND = {
+					OR = {
+						is_nomadic = yes
+						is_tribal = yes
+						religion = stalinist
+						religion = jacobinist
+						religion = trotskyite
+						religion = titoist
+						trait = cruel
+						trait = impaler
+						trait = aggressive_leader
+						trait = viking
+						trait = pirate
+						trait = ravager
+						trait = seaking
+						trait = sea_queen
+						trait = deceitful
+						trait = arbitrary
+						trait = greedy
+						trait = berserker
+						trait = wroth
+					}
+					NOR = {
+						trait = kind
+						trait = charitable
+						trait = just
+					}
+				}
+				OR = {
+					trait = viking
+					trait = pirate
+					trait = ravager
+					trait = seaking
+					trait = sea_queen
+				}
 			}
 			has_dlc = "Horse Lords"
 		}
 		
 		potential = {
 			NOT = { holding_type = nomad }
-			OR = {
-				FROM = { is_nomadic = yes }
-				location = {
-					num_of_settlements = 2
-				}
+			location = {
+				num_of_settlements = 2
 			}
 			OR = {
 				owner = { NOT = { character = FROM } }
 				AND = {
 					FROM = { is_nomadic = yes }
 					location = { NOT = { religion_group = FROM } }
+				}
+			}
+			NOT = {
+				AND = {
+					is_capital = yes
+					num_of_buildings == 0
 				}
 			}
 			has_siege = no
@@ -481,7 +524,6 @@ settlement_decisions = {
 		effect = {
 			
 			hidden_tooltip = {
-				location = { save_event_target_as = nickname_target }
 				FROM = { save_event_target_as = nickname_receiver }
 				if = {
 					limit = {
@@ -616,7 +658,7 @@ settlement_decisions = {
 							}
 						}
 					}
-					FROM = { character_event = { id = HL.4800 days = 180 } }
+					#FROM = { character_event = { id = HL.4800 days = 180 } }
 					FROM = {
 						add_character_modifier = {
 							modifier = pillage_cooldown
@@ -629,25 +671,15 @@ settlement_decisions = {
 			
 			if = {
 				limit = {
-					ROOT = {
-						NOT = { has_any_building = yes }
-						owner = {
-							character = FROM
-						}
-						NOT = {
-							is_capital = yes
-						}
-					}
+					num_of_buildings == 0
 				}
-				hidden_tooltip = {
-					location = {
-						province_event = { id = HL.4810 days = 1 }
-						province_event = { id = HL.4814 days = 2 random = 2 }
-					}
-				}
-				ROOT = {
-					destroy_settlement = THIS
-				}
+				# hidden_tooltip = {
+					# location = {
+						# province_event = { id = HL.4810 days = 1 }
+						# province_event = { id = HL.4814 days = 2 random = 2 }
+					# }
+				# }
+				destroy_settlement = THIS
 			}
 			
 		}
@@ -659,23 +691,23 @@ settlement_decisions = {
 			}
 			modifier = { 
 				factor = 0.1
-				trait = kind
+				FROM = { trait = kind }
 			}
 			modifier = { 
 				factor = 0.1
-				trait = humble
+				FROM = { trait = humble }
 			}
 			modifier = { 
 				factor = 0.1
-				trait = just
+				FROM = { trait = just }
 			}
 			modifier = { 
 				factor = 1.5
-				trait = arbitrary
+				FROM = { trait = arbitrary }
 			}
 			modifier = { 
 				factor = 1.5
-				trait = greedy
+				FROM = { trait = greedy }
 			}
 			modifier = { 
 				factor = 1.5
@@ -684,14 +716,14 @@ settlement_decisions = {
 						religion_group = FROM
 					}
 				}
-				trait = zealous
+				FROM = { trait = zealous }
 			}
 			modifier = { 
 				factor = 0.25
 				location = {
 					religion_group = FROM
 				}
-				trait = zealous
+				FROM = { trait = zealous }
 			}
 		}
 	}
@@ -776,6 +808,12 @@ settlement_decisions = {
 				k_papacy = {
 					holder_scope = {
 						grant_title = ROOT
+					}
+				}
+				FROM = {
+					add_offmap_currency = {
+						offmap = offmap_patriarchs
+						value = 300
 					}
 				}
 			}
@@ -883,7 +921,6 @@ settlement_decisions = {
 		effect = {
 			
 			hidden_tooltip = {
-				location = { save_event_target_as = nickname_target }
 				FROM = { save_event_target_as = nickname_receiver }
 				if = {
 					limit = {
@@ -1019,7 +1056,7 @@ settlement_decisions = {
 							}
 						}
 					}
-					FROM = { character_event = { id = HL.4800 days = 180 } }
+					#FROM = { character_event = { id = HL.4800 days = 180 } }
 					FROM = {
 						add_character_modifier = {
 							modifier = pillage_cooldown
@@ -1032,17 +1069,14 @@ settlement_decisions = {
 			
 			if = {
 				limit = {
-					NOT = { has_any_building = yes }
-					owner = {
-						character = FROM
-					}
+					num_of_buildings == 0
 				}
-				hidden_tooltip = {
-					location = {
-						province_event = { id = HL.4810 days = 1 }
-						province_event = { id = HL.4814 days = 2 random = 2 }
-					}
-				}
+				# hidden_tooltip = {
+					# location = {
+						# province_event = { id = HL.4810 days = 1 }
+						# province_event = { id = HL.4814 days = 2 random = 2 }
+					# }
+				# }
 				destroy_settlement = THIS
 			}
 			
@@ -1181,7 +1215,7 @@ settlement_decisions = {
 		effect = {
 			# Change culture and religion of new capital province and possibly more provinces depending on nomad population_and_manpower
 			location = {
-				show_scope_change = no
+				
 				if = {
 					limit = {
 						NOT = { culture = FROM }
@@ -2172,9 +2206,9 @@ settlement_decisions = {
 				capital = PREV
 				
 				primary_title = {
-					show_scope_change = no
+					
 					ROOT_FROM = {
-						show_scope_change = no
+						
 						custom_tooltip = { 
 							text = TT_KHAN_INDEPENDENCE
 						}
@@ -2273,18 +2307,6 @@ settlement_decisions = {
 				}
 			}
 			
-			modifier = {
-				factor = 0
-				FROM = {
-					any_demesne_title = {
-						OR = {
-							title = e_mongol_empire
-							title = e_golden_horde
-							title = e_chagatai
-						}
-					}
-				}
-			}
 		}
 	}
 	
@@ -2987,18 +3009,6 @@ settlement_decisions = {
 				}
 			}
 			
-			modifier = {
-				factor = 0
-				FROM =	{
-					any_demesne_title = {
-						OR = {
-							title = e_mongol_empire
-							title = e_golden_horde
-							title = e_chagatai
-						}
-					}
-				}
-			}
 		}
 	}
 	

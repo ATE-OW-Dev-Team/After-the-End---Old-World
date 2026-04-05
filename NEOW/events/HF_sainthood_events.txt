@@ -48,23 +48,24 @@ character_event = {
             any_claim = { title = d_fraticelli } # Antipopes
             any_claim = { title = k_sevillian_pope } # Antipopes
             any_claim = { title = k_koptic } # Antipopes
+            any_claim = { title = k_katoliko } # Antipopes
 		}
 		OR = {
 			AND = {
-				tier = Emperor
+				tier = emperor
 				piety >= 1250
 			}
 
 			AND = {
-				tier = King
+				tier = king
 				piety >= 1000
 			}
 			AND = {
-				tier = Duke
+				tier = duke
 				piety >= 750
 			}
 			AND = {
-				tier = Count
+				tier = count
 				piety >= 500
 			}
 			has_character_modifier = true_christian_knight
@@ -445,11 +446,16 @@ character_event = {
                     event_target:saint_person = {
 						OR = {
 							has_religion_feature = religion_feature_sarna
+							has_religion_feature = religion_feature_wuist
+							has_religion_feature = religion_feature_shindo
 							religion = finnish_pagan
 							religion = akjang
 							religion = finnish_pagan_reformed
 							religion = donyipolo
+							religion = marapu
 							religion = kiratist
+							religion = alukta_pagan
+							religion = alukta_pagan_reformed
 							religion = baltic_pagan
 							religion = baltic_pagan_reformed
 							religion = ovlatii
@@ -457,8 +463,20 @@ character_event = {
 							religion = zoroastrian
 							religion = nobelian
 							religion = neo_zorvanite
+							religion = red_cult
 							religion = maoist
+							religion = taoist
+							religion = white_lotus
+							religion = shinto
+							religion = bushinto
+							religion = buddhoshinto
+							religion = ainushinto
+							religion = shindo
+							religion = shinko
+							religion = raven_tales
+							religion = raven_tales_reformed
 							has_religion_feature = religion_beatification
+				religion = juche
 							religion = sanamahist
 							religion = cosmist
 							religion = easternprotestant
@@ -468,18 +486,14 @@ character_event = {
                     }
                 }
             }
-            province_event = { id = HF.40015 days = 5 }
-        }
-        else_if = {
-            limit = {
-                event_target:saint_person = {
-                    trait = i_used_to_be_a_player
-                }
-            }
-            province_event = { id = HF.40015 days = 1000 random = 1000 }
+			capital_scope = {
+				province_event = { id = HF.40015 days = 5 }
+			}
         }
         else = {
-            province_event = { id = HF.40015 days = 1000 random = 10000 }
+			capital_scope = {
+				province_event = { id = HF.40015 days = 1000 random = 10000 }
+			}
         }
     }
 }
@@ -498,6 +512,9 @@ province_event = {
 				religion = akjang
 				religion = finnish_pagan_reformed
 				religion = donyipolo
+				religion = marapu
+				religion = alukta_pagan
+				religion = alukta_pagan_reformed
 				religion = kiratist
 				religion = baltic_pagan
 				religion = baltic_pagan_reformed
@@ -506,12 +523,26 @@ province_event = {
 				religion = zoroastrian
 				religion = nobelian
 				religion = neo_zorvanite
+				religion = red_cult
 				religion = maoist
+				religion = taoist
+				religion = white_lotus
+				religion = shinto
+				religion = bushinto
+				religion = buddhoshinto
+				religion = ainushinto
+				religion = shindo
+				religion = shinko
+				religion = raven_tales
+				religion = raven_tales_reformed
                 has_religion_feature = religion_beatification
+				religion = juche
 				religion = sanamahist
+				has_religion_feature = religion_feature_wuist
+				has_religion_feature = religion_feature_shindo
 				religion = cosmist
-							religion = easternprotestant
-							religion = devaloka
+				religion = easternprotestant
+				religion = devaloka
 				has_religion_feature = religion_feature_novelist
             }
             NOT = {
@@ -665,7 +696,7 @@ character_event = {
                         }
                         set_variable = { which = global_miracle value = 4 }
                         event_target:saint_person = {
-                            give_nickname = nick_the_prophet
+                            give_nickname = nick_the_apostle
                         }
                     }
                     #Mindreading
@@ -2461,7 +2492,7 @@ narrative_event = {
         		}
         	}
         }
-        show_portrait = bishopric_holder
+        show_portrait = event_target:bishopric_holder
     }
 
     #Stranger and approve
@@ -2478,7 +2509,7 @@ narrative_event = {
     			}
     		}
     	}
-        show_portrait = bishopric_holder
+        show_portrait = event_target:bishopric_holder
     }
 
     #Family and disapprove
@@ -2496,7 +2527,7 @@ narrative_event = {
     			
     		}
     	}
-        show_portrait = bishopric_holder
+        show_portrait = event_target:bishopric_holder
     }
 
     #Family and approve
@@ -2511,7 +2542,7 @@ narrative_event = {
     			family = ROOT
     		}
     	}
-        show_portrait = bishopric_holder
+        show_portrait = event_target:bishopric_holder
     }
 }
 
@@ -2678,7 +2709,7 @@ narrative_event = {
             who = FROM
         }
         FROM = {
-            show_scope_change = no
+            
             opinion = {
                 modifier = insulted
                 who = ROOT
@@ -2721,7 +2752,7 @@ narrative_event = {
             who = FROM
         }        
         FROM = {
-            show_scope_change = no
+            
             opinion = {
                 modifier = insulted
                 who = ROOT
@@ -2818,11 +2849,13 @@ character_event = {
     		AND = {
     			trait = lustful
     			k_papacy = {
-    				is_lover = ROOT
-    				trait = lustful
-    				NOT = {
-    					trait = homosexual
-    				}
+    				holder_scope = {
+						is_lover = ROOT
+						trait = lustful
+						NOT = {
+							trait = homosexual
+						}
+					}
     			}
     		}
     		AND = {
@@ -3254,7 +3287,7 @@ narrative_event = {
         name = EVTOPTA_HF_40093
         trigger = {
             independent = yes
-            NOR = { 
+            NOR = {
                 trait = cynical
                 has_character_flag = supported_impious_pope 
                 any_war = {
@@ -3266,14 +3299,14 @@ narrative_event = {
             text = join_war_to_despose_pope_TT
 
             event_target:papal_attacker = {
-                show_scope_change = no
+                
                 any_war = {
                     limit = {
                         using_cb = depose_impious_pope
                         is_primary_war_attacker = yes
                     }
                     ROOT = {
-                        show_scope_change = no
+                        
                         join_attacker_wars = PREV
                     }
                 }
@@ -3313,7 +3346,7 @@ narrative_event = {
                         using_cb = depose_impious_pope
                     }
                     ROOT = {
-                        show_scope_change = no
+                        
                         join_defender_wars = PREV
                     }
                 }

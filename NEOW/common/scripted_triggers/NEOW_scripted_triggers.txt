@@ -74,7 +74,7 @@ is_anti_caliph = {
 		has_claim = d_ismaili
 		has_claim = d_ahmadiyya
 		has_claim = e_sufi
-		has_claim = e_ovlatii
+		has_claim = d_ovlatii
 	}
 }
 uses_agrarian_feudal = {
@@ -135,7 +135,7 @@ uses_agrarian_feudal = {
 		culture = ulsterian
 		culture = maltese
 		culture = corsu
-		culture = sard
+		culture_group = sardic
 		culture = sicilian
 		culture = neapolitan
 		culture = pugliese
@@ -201,7 +201,6 @@ uses_theocratic_feudal = {
 			}
 			religion_group = buddhist_group
 		}
-		has_religion_feature = religion_monastic
 		religion = celtic_pagan
 		religion = celtic_pagan_reformed
 		religion = sulhi
@@ -257,8 +256,18 @@ uses_theocratic_feudal = {
 			}
 		}
 	}
-	NOT = {
-		has_religion_feature = religion_ritual_sacrifice
+	NAND = {
+		OR = { 
+			real_tier = EMPEROR
+			real_tier = KING
+		}
+		OR = {
+			culture_group = east_african
+			culture_group = cushitic
+			culture = beta_israeli
+			culture_group = egyptian
+			culture_group = nilotic
+		}
 	}
 }
 uses_zodiacs = {
@@ -268,7 +277,7 @@ uses_zodiacs = {
 		religion = saura
 		religion = hellenic_pagan
 		religion = hellenic_pagan_reformed
-		has_religion_feature = religion_astrology
+		religion_scope = { has_religion_feature = religion_astrology }
 		religion = arcane
 		religion = espiritista
 		religion = raelian
@@ -285,12 +294,16 @@ uses_zodiacs = {
 		religion = poseidonian
 		religion = mandaeanism
 		religion = cosmist
-		has_religion_feature = religion_feature_folklorist_2
+		religion_scope = { has_religion_feature = religion_feature_folklorist_2 }
 	}
 }
 uses_alchemy = {
 	OR={
-		has_religion_feature = religion_alchemy
+		religion_scope = {
+			OR = {
+				has_religion_feature = religion_alchemy
+			}
+		}
 		religion = arcane
 		religion = espiritista
 		religion = nobelian
@@ -299,7 +312,9 @@ uses_alchemy = {
 }
 uses_hexes = {
 	OR={
-		has_religion_feature = religion_alchemy
+		religion_scope = {
+			has_religion_feature = religion_alchemy
+		}
 		religion = thelemic_reformed
 		religion = summer_queen
 		religion = theosophy
@@ -340,7 +355,6 @@ doesnt_holds_special_empire = {
 					title = e_german_confederation
 					title = e_aegean
 					title = e_al-andalus
-					title = e_droid
 					title = e_druze
 					title = e_latin_empire
 					title = e_ottoman
@@ -370,7 +384,6 @@ doesnt_holds_special_empire = {
 					title = e_marblists
 					title = e_bengal
 					title = e_neodonatists
-					title = e_ovlatii
 				}
 			}
 		}
@@ -420,7 +433,7 @@ can_hold_council_trigger = {
 	OR = {
 		AND = { #Patriarchal religions can only hire males. Matriarchal religions can only hire females.
 			is_female = no 
-			NOT = { liege = { has_religion_feature = religion_matriarchal } } 
+			NOT = { liege = { religion_scope = { has_religion_feature = religion_matriarchal } } }
 		}
 		AND = {
 			is_female = yes 
@@ -516,12 +529,6 @@ should_have_byz_elective_trigger = {
 		title = e_ruthenia
 		title = e_marblists
 		title = e_bengal
-		AND = {
-			title = k_britannia
-			holder_scope = {
-				has_landed_title = e_britannia
-			}
-		}
 		AND = {
 			OR = {
 				title = e_great_russia
@@ -1059,7 +1066,7 @@ ROOT_can_press_dejure_claim_trigger = {
 			religion = ROOT
 		}
 		trigger_if = {
-			limit = { primary_title = { religion_scope = { persistent_event_target:one_holy_order = { title = PREVPREV } } } }
+			limit = { primary_title = { holder_scope = { religion_scope = { persistent_event_target:one_holy_order = { title = PREVPREVPREV } } } } }
 			ROOT = {
 				OR = {
 					has_character_modifier = expelled_one_holy_order
@@ -1071,7 +1078,7 @@ ROOT_can_press_dejure_claim_trigger = {
 			}
 		}
 		trigger_else_if = {
-			limit = { primary_title = { religion_scope = { persistent_event_target:two_holy_order = { title = PREVPREV } } } }
+			limit = { primary_title = { holder_scope = { religion_scope = { persistent_event_target:two_holy_order = { title = PREVPREVPREV } } } } }
 			ROOT = {
 				OR = {
 					has_character_modifier = expelled_two_holy_order
@@ -1188,7 +1195,7 @@ holder_not_confederation_trigger = {
 			holder_scope = { government = confederation_government }
 		}
 		holder_scope = {
-			show_scope_change = no
+			
 			NOT = { government = confederation_government }
 		}
 	}
@@ -1204,14 +1211,15 @@ confederation_title_trigger = {
 		has_title_flag = is_a_confederacy
 	}
 }
-
 is_feminist_culture = {
 	OR = {
 		culture_group = anglo_frisian
 		culture_group = goidelic
 		culture_group = brythonic
 		culture_group = francophone
-		OR = { culture_group = germanic culture_group = low_germanic culture_group = high_german }
+		culture_group = germanic 
+		culture_group = low_germanic 
+		culture_group = high_german
 		culture_group = mosellophone
 		culture_group = lusophone
 		culture_group = hispanophone
@@ -1220,7 +1228,6 @@ is_feminist_culture = {
 		culture_group = alpinian
 		culture_group = low_american
 		culture_group = high_american
-		culture_group = brittannic
 		culture = bhutanese
 		culture = low_bhutanese
 		culture = german
@@ -1266,7 +1273,6 @@ is_feminist_culture = {
 		culture = tuareg
 		culture = atlantian
 		NOT = { culture = traveller }
-		is_alien_culture_trigger = yes
 	}
 }
 
@@ -1436,16 +1442,6 @@ spread_revolution_can_use_title_trigger = {
 					}
 				}
 			}
-		}
-	}
-}
-is_not_titular_tooltip_trigger = {
-	conditional_tooltip = {
-		trigger = {
-			is_titular = yes
-		}
-		THIS = {
-			is_titular = no
 		}
 	}
 }
