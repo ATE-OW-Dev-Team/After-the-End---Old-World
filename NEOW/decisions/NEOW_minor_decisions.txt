@@ -61,6 +61,11 @@ decisions = {
 				culture_group = iranian
 				culture_group = east_iranic
 				culture_group = alpinian
+				culture_group = chamic
+				culture_group = northern_thai
+				culture_group = khasi_palaung_khmuic
+				culture_group = katuic
+				culture_group = south_chinese_group
 				culture = austrian
 				culture_group = dardic
 				culture = nepali
@@ -192,7 +197,23 @@ decisions = {
 				culture_group = eastern_dravidian_group
 				culture_group = eastern_indo_aryan_group
 				culture_group = manipuric
-				culture_group = east_asian_group
+				culture_group = borneonic
+				culture_group = bali_sumbawa
+				culture_group = iban_dayakic
+				culture_group = mon_group
+				culture_group = mundic
+				culture_group = sumatric
+				culture_group = tanjia
+				culture_group = viet
+				culture_group = mokenic
+				culture_group = burmic
+				culture_group = malay_group
+				culture_group = aslian
+				culture_group = celebic
+				culture_group = papuan
+				culture_group = west_papuan
+				culture_group = abun_mpuric
+				culture_group = sulawesic
 			}
 			can_have_more_leadership_traits = yes
 			age = 25
@@ -270,6 +291,73 @@ decisions = {
 			factor = 1
 		}
 	}
+	claim_chrysanthemum_throne = {
+		only_playable = yes
+		is_high_prio = yes
+		ai_check_interval = 3
+		potential = {
+			any_owned_bloodline = {
+				has_bloodline_flag = japanese_imperial_blood
+			}
+			NOT = { 
+				has_character_flag = claimed_japan
+			}
+			NOR = {
+				has_landed_title = e_japan
+				any_liege = {
+					has_landed_title = e_japan
+				}
+				has_landed_title = e_tokyo
+				any_liege = {
+					has_landed_title = e_tokyo
+				}
+			}
+		}
+		
+		allow = {
+			OR = {
+				tier = KING
+				tier = EMPEROR
+			}
+			NOR =	{
+				trait = japanese_shogun
+				trait = japanese_pretender_shogun
+				trait = japanese_emperor_killer_trait
+			}
+			trait = ambitious
+			is_inaccessible_trigger = no
+			prestige = 3000
+			wealth = 50
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					e_japan = { 
+						has_holder = yes
+					}
+				}
+				add_claim = e_japan
+			}
+			else_if = {
+				limit = {
+					e_tokyo = {
+						has_holder = yes
+					}
+				}
+				add_claim = e_tokyo
+			}
+			else = { }
+			set_character_flag = claimed_japan
+			wealth = -50
+		}
+		
+		
+		
+		ai_will_do = {
+			factor = 1
+		}
+	}
 	claim_israeli_throne = {
 		only_playable = yes
 		is_high_prio = yes
@@ -328,7 +416,10 @@ decisions = {
 			OR = {
 				religion = easternprotestant
 				religion = penitente
+				religion = neoncult
+				OR = { religion = neoncult_reformed secret_religion = neoncult_reformed }
 				religion = apostolic
+				religion = katoliko
 			}
 			NOR = {
 				trait = infection
@@ -872,6 +963,10 @@ decisions = {
 				culture = old_norman
 				culture = brytwysher
 				culture = ashkenazi
+				culture = han
+				culture = beijing
+				culture = taiwanese
+				culture = kyushu
 				capital_scope = {
 					region = custom_euro_gun_region
 				}
@@ -898,6 +993,10 @@ decisions = {
 					culture = old_norman
 					culture = brytwysher
 					culture = ashkenazi
+					culture = han
+					culture = beijing
+					culture = taiwanese
+					culture = kyushu
 					}
 				}
 				capital_scope = {
@@ -1989,7 +2088,9 @@ targeted_decisions = {
 			OR = {
 				religion = bezpopotvsy
 				religion = prussianist
+				religion = vostokist
 				religion_scope = { has_religion_feature = religion_self_immolate }
+				OR = { religion = red_cult secret_religion = red_cult }
 			}
 			
 		}
@@ -2171,7 +2272,7 @@ targeted_decisions = {
 				} 
 				opinion = { 
 					who = FROM
-					value = 20
+					value = 15
 				}
 			}
 		}
@@ -2229,352 +2330,6 @@ targeted_decisions = {
 		}
 	}
 	
-	send_imperial_troops = {
-		
-		ai_check_interval = 18
-		filter = independent_rulers
-		ai_target_filter = independent_rulers
-		
-	    diplomacy_icon = GFX_bhutan_icon
-		
-		from_potential = { 
-			primary_title = { 
-				title = e_bhutan
-			}
-			is_within_diplo_range = ROOT
-			NOT = {
-				trait = bhutan_isolationist
-			}
-		}
-		potential = { 
-			war = yes
-			is_within_diplo_range = FROM
-		}
-
-		allow = {
-			FROM = {
-				is_inaccessible_or_incapable_trigger = no
-				has_regent = no
-				war = no
-				wealth = 200
-				is_adult = yes
-				opinion = { 
-					who = ROOT
-					value = 5
-				}
-			}
-			ROOT = {
-				in_seclusion = no
-				OR = {
-					is_landed = yes
-					mercenary = yes
-					holy_order = yes
-					controls_religion = yes
-				}
-				opinion = { 
-					who = FROM
-					value = 20
-				}
-			}
-		}
-		effect = {
-            ROOT = { 
-                capital_scope = {
-                    ROOT = {
-                        spawn_unit = {
-                            owner = ROOT
-                            province = PREV
-                            home = PREV
-                            troops = {
-                                light_cavalry = { 200 200 }
-                                pikemen = { 500 500 }
-                                gunmen = { 500 500 }
-                            }
-                            attrition = 0.5
-                            maintenance = no
-                            reinforces = yes
-                            cannot_inherit = yes
-                            disband_on_peace = yes
-                        }
-                    }
-                }
-            }
-            FROM = {
-                wealth = -200
-            }
-        }
-		
-		ai_will_do = {
-			factor = 1
-			modifier = {
-				factor = 2
-				trait = charitable
-			}
-			modifier = {
-				factor = 2
-				has_non_aggression_pact_with = ROOT
-			}
-			modifier = {
-				factor = 2
-				trait = gregarious
-			}
-			modifier = {
-				factor = 0
-				trait = bhutan_isolationist
-			}
-			modifier = {
-				factor = 2
-				trait = bhutan_expansionist
-			}
-			modifier = {
-				factor = 2
-				trait = ambitious
-			}
-			modifier = {
-				factor = 0.1
-				trait = slothful
-			}
-			modifier = {
-				factor = 0.5
-				trait = proud
-			}
-			modifier = {
-				factor = 0.2
-				trait = greedy
-			}
-			modifier = {
-				factor = 0.1
-				trait = content
-			}
-		}
-	}
-	#####
-	request_imperial_support = {
-		
-		ai_check_interval = 18
-		filter = independent_rulers
-		ai_target_filter = independent_rulers
-		
-	    diplomacy_icon = GFX_bhutan_icon
-		
-		from_potential = { 
-			is_within_diplo_range = ROOT
-		}
-		potential = { 
-			primary_title = { 
-				title = e_bhutan
-			}
-			is_within_diplo_range = FROM
-			NOT = {
-				trait = bhutan_isolationist
-			}
-		}
-
-		allow = {
-			ROOT = {
-				is_inaccessible_or_incapable_trigger = no
-				has_regent = no
-				war = no
-				wealth = 1000
-				is_adult = yes
-				opinion = { 
-					who = FROM
-					value = 20
-				}
-			}
-			FROM = {
-				in_seclusion = no
-				opinion = { 
-					who = ROOT
-					value = 5
-				}
-				OR = {
-					is_landed = yes
-					mercenary = yes
-					holy_order = yes
-					controls_religion = yes
-				}
-			}
-		}
-		effect = {
-			FROM = { 
-				wealth = 200
-			}
-			ROOT = {
-				wealth = -200
-			}
-		}
-		
-		ai_will_do = {
-			factor = 1
-			modifier = {
-				factor = 2
-				trait = charitable
-			}
-			modifier = {
-				factor = 2
-				has_non_aggression_pact_with = ROOT
-			}
-			modifier = {
-				factor = 2
-				trait = gregarious
-			}
-			modifier = {
-				factor = 0
-				ROOT = {
-					trait = bhutan_isolationist
-				}
-			}
-			modifier = {
-				factor = 2
-				ROOT = {
-					trait = bhutan_expansionist
-				}
-			}
-			modifier = {
-				factor = 2
-				trait = ambitious
-			}
-			modifier = {
-				factor = 0.1
-				trait = slothful
-			}
-			modifier = {
-				factor = 0.5
-				trait = proud
-			}
-			modifier = {
-				factor = 0.2
-				trait = greedy
-			}
-			modifier = {
-				factor = 0.1
-				trait = content
-			}
-		}
-	}
-	
-	request_imperial_troops = {
-		
-		ai_check_interval = 18
-		filter = independent_rulers
-		ai_target_filter = independent_rulers
-		
-	    diplomacy_icon = GFX_bhutan_icon
-		
-		from_potential = { 
-			war = yes
-			is_within_diplo_range = ROOT
-		}
-		potential = { 
-			primary_title = { 
-				title = e_bhutan
-			}
-			NOT = {
-				trait = bhutan_isolationist
-			}
-			is_within_diplo_range = FROM
-		}
-
-		allow = {
-			FROM = {
-				opinion = { 
-					who = ROOT
-					value = 20
-				}
-				in_seclusion = no
-				OR = {
-					is_landed = yes
-					mercenary = yes
-					holy_order = yes
-					controls_religion = yes
-				}
-				wealth = 200
-				is_adult = yes
-			}
-			ROOT = {
-				opinion = { 
-					who = FROM
-					value = 5
-				}
-				is_inaccessible_or_incapable_trigger = no
-				has_regent = no
-				war = no
-			}
-		}
-		effect = {
-            FROM = { 
-                capital_scope = {
-					holder_scope = {
-                        spawn_unit = {
-                            owner = FROM
-                            province = PREV
-                            home = PREV
-                            troops = {
-                                light_cavalry = { 200 200 }
-                                pikemen = { 500 500 }
-                                gunmen = { 500 500 }
-                            }
-                            attrition = 0.5
-                            maintenance = no
-                            reinforces = yes
-                            cannot_inherit = yes
-                            disband_on_peace = yes
-                        }
-					}
-                }
-				wealth = -200
-            }
-        }
-		
-		ai_will_do = {
-			factor = 1
-			modifier = {
-				factor = 2
-				trait = charitable
-			}
-			modifier = {
-				factor = 2
-				has_non_aggression_pact_with = ROOT
-			}
-			modifier = {
-				factor = 2
-				trait = gregarious
-			}
-			modifier = {
-				factor = 0
-				ROOT = {
-					trait = bhutan_isolationist
-				}
-			}
-			modifier = {
-				factor = 2
-				ROOT = {
-					trait = bhutan_expansionist
-				}
-			}
-			modifier = {
-				factor = 2
-				trait = ambitious
-			}
-			modifier = {
-				factor = 0.1
-				trait = slothful
-			}
-			modifier = {
-				factor = 0.5
-				trait = proud
-			}
-			modifier = {
-				factor = 0.2
-				trait = greedy
-			}
-			modifier = {
-				factor = 0.1
-				trait = content
-			}
-		}
-	}
 	release_vassal_as_march = {
 		only_playable = yes
 		filter = vassals
@@ -2597,6 +2352,9 @@ targeted_decisions = {
 				OR = {
 					AND = {
 						ai = no
+						NOT = {
+							government = mandala_government
+						}
 						TECH_MAJESTY = 3
 						TECH_RECRUITMENT = 3
 						prestige = 750
@@ -2612,7 +2370,27 @@ targeted_decisions = {
 						}
 					}
 					AND = {
+						ai = no
+						government = mandala_government
+						TECH_MAJESTY = 2
+						TECH_RECRUITMENT = 2
+						prestige = 750
+						PREV = {
+							OR = {
+								trait = misguided_warrior
+								trait = tough_soldier
+								trait = skilled_tactician
+								trait = brilliant_strategist
+								trait = exalted_warlord
+								martial = 10
+							}
+						}
+					}
+					AND = {
 						ai = yes
+						NOT = {
+							government = mandala_government
+						}
 						ROOT = {
 							NOR ={
 								de_jure_vassal_or_below = FROM
@@ -2637,6 +2415,33 @@ targeted_decisions = {
 						prestige = 750
 						NOT = { government = confederation_government }
 					}
+					AND = {
+						ai = yes
+						government = mandala_government
+						ROOT = {
+							NOR ={
+								de_jure_vassal_or_below = FROM
+								culture = FROM
+							}
+						}
+						ROOT = {
+							NOT = { culture_group = FROM }
+						}
+						PREV = {
+							OR = {
+								trait = misguided_warrior
+								trait = tough_soldier
+								trait = skilled_tactician
+								trait = brilliant_strategist
+								trait = exalted_warlord
+								martial = 10
+							}
+						}
+						TECH_MAJESTY = 3
+						TECH_RECRUITMENT = 3
+						prestige = 750
+						NOT = { government = confederation_government }
+					}
 				}
 			}
 		}
@@ -2647,7 +2452,13 @@ targeted_decisions = {
 					who = PREV
 					tributary_type = march
 				}
-				prestige = -750
+				if = {
+					limit = { government = mandala_government }
+					prestige = -500
+				}
+				else = {
+					prestige = -750
+				}
 			}
 			opinion = { modifier = opinion_released_tributary who = FROM }
 		}
