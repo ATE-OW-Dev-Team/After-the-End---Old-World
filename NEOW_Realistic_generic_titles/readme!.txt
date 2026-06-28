@@ -1,1 +1,1 @@
-Use this submod if you want more realistic post apocalytic titles.
+Use this submod if you want more realistic post apocalyptic titles.
